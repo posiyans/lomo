@@ -73,9 +73,9 @@ class Stead extends MyModel
     public function setSession($request){
 
         session(['stead_id' => $this->id]);
-        isset($request->surnamesession) ? (['surname' =>  $request->surname]):'';
-        isset($request->names) ? session(['name' => $request->name]):'';
-        isset($request->name) ? session(['patronymic' => $request->patronymic]):'';
+        isset($request->surname) ? (['surname' =>  $request->surname]):'';
+        isset($request->name) ? session(['name' => $request->name]):'';
+        isset($request->patronymic) ? session(['patronymic' => $request->patronymic]):'';
         isset($request->size) ? session(['stead_size' => $request->size]):'';
     }
 

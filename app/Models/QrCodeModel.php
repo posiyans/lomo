@@ -37,9 +37,9 @@ class QrCodeModel
         if (is_int($stead)){
             $stead = Stead::findOrFail($stead);
         }
-        $this->out .= session('surname') ? '|LastName=' . session('surname') : $stead->surname;
-        $this->out .= session('name') ? '|FirstName=' . session('name') : $stead->name;
-        $this->out .= session('patronymic') ? '|MiddleName=' . session('patronymic') : $stead->patronymic;
+        $this->out .= session('surname') ? '|LastName=' . session('surname') : '|LastName=' . $stead->surname;
+        $this->out .= session('name') ? '|FirstName=' . session('name') : '|FirstName=' . $stead->name;
+        $this->out .= session('patronymic') ? '|MiddleName=' . session('patronymic') : '|MiddleName=' . $stead->patronymic;
     }
 
     public function fillDetailsDevice($ReceiptType, $steadModel)
