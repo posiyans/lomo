@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">Получить квитанцию на оплату 2</div>
+                <div class="card-header">Получить квитанцию на оплату</div>
 
                 <div class="card-body">
                     <form method="post" action="{{ route('ticket', $receipt->id) }}">
@@ -26,7 +26,7 @@
                         </div>
                         @if ($receipt->depends == 1)
                             <div class="form-group">
-                                <label for="size">Размер участка в сотках</label>
+                                <label for="size">Размер участка в м<sup>2</sup></label>
                                 <input type="text" class="form-control" name="size" id="size" placeholder="" value="{{ $stead->size }}">
                             </div>
                         @endif

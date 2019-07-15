@@ -13,6 +13,9 @@
                         <div class="form-group">
                             <label for="number">Введите номер участка</label>
                             <input type="text" class="form-control" name="stead" id="number" placeholder="" value="{{ $stead ? $stead->number:'' }}">
+                            <small  class="form-text text-muted">
+                                если участок обьединенный то вводится два номера через /, например 125/142
+                            </small>
                         </div>
                         <div class="form-group">
                             <label for="receipt">Выберите тип квитанции</label>

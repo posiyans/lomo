@@ -25,8 +25,8 @@ class ReceiptController extends Controller
         }
         if ($request->isMethod('post')) {
 
-            if (isset($request->stead) and (int)$request->stead > 0 and isset($request->receipt)) {
-                $stead = (int)$request->stead;
+            if (isset($request->stead) and isset($request->receipt)) {
+                $stead = $request->stead;
                 $ReceiptType = ReceiptType::findOrFail((int)$request->receipt);
                 $steadModel = Stead::where(['number' => $stead])->first();
                 if ($ReceiptType) {
@@ -55,7 +55,7 @@ class ReceiptController extends Controller
 
     public function ticket($id, Request $request)
     {
-        $stead = (int)$request->stead;
+        $stead = $request->stead;
         $steadModel = Stead::where(['number' => $stead])->first();
         $steadModel->setSession($request);
         if ($request->save == "on") {
