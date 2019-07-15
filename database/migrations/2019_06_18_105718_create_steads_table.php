@@ -16,13 +16,14 @@ class CreateSteadsTable extends Migration
         Schema::create('steads', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('gardening_id');
-            $table->integer('number')->unique();
+            $table->string('number');
             $table->string('surname')->nullable();
             $table->string('name')->nullable();
             $table->string('patronymic')->nullable();
             $table->string('size')->nullable();
             $table->string('email')->nullable();
             $table->text('history')->nullable();
+            $table->json('discriptions')->nullable();
             $table->timestamps();
         });
     }

@@ -4,7 +4,7 @@
 /storage/*.key
 /vendor
 /database/seeds/DatabaseMySeeder.php
-
+/database/seeds/data.csv
 .env
 .idea
 .phpunit.result.cache

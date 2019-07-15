@@ -7,6 +7,7 @@ use App\Models\Stead;
 use App\Models\ReceiptType;
 use App\Models\Rate;
 
+
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -16,5 +17,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        $this->call(DatabaseMySeeder::class);
     }
 }

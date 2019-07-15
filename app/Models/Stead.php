@@ -11,7 +11,10 @@ use Illuminate\Support\Facades\Cookie;
  */
 class Stead extends MyModel
 {
-    protected $fillable = ['number'];
+    protected $fillable = ['number', 'discriptions'];
+    protected $casts = [
+        'discriptions' => 'array',
+    ];
     //
 
     public function indications()
