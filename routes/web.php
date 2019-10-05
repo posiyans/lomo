@@ -16,7 +16,8 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-
+//Route::get('/vk', 'HomeController@vk')->name('vk');
+//Route::get('/callback', 'HomeController@vkcalback');
 Route::get('/home', 'HomeController@index')->name('home');
 Route::match(['get', 'post'], '/ticket/{id}', 'ReceiptController@ticket')->name('ticket');
 Route::get('/qrcode/ticket/{id}/{fio}', 'QrCodeController@getImage');
