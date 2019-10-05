@@ -27,3 +27,5 @@ Route::match(['get', 'post'], '/report', 'ReceiptController@index')->name('repor
 Route::get('/personal', function () {
     return view('personal');
 })->name('personal');;
+Route::get('/temper', 'TemperController@index');
+Route::get('/temper/get', 'TemperController@showGrafTemper');

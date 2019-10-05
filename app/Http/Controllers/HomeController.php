@@ -24,27 +24,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $url = env('GET_TEMPER_URL', false);
-        if ($url){
-            try {
-                $temper =file_get_contents($url);
-                $temper =json_decode($temper);
-            } catch ( \Exception $e){
-                $temper = false;
-                //echo 'Выброшено исключение: ',  $e->getMessage(), "\n";
-            }
-            //dump($temper);
-            if ($temper and isset($temper->temp)){
-                $temper->time = substr($temper->time, 11, 5);
-                $temper->temp = round(floatval($temper->temp),1);
-            }else{
-                $temper = false;
-            }
-            //dump(compact('temper'));
-
-
-        }
-
+        $temper = TemperController::getTemper();
         return view('welcome', compact('temper'));
     }
 
@@ -74,9 +54,9 @@ class HomeController extends Controller
 
     public function vkcalback()
     {
-        // $clientId = "7152731";
-        // $clientSecret = "GEMM574O1sCY25yEvAwG";
-        // $redirectUrl = "http://lomo.loc/callback";
+        // $clientId = "";
+        // $clientSecret = ";
+        // $redirectUrl = "";
         // $additionalProviderConfig = ['site' => 'lomo.loc'];
         // $config = new \SocialiteProviders\Manager\Config($clientId, $clientSecret, $redirectUrl, $additionalProviderConfig);
         // return Socialite::with('vkontakte')->setConfig($config)->redirect();

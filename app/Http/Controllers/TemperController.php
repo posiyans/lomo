@@ -24,28 +24,40 @@ class TemperController extends Controller
      */
     public function index()
     {
+        $temper = TemperController::getTemper();
+        return view('temper.index', compact('temper'));
+    }
+
+    public static function getTemper($week = false){
         $url = env('GET_TEMPER_URL', false);
         if ($url){
             try {
-                $temper =file_get_contents($url.'?d=1');
+                if ($week) {
+                   $url.='?d=1';
+                }
+                $temper = file_get_contents($url);
                 $temper =json_decode($temper);
             } catch ( \Exception $e){
+                $temper = false;
                 //echo 'Выброшено исключение: ',  $e->getMessage(), "\n";
             }
-            if ($temper == null){
-               $temper = false;
-            }else{
+            if ($week) {
+                return $temper;
+            }
+            if ($temper and isset($temper->temp)){
                 $temper->time = substr($temper->time, 11, 5);
                 $temper->temp = round(floatval($temper->temp),1);
+            }else{
+                $temper = false;
             }
-            //dump($temper);
-            //dump(compact('temper'));
-
-
         }
-
-        return view('welcome', compact('temper'));
+        return $temper;
     }
 
+
+    public function showGrafTemper(){
+
+        return $this->getTemper(true);
+    }
 
 }
