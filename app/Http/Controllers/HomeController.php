@@ -14,7 +14,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+       //$this->middleware('auth');
     }
 
     /**
@@ -24,13 +24,34 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $url = env('GET_TEMPER_URL', false);
+        if ($url){
+            try {
+                $temper =file_get_contents($url);
+                $temper =json_decode($temper);
+            } catch ( \Exception $e){
+                $temper = false;
+                //echo 'Выброшено исключение: ',  $e->getMessage(), "\n";
+            }
+            //dump($temper);
+            if ($temper and isset($temper->temp)){
+                $temper->time = substr($temper->time, 11, 5);
+                $temper->temp = round(floatval($temper->temp),1);
+            }else{
+                $temper = false;
+            }
+            //dump(compact('temper'));
+
+
+        }
+
+        return view('welcome', compact('temper'));
     }
 
     /**
-     * 
      *
-     * 
+     *
+     *
      */
     public function vk()
     {
@@ -59,7 +80,7 @@ class HomeController extends Controller
         // $additionalProviderConfig = ['site' => 'lomo.loc'];
         // $config = new \SocialiteProviders\Manager\Config($clientId, $clientSecret, $redirectUrl, $additionalProviderConfig);
         // return Socialite::with('vkontakte')->setConfig($config)->redirect();
-        
+
 
         // dd(Socialite::driver('vkontakte')->user());
         // dd($user);
@@ -73,7 +94,7 @@ class HomeController extends Controller
                 'redirect_uri' => $value['redirect'],
             );
         }
-   
+
 	    $token = json_decode(file_get_contents('https://oauth.vk.com/access_token' . '?' . urldecode(http_build_query($params))), true);
         dump($token);
         if (isset($token['access_token'])) {
@@ -83,7 +104,7 @@ class HomeController extends Controller
                 'access_token' => $token['access_token'],
                 'v' => '5.101'
             );
-    
+
             $userInfo = json_decode(file_get_contents('https://api.vk.com/method/users.get' . '?' . urldecode(http_build_query($params))), true);
             dump($userInfo);
         }

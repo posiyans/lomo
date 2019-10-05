@@ -66,8 +66,11 @@
     <body>
         <div class="flex-center position-ref full-height">
             <div class="top-right links">
+                @if ($temper)
+                    <span> в Чаще <b>{{ $temper->temp }}°C</b> на {{ $temper->time }}</span>
+                @endif
                 <a  href="{{ route('receipt') }}">Квитанции</a>
-           
+
             @if (Route::has('login'))
                 <!-- <div class="top-right links"> -->
                     @auth
