@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Temper\TemperModel;
 use Illuminate\Http\Request;
 use Socialite;
 
@@ -24,7 +25,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $temper = TemperController::getTemper();
+        $temper = TemperModel::getTemper();
         return view('welcome', compact('temper'));
     }
 

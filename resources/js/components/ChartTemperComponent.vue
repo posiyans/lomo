@@ -4,26 +4,39 @@
 
 <script>
     import echarts from 'echarts'
-    import {getTemper} from '../api/temper.js'
+    import {getTemper, getSun } from '../api/temper.js'
 
     export default {
         data() {
             return {
                 id: 'chart',
                 className: 'chart',
-                height: '400px',
+                height: '500px',
                 width: '100%',
                 chart: null,
                 data: [],
+                datav: [],
+                dataSun: [],
+                dataSumer: []
             }
         },
         mounted() {
             getTemper().then(response => {
                 const data = response.data;
-                for (const temp of response.data) {
+                for (const temp of response.data.temper) {
                     this.data.push({name: temp.time, value: [temp.time, temp.temp]});
+                    this.datav =[{name: temp.time, value: [temp.time, temp.temp]}];
+
+
                 }
-                this.initChart()
+                for (const temp of response.data.sunrise) {
+                    this.dataSun.push([{xAxis: temp.start}, {xAxis: temp.stop}]);
+                }
+                for (const temp of response.data.dusk) {
+                    this.dataSumer.push([{xAxis: temp.start}, {xAxis: temp.stop}]);
+                }
+                    this.initChart()
+
             })
         },
         beforeDestroy() {
@@ -40,7 +53,7 @@
                     backgroundColor: '#ffffff',
                     title: {
                         top: 20,
-                        text: 'ЧАЩА',
+                        text: 'ЧАЩА, температура за прошедшую неделю',
                         textStyle: {
                             fontWeight: 'normal',
                             fontSize: 16,
@@ -133,8 +146,24 @@
                         type: 'line',
                         showSymbol: false,
                         hoverAnimation: true,
+                        markArea: {
+                            silent: true,
+                            data: this.dataSun
+                        },
                         data: this.data
-                    }]
+                    },
+                        {
+                            smooth: false,
+                            name: 'Темпер657567атура',
+                            type: 'line',
+                            showSymbol: false,
+                            hoverAnimation: true,
+                            markArea: {
+                                silent: true,
+                                data: this.dataSumer
+                            },
+                            data: this.datav
+                        }]
                 })
             }
         }

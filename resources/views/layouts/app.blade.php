@@ -84,7 +84,7 @@
     </div>
     <div class="page-footer font-small blue">
         <div class="footer-copyright text-center py-3">
-            <a href="{{ route('personal') }}">Внимание!!! Оставаясь на данном сайте в соглашаетьсь с политикой обработки пересональных данных</a>
+            <a href="{{ route('personal') }}">Внимание!!! Оставаясь на данном сайте вы соглашаетесь с политикой обработки пересональных данных</a>
         </div>
     </div>
 </body>

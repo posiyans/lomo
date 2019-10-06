@@ -67,7 +67,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Europe/Moscow',
 
     /*
     |--------------------------------------------------------------------------
@@ -80,7 +80,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'ru',
 
     /*
     |--------------------------------------------------------------------------
@@ -176,7 +176,7 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         // регистрация через соцсети
-        \SocialiteProviders\Manager\ServiceProvider::class, 
+        \SocialiteProviders\Manager\ServiceProvider::class,
         //Laravel\Socialite\SocialiteServiceProvider::class,
 
     ],

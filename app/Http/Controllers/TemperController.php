@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Temper\TemperModel;
 use Illuminate\Http\Request;
 use Socialite;
 
@@ -12,7 +13,7 @@ class TemperController extends Controller
      *
      * @return void
      */
-    public function __construct()
+public function __construct()
     {
        //$this->middleware('auth');
     }
@@ -24,40 +25,18 @@ class TemperController extends Controller
      */
     public function index()
     {
-        $temper = TemperController::getTemper();
+        $temper = TemperModel::getTemper();
         return view('temper.index', compact('temper'));
     }
 
-    public static function getTemper($week = false){
-        $url = env('GET_TEMPER_URL', false);
-        if ($url){
-            try {
-                if ($week) {
-                   $url.='?d=1';
-                }
-                $temper = file_get_contents($url);
-                $temper =json_decode($temper);
-            } catch ( \Exception $e){
-                $temper = false;
-                //echo 'Выброшено исключение: ',  $e->getMessage(), "\n";
-            }
-            if ($week) {
-                return $temper;
-            }
-            if ($temper and isset($temper->temp)){
-                $temper->time = substr($temper->time, 11, 5);
-                $temper->temp = round(floatval($temper->temp),1);
-            }else{
-                $temper = false;
-            }
-        }
-        return $temper;
-    }
 
-
+    /**
+     * данные температуры, восхода и захода солнца за неделю
+     * @return array
+     */
     public function showGrafTemper(){
-
-        return $this->getTemper(true);
+        $sunriseAndDusk = TemperModel::getSunriseAndDusk(7);
+        return ['temper'=>TemperModel::getTemper(true)]+$sunriseAndDusk;
     }
 
 }
