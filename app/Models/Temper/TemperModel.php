@@ -30,7 +30,7 @@ class TemperModel extends Model
             $adres = env('PRIMARY_SENSOR','');
         }
         if($day){
-            $data = TemperModel::where('adres', $adres)->where('time', '>', (new \DateTime())->modify('-'.$day.' day')->format('Y-m-d'))->get();
+            $data = TemperModel::where('adres', $adres)->where('time', '>', (new \DateTime())->modify('-'.$day.' day')->format('Y-m-d'))->orderBy('time', 'ASC')->get();
 
         }else{
             $data = TemperModel::where('adres', $adres)->orderBy('time', 'desc')->limit(1)->first();
