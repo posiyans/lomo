@@ -42,6 +42,55 @@ class QrCodeModel
         $this->out .= session('patronymic') ? '|MiddleName=' . session('patronymic') : '|MiddleName=' . $stead->patronymic;
     }
 
+    /**
+     * установить ФИО плательщика
+     *
+     * @param $fio
+     */
+    public function fillFioUser($fio)
+    {
+        $args = explode(' ', $fio);
+        $field = ['|LastName=', '|FirstName=', '|MiddleName='];
+        for ($i=0; $i < 3; $i++) {
+            if (key_exists($i, $args)){
+                $this->out .= $field[$i] . $args[$i];
+            }
+        }
+        if (count($args)> 3){
+            unset($args[0], $args[1],$args[2]);
+            $this->out .= ' '.implode(' ', $args);
+        }
+      }
+
+    /**
+     * установить назначение платежа
+     *
+     * @param $discription
+     */
+    public function setDiscription($discription){
+        $this->out .= '|Purpose=' . mb_substr($discription, 0, 115);
+    }
+
+    /**
+     * установить номер участка
+     *
+     * @param $number
+     */
+    public function setSteadNumber($number){
+        $this->out .= '|PersAcc=' . $number;
+    }
+
+    /**
+     * установить сумму платежа в копейках
+     *
+     * @param int $cash
+     */
+    public function setCash(int $cash){
+        if ($cash > 0) {
+            $this->out .= '|Sum=' . $cash;
+        }
+    }
+
     public function fillDetailsDevice($ReceiptType, $steadModel)
     {
         //$ReceiptType = ReceiptType::findOrFail((int)$id);

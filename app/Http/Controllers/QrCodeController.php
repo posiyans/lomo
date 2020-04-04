@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Gardening;
 use Illuminate\Http\Request;
 use App\Models\QrCodeModel;
 use App\Models\Stead;
@@ -23,8 +24,11 @@ class QrCodeController extends Controller
         return $code->getPng();
     }
 
-    public function qrCode(){
-
+    public function qrCodeClear(){
+        $gardient = Gardening::find(1);
+        $code = new QrCodeModel;
+        $code->fillDetailsGardient($gardient);
+        return $code->getPng();
     }
 
 

@@ -19,6 +19,7 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-        //
+//        'prod-api/*'
+//        '/prod-api/vue-element-admin/file'
     ];
 }

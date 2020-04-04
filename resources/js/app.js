@@ -3,10 +3,24 @@
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
+//import vuetify from "./plugins/vuetify";
 
 require('./bootstrap');
+import Element from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
+// import moment from 'vue-moment'
+const moment = require('moment-timezone');
+require('moment/locale/es');
+moment.locale('ru');
+moment.tz.setDefault('UTC')
 
-window.Vue = require('vue');
+window.Vue = require('vue')
+Vue.use(Element)
+
+Vue.use(require('vue-moment'), {
+    moment
+});
+
 
 /**
  * The following block of code may be used to automatically register your
@@ -21,12 +35,16 @@ window.Vue = require('vue');
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('chart-vue', require('./components/ChartTemperComponent.vue').default);
+Vue.component('show-local-temper-now', require('./components/ShowTemperNowComponent').default);
+Vue.component('yandex-rasp-vue', require('./components/YandexRaspComponent.vue').default);
+Vue.component('user-profile', require('./components/user/UserProfileComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+
 
 const app = new Vue({
     el: '#app',

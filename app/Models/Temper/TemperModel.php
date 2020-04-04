@@ -16,7 +16,11 @@ class TemperModel extends Model
     public $timestamps = false;
 
 
-
+    /**
+     * получить температуру на неделю или последненюю
+     * @param bool $week
+     * @return mixed
+     */
     public static function getTemper($week = false){
         if($week){
             return self::getDataSensor(false, 7);

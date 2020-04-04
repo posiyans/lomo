@@ -25,7 +25,9 @@
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
+
                 </a>
+                <show-local-temper-now></show-local-temper-now>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -39,15 +41,16 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('receipt') }}">Квитанции</a>
+                        </li>
                         @guest
 {{--                            <li class="nav-item">--}}
 {{--                                <a class="nav-link" href="{{ route('receipt') }}">Сообщиить показания</a>--}}
 {{--                            </li>--}}
+
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('receipt') }}">Квитанции</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                <a class="nav-link" href="{{ route('login') }}">Войти</a>
                             </li>
                             <!-- @if (Route::has('register'))
                                 <li class="nav-item">
@@ -81,11 +84,17 @@
         <main class="py-4">
             @yield('content')
         </main>
-    </div>
-    <div class="page-footer font-small blue">
+
+
+    <footer class="page-footer font-small blue">
+
+        <!-- Copyright -->
         <div class="footer-copyright text-center py-3">
             <a href="{{ route('personal') }}">Внимание!!! Оставаясь на данном сайте вы соглашаетесь с политикой обработки пересональных данных</a>
         </div>
+        <!-- Copyright -->
+
+    </footer>
     </div>
 </body>
 </html>

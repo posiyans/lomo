@@ -3,6 +3,7 @@ namespace App\Models;
 
 use App\MyModel;
 use App\Models\InstrumentReadings;
+use App\User;
 use Illuminate\Support\Facades\Cookie;
 
 
@@ -16,6 +17,25 @@ class Stead extends MyModel
         'discriptions' => 'array',
     ];
     //
+
+    public $userFullName = '';
+    /**
+     * отношение с пользователем
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function user()
+    {
+        return $this->hasOne(User::class, 'id', 'user_id');
+    }
+
+    public function userFullName()
+    {
+        if ($this->user){
+            $this->userFullName = $this->user->fullName();
+            return $this->userFullName;
+        }
+        return '';
+    }
 
     public function indications()
     {
@@ -37,8 +57,8 @@ class Stead extends MyModel
     }
 
     public function getIndication($n=false) {
-        $devices = MeteringDevice::where('enable', 1)->get(); 
-        $ind= [];    
+        $devices = MeteringDevice::where('enable', 1)->get();
+        $ind= [];
         foreach ($devices as $device){
             $indications = InstrumentReadings::where('type_id', $device->id)
                 ->where('stead_id', $this->id)
@@ -47,7 +67,7 @@ class Stead extends MyModel
                 ->get();
             $device->val_new = isset($indications[0]->value) ? $indications[0]->value : 0;
             $device->val_old = isset($indications[1]->value) ? $indications[1]->value : 0;
-            $device->value = $device->val_new - $device->val_old; 
+            $device->value = $device->val_new - $device->val_old;
             $device->rateNow();
             $device->cash = $device->value * $device->rate->ratio_a  + $device->rate->ratio_b;
             $ind[$device->id] = $device;

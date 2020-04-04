@@ -6,3 +6,10 @@ export function getTemper() {
         method: 'get'
     })
 }
+
+export function getTemperNow() {
+    return request({
+        url: '/temper/now',
+        method: 'post'
+    })
+}

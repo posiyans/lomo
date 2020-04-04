@@ -93,7 +93,7 @@ return [
     |
     */
 
-    'fallback_locale' => 'en',
+    'fallback_locale' => 'ru',
 
     /*
     |--------------------------------------------------------------------------
@@ -178,6 +178,9 @@ return [
         // регистрация через соцсети
         \SocialiteProviders\Manager\ServiceProvider::class,
         //Laravel\Socialite\SocialiteServiceProvider::class,
+
+        // права доступа
+        Spatie\Permission\PermissionServiceProvider::class,
 
     ],
 

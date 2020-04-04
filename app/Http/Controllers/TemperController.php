@@ -39,4 +39,13 @@ public function __construct()
         return ['temper'=>TemperModel::getTemper(true)]+$sunriseAndDusk;
     }
 
+    /**
+     * данные температуры сейчас
+     * @return array
+     */
+    public function showLocalTemper(){
+        $temper = TemperModel::getTemper();
+        return ['temper'=>$temper];
+    }
+
 }

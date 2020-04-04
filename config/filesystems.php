@@ -65,5 +65,5 @@ return [
         ],
 
     ],
-
+    'file_folder' => env('FILE_FOLDER', '../storage'),
 ];

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\MyModel;
+Use Illuminate\Support\Facades\Auth;
 
 /**
  * Модель логов
@@ -30,6 +31,14 @@ class Log extends MyModel
     {
         return $this->morphTo();
     }
+
+    /**
+     * сравниваем 2 обьекта и разницу сохраняем в лог
+     *
+     * @param $objNew new object
+     * @param $objOld old object
+     * @param bool $description описание
+     */
     public static function saveDiff($objNew, $objOld, $description=false){
             $log = new Log();
             if ($diff = $log->diff($objNew, $objOld)) {
