@@ -1,0 +1,77 @@
+
+body {
+  font-family: 'Trebuchet MS', Helvetica, 'DejaVu Sans', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', sans-serif;
+  font-style: normal;
+  font-variant: normal;
+  font-size: 14px;
+  color: #444;
+  background: url("./images/bg.png");
+}
+#layout {
+  width: 1140px;
+  margin: 0 auto;
+}
+#main-container {
+  max-width: 1140px;
+  margin: 0 auto;
+  border: 1px solid #eee
+}
+
+#main_layout {
+  margin-top: 60px;
+}
+
+.el-header {
+  background-color: #AFEEEE;
+  color: #333;
+  line-height: 60px;
+}
+.main-app {
+  background: #eaebeb;
+  color: #333;
+  margin-bottom: 20px;
+  padding: 20px 0;
+}
+
+.el-aside {
+  color: #333;
+  bottom:0;
+  height: 100%;
+}
+
+.header a {
+  color: #000;
+  text-decoration: none;
+}
+.header.logo {
+  font-size: 18px;
+  padding-left: 10px;
+  color: #1b3958;
+  text-align: start;
+}
+.leftimg {
+  float:left; /* Выравнивание по левому краю */
+  margin: 7px 20px 20px 0; /* Отступы вокруг картинки */
+}
+.rightimg  {
+  float: right; /* Выравнивание по правому краю  */
+  margin: 7px 0 7px 7px; /* Отступы вокруг картинки */
+}
+
+.welcome-avatar-wrapper {
+  margin-top: 5px;
+  position: relative;
+}
+.welcome-avatar-wrapper img{
+  cursor: pointer;
+  width: 80px;
+  height: 80px;
+  border-radius: 10px;
+}
+.plugin-welcome {
+  //align: center;
+}
+.center {
+  //width: 100%;
+  //margin: 0 auto;
+}
