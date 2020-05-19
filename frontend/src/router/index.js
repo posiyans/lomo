@@ -310,7 +310,7 @@ export const asyncRoutes = [
         meta: {
           title: 'Добавить',
           icon: 'edit',
-          roles: ['sсreate-polls']
+          roles: ['сreate-polls']
         }
       },
       {
