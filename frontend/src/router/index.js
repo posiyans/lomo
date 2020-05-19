@@ -54,8 +54,15 @@ export const constantRoutes = [
   },
   {
     path: '/login',
-    component: () => import('@/views/login/index'),
-    hidden: true
+    component: UserLayout,
+    redirect: '/login/index',
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/login/index'),
+        hidden: true
+      }
+    ]
   },
   {
     path: '/auth-redirect',
@@ -103,6 +110,31 @@ export const constantRoutes = [
         name: 'Article',
         meta: { title: 'Сайт', icon: 'dashboard', affix: true }
       }
+    ]
+  },
+  {
+    path: '/modules',
+    component: UserLayout,
+    redirect: '/modules/rates',
+    children: [
+      {
+        path: 'rates',
+        component: () => import('@/views/modules/rates/index'),
+        name: 'modulesRates',
+        hidden: true
+      },
+      {
+        path: 'receipt',
+        component: () => import('@/views/modules/ReceiptForm/index.vue'),
+        name: 'modulesReceipt',
+        hidden: true
+      },
+      {
+        path: 'weather',
+        component: () => import('@/views/modules/weatherPro/index.vue'),
+        name: 'modulesWeather',
+        hidden: true
+      },
     ]
   },
   {
@@ -328,7 +360,7 @@ export const constantRoutes = [
     children: [
       {
         path: 'index',
-        component: () => import('@/views/clear/index'),
+        component: () => import('@/views/admin/settings/index'),
         name: 'Settings',
         meta: { title: 'Настройки', icon: 'documentation', affix: true }
       }

@@ -13,3 +13,10 @@ export function getTemperNow() {
         method: 'post'
     })
 }
+
+export function getNewWeatherProHD() {
+  return request({
+    url: '/temper/getNewWeatherProHD',
+    method: 'get'
+  })
+}

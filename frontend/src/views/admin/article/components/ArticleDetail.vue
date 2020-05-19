@@ -3,6 +3,7 @@
     <el-form ref="postForm" :model="postForm" :rules="rules" class="form-container">
 
       <sticky :z-index="10" :class-name="'sub-navbar '+postForm.status">
+        <OnMain v-model="postForm.news"/>
         <CategoryDropdown v-model="postForm.category_id"/>
         <CommentDropdown v-model="postForm.allow_comments" />
         <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submitForm">
@@ -68,7 +69,7 @@
   import { validURL } from '@/utils/validate'
   import { fetchArticle, createArticle, updateArticle } from '@/api/article'
   import { searchUser } from '@/api/remote-search'
-  import { CommentDropdown } from './Dropdown'
+  import { CommentDropdown, OnMain } from './Dropdown'
   import CategoryDropdown from './Dropdown/Category'
   const defaultForm = {
     public: false,
@@ -76,16 +77,17 @@
     text: '', // 文章内容
     resume: '', // 文章摘要
     files: [],
+    news: 1,
     display_time: +new Date(),
     id: undefined,
     category_id: null,
-    allow_comments: true,
+    allow_comments: 0,
     uid: ''
   }
 
   export default {
     name: 'ArticleDetail',
-    components: { Tinymce, MDinput, Upload, Sticky, CommentDropdown, CategoryDropdown },
+    components: { Tinymce, MDinput, Upload, Sticky, CommentDropdown, CategoryDropdown, OnMain },
     props: {
       isEdit: {
         type: Boolean,
@@ -164,7 +166,7 @@
       fetchData(id) {
         fetchArticle(id).then(response => {
           this.postForm = response.data
-          this.postForm.allow_comments = Boolean(response.data.allow_comments)
+          // this.postForm.allow_comments = Boolean(response.data.allow_comments)
           this.datetime = this.$moment(this.postForm.publish_time)
           this.setTagsViewTitle()
 
@@ -200,7 +202,7 @@
               updateArticle(id, this.postForm)
                 .then(response => {
                   this.postForm = response.data
-                  this.postForm.allow_comments = Boolean(response.data.allow_comments)
+                  // this.postForm.allow_comments = Boolean(response.data.allow_comments)
                   this.datetime = this.$moment(this.postForm.publish_time)
                   console.log(response.data)
                 })

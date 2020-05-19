@@ -8,10 +8,10 @@
       <el-dropdown-item>
         <el-radio-group v-model="comment_disabled" style="padding: 10px;">
           <el-radio :label="0">
-            Комментарии отключены
+            Только по прямой ссылке
           </el-radio>
           <el-radio :label="1">
-            Комментарии разрешены
+            Показывать с списке
           </el-radio>
         </el-radio-group>
       </el-dropdown-item>
@@ -24,7 +24,7 @@ export default {
   props: {
     value: {
       type: Number,
-      default: 0
+      default: 1
     }
   },
   computed: {
@@ -38,8 +38,8 @@ export default {
     },
     comemnt_title(){
       const r = {
-        0:'Комментарии отключены',
-        1:'Комментарии разрешены'
+        0:'Только по ссылке',
+        1:'В списке'
       }
       return r[this.comment_disabled]
     }

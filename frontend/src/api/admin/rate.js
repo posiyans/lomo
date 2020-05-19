@@ -1,10 +1,20 @@
 import request from '@/utils/request'
 
+
 export function fetchList(query) {
   return request({
-    url: '/api/v1/user/rate',
+    url: '/api/v1/admin/rate',
     method: 'get',
     params: query
+  })
+}
+
+
+export function updateRate(data) {
+  return request({
+    url: '/api/v1/admin/rate',
+    method: 'post',
+    data
   })
 }
 

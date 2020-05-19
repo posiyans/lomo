@@ -154,7 +154,7 @@
           },
             {
               smooth: false,
-              name: 'Темпер657567атура',
+              name: 'Температура',
               type: 'line',
               showSymbol: false,
               hoverAnimation: true,
@@ -163,7 +163,8 @@
                 data: this.dataSumer
               },
               data: this.datav
-            }]
+            }
+            ]
         })
       }
     }

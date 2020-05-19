@@ -9,7 +9,14 @@
       </div>
       <div class="article-preview-footer">
         <el-row type="flex" class="row-bg" justify="space-between" align="center">
-          <el-col :span="12"><div style="padding-left: 20px;"><el-button type="primary" size="mini" plain @click="showArticle">Подробнее</el-button></div></el-col>
+          <el-col :span="12">
+            <span style="padding-left: 20px;">
+              <el-button type="primary" size="mini" plain @click="showArticle">Подробнее</el-button>
+            </span>
+            <span style="padding-left: 20px;">
+              <el-button v-if="article.allow_comments==1" type="primary" size="mini" plain icon="el-icon-chat-dot-square" @click="showArticle">{{ article.comments.length }}</el-button>
+            </span>
+          </el-col>
           <el-col :span="12"><div style="text-align: right; padding: 10px 20px 0px 0;color: #848484; height: 100%;">{{article.publish_time | moment('HH:mm DD-MM-YYYY')}}</div></el-col>
         </el-row>
       </div>

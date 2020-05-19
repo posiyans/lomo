@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-card>
+    <el-card class="card-mobile">
       <div class="article-preview-header">
         <h2>{{ article.title }}</h2>
       </div>
@@ -18,60 +18,73 @@
       </div>
 
       <div class="article-preview-footer">
+        <el-divider class="divider-footer"></el-divider>
         <el-row type="flex" class="row-bg" justify="space-between" align="center">
-          <el-col :span="12"><div style="padding-left: 20px;"><el-button type="primary" @click="back">Назад</el-button></div></el-col>
-          <el-col :span="12"><div style="text-align: right; padding: 10px 20px 0px 0;color: #848484; height: 100%;">{{article.publish_time | moment('HH:mm DD-MM-YYYY')}}</div></el-col>
+          <el-col :span="14">
+            <span style="padding-left: 20px;">
+              <el-button type="primary" size="mini"  @click="back">Назад</el-button>
+            </span>
+            <span style="padding-left: 20px;">
+              <el-button v-if="article.allow_comments==1" type="primary" size="mini" plain icon="el-icon-chat-dot-square">{{ article.comments.length }}</el-button>
+            </span>
+          </el-col>
+          <el-col :span="10"><div style="text-align: right; padding: 10px 20px 0px 0;color: #848484; height: 100%;">{{article.publish_time | moment('HH:mm DD-MM-YYYY')}}</div></el-col>
         </el-row>
+      </div>
+      <div class="comments-body">
+        <Comments v-model="article" />
       </div>
     </el-card>
   </div>
 </template>
 
 <script>
-  import { fetchUserArticle } from "@/api/article"
-  export default {
-    props: {
-      id: {
-        type: Number,
-        default: 0
-      },
+import { fetchUserArticle } from "@/api/article"
+import Comments from '@/components/Comments/index.vue'
+export default {
+  components: { Comments },
+  props: {
+    id: {
+      type: Number,
+      default: 0
     },
-    filters: {
-      urlFilter(val){
-        return process.env.VUE_APP_BASE_API + '/user/storage/file/' + val
-      },
-      sizeFilter(size){
-        if (size) {
-          const i = Math.floor(Math.log(size) / Math.log(1024));
-          return (size / Math.pow(1024, i)).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
-        }
-        return '';
+  },
+  filters: {
+    urlFilter(val){
+      return process.env.VUE_APP_BASE_API + '/user/storage/file/' + val
+    },
+    sizeFilter(size){
+      if (size) {
+        const i = Math.floor(Math.log(size) / Math.log(1024));
+        return (size / Math.pow(1024, i)).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
       }
+      return '';
+    }
+  },
+  mounted() {
+    this.fetchArticle()
+    console.log(this.$route.params.id)
+  },
+  data() {
+    return {
+      article: {}
+    }
+  },
+  methods: {
+    back() {
+      this.$router.back()
     },
-    mounted() {
-      this.fetchArticle()
-      console.log(this.$route.params.id)
-    },
-    data() {
-      return {
-        article: {}
-      }
-    },
-    methods: {
-      back(){
-        this.$router.back()
-      },
-      fetchArticle(){
-        console.log('fetch article')
-        console.log(this.id)
-        fetchUserArticle(this.$route.params.id)
-          .then(response => {
-            console.log(response)
-            this.article = response.data
-          })
-      }
+    fetchArticle() {
+      console.log('fetch article')
+      console.log(this.id)
+      fetchUserArticle(this.$route.params.id)
+        .then(response => {
+          console.log(response)
+          this.article = response.data.data
+        })
     }
   }
+}
 </script>
 
 <style scoped>
@@ -94,6 +107,15 @@
   .article-preview-footer {
 
   }
+  .comments-body {
+    border-radius: 5px;
+    border: solid 1px #cecece;
+    margin-top: 10px;
+  }
+.divider-footer {
+  margin: 10px 0;
+}
+
 </style>
 
 <style>
