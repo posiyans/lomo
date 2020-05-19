@@ -327,7 +327,7 @@ export const asyncRoutes = [
           title: 'Правка',
           noCache: true,
           activeMenu: '/voting/list',
-          roles: ['sсreate-polls']
+          roles: ['сreate-polls']
         },
         hidden: true
       },

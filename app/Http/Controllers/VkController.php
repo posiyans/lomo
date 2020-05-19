@@ -27,6 +27,7 @@ class VkController extends Controller
     public function redirect($profile=false){
         if ($profile) {
             return redirect('http://lomo.loc:9527/#/user/profile');
+//            return redirect('http://beta-lomo.posiayns.ru/#/user/profile');
         }
         return redirect('http://lomo.loc:9527/');
     }
