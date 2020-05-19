@@ -30,10 +30,16 @@ class CategoryController extends Controller
 
         $rez = [];
         $rez[] = ['label'=>'Главная', 'basePath'=>'/index'];
-        $rez[] = ['label'=>'Все новости', 'basePath'=>'/article/list'];
+//        $rez[] = ['label'=>'Все новости', 'basePath'=>'/article/list'];
         if ($cat){
             $rez[] = ['label'=>'Статьи', 'basePath'=>'/article/list', 'children'=>$cat];
         }
+        $rez[] = ['label' => 'Информация', 'basePath' => '/', 'children'=> [
+                ['label'=>'Тарифы', 'basePath'=>'/modules/rates'],
+                ['label'=>'Квитанции', 'basePath'=>'/modules/receipt'],
+                ['label'=>'Погода', 'basePath'=>'/modules/weather'],
+            ]
+        ];
         if (Auth::check() && Auth::user()->ability('superadmin', 'access-admin-panel')) {
             $rez[] = ['label' => 'Админ панель', 'basePath' => '/admin-article/list'];
         }

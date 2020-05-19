@@ -78,6 +78,7 @@ class UserController extends Controller
             $user->name = $data['user']['name'];
             $user->middle_name = $data['user']['middle_name'];
             $user->phone = $data['user']['phone'];
+            $user->avatar = $data['user']['avatar'];
             $user->adres = $data['user']['adres'];
             $user->consent_personal = $data['user']['consent_personal'];
             $user->consent_to_email = $data['user']['consent_to_email'];

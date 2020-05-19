@@ -47,7 +47,7 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
-//        return $request;
+//        return $request->allow_comments;
         if (isset($request->title) && !empty($request->title)){
             $title = $request->title;
             $article = new ArticleModel();
@@ -57,7 +57,8 @@ class ArticleController extends Controller
             $article->text = $request->text;
             $article->category_id = $request->category_id;
             $article->public = $request->public;
-            $article->allow_comments = !$request->comment_disabled;
+            $article->allow_comments = $request->allow_comments;
+            $article->news = $request->news;
             $article->publish_time = $request->display_time;
             if ($article->save()){
                 if (isset($request->files) && is_array($request->files)) {
@@ -118,7 +119,8 @@ class ArticleController extends Controller
             $article->text = $request->text;
             $article->category_id = $request->category_id;
             $article->public = $request->public;
-            $article->allow_comments = !$request->comment_disabled;
+            $article->news = $request->news;
+            $article->allow_comments = $request->allow_comments;
             $article->publish_time = $request->display_time;
             if ($article->save()){
                 if (is_array($request->input('files'))) {

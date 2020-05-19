@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Http\Resources\ArticleResource;
+use App\Http\Resources\AppealResource;
+use App\Http\Resources\CommentResource;
 use App\Http\Resources\ConrtollerResource;
 use App\Models\AppealModel;
 use App\Models\Article\ArticleModel;
 use App\Models\Article\CategoryModel;
+use App\Models\Article\CommentModel;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
-class ArticleController extends Controller
+class CommentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,31 +22,13 @@ class ArticleController extends Controller
      */
     public function index(Request $request)
     {
-        $query =  ArticleModel::query();
-        $query->where('publish_time', '<', NOW());
-        $query->where('public', '1');
-        $query->where('news', '1');
-        if ($request->category_id) {
-            $query->where('category_id', $request->category_id);
+        if (isset($request->article_id)) {
+            $query = CommentModel::query();
+            $query->where('article_id', $request->article_id);
+            $query->orderBy('id', 'ASC');
+            $comments = $query->paginate($request->limit);
+            return CommentResource::collection($comments);
         }
-        if ($request->sort) {
-            if ($request->sort == '-time'){
-                $query->orderBy('publish_time', 'DESC');
-            } else if ($request->sort == '+time') {
-               $query->orderBy('publish_time', 'ASC') ;
-            } else if ($request->sort == '-id') {
-                $query->orderBy('id', 'DESC') ;
-            } else {
-                $query->orderBy('id', 'ASC') ;
-            }
-
-        } else {
-            $query->orderBy('id', 'ASC') ;
-        }
-
-        $appeal = $query->paginate($request->limit);
-        return ArticleResource::collection($appeal);
-//        return json_encode(['data'=>$data,'total'=>$appeal->total()]);
     }
 
     /**
@@ -64,27 +49,19 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
-////        return $request;
-//        if (isset($request->title) && !empty($request->title)){
-//            $title = $request->title;
-//            $article = new ArticleModel();
-//            $article->title = $title;
-//            $article->uid = $request->uid;
-//            $article->resume = $request->resume;
-//            $article->text = $request->text;
-//            $article->category_id = $request->category_id;
-//            $article->public = $request->public;
-//            $article->allow_comments = !$request->comment_disabled;
-//            $article->publish_time = $request->display_time;
-//            if ($article->save()){
-//                if (isset($request->files) && is_array($request->files)) {
-//                    $article->attachedFiles($request->attached_files);
-//                }
-//
-//            }
-//            return $article;
-//        }
-//        return false;
+        if (isset($request->article_id) && isset($request->message)){
+            $article = ArticleModel::find((int)$request->article_id);
+            if ($article) {
+                $comment = new CommentModel();
+                $comment->user_id = Auth::user()->id;
+                $comment->article_id = $article->id;
+                $comment->message = $request->message;
+                if ($comment->save()){
+                    return json_encode(['status'=>true, 'data'=>new CommentResource($comment)]);
+                }
+            }
+        }
+        return json_encode(['status'=>false]);
     }
 
 
@@ -103,9 +80,7 @@ class ArticleController extends Controller
         }
         if ($model){
             $model->files = $model->files;
-            $model->comments = $model->comments;
-//            return $model;
-            return new ArticleResource($model);
+            return $model;
         }
         return false;
 

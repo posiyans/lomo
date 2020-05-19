@@ -8,5 +8,6 @@ use App\MyModel;
  */
 class Gardening extends MyModel
 {
+    protected $fillable = ['BankName', 'BIC', 'CorrespAcc', 'full_name', 'name', 'PayeeINN', 'PersonalAcc'];
     //
 }

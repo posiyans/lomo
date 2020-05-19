@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\User;
 
 use App\Models\MeteringDevice;
 use App\Models\Rate;
@@ -16,7 +16,7 @@ class RateController extends Controller
      */
     public function index(Request $request)
     {
-        $models = MeteringDevice::where('type_id', $request->type)->get();
+        $models = MeteringDevice::where('type_id', $request->type)->where('enable', 1)->get();
         foreach ($models as $model) {
              $model->rateNow();
         }

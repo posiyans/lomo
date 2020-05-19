@@ -42,6 +42,13 @@ class GardeningController extends Controller
      */
     public function store(Request $request)
     {
+        if (isset($request->id)){
+            $gardening = Gardening::find($request->id);
+            $data = $request->post();
+            $gardening->fill($data);
+            $gardening->save();
+            return $gardening;
+        }
 ////        return $request;
 //        if (isset($request->title) && !empty($request->title)){
 //            $title = $request->title;
@@ -100,6 +107,8 @@ class GardeningController extends Controller
      */
     public function update(Request $request, $id)
     {
+
+        return 'update';
 //
 //        $article = ArticleModel::find($id);
 //        if ($article  && $request->id == $id){

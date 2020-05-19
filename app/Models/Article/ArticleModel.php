@@ -9,6 +9,11 @@ class ArticleModel extends MyModel
 {
     //
 
+    public function comments()
+    {
+        return $this->hasMany('App\Models\Article\CommentModel', 'article_id', 'id');
+    }
+
     /**
      * прикрепить файлы к модели
      * @param $files

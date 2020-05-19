@@ -46,6 +46,7 @@ Route::get('/personal', function () {
 Route::get('/rasp', 'RaspController@index');
 Route::get('/temper', 'TemperController@index');
 Route::get('/temper/get', 'TemperController@showGrafTemper');
+Route::get('/temper/getNewWeatherProHD', 'TemperController@getNewWeatherProHD');
 Route::get('/api/temper/get', 'TemperController@showGrafTemper');
 Route::post('/temper/now', 'TemperController@showLocalTemper'); // old
 Route::post('/api/temper/now', 'TemperController@showLocalTemper');
@@ -60,7 +61,10 @@ Route::resource('/api/v1/user/article', 'User\ArticleController')
     ->only(['index', 'show']);
 Route::resource('/api/v1/user/gardening', 'User\GardeningController')
     ->only(['index', 'show']);
-
+Route::resource('/api/v1/user/comment', 'User\CommentController')
+    ->only(['index']);
+Route::resource('/api/v1/user/rate', 'User\RateController')
+    ->only(['index']);
 Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/api/v1/admin/user-info', 'UserController@info');
@@ -81,7 +85,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('/api/v1/admin/role', 'Admin\RoleController')
         ->only(['index', 'update']);
     Route::resource('/api/v1/admin/rate', 'Admin\RateController')
-    ->only(['index', 'update']);
+    ->only(['index', 'update', 'store']);
     Route::resource('/api/v1/admin/category', 'Admin\CategoryController')
         ->only(['index', 'update', 'store']);
     Route::resource('/api/v1/admin/article', 'Admin\ArticleController')
@@ -92,8 +96,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('/api/v1/admin/voting-result', 'Admin\AdminVotingResultController')
         ->only(['index', 'update', 'store', 'show']);
 //        ->only(['index', 'update', 'store', 'show']);
+    Route::resource('/api/v1/user/comment', 'User\CommentController')
+        ->only(['store']);
 
 
+    Route::resource('/api/v1/admin/gardening', 'User\GardeningController')
+        ->only(['store']); //todo нге работает заглушка
 });
 Route::resource('/user/storage/file', 'Storage\FileController');
 Route::resource('/api/user/storage/file', 'Storage\FileController');

@@ -72,6 +72,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->last_name.' '.$this->name.' '.$this->middle_name;
     }
 
+    public function smallName()
+    {
+        return $this->last_name.' '.$this->name;
+    }
+
     public function fName()
     {
         $fio = '';
