@@ -9,15 +9,15 @@
       </div>
       <div class="article-preview-footer">
         <el-row type="flex" class="row-bg" justify="space-between" align="center">
-          <el-col :span="12">
-            <span style="padding-left: 20px;">
-              <el-button type="primary" size="mini" plain @click="showArticle">Подробнее</el-button>
-            </span>
-            <span style="padding-left: 20px;">
-              <el-button v-if="article.allow_comments==1" type="primary" size="mini" plain icon="el-icon-chat-dot-square" @click="showArticle">{{ article.comments.length }}</el-button>
-            </span>
+          <el-col :xs="24" :lg="12">
+              <span class="article-preview-more">
+                <el-button type="primary" size="mini" plain @click="showArticle">Подробнее</el-button>
+              </span>
+              <span class="article-preview-more">
+                <el-button v-if="article.allow_comments==1" type="primary" size="mini" plain icon="el-icon-chat-dot-square" @click="showArticle">{{ article.comments.length }}</el-button>
+              </span>
           </el-col>
-          <el-col :span="12"><div style="text-align: right; padding: 10px 20px 0px 0;color: #848484; height: 100%;">{{article.publish_time | moment('HH:mm DD-MM-YYYY')}}</div></el-col>
+          <el-col :xs="0" hidden-xs-only  :lg="12"><div style="text-align: right; padding: 10px 20px 0px 0;color: #848484; height: 100%;">{{article.publish_time | moment('HH:mm DD-MM-YYYY')}}</div></el-col>
         </el-row>
       </div>
     </el-card>
@@ -100,5 +100,21 @@
     width: 100px;
     float:left; /* Выравнивание по левому краю */
     margin: 0px 20px 0 0; /* Отступы вокруг картинки */
+  }
+  .article-preview-more {
+    padding-left: 20px;
+  }
+  @media screen and (max-width: 480px) {
+    .article-preview-body{
+      padding: 10px 5px;
+    }
+    .article-preview-body >>> img{
+      width: 100px;
+      float:left; /* Выравнивание по левому краю */
+      margin: 0 0 0 0; /* Отступы вокруг картинки */
+    }
+    .article-preview-more {
+      padding-left: 5px;
+    }
   }
 </style>

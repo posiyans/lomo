@@ -7,6 +7,7 @@ import 'normalize.css/normalize.css' // a modern alternative to CSS resets
 import Element from 'element-ui'
 import locale from 'element-ui/lib/locale/lang/ru-RU'
 import './styles/element-variables.scss'
+import 'element-ui/lib/theme-chalk/display.css'
 
 import '@/styles/index.scss' // global css
 import '@/styles/global2.scss' // global css
