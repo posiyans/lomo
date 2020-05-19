@@ -55,13 +55,13 @@ export default {
   },
   watch: {
     activeName(val) {
-      console.log('watch')
+      // console.log('watch')
       this.$router.push(`${this.$route.path}?tab=${val}`)
     }
   },
   mounted() {
     // init the default selected tab
-    console.log('mounted index')
+    // console.log('mounted index')
     const tab = this.$route.query.tab
     if (tab) {
       this.activeName = tab

@@ -157,30 +157,25 @@ export default {
                         message: 'Данные успешно сохренены.',
                         type: 'success'
                       });
-                        console.log(response)
                     })
             }
         },
         getInfo(){
             getInfo()
                 .then(response =>{
-                    console.log(response.data)
                     this.user = response.data
                 })
             getSteadsList()
                 .then(response => {
-                    console.log(response.data)
                     this.steadsList = response.data
                 })
         },
         findStead(query){
-           console.log(query)
             const data = {
                query: query
             }
            getSteadsList(data)
                .then(response => {
-                    console.log(response.data)
                     this.steadsList = response.data
                 })
         }

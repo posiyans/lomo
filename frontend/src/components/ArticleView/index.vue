@@ -33,11 +33,8 @@
     },
     methods: {
       fetchArticle(){
-        console.log('fetch article')
-        console.log(this.id)
         fetchUserArticle(this.id)
           .then(response => {
-            console.log(response)
             this.article = response.data
           })
       }

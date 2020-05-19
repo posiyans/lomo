@@ -154,13 +154,11 @@
         return process.env.VUE_APP_BASE_API + '/user/storage/file/' + val
       },
       resultFilter(answer, question) {
-        console.log(question)
         const count = question.answers.reduce( (sum, item) => {return sum + item.userAnswersCount}, 0)
         return (100*answer.userAnswersCount/count).toFixed(2)
         // return answer.userAnswersCount/count
       },
       resultBackgroundFilter(answer, question) {
-        console.log(question)
         const count = question.answers.reduce( (sum, item) => {return sum + item.userAnswersCount}, 0)
         return 'width:' + 600*answer.userAnswersCount/count + 'px;'
         // return answer.userAnswersCount/count
@@ -239,7 +237,6 @@
       getVoting() {
         this.listLoading = true
         fetchVoting(this.id, this.listQuery).then(response => {
-          console.log(response.data)
           this.voting = response.data.data
           // this.total = response.data.meta.total
 
@@ -256,7 +253,6 @@
         }
         updateAppel(data, row.id)
           .then(response =>{
-            console.log(response.data)
             this.$message({
               message: 'Success',
               type: 'success'
@@ -273,7 +269,6 @@
         }
       },
       sortByID(order) {
-        console.log(order)
         if (order === 'ascending') {
           this.listQuery.sort = '+created_at'
         } else if(order === 'descending') {
@@ -351,7 +346,6 @@
             this.temp.message.push({text: this.temp.new_message, user: {name: 'я'}})
             this.temp.new_message = ''
             this.list.splice(index, 1, this.temp)
-            console.log(response.data)
             this.dialogFormVisible = false
             this.$notify({
               title: 'Success',

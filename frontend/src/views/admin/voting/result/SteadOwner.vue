@@ -61,7 +61,6 @@
             this.steads[item.id] = item.number
           })
           this.steads = response.data.data
-          console.log(this.steads)
           this.listLoading = true
         })
 
@@ -83,7 +82,6 @@
             })
           })
         })
-        console.log(this.list)
         this.listo = temp
         for(const key in temp) {
           this.list.push({id: key, quest: temp[key]})
@@ -94,8 +92,6 @@
     },
     watch:{
       questions(value) {
-        console.log('watch')
-        console.log(value)
         this.getList()
       }
     }

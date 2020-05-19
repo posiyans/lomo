@@ -323,7 +323,6 @@ export default {
   mounted() {
     this.getList()
     this.fetchSteads()
-    console.log('mouunt user')
   },
   computed: {
     editFio() {
@@ -334,7 +333,6 @@ export default {
     fetchSteads(){
       getSteadsList()
         .then(response => {
-          console.log(response.data)
           this.steadsList = response.data
         })
     },
@@ -365,7 +363,6 @@ export default {
       }
     },
     sortByID(order) {
-      console.log(order)
       if (order === 'ascending') {
         this.listQuery.sort = '+created_at'
       } else if(order === 'descending') {
@@ -439,7 +436,6 @@ export default {
         .then(response => {
           const index = this.list.findIndex(v => v.id === this.temp.id)
           this.list.splice(index, 1, this.temp)
-          console.log(response.data)
           this.dialogFormVisible = false
           this.$notify({
             title: 'Успех',

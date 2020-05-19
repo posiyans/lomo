@@ -3,7 +3,7 @@
     <div class="comment_title"><strong>Комментарий</strong></div>
     <div v-for="i in value.comments" class="comments-post">
       <el-row>
-        <el-col :xs="4" :sm="2" :lg="1" align="middle" ><el-avatar size="40" :src="i.avatar | avatarUrl"></el-avatar></el-col>
+        <el-col :xs="4" :sm="2" :lg="1" align="middle" ><el-avatar :size="40" :src="i.avatar | avatarUrl"></el-avatar></el-col>
         <el-col :xs="20" :sm="20" :lg="20">
           <div class="comment_author">
             {{i.userName}}
@@ -23,7 +23,7 @@
 
     </div>
     <el-row v-if="user" class="send" align="middle">
-      <el-col :xs="4" :sm="2" :lg="1"><el-avatar size="40" :src="user.avatar | avatarUrl"></el-avatar></el-col>
+      <el-col :xs="4" :sm="2" :lg="1"><el-avatar :size="40" :src="user.avatar | avatarUrl"></el-avatar></el-col>
       <el-col :xs="16" :sm="18" :lg="19">
         <el-input
           type="textarea"
@@ -47,7 +47,7 @@
 <script>
   import { addComment, fetchListComments } from '@/api/user/comment.js'
   export default {
-    props:{
+    props: {
        value: {
          // type: Array,
          // defaults: []

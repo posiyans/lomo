@@ -65,7 +65,6 @@ const actions = {
     })
   },
   async getMenu({ commit }) {
-    console.log('getmenu')
     return new Promise(resolve => {
       getMenu({ 'children': true }).then(response => {
         commit('SET_MENU', response.data)

@@ -51,12 +51,10 @@ export default {
     this.chartold = null
   },
   mounted() {
-    console.log('mounted')
     this.getDatay()
   },
   methods: {
     getDatay() {
-      console.log('mounted1')
       getTemper().then(response => {
       // gettestTemper().then(response => {
         for (const temp of response.data.temper) {

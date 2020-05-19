@@ -7,7 +7,7 @@
       <div class="article-preview-body" >
         <span v-html="article.text"/>
       </div>
-      <div v-if="article.files.length > 0">
+      <div v-if="article.files && article.files.length > 0">
         <div class="file-list-header">Файлы:</div>
         <ul>
           <li v-for="file in article.files">{{ file.name }}
@@ -63,7 +63,6 @@ export default {
   },
   mounted() {
     this.fetchArticle()
-    console.log(this.$route.params.id)
   },
   data() {
     return {
@@ -75,11 +74,8 @@ export default {
       this.$router.back()
     },
     fetchArticle() {
-      console.log('fetch article')
-      console.log(this.id)
       fetchUserArticle(this.$route.params.id)
         .then(response => {
-          console.log(response)
           this.article = response.data.data
         })
     }

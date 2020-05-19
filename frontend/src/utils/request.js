@@ -32,7 +32,6 @@ service.interceptors.request.use(
   },
   error => {
     // do something with request error
-    console.log(error) // for debug
     return Promise.reject(error)
   }
 )
@@ -52,7 +51,6 @@ service.interceptors.response.use(
   response => {
     const res = response
     // if the custom code is not 20000, it is judged as an error.
-    console.log(res)
     if (res.status < 200 || res.status > 299) {
       Message({
         message: res.message || 'Error',
@@ -60,7 +58,6 @@ service.interceptors.response.use(
         duration: 5 * 1000
       })
       if (res.status === 401) {
-        console.log('code 401')
         // to re-login
         MessageBox.confirm('You have been logged out, you can cancel to stay on this page, or log in again', 'Confirm logout', {
           confirmButtonText: 'Re-Login',
@@ -92,8 +89,6 @@ service.interceptors.response.use(
     }
   },
   error => {
-    console.log(error.response.status)
-    console.log('err' + error) // for debug
     if (error.response.status === 401){
       store.dispatch('user/resetToken').then(() => {
         location.href = '/login'

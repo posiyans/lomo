@@ -40,7 +40,6 @@
     filters:{
       roleFilter(val, user){
         const index = user.roles.findIndex(v => v.name === 'superAdmin')
-        console.log(index)
         // return true
         if (user.roles.findIndex(v => v.name === 'superAdmin') != -1){
           return false
@@ -68,8 +67,6 @@
     },
     computed: {
       my_user() {
-        console.log('this.$store.getters.info')
-        console.log(this.$store.state.user.info)
         return this.$store.state.user.info
       }
     },
@@ -83,12 +80,8 @@
       fetchRoles(){
         fetchList()
          .then(response =>{
-           console.log(response)
            this.roles = response.data.roles
            this.permissions = response.data.permissions
-           console.log('this.roles')
-           console.log(this.roles)
-
          })
       }
     }

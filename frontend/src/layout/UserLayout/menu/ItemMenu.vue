@@ -58,16 +58,16 @@ export default {
     }
   },
   mounted() {
-    console.log('menu item menu')
-    console.log(this.$store.state.permission.menu)
-    console.log(this.menul)
+    // console.log('menu item menu')
+    // console.log(this.$store.state.permission.menu)
+    // console.log(this.menul)
   },
   methods: {
     handleSelect(key, keyPath) {
 
-      console.log(this.$router)
+      // console.log(this.$router)
       this.$router.push(key)
-      console.log(key, keyPath)
+      // console.log(key, keyPath)
     },
     handleClickOutside() {
       this.$store.dispatch('app/closeSideBar', { withoutAnimation: false })

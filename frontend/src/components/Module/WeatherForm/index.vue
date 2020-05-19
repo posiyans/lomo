@@ -29,18 +29,17 @@
       this.fetchTemp()
     },
     methods: {
-      putWeather(){
+      putWeather() {
         this.$router.push('/weather/index')
       },
-      fetchTemp(){
+      fetchTemp() {
         getTemperNow().then(response => {
-          this.temper = response.data.temper;
-          console.log(data)
+          this.temper = response.data.temper
         })
       }
     },
     computed: {
-      show(){
+      show() {
         // проверка на актуальность темепературы,выводим если занчение получено не более 2 часов назад
         if ((this.$moment(this.temper.time).format('X') - this.$moment(new Date().getTime()).format('X'))/(60*60) > 1){
           return true

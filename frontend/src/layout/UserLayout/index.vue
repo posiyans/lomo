@@ -115,8 +115,8 @@ export default {
   },
   mounted() {
     // console.log(this.$route)
-    console.log('this.menu')
-    console.log(this.menu)
+    // console.log('this.menu')
+    // console.log(this.menu)
     // console.log(this.$store.permission_routes)
     // console.log(this.$store)
   },
@@ -162,9 +162,9 @@ export default {
     },
     handleSelect(key, keyPath) {
 
-      console.log(this.$router)
+      // console.log(this.$router)
       this.$router.push(key)
-      console.log(key, keyPath)
+      // console.log(key, keyPath)
     },
     handleClickOutside() {
       this.$store.dispatch('app/closeSideBar', { withoutAnimation: false })

@@ -39,7 +39,7 @@
       if (this.id > 0) {
         this.fetchArticle()
       } else {
-        console.log('props ddata')
+        // console.log('props ddata')
         this.article = this.data
       }
     },
@@ -57,20 +57,21 @@
         }
         const size = 190
         const newsText = this.article.text.split('</p>')
-        return newsText[0]+ '</p>'
+        return newsText[0] + '</p>'
       }
     },
     methods: {
       showArticle(){
-        this.$router.push('/article/show/'+this.article.id)
+        // console.log('/article/show/'+this.article.id)
+        this.$router.push('/article/show/' + this.article.id)
 
       },
       fetchArticle(){
-        console.log('fetch article')
-        console.log(this.id)
+        // console.log('fetch article')
+        // console.log(this.id)
         fetchUserArticle(this.id)
           .then(response => {
-            console.log(response)
+            // console.log(response)
             this.article = response.data
           })
       }

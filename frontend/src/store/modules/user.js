@@ -38,14 +38,8 @@ const actions = {
   // user login
   register({ commit }, userData) {
     const { name, email, password, password_confirmation } = userData
-    console.log('action register')
-    console.log(email)
-    console.log(password)
     return new Promise((resolve, reject) => {
-    console.log('promise action register')
-
       userRegister({ name: name.trim(), email: email.trim(), password: password.trim(), password_confirmation: password_confirmation.trim() }).then(response => {
-        console.log(response)
         store.dispatch('user/getInfo')
         // const { data } = response
         // commit('SET_TOKEN', data.token)
@@ -60,7 +54,6 @@ const actions = {
     const { email, password, remember } = userInfo
     return new Promise((resolve, reject) => {
       login({ email: email.trim(), password: password.trim(), remember: remember }).then(response => {
-        console.log(response)
         store.dispatch('user/getInfo')
         // const { data } = response
         // commit('SET_TOKEN', data.token)
@@ -75,7 +68,6 @@ const actions = {
     // const { email, password, remember } = userInfo
     return new Promise((resolve, reject) => {
       loginVK({}).then(response => {
-        console.log(response)
         const { data } = response
         //store.dispatch('user/getInfo')
         // const { data } = response
@@ -90,13 +82,9 @@ const actions = {
   // get user info
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
-      console.log(state.token)
       getInfo(state.token).then(response => {
-        console.log('get info')
-        console.log(response)
         //   return ''
           const { data } = response
-          console.log(data)
           if (!data) {
             reject('Verification failed, please Login again.')
           }
@@ -114,7 +102,6 @@ const actions = {
               duration: 5 * 1000
             })
           }
-          console.log('roles ok')
           commit('SET_INFO', data)
           commit('SET_ROLES', allPermissions)
           commit('SET_NAME', name)
@@ -130,14 +117,11 @@ const actions = {
 
   // user logout
  logout({ commit, state, dispatch }) {
-    console.log('logout')
     return new Promise((resolve, reject) => {
       logout(state.token).then(() => {
-        console.log('promise logout')
         commit('SET_TOKEN', '')
         commit('SET_ROLES', [])
         removeToken()
-        console.log(dispatch)
         resetRouter()
         // getInfo()
         //dispatch('permission/getMenu')

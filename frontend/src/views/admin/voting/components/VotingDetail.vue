@@ -169,7 +169,6 @@
         },
         rangePickerOptions: {
           disabledDate(time) {
-            console.log(vm.displayTime)
             if (vm.postForm.type === 'owner') {
               if (time.getTime() < (vm.publishTime+ 14 * 60 * 60 * 24 * 1000)) {
                 return true
@@ -189,7 +188,6 @@
     computed: {
       dataRange: {
         set(val){
-          console.log(val)
           this.postForm.date_start = this.$moment(val[0]).format('YYYY-MM-DD HH:mm:ss')
           this.postForm.date_stop = this.$moment(val[1]).format('YYYY-MM-DD HH:mm:ss')
         },

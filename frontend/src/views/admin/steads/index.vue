@@ -294,7 +294,6 @@ export default {
       }
     },
     sortByID(order) {
-      console.log(order)
       if (order === 'ascending') {
         this.listQuery.sort = '+created_at'
       } else if(order === 'descending') {

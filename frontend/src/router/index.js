@@ -93,6 +93,25 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/article',
+    component: UserLayout,
+    redirect: '/article/list',
+    children: [
+      {
+        path: 'list/:id?',
+        component: () => import('@/views/article-list/index'),
+        name: 'ArticleList',
+        hidden: true
+      },
+      {
+        path: 'show/:id',
+        component: () => import('@/views/article-view/index'),
+        name: 'Article',
+        hidden: true
+      }
+    ]
+  },
+  {
     path: '/modules',
     component: UserLayout,
     redirect: '/modules/rates',

@@ -129,20 +129,15 @@
         // back end return => "2013-06-25 06:59:25"
         // front end need timestamp => 1372114765000
         get() {
-          console.log(this.postForm)
           return (+new Date(this.datetime))
         },
         set(val) {
-          console.log(this.postForm.display_time)
           this.datetime= new Date(val)
         }
       }
     },
     created() {
       this.postForm.uid = this.create_UUID()
-      console.log('this.isEdit')
-      console.log(this.isEdit)
-      console.log(this.defaultForm)
       if (this.isEdit) {
         const id = this.$route.params && this.$route.params.id
         this.fetchData(id)
@@ -173,7 +168,7 @@
           // set page title
           this.setPageTitle()
         }).catch(err => {
-          console.log(err)
+          // console.log(err)
         })
       },
       setTagsViewTitle() {
@@ -190,8 +185,6 @@
         this.saveForm()
       },
       saveForm() {
-        console.log('this.postForm')
-        console.log(this.postForm)
         this.$refs.postForm.validate(valid => {
           if (valid) {
             this.loading = true
@@ -204,7 +197,6 @@
                   this.postForm = response.data
                   // this.postForm.allow_comments = Boolean(response.data.allow_comments)
                   this.datetime = this.$moment(this.postForm.publish_time)
-                  console.log(response.data)
                 })
             } else {
               createArticle(this.postForm)
@@ -230,7 +222,6 @@
 
             this.loading = false
           } else {
-            console.log('error submit!!')
             return false
           }
         })
