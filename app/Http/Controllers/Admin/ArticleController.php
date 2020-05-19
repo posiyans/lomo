@@ -19,13 +19,9 @@ class ArticleController extends Controller
      */
     public function index(Request $request)
     {
-//        if (isset($request->children) && $request->children){
-//            return CategoryModel::getListChildren();
-//        }
-//        $appeal = AppealModel::all();
+
         $query =  ArticleModel::query();
-        $appeal = $query->paginate($request->limit);
-//        return  $query->paginate();
+        $appeal = $query->orderBy('id', 'desc')->paginate($request->limit);
         return $appeal;
     }
 

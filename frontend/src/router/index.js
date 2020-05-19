@@ -93,26 +93,6 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/article',
-    component: UserLayout,
-    redirect: '/article/list',
-    children: [
-      {
-        path: 'list/:id?',
-        component: () => import('@/views/article-list/index'),
-        name: 'ArticleList',
-        hidden: true
-      },
-      {
-        // path: 'show/:id(\\d+)',
-        path: 'show/:id',
-        component: () => import('@/views/article-view/index'),
-        name: 'Article',
-        meta: { title: 'Сайт', icon: 'dashboard', affix: true }
-      }
-    ]
-  },
-  {
     path: '/modules',
     component: UserLayout,
     redirect: '/modules/rates',
@@ -257,18 +237,7 @@ export const constantRoutes = [
       }
     ]
   },
-  {
-    path: '/appeals',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/admin/appeals/index'),
-        name: 'Appeal',
-        meta: { title: 'Обращения', icon: 'documentation', affix: true }
-      }
-    ]
-  },
+
   {
     path: '/steads',
     component: Layout,
@@ -278,6 +247,31 @@ export const constantRoutes = [
         component: () => import('@/views/admin/steads/index'),
         name: 'Steads',
         meta: { title: 'Участки', icon: 'documentation', affix: true }
+      }
+    ]
+  },
+
+]
+
+/**
+ * asyncRoutes
+ * the routes that need to be dynamically loaded based on user roles
+ */
+export const asyncRoutes = [
+  {
+    path: '/appeals',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/admin/appeals/index'),
+        name: 'Appeal',
+        meta: {
+          title: 'Обращения',
+          icon: 'documentation',
+          affix: true,
+          roles: ['show-appels']
+        }
       }
     ]
   },
@@ -294,7 +288,11 @@ export const constantRoutes = [
         path: 'create',
         component: () => import('@/views/admin/voting/create'),
         name: 'AdminVotingCreate',
-        meta: { title: 'Добавить', icon: 'edit' }
+        meta: {
+          title: 'Добавить',
+          icon: 'edit',
+          roles: ['sсreate-polls']
+        }
       },
       {
         path: 'index',
@@ -306,14 +304,23 @@ export const constantRoutes = [
         path: 'edit/:id(\\d+)',
         component: () => import('@/views/admin/voting/edit'),
         name: 'AdminEditVoting',
-        meta: { title: 'Правка', noCache: true, activeMenu: '/voting/list' },
+        meta: {
+          title: 'Правка',
+          noCache: true,
+          activeMenu: '/voting/list',
+          roles: ['sсreate-polls']
+        },
         hidden: true
       },
       {
         path: 'result/:id(\\d+)',
         component: () => import('@/views/admin/voting/result'),
         name: 'AdminResultVoting',
-        meta: { title: 'Правка', noCache: true, activeMenu: '/voting/list' },
+        meta: {
+          title: 'Правка',
+          noCache: true,
+          activeMenu: '/voting/list'
+        },
         hidden: true
       },
     ]
@@ -326,7 +333,12 @@ export const constantRoutes = [
         path: 'index',
         component: () => import('@/views/admin/users/index'),
         name: 'Users',
-        meta: { title: 'Пользователи', icon: 'documentation', affix: true }
+        meta: {
+          title: 'Пользователи',
+          icon: 'documentation',
+          affix: true,
+          roles: ['show-users']
+        }
       }
     ]
   },
@@ -338,7 +350,12 @@ export const constantRoutes = [
         path: 'index',
         component: () => import('@/views/clear/index'),
         name: 'Mail',
-        meta: { title: 'Рассылка', icon: 'documentation', affix: true }
+        meta: {
+          title: 'Рассылка',
+          icon: 'documentation',
+          affix: true,
+          roles: ['send-mail-spam']
+        }
       }
     ]
   },
@@ -350,56 +367,15 @@ export const constantRoutes = [
         path: 'index',
         component: () => import('@/views/admin/rates/index'),
         name: 'Rate',
-        meta: { title: 'Тарифы', icon: 'documentation', affix: true }
+        meta: {
+          title: 'Тарифы',
+          icon: 'documentation',
+          affix: true,
+          roles: ['edit-rate']
+        }
       }
     ]
   },
-  {
-    path: '/settings',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/admin/settings/index'),
-        name: 'Settings',
-        meta: { title: 'Настройки', icon: 'documentation', affix: true }
-      }
-    ]
-  },
-  // {
-  //   path: '/guide',
-  //   component: Layout,
-  //   redirect: '/guide/index',
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       component: () => import('@/views/guide/index'),
-  //       name: 'Guide',
-  //       meta: { title: 'Guide', icon: 'guide', noCache: true }
-  //     }
-  //   ]
-  // },
-  // {
-  //   path: '/profile',
-  //   component: Layout,
-  //   redirect: '/profile/index',
-  //   hidden: true,
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       component: () => import('@/views/profile/index'),
-  //       name: 'Profile',
-  //       meta: { title: 'Profile', icon: 'user', noCache: true }
-  //     }
-  //   ]
-  // }
-]
-
-/**
- * asyncRoutes
- * the routes that need to be dynamically loaded based on user roles
- */
-export const asyncRoutes = [
   {
     path: '/permissions',
     component: Layout,
@@ -411,8 +387,24 @@ export const asyncRoutes = [
         meta: {
           title: 'Права доступа',
           icon: 'documentation',
-          roles: ['admin']
+          roles: ['edit-role']
         }
+      }
+    ]
+  },
+  {
+    path: '/settings',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/admin/settings/index'),
+        name: 'Settings',
+        meta: {
+          title: 'Настройки',
+          icon: 'documentation',
+          affix: true,
+          roles: ['gardening-edit'] }
       }
     ]
   },

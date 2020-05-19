@@ -6,6 +6,7 @@ use App\Models\AppealModel;
 use App\Models\Log;
 use App\Models\Stead;
 use App\Models\Temper\TemperModel;
+use App\Permission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -41,11 +42,19 @@ class UserController extends Controller
 //        $user->roles = ['admin'];
 //            $user->roles = $user->getRoles();
 //            $user->roles = array_merge_recursive(['user'], $user->getRoles());
-            $perms = $user->allPermissions();
+
             $temp = ['user'];
+            if ($user->hasRole('superAdmin')) {
+                $perms = Permission::all();
+            } else {
+                $perms = $user->allPermissions();
+
+            }
             foreach ($perms as $perm) {
                 $temp[] = $perm->name;
             }
+
+
 //            $roles = [];
 //            foreach ($user->roles as $role){
 //                $roles[] = $role->name;
