@@ -9,7 +9,7 @@
 <script>
 export default {
   mounted() {
-    fetch('/camera')
+    // fetch('/camera')
   }
 }
 </script>

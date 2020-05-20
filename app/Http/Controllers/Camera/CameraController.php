@@ -21,27 +21,32 @@ class CameraController extends Controller
 
     public function index()
     {
+        ignore_user_abort(true);
+        set_time_limit(500);
         $count = env('CAMERA_COUNT',0);
+
         if ($count > 0){
+            $date = date_create();
+            $date = date_timestamp_get($date);
             for ($i=1; $i<=$count; $i++){
                 $camera = 'CAMERA'.$i;
-                $value = Cache::remember('Img'.$camera, 600, function () use ($camera) {
+                if (!Cache::has('Img'.$camera)) {
+                    $value = Cache::remember('Img'.$camera, 600, function () use ($date) {
+                        echo 'update ';
+                        return $date;
+                    });
                     $camera_rtsp = env($camera,false);
                     $ffmpeg = env('FFMPEG_BIN',false);
                     if ($camera_rtsp && $ffmpeg) {
-                        $date = date_create();
-                        $date = date_timestamp_get($date);
                         $file = __DIR__ . '/../../../../storage/app/file/camera/' . $camera.'_' . $date . '.jpg';
                         shell_exec($ffmpeg." -rtsp_transport tcp  -y -i " . $camera_rtsp . " -f image2 -vframes 1 " . $file);
-                        echo 'update ';
-                        return true;
                     }
-                    return false;
-                });
-                if ($value) {
-                    echo 'ok <br>';
+                } else {
+                    $value = Cache::get('Img'.$camera);
                 }
+                echo $value.'ok <br>';
             }
+            echo $date.' <br>';
         }
     }
 
