@@ -39,7 +39,7 @@
   export default {
     data() {
       const validateEmail = (rule, value, callback) => {
-        console.log('valid eamil')
+        // console.log('valid eamil')
         const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/
         if (!re.test(value )) {
           callback(new Error('Пожалуйста, введите действующий email'))
@@ -60,7 +60,7 @@
     methods:{
       reset(){
         this.$refs.Resetform.validate(valid => {
-          console.log(valid)
+          // console.log(valid)
           if (valid) {
             const data = {
               email: this.form.email
@@ -76,9 +76,9 @@
                     confirmButtonText: 'OK',
                   });
                 }
-                console.log(response.data)
+                // console.log(response.data)
               })
-            console.log('ok')
+            // console.log('ok')
             // password/email
           }
         })

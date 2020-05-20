@@ -43,6 +43,8 @@ Route::get('/personal', function () {
 //    return view('vue');
 //})->name('vue');
 
+Route::get('/camera', 'Camera\CameraController@index');
+Route::get('/camera/img/{id?}', 'Camera\CameraController@getImages');
 Route::get('/rasp', 'RaspController@index');
 Route::get('/temper', 'TemperController@index');
 Route::get('/temper/get', 'TemperController@showGrafTemper');

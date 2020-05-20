@@ -252,7 +252,7 @@ export default {
       }
       updateAppel(data, row.id)
         .then(response =>{
-          console.log(response.data)
+          // console.log(response.data)
           this.$message({
             message: 'Success',
             type: 'success'
@@ -269,7 +269,7 @@ export default {
       }
     },
     sortByID(order) {
-      console.log(order)
+      // console.log(order)
       if (order === 'ascending') {
         this.listQuery.sort = '+created_at'
       } else if(order === 'descending') {
@@ -347,7 +347,7 @@ export default {
           this.temp.message.push({text: this.temp.new_message, user: {name: 'я'}})
           this.temp.new_message = ''
           this.list.splice(index, 1, this.temp)
-          console.log(response.data)
+          // console.log(response.data)
           this.dialogFormVisible = false
           this.$notify({
             title: 'Success',

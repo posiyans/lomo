@@ -38,6 +38,7 @@ class CategoryController extends Controller
                 ['label'=>'Тарифы', 'basePath'=>'/modules/rates'],
                 ['label'=>'Квитанции', 'basePath'=>'/modules/receipt'],
                 ['label'=>'Погода', 'basePath'=>'/modules/weather'],
+                ['label'=>'Камеры', 'basePath'=>'/modules/camera'],
             ]
         ];
         if (Auth::check() && Auth::user()->ability('superadmin', 'access-admin-panel')) {

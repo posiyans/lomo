@@ -56,8 +56,8 @@ export default {
       fetchList(listQuery)
         .then(response => {
           this.options = response.data
-          console.log('response')
-          console.log(response)
+          // console.log('response')
+          // console.log(response)
         })
     }
   }

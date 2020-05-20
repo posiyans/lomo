@@ -58,9 +58,9 @@
       onSubmit() {
         updateGardeninngInfo(this.form)
           .then(response => {
-            console.log(response.data)
+            // console.log(response.data)
           })
-        console.log('submit!');
+        // console.log('submit!');
       }
 
     }

@@ -134,6 +134,12 @@ export const constantRoutes = [
         name: 'modulesWeather',
         hidden: true
       },
+      {
+        path: 'camera',
+        component: () => import('@/views/modules/camera/index.vue'),
+        name: 'modulesCamera',
+        hidden: true
+      },
     ]
   },
   {

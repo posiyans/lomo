@@ -58,11 +58,11 @@
         return matches ? decodeURIComponent(matches[1]) : undefined;
       },
       handleSuccess(response, file,  fileList) {
-        console.log('handleSuccess')
-        console.log(response)
+        // console.log('handleSuccess')
+        // console.log(response)
         file.id = file.response.files.id,
-        console.log(file)
-        console.log(fileList)
+        // console.log(file)
+        // console.log(fileList)
         this.fileList = fileList
         // this.fileList = fileList.map( item =>{
         //   return {
@@ -82,8 +82,8 @@
         // }
       },
       handleRemove(file, fileList) {
-        console.log(file);
-        console.log(fileList);
+        // console.log(file);
+        // console.log(fileList);
         this.fileList = fileList
       },
       handlePreview(file) {

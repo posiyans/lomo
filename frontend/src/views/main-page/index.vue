@@ -32,14 +32,14 @@ export default {
   },
   methods:{
     add(){
-      console.log('ADD!!!')
+      // console.log('ADD!!!')
       this.listQuery.page += 1
       if (this.$route.params.id) {
         this.listQuery.category_id = this.$route.params.id
       }
 
       fetchListForCategory(this.listQuery).then(response => {
-        console.log('ADD OK')
+        // console.log('ADD OK')
 
         const data = response.data.data
         data.forEach(item => {
@@ -48,15 +48,15 @@ export default {
       })
     },
     fetchArticle(){
-      console.log('fewtch!!!')
-      console.log(this.listQuery)
+      // console.log('fewtch!!!')
+      // console.log(this.listQuery)
       this.listLoading = false
       if (this.$route.params.id) {
         this.listQuery.category_id = this.$route.params.id
       }
 
       fetchListForCategory(this.listQuery).then(response => {
-        console.log('fewtch OK')
+        // console.log('fewtch OK')
         this.list = response.data.data
         this.total = response.data.total
         this.listLoading = true

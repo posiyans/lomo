@@ -56,7 +56,7 @@
   export default {
     data() {
       const validateEmail = (rule, value, callback) => {
-        console.log('valid eamil')
+        // console.log('valid eamil')
         const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/
         if (!re.test(value )) {
           callback(new Error('Пожалуйста, введите действующий email'))
@@ -96,8 +96,8 @@
       }
     },
     mounted() {
-      console.log('this.$route.par')
-      console.log(this.$route)
+      // console.log('this.$route.par')
+      // console.log(this.$route)
       this.form.email = this.$route.query.email
       this.form.token = this.$route.query.token
 
@@ -129,9 +129,9 @@
                     confirmButtonText: 'OK',
                   });
                 }
-                console.log(response.data)
+                // console.log(response.data)
               })
-            console.log('ok')
+            // console.log('ok')
             // password/email
           }
         })

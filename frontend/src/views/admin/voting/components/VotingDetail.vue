@@ -208,13 +208,13 @@
         // back end return => "2013-06-25 06:59:25"
         // front end need timestamp => 1372114765000
         get() {
-          console.log(this.postForm)
+          // console.log(this.postForm)
           return this.$moment(this.postForm.date_publish)
         },
         set(val) {
           this.dataRange = ['','']
           this.postForm.date_publish = this.$moment(val).format('YYYY-MM-DD HH:mm:ss')
-          console.log(this.postForm.date_publish)
+          // console.log(this.postForm.date_publish)
           // this.datetime= new Date(val)
         }
       }
@@ -222,9 +222,9 @@
     created() {
       this.postForm.uid = this.create_UUID()
       this.postForm.date_publish = this.$moment(this.postForm.date_publish).format('YYYY-MM-DD HH:mm:ss')
-      console.log('this.isEdit')
-      console.log(this.isEdit)
-      console.log(this.defaultForm)
+      // console.log('this.isEdit')
+      // console.log(this.isEdit)
+      // console.log(this.defaultForm)
       if (this.isEdit) {
         const id = this.$route.params && this.$route.params.id
         this.fetchData(id)
@@ -289,8 +289,8 @@
         // this.saveForm()
       },
       saveForm() {
-        console.log('this.postForm')
-        console.log(this.postForm)
+        // console.log('this.postForm')
+        // console.log(this.postForm)
         this.$refs.postForm.validate(valid => {
           if (valid) {
             this.loading = true
@@ -303,7 +303,7 @@
                   this.postForm = response.data.data
                   // this.postForm.allow_comments = Boolean(response.data.allow_comments)
                   // this.datetime = this.$moment(this.postForm.publish_time)
-                  console.log(response.data)
+                  // console.log(response.data)
                 })
             } else {
               createVoting({ voting: this.postForm })
@@ -329,14 +329,14 @@
 
             this.loading = false
           } else {
-            console.log('error submit!!')
+            // console.log('error submit!!')
             return false
           }
         })
       },
       draftForm() {
         this.postForm.public = false
-        console.log(this.postForm)
+        // console.log(this.postForm)
         this.saveForm()
       },
       getRemoteUserList(query) {

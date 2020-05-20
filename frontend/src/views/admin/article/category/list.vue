@@ -119,7 +119,7 @@
         }
         updateCategory('all', data)
           .then(response => {
-            console.log(response)
+            // console.log(response)
             this.getList()
             this.showAdd=false
             this.$message({
@@ -134,9 +134,9 @@
         }
         createCategory(data)
           .then(response => {
-            console.log(response)
+            // console.log(response)
             this.form.newCategory = ''
-            this.showAdd=false
+            this.showAdd = false
             this.getList()
             this.$message({
               message: 'Данные сохранены',
@@ -171,7 +171,7 @@
           //   }
           // })
           this.listLoading = false
-          console.log(this.category)
+          // console.log(this.category)
         })
       },
       handleDragStart(node, ev) {

@@ -60,7 +60,7 @@
       }
     },
     mounted() {
-      console.log(this.showLoginForm)
+      // console.log(this.showLoginForm)
     },
     computed: {
 
@@ -73,10 +73,10 @@
         console.log('vk')
 
         const $url = await this.$store.dispatch('user/loginVK')
-        console.log($url)
-        console.log(window.location.pathname)
-        console.log(this.$route.query.page)
-        console.log(location.href)
+        // console.log($url)
+        // console.log(window.location.pathname)
+        // console.log(this.$route.query.page)
+        // console.log(location.href)
         window.location = $url
         // window.location = $url + '&redirect_uri=' + location.href
         // this.newWin = window.open($url, "hello", "width=200,height=200");
@@ -97,10 +97,10 @@
         //this.$emit(true)
         this.$router.push('/')
 
-        console.log('register')
+        // console.log('register')
       },
       test() {
-        console.log('close!!!!!!!!!!!')
+        // console.log('close!!!!!!!!!!!')
       },
       login() {
         this.$store.dispatch('user/login', this.form)

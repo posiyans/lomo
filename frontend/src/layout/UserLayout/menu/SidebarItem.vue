@@ -61,7 +61,7 @@ export default {
       // Show parent if there are no child router to display
       if (children.length === 0) {
         this.onlyOneChild = parent
-        console.log(this.onlyOneChild)
+        // console.log(this.onlyOneChild)
         return true
       }
 
