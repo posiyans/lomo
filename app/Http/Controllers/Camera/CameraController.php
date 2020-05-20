@@ -33,12 +33,13 @@ class CameraController extends Controller
                         $date = date_timestamp_get($date);
                         $file = __DIR__ . '/../../../../storage/app/file/camera/' . $camera.'_' . $date . '.jpg';
                         shell_exec($ffmpeg." -rtsp_transport tcp  -y -i " . $camera_rtsp . " -f image2 -vframes 1 " . $file);
-                        return $file;
+                        echo 'update ';
+                        return true;
                     }
                     return false;
                 });
                 if ($value) {
-                    echo $value;
+                    echo 'ok <br>';
                 }
             }
         }
