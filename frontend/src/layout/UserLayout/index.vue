@@ -33,7 +33,7 @@
           </el-aside>
         </el-container>
       </el-main>
-      <el-footer class="el-header">
+      <el-footer class="footer">
         <div align="center">
           <div class="el-link" @click="showPersonal"> Внимание!!! Оставаясь на данном сайте вы соглашаетесь с политикой обработки пересональных данных</div>
 
@@ -79,38 +79,6 @@ export default {
       form: {
         name: ''
       },
-      menus: [
-        {
-          route: '/dashboard',
-          name: 'Главная',
-          icon: 'el-icon-s-custom'
-        },
-        {
-          route: '/documentation',
-          name: 'Личный кабинет'
-        },
-        {
-          route: '/icon',
-          name: 'Новости'
-        },
-        {
-          route: '/guide',
-          name: 'Написать в правление'
-        },
-        {
-          route: '/sdfsdf5',
-          name: 'Голосование'
-        },
-        {
-          route: '/sdfsdf6',
-          name: 'Объявления'
-        },
-        {
-          route: '/sdfsdf7',
-          name: 'Контакты'
-        }
-
-      ]
     }
   },
   mounted() {
@@ -182,6 +150,12 @@ export default {
   .main-body{
     padding: 5px 0;
   }
+  .footer {
+    background-color: #AFEEEE;
+    color:#333;
+    padding: 10px 0;
+  }
+
  /*.header {*/
  /*  line-height: 60px;*/
  /*}*/

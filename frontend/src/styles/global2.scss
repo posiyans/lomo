@@ -75,11 +75,26 @@ body {
   //width: 100%;
   //margin: 0 auto;
 }
-
+.el-card__body {
+  padding-top: 5px;
+}
+.article-setting-icon{
+  position: absolute;
+  top: 11px;
+  right: 24px;
+  cursor: pointer;
+  color: #1890ff;
+}
 @media screen and (max-width: 480px) {
   .el-card__body {
     padding-left: 0px;
     padding-right: 0px;
+    padding-top: 0px;
+    padding-bottom: 10px;
+  }
+  .article-setting-icon{
+    top: 5px;
+    right: 20px;
   }
 }
 

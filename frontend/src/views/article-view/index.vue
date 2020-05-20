@@ -3,6 +3,9 @@
     <el-card class="card-mobile">
       <div class="article-preview-header">
         <h2>{{ article.title }}</h2>
+        <div v-if="editor" class="article-setting-icon" @click="editArticle">
+          <i class="el-icon-s-tools"></i>
+        </div>
       </div>
       <div class="article-preview-body" >
         <span v-html="article.text"/>
@@ -31,7 +34,7 @@
           <el-col :span="10"><div style="text-align: right; padding: 10px 20px 0px 0;color: #848484; height: 100%;">{{article.publish_time | moment('HH:mm DD-MM-YYYY')}}</div></el-col>
         </el-row>
       </div>
-      <div class="comments-body">
+      <div v-if="article.allow_comments==1"  class="comments-body">
         <Comments v-model="article" />
       </div>
     </el-card>
@@ -69,7 +72,20 @@ export default {
       article: {}
     }
   },
+  computed:{
+    editor() {
+      if (this.$store.getters.user.allPermissions.includes('create-article')) {
+        return true
+      }
+      return false
+    },
+  },
   methods: {
+    editArticle() {
+      if (this.editor) {
+        this.$router.push('/admin-article/edit/' + this.article.id)
+      }
+    },
     back() {
       this.$router.back()
     },
@@ -91,6 +107,7 @@ export default {
     box-sizing: border-box;
     color: #303133;
     margin-top: -17px;
+    position: relative;
   }
   .article-preview-body{
     padding: 20px 0;
@@ -123,6 +140,20 @@ export default {
     font-weight: bold;
     color: #1f2d3d;
   }
+
+  .article-preview-body > img {
+    width: 90%;
+  }
+  .article-preview-body {
+    text-indent: 1.5em; /* Отступ первой строки */
+    text-align: justify; /* Выравнивание по ширине */
+  }
+  @media screen and (max-width: 480px) {
+    .article-preview-body{
+      padding: 5px 5px;
+    }
+  }
+
   /*.leftimg {*/
   /*  float:left; !* Выравнивание по левому краю *!*/
   /*  margin: 7px 20px 20px 0; !* Отступы вокруг картинки *!*/

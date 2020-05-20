@@ -1,6 +1,5 @@
 <template>
   <div class="main-comments">
-    <div class="comment_title"><strong>Комментарий</strong></div>
     <div v-for="i in value.comments" class="comments-post">
       <el-row>
         <el-col :xs="4" :sm="2" :lg="1" align="middle" ><el-avatar :size="40" :src="i.avatar | avatarUrl"></el-avatar></el-col>
@@ -10,7 +9,7 @@
           </div>
           <div class="reply_text">
             <div>
-              <div class="wall_reply_text" v-html="i.message">
+              <div class="wall_reply_text" v-html="$options.filters.marked(i.message)">
               </div>
             </div>
           </div>
@@ -45,69 +44,74 @@
 </template>
 
 <script>
-  import { addComment, fetchListComments } from '@/api/user/comment.js'
-  export default {
-    props: {
-       value: {
-         // type: Array,
-         // defaults: []
-       }
-    },
-    filters: {
-      avatarUrl(val){
-        if ( val[0] === '/') {
-          return process.env.VUE_APP_BASE_API + val
-        }
-        return val
-      }
-    },
-    data() {
-      return {
-        newComment: '',
-        items: []
-      }
-    },
-    computed: {
-      user(){
-        if (this.$store.getters.user.allPermissions.includes('guest')) {
-           return false
-        }
-        return this.$store.getters.user
-      }
-    },
-    created() {
-      // this.getComments()
-    },
-    methods:{
+import { addComment, fetchListComments } from '@/api/user/comment.js'
+// var marked = require('marked')
 
-      getComments(){
-        // const data = {
-        //   article_id: this.value,
-        // }
-        // fetchListComments(data)
-        //   .then(response => {
-        //     this.items = response.data.data
-        //   })
-      },
-      sendComment() {
-        const data = {
-          article_id: this.value.id,
-          message: this.newComment
-        }
-        addComment(data).then(response =>{
-          if(response.data.status){
-            this.value.comments.push(response.data.data)
-          } else {
-            this.$message({
-              message: 'Не удалось добавить комментарий',
-              type: 'error'
-            })
-          }
-        })
-        this.newComment = ''
+export default {
+  props: {
+     value: {
+       // type: Array,
+       // defaults: []
+     }
+  },
+  filters: {
+    mFilter(val) {
+      return 'dasdasdasd' + val
+    },
+    avatarUrl(val){
+      if ( val[0] === '/') {
+        return process.env.VUE_APP_BASE_API + val
       }
+      return val
+    }
+  },
+  data() {
+    return {
+      newComment: '',
+      items: []
+    }
+  },
+  computed: {
+    user(){
+      if (this.$store.getters.user.allPermissions.includes('guest')) {
+         return false
+      }
+      return this.$store.getters.user
+    }
+  },
+  created() {
+    // this.getComments()
+  },
+  methods:{
+
+    getComments(){
+      // const data = {
+      //   article_id: this.value,
+      // }
+      // fetchListComments(data)
+      //   .then(response => {
+      //     this.items = response.data.data
+      //   })
+    },
+    sendComment() {
+      const data = {
+        article_id: this.value.id,
+        message: this.newComment
+      }
+      addComment(data).then(response => {
+        if (response.data.status) {
+          this.value.comments.push(response.data.data)
+        } else {
+          this.$message({
+            message: 'Не удалось добавить комментарий',
+            type: 'error'
+          })
+        }
+      })
+      this.newComment = ''
     }
   }
+}
 </script>
 
 <style scoped>
@@ -166,5 +170,15 @@
     margin: 0 20px;
     font-size: 2em;
     vertical-align: middle;
+  }
+</style>
+<style>
+  .wall_reply_text > p {
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+  .wall_reply_text > h1 {
+    margin-top: 5px;
+    margin-bottom: 5px;
   }
 </style>

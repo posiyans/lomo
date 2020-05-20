@@ -1,5 +1,6 @@
 // import parseTime, formatTime and set to filter
 export { parseTime, formatTime } from '@/utils'
+var markedFunc = require('marked')
 
 /**
  * Show plural label if time is plural number
@@ -65,4 +66,11 @@ export function toThousandFilter(num) {
  */
 export function uppercaseFirst(string) {
   return string.charAt(0).toUpperCase() + string.slice(1)
+}
+
+
+export function marked(string) {
+  console.log(markedFunc(string))
+
+  return markedFunc(string)
 }

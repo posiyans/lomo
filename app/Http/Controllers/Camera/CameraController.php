@@ -36,10 +36,9 @@ class CameraController extends Controller
                         return $date;
                     });
                     $camera_rtsp = env($camera,false);
-                    $ffmpeg = env('FFMPEG_BIN',false);
-                    if ($camera_rtsp && $ffmpeg) {
+                    if ($camera_rtsp) {
                         $file = __DIR__ . '/../../../../storage/app/file/camera/' . $camera.'_' . $date . '.jpg';
-                        shell_exec($ffmpeg." -rtsp_transport tcp  -y -i " . $camera_rtsp . " -f image2 -vframes 1 " . $file);
+                        $this->rtspToJpeg($camera_rtsp, $file);
                     }
                 } else {
                     $value = Cache::get('Img'.$camera);
@@ -50,6 +49,23 @@ class CameraController extends Controller
         }
     }
 
+    public function rtspToJpeg($camera_rtsp, $file, $count = 2){
+        $ffmpeg = env('FFMPEG_BIN',false);
+        if ($ffmpeg) {
+            shell_exec($ffmpeg . " -rtsp_transport tcp  -y -i " . $camera_rtsp . " -f image2 -vframes 1 " . $file);
+            $size = env('CAMERA_IMG_MIN_FILE_SIZE',10000);
+            if (filesize($file) < $size && $count > 0) {
+                $today = date("Y-m-d H:i:s");
+                $file_log = __DIR__ . '/../../../../storage/app/file/camera/log.txt';
+//                $current = file_get_contents($file_log);
+                $current = $today. ' - '. $camera_rtsp. ' - size: '. filesize($file).' - count :'. $count . "\n";
+                file_put_contents($file_log, $current, FILE_APPEND | LOCK_EX);
+                $count = $count - 1;
+                $this->rtspToJpeg($camera_rtsp, $file, $count);
+            }
+        }
+        return true;
+    }
 
     public function getImages($camera = false){
         if(!$camera) {

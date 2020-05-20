@@ -51,11 +51,14 @@ class CommentController extends Controller
     {
         if (isset($request->article_id) && isset($request->message)){
             $article = ArticleModel::find((int)$request->article_id);
-            if ($article) {
+            if ($article && $article->allow_comments == 1) {
                 $comment = new CommentModel();
                 $comment->user_id = Auth::user()->id;
                 $comment->article_id = $article->id;
-                $comment->message = $request->message;
+                $message = $request->message;
+                $message = htmlspecialchars($message, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', false);
+                $message = nl2br($message);
+                $comment->message = $message;
                 if ($comment->save()){
                     return json_encode(['status'=>true, 'data'=>new CommentResource($comment)]);
                 }
