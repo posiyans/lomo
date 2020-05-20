@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-  <h2>Реквизиты для оплаты</h2>
+    <h2>Реквизиты для оплаты</h2>
     <div class="props">
       <div><b>Наименование:</b> <span class="props-value">{{gardening.name}}</span></div>
       <div><b>ИНН:</b> <span class="props-value">{{gardening.PayeeINN}}</span></div>
