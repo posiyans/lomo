@@ -7,8 +7,8 @@
     background-color="#545c64"
     text-color="#fff"
     active-text-color="#ffd04b">
-    <sidebar-item v-for="route in menul" :item="route"/>
-    <el-menu-item v-if="admin && screen_wight < 480" index="/admin-article/list" >Админ панель</el-menu-item>
+    <sidebar-item v-for="route in menul" :item="route" :key="route"/>
+    <el-menu-item v-if="admin && screen_wight > 480" index="/admin-article/list" >Админ панель</el-menu-item>
   </el-menu>
 </template>
 
@@ -80,10 +80,8 @@ export default {
   },
   methods: {
     handleSelect(key, keyPath) {
-
-      // console.log(this.$router)
       this.$router.push(key)
-      // console.log(key, keyPath)
+      this.$emit('toggleClick')
     },
     handleClickOutside() {
       this.$store.dispatch('app/closeSideBar', { withoutAnimation: false })

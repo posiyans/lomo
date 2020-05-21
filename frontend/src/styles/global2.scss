@@ -85,7 +85,11 @@ body {
   cursor: pointer;
   color: #1890ff;
 }
+
 @media screen and (max-width: 480px) {
+  .el-header {
+    padding-left: 5px;
+  }
   .el-card__body {
     padding-left: 5px;
     padding-right: 5px;

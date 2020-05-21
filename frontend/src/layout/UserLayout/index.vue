@@ -3,12 +3,13 @@
     <el-container>
       <el-header style="text-align: right; font-size: 12px">
         <el-row
-          align="middle"
+          align="left"
           type="flex"
           justify="space-between"
           class="layout-header"
         >
           <el-col :md="6"  :xs="8">
+            <hamburger v-if="mobile" :is-active="open_sidebar" class="hamburger-container" @toggleClick="toggleSideBar" />
             <div class="header logo">ЛОМО</div>
           </el-col>
           <el-col :md="6" :xs="16">
@@ -16,9 +17,9 @@
           </el-col>
         </el-row>
       </el-header>
-      <el-row>
+      <el-row v-if="open_sidebar || !mobile" >
         <el-col :span="24">
-          <ItemMenu :menu="menu"/>
+          <ItemMenu :menu="menu" @toggleClick="open_sidebar = false" />
         </el-col>
       </el-row>
       <el-main class="main-body">
@@ -51,6 +52,7 @@ import ReceiptForm from '@/components/Module/ReceiptForm/index.vue'
 import WeatherForm from '@/components/Module/WeatherForm/index.vue'
 import LoginForm from '@/components/LoginForm'
 import ItemMenu from './menu/ItemMenu.vue'
+import Hamburger from '@/components/Hamburger'
 import { AppMain, Navbar, Settings, Sidebar, TagsView } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
 import { mapState, mapGetters } from 'vuex'
@@ -70,6 +72,7 @@ export default {
     RightCard,
     Settings,
     Sidebar,
+    Hamburger,
     TagsView
   },
   mixins: [ResizeMixin],
@@ -79,6 +82,7 @@ export default {
       form: {
         name: ''
       },
+      open_sidebar: false
     }
   },
   mounted() {
@@ -97,6 +101,8 @@ export default {
       fixedHeader: state => state.settings.fixedHeader
     }),
     ...mapGetters([
+      'sidebar',
+      'user_sidebar',
       'menu'
     ]),
     classObj() {
@@ -107,14 +113,14 @@ export default {
         mobile: this.device === 'mobile'
       }
     },
-    asideShow() {
-      if (this.$route.fullPath !== '/index') {
-        return false
-      }
+    mobile() {
+      // if (this.$route.fullPath !== '/index') {
+      //   return false
+      // }
       if (this.device === 'mobile'){
-        return false
+        return true
       }
-      return true
+      return false
     },
     // screenResize() {
     //   return window.screen.width
@@ -124,6 +130,9 @@ export default {
     }
   },
   methods: {
+    toggleSideBar() {
+      this.open_sidebar = !this.open_sidebar
+    },
     showPersonal(){
       this.$router.push('/article/show/term-of-use')
       // this.$router.push('/article/show/10')
@@ -163,6 +172,23 @@ export default {
  /*   background-color: #00084c;*/
  /*   color: #fff;*/
  /* }*/
+  .hamburger-container {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-right: 10px;
+    line-height: 48px;
+    height: 50px;
+    float: left;
+    cursor: pointer;
+    transition: background .3s;
+    background-color: #79e5e5;;
+    border-radius: 10px;
+    -webkit-tap-highlight-color:transparent;
+
+  &:hover {
+     background: rgba(0, 0, 0, .005)
+   }
+  }
 
 </style>
 
