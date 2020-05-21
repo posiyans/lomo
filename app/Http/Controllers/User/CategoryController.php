@@ -41,9 +41,9 @@ class CategoryController extends Controller
                 ['label'=>'Камеры', 'basePath'=>'/modules/camera'],
             ]
         ];
-        if (Auth::check() && Auth::user()->ability('superadmin', 'access-admin-panel')) {
-            $rez[] = ['label' => 'Админ панель', 'basePath' => '/admin-article/list'];
-        }
+//        if (Auth::check() && Auth::user()->ability('superadmin', 'access-admin-panel')) {
+//            $rez[] = ['label' => 'Админ панель', 'basePath' => '/admin-article/list'];
+//        }
         return $rez;
     }
 

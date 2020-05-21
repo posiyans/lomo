@@ -1,13 +1,14 @@
 <template>
   <el-menu
     :default-active="activeIndex"
-    class="el-menu-demo"
-    mode="horizontal"
+    class="el-menu-vertical-demo"
+    :mode="mode_menu"
     @select="handleSelect"
     background-color="#545c64"
     text-color="#fff"
     active-text-color="#ffd04b">
     <sidebar-item v-for="route in menul" :item="route"/>
+    <el-menu-item v-if="admin && screen_wight < 480" index="/admin-article/list" >Админ панель</el-menu-item>
   </el-menu>
 </template>
 
@@ -38,8 +39,23 @@ export default {
       'permission_routes',
       'sidebar'
     ]),
+    screen_wight(){
+      return document.documentElement.clientWidth
+    },
+    mode_menu(){
+      if(this.screen_wight < 500){
+        return 'vertical'
+      }
+      return 'horizontal'
+    },
     menul() {
       return this.$store.state.permission.menu
+    },
+    admin() {
+      if (this.$store.getters.user.allPermissions.includes('access-admin-panel')) {
+        return true
+      }
+      return false
     },
     activeMenu() {
       const route = this.$route
@@ -60,7 +76,7 @@ export default {
   mounted() {
     // console.log('menu item menu')
     // console.log(this.$store.state.permission.menu)
-    // console.log(this.menul)
+    console.log(document.documentElement.clientWidth)
   },
   methods: {
     handleSelect(key, keyPath) {

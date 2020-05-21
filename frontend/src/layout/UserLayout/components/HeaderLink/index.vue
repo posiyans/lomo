@@ -15,6 +15,7 @@
             {{ user.name }}<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item v-if="admin" command="adminPanel">Админ панель</el-dropdown-item>
             <el-dropdown-item command="profile">Профиль</el-dropdown-item>
             <el-dropdown-item command="logout" divided >Выход</el-dropdown-item>
           </el-dropdown-menu>
@@ -70,6 +71,12 @@ export default {
     roleGuest() {
       return this.$store.getters.roles.includes('guest')
     },
+    admin() {
+      if (this.$store.getters.user.allPermissions.includes('access-admin-panel')) {
+        return true
+      }
+      return false
+    },
     cachedViews() {
       console.log('this.$store.state.tagsView.cachedViews')
       console.log(this.$store.state.tagsView.cachedViews)
@@ -89,6 +96,9 @@ export default {
       }
       if (command === 'profile') {
         this.$router.push('/user/profile')
+      }
+      if (command === 'adminPanel') {
+        this.$router.push('/admin-article/list')
       }
     },
     async loginVK() {
