@@ -44,167 +44,114 @@
 </template>
 
 <script>
-  import { fetchList, createCategory, updateCategory } from '@/api/category'
-  import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
+import { fetchList, createCategory, updateCategory } from '@/api/category'
+import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
-  export default {
-    name: 'ArticleList',
-    components: { Pagination },
-    filters: {
-      statusFilter(status) {
-        const statusMap = {
-          published: 'success',
-          draft: 'info',
-          deleted: 'danger'
-        }
-        return statusMap[status]
+export default {
+  name: 'ArticleList',
+  components: { Pagination },
+  filters: {
+    statusFilter(status) {
+      const statusMap = {
+        published: 'success',
+        draft: 'info',
+        deleted: 'danger'
       }
-    },
-    data() {
-      return {
-        form: {
-          newCategory: '',
-        },
-        showAdd: false,
+      return statusMap[status]
+    }
+  },
+  data() {
+    return {
+      form: {
+        newCategory: '',
+      },
+      showAdd: false,
 
-        category: [],
-        data: [{
-          label: 'Level one 1',
-          children: [{
-            label: 'Level two 1-1',
-            children: [{
-              label: 'Level three 1-1-1'
-            }]
-          }]
-        }, {
-          label: 'Level one 2',
-          children: [{
-            label: 'Level two 2-1',
-            children: [{
-              label: 'Level three 2-1-1'
-            }]
-          }, {
-            label: 'Level two 2-2',
-            children: [{
-              label: 'Level three 2-2-1'
-            }]
-          }]
-        }, {
-          label: 'Level one 3',
-          children: [{
-            label: 'Level two 3-1',
-            children: [{
-              label: 'Level three 3-1-1'
-            }]
-          }, {
-            label: 'Level two 3-2',
-            children: [{
-              label: 'Level three 3-2-1'
-            }]
-          }]
-        }],
-        defaultProps: {
-          children: 'children',
-          label: 'label'
-        }
-      }
-    },
-    mounted() {
-     this.getList()
-    },
-    methods: {
-      updateCategory(){
-        const data = {
-          allCategory: this.category
-        }
-        updateCategory('all', data)
-          .then(response => {
-            // console.log(response)
-            this.getList()
-            this.showAdd=false
-            this.$message({
-              message: 'Данные сохранены',
-              type: 'success'
-            })
-          })
-      },
-      addCategory() {
-        const data = {
-          title: this.form.newCategory
-        }
-        createCategory(data)
-          .then(response => {
-            // console.log(response)
-            this.form.newCategory = ''
-            this.showAdd = false
-            this.getList()
-            this.$message({
-              message: 'Данные сохранены',
-              type: 'success'
-            })
-          })
-
-      },
-      getList() {
-        this.listLoading = true
-        const listQuery = {
-          children : true
-        }
-        fetchList(listQuery).then(response => {
-          this.category = response.data;
-          // this.category = []
-          // response.data.data.forEach(i =>{
-          //   if (!i.parent){
-          //     this.category.push({
-          //       id: i.id,
-          //       label: i.name,
-          //       children: []
-          //     })
-          //   } else {
-          //
-          //   }
-          // })
-          // this.category = response.data.data.map( i => {
-          //   return {
-          //     id: i.id,
-          //     label: i.name
-          //   }
-          // })
-          this.listLoading = false
-          // console.log(this.category)
-        })
-      },
-      handleDragStart(node, ev) {
-        console.log('drag start', node);
-      },
-      handleDragEnter(draggingNode, dropNode, ev) {
-        console.log('tree drag enter: ', dropNode.label);
-      },
-      handleDragLeave(draggingNode, dropNode, ev) {
-        console.log('tree drag leave: ', dropNode.label);
-      },
-      handleDragOver(draggingNode, dropNode, ev) {
-        console.log('tree drag over: ', dropNode.label);
-      },
-      handleDragEnd(draggingNode, dropNode, dropType, ev) {
-        console.log('tree drag end: ', dropNode && dropNode.label, dropType);
-        console.log(this.category);
-      },
-      handleDrop(draggingNode, dropNode, dropType, ev) {
-        console.log('tree drop: ', dropNode.label, dropType);
-      },
-      allowDrop(draggingNode, dropNode, type) {
-        if (dropNode.data.label === 'Level two 3-1') {
-          return type !== 'inner';
-        } else {
-          return true;
-        }
-      },
-      allowDrag(draggingNode) {
-        return draggingNode.data.label.indexOf('Level three 3-1-1') === -1;
+      category: [],
+      defaultProps: {
+        children: 'children',
+        label: 'label'
       }
     }
+  },
+  mounted() {
+    this.getList()
+  },
+  methods: {
+    updateCategory() {
+      const data = {
+        allCategory: this.category
+      }
+      updateCategory('all', data)
+        .then(response => {
+          // console.log(response)
+          this.getList()
+          this.showAdd=false
+          this.$message({
+            message: 'Данные сохранены',
+            type: 'success'
+          })
+        })
+    },
+    addCategory() {
+      const data = {
+        title: this.form.newCategory
+      }
+      createCategory(data)
+        .then(response => {
+          // console.log(response)
+          this.form.newCategory = ''
+          this.showAdd = false
+          this.getList()
+          this.$message({
+            message: 'Данные сохранены',
+            type: 'success'
+          })
+        })
+    },
+    getList() {
+      this.listLoading = true
+      const listQuery = {
+        children: true
+      }
+      fetchList(listQuery).then(response => {
+        this.category = response.data
+        this.listLoading = false
+        // console.log(this.category)
+      })
+    },
+    handleDragStart(node, ev) {
+      console.log('drag start', node);
+    },
+    handleDragEnter(draggingNode, dropNode, ev) {
+      console.log('tree drag enter: ', dropNode.label);
+    },
+    handleDragLeave(draggingNode, dropNode, ev) {
+      console.log('tree drag leave: ', dropNode.label);
+    },
+    handleDragOver(draggingNode, dropNode, ev) {
+      console.log('tree drag over: ', dropNode.label);
+    },
+    handleDragEnd(draggingNode, dropNode, dropType, ev) {
+      console.log('tree drag end: ', dropNode && dropNode.label, dropType);
+      console.log(this.category);
+
+    },
+    handleDrop(draggingNode, dropNode, dropType, ev) {
+      console.log('tree drop: ', dropNode.label, dropType);
+    },
+    allowDrop(draggingNode, dropNode, type) {
+      if (dropNode.data.label === 'Level two 3-1') {
+        return type !== 'inner';
+      } else {
+        return true;
+      }
+    },
+    allowDrag(draggingNode) {
+      return draggingNode.data.label.indexOf('Level three 3-1-1') === -1;
+    }
   }
+}
 </script>
 
 <style scoped>

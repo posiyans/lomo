@@ -39,11 +39,6 @@ export default {
     default: {}
   },
   filters: {
-    publishFilter(val) {
-      console.log('this')
-      console.log(this)
-      return moment(val).format('MMMM Do YYYY, h:mm:ss a')
-    }
   },
   mounted() {
     if (this.id > 0) {
@@ -144,6 +139,9 @@ export default {
   .resume-article-preview-footer {
 
   }
+  /*h2 {*/
+  /*  margin-right: 20px;*/
+  /*}*/
   .resume-article-preview-body >>> img{
     width: 100px;
     float:left; /* Выравнивание по левому краю */
@@ -153,6 +151,14 @@ export default {
     padding-left: 20px;
   }
   @media screen and (max-width: 480px) {
+    .resume-article-preview-header{
+      padding: 0 20px;
+      border-bottom: 1px solid #e6ebf5;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+      color: #303133;
+      position: relative;
+    }
     .article-setting-icon{
       top: 5px;
       right: 20px;

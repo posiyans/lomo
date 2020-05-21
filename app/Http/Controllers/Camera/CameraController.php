@@ -88,4 +88,6 @@ class CameraController extends Controller
 
     }
 
+//    convert -delay 50 -loop 1 CAMERA1_*.jpg cam1.gif
+
 }

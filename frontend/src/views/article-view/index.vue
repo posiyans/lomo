@@ -1,6 +1,9 @@
 <template>
   <div>
-    <el-card class="card-mobile">
+    <el-card
+      v-loading="loading"
+      class="card-mobile"
+    >
       <div class="article-preview-header">
         <h2>{{ article.title }}</h2>
         <div v-if="editor" class="article-setting-icon" @click="editArticle">
@@ -31,7 +34,7 @@
               <el-button v-if="article.allow_comments==1" type="primary" size="mini" plain icon="el-icon-chat-dot-square">{{ article.comments.length }}</el-button>
             </span>
           </el-col>
-          <el-col :span="10"><div style="text-align: right; padding: 10px 20px 0px 0;color: #848484; height: 100%;">{{article.publish_time | moment('HH:mm DD-MM-YYYY')}}</div></el-col>
+          <el-col :span="10"><div style="text-align: right; padding: 10px 20px 0px 0;color: #848484; height: 100%;">{{publicTime(article.publish_time)}}</div></el-col>
         </el-row>
       </div>
       <div v-if="article.allow_comments==1"  class="comments-body">
@@ -69,6 +72,7 @@ export default {
   },
   data() {
     return {
+      loading: true,
       article: {}
     }
   },
@@ -81,6 +85,16 @@ export default {
     },
   },
   methods: {
+    publicTime(val) {
+      const time = (this.$moment() - this.$moment(val)) / 1000
+      if (time > 24 * 3600 * 360) {
+        return this.$moment(val).format('DD MMM YYYY в HH:mm')
+      }
+      if (time > 24 * 3600 * 2) {
+        return this.$moment(val).format('DD MMM в HH:mm')
+      }
+      return this.$moment(val).fromNow()
+    },
     editArticle() {
       if (this.editor) {
         this.$router.push('/admin-article/edit/' + this.article.id)
@@ -93,6 +107,7 @@ export default {
       fetchUserArticle(this.$route.params.id)
         .then(response => {
           this.article = response.data.data
+          this.loading = false
         })
     }
   }
@@ -106,7 +121,7 @@ export default {
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     color: #303133;
-    margin-top: -17px;
+    /*margin-top: -17px;*/
     position: relative;
   }
   .article-preview-body{
@@ -128,7 +143,17 @@ export default {
 .divider-footer {
   margin: 10px 0;
 }
+  @media screen and (max-width: 480px) {
 
+    .article-preview-header{
+      padding: 0 20px;
+      border-bottom: 1px solid #e6ebf5;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+      color: #303133;
+      position: relative;
+    }
+  }
 </style>
 
 <style>
@@ -153,7 +178,6 @@ export default {
       padding: 5px 5px;
     }
   }
-
   /*.leftimg {*/
   /*  float:left; !* Выравнивание по левому краю *!*/
   /*  margin: 7px 20px 20px 0; !* Отступы вокруг картинки *!*/
