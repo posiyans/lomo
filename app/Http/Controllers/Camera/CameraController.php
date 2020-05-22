@@ -71,6 +71,19 @@ class CameraController extends Controller
         if(!$camera) {
             $camera = 1;
         }
+        if ($camera == 'gif1'){
+            $path = __DIR__ . '/../../../../storage/app/file/camera/GIF_CAMERA1.gif' ;
+            if (file_exists($path)) {
+                return response()->download($path, 'cam1.gif');
+            }
+        }
+        if ($camera == 'gif2'){
+            $path = __DIR__ . '/../../../../storage/app/file/camera/GIF_CAMERA2.gif' ;
+            if (file_exists($path)) {
+                return response()->download($path, 'cam2.gif');
+            }
+        }
+
         $directory = __DIR__ . '/../../../../storage/app/file/camera/';
         $scanned_directory = array_diff(scandir($directory), array('..', '.'));
         sort($scanned_directory);
@@ -88,6 +101,23 @@ class CameraController extends Controller
 
     }
 
-//    convert -delay 50 -loop 1 CAMERA1_*.jpg cam1.gif
+    public function createGif($token = false){
+        ignore_user_abort(true);
+        set_time_limit(500);
+        if($token === env('CAMERA_TOKEN',false) && $conver = env('CONVERT_BIN',false) ) {
+            $delay = env('CONVERT_DELAY',10);
+            $directory = __DIR__ . '/../../../../storage/app/file/camera/';
+            $count = env('CAMERA_COUNT',0);
+            if ($count > 0){
+                for ($i=1; $i<=$count; $i++) {
+                    $camera = 'CAMERA' . $i;
+                    shell_exec($conver . ' -delay ' . $delay . ' -loop 0 ' . $directory . $camera . '_*.jpg ' . $directory . 'GIF_' . $camera . '.gif');
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
 
 }
