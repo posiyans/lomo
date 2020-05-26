@@ -9,6 +9,8 @@ yarn-error.log*
 tests/**/coverage/
 tests/e2e/reports
 selenium-debug.log
+.env.production
+.env.development
 
 # Editor directories and files
 .idea
