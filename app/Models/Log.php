@@ -52,6 +52,7 @@ class Log extends MyModel
                 $objOld->log()->save($log);
             }
     }
+
     public function diff($objNew, $objOld)
     {
         $diff = [];

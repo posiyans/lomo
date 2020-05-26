@@ -52,6 +52,7 @@ Route::get('/rasp', 'RaspController@index');
 Route::get('/temper', 'TemperController@index');
 Route::get('/temper/get', 'TemperController@showGrafTemper');
 Route::get('/temper/getNewWeatherProHD', 'TemperController@getNewWeatherProHD');
+Route::get('/temper/getNowWeatherProHD', 'TemperController@getNowWeatherProHD');
 Route::get('/api/temper/get', 'TemperController@showGrafTemper');
 Route::post('/temper/now', 'TemperController@showLocalTemper'); // old
 Route::post('/api/temper/now', 'TemperController@showLocalTemper');
@@ -84,7 +85,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('/api/v1/admin/appeal', 'Admin\AppealController')
         ->only(['index', 'show', 'update']);
     Route::resource('/api/v1/admin/stead', 'Admin\SteadController')
-        ->only(['index', 'show']);
+        ->only(['index', 'show', 'update']);
     Route::resource('/api/v1/admin/user', 'Admin\UserController')
         ->only(['index', 'show', 'update']);
     Route::resource('/api/v1/admin/role', 'Admin\RoleController')

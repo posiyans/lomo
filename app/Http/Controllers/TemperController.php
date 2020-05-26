@@ -88,6 +88,41 @@ public function __construct()
 
     }
 
+
+    public function getNowWeatherProHD(){
+        $value = Cache::remember('NewWeatherProHD', 60, function () {
+            $link = env('WEATHER_LINL1',false);
+            $response_data = false;
+            if ($link) {
+                $agent = 'WeatherProHD';
+                $ch = curl_init($link);
+                curl_setopt($ch, CURLOPT_USERAGENT, $agent);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, ['Accept-Language: ru-ru,ru;q=0.8,en:q=0.3']);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, ['Connection: keep-alive']);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                $response_data = curl_exec($ch);
+                curl_close($ch);
+            }
+            return $response_data;
+        });
+        $p = xml_parser_create();
+        xml_parse_into_struct($p, $value, $vals, $index);
+        xml_parser_free($p);
+        $temper ='';
+//        echo '<pre>';
+
+        foreach ($vals as $val) {
+            if ($val['tag'] == 'LASTOBS') {
+                if (isset($val['attributes']['TT'])) {
+                    $temper = ['time' => $val['attributes']['DATETIME'], 'temp' => $val['attributes']['TT']];
+                }
+            }
+        }
+//        print_r($vals);
+        return  json_encode(['temper'=>$temper]);
+
+    }
+
 //    public function testt(){
 //        $value = Cache::remember('musers3', 6, function () {
 //        $link = '/temper/testt';

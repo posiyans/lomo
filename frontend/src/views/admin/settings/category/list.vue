@@ -71,7 +71,6 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        {{categoryEdit}}
         <el-button @click="dialogVisible = false">Отмена</el-button>
         <el-button type="primary" @click="saveCategory">Сохранить</el-button>
       </span>

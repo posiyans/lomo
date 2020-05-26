@@ -48,8 +48,8 @@ class UserController extends Controller
 //                $perms = Permission::all();
 //            } else {
                 $perms = $user->allPermissions();
-
 //            }
+
             foreach ($perms as $perm) {
                 $temp[] = $perm->name;
             }

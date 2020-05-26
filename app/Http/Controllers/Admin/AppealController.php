@@ -11,6 +11,15 @@ use Illuminate\Support\Facades\Auth;
 
 class AppealController extends Controller
 {
+
+    /**
+     * проверка на суперадмин или на доступ а админ панель
+     */
+    public function __construct()
+    {
+        $this->middleware('ability:superAdmin,show-appels|edit-appels');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -18,14 +27,12 @@ class AppealController extends Controller
      */
     public function index(Request $request)
     {
-        // todo а можно получать?
-//        $appeal = AppealModel::all();
+
         $query = AppealModel::query();
         if ($request->status && $request->status !='all'){
             $query->where('status', $request->status);
         }
         $appeal = $query->paginate($request->limit);
-//        return  $query->paginate();
         return AppealResource::collection($appeal);
     }
 
@@ -88,7 +95,7 @@ class AppealController extends Controller
             $model = AppealModel::find($id);
             $data = $request->post('appeal');
             if ($data){
-                if($data['new_message'] && !empty($data['new_message'])) {
+                if(isset($data['new_message']) && !empty($data['new_message'])) {
                     $model->addMessage($data['new_message'], $user->id);
                 }
                 $model->fill($data);

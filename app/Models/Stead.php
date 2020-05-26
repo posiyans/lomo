@@ -100,4 +100,52 @@ class Stead extends MyModel
     }
 
 
+    /**
+     * добавить примечание к участку
+     *
+     * @param $id -- id участка
+     * @param $note -- примечание
+     * @return bool
+     */
+    public static function addNote($id, $note){
+        $stead = Stead::find($id);
+        if ($stead){
+
+//            $stead_clone = clone $stead;
+            $discriptions = $stead->discriptions;
+            if (isset($discriptions['note'])){
+                $discriptions['note'] .= "\n".$note;
+            } else {
+                $discriptions['note'] = $note;
+            }
+            $stead->discriptions = $discriptions;
+            if ($stead->save()){
+
+                return $stead;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * обноиьт данные участка
+     * @param $id
+     * @param $model
+     * @return bool
+     */
+    public static function updateStead($id, $model)
+    {
+       $stead = Stead::find($id);
+            if ($stead && $model['id'] == $stead->id){
+                $stead_clone = clone $stead;
+                $stead->number =  $model['number'];
+                $stead->size =  $model['size'];
+                $stead->discriptions =  $model['discriptions'];
+                if ($stead->save()){
+                    Log::saveDiff($stead, $stead_clone, 'Изменение данныз об участке');
+                    return $stead;
+                }
+            }
+        return false;
+    }
 }

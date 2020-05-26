@@ -13,44 +13,41 @@
 </template>
 
 <script>
-  import RightCard from '@/components/RightCard'
-  import {getTemperNow } from '@/api/temper.js'
-  export default {
-    name: 'RecaiptForm',
-    components: {
-      RightCard
+import RightCard from '@/components/RightCard'
+import { getNowWeatherProHD } from '@/api/temper.js'
+export default {
+  name: 'RecaiptForm',
+  components: {
+    RightCard
+  },
+  data() {
+    return {
+      temper: false
+    }
+  },
+  mounted() {
+    this.fetchTemp()
+  },
+  methods: {
+    putWeather() {
+      this.$router.push('/modules/weather')
     },
-    data() {
-      return {
-        temper: false
-      }
+    fetchTemp() {
+      getNowWeatherProHD().then(response => {
+        this.temper = response.data.temper
+      })
+    }
+  },
+  computed: {
+    show() {
+      // проверка на актуальность темепературы,выводим если занчение получено не более 2 часов назад
+      // if ((this.$moment(this.temper.time).format('X') - this.$moment(new Date().getTime()).format('X'))/(60*60) > 1){
+      //   return true
+      // }
+      return true
     },
-    mounted() {
-      this.fetchTemp()
-    },
-    methods: {
-      putWeather() {
-        this.$router.push('/weather/index')
-      },
-      fetchTemp() {
-        getTemperNow().then(response => {
-          this.temper = response.data.temper
-        })
-      }
-    },
-    computed: {
-      show() {
-        // проверка на актуальность темепературы,выводим если занчение получено не более 2 часов назад
-        if ((this.$moment(this.temper.time).format('X') - this.$moment(new Date().getTime()).format('X'))/(60*60) > 1){
-          return true
-        }
-        return false
-      },
-      url() {
-        return process.env.VUE_APP_BASE_API + '/../user/receipt/get-receipt-clear'
-      }
-    },
-  }
+  },
+}
 </script>
 
 <style scoped>

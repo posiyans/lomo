@@ -17,6 +17,16 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
+
+    /**
+     * проверка на суперадмин или на доступ а админ панель
+     */
+    public function __construct()
+    {
+        $this->middleware('ability:superAdmin,show-users');
+    }
+
+
     /**
      * Display a listing of the resource.
      *

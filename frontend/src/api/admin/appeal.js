@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-export function fetchList(query) {
+export function fetchAppelList(query) {
   return request({
     url: '/api/v1/admin/appeal',
     method: 'get',

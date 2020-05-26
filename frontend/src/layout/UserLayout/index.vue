@@ -10,7 +10,7 @@
         >
           <el-col :md="6"  :xs="8">
             <hamburger v-if="mobile" :is-active="open_sidebar" class="hamburger-container" @toggleClick="toggleSideBar" />
-            <div class="header logo">ЛОМО</div>
+            <div class="header logo">{{site_name}}</div>
           </el-col>
           <el-col :md="6" :xs="16">
             <HeaderLink/>
@@ -82,6 +82,7 @@ export default {
       form: {
         name: ''
       },
+      site_name: process.env.VUE_APP_SITE_NAME,
       open_sidebar: false
     }
   },
@@ -112,6 +113,15 @@ export default {
         withoutAnimation: this.sidebar.withoutAnimation,
         mobile: this.device === 'mobile'
       }
+    },
+    asideShow() {
+      if (this.$route.fullPath !== '/index') {
+        return false
+      }
+      if (this.device === 'mobile'){
+        return false
+      }
+      return true
     },
     mobile() {
       // if (this.$route.fullPath !== '/index') {

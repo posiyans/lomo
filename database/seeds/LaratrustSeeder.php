@@ -75,6 +75,7 @@ class LaratrustSeeder extends Seeder
         'edit-users' => 'Редактирование пользователей',
         'show-users' => 'Просмотр пользователей',
         'edit-rate' => 'Правка тарифов',
+        'edit-menu' => 'Редактирование меню',
 
 
 

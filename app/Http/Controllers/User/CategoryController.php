@@ -28,9 +28,10 @@ class CategoryController extends Controller
 //        return $appeal;
 
 
+
+
         $rez = [];
         $rez[] = ['label'=>'Главная', 'basePath'=>'/index'];
-//        $rez[] = ['label'=>'Все новости', 'basePath'=>'/article/list'];
         if ($cat){
             $rez[] = ['label'=>'Статьи', 'basePath'=>'/article/list', 'children'=>$cat];
         }
@@ -44,7 +45,7 @@ class CategoryController extends Controller
 //        if (Auth::check() && Auth::user()->ability('superadmin', 'access-admin-panel')) {
 //            $rez[] = ['label' => 'Админ панель', 'basePath' => '/admin-article/list'];
 //        }
-        return $rez;
+        return $cat;
     }
 
     /**
@@ -110,13 +111,13 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if ($id == 'all'){
-            $data = $request->allCategory;
-            if (is_array($data)){
-                return json_encode(CategoryModel::updateSort($data));
-            }
-        }
-        return $data;
+//        if ($id == 'all'){
+//            $data = $request->allCategory;
+//            if (is_array($data)){
+//                return json_encode(CategoryModel::updateSort($data));
+//            }
+//        }
+//        return $data;
     }
 
     /**

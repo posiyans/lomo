@@ -80,6 +80,19 @@ export const constantRoutes = [
     hidden: true
   },
   {
+    path: '/admin',
+    component: Layout,
+    redirect: '/admin/dashboard',
+    children: [
+      {
+        path: 'dashboard',
+        component: () => import('@/views/admin/dashboard/admin/index'),
+        name: 'AdminDashboard',
+        meta: { title: 'Главная', icon: 'dashboard', affix: true }
+      }
+    ]
+  },
+  {
     path: '/',
     component: UserLayout,
     redirect: '/index',
@@ -88,7 +101,7 @@ export const constantRoutes = [
         path: 'index',
         component: () => import('@/views/main-page/index'),
         name: 'Dashboard',
-        meta: { title: 'Сайт', icon: 'dashboard', affix: true }
+        meta: { title: 'Сайт', icon: 'link', affix: true }
       }
     ]
   },
@@ -254,12 +267,12 @@ export const constantRoutes = [
         name: 'AdminArticleList',
         meta: { title: 'Статьи', icon: 'list' }
       },
-      {
-        path: 'category',
-        component: () => import('@/views/admin/article/category/list'),
-        name: 'CategoryList',
-        meta: { title: 'Категории', icon: 'list' }
-      }
+      // {
+      //   path: 'category',
+      //   component: () => import('@/views/admin/article/category/list'),
+      //   name: 'CategoryList',
+      //   meta: { title: 'Категории', icon: 'list' }
+      // }
     ]
   },
 

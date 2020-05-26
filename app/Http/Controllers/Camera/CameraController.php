@@ -114,9 +114,9 @@ class CameraController extends Controller
                     shell_exec($conver . ' -delay ' . $delay . ' -loop 0 ' . $directory . $camera . '_*.jpg ' . $directory . 'GIF_' . $camera . '.gif');
                 }
             }
-            return true;
+            return 'yes';
         }
-        return false;
+        return 'no';
     }
 
 

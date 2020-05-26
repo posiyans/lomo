@@ -10,6 +10,16 @@ use Auth;
 
 class RoleController extends Controller
 {
+
+
+    /**
+     * проверка на суперадмин или на доступ а админ панель
+     */
+    public function __construct()
+    {
+        $this->middleware('ability:superAdmin,access-admin-panel');
+    }
+
     /**
      * Display a listing of the resource.
      *

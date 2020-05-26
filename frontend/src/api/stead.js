@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-export function fetchList(query) {
+export function fetchSteadList(query) {
   return request({
     url: '/api/v1/admin/stead',
     method: 'get',
@@ -32,10 +32,23 @@ export function createArticle(data) {
   })
 }
 
+
+
+
 export function updateArticle(data) {
   return request({
     url: '/api/v1/article/update',
     method: 'post',
+    data
+  })
+}
+
+
+
+export function updateStead(id, data) {
+  return request({
+    url: '/api/v1/admin/stead/' + id,
+    method: 'put',
     data
   })
 }

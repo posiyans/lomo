@@ -7,7 +7,7 @@
     background-color="#545c64"
     text-color="#fff"
     active-text-color="#ffd04b">
-    <sidebar-item v-for="route in menul" :item="route" :key="route"/>
+    <sidebar-item v-for="route in menul" :item="route" :key="route.basePath"/>
     <el-menu-item v-if="admin && screen_wight > 480" index="/admin-article/list" >Админ панель</el-menu-item>
   </el-menu>
 </template>

@@ -8,9 +8,20 @@ use App\Models\AppealModel;
 use App\Models\Article\CategoryModel;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
+
+
+    /**
+     * проверка на суперадмин или на доступ а админ панель
+     */
+    public function __construct()
+    {
+        $this->middleware('ability:superAdmin,access-admin-panel');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -19,13 +30,13 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         if (isset($request->children) && $request->children){
-            return CategoryModel::getListChildren();
         }
-//        $appeal = AppealModel::all();
-        $query =  CategoryModel::query();
-        $appeal = $query->paginate($request->limit);
-//        return  $query->paginate();
-        return $appeal;
+            return CategoryModel::getListChildren(true);
+////        $appeal = AppealModel::all();
+//        $query =  CategoryModel::query();
+//        $appeal = $query->paginate($request->limit);
+////        return  $query->paginate();
+//        return $appeal;
     }
 
     /**
@@ -46,12 +57,15 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        if (isset($request->title) && !empty($request->title)){
-            $title = $request->title;
-            $category = new CategoryModel();
-            $category->name = $title;
-            $category->save();
-            return $category;
+        $user = Auth::user();
+        if ($user->ability('superAdmin', 'edit-menu')) {
+            if (isset($request->title) && !empty($request->title)) {
+                $title = $request->title;
+                $category = new CategoryModel();
+                $category->name = $title;
+                $category->save();
+                return $category;
+            }
         }
         return false;
     }
@@ -91,13 +105,25 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if ($id == 'all'){
-            $data = $request->allCategory;
-            if (is_array($data)){
-                return json_encode(CategoryModel::updateSort($data));
+        $user = Auth::user();
+        if ($user->ability('superAdmin', 'edit-menu')) {
+            if ($id == 'all') {
+                $data = $request->allCategory;
+                if (is_array($data)) {
+                    return json_encode(CategoryModel::updateSort($data));
+                }
+            }
+            $category = CategoryModel::find($id);
+            if ($category) {
+                $category->show_menu = $request->category['show_menu'];
+                $category->menu_name = $request->category['menu_name'];
+                $category->name = $request->category['label'];
+                if ($category->save()) {
+                    return json_encode(['status' => true, 'data' => $category]);
+                }
             }
         }
-        return $data;
+        return false;
     }
 
     /**

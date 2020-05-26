@@ -12,6 +12,16 @@ use App\Http\Controllers\Controller;
 
 class SteadController extends Controller
 {
+
+    /**
+     * проверка на суперадмин или на доступ а админ панель
+     */
+    public function __construct()
+    {
+        $this->middleware('ability:superAdmin,access-admin-panel');
+    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -82,7 +92,20 @@ class SteadController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // добавить комментарий к участку
+        if (isset($request->type) &&  $request->type == 'addNote' && isset($request->note) && !empty($request->note)){
+            $stead = Stead::addNote($id, $request->note);
+            if ($stead){
+                return json_encode(['status'=>true, 'data'=>$stead]);
+            }
+        }
+        if (isset($request->type) &&  $request->type == 'update' && isset($request->model) && !empty($request->model)){
+            $stead = Stead::updateStead($id, $request->model);
+            if ($stead){
+                return json_encode(['status'=>true, 'data'=>$stead]);
+            }
+        }
+        return json_encode(['status'=>false, 'data'=>'Упс']);
     }
 
     /**

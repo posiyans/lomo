@@ -119,7 +119,7 @@
 </template>
 
 <script>
-import { fetchList, fetchPv, createArticle, updateArticle, updateAppel } from '@/api/admin/appeal'
+import { fetchAppelList, fetchPv, createArticle, updateArticle, updateAppel } from '@/api/admin/appeal'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -231,14 +231,10 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      fetchList(this.listQuery).then(response => {
+      fetchAppelList(this.listQuery).then(response => {
         this.list = response.data.data
         this.total = response.data.meta.total
-
-        // Just to simulate the time of the request
-        setTimeout(() => {
-          this.listLoading = false
-        }, 1.5 * 1000)
+        this.listLoading = false
       })
     },
     handleFilter() {
@@ -251,16 +247,15 @@ export default {
         'appeal': row
       }
       updateAppel(data, row.id)
-        .then(response =>{
+        .then(response => {
           // console.log(response.data)
           this.$message({
             message: 'Success',
             type: 'success'
           })
+          this.getList()
 
         })
-
-
     },
     sortChange(data) {
       const { prop, order } = data
@@ -349,6 +344,7 @@ export default {
           this.list.splice(index, 1, this.temp)
           // console.log(response.data)
           this.dialogFormVisible = false
+          this.getList()
           this.$notify({
             title: 'Success',
             message: 'Update Successfully',

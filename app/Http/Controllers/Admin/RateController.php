@@ -6,9 +6,19 @@ use App\Models\MeteringDevice;
 use App\Models\Rate;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class RateController extends Controller
 {
+
+    /**
+     * проверка на суперадмин или на доступ а админ панель
+     */
+    public function __construct()
+    {
+        $this->middleware('ability:superAdmin,access-admin-panel');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -43,22 +53,25 @@ class RateController extends Controller
      */
     public function store(Request $request)
     {
-        if ($request->id){
-           $rate = MeteringDevice::find($request->id);
-           $rate->type_id = $request->type_id;
-           $rate->name = $request->name;
-           $rate->enable = $request->enable;
-           $rate->discription = $request->discription;
-           $rate->save();
-           if ($request->rate) {
-               $r = new Rate();
-               $r->device_id = $rate->id;
-               $r->ratio_a = $request->rate['ratio_a'];
-               $r->ratio_b = $request->rate['ratio_b'];
-               $r->discription = $request->rate['discription'];
-               $r->save();
-           }
-           return json_encode(['status'=>true, 'data'=>$rate]);
+        $user = Auth::user();
+        if ($user->ability('superAdmin', 'edit-rate')) {
+            if ($request->id) {
+                $rate = MeteringDevice::find($request->id);
+                $rate->type_id = $request->type_id;
+                $rate->name = $request->name;
+                $rate->enable = $request->enable;
+                $rate->discription = $request->discription;
+                $rate->save();
+                if ($request->rate) {
+                    $r = new Rate();
+                    $r->device_id = $rate->id;
+                    $r->ratio_a = $request->rate['ratio_a'];
+                    $r->ratio_b = $request->rate['ratio_b'];
+                    $r->discription = $request->rate['discription'];
+                    $r->save();
+                }
+                return json_encode(['status' => true, 'data' => $rate]);
+            }
         }
     }
 

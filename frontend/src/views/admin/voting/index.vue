@@ -125,7 +125,7 @@
 </template>
 
 <script>
-import { fetchList } from '@/api/admin/voting'
+import { fetchVotingList } from '@/api/admin/voting'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -249,14 +249,10 @@ export default {
     },
     getList() {
       this.listLoading = true
-      fetchList(this.listQuery).then(response => {
+      fetchVotingList(this.listQuery).then(response => {
         this.list = response.data.data
-        this.total = response.data.total
-
-        // Just to simulate the time of the request
-        // setTimeout(() => {
-          this.listLoading = false
-        // }, 1.5 * 1000)
+        this.total = response.data.meta.total
+        this.listLoading = false
       })
     },
     handleFilter() {
