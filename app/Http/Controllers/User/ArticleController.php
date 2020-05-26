@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Resources\ArticleResource;
+use App\Http\Resources\CommentResource;
 use App\Http\Resources\ConrtollerResource;
 use App\Models\AppealModel;
 use App\Models\Article\ArticleModel;
@@ -103,9 +104,10 @@ class ArticleController extends Controller
         }
         if ($model){
             $model->files = $model->files;
-            $model->comments = $model->comments;
-//            return $model;
-            return new ArticleResource($model);
+//            $model->comments = $model->comments;
+            $model->comments_show = CommentResource::collection($model->comments);
+            return $model;
+
         }
         return false;
 

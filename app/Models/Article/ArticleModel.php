@@ -14,6 +14,14 @@ class ArticleModel extends MyModel
         return $this->hasMany('App\Models\Article\CommentModel', 'article_id', 'id');
     }
 
+
+    public function show_resume(){
+        if ($this->resume){
+            return $this->resume;
+        }
+        $text = explode('</p>', $this->text);
+        return $text[0].'</p>';
+    }
     /**
      * прикрепить файлы к модели
      * @param $files

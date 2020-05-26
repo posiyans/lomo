@@ -79,7 +79,7 @@
 </template>
 
 <script>
-import { fetchList, createCategory, updateCategory } from '@/api/category'
+import { fetchCategoryList, createCategory, updateCategory } from '@/api/category'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
 export default {
@@ -206,7 +206,7 @@ export default {
       const listQuery = {
         children: true
       }
-      fetchList(listQuery).then(response => {
+      fetchCategoryList(listQuery).then(response => {
         this.category = response.data
         this.listLoading = false
         // console.log(this.category)

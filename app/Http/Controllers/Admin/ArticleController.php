@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Resources\AppealResource;
+use App\Http\Resources\ArticleResource;
 use App\Http\Resources\ConrtollerResource;
 use App\Models\AppealModel;
 use App\Models\Article\ArticleModel;
@@ -32,8 +33,23 @@ class ArticleController extends Controller
     {
 
         $query =  ArticleModel::query();
-        $appeal = $query->orderBy('id', 'desc')->paginate($request->limit);
-        return $appeal;
+        if ($request->category){
+            $query->where('category_id', $request->category);
+        }
+        if (isset($request->status)){
+            $query->where('public', (int)$request->status);
+        }
+        if ($request->find){
+            $find= explode(' ', mb_strtolower($request->find));
+            foreach ($find as $item) {
+                if (!empty(trim($item))) {
+                    $query->whereRaw('lower(concat_ws(" ",title,resume, text)) like ?', '%' . $item . '%');
+                }
+            }
+        }
+        $article = $query->orderBy('id', 'desc')->paginate($request->limit);
+        return ArticleResource::collection($article);
+//        return $article;
     }
 
     /**

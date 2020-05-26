@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import { fetchUserArticle } from "@/api/article"
+import { fetchUserArticle } from '@/api/article'
 import Comments from '@/components/Comments/index.vue'
 export default {
   components: { Comments },
@@ -106,7 +106,7 @@ export default {
     fetchArticle() {
       fetchUserArticle(this.$route.params.id)
         .then(response => {
-          this.article = response.data.data
+          this.article = response.data
           this.loading = false
         })
     }

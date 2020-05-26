@@ -20,11 +20,14 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         $cat = false;
-        if (isset($request->children) && $request->children){
+        if (isset($request->children) && $request->children == true){
             $cat = CategoryModel::getListChildren();
+
         }
+        return $cat;
 //        $query =  CategoryModel::query();
 //        $appeal = $query->paginate($request->limit);
+//        return 'sdsadas';
 //        return $appeal;
 
 

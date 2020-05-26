@@ -108,7 +108,7 @@
 </template>
 
 <script>
-import { fetchList, updateStead, fetchPv, createArticle, updateArticle } from '@/api/stead'
+import { fetchSteadList, updateStead } from '@/api/stead'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination'
@@ -184,7 +184,7 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      fetchList(this.listQuery).then(response => {
+      fetchSteadList(this.listQuery).then(response => {
         this.list = response.data.data
         this.total = response.data.meta.total
         this.listLoading = false

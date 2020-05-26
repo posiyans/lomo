@@ -10,7 +10,7 @@
 </template>
 
 <script>
-  import { fetchList } from '@/api/category'
+  import { fetchCategoryList } from '@/api/category'
 export default {
   props: {
     value: {
@@ -44,7 +44,7 @@ export default {
       const listQuery = {
         children : false
       }
-      fetchList(listQuery)
+      fetchCategoryList(listQuery)
         .then(response => {
           this.options = response.data
           // console.log('response')

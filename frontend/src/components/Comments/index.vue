@@ -1,6 +1,6 @@
 <template>
   <div class="main-comments">
-    <div v-for="i in value.comments" class="comments-post">
+    <div v-for="i in value.comments_show" class="comments-post">
       <el-row>
         <el-col :xs="4" :sm="2" :lg="1" align="middle" ><el-avatar :size="40" :src="i.avatar | avatarUrl"></el-avatar></el-col>
         <el-col :xs="20" :sm="20" :lg="20">
@@ -50,8 +50,8 @@ import { addComment, fetchListComments } from '@/api/user/comment.js'
 export default {
   props: {
      value: {
-       // type: Array,
-       // defaults: []
+       type: Object,
+       defaults: {}
      }
   },
   filters: {
@@ -72,7 +72,7 @@ export default {
     }
   },
   computed: {
-    user(){
+    user() {
       if (this.$store.getters.user.allPermissions.includes('guest')) {
          return false
       }

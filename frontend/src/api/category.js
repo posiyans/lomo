@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-export function fetchList(query) {
+export function fetchCategoryList(query) {
   return request({
     url: '/api/v1/admin/category',
     method: 'get',

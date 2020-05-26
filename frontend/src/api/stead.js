@@ -16,35 +16,6 @@ export function fetchArticle(id) {
   })
 }
 
-export function fetchPv(pv) {
-  return request({
-    url: '/api/v1/article/pv',
-    method: 'get',
-    params: { pv }
-  })
-}
-
-export function createArticle(data) {
-  return request({
-    url: '/api/v1/article/create',
-    method: 'post',
-    data
-  })
-}
-
-
-
-
-export function updateArticle(data) {
-  return request({
-    url: '/api/v1/article/update',
-    method: 'post',
-    data
-  })
-}
-
-
-
 export function updateStead(id, data) {
   return request({
     url: '/api/v1/admin/stead/' + id,

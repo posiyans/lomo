@@ -29,14 +29,28 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
-        if (isset($request->children) && $request->children){
-        }
+        if (isset($request->children) && $request->children === true){
             return CategoryModel::getListChildren(true);
-////        $appeal = AppealModel::all();
-//        $query =  CategoryModel::query();
-//        $appeal = $query->paginate($request->limit);
-////        return  $query->paginate();
-//        return $appeal;
+        }
+        $appeals =  CategoryModel::all();
+        $rez = [];
+        foreach ($appeals as $item) {
+            $i = [];
+            $i['id'] = $item->id;
+            $i['show_menu'] = $item->show_menu;
+            $i['menu_name'] = $item->menu_name;
+            if ($item->menu_name){
+                $i['basePath'] = $item->menu_name;
+            } else {
+                $i['basePath'] = '/article/list/'.$item->id;
+            }
+            $i['menu'] = $item->menu_name;
+            $i['label'] = $item->name;
+
+            $rez[] = $i;
+        }
+
+        return $rez;
     }
 
     /**
