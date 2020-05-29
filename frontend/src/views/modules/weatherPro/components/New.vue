@@ -177,7 +177,7 @@ export default {
           },
 
           // splitNumber: 7,
-          min: new Date(),
+          min: new Date() - 3 * 1000 * 3600,
           minInterval: 12 * 3600 * 1000,
           maxInterval: 12 * 3600 * 1000
         }],
@@ -291,7 +291,7 @@ export default {
             show: true,  //показать линии осей
             interval: '0'
           },
-          min: new Date(),
+          min: new Date() - 3 * 1000 * 3600,
           minInterval: 12*3600*1000,
           maxInterval: 12*3600*1000
           // splitNumber: 7

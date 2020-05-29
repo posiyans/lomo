@@ -18,11 +18,17 @@ class VotingResource extends JsonResource
         $datetime = new \DateTime();
         $status = $this->status;
         if ($this->status == 'new') {
-            if (strtotime($this->date_start) < $datetime->format('U')){
-                $status = 'execution';
-            }
-            if (strtotime($this->date_stop) < $datetime->format('U')){
-                $status = 'done';
+            if ($this->type == 'public'){
+                if (strtotime($this->date_publish) < $datetime->format('U')) {
+                    $status = 'execution';
+                }
+            } else {
+                if (strtotime($this->date_start) < $datetime->format('U')) {
+                    $status = 'execution';
+                }
+                if (strtotime($this->date_stop) < $datetime->format('U')) {
+                    $status = 'done';
+                }
             }
         }
         return [
@@ -34,15 +40,14 @@ class VotingResource extends JsonResource
             'date_stop'=>$this->date_stop,
             'type'=>$this->type,
             'comments'=>$this->comments,
+//            'comments_list' => CommentResource::collection($this->comments),
             'status'=>$status,
-            'result'=>$this->result,
             'public'=>$this->public,
             'files'=>$this->files,
+            'countAnswer'=>$this->userAnswer(),
             'questions'=>QuestionResource::collection($this->questions),
             'steadsCount'=> Stead::all()->count(),
-            'created_at'=>$this->created_at,
-            'updated_at'=>$this->updated_at,
-
+            'created_at'=>$this->updated_at,
             ];
 //        $this->user->fullName = $this->user->fullName();;
 //        $this->user->fName = $this->user->fName();;

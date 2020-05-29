@@ -18,8 +18,6 @@ export default {
     ArticlePreview,
     Pagination
   },
-  computed: {
-  },
   data() {
     return {
       listLoading: false,
@@ -34,7 +32,7 @@ export default {
     }
   },
   computed: {
-    loadMore(){
+    loadMore() {
 
       if (this.total > this.list.length){
         return 'Загрузить еще'

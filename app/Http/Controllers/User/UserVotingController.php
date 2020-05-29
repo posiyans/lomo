@@ -1,27 +1,28 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\User;
 
 use App\Http\Resources\AppealResource;
 use App\Http\Resources\ConrtollerResource;
 use App\Http\Resources\VotingResource;
 use App\Models\AppealModel;
+use App\Models\Voting\AnswerModel;
 use App\Models\Voting\VotingModel;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Laratrust\Laratrust;
 
-class AdminVotingController extends Controller
+class UserVotingController extends Controller
 {
 
-    /**
-     * проверка на суперадмин или на доступ а админ панель
-     */
-    public function __construct()
-    {
-        $this->middleware('ability:superAdmin,access-admin-panel');
-    }
+//    /**
+//     * проверка на суперадмин или на доступ а админ панель
+//     */
+//    public function __construct()
+//    {
+//        $this->middleware('ability:superAdmin,access-admin-panel');
+//    }
 
     /**
      * Display a listing of the resource.
@@ -30,7 +31,27 @@ class AdminVotingController extends Controller
      */
     public function index(Request $request)
     {
-        $query = VotingModel::query();
+        $query = VotingModel::query()->where('public', 1);
+        if (isset($request->type)){
+            $query->whereIn('type',  $request->type);
+        }
+        if (isset($request->status)){
+            //todo не совсем так нужно рефакторить!!!!
+            if (is_array($request->status)) {
+                $status =  $request->status;
+            } elseif (is_string($request->type)){
+                $status = [$request->status];
+            } else {
+                $status = false;
+            }
+            if ($status){
+                $query->whereIn('status',  $status, 'or');
+
+            }
+
+
+            $query->where('status', $request->status);
+        }
         $votings = $query->paginate($request->limit);
         return VotingResource::collection($votings);
     }
@@ -57,6 +78,7 @@ class AdminVotingController extends Controller
         if ($data) {
             $voting = new VotingModel();
             $voting->fill($data);
+            $voting->coments = 0;
             if ($voting->type == 'public'){
                 $voting->date_start = '0000-01-01 00:00:00';
                 $voting->date_stop = '9999-01-01 00:00:00';
@@ -84,9 +106,16 @@ class AdminVotingController extends Controller
     public function show($id)
     {
         if (is_numeric($id)) {
-            $voting = VotingModel::find($id);
+            $voting = VotingModel::where('id', $id)->where('public', 1)->first();
             if ($voting) {
-                return new VotingResource($voting);
+                $user = Auth::user();
+                if ($user){
+                    $user_id = $user->id;
+                } else {
+                    $user_id = false;
+                }
+                return ['data'=>$voting->userReturn($user_id)];
+//                return new VotingResource($voting);
             }
         }
         return [];
@@ -119,6 +148,7 @@ class AdminVotingController extends Controller
                 $voting = VotingModel::find($id);
                 if ($voting && $id == $voting->id) {
                     $voting->fill($data);
+                    $voting->coments = 0;
                     if ($voting->type == 'public'){
                         $voting->date_start = '0000-01-01 00:00:00';
                         $voting->date_stop = '9999-01-01 00:00:00';
@@ -147,6 +177,24 @@ class AdminVotingController extends Controller
      */
     public function destroy($id)
     {
-        //
+
+    }
+
+
+    /**
+     * получить голос пользователя
+     */
+    public function addAnswer(Request $request)
+    {
+        if (!Auth::guest() && $request->answer_id)
+        {
+            $user = Auth::user();
+            if ($data = AnswerModel::userVoting($user->id, (int)$request->answer_id)){
+                return json_encode(['status'=>true, 'data'=> $data]);
+            }
+            return json_encode(['status'=>false, 'data'=>  'На данный вопрос уже был получен ответ']);
+        }
+        return json_encode(['status'=>false, 'data'=>  'Вы не авторизованы']);
+
     }
 }

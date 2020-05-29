@@ -4,7 +4,8 @@
       :background="background"
       :current-page.sync="currentPage"
       :page-size.sync="pageSize"
-      :layout="layout"
+      :pager-count="5"
+      :layout="myLayout"
       :page-sizes="pageSizes"
       :total="total"
       v-bind="$attrs"
@@ -16,6 +17,7 @@
 
 <script>
 import { scrollTo } from '@/utils/scroll-to'
+import { mapState } from 'vuex'
 
 export default {
   name: 'Pagination',
@@ -56,6 +58,15 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      device: state => state.app.device
+    }),
+    myLayout() {
+      if (this.device === 'mobile') {
+        return ' prev, next, total, sizes'
+      }
+      return this.layout
+    },
     currentPage: {
       get() {
         return this.page

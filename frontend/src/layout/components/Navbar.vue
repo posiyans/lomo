@@ -31,7 +31,7 @@
             <el-dropdown-item>Перейти на сайт</el-dropdown-item>
           </router-link>
           <el-dropdown-item divided @click.native="logout">
-            <span style="display:block;">Log Out</span>
+            <span style="display:block;">Выйти</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>

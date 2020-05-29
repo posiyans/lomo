@@ -118,7 +118,7 @@ export default {
       if (this.$route.fullPath !== '/index') {
         return false
       }
-      if (this.device === 'mobile'){
+      if (this.device === 'mobile') {
         return false
       }
       return true
@@ -127,7 +127,7 @@ export default {
       // if (this.$route.fullPath !== '/index') {
       //   return false
       // }
-      if (this.device === 'mobile'){
+      if (this.device === 'mobile') {
         return true
       }
       return false
@@ -143,9 +143,8 @@ export default {
     toggleSideBar() {
       this.open_sidebar = !this.open_sidebar
     },
-    showPersonal(){
+    showPersonal() {
       this.$router.push('/article/show/term-of-use')
-      // this.$router.push('/article/show/10')
     },
     handleSelect(key, keyPath) {
 

@@ -18,17 +18,19 @@
 
     <el-table v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
       <el-table-column align="center" label="ID" width="80">
-        <template slot-scope="scope">
-          <span>{{ scope.row.id }}</span>
+        <template slot-scope="{ row }">
+          <el-tag :type="row.public | statusFilter">
+            {{ row.id }}
+          </el-tag>
         </template>
       </el-table-column>
 
-      <el-table-column width="150px" align="center" label="Дата">
+      <el-table-column v-if="!mobile" width="150px" align="center" label="Дата">
         <template slot-scope="scope">
           <span>{{ scope.row.publish_time | moment('HH:mm DD-MM-YYYY') }}</span>
         </template>
       </el-table-column>
-      <el-table-column class-name="status-col" label="Статус" width="120">
+      <el-table-column v-if="!mobile"  class-name="status-col" label="Статус" width="120">
         <template slot-scope="{row}">
           <el-tag :type="row.public | statusFilter">
             {{ row.public | publicFilter }}
@@ -43,12 +45,12 @@
           </router-link>
         </template>
       </el-table-column>
-      <el-table-column label="Раздел">
+      <el-table-column v-if="!mobile" label="Раздел">
         <template slot-scope="{row}">
             <span>{{ categoryTitle(row.category_id) }}</span>
         </template>
       </el-table-column>
-      <el-table-column class-name="status-col" label="Комментарии" width="120">
+      <el-table-column  v-if="!mobile" class-name="status-col" label="Комментарии" width="120">
         <template slot-scope="{row}">
           <el-tag :type="row.allow_comments | statusFilter">
             {{ row.comments.length }}
@@ -75,7 +77,8 @@
 import { fetchAdminArticleList } from '@/api/article'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import { fetchCategoryList } from '@/api/category'
-import waves from '@/directive/waves' // waves directive
+import waves from '@/directive/waves'
+import {mapState} from "vuex"; // waves directive
 
 export default {
   name: 'ArticleList',
@@ -118,6 +121,17 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapState({
+      device: state => state.app.device
+    }),
+    mobile() {
+      if (this.device === 'mobile') {
+        return true
+      }
+      return false
+    }
+  },
   mounted() {
     this.getList()
     this.getCategoryList()
@@ -144,7 +158,7 @@ export default {
       this.listLoading = true
       fetchAdminArticleList(this.listQuery).then(response => {
         this.list = response.data.data
-        this.total = response.data.total
+        this.total = response.data.meta.total
         this.listLoading = false
       })
     },

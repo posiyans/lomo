@@ -189,7 +189,13 @@ export const constantRoutes = [
       {
         path: 'index',
         component: () => import('@/views/user/voting/index'),
-        name: 'Voting',
+        name: 'UserVotingList',
+        hidden: true
+      },
+      {
+        path: 'show/:id',
+        component: () => import('@/views/user/voting/VotingShow/index'),
+        name: 'UserVotingShow',
         hidden: true
       },
     ]

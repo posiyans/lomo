@@ -29,7 +29,7 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
-        if (isset($request->children) && $request->children === true){
+        if (isset($request->children) && $request->children === 'true'){
             return CategoryModel::getListChildren(true);
         }
         $appeals =  CategoryModel::all();

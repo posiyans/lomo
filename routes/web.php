@@ -71,10 +71,13 @@ Route::resource('/api/v1/user/comment', 'User\CommentController')
     ->only(['index']);
 Route::resource('/api/v1/user/rate', 'User\RateController')
     ->only(['index']);
+Route::resource('/api/v1/user/voting', 'User\UserVotingController')
+    ->only(['index', 'show']);
 Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/api/v1/admin/user-info', 'UserController@info');
     Route::post('/api/v1/user/save-user-info', 'UserController@save');
+    Route::post('/api/v1/user/vote', 'User\UserVotingController@addAnswer');
     Route::get('/api/v1/user/steads-list', 'SteadController@list');
     Route::get('/profile', 'UserController@index');
 

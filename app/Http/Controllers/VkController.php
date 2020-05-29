@@ -61,10 +61,10 @@ class VkController extends Controller
         $value = config('services.vkontakte');
         //dd($value);
         $url = 'http://oauth.vk.com/authorize';
-
+        $actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]/vk/auth/callback";
         $params = array(
             'client_id'     => $value['client_id'],
-            'redirect_uri'  => $value['redirect'],
+            'redirect_uri'  => $actual_link,
             'response_type' => 'code',
             'display'=> 'page',
             'scope' => 'email,status,wall'
@@ -160,11 +160,13 @@ class VkController extends Controller
     public function getToken($code)
     {
         $config = config('services.vkontakte');
+        $actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]/vk/auth/callback";
+
         $params = array(
             'client_id' => $config['client_id'],
             'client_secret' => $config['client_secret'],
             'code' => $code,
-            'redirect_uri' => $config['redirect'],
+            'redirect_uri' => $actual_link,
         );
         $token = json_decode(file_get_contents('https://oauth.vk.com/access_token' . '?' . urldecode(http_build_query($params))), true);
         return $token;

@@ -3,7 +3,7 @@
     <el-form ref="postForm" :model="postForm" :rules="rules" class="form-container">
       <sticky :z-index="10" :class-name="'sub-navbar '+postForm.status">
         <TypeDropdown v-model="postForm.type"/>
-        <CommentDropdown v-model="postForm.comments" />
+<!--        <CommentDropdown v-model="postForm.comments" />-->
         <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submitForm">
           Опубликовать
         </el-button>
@@ -13,7 +13,7 @@
       </sticky>
 
       <div class="createPost-main-container">
-    <h1>{{ typeTitle }}</h1>
+        <h1>{{ typeTitle }}</h1>
         <el-row>
           <el-col :span="24">
             <el-form-item style="margin-bottom: 40px;" prop="title">
@@ -26,11 +26,11 @@
               <el-row>
                 <el-col :span="8" justify="start">
                   <el-form-item label-width="150px"  label="Время публикации:" class="postInfo-container-item">
-                    <el-date-picker v-model="publishTime" type="datetime" :picker-options="datePickerOptions" :firstDayOfWeek="2" format="HH:mm dd-MM-yyyy" placeholder="Выберите дату и время" />
+                    <el-date-picker v-model="publishTime" type="datetime" :clearable="false" :picker-options="datePickerOptions" :firstDayOfWeek="2" format="HH:mm dd-MM-yyyy" placeholder="Выберите дату и время" />
                   </el-form-item>
                 </el-col>
-                <el-col :span="8">
-                  <el-form-item label-width="160px"  label="Голосование с :" class="postInfo-container-item">
+                <el-col v-if="postForm.type === 'owner'" :span="8">
+                  <el-form-item label-width="160px"  label="Голосование с :" class="postInfo-container-item" required prop="dateStart">
                     <el-date-picker
                       v-model="dataRange"
                       type="daterange"
@@ -86,267 +86,286 @@
 </template>
 
 <script>
-  import Tinymce from '@/components/Tinymce'
-  import Upload from './upload/index'
-  import MDinput from '@/components/MDinput'
-  import Sticky from '@/components/Sticky' // 粘性header组件
+import Tinymce from '@/components/Tinymce'
+import Upload from './upload/index'
+import MDinput from '@/components/MDinput'
+import Sticky from '@/components/Sticky' // 粘性header组件
 
-  import { validURL } from '@/utils/validate'
-  // import { fetchArticle, createArticle, updateArticle } from '@/api/article'
-  import { createVoting, fetchVoting, updateVoting } from '@/api/admin/voting.js'
+import { validURL } from '@/utils/validate'
+// import { fetchArticle, createArticle, updateArticle } from '@/api/article'
+import { createVoting, fetchVoting, updateVoting } from '@/api/admin/voting.js'
 
-  import { searchUser } from '@/api/remote-search'
-  import { CommentDropdown } from './Dropdown'
-  import TypeDropdown from './Dropdown/Type.vue'
-  const defaultForm = {
-    public: false,
-    title: '',
-    description: '',
-    resume: '',
-    files: [],
-    date_publish: +new Date(),
-    date_start: '',
-    date_stop: '',
-    id: undefined,
-    comments: 1,
-    uid: '',
-    type: 'owner',
-    questions: [
-      {
-        text: '',
-        answers: [
-          {
-            text: ''
-          },
-          {
-            text: ''
-          }]
+import { searchUser } from '@/api/remote-search'
+import { CommentDropdown } from './Dropdown'
+import TypeDropdown from './Dropdown/Type.vue'
+const defaultForm = {
+  public: false,
+  title: '',
+  description: '',
+  resume: '',
+  files: [],
+  date_publish: +new Date(),
+  date_start: '',
+  date_stop: '',
+  id: undefined,
+  comments: 0,
+  uid: '',
+  type: 'public',
+  questions: [
+    {
+      text: '',
+      answers: [
+        {
+          text: ''
+        },
+        {
+          text: ''
+        }]
+    }
+  ]
+}
+
+export default {
+  name: 'ArticleDetail',
+  components: { Tinymce, MDinput, Upload, Sticky, CommentDropdown,TypeDropdown },
+  props: {
+    isEdit: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data() {
+    var vm = this;
+    const validateRequire = (rule, value, callback) => {
+      if (value === '') {
+        this.$message({
+          message: rule.field + ' Обязательное поле',
+          type: 'error'
+        })
+        callback(new Error(' Обязательное поле'))
+      } else {
+        callback()
       }
-    ]
-  }
-
-  export default {
-    name: 'ArticleDetail',
-    components: { Tinymce, MDinput, Upload, Sticky, CommentDropdown,TypeDropdown },
-    props: {
-      isEdit: {
-        type: Boolean,
-        default: false
-      }
-    },
-    data() {
-      var vm = this;
-      const validateRequire = (rule, value, callback) => {
-        if (value === '') {
-          this.$message({
-            message: rule.field + ' Обязательное поле',
-            type: 'error'
-          })
-          callback(new Error(' Обязательное поле'))
-        } else {
-          callback()
+    }
+    return {
+      options: {
+         "owner": 'Голосование собственников',
+         "public": 'Публичное голосование'
+      },
+      rrr: '',
+      datetime: +new Date(),
+      postForm: Object.assign({}, defaultForm),
+      loading: false,
+      userListOptions: [],
+      rules: {
+        // image_uri: [{ validator: validateRequire }],
+        // title: [{ validator: validateRequire }],
+        title: [{ required: true, message: 'Введите тему голосования' }],
+        text: [{ validator: validateRequire }],
+        dateStart: [{ required: true, message: 'Необходимо установить период голосования!' }],
+      },
+      datePickerOptions:  {
+        disabledDate(time) {
+          return time.getTime() < Date.now()
         }
-      }
-      return {
-        options: {
-           "owner": 'Голосование собственников',
-           "public": 'Публичное голосование'
-        },
-        rrr: '',
-        datetime: +new Date(),
-        postForm: Object.assign({}, defaultForm),
-        loading: false,
-        userListOptions: [],
-        rules: {
-          // image_uri: [{ validator: validateRequire }],
-          title: [{ validator: validateRequire }],
-          text: [{ validator: validateRequire }],
-        },
-        datePickerOptions:  {
-          disabledDate(time) {
-            return time.getTime() < Date.now()
-          }
-        },
-        rangePickerOptions: {
-          disabledDate(time) {
-            if (vm.postForm.type === 'owner') {
-              if (time.getTime() < (vm.publishTime+ 14 * 60 * 60 * 24 * 1000)) {
-                return true
-              }
+      },
+      rangePickerOptions: {
+        disabledDate(time) {
+          if (vm.postForm.type === 'owner') {
+            if (time.getTime() < (vm.publishTime + 14 * 60 * 60 * 24 * 1000)) {
+              return true
             }
-            return time.getTime() < (Date.now() - 60*60*24*1000)
-            // if (time.getTime() >  (vm.rrr[0] + 62*60*60*24*1000)) {
-            //   return true
-            // }
-            // return false
           }
-        },
-        tempRoute: {},
-        answerCount: ['Ответ № 1', 'Ответ № 2']
-      }
-    },
-    computed: {
-      dataRange: {
-        set(val){
-          this.postForm.date_start = this.$moment(val[0]).format('YYYY-MM-DD HH:mm:ss')
-          this.postForm.date_stop = this.$moment(val[1]).format('YYYY-MM-DD HH:mm:ss')
-        },
-        get(){
-          return [this.$moment(this.postForm.date_start), this.$moment(this.postForm.date_stop)]
+          return time.getTime() < (Date.now() - 90 * 60 * 24 * 1000)
+          // if (time.getTime() >  (vm.rrr[0] + 62*60*60*24*1000)) {
+          //   return true
+          // }
+          // return false
         }
       },
-      typeTitle(){
-        // return this.options.indexOf('')
-        return this.options[this.postForm.type]
+      tempRoute: {},
+      answerCount: ['Ответ № 1', 'Ответ № 2']
+    }
+  },
+  computed: {
+    votingType() {
+      return this.postForm.type
+    },
+    dataRange: {
+      set(val){
+        this.postForm.date_start = this.$moment(val[0]).format('YYYY-MM-DD HH:mm:ss')
+        this.postForm.date_stop = this.$moment(val[1]).format('YYYY-MM-DD HH:mm:ss')
       },
-      contentShortLength() {
-        return this.postForm.resume.length
-      },
-      publishTime: {
-        // set and get is useful when the data
-        // returned by the back end api is different from the front end
-        // back end return => "2013-06-25 06:59:25"
-        // front end need timestamp => 1372114765000
-        get() {
-          // console.log(this.postForm)
-          return this.$moment(this.postForm.date_publish)
-        },
-        set(val) {
-          this.dataRange = ['','']
-          this.postForm.date_publish = this.$moment(val).format('YYYY-MM-DD HH:mm:ss')
-          // console.log(this.postForm.date_publish)
-          // this.datetime= new Date(val)
-        }
+      get(){
+        return [this.$moment(this.postForm.date_start), this.$moment(this.postForm.date_stop)]
       }
     },
-    created() {
-      this.postForm.uid = this.create_UUID()
-      this.postForm.date_publish = this.$moment(this.postForm.date_publish).format('YYYY-MM-DD HH:mm:ss')
-      // console.log('this.isEdit')
-      // console.log(this.isEdit)
-      // console.log(this.defaultForm)
-      if (this.isEdit) {
-        const id = this.$route.params && this.$route.params.id
-        this.fetchData(id)
-      }
-
-      // Why need to make a copy of this.$route here?
-      // Because if you enter this page and quickly switch tag, may be in the execution of the setTagsViewTitle function, this.$route is no longer pointing to the current page
-      // https://github.com/PanJiaChen/vue-element-admin/issues/1221
-      this.tempRoute = Object.assign({}, this.$route)
+    typeTitle(){
+      // return this.options.indexOf('')
+      return this.options[this.postForm.type]
     },
-    methods: {
-      addQuestion(){
-        this.postForm.questions.push({text: '', answers: [{text: ''},{text: ''}]})
-      },
-      disabledDate(time) {
-        return time.getTime() > Date.now();
-      },
-      addAnswer(question){
-        // if (this.answerCount.length > 5){
-        //   this.$notify({
-        //     title: 'Внимание',
-        //     message: 'НЕ много ответов???',
-        //     type: 'success',
-        //     duration: 2000
-        //   })
-        // }
-        this.postForm.questions[question].answers.push({text: ''})
-      },
-      create_UUID(){
-        var dt = new Date().getTime();
-        var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-          var r = (dt + Math.random()*16)%16 | 0
-          dt = Math.floor(dt/16)
-          return (c == 'x' ? r : (r&0x3 | 0x8)).toString(16)
-        })
-        return uuid
-      },
-      fetchData(id) {
-        fetchVoting(id).then(response => {
-          this.postForm = response.data.data
-          // this.postForm.allow_comments = Boolean(response.data.allow_comments)
-          // this.datetime = this.$moment(this.postForm.publish_time)
-          this.setTagsViewTitle()
-
-          // set page title
-          this.setPageTitle()
-        }).catch(err => {
-          console.log(err)
-        })
-      },
-      setTagsViewTitle() {
-        const title = 'Статья id'
-        const route = Object.assign({}, this.tempRoute, { title: `${title}-${this.postForm.id}` })
-        this.$store.dispatch('tagsView/updateVisitedView', route)
-      },
-      setPageTitle() {
-        const title = 'Статья id'
-        document.title = `${title} - ${this.postForm.id}`
-      },
-      submitForm() {
-        this.postForm.public = true
-        // this.saveForm()
-      },
-      saveForm() {
-        // console.log('this.postForm')
+    contentShortLength() {
+      return this.postForm.resume.length
+    },
+    publishTime: {
+      // set and get is useful when the data
+      // returned by the back end api is different from the front end
+      // back end return => "2013-06-25 06:59:25"
+      // front end need timestamp => 1372114765000
+      get() {
         // console.log(this.postForm)
-        this.$refs.postForm.validate(valid => {
-          if (valid) {
-            this.loading = true
-            // this.postForm.public = true
-            // this.postForm.display_time = this.$moment(this.datetime).format('YYYY-MM-DD HH:mm:ss')
-            if (this.isEdit) {
-              const id = this.$route.params && this.$route.params.id
-              updateVoting({ voting: this.postForm }, id)
-                .then(response => {
-                  this.postForm = response.data.data
-                  // this.postForm.allow_comments = Boolean(response.data.allow_comments)
-                  // this.datetime = this.$moment(this.postForm.publish_time)
-                  // console.log(response.data)
-                })
-            } else {
-              createVoting({ voting: this.postForm })
-                .then(response => {
-                  // this.$router.push({ name: 'AdminEditArticle', params: { id:response.data.id } })
-                })
-            }
-            if (this.postForm.public) {
-              this.$notify({
-                title: 'успех',
-                message: 'Статья успешно опубликована',
-                type: 'success',
-                duration: 2000
-              })
-            } else {
-              this.$notify({
-                title: 'успех',
-                message: 'Черновик сохранен',
-                type: 'success',
-                duration: 2000
-              })
-            }
+        return this.$moment(this.postForm.date_publish)
+      },
+      set(val) {
+        this.dataRange = ['','']
+        this.postForm.date_publish = this.$moment(val).format('YYYY-MM-DD HH:mm:ss')
+        // console.log(this.postForm.date_publish)
+        // this.datetime= new Date(val)
+      }
+    }
+  },
+  created() {
+    this.postForm.uid = this.create_UUID()
+    this.postForm.date_publish = this.$moment(this.postForm.date_publish).format('YYYY-MM-DD HH:mm:ss')
+    // console.log('this.isEdit')
+    // console.log(this.isEdit)
+    // console.log(this.defaultForm)
+    if (this.isEdit) {
+      const id = this.$route.params && this.$route.params.id
+      this.fetchData(id)
+    }
 
-            this.loading = false
+    // Why need to make a copy of this.$route here?
+    // Because if you enter this page and quickly switch tag, may be in the execution of the setTagsViewTitle function, this.$route is no longer pointing to the current page
+    // https://github.com/PanJiaChen/vue-element-admin/issues/1221
+    this.tempRoute = Object.assign({}, this.$route)
+  },
+  methods: {
+    addQuestion(){
+      this.postForm.questions.push({text: '', answers: [{text: ''},{text: ''}]})
+    },
+    disabledDate(time) {
+      return time.getTime() > Date.now();
+    },
+    addAnswer(question) {
+      // if (this.answerCount.length > 5){
+      //   this.$notify({
+      //     title: 'Внимание',
+      //     message: 'НЕ много ответов???',
+      //     type: 'success',
+      //     duration: 2000
+      //   })
+      // }
+      this.postForm.questions[question].answers.push({text: ''})
+    },
+    create_UUID(){
+      var dt = new Date().getTime()
+      var uuid = 'xxxxxxxx-xxxx-voting-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = (dt + Math.random()*16)%16 | 0
+        dt = Math.floor(dt/16)
+        return (c == 'x' ? r : (r&0x3 | 0x8)).toString(16)
+      })
+      return uuid
+    },
+    fetchData(id) {
+      fetchVoting(id).then(response => {
+        this.postForm = response.data.data
+        // this.postForm.allow_comments = Boolean(response.data.allow_comments)
+        // this.datetime = this.$moment(this.postForm.publish_time)
+        this.setTagsViewTitle()
+
+        // set page title
+        this.setPageTitle()
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    setTagsViewTitle() {
+      const title = 'Статья id'
+      const route = Object.assign({}, this.tempRoute, { title: `${title}-${this.postForm.id}` })
+      this.$store.dispatch('tagsView/updateVisitedView', route)
+    },
+    setPageTitle() {
+      const title = 'Статья id'
+      document.title = `${title} - ${this.postForm.id}`
+    },
+    submitForm() {
+      this.postForm.public = true
+      alert('не работает')
+      // this.saveForm()
+    },
+    saveForm() {
+      // console.log('this.postForm')
+      // console.log(this.postForm)
+      this.$refs.postForm.validate(valid => {
+        if (valid) {
+          this.loading = true
+          this.postForm.public = true
+          console.log('this.postForm')
+          console.log(this.postForm)
+          // this.postForm.display_time = this.$moment(this.datetime).format('YYYY-MM-DD HH:mm:ss')
+          if (this.isEdit) {
+            const id = this.$route.params && this.$route.params.id
+            updateVoting({ voting: this.postForm }, id)
+              .then(response => {
+                this.postForm = response.data.data
+                // this.postForm.allow_comments = Boolean(response.data.allow_comments)
+                // this.datetime = this.$moment(this.postForm.publish_time)
+                // console.log(response.data)
+              })
           } else {
-            // console.log('error submit!!')
-            return false
+            createVoting({ voting: this.postForm })
+              .then(response => {
+                // this.$router.push({ name: 'AdminEditArticle', params: { id:response.data.id } })
+              })
           }
-        })
-      },
-      draftForm() {
-        this.postForm.public = false
-        // console.log(this.postForm)
-        this.saveForm()
-      },
-      getRemoteUserList(query) {
-        searchUser(query).then(response => {
-          if (!response.data.items) return
-          this.userListOptions = response.data.items.map(v => v.name)
-        })
+          if (this.postForm.public) {
+            this.$notify({
+              title: 'успех',
+              message: 'Статья успешно опубликована',
+              type: 'success',
+              duration: 2000
+            })
+          } else {
+            this.$notify({
+              title: 'успех',
+              message: 'Черновик сохранен',
+              type: 'success',
+              duration: 2000
+            })
+          }
+
+          this.loading = false
+        } else {
+          // console.log('error submit!!')
+          return false
+        }
+      })
+    },
+    draftForm() {
+      this.postForm.public = false
+      // console.log(this.postForm)
+      this.saveForm()
+    },
+    getRemoteUserList(query) {
+      searchUser(query).then(response => {
+        if (!response.data.items) return
+        this.userListOptions = response.data.items.map(v => v.name)
+      })
+    }
+  },
+  watch: {
+    votingType(val) {
+      if (val === 'public') {
+        this.postForm.date_start = '0000-01-01 00:00:00'
+        this.postForm.date_stop = '9999-01-01 00:00:00'
+      } else {
+        this.postForm.date_start = ''
+        this.postForm.date_stop = ''
       }
     }
   }
+}
 </script>
 
 <style lang="scss" scoped>
