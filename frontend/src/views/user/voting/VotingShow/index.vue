@@ -106,7 +106,7 @@ export default {
       this.$router.back()
     },
     fetchVoting() {
-      fetchUserVoting(this.$route.params.id)
+      fetchAdminVoting(this.$route.params.id)
         .then(response => {
           this.voting = response.data.data
           this.loading = false

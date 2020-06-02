@@ -361,7 +361,7 @@ export const asyncRoutes = [
         component: () => import('@/views/admin/voting/result'),
         name: 'AdminResultVoting',
         meta: {
-          title: 'Правка',
+          title: 'Результаты',
           noCache: true,
           activeMenu: '/voting/list'
         },

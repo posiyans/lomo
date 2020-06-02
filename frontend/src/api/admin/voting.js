@@ -8,7 +8,7 @@ export function fetchVotingList(query) {
   })
 }
 
-export function fetchVoting(id) {
+export function fetchAdminVoting(id) {
   return request({
     url: '/api/v1/admin/voting/' + id,
     method: 'get'

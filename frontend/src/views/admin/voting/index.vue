@@ -2,9 +2,6 @@
   <div class="app-container">
     <div class="filter-container">
       <el-input v-model="listQuery.title" placeholder="Поиск" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-<!--      <el-select v-model="listQuery.importance" placeholder="Imp" clearable style="width: 90px" class="filter-item">-->
-<!--        <el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item" />-->
-<!--      </el-select>-->
       <el-select v-model="listQuery.type" placeholder="Голосование" clearable class="filter-item" style="width: 130px">
         <el-option v-for="item in TypeObject" :key="item.key" :label="item.display_name" :value="item.key" />
       </el-select>
@@ -13,9 +10,6 @@
       </el-select>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         Показать
-      </el-button>
-      <el-button v-if="false" v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
-        Export
       </el-button>
     </div>
 
@@ -27,7 +21,6 @@
       fit
       highlight-current-row
       style="width: 100%;"
-      @sort-change="sortChange"
     >
       <el-table-column label="№"  align="center" width="80">
         <template slot-scope="{row}">
@@ -36,7 +29,8 @@
       </el-table-column>
       <el-table-column label="Заголовок" min-width="150px">
         <template slot-scope="{row}">
-          <span class="link-type" @click="handleShow(row)">{{ row.title }}</span>
+          <span class="link-type">{{ row.title }}</span>
+          <el-button type="success" size="mini" plain  icon="el-icon-s-custom" >{{ row.countAnswer }}</el-button>
         </template>
       </el-table-column>
       <el-table-column label="Публикация" prop="date_publish" width="150px"  align="center">
@@ -44,14 +38,14 @@
           <span>{{ row.date_publish  | parseTime(' {d}-{m}-{y} {h}:{i}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Дата начала" prop="date_start" width="150px"  align="center">
+      <el-table-column v-if="false" label="Дата начала" prop="date_start" width="150px"  align="center">
         <template slot-scope="{row}">
-          <span>{{ row.date_start   | parseTime('{d}-{m}-{y}') }}</span>
+          <span v-if="row.type === 'owner'">{{ row.date_start   | parseTime('{d}-{m}-{y}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Дата конца" prop="date_stop" width="150px" align="center">
+      <el-table-column v-if="false" label="Дата конца" prop="date_stop" width="150px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.date_stop   | parseTime('{d}-{m}-{y}') }}</span>
+          <span v-if="row.type === 'owner'">{{ row.date_stop   | parseTime('{d}-{m}-{y}') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="Тип" align="center"  width="150px">
@@ -60,14 +54,14 @@
         </template>
       </el-table-column>
       <el-table-column label="Статус" class-name="status-col" width="100">
-        <template slot-scope="{row}">
+        <template slot-scope="{ row }">
           <el-tag :type="row.status | statusColorFilter">
             {{ row.status | statusFilter }}
           </el-tag>
         </template>
       </el-table-column>
       <el-table-column label="Actions" align="center" width="320px" class-name="small-padding fixed-width">
-        <template slot-scope="{row,$index}">
+        <template slot-scope="{ row }">
           <router-link v-if="row.status === 'new' || row.type === 'public'" :to="'/admin/voting/edit/' + row.id">
             <el-button type="primary" size="small" icon="el-icon-edit">
               Edit
@@ -78,7 +72,7 @@
               Результат
             </el-button>
           </router-link>
-          <el-button v-if="row.status !=='done' || row.status !=='cancel'" size="small" type="danger" @click="handleModifyStatus(row,'close')">
+          <el-button v-if="row.status === 'new' || row.status === 'execution'" size="small" type="danger" @click="handleModifyStatus(row)">
             Отменить
           </el-button>
         </template>
@@ -87,66 +81,41 @@
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="100px" style="width: 600px; margin-left:100px;">
-        <el-form-item label="Автор" prop="user">
-        </el-form-item>
-        <el-form-item label="Заголовок" prop="title">
-          <el-input v-model="temp.title" readonly />
-        </el-form-item>
-        <el-form-item label="Текст">
-          <el-input v-model="temp.text" :autosize="{ minRows: 2}" type="textarea" placeholder="Нет теста =(" readonly />
-        </el-form-item>
-
-        <el-form-item label="Ответить">
-          <el-input v-model="temp.new_message" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="Введите сообщение для пользователя" />
-        </el-form-item>
-      </el-form>
+    <el-dialog title="Закончить голосование" :visible.sync="dialogFormVisible">
+      <div>
+        Укажите как закончить голосование!!!
+      </div>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
           Отмена
         </el-button>
-        <el-button type="primary" @click="updateData()">
-          Отправить
+        <el-button type="danger" @click="updateStatus('cancel')" class="mx-4">
+          Отменить
+        </el-button>
+        <el-button type="success" @click="updateStatus('done')" class="mr-4">
+          Закончить голосование
         </el-button>
       </div>
-    </el-dialog>
-
-    <el-dialog :visible.sync="dialogPvVisible" title="Reading statistics">
-      <el-table :data="pvData" border fit highlight-current-row style="width: 100%">
-        <el-table-column prop="key" label="Channel" />
-        <el-table-column prop="pv" label="Pv" />
-      </el-table>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogPvVisible = false">Confirm</el-button>
-      </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { fetchVotingList } from '@/api/admin/voting'
+import { fetchVotingList, updateVoting } from '@/api/admin/voting'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-
-const calendarTypeOptions = [
-  { key: 'CN', display_name: 'China' },
-  { key: 'US', display_name: 'USA' },
-  { key: 'JP', display_name: 'Japan' },
-  { key: 'EU', display_name: 'Eurozone' }
-]
 
 const selectStatusOptions = [
   { key: 'new', display_name: 'Новое' },
   { key: 'execution', display_name: 'Идет' },
   { key: 'done', display_name: 'Законченно' },
-  { key: 'cancel', display_name: 'Отмененное' }
+  { key: 'cancel', display_name: 'Отменено' }
 ]
 
 const TypeObject = [
-  { key: 'owner', display_name: 'Собственников'},
-  { key: 'public', display_name: 'Публичное'},
+  { key: 'public', display_name: 'Публичное' },
+  { key: 'owner', display_name: 'Собственников' }
 ]
 
 const Type = TypeObject.reduce((acc, cur) => {
@@ -159,18 +128,12 @@ const Status = selectStatusOptions.reduce((acc, cur) => {
   return acc
 }, {})
 
-// arr to obj, such as { CN : "China", US : "USA" }
-const calendarTypeKeyValue = calendarTypeOptions.reduce((acc, cur) => {
-  acc[cur.key] = cur.display_name
-  return acc
-}, {})
-
 export default {
-  name: 'ComplexTable',
+  name: 'AdminVotingListTable',
   components: { Pagination },
   directives: { waves },
   filters: {
-    statusColorFilter(status){
+    statusColorFilter(status) {
       const color = {
         new: 'info',
         execution: '',
@@ -183,7 +146,7 @@ export default {
       return Status[status]
     },
     typeFilter(temp) {
-      if (temp in Type){
+      if (temp in Type) {
         return Type[temp]
       }
       return 'Другое'
@@ -204,40 +167,10 @@ export default {
         status: '',
         sort: '+created_at'
       },
-      importanceOptions: [1, 2, 3],
-      calendarTypeOptions,
+      dialogFormVisible: false,
       selectStatusOptions,
       TypeObject,
-      sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
-      statusOptions: ['published', 'draft', 'deleted'],
-      temp: {
-        id: undefined,
-        user: {},
-        importance: 1,
-        new_message: '',
-        timestamp: new Date(),
-        title: '',
-        type: '',
-        status: 'published'
-      },
-      dialogFormVisible: false,
-      dialogStatus: '',
-      textMap: {
-        update: 'Edit',
-        create: 'Create',
-        show: 'Обращение'
-      },
-      // appealType: {
-      //   stead: 'Участок'
-      // },
-      dialogPvVisible: false,
-      pvData: [],
-      rules: {
-        // type: [{ required: true, message: 'type is required', trigger: 'change' }],
-        // timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
-        // title: [{ required: true, message: 'title is required', trigger: 'blur' }]
-      },
-      downloadLoading: false
+      temp: {}
     }
   },
   mounted() {
@@ -245,7 +178,6 @@ export default {
   },
   methods: {
     showResult(row) {
-
     },
     getList() {
       this.listLoading = true
@@ -259,175 +191,27 @@ export default {
       this.listQuery.page = 1
       this.getList()
     },
-    handleModifyStatus(row, status) {
-      row.status = status
+    updateStatus(status) {
+      this.temp.status = status
+      console.log(status)
+      console.log(this.temp)
       const data = {
-        'appeal': row
+        'voting': this.temp
       }
-      updateAppel(data, row.id)
-        .then(response =>{
+      updateVoting(data, this.temp.id)
+        .then(response => {
+          this.dialogFormVisible = false
+          console.log(response.data)
           this.$message({
             message: 'Success',
             type: 'success'
           })
-
         })
-
-
     },
-    sortChange(data) {
-      const { prop, order } = data
-      if (prop === 'created_at') {
-        this.sortByID(order)
-      }
-    },
-    sortByID(order) {
-      if (order === 'ascending') {
-        this.listQuery.sort = '+created_at'
-      } else if(order === 'descending') {
-        this.listQuery.sort = '-created_at'
-      } else {
-        this.listQuery.sort = ''
-      }
-      this.handleFilter()
-    },
-    resetTemp() {
-      this.temp = {
-        id: undefined,
-        user: {},
-        importance: 1,
-        remark: '',
-        timestamp: new Date(),
-        title: '',
-        status: 'published',
-        type: '',
-
-      }
-    },
-    // handleCreate() {
-    //   this.resetTemp()
-    //   this.dialogStatus = 'create'
-    //   this.dialogFormVisible = true
-    //   this.$nextTick(() => {
-    //     this.$refs['dataForm'].clearValidate()
-    //   })
-    // },
-    createData() {
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
-          this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-          this.temp.author = 'vue-element-admin'
-          createArticle(this.temp).then(() => {
-            this.list.unshift(this.temp)
-            this.dialogFormVisible = false
-            this.$notify({
-              title: 'Success',
-              message: 'Created Successfully',
-              type: 'success',
-              duration: 2000
-            })
-          })
-        }
-      })
-    },
-    handleUpdate(row) {
-      this.temp = Object.assign({}, row) // copy obj
-      this.temp.timestamp = new Date(this.temp.timestamp)
-      this.dialogStatus = 'update'
+    handleModifyStatus(row) {
+      this.temp = row
       this.dialogFormVisible = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
     },
-    handleShow(row) {
-      this.temp = Object.assign({}, row) // copy obj
-      this.temp.timestamp = new Date(this.temp.timestamp)
-      this.dialogStatus = 'show'
-      this.dialogFormVisible = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
-    },
-    updateData() {
-       const data = {
-        'appeal': this.temp
-      }
-      updateAppel(data, this.temp.id)
-        .then(response =>{
-          const index = this.list.findIndex(v => v.id === this.temp.id)
-          // todo поменть на модель польлзователя
-          this.temp.message.push({text: this.temp.new_message, user: {name: 'я'}})
-          this.temp.new_message = ''
-          this.list.splice(index, 1, this.temp)
-          this.dialogFormVisible = false
-          this.$notify({
-            title: 'Success',
-            message: 'Update Successfully',
-            type: 'success',
-            duration: 2000
-          })
-
-        })
-      // this.$refs['dataForm'].validate((valid) => {
-      //   if (valid) {
-      //     const tempData = Object.assign({}, this.temp)
-      //     tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-      //     updateArticle(tempData).then(() => {
-      //       const index = this.list.findIndex(v => v.id === this.temp.id)
-      //       this.list.splice(index, 1, this.temp)
-      //       this.dialogFormVisible = false
-      //       this.$notify({
-      //         title: 'Success',
-      //         message: 'Update Successfully',
-      //         type: 'success',
-      //         duration: 2000
-      //       })
-      //     })
-      //   }
-      // })
-    },
-    handleDelete(row, index) {
-      this.$notify({
-        title: 'Success',
-        message: 'Delete Successfully',
-        type: 'success',
-        duration: 2000
-      })
-      this.list.splice(index, 1)
-    },
-    handleFetchPv(pv) {
-      fetchPv(pv).then(response => {
-        this.pvData = response.data.pvData
-        this.dialogPvVisible = true
-      })
-    },
-    handleDownload() {
-      this.downloadLoading = true
-      import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['timestamp', 'title', 'type', 'importance', 'status']
-        const filterVal = ['timestamp', 'title', 'type', 'importance', 'status']
-        const data = this.formatJson(filterVal)
-        excel.export_json_to_excel({
-          header: tHeader,
-          data,
-          filename: 'table-list'
-        })
-        this.downloadLoading = false
-      })
-    },
-    formatJson(filterVal) {
-      return this.list.map(v => filterVal.map(j => {
-        if (j === 'timestamp') {
-          return parseTime(v[j])
-        } else {
-          return v[j]
-        }
-      }))
-    },
-    // getSortClass: function(key) {
-    //   const sort = this.listQuery.sort
-    //   return sort === `+${key}` ? 'ascending' : 'descending'
-    // }
   }
 }
 </script>

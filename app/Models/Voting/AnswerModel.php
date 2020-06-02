@@ -63,4 +63,23 @@ class AnswerModel extends Model
         }
         return false;
     }
+
+    public function getUserAnswers()
+    {
+        $type = $this->question->voting->type;
+        $userAnswers = $this->userAnswers;
+        $data = [];
+        foreach ($userAnswers as $item) {
+            if ($type == 'public') {
+                $temp = [
+                    'created_at' =>$item->creted_at,
+                    'user_id' => $item->user_id,
+                    'id' => 'user_id_'.$item->user_id,
+                    'user_name' => $item->user->last_name . ' ' . $item->user->name . ' ' . $item->user->moddle_name
+                ];
+                $data['user_id_'.$item->user_id] = $temp;
+            }
+        }
+        return $data;
+    }
 }

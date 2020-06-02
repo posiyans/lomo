@@ -26,7 +26,7 @@ class AnswerResource extends JsonResource
 //            'description' => $this->description,
 //            'created_at' => $this->created_at,
             'userAnswersCount' => count($this->userAnswers),
-            'userAnswers' => $this->userAnswers,
+            'userAnswers' => $this->getUserAnswers(),
         ];
 //        $this->user->fullName = $this->user->fullName();;
 //        $this->user->fName = $this->user->fName();;

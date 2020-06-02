@@ -67,6 +67,7 @@
     "vue": "2.6.10",
     "vue-chartjs": "^3.5.0",
     "vue-count-to": "1.0.13",
+    "vue-json-tree": "^0.4.3",
     "vue-moment": "^4.1.0",
     "vue-router": "3.0.2",
     "vue-splitpane": "1.0.4",

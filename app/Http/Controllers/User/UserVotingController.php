@@ -31,9 +31,9 @@ class UserVotingController extends Controller
      */
     public function index(Request $request)
     {
-        $query = VotingModel::query()->where('public', 1);
+        $query = VotingModel::where('public', 1);
         if (isset($request->type)){
-            $query->whereIn('type',  $request->type);
+            $query->where('type',  $request->type);
         }
         if (isset($request->status)){
             //todo не совсем так нужно рефакторить!!!!
@@ -45,12 +45,9 @@ class UserVotingController extends Controller
                 $status = false;
             }
             if ($status){
-                $query->whereIn('status',  $status, 'or');
+                $query->whereIn('status',  $status);
 
             }
-
-
-            $query->where('status', $request->status);
         }
         $votings = $query->paginate($request->limit);
         return VotingResource::collection($votings);

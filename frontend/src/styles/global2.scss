@@ -102,3 +102,46 @@ body {
   }
 }
 
+$spacer: 1rem;
+
+.pr-4 {
+  padding-right: ($spacer * 1.5) !important;
+}
+.mr-0 {
+  margin-right: 0 !important;
+}
+.mr-1 {
+  margin-right: ($spacer * .25) !important;
+}
+.mr-2 {
+  margin-right: ($spacer * .5) !important;
+}
+.mr-3 {
+  margin-right: ($spacer ) !important;
+}
+.mr-4 {
+  margin-right: ($spacer * 1.5) !important ;
+}
+.mr-4 {
+  margin-right: ($spacer * 3) !important;
+}
+.mx-0{
+  margin-right: 0 !important;
+  margin-left: 0 !important;
+}
+.mx-1{
+  margin-right: ($spacer * 0.25) !important;
+  margin-left: ($spacer * 0.25) !important;
+}
+.mx-2{
+  margin-right: ($spacer * .5) !important;
+  margin-left: ($spacer * .5) !important;
+}
+.mx-3{
+  margin-right: ($spacer * 1) !important;
+  margin-left: ($spacer * 1) !important;
+}
+.mx-4{
+  margin-right: ($spacer * 1.5) !important;
+  margin-left: ($spacer * 1.5) !important;
+}
