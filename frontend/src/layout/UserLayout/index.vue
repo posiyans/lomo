@@ -8,15 +8,14 @@
           justify="space-between"
           class="layout-header"
         >
-          <el-col :md="6"  :xs="8">
+          <el-col :md="6"  :xs="12">
             <hamburger v-if="mobile" :is-active="open_sidebar" class="hamburger-container" @toggleClick="toggleSideBar" />
             <div class="header logo">
               {{site_name}}
               <TemperWidget/>
             </div>
-
           </el-col>
-          <el-col :md="6" :xs="16">
+          <el-col :md="6" :xs="12">
             <HeaderLink/>
           </el-col>
         </el-row>

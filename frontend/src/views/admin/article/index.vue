@@ -47,7 +47,7 @@
       </el-table-column>
       <el-table-column v-if="!mobile" label="Раздел">
         <template slot-scope="{row}">
-            <span>{{ categoryTitle(row.category_id) }}</span>
+            <span :class=" {red: !categoryTitle(row.category_id)}">{{ categoryTitle(row.category_id) | categoryFilter }}</span>
         </template>
       </el-table-column>
       <el-table-column  v-if="!mobile" class-name="status-col" label="Комментарии" width="120">
@@ -85,6 +85,12 @@ export default {
   components: { Pagination },
   directives: { waves },
   filters: {
+    categoryFilter(val) {
+      if (val) {
+        return val
+      }
+      return 'Укажете категорию'
+    },
     statusFilter(status) {
       return status ? 'success' : 'info'
     },
@@ -138,7 +144,7 @@ export default {
   },
   methods: {
     categoryTitle(id) {
-      let label = ''
+      let label = false
       this.categoryArray.forEach(i => {
         if (i.id === id) {
           label = i.label

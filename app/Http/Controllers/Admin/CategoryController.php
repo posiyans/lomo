@@ -35,19 +35,21 @@ class CategoryController extends Controller
         $appeals =  CategoryModel::all();
         $rez = [];
         foreach ($appeals as $item) {
-            $i = [];
-            $i['id'] = $item->id;
-            $i['show_menu'] = $item->show_menu;
-            $i['menu_name'] = $item->menu_name;
-            if ($item->menu_name){
-                $i['basePath'] = $item->menu_name;
-            } else {
-                $i['basePath'] = '/article/list/'.$item->id;
-            }
-            $i['menu'] = $item->menu_name;
-            $i['label'] = $item->name;
+            if (!$item->getChildren()) {
+                $i = [];
+                $i['id'] = $item->id;
+                $i['show_menu'] = $item->show_menu;
+                $i['menu_name'] = $item->menu_name;
+                if ($item->menu_name) {
+                    $i['basePath'] = $item->menu_name;
+                } else {
+                    $i['basePath'] = '/article/list/' . $item->id;
+                }
+                $i['menu'] = $item->menu_name;
+                $i['label'] = $item->name;
 
-            $rez[] = $i;
+                $rez[] = $i;
+            }
         }
 
         return $rez;
