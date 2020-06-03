@@ -44,11 +44,11 @@ class UserController extends Controller
 //            $user->roles = array_merge_recursive(['user'], $user->getRoles());
 
             $temp = ['user'];
-//            if ($user->hasRole('superAdmin')) {
-//                $perms = Permission::all();
-//            } else {
+            if ($user->hasRole('superAdmin')) {
+                $perms = Permission::all();
+            } else {
                 $perms = $user->allPermissions();
-//            }
+            }
 
             foreach ($perms as $perm) {
                 $temp[] = $perm->name;

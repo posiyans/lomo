@@ -15,21 +15,21 @@ export default {
   props: {
     value: {
       type: String,
-      default: 'owner'
+      default: 'public'
     }
   },
   data() {
     return {
       options: [
+        // {
+        //   id: 'owner',
+        //   label: 'Голосование собственников'
+        // },
         {
-          id: "owner",
-          label: 'Голосование собственников'
-        },
-        {
-          id: "public",
+          id: 'public',
           label: 'Публичное голосование'
         }
-      ],
+      ]
       // value: '',
     }
   },

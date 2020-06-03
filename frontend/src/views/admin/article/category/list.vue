@@ -149,10 +149,10 @@ export default {
   },
   methods: {
     editCategory(node, data) {
-      console.log('node')
-      console.log(node)
-      console.log('data')
-      console.log(data)
+      // console.log('node')
+      // console.log(node)
+      // console.log('data')
+      // console.log(data)
       this.categoryEdit = data
       this.dialogVisible = true
     },
@@ -227,7 +227,7 @@ export default {
     },
     handleDragEnd(draggingNode, dropNode, dropType, ev) {
       console.log('tree drag end: ', dropNode && dropNode.label, dropType);
-      console.log(this.category);
+      // console.log(this.category);
 
     },
     handleDrop(draggingNode, dropNode, dropType, ev) {

@@ -1,11 +1,9 @@
 <template>
   <div class="components-container">
     <pan-thumb :image="image" />
-
     <el-button type="primary" icon="el-icon-upload" :class="{'avatar-desktop': desktop}" @click="imagecropperShow=true">
       Сменить Аватар
     </el-button>
-
     <image-cropper
       v-show="imagecropperShow"
       :key="imagecropperKey"
@@ -25,12 +23,12 @@
 <script>
 import ImageCropper from '@/components/ImageCropper'
 import PanThumb from '@/components/PanThumb'
-import {mapState} from "vuex";
+import { mapState } from 'vuex'
 
 export default {
   name: 'AvatarUpload',
   components: { ImageCropper, PanThumb },
-  props:{
+  props: {
     user_id: {
       type: Number,
       default: 0
@@ -49,12 +47,12 @@ export default {
   },
   computed: {
     ...mapState({
-      device: state => state.app.device,
+      device: state => state.app.device
     }),
     url() {
       return process.env.VUE_APP_BASE_API + '/user/storage/file'
     },
-    desktop(){
+    desktop() {
       if (this.device === 'desktop') {
         return true
       }
@@ -63,33 +61,24 @@ export default {
     user() {
       return this.$store.getters.user
     },
-    // avatar() {
-    //   if (this.id > 0 ){
-    //     return this.value
-    //   }
-    //  // return this.user.avatar
-    // },
     id() {
-      if (this.user_id > 0){
+      if (this.user_id > 0) {
         return this.user_id
       }
       return this.user.id
     }
   },
   mounted() {
-    console.log('mount avatar')
-    if (this.id > 0 ) {
-      if (this.value){
+    if (this.id > 0) {
+      if (this.value) {
         if (this.value[0] === '/') {
           this.image = process.env.VUE_APP_BASE_API + this.value
         } else {
           this.image = this.value
         }
-
-      }else {
+      } else {
         this.image = '/'
       }
-
     } else {
       if (this.$store.getters.user.avatar[0] === '/') {
         this.image = process.env.VUE_APP_BASE_API + this.$store.getters.user.avatar
@@ -105,12 +94,11 @@ export default {
       this.imagecropperShow = false
       this.imagecropperKey = this.imagecropperKey + 1
       this.$emit('input', resData.files.file)
-      if (resData.files.file[0] === '/'){
-        this.image = process.env.VUE_APP_BASE_API  + resData.files.file
+      if (resData.files.file[0] === '/') {
+        this.image = process.env.VUE_APP_BASE_API + resData.files.file
       } else {
         this.image = resData.files.file
       }
-
     },
     close() {
       this.imagecropperShow = false

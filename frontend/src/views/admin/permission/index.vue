@@ -204,7 +204,7 @@ export default {
       return res
     },
     async confirmRole() {
-      console.log(this.$refs.tree.getCheckedKeys())
+      // console.log(this.$refs.tree.getCheckedKeys())
 
       const checkedKeys = this.$refs.tree.getCheckedKeys()
       this.role.newPermissions = checkedKeys;
@@ -221,7 +221,7 @@ export default {
         // }
 
 
-      console.log(this.rolesList);
+      // console.log(this.rolesList);
       const { description, display_name, name } = this.role
       this.dialogVisible = false
       this.$notify({

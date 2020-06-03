@@ -8,12 +8,12 @@
 import adminDashboard from './admin'
 
 export default {
-  name: 'AdminDashboard',
+  name: 'AdminModeratorDashboard',
   components: { adminDashboard },
   data() {
     return {
       currentRole: 'adminDashboard'
     }
-  },
+  }
 }
 </script>

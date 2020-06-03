@@ -76,7 +76,7 @@ export default {
   mounted() {
     // console.log('menu item menu')
     // console.log(this.$store.state.permission.menu)
-    console.log(document.documentElement.clientWidth)
+    // console.log(document.documentElement.clientWidth)
   },
   methods: {
     handleSelect(key, keyPath) {

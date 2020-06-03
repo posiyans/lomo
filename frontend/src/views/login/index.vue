@@ -70,7 +70,7 @@
         this.$router.push('/password/reset')
       },
       async loginVK() {
-        console.log('vk')
+        // console.log('vk')
 
         const $url = await this.$store.dispatch('user/loginVK')
         // console.log($url)

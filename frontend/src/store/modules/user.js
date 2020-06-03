@@ -92,7 +92,7 @@ const actions = {
           const { roles, name, avatar, introduction, allPermissions } = data
 
           // roles must be a non-empty array
-          if (!allPermissions|| allPermissions.length <= 0) {
+          if (!allPermissions || allPermissions.length <= 0) {
             reject('getInfo: roles must be a non-null array!')
           }
           if (data.message) {
@@ -124,7 +124,7 @@ const actions = {
         removeToken()
         resetRouter()
         // getInfo()
-        //dispatch('permission/getMenu')
+        // dispatch('permission/getMenu')
         // reset visited views and cached views
         // to fixed https://github.com/PanJiaChen/vue-element-admin/issues/2485
         dispatch('tagsView/delAllViews', null, { root: true })

@@ -105,7 +105,7 @@
     methods:{
       save(){
         this.$refs.Resetform.validate(valid => {
-          console.log(valid)
+          // console.log(valid)
           if (valid) {
             // const data = {
             //   email: this.form.email,

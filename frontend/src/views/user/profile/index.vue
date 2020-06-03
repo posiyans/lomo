@@ -57,14 +57,12 @@
           </el-form-item>
           <el-form-item label="Cогласен ">
             <el-tooltip class="item" effect="light" content="Cогласен на обработку персональных данных и с условиями пользовательского соглашения" placement="top">
-            <el-checkbox v-model="user.consent_personal" label="на обработку персональных данных"
-                                       name="type"></el-checkbox>
+            <el-checkbox
+              v-model="user.consent_personal"
+              label="на обработку персональных данных"
+              name="type"
+            />
             </el-tooltip>
-             <el-tooltip class="item" effect="light" content="Согласен получать письма с новостями от правления" placement="top">
-              <el-checkbox v-model="user.consent_to_email" label="получать письма от правления"
-                           name="type"></el-checkbox>
-            </el-tooltip>
-
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="saveData" :disabled="!user.consent_personal">Сохранить</el-button>
@@ -80,33 +78,31 @@
 import { getInfo, setUserInfo } from '@/api/user/user.js'
 import { getSteadsList } from '@/api/user/stead.js'
 import AvatarUpload from '@/components/AvatarUpload'
-import {mapState} from "vuex";
+import { mapState } from 'vuex'
 
 export default {
   components: {
     AvatarUpload,
   },
   data() {
-      return {
-          data: false,
-          user: {
-              steads: false
-          },
-          form: {
-              name: '',
-              region: '',
-              date1: '',
-              date2: '',
-              delivery: false,
-              type: [],
-              resource: '',
-              desc: ''
-          },
-          loading: false,
-          steadsList: []
-
-
-      }
+    return {
+      data: false,
+      user: {
+        steads: false
+      },
+      form: {
+        name: '',
+        region: '',
+        date1: '',
+        date2: '',
+        delivery: false,
+        type: [],
+        resource: '',
+        desc: ''
+      },
+      loading: false,
+      steadsList: []
+    }
   },
   computed: {
     ...mapState({
@@ -142,50 +138,50 @@ export default {
       }
     }
   },
-    mounted() {
-        this.getInfo()
-    },
-    methods: {
-        saveData(){
-            if (this.user.consent_personal){
-                const data ={
-                    user: this.user
-                }
-                setUserInfo(data)
-                    .then(response => {
-                      this.$message({
-                        message: 'Данные успешно сохренены.',
-                        type: 'success'
-                      });
-                    })
-            }
-        },
-        getInfo(){
-            getInfo()
-                .then(response =>{
-                    this.user = response.data
-                })
-            getSteadsList()
-                .then(response => {
-                    this.steadsList = response.data
-                })
-        },
-        findStead(query){
-            const data = {
-               query: query
-            }
-           getSteadsList(data)
-               .then(response => {
-                    this.steadsList = response.data
-                })
+  mounted() {
+    this.getInfo()
+  },
+  methods: {
+    saveData() {
+      if (this.user.consent_personal) {
+        const data = {
+          user: this.user
         }
+        setUserInfo(data)
+          .then(response => {
+            this.$message({
+              message: 'Данные успешно сохренены.',
+              type: 'success'
+            })
+          })
+      }
+    },
+    getInfo() {
+      getInfo()
+        .then(response => {
+          this.user = response.data
+        })
+      getSteadsList()
+        .then(response => {
+          this.steadsList = response.data
+        })
+    },
+    findStead(query) {
+      const data = {
+        query: query
+      }
+      getSteadsList(data)
+        .then(response => {
+          this.steadsList = response.data
+        })
     }
+  }
 }
 </script>
 
 <style scoped>
   .message{
-    color: #1890ff;
+    color: #bd0000;
     padding-left: 50px;
   }
 </style>

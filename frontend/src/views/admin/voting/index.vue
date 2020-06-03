@@ -193,15 +193,15 @@ export default {
     },
     updateStatus(status) {
       this.temp.status = status
-      console.log(status)
-      console.log(this.temp)
+      // console.log(status)
+      // console.log(this.temp)
       const data = {
         'voting': this.temp
       }
       updateVoting(data, this.temp.id)
         .then(response => {
           this.dialogFormVisible = false
-          console.log(response.data)
+          // console.log(response.data)
           this.$message({
             message: 'Success',
             type: 'success'

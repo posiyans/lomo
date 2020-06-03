@@ -4,9 +4,9 @@
       <sticky :z-index="10" :class-name="'sub-navbar '+postForm.status">
         <TypeDropdown v-model="postForm.type"/>
 <!--        <CommentDropdown v-model="postForm.comments" />-->
-        <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submitForm">
-          Опубликовать
-        </el-button>
+<!--        <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submitForm">-->
+<!--          Опубликовать-->
+<!--        </el-button>-->
         <el-button v-loading="loading" type="warning" @click="draftForm">
           Сохранить
         </el-button>
@@ -274,8 +274,8 @@ export default {
         if (valid) {
           this.loading = true
           this.postForm.public = true
-          console.log('this.postForm')
-          console.log(this.postForm)
+          // console.log('this.postForm')
+          // console.log(this.postForm)
           // this.postForm.display_time = this.$moment(this.datetime).format('YYYY-MM-DD HH:mm:ss')
           if (this.isEdit) {
             const id = this.$route.params && this.$route.params.id

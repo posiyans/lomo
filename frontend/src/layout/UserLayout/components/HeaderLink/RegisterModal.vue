@@ -130,8 +130,8 @@
         return this.$store.getters.roles.includes('guest')
       },
       cachedViews() {
-        console.log('this.$store.state.tagsView.cachedViews')
-        console.log(this.$store.state.tagsView.cachedViews)
+        // console.log('this.$store.state.tagsView.cachedViews')
+        // console.log(this.$store.state.tagsView.cachedViews)
         return this.$store.state.tagsView.cachedViews
       },
       key() {
@@ -142,8 +142,8 @@
   }
     },
     mounted() {
-      console.log('this.$refs')
-      console.log(this.$refs)
+      // console.log('this.$refs')
+      // console.log(this.$refs)
       // if (this.form.email === '') {
       //   this.$refs.email.focus()
       // }
@@ -161,10 +161,10 @@
         console.log('vk')
 
         const $url = await this.$store.dispatch('user/loginVK')
-        console.log($url)
-        console.log(window.location.pathname)
-        console.log(this.$route.query.page)
-        console.log(location.href)
+        // console.log($url)
+        // console.log(window.location.pathname)
+        // console.log(this.$route.query.page)
+        // console.log(location.href)
         window.location = $url
         // window.location = $url + '&redirect_uri=' + location.href
         // this.newWin = window.open($url, "hello", "width=200,height=200");

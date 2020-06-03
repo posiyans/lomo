@@ -71,7 +71,7 @@ const actions = {
         resolve(response.data)
       })
     })
-  },
+  }
 }
 
 export default {

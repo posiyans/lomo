@@ -36,12 +36,12 @@ export default {
       form: {
         name: '',
         rename: false
-      },
+      }
     }
   },
   mounted() {
-    console.log(this.$store.getters.roles)
-    console.log(this.roleGuest)
+    // console.log(this.$store.getters.roles)
+    // console.log(this.roleGuest)
   },
   computed: {
     ...mapGetters([
@@ -65,7 +65,7 @@ export default {
     }
   },
   methods: {
-    toProfile(){
+    toProfile() {
       this.$router.push('/user/profile')
     },
     async logout() {

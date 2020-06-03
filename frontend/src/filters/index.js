@@ -68,9 +68,7 @@ export function uppercaseFirst(string) {
   return string.charAt(0).toUpperCase() + string.slice(1)
 }
 
-
 export function marked(string) {
-  console.log(markedFunc(string))
-
+  // console.log(markedFunc(string))
   return markedFunc(string)
 }

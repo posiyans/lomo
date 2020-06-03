@@ -82,10 +82,10 @@ export const constantRoutes = [
   {
     path: '/admin',
     component: Layout,
-    redirect: '/admin/dashboard',
+    redirect: '/admin/my-dashboard',
     children: [
       {
-        path: 'dashboard',
+        path: 'my-dashboard',
         component: () => import('@/views/admin/dashboard/admin/index'),
         name: 'AdminDashboard',
         meta: { title: 'Главная', icon: 'dashboard', affix: true }

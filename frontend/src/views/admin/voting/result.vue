@@ -38,7 +38,7 @@ export default {
     },
     fetchVoting() {
       const id = this.$route.params && this.$route.params.id
-      console.log(id)
+      // console.log(id)
       fetchAdminVoting(id)
         .then(response => {
           this.voting = response.data.data

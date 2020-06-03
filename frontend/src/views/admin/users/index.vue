@@ -82,30 +82,30 @@
           >
             <i class="el-icon-s-home" />
           </span>
-          <span
-            :class="{'gren' : false}"
-            :title="'Член правления' | titleFilter(false)">
-            <svg-icon icon-class="user" />
-          </span>
+<!--          <span-->
+<!--            :class="{'gren' : false}"-->
+<!--            :title="'Член правления' | titleFilter(false)">-->
+<!--            <svg-icon icon-class="user" />-->
+<!--          </span>-->
 
-          <span
-            :class="{'gren' : row.consent_to_email}"
-            :title="'Подписан на рассылку' | titleFilter(row.consent_to_email)">
-            <svg-icon icon-class="email" />
-          </span>
+<!--          <span-->
+<!--            :class="{'gren' : row.consent_to_email}"-->
+<!--            :title="'Подписан на рассылку' | titleFilter(row.consent_to_email)">-->
+<!--            <svg-icon icon-class="email" />-->
+<!--          </span>-->
         </template>
       </el-table-column>
       <el-table-column label="Actions" align="center" width="230" class-name="small-padding fixed-width">
-        <template slot-scope="{row,$index}">
+        <template slot-scope="{ row }">
           <el-button type="primary" size="small" @click="handleUpdate(row)" circle>
             <svg-icon icon-class="edit" />
           </el-button>
-          <el-button size="small" type="success" @click="handleModifyStatus(row,'published')" circle>
-            <svg-icon icon-class="eye-open" />
-          </el-button>
-          <el-button v-if="row.status!='open'" size="small" type="warning" @click="handleModifyStatus(row,'draft')" circle>
-            <svg-icon icon-class="guide" />
-          </el-button>
+<!--          <el-button size="small" type="success" @click="handleModifyStatus(row,'published')" circle>-->
+<!--            <svg-icon icon-class="eye-open" />-->
+<!--          </el-button>-->
+<!--          <el-button v-if="row.status!='open'" size="small" type="warning" @click="handleModifyStatus(row,'draft')" circle>-->
+<!--            <svg-icon icon-class="guide" />-->
+<!--          </el-button>-->
         </template>
       </el-table-column>
     </el-table>
