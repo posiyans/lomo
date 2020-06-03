@@ -4,7 +4,7 @@
       <div align="center" class="plugin-welcome">
         <div>Температура на </div>
         <div>{{ temper.time | moment('HH:mm') }} </div>
-        <div style="font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 1em; padding: 15px 0; cursor: pointer;" @click="putWeather">
+        <div style="font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 3em; padding: 15px 0; cursor: pointer;" @click="putWeather">
           {{ temper.temp }}°C
         </div>
       </div>

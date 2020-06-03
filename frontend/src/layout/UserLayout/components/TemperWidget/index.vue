@@ -1,5 +1,5 @@
 <template>
-  <span v-if="temper" style="font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 3em; color: #1b5fab;">
+  <span v-if="temper" style="font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 1em; color: #1b5fab;">
       {{temper.temp}}°C
   </span>
 </template>
@@ -22,7 +22,7 @@ export default {
         this.temper = response.data.temper
       })
     }
-  },
+  }
 }
 </script>
 
