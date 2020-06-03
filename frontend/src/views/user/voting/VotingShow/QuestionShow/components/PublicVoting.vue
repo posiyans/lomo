@@ -144,7 +144,7 @@ export default {
           this.voidVisible = false
           if (response.data.status) {
             this.$message({
-              message: 'Спасибо что проголосовалит',
+              message: 'Успешно',
               type: 'success',
               duration: 5 * 1000
             })
