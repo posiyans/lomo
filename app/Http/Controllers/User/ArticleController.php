@@ -109,7 +109,8 @@ class ArticleController extends Controller
             return $model;
 
         }
-        return false;
+
+        return json_encode(['title'=>'Статья не найдена']);
 
     }
 

@@ -69,9 +69,6 @@ export default {
       return '';
     }
   },
-  mounted() {
-    this.fetchVoting()
-  },
   data() {
     return {
       loading: true,
@@ -84,7 +81,10 @@ export default {
         return true
       }
       return false
-    },
+    }
+  },
+  mounted() {
+    this.fetchVoting()
   },
   methods: {
     publicTime(val) {
@@ -106,7 +106,7 @@ export default {
       this.$router.back()
     },
     fetchVoting() {
-      fetchAdminVoting(this.$route.params.id)
+      fetchUserVoting(this.$route.params.id)
         .then(response => {
           this.voting = response.data.data
           this.loading = false

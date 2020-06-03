@@ -10,7 +10,11 @@
         >
           <el-col :md="6"  :xs="8">
             <hamburger v-if="mobile" :is-active="open_sidebar" class="hamburger-container" @toggleClick="toggleSideBar" />
-            <div class="header logo">{{site_name}}</div>
+            <div class="header logo">
+              {{site_name}}
+              <TemperWidget/>
+            </div>
+
           </el-col>
           <el-col :md="6" :xs="16">
             <HeaderLink/>
@@ -56,11 +60,13 @@ import Hamburger from '@/components/Hamburger'
 import { AppMain, Navbar, Settings, Sidebar, TagsView } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
 import { mapState, mapGetters } from 'vuex'
+import TemperWidget from './components/TemperWidget'
 import store from '../../store'
 
 export default {
   name: 'Layout',
   components: {
+    TemperWidget,
     AppMain,
     HeaderLink,
     Navbar,

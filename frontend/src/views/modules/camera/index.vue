@@ -19,20 +19,20 @@ export default {
   },
   methods: {
     limgClick(val) {
-      if (val === 1) {
-        if (this.src1 === '/camera/img/1') {
-          this.src1 = '/camera/img/gif1'
-        } else {
-          this.src1 = '/camera/img/1'
-        }
-      }
-      if (val === 2) {
-        if (this.src2 === '/camera/img/2') {
-          this.src2 = '/camera/img/gif2'
-        } else {
-          this.src2 = '/camera/img/2'
-        }
-      }
+      // if (val === 1) {
+      //   if (this.src1 === '/camera/img/1') {
+      //     this.src1 = '/camera/img/gif1'
+      //   } else {
+      //     this.src1 = '/camera/img/1'
+      //   }
+      // }
+      // if (val === 2) {
+      //   if (this.src2 === '/camera/img/2') {
+      //     this.src2 = '/camera/img/gif2'
+      //   } else {
+      //     this.src2 = '/camera/img/2'
+      //   }
+      // }
     }
   }
 }

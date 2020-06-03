@@ -8,21 +8,21 @@ use App\Models\Voting\UserAnswerModel;
 use App\Models\Voting\VotingModel;
 use Illuminate\Console\Command;
 
-class ActionVoting extends Command
+class ActionVotingOwner extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'command:voting-action {voting}';
+    protected $signature = 'command:owner-voting-action {voting}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Провести фейковое голосование';
+    protected $description = 'Провести фейковое голосование собственников';
 
     /**
      * Create a new command instance.

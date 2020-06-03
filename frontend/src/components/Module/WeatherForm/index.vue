@@ -1,11 +1,11 @@
 <template>
-  <RightCard v-if="show" header="Погода" class="right-welcome">
+  <RightCard header="Погода" class="right-welcome">
     <template>
       <div align="center" class="plugin-welcome">
         <div>Температура на </div>
-        <div>{{temper.time | moment('HH:mm')}} </div>
-        <div style="font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 3em; padding: 15px 0; cursor: pointer;" @click="putWeather">
-          {{temper.temp}}°C
+        <div>{{ temper.time | moment('HH:mm') }} </div>
+        <div style="font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 1em; padding: 15px 0; cursor: pointer;" @click="putWeather">
+          {{ temper.temp }}°C
         </div>
       </div>
     </template>
@@ -37,16 +37,7 @@ export default {
         this.temper = response.data.temper
       })
     }
-  },
-  computed: {
-    show() {
-      // проверка на актуальность темепературы,выводим если занчение получено не более 2 часов назад
-      // if ((this.$moment(this.temper.time).format('X') - this.$moment(new Date().getTime()).format('X'))/(60*60) > 1){
-      //   return true
-      // }
-      return true
-    },
-  },
+  }
 }
 </script>
 
