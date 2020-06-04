@@ -48,7 +48,7 @@ class ResetPassword extends Notification
             ->subject('Сброс пароля')
             ->line('Вы получили это письмо, потому что мы получили запрос на сброс пароля для вашей учетной записи.')
 //            ->action('Сбросить пароль', url(config('app.url').route('password.reset', ['token' => $this->token, 'email' => $notifiable->getEmailForPasswordReset()], false)))
-            ->action('Сбросить пароль', config('app.url').':9527/#/password/change?token='.$this->token.'&email='.$notifiable->getEmailForPasswordReset())
+            ->action('Сбросить пароль', config('app.url').'/#/password/change?token='.$this->token.'&email='.$notifiable->getEmailForPasswordReset())
             ->line('Время действия ссылки для сброса пароля истечет через 60 минут.')
             ->line('Если вы не запрашивали сброс пароля, никаких дальнейших действий не требуется.');
 //        return (new MailMessage)
