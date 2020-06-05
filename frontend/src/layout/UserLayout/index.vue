@@ -15,7 +15,7 @@
               <TemperWidget/>
             </div>
           </el-col>
-          <el-col :md="6" :xs="12beta">
+          <el-col :md="6" :xs="12">
             <HeaderLink/>
           </el-col>
         </el-row>
