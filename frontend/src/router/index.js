@@ -153,6 +153,12 @@ export const constantRoutes = [
         name: 'modulesCamera',
         hidden: true
       },
+      {
+        path: 'schedule',
+        component: () => import('@/views/modules/YandexSchedule/index.vue'),
+        name: 'modulesSchedule',
+        hidden: true
+      },
     ]
   },
   {
