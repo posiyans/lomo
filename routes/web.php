@@ -47,7 +47,7 @@ Route::get('/camera', 'Camera\CameraController@index');
 Route::get('/camera/img/{id?}', 'Camera\CameraController@getImages');
 Route::get('/camera/create-gif/{token?}', 'Camera\CameraController@createGif');
 
-Route::get('/rasp', 'RaspController@index');
+Route::get('/rasp', 'Yandex\ScheduleController@index');
 
 Route::get('/temper', 'TemperController@index');
 Route::get('/temper/get', 'TemperController@showGrafTemper');
