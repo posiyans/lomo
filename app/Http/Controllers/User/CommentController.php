@@ -139,6 +139,14 @@ class CommentController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = Auth::user();
+        if ($user->ability('superAdmin', 'delete-comment')) {
+            if ($comment = CommentModel::find($id)) {
+                $comment->delete();
+                return json_encode(['status'=>true, 'data'=>$comment]);
+            }
+
+        }
+        return json_encode(['status'=>false]);
     }
 }

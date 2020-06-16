@@ -72,8 +72,14 @@ class UserController extends Controller
      */
     public function show($id)
     {
+        $user = Auth::user();
+        if ($user->ability('superAdmin', 'show-users')) {
+            if ($model = User::find($id)){
+                return new UserResource($model);
+            }
 
-//        return new AppealResource($apppel);
+        }
+        return false;
 
     }
 

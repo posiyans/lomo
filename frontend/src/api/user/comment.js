@@ -17,3 +17,11 @@ export function addComment(data) {
     data
   })
 }
+
+
+export function deleteComment(id) {
+  return request({
+    url: '/api/v1/user/comment/' + id,
+    method: 'delete'
+  })
+}

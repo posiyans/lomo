@@ -45,7 +45,8 @@ class UserController extends Controller
 
             $temp = ['user'];
             if ($user->hasRole('superAdmin')) {
-                $perms = Permission::all();
+//                $perms = Permission::all();
+                $perms = Permission::where('name', 'not like', 'ban-%')->get();
             } else {
                 $perms = $user->allPermissions();
             }

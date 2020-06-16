@@ -31,7 +31,7 @@
               <el-button type="primary" size="mini"  @click="back">Назад</el-button>
             </span>
             <span style="padding-left: 20px;">
-              <el-button v-if="article.allow_comments==1" type="primary" size="mini" plain icon="el-icon-chat-dot-square">{{ article.comments.length }}</el-button>
+              <el-button v-if="article.allow_comments==1" type="primary" size="mini" plain icon="el-icon-chat-dot-square">{{ article.comments_show.length }}</el-button>
             </span>
           </el-col>
           <el-col :span="10"><div style="text-align: right; padding: 10px 20px 0px 0;color: #848484; height: 100%;">{{publicTime(article.publish_time)}}</div></el-col>

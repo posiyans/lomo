@@ -378,14 +378,25 @@ export const asyncRoutes = [
   {
     path: '/users',
     component: Layout,
+    title: 'Пользователи',
     children: [
       {
         path: 'index',
-        component: () => import('@/views/admin/users/index'),
-        name: 'Users',
+        component: () => import('@/views/admin/users/list/index'),
+        name: 'UsersList',
         meta: {
           title: 'Пользователи',
           icon: 'documentation',
+          affix: true,
+          roles: ['show-users']
+        }
+      },
+      {
+        path: 'show/:id(\\d+)',
+        component: () => import('@/views/admin/users/show/index'),
+        name: 'UserShow',
+        hidden: true,
+        meta: {
           affix: true,
           roles: ['show-users']
         }

@@ -106,7 +106,7 @@ Route::group(['middleware' => 'auth'], function () {
         ->only(['index', 'update', 'store', 'show']);
 //        ->only(['index', 'update', 'store', 'show']);
     Route::resource('/api/v1/user/comment', 'User\CommentController')
-        ->only(['store']);
+        ->only(['store', 'destroy']);
 
 
     Route::resource('/api/v1/admin/gardening', 'User\GardeningController')

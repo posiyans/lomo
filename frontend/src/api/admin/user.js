@@ -15,3 +15,10 @@ export function updateUserData(data, id) {
     data: data
   })
 }
+
+export function fetchUserInfo(id) {
+  return request({
+    url: '/api/v1/admin/user/' + id,
+    method: 'get'
+  })
+}

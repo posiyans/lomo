@@ -69,6 +69,8 @@ class LaratrustSeeder extends Seeder
         'edit-role' => 'Редактирование ролей и прав',
         'create-article' => 'Создание статей',
         'create-comment' => 'Создание коментарии',
+        'ban-comment' => 'Запрет на коментарии',
+        'delete-comment' => 'Удаление коментариев',
         'access-admin-panel' => 'Доступ в админ панель',
         'show-appels' => 'Просмотр обращений',
         'edit-appels' => 'Обработка обращений',

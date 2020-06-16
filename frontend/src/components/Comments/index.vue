@@ -2,8 +2,10 @@
   <div class="main-comments">
     <div v-for="i in value.comments_show" class="comments-post">
       <el-row>
-        <el-col :xs="4" :sm="2" :lg="1" align="middle" ><el-avatar :size="40" :src="i.avatar | avatarUrl"></el-avatar></el-col>
-        <el-col :xs="20" :sm="20" :lg="20">
+        <el-col :xs="4" :sm="2" :lg="1" align="middle" >
+          <el-avatar :size="40" :src="i.avatar | avatarUrl"/>
+        </el-col>
+        <el-col :xs="20" :sm="22" :lg="23">
           <div class="comment_author">
             {{i.userName}}
           </div>
@@ -18,10 +20,16 @@
           </div>
           <el-divider class="divider"></el-divider>
         </el-col>
+          <div v-if="deleteAccess" class="article-setting-icon" @click="deleteComment(i)">
+            <i class="el-icon-delete-solid"></i>
+          </div>
       </el-row>
 
     </div>
-    <el-row v-if="user" class="send" align="middle">
+    <div v-if="ban" class="red no-send " align="middle">
+      Вам запрещено оставлять комментарии!!!
+    </div>
+    <el-row v-else-if="user" class="send" align="middle">
       <el-col :xs="4" :sm="2" :lg="1"><el-avatar :size="40" :src="user.avatar | avatarUrl"></el-avatar></el-col>
       <el-col :xs="16" :sm="18" :lg="19">
         <el-input
@@ -37,14 +45,14 @@
         </div>
       </el-col>
     </el-row>
-    <div v-else class="no-send" align="middle">
+    <div v-else class="no-send green" align="middle">
       <router-link to="/login/index">Чтобы оставить комментарий, необходимо авторизоваться</router-link>
     </div>
   </div>
 </template>
 
 <script>
-import { addComment, fetchListComments } from '@/api/user/comment.js'
+import { addComment, deleteComment } from '@/api/user/comment.js'
 // var marked = require('marked')
 
 export default {
@@ -68,30 +76,55 @@ export default {
   data() {
     return {
       newComment: '',
-      items: []
+      items: [],
     }
   },
   computed: {
     user() {
       if (this.$store.getters.user.allPermissions.includes('guest')) {
-         return false
+        return false
       }
       return this.$store.getters.user
+    },
+    deleteAccess() {
+      if (this.$store.getters.user.allPermissions.includes('delete-comment')) {
+        return true
+      }
+      return false
+    },
+    ban() {
+      if (this.$store.getters.user.allPermissions.includes('ban-comment')) {
+        return true
+      }
+      return false
     }
   },
   created() {
     // this.getComments()
   },
-  methods:{
-
-    getComments(){
-      // const data = {
-      //   article_id: this.value,
-      // }
-      // fetchListComments(data)
-      //   .then(response => {
-      //     this.items = response.data.data
-      //   })
+  methods: {
+    deleteComment(val) {
+      this.$confirm('Вы точно хотите удалить комментарий?', 'Внимание!!!', {
+        confirmButtonText: 'Удалить',
+        cancelButtonText: 'Отмена',
+        type: 'warning'
+      }).then(() => {
+        deleteComment(val.id).then(response => {
+          if (response.data.status) {
+            for (const item of this.value.comments_show) {
+              if (item.id === val.id) {
+                const index = this.value.comments_show.indexOf(item)
+                this.value.comments_show.splice(index, 1)
+                break
+              }
+            }
+            this.$message({
+              type: 'success',
+              message: 'Комментарий удален'
+            })
+          }
+        })
+      })
     },
     sendComment() {
       const data = {
@@ -100,7 +133,8 @@ export default {
       }
       addComment(data).then(response => {
         if (response.data.status) {
-          this.value.comments.push(response.data.data)
+          // this.value.comments.push(response.data.data)
+          this.value.comments_show.push(response.data.data)
         } else {
           this.$message({
             message: 'Не удалось добавить комментарий',
@@ -162,7 +196,6 @@ export default {
     margin-top: 15px;
     margin-left: 50px;
     margin-bottom: 15px;
-    color: #1b3958;
   }
   .comment-send > i {
     cursor: pointer;
