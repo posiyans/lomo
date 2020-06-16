@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div class="app-container">
+    <h2>Расписание электричек</h2>
     <div>
       <el-radio-group v-model="queryParams.back" @change="getList">
          <el-radio-button v-for="dt in directions"  :label="dt.key">{{dt.label}}</el-radio-button>

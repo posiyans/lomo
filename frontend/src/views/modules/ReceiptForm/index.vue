@@ -24,38 +24,38 @@
 </template>
 
 <script>
-  import { getGardeninngInfo } from '@/api/user/gardening.js'
-  import { mapGetters } from 'vuex'
-  import store from '../../../store'
-  export default {
-    name: 'RecaiptForm',
-    components: {
-    },
-    data() {
-      return {
-        centerDialogVisible: false,
-        gardening: {}
-      }
-    },
-    mounted() {
-      this.fetchGagdening()
-    },
-    computed: {
-      urlQRcode() {
-        return process.env.VUE_APP_BASE_API + '/../user/receipt/get-qrcode-clear'
-      },
-      url() {
-         return process.env.VUE_APP_BASE_API + '/../user/receipt/get-receipt-clear'
-      }
-    },
-    methods:{
-      fetchGagdening() {
-        getGardeninngInfo().then(response =>{
-          this.gardening = response.data
-        })
-       }
+import { getGardeninngInfo } from '@/api/user/gardening.js'
+import { mapGetters } from 'vuex'
+import store from '../../../store'
+export default {
+  name: 'RecaiptForm',
+  components: {
+  },
+  data() {
+    return {
+      centerDialogVisible: false,
+      gardening: {}
     }
+  },
+  mounted() {
+    this.fetchGagdening()
+  },
+  computed: {
+    urlQRcode() {
+      return process.env.VUE_APP_BASE_API + '/user/receipt/get-qrcode-clear'
+    },
+    url() {
+       return process.env.VUE_APP_BASE_API + '/receipt/get-receipt-clear'
+    }
+  },
+  methods:{
+    fetchGagdening() {
+      getGardeninngInfo().then(response => {
+        this.gardening = response.data
+      })
+     }
   }
+}
 </script>
 
 <style scoped>
