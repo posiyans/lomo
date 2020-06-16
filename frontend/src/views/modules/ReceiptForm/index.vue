@@ -45,7 +45,7 @@ export default {
       return process.env.VUE_APP_BASE_API + '/user/receipt/get-qrcode-clear'
     },
     url() {
-       return process.env.VUE_APP_BASE_API + '/receipt/get-receipt-clear'
+       return process.env.VUE_APP_BASE_API + '/user/receipt/get-receipt-clear'
     }
   },
   methods:{
