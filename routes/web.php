@@ -31,8 +31,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::match(['get', 'post'], '/ticket/{id}', 'ReceiptController@ticket')->name('ticket');
 Route::get('/qrcode/ticket/{id}/{fio}', 'QrCodeController@getImage');
 //Route::get('/user/get-receipt-clear', 'PdfController@clearReceipt');
-Route::get('/user/receipt/get-receipt-clear', 'PdfController@clearReceipt');
-Route::get('/user/receipt/get-qrcode-clear', 'QrCodeController@qrCodeClear');
+Route::get('/api/v1/receipt/get-receipt-clear', 'PdfController@clearReceipt');
+Route::get('/api/v1/receipt/get-qrcode-clear', 'QrCodeController@qrCodeClear');
 Route::get('/pdf/ticket/{id}/{stead}', 'PdfController@renderPdf')->name('renderPdf');
 Route::match(['get', 'post'], '/receipt/{id?}', 'ReceiptController@index')->name('receipt');
 Route::match(['get', 'post'], '/report', 'ReceiptController@index')->name('report');
@@ -43,19 +43,19 @@ Route::get('/personal', function () {
 //    return view('vue');
 //})->name('vue');
 
-Route::get('/camera', 'Camera\CameraController@index');
-Route::get('/camera/img/{id?}', 'Camera\CameraController@getImages');
-Route::get('/camera/create-gif/{token?}', 'Camera\CameraController@createGif');
+Route::get('/api/v1/camera', 'Camera\CameraController@index');
+Route::get('/api/v1/camera/img/{id?}', 'Camera\CameraController@getImages');
+Route::get('/api/v1/camera/create-gif/{token?}', 'Camera\CameraController@createGif');
 
-Route::get('/rasp', 'Yandex\ScheduleController@index');
+Route::get('/api/v1/yandex/rasp', 'Yandex\ScheduleController@index');
 
-Route::get('/temper', 'TemperController@index');
-Route::get('/temper/get', 'TemperController@showGrafTemper');
-Route::get('/temper/getNewWeatherProHD', 'TemperController@getNewWeatherProHD');
-Route::get('/temper/getNowWeatherProHD', 'TemperController@getNowWeatherProHD');
+Route::get('/api/v1/temper', 'TemperController@index');
+Route::get('/api/v1/temper/get', 'TemperController@showGrafTemper');
+Route::get('/api/v1/temper/getNewWeatherProHD', 'TemperController@getNewWeatherProHD');
+Route::get('/api/v1/temper/getNowWeatherProHD', 'TemperController@getNowWeatherProHD');
 Route::get('/api/temper/get', 'TemperController@showGrafTemper');
-Route::post('/temper/now', 'TemperController@showLocalTemper'); // old
-Route::post('/api/temper/now', 'TemperController@showLocalTemper');
+Route::post('/api/v1/temper/now', 'TemperController@showLocalTemper'); // old
+Route::post('/api/v1/temper/now', 'TemperController@showLocalTemper');
 Route::get('/api/v1/user', 'UserController@info');
 Route::post('/api/v1/login', 'Auth\LoginController@apiLogin');
 Route::post('/api/v1/login-vk', 'VkController@getUrl');

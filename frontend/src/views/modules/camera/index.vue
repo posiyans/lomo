@@ -10,8 +10,8 @@
 export default {
   data() {
     return {
-      src1: '/camera/img/1',
-      src2: '/camera/img/2'
+      src1: '/api/v1/camera/img/1',
+      src2: '/api/v1/camera/img/2'
     }
   },
   mounted() {
