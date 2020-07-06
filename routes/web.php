@@ -27,6 +27,9 @@ Route::get('email/verify/{id}', 'Auth\VerificationController@verify')->name('ver
 
 Route::get('/vk', 'HomeController@vk')->name('vk');
 Route::get('/vk/auth/callback', 'VkController@vkcalback');
+Route::get('/api/vk', 'HomeController@vk')->name('vk');
+Route::get('/api/vk/auth/callback', 'VkController@vkcalback');
+
 Route::get('/home', 'HomeController@index')->name('home');
 Route::match(['get', 'post'], '/ticket/{id}', 'ReceiptController@ticket')->name('ticket');
 Route::get('/qrcode/ticket/{id}/{fio}', 'QrCodeController@getImage');
@@ -60,6 +63,7 @@ Route::get('/api/v1/user', 'UserController@info');
 Route::post('/api/v1/login', 'Auth\LoginController@apiLogin');
 Route::post('/api/v1/login-vk', 'VkController@getUrl');
 Route::post('/api/v1/user-logout', 'Auth\LoginController@logout');
+Route::get('/api/email/verify/{id} ', 'Auth\VerificationController@verify')->name('api.verification.verify');
 
 Route::resource('/api/v1/user/category', 'User\CategoryController')
     ->only(['index']);

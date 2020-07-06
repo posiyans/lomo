@@ -130,4 +130,17 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $this->notify(new VerifyEmail());
     }
+
+    public function changeEmail($email)
+    {
+        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            // todo log смена email!!!
+            $this->email = $email;
+            $this->email_verified_at = null;
+            $this->save();
+            $this->sendEmailVerificationNotification();
+            return true;
+        }
+        return false;
+    }
 }

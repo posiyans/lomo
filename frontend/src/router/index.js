@@ -7,6 +7,7 @@ Vue.use(Router)
 import Layout from '@/layout'
 import AdminLayout from '@/layout'
 import UserLayout from '@/layout/UserLayout'
+import VueYandexMetrika from 'vue-yandex-metrika'
 
 /* Router Modules */
 // import componentsRouter from './modules/components'
@@ -734,6 +735,15 @@ const createRouter = () => new Router({
 })
 
 const router = createRouter()
+
+
+Vue.use(VueYandexMetrika, {
+  id: 64988785,
+  router: router,
+  env: process.env.NODE_ENV
+  // other options
+})
+
 
 // Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
 export function resetRouter() {

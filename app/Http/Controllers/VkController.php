@@ -61,7 +61,7 @@ class VkController extends Controller
         $value = config('services.vkontakte');
         //dd($value);
         $url = 'http://oauth.vk.com/authorize';
-        $actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]/vk/auth/callback";
+        $actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]/api/vk/auth/callback";
         $params = array(
             'client_id'     => $value['client_id'],
             'redirect_uri'  => $actual_link,
@@ -83,8 +83,14 @@ class VkController extends Controller
                 Auth::guard()->login($user_soc->user, true);
                 return $this->redirect();
             } else {
-                $user = User::where('email', $token['email'])->first();
-                if (!$user) {
+                if (isset($token['email'])) {
+                    $user = User::where('email', $token['email'])->first();
+                    if (!$user) {
+                        $user = $this->createUser($token);
+                    }
+                } else {
+                    $date = date_create();
+                    $token['email'] = 'no_email_'.date_timestamp_get($date).'@example.com';
                     $user = $this->createUser($token);
                 }
                 if ($user){
@@ -160,7 +166,7 @@ class VkController extends Controller
     public function getToken($code)
     {
         $config = config('services.vkontakte');
-        $actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]/vk/auth/callback";
+        $actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]/api/vk/auth/callback";
 
         $params = array(
             'client_id' => $config['client_id'],
