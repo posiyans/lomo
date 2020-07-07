@@ -5,7 +5,7 @@
         <h2>Профиль</h2>
       </div>
       <div class="article-preview-body" style="padding: 0 10px; max-width: 600px; margin: 0 auto" >
-        <AvatarUpload v-model="user.avatar" :user_id="user.id"/>
+        <AvatarUpload v-model="user.avatar" :userId="user.id"/>
       </div>
       <div class="article-preview-body" style="padding: 0 10px; max-width: 600px; margin: 0 auto" >
         <el-form

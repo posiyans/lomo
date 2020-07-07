@@ -25,7 +25,7 @@ import PanThumb from '@/components/PanThumb'
 import { mapState } from 'vuex'
 
 export default {
-  name: 'AvatarUpload',
+  name: 'ProfileAvatarUpload',
   components: { ImageCropper, PanThumb },
   props: {
     userId: {
@@ -68,8 +68,16 @@ export default {
     }
   },
   mounted() {
-    if (this.id > 0) {
+    if (this.$store.getters.user.avatar[0] === '/') {
+      this.image = process.env.VUE_APP_BASE_API + this.$store.getters.user.avatar
+    } else {
+      this.image = this.$store.getters.user.avatar
+    }
+
+    if (this.userId > 0) {
       if (this.value) {
+        console.log('this.value')
+        console.log(this.value)
         if (this.value[0] === '/') {
           this.image = process.env.VUE_APP_BASE_API + this.value
         } else {
@@ -77,12 +85,6 @@ export default {
         }
       } else {
         this.image = '/'
-      }
-    } else {
-      if (this.$store.getters.user.avatar[0] === '/') {
-        this.image = process.env.VUE_APP_BASE_API + this.$store.getters.user.avatar
-      } else {
-        this.image = this.$store.getters.user.avatar
       }
     }
   },

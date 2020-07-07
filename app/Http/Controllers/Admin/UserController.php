@@ -142,4 +142,19 @@ class UserController extends Controller
         $permissions = Permission::all();
         return ['roles'=>$roles, 'permissions'=>$permissions];
     }
+
+
+    public function sendVerifyMailToken($id)
+    {
+        if ($user = User::find($id)){
+            if (!$user->email_verified_at){
+                $user->email_verified_at = null;
+                $user->save();
+                $user->sendEmailVerificationNotification();
+                return json_encode(['status' => true, 'data' => 'Письмо отправлено']);
+            }
+            return json_encode(['status' => false, 'data' => 'Почта уже потверждена']);
+        }
+        return json_encode(['status' => false, 'data' => 'Пользователь не найден']);
+    }
 }

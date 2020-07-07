@@ -4,7 +4,7 @@
       <slot></slot>
       <el-tab-pane label="Роли">
         <el-checkbox-group
-          v-model="value.roles"
+          v-model="value.roles.roles"
           @change="chageData"
           >
           <div v-for="role in roles" :key="role.name">
@@ -15,7 +15,7 @@
       </el-tab-pane>
       <el-tab-pane label="Разрешения">
         <el-checkbox-group
-          v-model="value.permissions"
+          v-model="value.roles.permissions"
           @change="chageData"
         >
           <div v-for="permission in permissions" :key="permission.name">
@@ -24,12 +24,22 @@
 
         </el-checkbox-group>
       </el-tab-pane>
+      <el-tab-pane label="Действия">
+        <div v-if="!value.email_verified_at">
+          Повторное потверждение почты
+          <el-button type="primary" size="small" @click="sentToken">
+            Отправить
+          </el-button>
+        </div>
+
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
 
 <script>
 import { fetchList } from '@/api/admin/role.js'
+import { sendVerifyMailToken } from '@/api/admin/user.js'
 export default {
   props: {
     value: {
@@ -37,19 +47,19 @@ export default {
       default: {}
     }
   },
-  filters:{
-    roleFilter(val, user){
+  filters: {
+    roleFilter(val, user) {
       const index = user.roles.findIndex(v => v.name === 'superAdmin')
       // return true
-      if (user.roles.findIndex(v => v.name === 'superAdmin') != -1){
+      if (user.roles.findIndex(v => v.name === 'superAdmin') != -1) {
         return false
       }
-      if (user.roles.findIndex(v => v.name === val) != -1){
+      if (user.roles.findIndex(v => v.name === val) != -1) {
         return false
       }
       return true
     },
-    permissionFilter(val, user){
+    permissionFilter(val, user) {
       if (user.roles.findIndex(v => v.name === 'superAdmin') != -1){
         return false
       }
@@ -74,15 +84,29 @@ export default {
     this.fetchRoles()
   },
   methods: {
-    chageData(){
+    sentToken() {
+      sendVerifyMailToken(this.value.id).then(response => {
+        if (response.data.status) {
+          this.$message({
+            message: response.data.data,
+            type: 'success'
+          })
+        } else {
+          this.$message({
+            message: response.data.data,
+            type: 'error'
+          })
+        }
+      })
+    },
+    chageData() {
       this.$emit('input', this.value)
     },
-    fetchRoles(){
-      fetchList()
-       .then(response =>{
-         this.roles = response.data.roles
-         this.permissions = response.data.permissions
-       })
+    fetchRoles() {
+      fetchList().then(response => {
+        this.roles = response.data.roles
+        this.permissions = response.data.permissions
+      })
     }
   }
 

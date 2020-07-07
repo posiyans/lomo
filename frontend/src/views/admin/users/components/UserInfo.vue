@@ -3,7 +3,7 @@
     <div class="article-preview-body" style="padding: 0 10px; max-width: 600px; margin: 0 auto" >
       <AvatarUpload :user_id="value.id" v-model="value.avatar"/>
     </div>
-    <RoleAndPermision v-model="value.roles">
+    <RoleAndPermision v-model="value">
       <el-tab-pane label="Данные">
         <el-form ref="dataForm" :rules="rules" :model="user" :label-position="labelPosition" label-width="200px" style="">
           <el-form-item label="E-mail">

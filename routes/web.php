@@ -107,7 +107,7 @@ Route::group(['middleware' => 'auth'], function () {
 //        ->only(['index', 'update', 'store', 'show']);
     Route::resource('/api/v1/user/comment', 'User\CommentController')
         ->only(['store', 'destroy']);
-
+    Route::get('/api/v1/admin/user/profile/send-verify-mail-token/{id}', 'Admin\UserController@sendVerifyMailToken');
 
     Route::resource('/api/v1/admin/gardening', 'User\GardeningController')
         ->only(['store']); //todo нге работает заглушка
