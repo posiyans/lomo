@@ -51,7 +51,7 @@ export default {
       form: {
         email: '',
         password: '',
-        remember: false
+        remember: true
       }
     }
   },

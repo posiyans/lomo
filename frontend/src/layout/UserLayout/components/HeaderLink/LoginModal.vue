@@ -54,7 +54,7 @@
         form: {
           email: '',
           password: '',
-          remember: false
+          remember: true
         },
         // key: 1,
         showLoginForm: false,

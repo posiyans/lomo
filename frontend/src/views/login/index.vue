@@ -55,7 +55,7 @@
         form: {
           email: '',
           password: '',
-          remember: false
+          remember: true
         }
       }
     },

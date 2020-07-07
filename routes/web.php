@@ -22,7 +22,7 @@ Route::post('/api/v1/password/email', 'Auth\ForgotPasswordController@sendResetLi
 Route::post('/api/v1/password/reset', 'Auth\ResetPasswordController@reset');
 Route::post('/api/v1/login', 'Auth\LoginController@login');
 
-Route::get('/api/email/verify/{id} ', 'Auth\VerificationController@verify')->name('api.verification.verify');
+Route::get('/api/email/verify/{id}', 'Auth\VerificationController@verify')->name('api.verification.verify');
 
 Route::get('/api/vk', 'HomeController@vk')->name('vk');
 Route::get('/api/vk/auth/callback', 'VkController@vkcalback');
