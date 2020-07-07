@@ -7,18 +7,18 @@
       </el-tag>
       <div v-for="(question, i) in value.questions" class="question">
         <div style="padding-bottom: 5px; color: black; font-weight: 600;">{{ i+1 }}.
-          <span> {{question.text}}</span>
+          <span> {{ question.text }}</span>
         </div>
         <div v-for="(answer, j) in question.answers">
           <div class="answer">
             <div class="an" :style="answer | resultBackgroundFilter(question)">
               <!--              {{j+1}}.<span>{{answer.text}} </span> <span>{{answer.userAnswersCount}} </span><span> ({{answer | resultFilter(question) }}%)</span>-->
-              {{j+1}}.<span>{{answer.text}} </span>
+              {{ j+1 }}.<span>{{ answer.text }} </span>
             </div>
           </div>
 
         </div>
-        <div style="padding-bottom: 5px;">Проголосовало {{(100*question.answersCount/value.steadsCount).toFixed(2)}}%  ({{question.answersCount}} участков)</div>
+        <div style="padding-bottom: 5px;">Проголосовало {{ (100*question.answersCount/value.steadsCount).toFixed(2) }}%  ({{ question.answersCount }} участков)</div>
       </div>
     </div>
   </div>
@@ -32,14 +32,12 @@ import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 // import SteadOwnwer from './result/SteadOwner.vue' // secondary package based on el-pagination
 
-
 const selectStatusOptions = [
   { key: 'new', display_name: 'Новое' },
   { key: 'execution', display_name: 'Идет' },
   { key: 'done', display_name: 'Законченно' },
   { key: 'cancel', display_name: 'Отмененное' }
 ]
-
 
 const Status = selectStatusOptions.reduce((acc, cur) => {
   acc[cur.key] = cur.display_name
@@ -51,7 +49,7 @@ export default {
   },
   directives: { waves },
   filters: {
-    statusColorFilter(status){
+    statusColorFilter(status) {
       const color = {
         new: 'info',
         execution: '',
@@ -60,27 +58,27 @@ export default {
       }
       return color[status]
     },
-    urlFilter(val){
-      return process.env.VUE_APP_BASE_API + '/user/storage/file/' + val
+    urlFilter(val) {
+      return process.env.VUE_APP_BASE_API + '/api/user/storage/file/' + val
     },
     resultFilter(answer, question) {
-      const count = question.answers.reduce( (sum, item) => {return sum + item.userAnswersCount}, 0)
-      if (count === 0){
+      const count = question.answers.reduce((sum, item) => { return sum + item.userAnswersCount }, 0)
+      if (count === 0) {
         return 0
       }
-      return (100*answer.userAnswersCount/count).toFixed(2)
+      return (100 * answer.userAnswersCount / count).toFixed(2)
       // return answer.userAnswersCount/count
     },
     resultBackgroundFilter(answer, question) {
-      const count = question.answers.reduce( (sum, item) => {return sum + item.userAnswersCount}, 0)
-      return 'width:' + 600*answer.userAnswersCount/count + 'px;'
+      const count = question.answers.reduce((sum, item) => { return sum + item.userAnswersCount }, 0)
+      return 'width:' + 600 * answer.userAnswersCount / count + 'px;'
       // return answer.userAnswersCount/count
     },
     statusFilter(status) {
       return Status[status]
-    },
+    }
   },
-  props:{
+  props: {
     value: {
       type: Object,
       default: {}
@@ -145,7 +143,6 @@ export default {
       fetchUserVoting(this.id).then(response => {
         this.voting = response.data.data
         // this.total = response.data.meta.total
-
       })
     },
     handleFilter() {
@@ -158,15 +155,12 @@ export default {
         'appeal': row
       }
       updateAppel(data, row.id)
-        .then(response =>{
+        .then(response => {
           this.$message({
             message: 'Success',
             type: 'success'
           })
-
         })
-
-
     },
     sortChange(data) {
       const { prop, order } = data
@@ -177,7 +171,7 @@ export default {
     sortByID(order) {
       if (order === 'ascending') {
         this.listQuery.sort = '+created_at'
-      } else if(order === 'descending') {
+      } else if (order === 'descending') {
         this.listQuery.sort = '-created_at'
       } else {
         this.listQuery.sort = ''
@@ -193,7 +187,7 @@ export default {
         timestamp: new Date(),
         title: '',
         status: 'published',
-        type: '',
+        type: ''
 
       }
     },
@@ -246,10 +240,10 @@ export default {
         'appeal': this.temp
       }
       updateAppel(data, this.temp.id)
-        .then(response =>{
+        .then(response => {
           const index = this.list.findIndex(v => v.id === this.temp.id)
           // todo поменть на модель польлзователя
-          this.temp.message.push({text: this.temp.new_message, user: {name: 'я'}})
+          this.temp.message.push({ text: this.temp.new_message, user: { name: 'я' }})
           this.temp.new_message = ''
           this.list.splice(index, 1, this.temp)
           this.dialogFormVisible = false
@@ -259,7 +253,6 @@ export default {
             type: 'success',
             duration: 2000
           })
-
         })
       // this.$refs['dataForm'].validate((valid) => {
       //   if (valid) {
@@ -316,7 +309,7 @@ export default {
           return v[j]
         }
       }))
-    },
+    }
     // getSortClass: function(key) {
     //   const sort = this.listQuery.sort
     //   return sort === `+${key}` ? 'ascending' : 'descending'

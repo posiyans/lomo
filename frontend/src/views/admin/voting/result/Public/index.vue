@@ -74,7 +74,7 @@ export default {
       return color[status]
     },
     urlFilter(val) {
-      return process.env.VUE_APP_BASE_API + '/user/storage/file/' + val
+      return process.env.VUE_APP_BASE_API + '/api/user/storage/file/' + val
     },
     resultFilter(answer, question) {
       const count = question.answers.reduce( (sum, item) => {return sum + item.userAnswersCount}, 0)

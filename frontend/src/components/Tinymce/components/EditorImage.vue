@@ -45,27 +45,27 @@ export default {
     id: {
       type: String,
       default: 'no_uid'
-    },
+    }
   },
   data() {
     return {
       dialogVisible: false,
       listObj: {},
       fileList: [],
-      token: {'X-XSRF-TOKEN':this.getCookie('XSRF-TOKEN')}
+      token: { 'X-XSRF-TOKEN': this.getCookie('XSRF-TOKEN') }
     }
   },
   computed: {
     url() {
-      return process.env.VUE_APP_BASE_API + '/user/storage/file'
+      return process.env.VUE_APP_BASE_API + '/api/user/storage/file'
     }
   },
   methods: {
     getCookie(name) {
-      let matches = document.cookie.match(new RegExp(
-       "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-      ));
-      return matches ? decodeURIComponent(matches[1]) : undefined;
+      const matches = document.cookie.match(new RegExp(
+        '(?:^|; )' + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + '=([^;]*)'
+      ))
+      return matches ? decodeURIComponent(matches[1]) : undefined
     },
     checkAllSuccess() {
       console.log('checkAllSuccess()')

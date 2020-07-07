@@ -15,7 +15,6 @@
       lang-type="ru"
       @close="close"
       @crop-upload-success="cropSuccess"
-
     />
   </div>
 </template>
@@ -29,7 +28,7 @@ export default {
   name: 'AvatarUpload',
   components: { ImageCropper, PanThumb },
   props: {
-    user_id: {
+    userId: {
       type: Number,
       default: 0
     },
@@ -50,7 +49,7 @@ export default {
       device: state => state.app.device
     }),
     url() {
-      return process.env.VUE_APP_BASE_API + '/user/storage/file'
+      return process.env.VUE_APP_BASE_API + '/api/user/storage/file'
     },
     desktop() {
       if (this.device === 'desktop') {

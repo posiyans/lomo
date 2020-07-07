@@ -7,11 +7,11 @@
       <div class="article-preview-header">
         <h2>{{ voting.title }}</h2>
         <div v-if="editor" class="article-setting-icon" @click="editArticle">
-          <i class="el-icon-s-tools"></i>
+          <i class="el-icon-s-tools" />
         </div>
       </div>
-      <div class="article-preview-body" >
-        <span v-html="voting.description"/>
+      <div class="article-preview-body">
+        <span v-html="voting.description" />
       </div>
       <div v-if="voting.files && voting.files.length > 0">
         <div class="file-list-header">Файлы:</div>
@@ -22,24 +22,24 @@
           </li>
         </ul>
       </div>
-      <QuestionShow :voting="voting" @changeResult="fetchVoting"/>
+      <QuestionShow :voting="voting" @changeResult="fetchVoting" />
       <div class="article-preview-footer">
-        <el-divider class="divider-footer"></el-divider>
+        <el-divider class="divider-footer" />
         <el-row type="flex" class="row-bg" justify="space-between" align="center">
           <el-col :span="14">
             <span style="padding-left: 20px;">
-              <el-button type="primary" size="mini"  @click="back">Назад</el-button>
+              <el-button type="primary" size="mini" @click="back">Назад</el-button>
             </span>
             <span v-if="false" style="padding-left: 20px;">
               <el-button v-if="voting.comments==1" type="primary" size="mini" plain icon="el-icon-chat-dot-square">{{ voting.comments.length }}</el-button>
             </span>
           </el-col>
-          <el-col :span="10"><div style="text-align: right; padding: 10px 20px 0px 0;color: #848484; height: 100%;">{{publicTime(voting.date_publish)}}</div></el-col>
+          <el-col :span="10"><div style="text-align: right; padding: 10px 20px 0px 0;color: #848484; height: 100%;">{{ publicTime(voting.date_publish) }}</div></el-col>
         </el-row>
       </div>
-<!--      <div v-if="false && voting.comments==1"  class="comments-body">-->
-<!--        <Comments v-model="voting" />-->
-<!--      </div>-->
+      <!--      <div v-if="false && voting.comments==1"  class="comments-body">-->
+      <!--        <Comments v-model="voting" />-->
+      <!--      </div>-->
     </el-card>
   </div>
 </template>
@@ -51,22 +51,22 @@ import QuestionShow from './QuestionShow/index.vue'
 
 export default {
   components: { Comments, QuestionShow },
+  filters: {
+    urlFilter(val) {
+      return process.env.VUE_APP_BASE_API + '/api/user/storage/file/' + val
+    },
+    sizeFilter(size) {
+      if (size) {
+        const i = Math.floor(Math.log(size) / Math.log(1024))
+        return (size / Math.pow(1024, i)).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i]
+      }
+      return ''
+    }
+  },
   props: {
     id: {
       type: Number,
       default: 0
-    },
-  },
-  filters: {
-    urlFilter(val) {
-      return process.env.VUE_APP_BASE_API + '/user/storage/file/' + val
-    },
-    sizeFilter(size) {
-      if (size) {
-        const i = Math.floor(Math.log(size) / Math.log(1024));
-        return (size / Math.pow(1024, i)).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
-      }
-      return '';
     }
   },
   data() {

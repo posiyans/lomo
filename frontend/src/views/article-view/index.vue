@@ -7,11 +7,11 @@
       <div class="article-preview-header">
         <h2>{{ article.title }}</h2>
         <div v-if="editor" class="article-setting-icon" @click="editArticle">
-          <i class="el-icon-s-tools"></i>
+          <i class="el-icon-s-tools" />
         </div>
       </div>
-      <div class="article-preview-body" >
-        <span v-html="article.text"/>
+      <div class="article-preview-body">
+        <span v-html="article.text" />
       </div>
       <div v-if="article.files && article.files.length > 0">
         <div class="file-list-header">Файлы:</div>
@@ -24,20 +24,20 @@
       </div>
 
       <div class="article-preview-footer">
-        <el-divider class="divider-footer"></el-divider>
+        <el-divider class="divider-footer" />
         <el-row type="flex" class="row-bg" justify="space-between" align="center">
           <el-col :span="14">
             <span style="padding-left: 20px;">
-              <el-button type="primary" size="mini"  @click="back">Назад</el-button>
+              <el-button type="primary" size="mini" @click="back">Назад</el-button>
             </span>
             <span style="padding-left: 20px;">
               <el-button v-if="article.allow_comments==1" type="primary" size="mini" plain icon="el-icon-chat-dot-square">{{ article.comments_show.length }}</el-button>
             </span>
           </el-col>
-          <el-col :span="10"><div style="text-align: right; padding: 10px 20px 0px 0;color: #848484; height: 100%;">{{publicTime(article.publish_time)}}</div></el-col>
+          <el-col :span="10"><div style="text-align: right; padding: 10px 20px 0px 0;color: #848484; height: 100%;">{{ publicTime(article.publish_time) }}</div></el-col>
         </el-row>
       </div>
-      <div v-if="article.allow_comments==1"  class="comments-body">
+      <div v-if="article.allow_comments==1" class="comments-body">
         <Comments v-model="article" />
       </div>
     </el-card>
@@ -49,26 +49,23 @@ import { fetchUserArticle } from '@/api/article'
 import Comments from '@/components/Comments/index.vue'
 export default {
   components: { Comments },
+  filters: {
+    urlFilter(val) {
+      return process.env.VUE_APP_BASE_API + '/api/user/storage/file/' + val
+    },
+    sizeFilter(size) {
+      if (size) {
+        const i = Math.floor(Math.log(size) / Math.log(1024))
+        return (size / Math.pow(1024, i)).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i]
+      }
+      return ''
+    }
+  },
   props: {
     id: {
       type: Number,
       default: 0
-    },
-  },
-  filters: {
-    urlFilter(val){
-      return process.env.VUE_APP_BASE_API + '/user/storage/file/' + val
-    },
-    sizeFilter(size){
-      if (size) {
-        const i = Math.floor(Math.log(size) / Math.log(1024));
-        return (size / Math.pow(1024, i)).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
-      }
-      return '';
     }
-  },
-  mounted() {
-    this.fetchArticle()
   },
   data() {
     return {
@@ -76,13 +73,16 @@ export default {
       article: {}
     }
   },
-  computed:{
+  computed: {
     editor() {
       if (this.$store.getters.user.allPermissions.includes('create-article')) {
         return true
       }
       return false
-    },
+    }
+  },
+  mounted() {
+    this.fetchArticle()
   },
   methods: {
     publicTime(val) {
