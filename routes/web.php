@@ -22,11 +22,8 @@ Route::post('/api/v1/password/email', 'Auth\ForgotPasswordController@sendResetLi
 Route::post('/api/v1/password/reset', 'Auth\ResetPasswordController@reset');
 Route::post('/api/v1/login', 'Auth\LoginController@login');
 
-Route::get('email/verify/{id}', 'Auth\VerificationController@verify')->name('verification.verify');
+Route::get('/api/email/verify/{id} ', 'Auth\VerificationController@verify')->name('api.verification.verify');
 
-
-Route::get('/vk', 'HomeController@vk')->name('vk');
-Route::get('/vk/auth/callback', 'VkController@vkcalback');
 Route::get('/api/vk', 'HomeController@vk')->name('vk');
 Route::get('/api/vk/auth/callback', 'VkController@vkcalback');
 
@@ -63,7 +60,6 @@ Route::get('/api/v1/user', 'UserController@info');
 Route::post('/api/v1/login', 'Auth\LoginController@apiLogin');
 Route::post('/api/v1/login-vk', 'VkController@getUrl');
 Route::post('/api/v1/user-logout', 'Auth\LoginController@logout');
-Route::get('/api/email/verify/{id} ', 'Auth\VerificationController@verify')->name('api.verification.verify');
 
 Route::resource('/api/v1/user/category', 'User\CategoryController')
     ->only(['index']);
