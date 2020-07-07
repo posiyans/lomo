@@ -7,7 +7,6 @@ Vue.use(Router)
 import Layout from '@/layout'
 import AdminLayout from '@/layout'
 import UserLayout from '@/layout/UserLayout'
-import VueYandexMetrika from 'vue-yandex-metrika'
 
 /* Router Modules */
 // import componentsRouter from './modules/components'
@@ -159,7 +158,7 @@ export const constantRoutes = [
         component: () => import('@/views/modules/YandexSchedule/index.vue'),
         name: 'modulesSchedule',
         hidden: true
-      },
+      }
     ]
   },
   {
@@ -172,7 +171,7 @@ export const constantRoutes = [
         component: () => import('@/views/user/profile/index'),
         name: 'UserProfile',
         hidden: true
-      },
+      }
     ]
   },
   {
@@ -185,7 +184,7 @@ export const constantRoutes = [
         component: () => import('@/views/user/receipt/index'),
         name: 'Receipt',
         hidden: true
-      },
+      }
     ]
   },
   {
@@ -204,7 +203,7 @@ export const constantRoutes = [
         component: () => import('@/views/user/voting/VotingShow/index'),
         name: 'UserVotingShow',
         hidden: true
-      },
+      }
     ]
   },
   {
@@ -217,7 +216,7 @@ export const constantRoutes = [
         component: () => import('@/views/weather/index'),
         name: 'Wather',
         hidden: true
-      },
+      }
     ]
   },
   {
@@ -236,7 +235,7 @@ export const constantRoutes = [
         component: () => import('@/views/password-change/index'),
         name: 'PasswordChange',
         hidden: true
-      },
+      }
     ]
   },
   // {
@@ -279,7 +278,7 @@ export const constantRoutes = [
         component: () => import('@/views/admin/article/index'),
         name: 'AdminArticleList',
         meta: { title: 'Статьи', icon: 'list' }
-      },
+      }
       // {
       //   path: 'category',
       //   component: () => import('@/views/admin/article/category/list'),
@@ -300,7 +299,7 @@ export const constantRoutes = [
         meta: { title: 'Участки', icon: 'documentation', affix: true }
       }
     ]
-  },
+  }
 
 ]
 
@@ -373,7 +372,7 @@ export const asyncRoutes = [
           activeMenu: '/voting/list'
         },
         hidden: true
-      },
+      }
     ]
   },
   {
@@ -735,15 +734,6 @@ const createRouter = () => new Router({
 })
 
 const router = createRouter()
-
-
-Vue.use(VueYandexMetrika, {
-  id: 64988785,
-  router: router,
-  env: process.env.NODE_ENV
-  // other options
-})
-
 
 // Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
 export function resetRouter() {
