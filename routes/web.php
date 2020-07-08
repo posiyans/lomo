@@ -1,5 +1,5 @@
 <?php
-
+define('__ROOT__', dirname(__FILE__));
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,103 +14,104 @@
 //Route::get('/', function () {
 //    return view('welcome');
 //});
-Route::get('/', 'HomeController@index');
-Auth::routes();
-//Auth::routes(['verify' => true]);
-Route::post('/api/register', 'Auth\RegisterController@register');
-Route::post('/api/v1/password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail');
-Route::post('/api/v1/password/reset', 'Auth\ResetPasswordController@reset');
-Route::post('/api/v1/login', 'Auth\LoginController@login');
-
-Route::get('/api/email/verify/{id}', 'Auth\VerificationController@verify')->name('api.verification.verify');
-
-Route::get('/api/vk', 'HomeController@vk')->name('vk');
-Route::get('/api/vk/auth/callback', 'VkController@vkcalback');
-
-Route::get('/home', 'HomeController@index')->name('home');
-Route::match(['get', 'post'], '/ticket/{id}', 'ReceiptController@ticket')->name('ticket');
-Route::get('/qrcode/ticket/{id}/{fio}', 'QrCodeController@getImage');
-//Route::get('/user/get-receipt-clear', 'PdfController@clearReceipt');
-Route::get('/api/v1/receipt/get-receipt-clear', 'PdfController@clearReceipt');
-Route::get('/api/v1/receipt/get-qrcode-clear', 'QrCodeController@qrCodeClear');
-Route::get('/pdf/ticket/{id}/{stead}', 'PdfController@renderPdf')->name('renderPdf');
-Route::match(['get', 'post'], '/receipt/{id?}', 'ReceiptController@index')->name('receipt');
-Route::match(['get', 'post'], '/report', 'ReceiptController@index')->name('report');
-Route::get('/personal', function () {
-    return view('personal');
-})->name('personal');
-//Route::get('/vue', function () {
-//    return view('vue');
-//})->name('vue');
-
-Route::get('/api/v1/camera', 'Camera\CameraController@index');
-Route::get('/api/v1/camera/img/{id?}', 'Camera\CameraController@getImages');
-Route::get('/api/v1/camera/create-gif/{token?}', 'Camera\CameraController@createGif');
-
-Route::get('/api/v1/yandex/rasp', 'Yandex\ScheduleController@index');
-
-Route::get('/api/v1/temper', 'TemperController@index');
-Route::get('/api/v1/temper/get', 'TemperController@showGrafTemper');
-Route::get('/api/v1/temper/getNewWeatherProHD', 'TemperController@getNewWeatherProHD');
-Route::get('/api/v1/temper/getNowWeatherProHD', 'TemperController@getNowWeatherProHD');
-Route::get('/api/temper/get', 'TemperController@showGrafTemper');
-Route::post('/api/v1/temper/now', 'TemperController@showLocalTemper'); // old
-Route::post('/api/v1/temper/now', 'TemperController@showLocalTemper');
-Route::get('/api/v1/user', 'UserController@info');
-Route::post('/api/v1/login', 'Auth\LoginController@apiLogin');
-Route::post('/api/v1/login-vk', 'VkController@getUrl');
-Route::post('/api/v1/user-logout', 'Auth\LoginController@logout');
-
-Route::resource('/api/v1/user/category', 'User\CategoryController')
-    ->only(['index']);
-Route::resource('/api/v1/user/article', 'User\ArticleController')
-    ->only(['index', 'show']);
-Route::resource('/api/v1/user/gardening', 'User\GardeningController')
-    ->only(['index', 'show']);
-Route::resource('/api/v1/user/comment', 'User\CommentController')
-    ->only(['index']);
-Route::resource('/api/v1/user/rate', 'User\RateController')
-    ->only(['index']);
-Route::resource('/api/v1/user/voting', 'User\UserVotingController')
-    ->only(['index', 'show']);
-Route::group(['middleware' => 'auth'], function () {
-
-    Route::get('/api/v1/admin/user-info', 'UserController@info');
-    Route::post('/api/v1/user/save-user-info', 'UserController@save');
-    Route::post('/api/v1/user/vote', 'User\UserVotingController@addAnswer');
-    Route::get('/api/v1/user/steads-list', 'SteadController@list');
-    Route::get('/profile', 'UserController@index');
-
-    Route::get('/api/v1/user/info', 'UserController@info');
-
-    // обращения
-    Route::get('/api/v1/admin/appeal/info', 'UserController@info');
-    Route::resource('/api/v1/admin/appeal', 'Admin\AppealController')
-        ->only(['index', 'show', 'update']);
-    Route::resource('/api/v1/admin/stead', 'Admin\SteadController')
-        ->only(['index', 'show', 'update']);
-    Route::resource('/api/v1/admin/user', 'Admin\UserController')
-        ->only(['index', 'show', 'update']);
-    Route::resource('/api/v1/admin/role', 'Admin\RoleController')
-        ->only(['index', 'update']);
-    Route::resource('/api/v1/admin/rate', 'Admin\RateController')
-    ->only(['index', 'update', 'store']);
-    Route::resource('/api/v1/admin/category', 'Admin\CategoryController')
-        ->only(['index', 'update', 'store']);
-    Route::resource('/api/v1/admin/article', 'Admin\ArticleController')
-        ->only(['index', 'update', 'store', 'show']);
-    Route::get('/api/v1/admin/role-list', 'Admin\UserController@roleList');
-    Route::resource('/api/v1/admin/voting', 'Admin\AdminVotingController')
-        ->only(['index', 'update', 'store', 'show']);
-    Route::resource('/api/v1/admin/voting-result', 'Admin\AdminVotingResultController')
-        ->only(['index', 'update', 'store', 'show']);
-//        ->only(['index', 'update', 'store', 'show']);
-    Route::resource('/api/v1/user/comment', 'User\CommentController')
-        ->only(['store', 'destroy']);
-    Route::get('/api/v1/admin/user/profile/send-verify-mail-token/{id}', 'Admin\UserController@sendVerifyMailToken');
-
-    Route::resource('/api/v1/admin/gardening', 'User\GardeningController')
-        ->only(['store']); //todo нге работает заглушка
+//Route::get('/', 'HomeController@index');
+//Auth::routes();
+Route::group(['prefix' => '/api'], function() {
+    // маршруты для callback контакта
+//    Route::get('vk', 'HomeController@vk')->name('vk');
+    Route::get('vk/auth/callback', 'VkController@vkcalback');
 });
+Route::group(['prefix' => '/api/v1'], function() {
+//    //маршруты авторизации и регистрации
+//    Route::post('/register', 'Auth\RegisterController@register');
+//    Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail');
+//    Route::post('password/reset', 'Auth\ResetPasswordController@reset');
+//    Route::post('login', 'Auth\LoginController@login');
+//    Route::get('email/verify/{id}', 'Auth\VerificationController@verify')->name('api.verification.verify');
+
+    // пустая квитанция
+    Route::get('receipt/get-receipt-clear', 'PdfController@clearReceipt');
+    // пустой QR code
+    Route::get('receipt/get-qrcode-clear', 'QrCodeController@qrCodeClear');
+
+//    // получить картинку с камеры (для cron)
+//    Route::get('camera', 'Camera\CameraController@index');
+//    // вывести последнюю картинку
+//    Route::get('camera/img/{id?}', 'Camera\CameraController@getImages');
+//    //    склесть gif из картинок с камеры (на будующее)
+//    Route::get('/api/v1/camera/create-gif/{token?}', 'Camera\CameraController@createGif');
+
+
+});
+
+
+//Route::match(['get', 'post'], '/ticket/{id}', 'ReceiptController@ticket')->name('ticket');
+//Route::get('/qrcode/ticket/{id}/{fio}', 'QrCodeController@getImage');
+
+//Route::get('/pdf/ticket/{id}/{stead}', 'PdfController@renderPdf')->name('renderPdf');
+//Route::match(['get', 'post'], '/receipt/{id?}', 'ReceiptController@index')->name('receipt');
+//Route::match(['get', 'post'], '/report', 'ReceiptController@index')->name('report');
+//Route::get('/personal', function () {
+//    return view('personal');
+//})->name('personal');
+
+$myRoutesForAll = [
+    'yandex',
+    'weather',
+    'auth',
+    'article',
+    'camera',
+    'rate'
+];
+$myRoutesForAdmin = [
+    'appeal',
+    'article',
+    'gardening',
+    'user'
+];
+$myRoutesForUser = [
+    'info',
+    'article'
+];
+
+Route::group(['prefix' => '/api/v1'], function() use ($myRoutesForAll, $myRoutesForAdmin, $myRoutesForUser) {
+
+
+    foreach ($myRoutesForAll as $route) {
+        $file = __ROOT__ . '/myRoutes/all/' . $route . '.php';
+        if (file_exists($file)) {
+            require_once($file);
+        }
+    }
+    Route::group(['prefix' => 'user', 'middleware' => 'auth'], function() use ($myRoutesForUser){
+
+        foreach ($myRoutesForUser  as $route) {
+            $file = __ROOT__ . '/myRoutes/user/' . $route . '.php';
+            if (file_exists($file)) {
+                require_once($file);
+            }
+        }
+    });
+    Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function() use ($myRoutesForAdmin){
+
+        foreach ($myRoutesForAdmin  as $route) {
+            $file = __ROOT__ . '/myRoutes/admin/' . $route . '.php';
+            if (file_exists($file)) {
+                require_once($file);
+            }
+        }
+    });
+
+});
+
+
+
+//Route::resource('/api/v1/user/gardening', 'User\GardeningController')
+//    ->only(['index', 'show']);
+
+//Route::resource('/api/v1/user/rate', 'User\RateController')
+//    ->only(['index']);
+
+
 Route::resource('/user/storage/file', 'Storage\FileController');
 Route::resource('/api/user/storage/file', 'Storage\FileController');

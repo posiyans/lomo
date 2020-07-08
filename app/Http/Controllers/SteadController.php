@@ -24,20 +24,20 @@ class SteadController extends Controller
      * Show the application dashboard.
      *
      * @return \Illuminate\Contracts\Support\Renderable
-     */
-    public function index()
-    {
-        return view('vue', ['template' => '<user-profile></user-profile>']);
-    }
-
-    public function list(Request $request)
-    {
-        $query = $request->input('query');
-        $steads = Stead::query();
-        if (isset($query) && !empty($query)){
-          $steads->where('number','LIKE', '%'.$query.'%');
-        }
-        $data = $steads->get();
-        return json_encode($data);
-    }
+//     */
+//    public function index()
+//    {
+//        return view('vue', ['template' => '<user-profile></user-profile>']);
+//    }
+//
+//    public function list(Request $request)
+//    {
+//        $query = $request->input('query');
+//        $steads = Stead::query();
+//        if (isset($query) && !empty($query)){
+//          $steads->where('number','LIKE', '%'.$query.'%');
+//        }
+//        $data = $steads->get();
+//        return json_encode($data);
+//    }
 }

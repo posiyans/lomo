@@ -8,8 +8,6 @@ export function fetchListComments(query) {
   })
 }
 
-
-
 export function addComment(data) {
   return request({
     url: '/api/v1/user/comment',
@@ -18,10 +16,9 @@ export function addComment(data) {
   })
 }
 
-
 export function deleteComment(id) {
   return request({
-    url: '/api/v1/user/comment/' + id,
+    url: '/api/v1/admin/comment/' + id,
     method: 'delete'
   })
 }
