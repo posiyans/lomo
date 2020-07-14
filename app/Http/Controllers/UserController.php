@@ -39,10 +39,6 @@ class UserController extends Controller
     {
         if (Auth::check()) {
             $user = Auth::user();
-//        $user->roles = ['admin'];
-//            $user->roles = $user->getRoles();
-//            $user->roles = array_merge_recursive(['user'], $user->getRoles());
-
             $temp = ['user'];
             if ($user->hasRole('superAdmin')) {
 //                $perms = Permission::all();
@@ -66,6 +62,7 @@ class UserController extends Controller
 //            }
             $user->permissions;
             $user->roles;
+            $user->socialList = $user->getSocialList();
             $user->allPermissions = $temp;
             if (Session::has('message')){
                 $user->message = Session::get('message');

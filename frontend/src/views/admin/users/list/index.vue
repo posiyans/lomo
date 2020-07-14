@@ -24,13 +24,13 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="ФИО" min-width="150px">
+      <el-table-column label="ФИО" min-width="150px" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <span
             class="link-type"
             :class="{
-          'grey' : !row.consent_personal
-          }"
+              'grey' : !row.consent_personal
+            }"
             :title="row.consent_personal ? '' : 'Нет согласия на обработку персональных данных'"
             @click="handleShow(row)"
           >
@@ -97,11 +97,9 @@
 </template>
 
 <script>
-import { fetchList, updateUserData } from '@/api/admin/user.js'
+import { fetchList } from '@/api/admin/user.js'
 import waves from '@/directive/waves' // waves directive
-import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-// import { getSteadsList } from '@/api/user/stead.js'
 import UserInfo from './../components/UserInfo.vue'
 
 const userTypeObject = [

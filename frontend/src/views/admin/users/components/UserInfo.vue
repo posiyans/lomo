@@ -7,7 +7,7 @@
       <el-tab-pane label="Данные">
         <el-form ref="dataForm" :rules="rules" :model="user" :label-position="labelPosition" label-width="200px" style="">
           <el-form-item label="E-mail">
-            <el-input v-model="value.email" readonly></el-input>
+            <el-input v-model="value.email"></el-input>
           </el-form-item>
           <el-form-item label="Фамилия">
             <el-input v-model="value.last_name"></el-input>
@@ -59,7 +59,7 @@ import { getSteadsList } from '@/api/user/stead.js'
 import RoleAndPermision from '@/views/admin/users/components/permisions/index'
 import AvatarUpload from '@/components/AvatarUpload/index'
 import { mapState } from 'vuex'
-import {updateUserData} from "@/api/admin/user";
+import { updateUserData } from '@/api/admin/user'
 
 export default {
   components: {

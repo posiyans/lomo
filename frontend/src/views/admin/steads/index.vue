@@ -44,13 +44,16 @@
           <span>{{ row.user.email }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Actions" align="center" width="180px" class-name="small-padding fixed-width">
+      <el-table-column label="Actions" align="center" width="270px" class-name="small-padding fixed-width">
         <template slot-scope="{ row }">
           <el-button type="success" size="small" @click="AddNoteShow(row)">
             Прим.
           </el-button>
           <el-button type="primary" size="small" @click="handleUpdate(row)">
             Инфо.
+          </el-button>
+          <el-button type="primary" size="small" title="Квитанции" @click="getReceipt(row)">
+            Квит.
           </el-button>
         </template>
       </el-table-column>
@@ -104,6 +107,43 @@
         </el-button>
       </div>
     </el-dialog>
+    <el-dialog title="Скачать квитанцию" :visible.sync="dialogReceipShow" width="80%" >
+      {{receiptData.discriptions.fio}}
+      <el-form :label-position="labelPosition" label-width="150px">
+        <el-form-item label="Оплата">
+          <el-select
+            v-model="receiptType"
+            placeholder="Select"
+            @change="getRate()"
+          >
+            <el-option
+              v-for="item in options"
+              :key="item.key"
+              :label="item.label"
+              :value="item.key"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <template  v-for="i in rate">
+        <div>
+          {{i.name}} - {{i.rate.discription}}
+          <span v-if="i.rate.ratio_a > 0">
+             * {{receiptData.size/100}} = {{(receiptData.size/100 * i.rate.ratio_a).toFixed(2)}} руб.
+          </span>
+        </div>
+      </template>
+      <div style="margin-top: 10px"><b>Итого: </b>{{receiptData.size | totalFilter(rate)}} руб.</div>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogReceipShow = false">
+          Закрыть
+        </el-button>
+        <el-button type="primary" @click="addNote">
+          Скачать
+        </el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -113,12 +153,21 @@ import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination'
 import { mapState } from "vuex"
+import { fetchList } from '@/api/admin/rate'
 
 export default {
   name: 'AdminSteadList',
   components: { Pagination },
   directives: { waves },
   filters: {
+    totalFilter(size, rate) {
+      let sum = 0
+      console.log(rate)
+      rate.forEach(i => {
+        sum = Number(sum) + Number(i.rate.ratio_a) * Number(size) / 100 + Number(i.rate.ratio_b)
+      })
+      return sum
+    },
     fioFilter(row) {
       if (row.user_fullName) {
         return row.user_fullName
@@ -137,6 +186,12 @@ export default {
   },
   data() {
     return {
+      options: [
+        { label: 'Коммунальные', key: 1 },
+        { label: 'Взносы', key: 2 }
+      ],
+      receiptType: 2,
+      rate: [],
       tableKey: 0,
       list: null,
       total: 0,
@@ -144,7 +199,7 @@ export default {
       listQuery: {
         page: 1,
         limit: 20,
-        title: undefined,
+        title: undefined
       },
       temp: {
         user: {},
@@ -154,6 +209,8 @@ export default {
       },
       dialogFormVisible: false,
       dialogNoteVisible: false,
+      dialogReceipShow: false,
+      receiptData: {},
       newNote: '',
       dialogStatus: '',
 
@@ -182,6 +239,22 @@ export default {
     this.getList()
   },
   methods: {
+    getRate() {
+      console.log('getrate')
+      fetchList({ type: this.receiptType }).then(response => {
+        this.rate = response.data.data
+        this.loading = false
+      })
+    },
+    getReceipt(row) {
+      this.getRate()
+      this.receiptData = row
+      this.dialogReceipShow = true
+      console.log(row.id)
+      this.$message({
+        message: row.id
+      })
+    },
     getList() {
       this.listLoading = true
       fetchSteadList(this.listQuery).then(response => {

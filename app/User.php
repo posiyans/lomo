@@ -59,7 +59,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function accounts()
     {
-        return $this->hasMany('App\LinkedSocialAccount');
+        return $this->hasMany('App\LinkedSocialAccounts','user_id', 'id' );
     }
 
     public function steads()
@@ -75,6 +75,14 @@ class User extends Authenticatable implements MustVerifyEmail
     public function smallName()
     {
         return $this->last_name.' '.$this->name;
+    }
+    public function getSocialList() {
+           $soc = $this->accounts;
+           $data = [];
+        foreach ($soc as $item) {
+            $data[] =$item->provider_name;
+           }
+        return $data;
     }
 
     public function fName()

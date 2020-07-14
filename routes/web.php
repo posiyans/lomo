@@ -14,8 +14,12 @@ define('__ROOT__', dirname(__FILE__));
 //Route::get('/', function () {
 //    return view('welcome');
 //});
-//Route::get('/', 'HomeController@index');
+////Route::get('/', 'HomeController@index');
+Route::get('/api/v1/test', 'Admin\Report\PdfController@report');
+Route::get('/api/v1/test', 'Admin\Report\PdfController@report');
+//Route::get('/api/v1/test_s', 'TestController@index');
 //Auth::routes();
+
 Route::group(['prefix' => '/api'], function() {
     // маршруты для callback контакта
 //    Route::get('vk', 'HomeController@vk')->name('vk');

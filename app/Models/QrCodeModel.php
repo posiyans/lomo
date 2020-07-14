@@ -42,6 +42,29 @@ class QrCodeModel
         $this->out .= session('patronymic') ? '|MiddleName=' . session('patronymic') : '|MiddleName=' . $stead->patronymic;
     }
 
+
+    public function fillDetailsUserInStead($stead)
+    {
+        if (is_int($stead)){
+            $stead = Stead::findOrFail($stead);
+        }
+        $fio = isset($stead->discriptions['fio']) ? $stead->discriptions['fio'] : '';
+        $str = strpos($fio, "19");
+        if ($str) {
+            $fio = substr($fio, 0, $str);
+        }
+        $ar = explode(' ', $fio);
+        if ($ar[0] != ''){
+            $this->out .= '|LastName=' . $ar[0];
+        }
+        if (count($ar) > 1) {
+            $this->out .= '|FirstName=' .  $ar[1];
+        }
+        if (count($ar) > 2) {
+            $this->out .= '|MiddleName=' . $ar[2];
+        }
+    }
+
     /**
      * установить ФИО плательщика
      *
@@ -93,7 +116,12 @@ class QrCodeModel
 
     public function fillDetailsDevice($ReceiptType, $steadModel)
     {
-        //$ReceiptType = ReceiptType::findOrFail((int)$id);
+        if (is_int($ReceiptType)){
+           $ReceiptType = ReceiptType::findOrFail((int)$ReceiptType);
+        }
+        if (is_int($steadModel)){
+            $steadModel = Stead::findOrFail((int)$steadModel);
+        }
         $cash = 0;
         $discription = '';
         foreach ($ReceiptType->MeteringDevice as $MeteringDevice) {

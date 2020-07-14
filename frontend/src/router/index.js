@@ -438,6 +438,37 @@ export const asyncRoutes = [
     ]
   },
   {
+    path: '/receipts',
+    component: Layout,
+    redirect: '/receipts/communal',
+    meta: {
+      title: 'Квитанции',
+      icon: 'documentation'
+    },
+    children: [
+      {
+        path: 'communal',
+        component: () => import('@/views/admin/receipts/communal/index'),
+        name: 'Receipts',
+        meta: {
+          title: 'Электроэнергия',
+          icon: 'documentation',
+          affix: true,
+        }
+      },
+      {
+        path: 'contributions',
+        component: () => import('@/views/admin/receipts/contributions/index'),
+        name: 'Receipts',
+        meta: {
+          title: 'Взносы',
+          icon: 'documentation',
+          affix: true,
+        }
+      }
+    ]
+  },
+  {
     path: '/permissions',
     component: Layout,
     children: [

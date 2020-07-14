@@ -55,7 +55,7 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="Cогласен ">
+          <el-form-item label="Cогласен">
             <el-tooltip class="item" effect="light" content="Cогласен на обработку персональных данных и с условиями пользовательского соглашения" placement="top">
             <el-checkbox
               v-model="user.consent_personal"
@@ -63,6 +63,11 @@
               name="type"
             />
             </el-tooltip>
+          </el-form-item>
+          <el-form-item label="Прикрепить соц.сеть">
+            <div v-if="user.socialList.includes('vkontakte')" class="socalConfirmed" ><img src="/images/vk-banner.png" width="100px"></div>
+            <div v-else @click="loginVK"><img src="/images/vk-banner.png" width="100px"></div>
+
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="saveData" :disabled="!user.consent_personal">Сохранить</el-button>
@@ -149,6 +154,10 @@ export default {
     this.getInfo()
   },
   methods: {
+    async loginVK() {
+      const $url = await this.$store.dispatch('user/loginVK')
+      window.location = $url
+    },
     saveData() {
       if (this.user.consent_personal) {
         const data = {
@@ -195,5 +204,8 @@ export default {
   .message{
     color: #bd0000;
     padding-left: 50px;
+  }
+  .socalConfirmed{
+    opacity: 0.3;
   }
 </style>

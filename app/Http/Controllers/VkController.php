@@ -83,15 +83,20 @@ class VkController extends Controller
                 Auth::guard()->login($user_soc->user, true);
                 return $this->redirect();
             } else {
-                if (isset($token['email'])) {
-                    $user = User::where('email', $token['email'])->first();
-                    if (!$user) {
+                // соцюзер не найден
+                if (Auth::guest()) {
+                    if (isset($token['email'])) {
+                        $user = User::where('email', $token['email'])->first();
+                        if (!$user) {
+                            $user = $this->createUser($token);
+                        }
+                    } else {
+                        $date = date_create();
+                        $token['email'] = 'no_email_'.date_timestamp_get($date).'@example.com';
                         $user = $this->createUser($token);
                     }
                 } else {
-                    $date = date_create();
-                    $token['email'] = 'no_email_'.date_timestamp_get($date).'@example.com';
-                    $user = $this->createUser($token);
+                    $user = Auth::user();
                 }
                 if ($user){
                     $user_soc = $this->createSocUser($user->id, $token['user_id'], $token['email']);

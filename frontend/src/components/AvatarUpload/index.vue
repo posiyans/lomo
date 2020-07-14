@@ -28,7 +28,7 @@ export default {
   name: 'ProfileAvatarUpload',
   components: { ImageCropper, PanThumb },
   props: {
-    userId: {
+    user_id: {
       type: Number,
       default: 0
     },
@@ -74,10 +74,8 @@ export default {
       this.image = this.$store.getters.user.avatar
     }
 
-    if (this.userId > 0) {
+    if (this.user_id > 0) {
       if (this.value) {
-        console.log('this.value')
-        console.log(this.value)
         if (this.value[0] === '/') {
           this.image = process.env.VUE_APP_BASE_API + this.value
         } else {
