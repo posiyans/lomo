@@ -1,5 +1,5 @@
 <template>
-  <span class="app-container">
+  <div class="app-container">
     <div class="filter-container">
       <el-input v-model="listQuery.title" placeholder="Title" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
@@ -108,7 +108,7 @@
       </div>
     </el-dialog>
     <el-dialog title="Скачать квитанцию" :visible.sync="dialogReceipShow" width="80%" >
-      <span v-if="receiptData.discriptions">{{receiptData.discriptions.fio}}</span>
+      <span v-if="receiptData.discriptions"><b>{{receiptData.discriptions.fio}}</b></span>
       <el-form :label-position="labelPosition" label-width="150px">
         <el-form-item label="Оплата">
           <el-select
