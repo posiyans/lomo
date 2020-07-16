@@ -86,7 +86,7 @@
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
     <el-dialog :title="editFio" :visible.sync="dialogFormVisible">
-      <UserInfo v-model="temp"/>
+      <UserInfo v-if="dialogFormVisible" v-model="temp"/>
         <div slot="footer" class="dialog-footer">
           <el-button @click="close">
             Закрыть

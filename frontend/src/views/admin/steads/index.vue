@@ -107,41 +107,43 @@
         </el-button>
       </div>
     </el-dialog>
-    <el-dialog title="Скачать квитанцию" :visible.sync="dialogReceipShow" width="80%" >
-      <span v-if="receiptData.discriptions"><b>{{receiptData.discriptions.fio}}</b></span>
-      <el-form :label-position="labelPosition" label-width="150px">
-        <el-form-item label="Оплата">
-          <el-select
-            v-model="receiptType"
-            placeholder="Select"
-            @change="getRate()"
-          >
-            <el-option
-              v-for="item in options"
-              :key="item.key"
-              :label="item.label"
-              :value="item.key"
+    <el-dialog title="Скачать квитанцию" :visible.sync="dialogReceipShow" :width="device === 'mobile' ? '100%' : '500px'" >
+      <div class="pl4-ns">
+        <div class="pb4">Собственник: <span v-if="receiptData.discriptions"><b>{{receiptData.discriptions.fio}}</b></span></div>
+        <el-form :label-position="labelPosition" label-width="100px">
+          <el-form-item label="Оплата">
+            <el-select
+              v-model="receiptType"
+              placeholder="Select"
+              @change="getRate()"
             >
-            </el-option>
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <template  v-for="i in rate">
-        <div>
-          {{i.name}} - {{i.rate.discription}}
-          <span v-if="i.rate.ratio_a > 0">
-             * {{receiptData.size/100}} = {{(receiptData.size/100 * i.rate.ratio_a).toFixed(2)}} руб.
-          </span>
+              <el-option
+                v-for="item in options"
+                :key="item.key"
+                :label="item.label"
+                :value="item.key"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
+        <template  v-for="i in rate" >
+          <div class="pb1">
+            {{i.name}} - {{i.rate.discription}}
+            <span v-if="i.rate.ratio_a > 0">
+               * {{receiptData.size/100}} = {{(receiptData.size/100 * i.rate.ratio_a).toFixed(2)}} руб.
+            </span>
+          </div>
+        </template>
+        <div class="pt4"><b>Итого: </b>{{receiptData.size | totalFilter(rate)}} руб.</div>
+        <div slot="footer" class="dialog-footer tr mt4 mr4-ns " >
+          <el-button @click="dialogReceipShow = false">
+            Закрыть
+          </el-button>
+          <el-button type="primary" @click="receive">
+            Скачать
+          </el-button>
         </div>
-      </template>
-      <div style="margin-top: 10px"><b>Итого: </b>{{receiptData.size | totalFilter(rate)}} руб.</div>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogReceipShow = false">
-          Закрыть
-        </el-button>
-        <el-button type="primary" @click="addNote">
-          Скачать
-        </el-button>
       </div>
     </el-dialog>
   </div>
@@ -154,7 +156,8 @@ import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination'
 import { mapState } from "vuex"
 import { fetchList } from '@/api/admin/rate'
-
+import { getReceipt } from '@/api/admin/receipt'
+import { saveAs } from 'file-saver'
 export default {
   name: 'AdminSteadList',
   components: { Pagination },
@@ -162,7 +165,6 @@ export default {
   filters: {
     totalFilter(size, rate) {
       let sum = 0
-      console.log(rate)
       rate.forEach(i => {
         sum = Number(sum) + Number(i.rate.ratio_a) * Number(size) / 100 + Number(i.rate.ratio_b)
       })
@@ -187,7 +189,7 @@ export default {
   data() {
     return {
       options: [
-        { label: 'Коммунальные', key: 1 },
+        // { label: 'Коммунальные', key: 1 },
         { label: 'Взносы', key: 2 }
       ],
       receiptType: 2,
@@ -239,8 +241,19 @@ export default {
     this.getList()
   },
   methods: {
+    receive() {
+      const data = {
+        receipt: this.receiptType,
+        stead: this.receiptData.id
+      }
+      getReceipt(data).then(response => {
+        saveAs(new Blob([response.data], {
+          type: response.data.type
+        }), 'Квитанция_' + this.receiptData.number + '.pdf')
+        this.dialogReceipShow = false
+      })
+    },
     getRate() {
-      console.log('getrate')
       fetchList({ type: this.receiptType }).then(response => {
         this.rate = response.data.data
         this.loading = false
@@ -250,10 +263,6 @@ export default {
       this.getRate()
       this.receiptData = row
       this.dialogReceipShow = true
-      console.log(row.id)
-      this.$message({
-        message: row.id
-      })
     },
     getList() {
       this.listLoading = true
@@ -267,42 +276,6 @@ export default {
       this.listQuery.page = 1
       this.getList()
     },
-    // handleModifyStatus(row, status) {
-    //   this.$message({
-    //     message: '操作Success',
-    //     type: 'success'
-    //   })
-    //   row.status = status
-    // },
-    // sortChange(data) {
-    //   const { prop, order } = data
-    //   if (prop === 'created_at') {
-    //     this.sortByID(order)
-    //   }
-    // },
-    // sortByID(order) {
-    //   if (order === 'ascending') {
-    //     this.listQuery.sort = '+created_at'
-    //   } else if(order === 'descending') {
-    //     this.listQuery.sort = '-created_at'
-    //   } else {
-    //     this.listQuery.sort = ''
-    //   }
-    //   this.handleFilter()
-    // },
-    // resetTemp() {
-    //   this.temp = {
-    //     id: undefined,
-    //     user: {},
-    //     importance: 1,
-    //     remark: '',
-    //     timestamp: new Date(),
-    //     title: '',
-    //     status: 'published',
-    //     type: '',
-    //
-    //   }
-    // },
     AddNoteShow(row) {
       this.note_id = row.id
       this.dialogNoteVisible = true
@@ -335,15 +308,6 @@ export default {
       this.dialogStatus = 'Участок № ' + this.temp.number
       this.dialogFormVisible = true
     },
-    // handleShow(row) {
-    //   this.temp = Object.assign({}, row) // copy obj
-    //   this.temp.timestamp = new Date(this.temp.timestamp)
-    //   this.dialogStatus = 'show'
-    //   this.dialogFormVisible = true
-    //   this.$nextTick(() => {
-    //     this.$refs['dataForm'].clearValidate()
-    //   })
-    // },
     updateData() {
       if (this.editor) {
         this.$refs['dataForm'].validate((valid) => {
@@ -366,15 +330,6 @@ export default {
         })
       }
     },
-    // handleDelete(row, index) {
-    //   this.$notify({
-    //     title: 'Success',
-    //     message: 'Delete Successfully',
-    //     type: 'success',
-    //     duration: 2000
-    //   })
-    //   this.list.splice(index, 1)
-    // },
     handleDownload() {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {

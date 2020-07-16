@@ -16,7 +16,6 @@ define('__ROOT__', dirname(__FILE__));
 //});
 ////Route::get('/', 'HomeController@index');
 Route::get('/api/v1/test', 'Admin\Report\PdfController@report');
-Route::get('/api/v1/test', 'Admin\Report\PdfController@report');
 //Route::get('/api/v1/test_s', 'TestController@index');
 //Auth::routes();
 
@@ -71,7 +70,8 @@ $myRoutesForAdmin = [
     'appeal',
     'article',
     'gardening',
-    'user'
+    'user',
+    'receipt'
 ];
 $myRoutesForUser = [
     'info',
@@ -117,5 +117,4 @@ Route::group(['prefix' => '/api/v1'], function() use ($myRoutesForAll, $myRoutes
 //    ->only(['index']);
 
 
-Route::resource('/user/storage/file', 'Storage\FileController');
 Route::resource('/api/user/storage/file', 'Storage\FileController');

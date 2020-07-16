@@ -14,22 +14,34 @@ class PdfController extends Controller
     //
 
 
+    public static function getReceipFoStead($stead_id, $ReceiptType)
+    {
+        $steads = Stead::findOrFail($stead_id);
+        $pdf = new \TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);
+        $pdf->AddPage();
+        self::createClearReceipt($pdf);
+        self::createQRcode($pdf, $stead_id);
+        self::fillGadeningData($pdf);
+        self::fillUserData($pdf, $stead_id);
+        self::fillAmountData($pdf, $ReceiptType, $stead_id);
+        $pdf->Output('ticket_'.$steads->number.'.pdf', 'I');
+    }
+
     public function report()
     {
-//        contributions
         $ReceiptType = 2;
         set_time_limit(700);
         $steads = Stead::all();
-//        $steads = Stead::query()->limit(2)->get();
-//        $steads = Stead::query()->where('id','=',379)->get();
         $pdf = new \TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
         $pdf->setPrintHeader(false);
         $pdf->setPrintFooter(false);
         $this->createRegistryPage($pdf, 2, $steads);
         foreach ($steads as $steadModel){
             $pdf->AddPage();
-            $this->createClearRecaipt($pdf);
-            $this->createQRcode($pdf, $steadModel->id, $options = []);
+            $this->createClearReceipt($pdf);
+            $this->createQRcode($pdf, $steadModel->id);
             $this->fillGadeningData($pdf);
             $this->fillUserData($pdf, $steadModel);
             $this->fillAmountData($pdf, $ReceiptType, $steadModel->id);
@@ -38,57 +50,63 @@ class PdfController extends Controller
         $pdf->Output('rr.pdf', 'I');
     }
 
-    public function fillAmountData($pdf, $ReceiptType, $steadModel)
+    public static function fillAmountData($pdf, $ReceiptType, $steadModel)
     {
         if(is_int($ReceiptType)){
-            $ReceiptType = ReceiptType::find(2);
+            $ReceiptType = ReceiptType::find($ReceiptType);
+        }
+        if (is_int($steadModel)) {
+            $steadModel = Stead::find($steadModel);
         }
         $discription = '';
         $cash = 0;
         mb_internal_encoding('UTF-8');
         foreach ($ReceiptType->MeteringDevice as $MeteringDevice) {
-            $cash += $MeteringDevice->getTicket($steadModel);
+            $cash += $MeteringDevice->getTicket($steadModel->id);
             $discription .= $MeteringDevice->name.' '.$MeteringDevice->cash_description . ' ';
         }
         $text = $ReceiptType->name.' '.$discription;
         $s_arr = [-0.5, 70];
-        $pdf->SetFont('freesans', '', 10);
+        $pdf->SetFont('freesans', '',9);
         foreach ($s_arr as $s) {
-            $pdf->Text(88, $s + 63, mb_substr($text, 0, 55));
-            $pdf->Text(52, $s + 68, mb_substr($text, 55));
+            $pdf->Text(88, $s + 63, mb_substr($text, 0, 60));
+            $pdf->Text(55, $s + 68, mb_substr($text, 60));
             $pdf->Text(82, $s + 74, floor($cash));
-            $pdf->Text(103.5, $s + 74, floor(fmod($cash, 1) * 100));
+            $pdf->Text(103.5, $s + 74, round(fmod($cash, 1) * 100));
         }
     }
 
-    public function fillUserData($pdf, $steadModel)
+    public static function fillUserData($pdf, $stead_id)
     {
-        $fio = isset($steadModel->discriptions['fio']) ? $steadModel->discriptions['fio'] : '';
-        $fio= str_replace('8', ' ', $fio);
-        $fio= str_replace('(', ' ', $fio);
-        $fio= str_replace('?', ' ', $fio);
-        $fio= str_replace('1', ' ', $fio);
-        $str = strpos($fio, "19");
-        if ($str) {
-            $fio = substr($fio, 0, $str);
-        }
-        $ar = explode(' ', $fio);
-        $fio = $ar[0];
-        if (count($ar) > 1) {
-            $fio .= ' '.$ar[1];
-        }
-        if (count($ar) > 2) {
-            $fio .= ' '.$ar[2];
-        }
-        $s_arr = [-0.5, 70];
-        foreach ($s_arr as $s) {
-            $pdf->SetFont('freesans', '', 10);
-            $pdf->Text(88, $s + 58, $fio);
-            $pdf->SetFont('freesans', 'B', 10);
-            $pdf->Text(75, $s+51,  $steadModel->number);
+        $steadModel = Stead::find($stead_id);
+        if ($steadModel) {
+            $fio = isset($steadModel->discriptions['fio']) ? $steadModel->discriptions['fio'] : '';
+            $fio = str_replace('8', ' ', $fio);
+            $fio = str_replace('(', ' ', $fio);
+            $fio = str_replace('?', ' ', $fio);
+            $fio = str_replace('1', ' ', $fio);
+            $str = strpos($fio, "19");
+            if ($str) {
+                $fio = substr($fio, 0, $str);
+            }
+            $ar = explode(' ', $fio);
+            $fio = $ar[0];
+            if (count($ar) > 1) {
+                $fio .= ' ' . $ar[1];
+            }
+            if (count($ar) > 2) {
+                $fio .= ' ' . $ar[2];
+            }
+            $s_arr = [-0.5, 70];
+            foreach ($s_arr as $s) {
+                $pdf->SetFont('freesans', '', 10);
+                $pdf->Text(88, $s + 58, $fio);
+                $pdf->SetFont('freesans', 'B', 10);
+                $pdf->Text(75, $s + 51, $steadModel->number);
+            }
         }
     }
-    public function fillGadeningData($pdf)
+    public static function fillGadeningData($pdf)
     {
         $gardient = Gardening::find(1);
             $s_arr = [-0.5, 70];
@@ -190,7 +208,7 @@ class PdfController extends Controller
         $pdf->Cell(150, 0, '', 'T');
     }
 
-    public function createQRcode($pdf, $stead_id, $options = [])
+    public static function createQRcode($pdf, $stead_id)
     {
         $pdf->SetFont('freesans', '', 6);
         $pdf->Text(15, 30, 'Код для оплаты в терминалах,');
@@ -205,7 +223,7 @@ class PdfController extends Controller
         $pdf->Image($fileName, 10, 36, 40, 40, 'PNG', '', '', true, 300, '', false, false, 1, false, false, false);
     }
 
-    public function createClearRecaipt($pdf)
+    public static function createClearReceipt($pdf)
     {
         $pdf->setFontStretching(105);
         $pdf->SetFont('freesans', 'B', 9);

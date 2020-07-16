@@ -53,10 +53,12 @@ class MeteringDevice extends Model
         //dump([$receiptType->depends]);
         if ($receiptType->depends == 1){
             $stead = Stead::find($stead_id);
-            $size = session('stead_size')!= null ? session('stead_size') : $stead ->size;
-            $this->cash = $size*0.01* $this->rate->ratio_a + $this->rate->ratio_b;
-            if ($size > 0 and $this->rate->ratio_a > 0) {
-                $description .= $size / 100 . ' * ' . $this->rate->ratio_a;
+            if ($stead) {
+                $size = $stead->size;
+                $this->cash = $size * 0.01 * $this->rate->ratio_a + $this->rate->ratio_b;
+                if ($size > 0 and $this->rate->ratio_a > 0) {
+                    $description .= $size / 100 . ' * ' . $this->rate->ratio_a;
+                }
             }
         }
         if ($receiptType->depends == 2) {

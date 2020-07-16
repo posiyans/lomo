@@ -11,6 +11,7 @@ import 'element-ui/lib/theme-chalk/display.css'
 
 import '@/styles/index.scss' // global css
 import '@/styles/global2.scss' // global css
+import '@/styles/tachyons.css' // global css
 
 
 import App from './App'

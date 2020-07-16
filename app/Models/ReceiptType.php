@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class ReceiptType extends Model
 {
     //
+    //depends
+    // 0 - фиксированная сумма (наверно)
+    // 1 - расчитывается от плащади участка
+    // 2 - расчитывается  по показания
+
     public function MeteringDevice()
     {
         return $this->hasMany(MeteringDevice::class, 'type_id', 'id');
