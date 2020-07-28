@@ -29,6 +29,25 @@ class PdfController extends Controller
         $pdf->Output('ticket_'.$steads->number.'.pdf', 'I');
     }
 
+    public static function getReceipFoSteadsList($steads, $ReceiptType, $reestr = false)
+    {
+        $pdf = new \TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);
+        if ($reestr) {
+            self::createRegistryPage($pdf, 2, $steads);
+        }
+        foreach ($steads as $stead) {
+            $pdf->AddPage();
+            self::createClearReceipt($pdf);
+            self::createQRcode($pdf, $stead->id);
+            self::fillGadeningData($pdf);
+            self::fillUserData($pdf, $stead->id);
+            self::fillAmountData($pdf, $ReceiptType, $stead->id);
+        }
+        $pdf->Output('tickets.pdf', 'I');
+    }
+
     public function report()
     {
         $ReceiptType = 2;
@@ -157,7 +176,7 @@ class PdfController extends Controller
     }
 
 
-    public function createRegistryPage($pdf, $ReceiptType, $steads)
+    public static function createRegistryPage($pdf, $ReceiptType, $steads)
     {
         $pdf->AddPage();
         $pdf->setFontStretching(105);

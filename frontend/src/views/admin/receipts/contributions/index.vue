@@ -1,13 +1,166 @@
 <template>
-  <div>
-    Квитанции по взносам
+  <div class="app-container">
+    <div class="">
+      Участки c
+      <el-select
+        v-model="listQuery.stead_min"
+        filterable
+        remote
+        reserve-keyword
+        placeholder="Введите номер участка"
+        no-data-text="Данный номер не найден"
+        :remote-method="findSteadMin"
+        :loading="loading">
+        <el-option
+          v-for="item in steadsListMin"
+          :key="item.id"
+          :label="item.number"
+          :value="item.id">
+        </el-option>
+      </el-select>
+      по
+      <el-select
+        v-model="listQuery.stead_max"
+        filterable
+        remote
+        reserve-keyword
+        placeholder="Введите номер участка"
+        no-data-text="Данный номер не найден"
+        :remote-method="findSteadMax"
+        :loading="loading">
+        <el-option
+          v-for="item in steadsListMax"
+          :key="item.id"
+          :label="item.number"
+          :value="item.id">
+        </el-option>
+      </el-select>
+      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="showReestr">
+        Показать
+      </el-button>
+      <el-button v-waves class="filter-item" type="success" icon="el-icon-download" @click="downloadDialogVisible = !downloadDialogVisible">
+        Скачать
+      </el-button>
+      <el-checkbox v-model="listQuery.reestr">Включить реест в фаил</el-checkbox>
+    </div>
+    <ShowTable v-if="list.length > 0" v-loading="loading" :list="list"/>
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="showReestr" />
+    <el-dialog
+      title="Внимание"
+      :visible.sync="downloadDialogVisible"
+      width="30%"
+      center>
+      <div>Скачать текущую страницу или весь диапазон??</div>
+      <div class="pt3">
+        При загрузке большого диапозона, создание файла может занять некоторое<br> временя,  так что наберитесь терпения!!
+      </div>
+
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="downloadDialogVisible = false" style="margin-right: 20px;">Отмена</el-button>
+    <el-button type="primary" @click="downloadReestr(true)" style="margin-right: 20px;">Страницу</el-button>
+    <el-button type="danger" @click="downloadReestr(false)">Все</el-button>
+  </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-  export default {
+import { getSteadsList } from '@/api/user/stead.js'
+import { getReestrForSteadList, getReceiptForSteadList } from '@/api/admin/receipt.js'
+import ShowTable from './ShowTable'
+import waves from '@/directive/waves'
+import Pagination from '@/components/Pagination/index'
+import { saveAs } from 'file-saver'
 
+export default {
+  components: {
+    ShowTable, Pagination
+  },
+  directives: { waves },
+  data() {
+    return {
+      loading: false,
+      stead_min: null,
+      stead_max: null,
+      steadsListMin: [],
+      steadsListMax: [],
+      downloadDialogVisible: false,
+      total: 0,
+      list: [],
+      listQuery: {
+        reestr: true,
+        page: 1,
+        limit: 20,
+        stead_min: null,
+        stead_max: null
+      },
+      reestrType: [
+        {
+          key: 0,
+          label: 'Не печатать реестр'
+        },
+        {
+          key: 1,
+          label: 'Печатать реестр'
+        },
+      ]
+    }
+  },
+  mounted() {
+    this.getStead()
+  },
+  methods: {
+    downloadReestr(padding = true) {
+      this.showReestr()
+      this.$message('Запрос отправлен ожидайте файл!')
+      const data = this.listQuery
+      data.padding = padding
+      this.downloadDialogVisible = false
+      getReceiptForSteadList(data).then(response => {
+        saveAs(new Blob([response.data], {
+          type: response.data.type
+        }), 'Квитанция.pdf')
+        this.$message('Фаил успешно скачен.')
+      })
+    },
+    getStead() {
+      getSteadsList()
+        .then(response => {
+          this.steadsListMin = response.data
+          this.steadsListMax = response.data
+        })
+    },
+    showReestr() {
+      this.loading = true
+      getReestrForSteadList(this.listQuery).then(response => {
+        if (response.data.status) {
+          this.list = response.data.data
+          this.total = response.data.total
+          this.loading = false
+        }
+      })
+    },
+    findSteadMin(query) {
+      const data = {
+        query: query
+      }
+      getSteadsList(data)
+        .then(response => {
+          this.steadsListMin = response.data
+        })
+    },
+    findSteadMax(query) {
+      const data = {
+        query: query
+      }
+      getSteadsList(data)
+        .then(response => {
+          this.steadsListMax = response.data
+        })
+    }
   }
+
+}
 </script>
 
 <style scoped>

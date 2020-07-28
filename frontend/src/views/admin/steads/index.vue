@@ -218,7 +218,7 @@ export default {
 
       rules: {
         number: [{ required: true, message: 'Обязательное поле', trigger: 'change' }],
-        size: [{ required: true, message: 'Обязательное поле', trigger: 'change' }],
+        size: [{ required: true, message: 'Обязательное поле', trigger: 'change' }]
       },
       downloadLoading: false
     }
