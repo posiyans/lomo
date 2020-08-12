@@ -42,6 +42,7 @@
         Скачать
       </el-button>
       <el-checkbox v-model="listQuery.reestr">Включить реест в фаил</el-checkbox>
+      <el-checkbox v-model="listQuery.fio">Включить ФИО в фаил</el-checkbox>
     </div>
     <ShowTable v-if="list.length > 0" v-loading="loading" :list="list"/>
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="showReestr" />
@@ -89,6 +90,7 @@ export default {
       list: [],
       listQuery: {
         reestr: true,
+        fio: false,
         page: 1,
         limit: 20,
         stead_min: null,

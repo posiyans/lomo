@@ -22,27 +22,27 @@ class PdfController extends Controller
         $pdf->setPrintFooter(false);
         $pdf->AddPage();
         self::createClearReceipt($pdf);
-        self::createQRcode($pdf, $stead_id);
+        self::createQRcode($pdf, $stead_id, true);
         self::fillGadeningData($pdf);
-        self::fillUserData($pdf, $stead_id);
+        self::fillUserData($pdf, $stead_id, true);
         self::fillAmountData($pdf, $ReceiptType, $stead_id);
         $pdf->Output('ticket_'.$steads->number.'.pdf', 'I');
     }
 
-    public static function getReceipFoSteadsList($steads, $ReceiptType, $reestr = false)
+    public static function getReceipFoSteadsList($steads, $ReceiptType, $reestr = false, $fio = false)
     {
         $pdf = new \TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
         $pdf->setPrintHeader(false);
         $pdf->setPrintFooter(false);
         if ($reestr) {
-            self::createRegistryPage($pdf, 2, $steads);
+            self::createRegistryPage($pdf, 2, $steads, $fio);
         }
         foreach ($steads as $stead) {
             $pdf->AddPage();
             self::createClearReceipt($pdf);
-            self::createQRcode($pdf, $stead->id);
+            self::createQRcode($pdf, $stead->id, $fio);
             self::fillGadeningData($pdf);
-            self::fillUserData($pdf, $stead->id);
+            self::fillUserData($pdf, $stead->id, $fio);
             self::fillAmountData($pdf, $ReceiptType, $stead->id);
         }
         $pdf->Output('tickets.pdf', 'I');
@@ -95,7 +95,7 @@ class PdfController extends Controller
         }
     }
 
-    public static function fillUserData($pdf, $stead_id)
+    public static function fillUserData($pdf, $stead_id, $fio_print= false)
     {
         $steadModel = Stead::find($stead_id);
         if ($steadModel) {
@@ -119,7 +119,9 @@ class PdfController extends Controller
             $s_arr = [-0.5, 70];
             foreach ($s_arr as $s) {
                 $pdf->SetFont('freesans', '', 10);
-                $pdf->Text(88, $s + 58, $fio);
+                if ($fio_print) {
+                    $pdf->Text(88, $s + 58, $fio);
+                }
                 $pdf->SetFont('freesans', 'B', 10);
                 $pdf->Text(75, $s + 51, $steadModel->number);
             }
@@ -176,16 +178,30 @@ class PdfController extends Controller
     }
 
 
-    public static function createRegistryPage($pdf, $ReceiptType, $steads)
+    public static function createRegistryPage($pdf, $ReceiptType, $steads, $fio_print = false)
     {
+        if(is_int($ReceiptType)){
+            $ReceiptType = ReceiptType::findOrFail($ReceiptType);
+        }
         $pdf->AddPage();
         $pdf->setFontStretching(105);
         $pdf->SetFont('freesans', '', 9);
         $pdf->SetFillColor(206, 239, 236);
         $pdf->Cell(20, 6, 'Номер', 1, 0, 'C', 1);
         $pdf->Cell(25, 6, 'Размер, м.кв', 1, 0, 'C', 1);
-        $pdf->Cell(60, 6, 'ФИО', 1, 0, 'C', 1);
-        $pdf->Cell(35, 6, 'Сумма', 1, 0, 'C', 1);
+        if ($fio_print) {
+            $pdf->Cell(60, 6, 'ФИО', 1, 0, 'C', 1);
+            $l = 60;
+        } else {
+            $pdf->SetFont('freesans', '', 6);
+            $l = 0;
+            foreach ($ReceiptType->MeteringDevice as $MeteringDevice) {
+                $pdf->Cell(18, 6, $MeteringDevice->name, 1, 0, 'C', 1);
+                $l += 18;
+            }
+            $pdf->SetFont('freesans', '', 9);
+        }
+        $pdf->Cell(30, 6, 'Сумма', 1, 0, 'C', 1);
         $pdf->Cell(50, 6, 'Примечание', 1, 0, 'C', 1);
         $pdf->Ln();
         $pdf->SetFillColor(224, 235, 255);
@@ -211,23 +227,26 @@ class PdfController extends Controller
             if (count($ar) > 2) {
                 $fio .= ' '.$ar[2];
             }
-            $pdf->Cell(60, 6, $fio, 'LR', 0, 'C', $fill);
-            $cash = 0;
-            if(is_int($ReceiptType)){
-                $ReceiptType = ReceiptType::findOrFail($ReceiptType);
+            if ($fio_print) {
+                $pdf->Cell(60, 6, $fio, 'LR', 0, 'C', $fill);
             }
+            $cash = 0;
             foreach ($ReceiptType->MeteringDevice as $MeteringDevice) {
+                if (!$fio_print) {
+                    $pdf->Cell(18, 6, $MeteringDevice->getTicket($value->id), 'LR', 0, 'C', $fill);
+                }
                 $cash += $MeteringDevice->getTicket($value->id);
             }
-            $pdf->Cell(35, 6, $cash.' руб.', 'LR', 0, 'C', $fill);
-            $pdf->Cell(50, 6, '', 1, 0, 'C', 0);
+            $pdf->Cell(30, 6, $cash.' руб.', 'LR', 0, 'C', $fill);
+            $pdf->Cell(50, 6, '', 1, 0, 'C', $fill);
             $pdf->Ln();
             $fill=!$fill;
         }
-        $pdf->Cell(150, 0, '', 'T');
+            $pdf->Cell(90+$l, 0, '', 'T');
+
     }
 
-    public static function createQRcode($pdf, $stead_id)
+    public static function createQRcode($pdf, $stead_id, $fio = false)
     {
         $pdf->SetFont('freesans', '', 6);
         $pdf->Text(15, 30, 'Код для оплаты в терминалах,');
@@ -235,7 +254,9 @@ class PdfController extends Controller
         $fileName= '/tmp/qr_code_'.time();
         $code = new QrCodeModel;
         $code->fillDetailsGardient(1);
-        $code->fillDetailsUserInStead($stead_id);
+        if ($fio) {
+            $code->fillDetailsUserInStead($stead_id);
+        }
         $code->fillDetailsDevice(2, $stead_id);
         $code->getFile($fileName);
 //        $this->createQrcode($gardient, $steadModel, $ReceiptType, $fileName);

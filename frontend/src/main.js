@@ -21,13 +21,21 @@ import router from './router'
 import './icons' // icon
 import './permission' // permission control
 import './utils/error-log' // error log
-const moment = require('moment-timezone');
-require('moment/locale/ru');
-moment.locale('ru');
+const moment = require('moment-timezone')
+require('moment/locale/ru')
+moment.locale('ru')
 moment.tz.setDefault('Europe/Moscow')
 
 import * as filters from './filters' // global filters
+import YmapPlugin from 'vue-yandex-maps'
 
+const settings = {
+  apiKey: process.env.VUE_APP_YANDEX_API_MAP,
+  lang: 'ru_RU',
+  coordorder: 'latlong',
+  version: '2.1' }
+
+Vue.use(YmapPlugin, settings)
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api

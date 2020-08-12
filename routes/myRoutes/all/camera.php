@@ -6,3 +6,4 @@ Route::get('camera', 'Camera\CameraController@index');
 Route::get('camera/img/{id?}', 'Camera\CameraController@getImages');
 //    склесть gif из картинок с камеры (на будующее)
 Route::get('camera/create-gif/{token?}', 'Camera\CameraController@createGif');
+Route::get('camera/test', 'HomeController@test');

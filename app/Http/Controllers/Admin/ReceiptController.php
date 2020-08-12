@@ -32,6 +32,7 @@ class ReceiptController extends Controller
         $stead_min = isset($request->stead_min) || !empty($request->stead_min) ? $request->stead_min : false;
         $stead_max = isset($request->stead_max) || !empty($request->stead_max) ? $request->stead_max : false;
         $reestr = isset($request->reestr) || !empty($request->reestr) ? $request->reestr : false;
+        $fio = isset($request->fio) || !empty($request->fio) ? $request->fio : false;
         $padding = isset($request->padding) || !empty($request->padding) ? $request->padding : true;
         $query = Stead::query();
         if ($stead_min){
@@ -46,7 +47,7 @@ class ReceiptController extends Controller
             set_time_limit(0);
             $steads =$query->get();
         }
-        return PdfController::getReceipFoSteadsList($steads, 2, $reestr);
+        return PdfController::getReceipFoSteadsList($steads, 2, $reestr, $fio);
     }
 
     public function getReestrForListStead(Request $request)

@@ -158,6 +158,12 @@ export const constantRoutes = [
         component: () => import('@/views/modules/YandexSchedule/index.vue'),
         name: 'modulesSchedule',
         hidden: true
+      },
+      {
+        path: 'yandexmap',
+        component: () => import('@/views/yandex/map/index.vue'),
+        name: 'yandexMap',
+        hidden: true
       }
     ]
   },
