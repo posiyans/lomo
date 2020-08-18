@@ -128,7 +128,9 @@ class QrCodeModel
             $cash += $MeteringDevice->getTicket($steadModel->id);
             $discription .= $MeteringDevice->name . ' ' . $MeteringDevice->cash_description . ' ';
         }
-        $this->out .= '|Purpose=' . $ReceiptType->name . ' ' . $discription;
+//        полное назначение не проходит в банк клиенте
+//        $this->out .= '|Purpose=' . $ReceiptType->name . ' ' . $discription;
+        $this->out .= '|Purpose=' . $ReceiptType->name . ' участок ' . $steadModel->number;
         $this->out .= '|PersAcc=' . $steadModel->number;
         if ($cash > 0) {
             $this->out .= '|Sum=' . $cash*100;
