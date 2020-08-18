@@ -465,7 +465,7 @@ export const asyncRoutes = [
       {
         path: 'contributions',
         component: () => import('@/views/admin/receipts/contributions/index'),
-        name: 'Receipts',
+        name: 'AdminReceipts',
         meta: {
           title: 'Взносы',
           icon: 'documentation',

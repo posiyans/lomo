@@ -14,7 +14,7 @@ class PdfController extends Controller
     //
 
 
-    public static function getReceipFoStead($stead_id, $ReceiptType)
+    public static function getReceipFoStead($stead_id, $ReceiptType, $fio= false)
     {
         $steads = Stead::findOrFail($stead_id);
         $pdf = new \TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
@@ -22,9 +22,9 @@ class PdfController extends Controller
         $pdf->setPrintFooter(false);
         $pdf->AddPage();
         self::createClearReceipt($pdf);
-        self::createQRcode($pdf, $stead_id, true);
+        self::createQRcode($pdf, $stead_id, $fio);
         self::fillGadeningData($pdf);
-        self::fillUserData($pdf, $stead_id, true);
+        self::fillUserData($pdf, $stead_id, $fio);
         self::fillAmountData($pdf, $ReceiptType, $stead_id);
         $pdf->Output('ticket_'.$steads->number.'.pdf', 'I');
     }

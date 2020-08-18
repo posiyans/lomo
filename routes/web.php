@@ -33,9 +33,9 @@ Route::group(['prefix' => '/api/v1'], function() {
 //    Route::get('email/verify/{id}', 'Auth\VerificationController@verify')->name('api.verification.verify');
 
     // пустая квитанция
-    Route::get('receipt/get-receipt-clear', 'PdfController@clearReceipt');
+//    Route::get('receipt/get-receipt-clear', 'PdfController@clearReceipt');
     // пустой QR code
-    Route::get('receipt/get-qrcode-clear', 'QrCodeController@qrCodeClear');
+//    Route::get('receipt/get-qrcode-clear', 'QrCodeController@qrCodeClear');
 
 //    // получить картинку с камеры (для cron)
 //    Route::get('camera', 'Camera\CameraController@index');
@@ -64,7 +64,8 @@ $myRoutesForAll = [
     'auth',
     'article',
     'camera',
-    'rate'
+    'rate',
+    'receipt'
 ];
 $myRoutesForAdmin = [
     'appeal',

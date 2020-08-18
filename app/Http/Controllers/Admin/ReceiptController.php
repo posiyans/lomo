@@ -21,7 +21,7 @@ class ReceiptController extends Controller
     {
 
         if (isset($request->stead) and isset($request->receipt)) {
-            return PdfController::getReceipFoStead($request->stead, $request->receipt);
+            return PdfController::getReceipFoStead($request->stead, $request->receipt, true);
         }
         return 'error';
     }

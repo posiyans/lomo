@@ -17,10 +17,10 @@ class SteadController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
-       $this->middleware('auth');
-    }
+//    public function __construct()
+//    {
+//       $this->middleware('auth');
+//    }
 
 
     public function list(Request $request)
@@ -30,7 +30,7 @@ class SteadController extends Controller
         if (isset($query) && !empty($query)){
           $steads->where('number','LIKE', '%'.$query.'%');
         }
-        $data = $steads->select(['id', 'number'])->get();
+        $data = $steads->select(['id', 'number', 'size'])->get();
 
         return json_encode($data);
     }

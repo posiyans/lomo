@@ -9,17 +9,24 @@
       <div><b>БИК:</b> <span class="props-value">{{gardening.BIC}}</span></div>
       <div><b>Корсчет:</b> <span class="props-value">{{gardening.CorrespAcc}}</span></div>
     </div>
-    <template>
     <div class="blank">
-      <b>Бланк квитанции на оплату</b>
-        <el-link :href="url" ><el-button type="primary" size="mini" plain>Скачать</el-button></el-link>
+      Бланк квитанции на оплату <b>вносов</b>
+      <el-button type="primary" size="mini" plain @click="showForm()">Скачать</el-button>
+    </div>
+    <ShowForm2 v-if="dialogVisible" @close="dialogVisible = false"/>
+    <div class="blank">
+      Бланк квитанции на оплату c реквизитами
+        <span class="pl2">
+          <el-link :href="url" ><el-button type="primary" size="mini" plain>Скачать</el-button></el-link>
+        </span>
     </div>
     <div class="qr-code">
       <h4 align="center">QR code для оплаты</h4>
       <div align="center"><img :src="urlQRcode"/></div>
       <div align="center">Для оплаты, отсканируйте код в банк клиенте.</div>
     </div>
-  </template>
+
+
   </div>
 </template>
 
@@ -27,14 +34,21 @@
 import { getGardeninngInfo } from '@/api/user/gardening.js'
 import { mapGetters } from 'vuex'
 import store from '../../../store'
+import { getSteadsList } from '@/api/user/stead.js'
+import ShowForm2 from './ShowForm2'
+
 export default {
-  name: 'RecaiptForm',
+  name: 'ModulesReceiptForm',
   components: {
+    ShowForm2
   },
   data() {
     return {
       centerDialogVisible: false,
-      gardening: {}
+      gardening: {},
+      dialogVisible: false,
+      getSteadsList: [],
+      stead: ''
     }
   },
   mounted() {
@@ -45,15 +59,30 @@ export default {
       return process.env.VUE_APP_BASE_API + '/api/v1/receipt/get-qrcode-clear'
     },
     url() {
-       return process.env.VUE_APP_BASE_API + '/api/v1/receipt/get-receipt-clear'
+      return process.env.VUE_APP_BASE_API + '/api/v1/receipt/get-receipt-clear'
     }
   },
-  methods:{
+  methods: {
+    setStead(val) {
+      this.stead = val
+    },
     fetchGagdening() {
       getGardeninngInfo().then(response => {
         this.gardening = response.data
       })
-     }
+    },
+    showForm() {
+      this.dialogVisible = true
+    },
+    findStead() {
+      const data = {
+        query: this.stead
+      }
+      getSteadsList(data)
+        .then(response => {
+          this.steadsListMax = response.data
+        })
+    }
   }
 }
 </script>
