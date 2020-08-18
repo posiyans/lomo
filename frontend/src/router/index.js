@@ -93,6 +93,11 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/temper',
+    component: Layout,
+    redirect: '/modules/weather'
+  },
+  {
     path: '/',
     component: UserLayout,
     redirect: '/index',
