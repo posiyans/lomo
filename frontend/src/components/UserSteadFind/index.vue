@@ -16,7 +16,8 @@
         v-for="item in SteadsList"
         :key="item.id"
         :label="item.number"
-        :value="item">
+        :value="item.id"
+      >
       </el-option>
     </el-select>
   </div>
@@ -57,8 +58,13 @@ export default {
           this.loading = false
         })
     },
-    selectStead(){
-      this.$emit('selectStead', this.stead)
+    selectStead() {
+      const data = this.SteadsList.find(i => {
+        if (i.id === this.stead) {
+          return true
+        }
+      })
+      this.$emit('selectStead', data)
     }
   }
 }
