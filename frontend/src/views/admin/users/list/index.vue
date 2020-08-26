@@ -38,7 +38,7 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column label="Участок" align="center">
+      <el-table-column v-if="mobile || !mobile" label="Участок" align="center">
         <template slot-scope="{row}">
           <span v-for="(stead, i) of row.steads" :key="stead.id" class="link-type" >
             <span v-if=" i > 0" >, </span>
