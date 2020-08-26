@@ -1,40 +1,27 @@
 <template>
   <div class="createPost-container">
     <el-form ref="postForm" :model="postForm" :rules="rules"  :label-position="labelPosition" class="form-container">
-
-<!--      <sticky :z-index="10" :class-name="'sub-navbar '+postForm.status">-->
-<!--        <OnMain v-model="postForm.news"/>-->
-<!--        <CategoryDropdown v-model="postForm.category_id"/>-->
-<!--        <CommentDropdown v-model="postForm.allow_comments" />-->
-<!--        <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submitForm">-->
-<!--          Опубликовать-->
-<!--        </el-button>-->
-<!--        <el-button v-loading="loading" type="warning" @click="draftForm">-->
-<!--          Черновик-->
-<!--        </el-button>-->
-<!--      </sticky>-->
-      <el-row type="flex">
-        <el-col :xs="22" :sm="4" :offset="2">
-        <OnMain v-model="postForm.news"/>
-        </el-col>
-        <el-col  :xs="22" :sm="4">
-        <CategoryDropdown v-model="postForm.category_id"/>
-        </el-col>
-        <el-col  :xs="22" :sm="4">
-        <CommentDropdown v-model="postForm.allow_comments" />
-        </el-col>
-        <el-col :xs="22" :sm="4">
-        <el-button v-loading="loading"  type="success" @click="submitForm">
-          Опубликовать
-        </el-button>
-        </el-col>
-        <el-col :xs="22" :sm="4">
-        <el-button v-loading="loading" type="warning" @click="draftForm">
-          Черновик
-        </el-button>
-        </el-col>
-      </el-row>
-
+      <div class="pt1 createPost-main-container" style="padding-top: 0; padding-bottom: 0">
+        <div style="display: inline-block;">
+          <OnMain v-model="postForm.news"/>
+        </div>
+        <div style="display: inline-block; ">
+          <CategoryDropdown v-model="postForm.category_id"/>
+        </div>
+        <div style="display: inline-block;">
+          <CommentDropdown v-model="postForm.allow_comments" />
+        </div>
+        <div style="display: inline-block;">
+          <el-button v-loading="loading"  type="success" @click="submitForm">
+            Опубликовать
+          </el-button>
+          </div>
+        <div style="display: inline-block;">
+           <el-button v-loading="loading" type="warning" @click="draftForm">
+            Черновик
+           </el-button>
+        </div>
+      </div>
       <div class="createPost-main-container">
         <el-row>
           <el-col :span="24">
@@ -273,18 +260,13 @@ export default {
   }
   .createPost-container {
     position: relative;
-
-
-      .postInfo-container {
-        position: relative;
-        margin-bottom: 10px;
-
-        .postInfo-container-item {
-          float: left;
-        }
+    .postInfo-container {
+      position: relative;
+      margin-bottom: 10px;
+      .postInfo-container-item {
+        float: left;
       }
-
-
+    }
     .word-counter {
       width: 100px;
       position: absolute;

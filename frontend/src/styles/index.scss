@@ -123,6 +123,11 @@ aside {
 .app-container {
   padding: 20px;
 }
+@media screen and (max-width: 700px) {
+  .app-container {
+    padding: 5px;
+  }
+}
 
 .components-container {
   margin: 30px 50px;

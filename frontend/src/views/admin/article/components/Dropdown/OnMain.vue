@@ -1,6 +1,6 @@
 <template>
-  <el-dropdown :show-timeout="100" trigger="click">
-    <el-button plain>
+  <el-dropdown trigger="click" >
+    <el-button plain style="width: 180px;">
       {{ comemnt_title }}
       <i class="el-icon-caret-bottom el-icon--right" />
     </el-button>

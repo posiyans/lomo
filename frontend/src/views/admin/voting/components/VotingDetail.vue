@@ -1,17 +1,16 @@
 <template>
   <div class="createPost-container">
     <el-form ref="postForm" v-loading="loadingForm" :model="postForm" :rules="rules" class="form-container">
-      <sticky :z-index="10" :class-name="'sub-navbar '+postForm.status">
-        <TypeDropdown v-model="postForm.type"/>
-<!--        <CommentDropdown v-model="postForm.comments" />-->
-<!--        <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submitForm">-->
-<!--          Опубликовать-->
-<!--        </el-button>-->
-        <el-button v-loading="loading" type="warning" @click="draftForm">
-          Сохранить
-        </el-button>
-      </sticky>
-
+      <div class="pt1 createPost-main-container" style="padding-top: 0; padding-bottom: 0">
+        <div style="display: inline-block;">
+          <TypeDropdown v-model="postForm.type"/>
+        </div>
+        <div style="display: inline-block;">
+          <el-button v-loading="loading" type="warning" @click="draftForm">
+            Сохранить
+          </el-button>
+        </div>
+      </div>
       <div class="createPost-main-container">
         <h1>{{ typeTitle }}</h1>
         <el-row>
@@ -342,22 +341,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import "~@/styles/mixin.scss";
-
+  .createPost-main-container {
+    padding: 40px 45px 20px 50px;
+  }
   .createPost-container {
     position: relative;
-
-    .createPost-main-container {
-      padding: 40px 45px 20px 50px;
-
-      .postInfo-container {
-        position: relative;
-        @include clearfix;
-        margin-bottom: 10px;
-
-        .postInfo-container-item {
-          float: left;
-        }
+    .postInfo-container {
+      position: relative;
+      margin-bottom: 10px;
+      .postInfo-container-item {
+        float: left;
       }
     }
 
@@ -388,5 +381,19 @@ export default {
   .answer-button {
     margin-left: 50px;
     margin-bottom: 10px
+  }
+  @media screen and (max-width: 700px) {
+    .createPost-main-container {
+      padding: 40px 6px 20px 6px;
+
+      .postInfo-container {
+        position: relative;
+        margin-bottom: 10px;
+
+        .postInfo-container-item {
+          float: left;
+        }
+      }
+    }
   }
 </style>

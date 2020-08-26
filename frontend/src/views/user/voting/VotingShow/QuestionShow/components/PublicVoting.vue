@@ -10,7 +10,9 @@
       </div>
       <div v-for="(answer, j) in question.answers">
         <div class="answer" :class="question.myAnswers | answerFilter(guest)">
-          <div class="an" :style="answer | resultBackgroundFilter(question)" @click="vote(answer,question)">
+          <div class="an" :style="answer | resultBackgroundFilter(question)">
+          </div>
+          <div class="an-text" @click="vote(answer,question)">
             {{j+1}}.
             <span>
               {{ ansverTextFilter(answer.text) }} - {{ answer.userAnswersCount }}
@@ -205,9 +207,24 @@ export default {
     /*padding: 5px;*/
     border-radius: 5px;
     margin-bottom: 2px;
+    position: relative;
+    height: 36px;
   }
   .an{
+    position: absolute;
     background-color: #3b576d;
+    /*width: 100px;*/
+    height: 100%;
+    /*word-wrap: break-word;*/
+    white-space:nowrap;
+    /*padding: 10px;*/
+    /*display: inline;*/
+    border-radius: 5px 0 0 5px;
+    clear: both;
+  }
+  .an-text{
+    position: absolute;
+    /*background-color: #0070c4;*/
     /*width: 100px;*/
     height: 100%;
     /*word-wrap: break-word;*/

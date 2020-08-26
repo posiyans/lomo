@@ -1,5 +1,5 @@
 <template>
-  <div class="components-container">
+  <div class="avatar-upload">
     <pan-thumb :image="image" />
     <el-button type="primary" icon="el-icon-upload" :class="{'avatar-desktop': desktop}" @click="imagecropperShow=true">
       Сменить Аватар
@@ -107,6 +107,11 @@ export default {
 </script>
 
 <style scoped>
+  .avatar-upload {
+    margin: 0 50px;
+    margin-bottom: 10px;
+    position: relative;
+  }
   .avatar-desktop{
     position: absolute;
     bottom: 15px;

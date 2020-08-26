@@ -19,12 +19,12 @@
       highlight-current-row
       style="width: 100%;"
     >
-      <el-table-column label="№"  align="center" width="80">
+      <el-table-column v-if="!mobile" label="№" align="center" width="80">
         <template slot-scope="{row}">
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="ФИО" min-width="150px" class-name="small-padding fixed-width">
+      <el-table-column label="ФИО" min-width="100px">
         <template slot-scope="{row}">
           <span
             class="link-type"
@@ -38,20 +38,21 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column label="Участок(и)" align="center"  width="150px">
+      <el-table-column label="Участок" align="center">
         <template slot-scope="{row}">
-          <span v-for="(stead, i) of row.steads" class="link-type" >
-             <span v-if=" i > 0" >, </span><span>{{ stead.number }}</span>
+          <span v-for="(stead, i) of row.steads" :key="stead.id" class="link-type" >
+            <span v-if=" i > 0" >, </span>
+            <span>{{ stead.number }}</span>
           </span>
         </template>
       </el-table-column>
-      <el-table-column label="Телефон" align="center"  width="150px">
+      <el-table-column v-if="!mobile" label="Телефон" align="center"  width="150px">
       <template slot-scope="{row}">
         <span lass="link-type" >
            {{ row.phone }}</span>
       </template>
       </el-table-column>
-      <el-table-column label="Email" align="center"  width="250px">
+      <el-table-column  v-if="!mobile" label="Email" align="center"  width="250px">
         <template slot-scope="{row}">
         <span
           class="link-type"
@@ -64,7 +65,7 @@
            {{ row.email }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Статус" class-name="status-col" width="100">
+      <el-table-column label="Статус" class-name="status-col" >
         <template slot-scope="{row}">
           <span
             :class="{'gren' : row.steads.length > 0}"
@@ -74,7 +75,7 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column label="Actions" align="center" width="230" class-name="small-padding fixed-width">
+      <el-table-column label="Actions" align="center" class-name="">
         <template slot-scope="{ row }">
           <el-button type="primary" size="small" @click="handleUpdate(row)" circle>
             <svg-icon icon-class="edit" />
@@ -85,7 +86,7 @@
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
-    <el-dialog :title="editFio" :visible.sync="dialogFormVisible">
+    <el-dialog :title="editFio" :visible.sync="dialogFormVisible" top="10px" :width="mobile ? '100%' : '50%'">
       <UserInfo v-if="dialogFormVisible" v-model="temp"/>
         <div slot="footer" class="dialog-footer">
           <el-button @click="close">
@@ -179,6 +180,12 @@ export default {
     // this.fetchSteads()
   },
   computed: {
+    mobile() {
+      if (this.$store.state.app.device === 'mobile') {
+        return true
+      }
+      return false
+    },
     editFio() {
       let fio = ''
       if (this.temp.last_name) {

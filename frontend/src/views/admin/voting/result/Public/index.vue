@@ -14,6 +14,8 @@
           <div v-for="(answer, j) in question.answers">
             <div class="answer">
               <div class="an" :style="answer | resultBackgroundFilter(question)">
+              </div>
+              <div class="an-text">
                 {{j+1}}. <span>{{answer.text}} </span> <span>{{answer.userAnswersCount}} </span><span> ({{answer | resultFilter(question) }}%)</span>
               </div>
             </div>
@@ -86,8 +88,11 @@ export default {
     },
     resultBackgroundFilter(answer, question) {
       const count = question.answers.reduce( (sum, item) => {return sum + item.userAnswersCount}, 0)
-      return 'width:' + 600*answer.userAnswersCount/count + 'px;'
-      // return answer.userAnswersCount/count
+      if (count == 0){
+        return 'width: 0%;'
+      }
+      return 'width:' + 100*answer.userAnswersCount/count + '%;'
+      // return 'width: 50%;'
     },
     statusFilter(status) {
       return Status[status]
@@ -121,11 +126,11 @@ export default {
     background: rgb(13,0,236);
     background: linear-gradient(315deg, rgba(13,0,236,1) 0%, rgba(0,112,196,1) 0%, rgba(175,217,249,1) 100%);
     padding: 20px;
-    width: 640px;
+    max-width: 640px;
     border-radius: 10px;
   }
   .answer {
-    width: 600px;
+    max-width: 600px;
     background-color: #86468f;
     background: rgb(13,0,236);
     background: linear-gradient(135deg, rgba(13,0,236,1) 0%, rgba(0,112,196,1) 0%, rgba(175,217,249,1) 100%);
@@ -133,9 +138,25 @@ export default {
     /*padding: 5px;*/
     border-radius: 5px;
     margin-bottom: 2px;
+    position: relative;
+    height: 36px;
+    /*float: left;*/
   }
   .an{
+    position: absolute;
     background-color: #0070c4;
+    /*width: 100px;*/
+    height: 100%;
+    /*word-wrap: break-word;*/
+    white-space:nowrap;
+    /*padding: 10px;*/
+    /*display: inline;*/
+    border-radius: 5px 0 0 5px;
+    clear: both;
+  }
+  .an-text{
+    position: absolute;
+    /*background-color: #0070c4;*/
     /*width: 100px;*/
     height: 100%;
     /*word-wrap: break-word;*/

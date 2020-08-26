@@ -10,7 +10,7 @@
       <div><b>Корсчет:</b> <span class="props-value">{{gardening.CorrespAcc}}</span></div>
     </div>
     <div class="blank">
-      Бланк квитанции на оплату <b>вносов</b> по участкам
+      Бланк квитанции на оплату <b>взносов</b> по участкам
       <el-button type="primary" size="mini" plain @click="showForm()">Скачать</el-button>
     </div>
     <ShowForm2 v-if="dialogVisible" @close="dialogVisible = false"/>
