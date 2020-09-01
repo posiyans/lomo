@@ -3,17 +3,18 @@
     <template>
       <div class="login-form">
         <el-form
-          ref="form"
+          ref="loginForm"
           :model="form"
           label-width="120px"
           label-position="top"
+          :rules="rules"
           size="mini"
         >
-          <el-form-item label="E-mail">
+          <el-form-item label="E-mail" prop="email">
             <div class="reset-password" @click="resetPassword" >Забыли пароль?</div>
             <el-input v-model="form.email"></el-input>
           </el-form-item>
-          <el-form-item label="Пароль">
+          <el-form-item label="Пароль" prop="password">
             <el-input v-model="form.password" show-password></el-input>
           </el-form-item>
           <el-form-item>
@@ -46,6 +47,15 @@ export default {
   },
   data() {
     return {
+      rules: {
+        email: [
+          { required: true, message: 'Введите свой E-mail', trigger: 'blur' },
+          { type: 'email', message: 'Должен быть валидный email', trigger: 'blur' }
+        ],
+        password: [
+          { required: true, message: 'Введите пароль', trigger: 'blur' },
+        ],
+      },
       intervalid: '',
       newWin: null,
       form: {
@@ -56,23 +66,23 @@ export default {
     }
   },
   mounted() {
-    console.log(this.showLoginForm)
+    // console.log(this.showLoginForm)
   },
   computed: {
 
   },
   methods: {
-    resetPassword(){
+    resetPassword() {
       this.$router.push('/password/reset')
     },
     async loginVK() {
       console.log('vk')
 
       const $url = await this.$store.dispatch('user/loginVK')
-      console.log($url)
-      console.log(window.location.pathname)
-      console.log(this.$route.query.page)
-      console.log(location.href)
+      // console.log($url)
+      // console.log(window.location.pathname)
+      // console.log(this.$route.query.page)
+      // console.log(location.href)
       window.location = $url
       // window.location = $url + '&redirect_uri=' + location.href
       // this.newWin = window.open($url, "hello", "width=200,height=200");
@@ -87,7 +97,7 @@ export default {
       // newWin.addEventListener('beforeunload', this.test)
       // newWin.addEventListener('resultCloseParent', this.test)
     },
-    register(){
+    register() {
       // console.log(this.showLoginForm)
 
       //this.$emit(true)
@@ -99,14 +109,18 @@ export default {
       console.log('close!!!!!!!!!!!')
     },
     login() {
-      this.$store.dispatch('user/login', this.form)
-        .then(() => {
-          this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
-          this.loading = false
-        })
-        .catch(() => {
-          this.loading = false
-        })
+      this.$refs['loginForm'].validate((valid) => {
+        if (valid) {
+          this.$store.dispatch('user/login', this.form)
+            .then(() => {
+              this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
+              this.loading = false
+            })
+            .catch(() => {
+              this.loading = false
+            })
+        }
+      })
     }
   }
 }

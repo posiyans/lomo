@@ -65,6 +65,7 @@ $myRoutesForAll = [
     'article',
     'camera',
     'rate',
+    'info',
     'receipt'
 ];
 $myRoutesForAdmin = [

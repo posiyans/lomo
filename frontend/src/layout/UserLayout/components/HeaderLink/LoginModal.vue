@@ -2,7 +2,7 @@
   <div class="header">
   <el-button type="text" icon="el-icon-star-on" @click="showLoginForm = !showLoginForm">Войти</el-button>
   <el-dialog
-  title="Войти на сайт "
+  title="Войти на сайт"
   :fullscreen="device == 'mobile' ? true : false"
   :visible.sync="showLoginForm"
   width="600px"
@@ -12,17 +12,18 @@
     </div>
     <div class="login-form">
       <el-form
-        ref="form"
+        ref="loginForm"
         :model="form"
         label-width="80px"
         :label-position="label_position"
+        :rules="rules"
         size="mini"
       >
-        <el-form-item label="E-mail">
+        <el-form-item label="E-mail" prop="email">
           <div class="reset-password" @click="resetPassword" >Забыли пароль?</div>
           <el-input v-model="form.email"></el-input>
         </el-form-item>
-        <el-form-item label="Пароль">
+        <el-form-item label="Пароль" prop="password">
           <el-input v-model="form.password" show-password></el-input>
         </el-form-item>
         <el-form-item>
@@ -51,6 +52,15 @@
     },
     data() {
       return {
+        rules: {
+          email: [
+            { required: true, message: 'Введите свой E-mail', trigger: 'blur' },
+            { type: 'email', message: 'Должен быть валидный email', trigger: 'blur' }
+          ],
+          password: [
+            { required: true, message: 'Введите пароль', trigger: 'blur' },
+          ],
+        },
         form: {
           email: '',
           password: '',
@@ -122,14 +132,18 @@
         this.$router.push('/password/reset')
       },
       login() {
-        this.$store.dispatch('user/login', this.form)
-          .then(() => {
-            this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
-            this.showLoginForm = false
-          })
-          .catch(() => {
-            this.loading = false
-          })
+        this.$refs['loginForm'].validate((valid) => {
+          if (valid) {
+            this.$store.dispatch('user/login', this.form)
+              .then(() => {
+                this.$router.push({path: this.redirect || '/', query: this.otherQuery})
+                this.showLoginForm = false
+              })
+              .catch(() => {
+                this.loading = false
+              })
+          }
+        })
       }
     }
   }
@@ -151,10 +165,10 @@
     padding: 0;
   }
 
-  .login-form >>> .el-form-item {
-    margin-bottom: 6px;
+  /*.login-form >>> .el-form-item {*/
+  /*  margin-bottom: 6px;*/
 
-  }
+  /*}*/
   /*.login-form {*/
   /*  position: static;*/
   /*}*/

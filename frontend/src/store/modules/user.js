@@ -54,6 +54,14 @@ const actions = {
     const { email, password, remember } = userInfo
     return new Promise((resolve, reject) => {
       login({ email: email.trim(), password: password.trim(), remember: remember }).then(response => {
+        console.log(response)
+        if (response.status === 422) {
+          Message({
+            message: 'Неверный пароль или E-mail!',
+            type: 'error',
+            duration: 15 * 1000
+          })
+        }
         store.dispatch('user/getInfo')
         // const { data } = response
         // commit('SET_TOKEN', data.token)

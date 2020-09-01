@@ -89,10 +89,13 @@ service.interceptors.response.use(
     }
   },
   error => {
-    if (error.response.status === 401){
+    if (error.response.status === 401) {
       store.dispatch('user/resetToken').then(() => {
         location.href = '/login'
       })
+    }
+    if (error.response.status === 422) {
+      return error.response
     }
     Message({
       message: error.message,
