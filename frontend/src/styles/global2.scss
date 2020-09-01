@@ -47,8 +47,22 @@ body {
   font-size: 18px;
   padding-left: 10px;
   color: #1b3958;
-  text-align: start;
+  //text-align: start;
+  float: left;
 }
+@media screen and (max-width: 480px) {
+  .header.logo {
+    padding-left: 1px;
+  }
+}
+.header.login {
+  font-size: 18px;
+  margin-right: 20px;
+  color: #1b3958;
+  //text-align: start;
+  float: right;
+}
+
 .leftimg {
   float:left; /* Выравнивание по левому краю */
   margin: 7px 20px 20px 0; /* Отступы вокруг картинки */

@@ -2,23 +2,22 @@
   <el-container id="main-container">
     <el-container>
       <el-header style="text-align: right; font-size: 12px">
-        <el-row
-          align="left"
-          type="flex"
-          justify="space-between"
-          class="layout-header"
+        <hamburger v-if="mobile" :is-active="open_sidebar" class="hamburger-container" @toggleClick="toggleSideBar" />
+        <div
+          class="header logo"
         >
-          <el-col :md="6"  :xs="12">
-            <hamburger v-if="mobile" :is-active="open_sidebar" class="hamburger-container" @toggleClick="toggleSideBar" />
-            <div class="header logo">
-              {{site_name}}
-              <TemperWidget/>
-            </div>
-          </el-col>
-          <el-col :md="6" :xs="12">
-            <HeaderLink/>
-          </el-col>
-        </el-row>
+          {{site_name}}
+        </div>
+        <div
+          class="header logo"
+        >
+          <TemperWidget/>
+        </div>
+        <div
+          class="header login"
+        >
+          <HeaderLink/>
+        </div>
       </el-header>
       <el-row v-if="open_sidebar || !mobile" >
         <el-col :span="24">
@@ -202,6 +201,11 @@ export default {
   &:hover {
      background: rgba(0, 0, 0, .005)
    }
+  }
+  @media screen and (max-width: 480px) {
+    .hamburger-container {
+      margin-right: 5px;
+    }
   }
 
 </style>
