@@ -170,6 +170,7 @@ export default {
     width: 90%;
   }
   .article-preview-body {
+    overflow-x: auto;
     text-indent: 1.5em; /* Отступ первой строки */
     text-align: justify; /* Выравнивание по ширине */
   }
