@@ -1,8 +1,8 @@
 <template>
   <div class="ps-card">
     <el-card>
-      <div class="article-preview-header">
-        <h2>Сбросить пароль</h2>
+      <div class="resume-article-preview-header">
+        <h2 >Сбросить пароль</h2>
       </div>
       <div class="article-preview-body" >
         <span>Для восстановления пароля введите email использованный при регистрации</span>
@@ -12,14 +12,14 @@
             ref="Resetform"
             :model="form"
             label-width="70px"
-            label-position="left"
+            :label-position="mobile ? 'top' : 'left'"
             :rules="loginRules"
           >
             <el-form-item label="E-mail" prop="email">
               <el-input
                 v-model="form.email"
-                tabindex="1"
                 ref="email"
+                style="width: 300px;"
               ></el-input>
             </el-form-item>
 
@@ -36,6 +36,7 @@
 
 <script>
   import { passwordReset } from '@/api/user/user.js'
+  import {mapState} from "vuex";
   export default {
     data() {
       const validateEmail = (rule, value, callback) => {
@@ -55,6 +56,14 @@
           email: [{ required: true, trigger: 'blur', validator: validateEmail }],
         },
 
+      }
+    },
+    computed: {
+      mobile() {
+        if (this.$store.state.app.device === 'mobile') {
+          return true
+        }
+        return false
       }
     },
     methods:{

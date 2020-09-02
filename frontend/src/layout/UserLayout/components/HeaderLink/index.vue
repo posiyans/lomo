@@ -2,10 +2,10 @@
   <div>
     <el-row v-if="roleGuest" >
       <el-col :span="11">
-          <LoginModal></LoginModal>
+          <LoginModal/>
       </el-col>
       <el-col :span="12" :offset="1">
-        <RegisterModal></RegisterModal>
+        <RegisterModal/>
       </el-col>
     </el-row>
     <el-row v-else justify="end">

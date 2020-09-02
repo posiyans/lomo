@@ -1,6 +1,6 @@
 <template>
-  <div class="header">
-  <el-button type="text" icon="el-icon-star-on" @click="showLoginForm = !showLoginForm">Войти</el-button>
+  <div class="header mr4-ns">
+  <el-button type="text" @click="showLoginForm = !showLoginForm">Войти</el-button>
   <el-dialog
   title="Войти на сайт"
   :fullscreen="device == 'mobile' ? true : false"
