@@ -58,7 +58,10 @@ class LaratrustSeeder extends Seeder
         'moderator' => 'Модератор',
         'proprietor' => 'Собственник',
         'gardening' => 'Член садоводства',
-        'user' => 'Подтвержденный пользователь'
+        'user' => 'Подтвержденный пользователь',
+        'bookkeeper'=> 'Бухгалтер'
+
+
     ];
 
     protected $permissions = [
@@ -78,7 +81,8 @@ class LaratrustSeeder extends Seeder
         'show-users' => 'Просмотр пользователей',
         'edit-rate' => 'Правка тарифов',
         'edit-menu' => 'Редактирование меню',
-
+        'bookkeeper' => 'Бухгалтер',
+        'reestr-edit' => 'Редактирование начислений'
 
 
 

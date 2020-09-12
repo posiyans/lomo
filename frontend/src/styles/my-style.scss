@@ -1,0 +1,23 @@
+.do-not-carry {
+  overflow-wrap: normal;
+  word-wrap: normal;
+  word-break: normal;
+  line-break: auto;
+  hyphens: manual;
+}
+
+
+.text-red {
+  color: #800000;
+}
+
+.text-green {
+  color: #008000;
+}
+
+//дополнения для element
+@media only screen and (max-width: 990px) {
+  .el-message-box {
+    width: 320px;
+  }
+}

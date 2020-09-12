@@ -1,0 +1,232 @@
+<template>
+  <div class="app-container">
+    <div class="ma2"><b>Баланс</b></div>
+    <div class="filter-container">
+      <el-input v-model="listQuery.find" placeholder="Поиск по номеру участка" clearable style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-select v-model="listQuery.category" placeholder="Долги" clearable class="filter-item" style="width: 130px" @change="changeCategory">
+        <el-option v-for="item in categoryArray" :key="item.key" :label="item.value" :value="item.key" />
+      </el-select>
+      <el-select v-model="listQuery.payment" placeholder="Последний платеж" clearable class="filter-item" style="width: 200px" @change="changePayment">
+        <el-option v-for="item in statusArray" :key="item.key" :label="item.value" :value="item.key" />
+      </el-select>
+      <el-input v-if="listQuery.payment" v-model="listQuery.month" type="number" placeholder="n месяцев" clearable style="width: 90px;" class="filter-item" @keyup.enter.native="changePayment" />
+      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+        Показать
+      </el-button>
+      <el-button v-waves class="filter-item" type="danger" icon="el-icon-plus" @click="addReestr">
+        Добавить выписку
+      </el-button>
+    </div>
+    <el-table v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
+      <el-table-column label="Номер участка" align="center" width="125px">
+        <template slot-scope="{row}">
+            <span>{{ row.number}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="Размер, кв.м." align="center" width="120px">
+        <template slot-scope="{row}">
+          <span>{{ row.size}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="Баланс" width="100px">
+        <template slot-scope="{row}">
+          <span :class="row.balans | balansFilter">{{ row.balans}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="Взносы" width="100px">
+        <template slot-scope="{row}">
+          <span :class="row.balans_2 | balansFilter">{{ row.balans_2}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="Электричество" width="150px">
+        <template slot-scope="{row}">
+          <span :class="row.balans_1 | balansFilter">{{ row.balans_1}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="Последний платеж">
+        <template slot-scope="{row}">
+          <span v-if="row.last_payment">
+            {{row.last_payment.payment_date}}<br>
+            <i>{{row.last_payment.discription}}</i><br>
+            {{row.last_payment.price}} руб.
+          </span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="Actions" width="180px">
+        <template slot-scope="scope">
+          <router-link :to="'/bookkeping/billing_balance_stead/'+scope.row.id">
+            <el-button type="primary" size="small" icon="el-icon-edit">
+              Подробнее
+            </el-button>
+          </router-link>
+        </template>
+      </el-table-column>
+    </el-table>
+    <LoadMore :key="key" :list-query="listQuery" :func="func" @setList="setList"/>
+  </div>
+</template>
+
+<script>
+import { fetchBillingBalansList } from '@/api/admin/billing'
+import waves from '@/directive/waves'
+import LoadMore from '@/components/LoadMore'
+
+export default {
+  name: 'ArticleList',
+  components: { LoadMore },
+  directives: { waves },
+  filters: {
+    balansFilter(val) {
+      if (val < 0) {
+        return 'text-red'
+      }
+      if (val > 0) {
+        return 'text-green'
+      }
+    },
+    categoryFilter(val) {
+      if (val) {
+        return val
+      }
+      return 'Укажете категорию'
+    },
+    statusFilter(status) {
+      return status ? 'success' : 'info'
+    },
+
+    publicFilter(status) {
+      return status === 1 ? 'Опубликовано' : 'Черновик'
+    },
+    commentFilter(status) {
+      return status === 1 ? 'Разрешены' : 'Отключены'
+    }
+  },
+  data() {
+    return {
+      list: null,
+      total: 0,
+      func: fetchBillingBalansList,
+      categoryArray: [
+        {
+          key: 1,
+          value: 'Без долгов'
+        },
+        {
+          key: 2,
+          value: 'С долгами'
+        },
+        {
+          key: 3,
+          value: 'Долги по взносам'
+        },
+        {
+          key: 4,
+          value: 'Долги по электроэнергии'
+        }
+
+      ],
+      statusArray: [
+        {
+          key: 1,
+          value: 'Последняя оплата < n месяцев назад'
+        },
+        {
+          key: 2,
+          value: 'Последняя оплата > n месяца назад'
+        }
+      ],
+      listLoading: true,
+      key: 0,
+      listQuery: {
+        page: 1,
+        limit: 50,
+        find: null,
+        payment: null,
+        category: null,
+        month: 1
+      }
+    }
+  },
+  computed: {
+    mobile() {
+      if (this.$store.state.app.device === 'mobile') {
+        return true
+      }
+      return false
+    }
+  },
+  mounted() {
+    this.handleFilter()
+  },
+  methods: {
+    setList(val) {
+      this.list = val
+      this.listLoading = false
+    },
+    // add() {
+    //   this.listQuery.page += 1
+    //   fetchBillingBalansList(this.listQuery).then(response => {
+    //     if (response.data.data) {
+    //       const data = response.data.data
+    //       data.forEach(item => {
+    //         this.list.push(item)
+    //       })
+    //     }
+    //   })
+    // },
+    addReestr() {
+      this.$router.push('/bookkeping/billing_bank_reestr_upload')
+    },
+    // categoryTitle(id) {
+    //   let label = false
+    //   this.categoryArray.forEach(i => {
+    //     if (i.id === id) {
+    //       label = i.label
+    //     }
+    //   })
+    //   return label
+    // },
+    // getCategoryList() {
+    //   const listQuery = {
+    //     children: false
+    //   }
+    //   fetchCategoryList(listQuery).then(response => {
+    //     this.categoryArray = response.data
+    //   })
+    // },
+    // getList() {
+    //   this.key++
+    // },
+    changePayment() {
+      this.listQuery.page = 1
+      this.listQuery.find = null
+      this.key++
+      this.listLoading = true
+    },
+    changeCategory() {
+      this.listQuery.page = 1
+      this.listQuery.find = null
+      this.key++
+
+      this.listLoading = true
+    },
+    handleFilter() {
+      this.listQuery.page = 1
+      this.key++
+      // this.getList()
+      this.listLoading = true
+    }
+  }
+}
+</script>
+
+<style scoped>
+  /*.edit-input {*/
+  /*  padding-right: 100px;*/
+  /*}*/
+  /*.cancel-btn {*/
+  /*  position: absolute;*/
+  /*  right: 15px;*/
+  /*  top: 10px;*/
+  /*}*/
+</style>

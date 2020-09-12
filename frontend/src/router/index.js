@@ -480,6 +480,83 @@ export const asyncRoutes = [
     ]
   },
   {
+    path: '/bookkeping',
+    component: Layout,
+    redirect: '/bookkeping/billing_reestr',
+    meta: {
+      title: 'Бухгалтерия',
+      icon: 'documentation',
+      roles: ['edit-rate']
+    },
+    children: [
+      {
+        path: 'billing_reestr_create',
+        component: () => import('@/views/admin/bookkeeping/BillingReestr/BillingReestrList/create'),
+        name: 'BillingReestrCreate',
+        hidden: true
+
+      },
+      {
+        path: 'billing_reestr_edit/:id(\\d+)',
+        component: () => import('@/views/admin/bookkeeping/BillingReestr/BillingReestrList/edit'),
+        name: 'BillingReestrCreate',
+        hidden: true
+
+      },
+      {
+        path: 'billing_reestr',
+        component: () => import('@/views/admin/bookkeeping/BillingReestr/BillingReestrList/index'),
+        name: 'BillingReestrList',
+        meta: {
+          title: 'Начисления',
+          icon: 'documentation',
+          affix: true,
+        }
+      },
+
+      {
+        path: 'billing_balance',
+        component: () => import('@/views/admin/bookkeeping/BillingBalans/BillingBalansList/index'),
+        name: 'BillingBalansLists',
+        meta: {
+          title: 'Баланс',
+          icon: 'documentation',
+          affix: true,
+        }
+      },
+      {
+        path: 'billing_balance_stead/:id(\\d+)',
+        component: () => import('@/views/admin/bookkeeping/BillingBalans/BillingBalansStead/index'),
+        name: 'BillingBalansStead',
+        hidden: true
+      },
+      {
+        path: 'billing_bank_reestr_upload',
+        component: () => import('@/views/admin/bookkeeping/BillingBank/BillingBankReestr/create'),
+        meta: {
+          title: 'Выписки',
+          icon: 'documentation',
+          affix: true,
+        }
+      },
+      {
+        path: 'billing_bank_reestr/:id(\\d+)',
+        component: () => import('@/views/admin/bookkeeping/BillingBank/BillingBankReestr/edit'),
+        hidden: true
+      },
+      // {
+      //   path: 'contributions',
+      //   component: () => import('@/views/admin/receipts/contributions/index'),
+      //   name: 'AdminReceipts',
+      //   meta: {
+      //     title: 'Взносы',
+      //     icon: 'documentation',
+      //     affix: true,
+      //   }
+      // }
+    ]
+  },
+  {
     path: '/permissions',
     component: Layout,
     children: [

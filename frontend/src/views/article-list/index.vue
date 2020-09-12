@@ -33,7 +33,6 @@ export default {
   },
   computed: {
     loadMore() {
-
       if (this.total > this.list.length){
         return 'Загрузить еще'
       }

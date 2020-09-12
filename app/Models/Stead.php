@@ -1,6 +1,8 @@
 <?php
 namespace App\Models;
 
+use App\Models\Billing\BillingInvoice;
+use App\Models\Billing\BillingPayment;
 use App\MyModel;
 use App\Models\InstrumentReadings;
 use App\User;
@@ -148,4 +150,77 @@ class Stead extends MyModel
             }
         return false;
     }
+
+
+    public function Invoices()
+    {
+        return $this->hasMany(BillingInvoice::class, 'stead_id', 'id');
+    }
+
+    public function InvoicesContributions()
+    {
+        return $this->hasMany(BillingInvoice::class, 'stead_id', 'id')->where('type', 2);
+    }
+
+    public function InvoicesCommunal()
+    {
+        return $this->hasMany(BillingInvoice::class, 'stead_id', 'id')->where('type', 1);
+    }
+
+    public function Payment()
+    {
+        return $this->hasMany(BillingPayment::class, 'stead_id', 'id');
+    }
+
+    public function lastPayment()
+    {
+        return $this->hasOne(BillingPayment::class, 'stead_id', 'id')->orderBy('payment_date', 'DESC');
+    }
+
+
+    public function PaymentContributions()
+    {
+        return $this->hasMany(BillingPayment::class, 'stead_id', 'id')->where('type', 2);
+    }
+
+    public function PaymentCommunal()
+    {
+        return $this->hasMany(BillingPayment::class, 'stead_id', 'id')->where('type', 1);
+    }
+
+
+    public function getBalans($type = false)
+    {
+        $balans = 0;
+        if ($type == 1 ){
+            foreach ($this->invoicesCommunal as $invoice) {
+                $balans -= $invoice->price;
+            }
+            foreach ($this->paymentCommunal as $invoice) {
+                $balans += $invoice->price;
+            }
+        } else if ($type == 2) {
+            foreach ($this->invoicesContributions as $invoice) {
+                $balans -= $invoice->price;
+            }
+            foreach ($this->paymentContributions as $invoice) {
+                $balans += $invoice->price;
+            }
+        } else {
+            foreach ($this->invoices as $invoice) {
+                $balans -= $invoice->price;
+            }
+            foreach ($this->payment as $invoice) {
+                $balans += $invoice->price;
+            }
+        }
+        return $balans;
+    }
+
+
+//    public function lastPayment()
+//    {
+//        return $this->hasMany(BillingInvoice::class, 'stead_id', 'id');
+//    }
+
 }

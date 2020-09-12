@@ -1,40 +1,86 @@
 <template>
-  <div v-if="loadMore" style="width: 100%;">
-    <el-button type="warning" plain @click="add" style="width: 100%;">
-    {{ loadMore }}
-    </el-button>
+  <div>
+    <div v-loading="listLoading" v-if="loadMore" style="width: 100%; margin-top: 5px;"><el-button type="info" plain @click="add" style="width: 100%;">{{ loadMore }}</el-button></div>
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
   </div>
 </template>
 
 <script>
+import Pagination from '@/components/Pagination'
 export default {
-  props:{
-    length:{
-      type: Number,
-      default: 0
-    },
-    total: {
-      type: Number,
-      default: 0
-    }
+  props: {
+    listQuery: { type: Object },
+    func: { type: Function },
+  },
+  components: {
+    Pagination
   },
   data() {
     return {
+      total: 0,
+      offset: 0,
+      list: [],
+      showCount: 0,
+      listLoading: false
     }
   },
   computed: {
     loadMore() {
-
-      if (this.total > this.length){
+      if (this.total > this.showCount) {
         return 'Загрузить еще'
       }
       return false
-    }
+    },
   },
-  methods:{
-    add(){
-      this.$emit('download')
+  mounted() {
+    this.getList()
+  },
+  methods: {
+    getList() {
+      this.listLoading = true
+      this.func(this.listQuery)
+        .then(response => {
+          if (response.data.total) {
+            this.total = response.data.total
+          }
+          if (response.data.meta.total) {
+            this.total = response.data.meta.total
+          }
+          if (response.data.offset) {
+            this.offset = response.data.offset
+          }
+          this.list = response.data.data
+          this.listLoading = false
+          this.showCount = this.listQuery.page * this.listQuery.limit
+          this.$emit('setList', this.list)
+          this.$emit('setOffset', this.offset)
+        })
+    },
+    add() {
+      this.listQuery.page += 1
+      this.listLoading = true
+      this.func(this.listQuery)
+        .then(response => {
+          if (response.data.total) {
+            this.total = response.data.total
+          }
+          if (response.data.meta.total) {
+            this.total = response.data.meta.total
+          }
+          // this.list = []
+          setTimeout(() => {
+            this.listLoading = false
+            response.data.data.forEach(val => {
+              this.list.push(val)
+              this.showCount++
+            })
+          }, 500)
+          this.$emit('setList', this.list)
+        })
     },
   }
 }
 </script>
+
+<style scoped>
+</style>
