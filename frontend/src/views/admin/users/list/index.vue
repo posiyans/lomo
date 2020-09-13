@@ -34,8 +34,9 @@
             :title="row.consent_personal ? '' : 'Нет согласия на обработку персональных данных'"
             @click="handleShow(row)"
           >
-            {{ row | fullNameFilter }}
+            {{ row | fullNameFilter }}<br>
           </span>
+          <span v-if="row.last_connect">{{row.last_connect | moment('from')}}</span>
         </template>
       </el-table-column>
       <el-table-column v-if="mobile || !mobile" label="Участок" align="center">
