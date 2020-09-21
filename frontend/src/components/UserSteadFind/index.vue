@@ -28,7 +28,7 @@ import { getSteadsList } from '@/api/user/stead.js'
 export default {
   props: {
     userStead: {
-      type: String,
+      type: [String, Number],
       default: ''
     }
   },

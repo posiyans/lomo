@@ -9,6 +9,14 @@ use App\MyModel;
 class InstrumentReadings extends MyModel
 {
     //
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'stead_id', 'payment_id', 'device_id'
+    ];
 
     public function MeteringDevice()
     {

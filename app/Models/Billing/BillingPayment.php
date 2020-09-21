@@ -2,6 +2,8 @@
 
 namespace App\Models\Billing;
 
+use App\Models\InstrumentReadings;
+use App\Models\Stead;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,6 +15,19 @@ class BillingPayment extends Model
         'history' => 'array',
         'price'=> 'float',
     ];
+
+    public function stead()
+    {
+        return $this->hasOne(Stead::class, 'id', 'stead_id');
+    }
+
+    public function steadNumber()
+    {
+        if ($this->stead) {
+            return $this->stead->number;
+        }
+        return '';
+    }
 
     /**
      * добавить историю и сохранить
@@ -106,5 +121,48 @@ class BillingPayment extends Model
         }
         $invoices  = $query->orderBy('created_at')->get();
         return $invoices;
+    }
+
+
+    /**
+     * установить показания счетчиков по этому платежу
+     */
+    public function setMeterReading()
+    {
+        if (isset($this->raw_data['meterReading1']) && !empty($this->raw_data['meterReading1']) && is_numeric($this->raw_data['meterReading1'])) {
+            $meter = InstrumentReadings::firstOrNew([
+//                'stead_id' => $this->stead_id,
+                'payment_id' => $this->id,
+                'device_id' =>  1
+            ]);
+            $meter->stead_id = $this->stead_id;
+            $meter->value = $this->raw_data['meterReading1'];
+            $meter->created_at = $this->payment_date;
+            $meter->save();
+        }
+        if (isset($this->raw_data['meterReading2']) && !empty($this->raw_data['meterReading2']) && is_numeric($this->raw_data['meterReading2'])) {
+            $meter = InstrumentReadings::firstOrNew([
+//                'stead_id' => $this->stead_id,
+                'payment_id' => $this->id,
+                'device_id' => 2
+            ]);
+            $meter->stead_id = $this->stead_id;
+            $meter->value = $this->raw_data['meterReading2'];
+            $meter->created_at = $this->payment_date;
+            $meter->save();
+        }
+    }
+
+    /**
+     *удалить показания счетчиков по этомк платежу
+     */
+    public function deleteMeterReading()
+    {
+       $items = InstrumentReadings::query()->where(['payment_id' => $this->id])->get();
+       if ($items) {
+           foreach ($items as $item) {
+               $item->delete();
+           }
+       }
     }
 }

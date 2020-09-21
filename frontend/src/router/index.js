@@ -531,6 +531,11 @@ export const asyncRoutes = [
         hidden: true
       },
       {
+        path: 'payment_info/:id(\\d+)',
+        component: () => import('@/views/admin/bookkeeping/BillingPayment/PaymentInfo/index'),
+        hidden: true
+      },
+      {
         path: 'billing_bank_reestr_upload',
         component: () => import('@/views/admin/bookkeeping/BillingBank/BillingBankReestr/create'),
         meta: {
