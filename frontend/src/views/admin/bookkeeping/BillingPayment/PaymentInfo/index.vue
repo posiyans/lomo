@@ -48,7 +48,7 @@
       @save="setMeterReading"
       @close="closeMetering"
     />
-  </div>
+   </div>
 </template>
 
 <script>

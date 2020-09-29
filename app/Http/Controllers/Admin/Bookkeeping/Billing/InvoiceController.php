@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers\Admin\Bookkeeping\Billing;
 
+use App\Http\Resources\Admin\Bookkeeping\AdminInvoiceResource;
 use App\Http\Resources\Admin\Bookkeeping\AdminPaymentResource;
+use App\Models\Billing\BillingInvoice;
 use App\Models\Billing\BillingPayment;
 use App\Models\Billing\BillingReestr;
-use App\Models\Stead;
 use App\Permission;
 use App\Role;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Auth;;
 
-class PaymentController extends Controller
+class InvoiceController extends Controller
 {
 
 
@@ -31,20 +32,16 @@ class PaymentController extends Controller
      */
     public function index(Request $request)
     {
-        $query = BillingPayment::query();
-        if ($request->find) {
-            $query->where('price', 'like', "%$request->find%");
-            $steads = Stead::query()->where('number', 'like', "%$request->find%")->get(['id']);
-            $query->orWhereIn('stead_id', $steads);
-        }
-        if ($request->date && is_array($request->date)) {
-            $query->whereBetween('payment_date', [$request->date[0],  $request->date[1].' 23:59:59']);
-        }
+        return 'index';
+//        $query = BillingReestr::query();
+//        if ($request->find) {
+//            $query->where('title', 'like', "%$request->find%");
+//        }
 //        if ($request->type) {
 //            $query->where('type', $request->type);
 //        }
-        $items = $query->orderBy('payment_date', 'desc')->paginate($request->limit);
-        return AdminPaymentResource::collection($items);
+//        $article = $query->orderBy('created_at', 'desc')->paginate($request->limit);
+//        return ['status'=>true, 'data'=>$article, 'total'=>$article->total()];
     }
 
     /**
@@ -66,20 +63,6 @@ class PaymentController extends Controller
     public function store(Request $request)
     {
         return 'store';
-//        if (isset($request->title) && !empty($request->title)) {
-//            $ratio_a = (isset($request->ratio_a) && !empty($request->ratio_a)) ? $request->ratio_a : false;
-//            $ratio_b = (isset($request->ratio_b) && !empty($request->ratio_b)) ? $request->ratio_b : false;
-//            if ($ratio_a || $ratio_b) {
-//                $user_id = Auth::user()->id;
-//                $reestr = BillingReestr::createСontributions($user_id, $request->title, $ratio_a,  $ratio_b);
-//                if ($reestr) {
-//                    return ['status'=>true, 'data'=>$reestr];
-//                }
-//                //todo нужно поставить симафор!!!!
-//                return ['status'=>false, 'data'=>'Ошибка при сохранении'];
-//            }
-//        }
-//        return ['status'=>false, 'data'=>'Нет данных'];
     }
 
     /**
@@ -90,8 +73,8 @@ class PaymentController extends Controller
      */
     public function show($id)
     {
-        $data= BillingPayment::find($id);
-        return new AdminPaymentResource($data);
+        $data= BillingInvoice::find($id);
+        return new AdminInvoiceResource($data);
 //        return json_encode(['status'=>true, 'data'=>$data]);
     }
 
@@ -115,15 +98,15 @@ class PaymentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $payment = BillingPayment::find($id);
-        $payment->stead_id = $request->stead_id;
-        $payment->payment_type = $request->payment_type;
-        $payment->raw_data = $request->raw_data;
-        if ($payment->save()) {
-            $payment->setMeterReading();
-            return json_encode(['status'=>true, 'data'=>$payment]);
-        }
-        return json_encode(['status'=>false]);
+//        $payment = BillingPayment::find($id);
+//        $payment->stead_id = $request->stead_id;
+//        $payment->payment_type = $request->payment_type;
+//        $payment->raw_data = $request->raw_data;
+//        if ($payment->save()) {
+//            $payment->setMeterReading();
+//            return json_encode(['status'=>true, 'data'=>$payment]);
+//        }
+//        return json_encode(['status'=>false]);
 
     }
 

@@ -20,41 +20,7 @@
         Добавить
       </el-button>
     </div>
-
-    <el-table v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
-      <el-table-column align="center" label="ID" width="80">
-        <template slot-scope="{ row }">
-          <el-tag :type="row.public | statusFilter">
-            {{ row.id }}
-          </el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column min-width="300px" label="Заголовок">
-        <template slot-scope="{row}">
-            <span>{{ row.title }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" label="На 1 сотку">
-        <template slot-scope="{row}">
-          <span>{{ row.ratio_a }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column  align="center" label="На 1 Участок">
-        <template slot-scope="{row}">
-          <span>{{ row.ratio_b}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" label="Actions" width="120">
-        <template slot-scope="scope">
-          <router-link :to="'/bookkeping/billing_reestr_edit/'+scope.row.id">
-            <el-button type="primary" size="small" icon="el-icon-edit">
-              Edit
-            </el-button>
-          </router-link>
-        </template>
-      </el-table-column>
-    </el-table>
-
+    <component :is="componentName" :list="list"/>
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
   </div>
 </template>
@@ -65,11 +31,13 @@ import { fetchBillingReestrList } from '@/api/admin/billing'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import { fetchCategoryList } from '@/api/category'
 import waves from '@/directive/waves'
-import {mapState} from "vuex"; // waves directive
+import {mapState} from "vuex";
+import Mobile from './View/Table/Mobile'
+import Desktop from './View/Table/Desktop'
 
 export default {
   name: 'ArticleList',
-  components: { Pagination },
+  components: { Pagination, Mobile, Desktop  },
   directives: { waves },
   filters: {
     categoryFilter(val) {
@@ -121,6 +89,12 @@ export default {
         return true
       }
       return false
+    },
+    componentName() {
+      if (this.mobile) {
+        return Mobile
+      }
+      return Desktop
     }
   },
   mounted() {
@@ -145,7 +119,7 @@ export default {
       fetchBillingReestrList(this.listQuery).then(response => {
         this.listLoading = false
         this.list = response.data.data.data
-        // this.total = response.data.meta.total
+        this.total = response.data.total
       })
     },
     handleFilter() {

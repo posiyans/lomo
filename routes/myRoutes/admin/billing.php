@@ -7,6 +7,8 @@ Route::resource('billing/reestr', 'Admin\Bookkeeping\Billing\ReestrController')
 
 Route::resource('billing/payment', 'Admin\Bookkeeping\Billing\PaymentController')
     ->only(['index', 'show', 'update', 'store']);
+Route::resource('billing/invoice', 'Admin\Bookkeeping\Billing\InvoiceController')
+    ->only(['index', 'show', 'update', 'store']);
 
 Route::post('billing/bank-reestr/upload', 'Admin\Bookkeeping\Billing\BankReestrController@uploadReestr');
 Route::get('billing/bank-reestr-info', 'Admin\Bookkeeping\Billing\BankReestrController@info');

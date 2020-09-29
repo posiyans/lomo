@@ -64,11 +64,9 @@
       </el-table-column>
       <el-table-column align="center" label="Actions" >
         <template slot-scope="{row}">
-          <router-link :to="'/bookkeping/payment_info/'+row.data.id">
-            <el-button type="primary" size="small" icon="el-icon-edit">
-              Подробнее
-            </el-button>
-          </router-link>
+          <el-button type="primary" size="small" icon="el-icon-edit" @click="showMore(row)">
+            Подробнее
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -204,6 +202,14 @@ export default {
     this.getData()
   },
   methods: {
+    showMore(row) {
+      if (row.type === 'payment') {
+        this.$router.push('/bookkeping/payment_info/' + row.data.id)
+      }
+      if (row.type === 'invoice') {
+        this.$router.push('/bookkeping/invoice_info/' + row.data.id)
+      }
+    },
     savePaymenInfo() {
       this.dialogPaymentInfoVisible = false
       updatePaymentInfo(this.rowShow.id, this.rowShow)

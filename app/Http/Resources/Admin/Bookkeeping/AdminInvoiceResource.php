@@ -4,7 +4,7 @@ namespace App\Http\Resources\Admin\Bookkeeping;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AdminPaymentResource extends JsonResource
+class AdminInvoiceResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,6 +16,7 @@ class AdminPaymentResource extends JsonResource
     {
         $data = parent::toArray($request);
         $data['stead_number'] = $this->steadNumber();
-        return $data;
+        $data['metersData'] = $this->metersData;
+        return ['status'=>true, 'data'=>$data];
     }
 }

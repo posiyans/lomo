@@ -49,7 +49,10 @@ export default {
           if (response.data.offset) {
             this.offset = response.data.offset
           }
-          this.list = response.data.data
+          // if (response.data.status) {
+            this.list = response.data.data
+          // }
+
           this.listLoading = false
           this.showCount = this.listQuery.page * this.listQuery.limit
           this.$emit('setList', this.list)

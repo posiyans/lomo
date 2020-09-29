@@ -2,11 +2,23 @@
 
 namespace App\Models\Billing;
 
+use App\Models\InstrumentReadings;
 use App\Models\Stead;
 use Illuminate\Database\Eloquent\Model;
 
 class BillingInvoice extends Model
 {
+
+
+    /**
+     * получить участок счета
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function metersData()
+    {
+        return $this->hasMany(InstrumentReadings::class, 'invoice_id', 'id');
+    }
 
     /**
      * получить участок счета
@@ -17,7 +29,14 @@ class BillingInvoice extends Model
     {
         return $this->hasOne(Stead::class, 'id', 'stead_id');
     }
-    //
+
+    public function steadNumber()
+    {
+        if ($this->stead) {
+            return $this->stead->number;
+        }
+        return '';
+    }
     /**
      * создать счет для участка
      *

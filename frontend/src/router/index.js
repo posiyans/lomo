@@ -531,8 +531,22 @@ export const asyncRoutes = [
         hidden: true
       },
       {
+        path: 'payment_list',
+        component: () => import('@/views/admin/bookkeeping/BillingPayment/PaymentList/index'),
+        meta: {
+          title: 'Платежи',
+          icon: 'documentation',
+          affix: true,
+        }
+      },
+      {
         path: 'payment_info/:id(\\d+)',
         component: () => import('@/views/admin/bookkeeping/BillingPayment/PaymentInfo/index'),
+        hidden: true
+      },
+      {
+        path: 'invoice_info/:id(\\d+)',
+        component: () => import('@/views/admin/bookkeeping/BillingInvoice/InvoiceInfo/index'),
         hidden: true
       },
       {
