@@ -17,9 +17,9 @@
         <span>{{ row.ratio_a }}</span>
       </template>
     </el-table-column>
-    <el-table-column  align="center" label="На 1 Участок">
+    <el-table-column align="center" label="На 1 Участок">
       <template slot-scope="{row}">
-        <span>{{ row.ratio_b}}</span>
+        <span>{{ row.ratio_b }}</span>
       </template>
     </el-table-column>
     <el-table-column align="center" label="Actions" width="120">
@@ -55,7 +55,10 @@ export default {
     }
   },
   props: {
-    list: {}
+    list: {
+      type: Array,
+      default: () => { [] }
+    }
   }
 }
 </script>

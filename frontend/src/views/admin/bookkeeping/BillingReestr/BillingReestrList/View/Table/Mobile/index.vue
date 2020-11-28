@@ -7,7 +7,7 @@
     </el-table-column>
     <el-table-column align="center" label="сотка/участок">
       <template slot-scope="{row}">
-        <span>{{ row.ratio_a }}</span>/<span>{{ row.ratio_b}}</span>
+        <span>{{ row.ratio_a }}</span>/<span>{{ row.ratio_b }}</span>
       </template>
     </el-table-column>
     <el-table-column align="center" label="Actions">
@@ -43,7 +43,10 @@ export default {
     }
   },
   props: {
-    list: {}
+    list: {
+      type: Array,
+      default: () => { [] }
+    }
   }
 }
 </script>

@@ -5,7 +5,7 @@ Vue.use(Router)
 
 /* Layout */
 import Layout from '@/layout'
-import AdminLayout from '@/layout'
+// import AdminLayout from '@/layout'
 import UserLayout from '@/layout/UserLayout'
 
 /* Router Modules */
@@ -464,7 +464,7 @@ export const asyncRoutes = [
         meta: {
           title: 'Электроэнергия',
           icon: 'documentation',
-          affix: true,
+          affix: true
         }
       },
       {
@@ -474,7 +474,7 @@ export const asyncRoutes = [
         meta: {
           title: 'Взносы',
           icon: 'documentation',
-          affix: true,
+          affix: true
         }
       }
     ]
@@ -510,7 +510,7 @@ export const asyncRoutes = [
         meta: {
           title: 'Начисления',
           icon: 'documentation',
-          affix: true,
+          affix: true
         }
       },
 
@@ -521,7 +521,7 @@ export const asyncRoutes = [
         meta: {
           title: 'Баланс',
           icon: 'documentation',
-          affix: true,
+          affix: true
         }
       },
       {
@@ -536,7 +536,7 @@ export const asyncRoutes = [
         meta: {
           title: 'Платежи',
           icon: 'documentation',
-          affix: true,
+          affix: true
         }
       },
       {
@@ -555,14 +555,14 @@ export const asyncRoutes = [
         meta: {
           title: 'Выписки',
           icon: 'documentation',
-          affix: true,
+          affix: true
         }
       },
       {
         path: 'billing_bank_reestr/:id(\\d+)',
         component: () => import('@/views/admin/bookkeeping/BillingBank/BillingBankReestr/edit'),
         hidden: true
-      },
+      }
       // {
       //   path: 'contributions',
       //   component: () => import('@/views/admin/receipts/contributions/index'),

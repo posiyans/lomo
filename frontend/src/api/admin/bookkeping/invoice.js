@@ -7,7 +7,6 @@ export function fetchInvoiceInfo(id) {
   })
 }
 
-
 // export function updatePaymentInfo(id, data) {
 //   return request({
 //     url: '/api/v1/admin/billing/payment/' + id,

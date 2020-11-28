@@ -11,8 +11,8 @@
         format="dd-MM-yyyy"
         value-format="yyyy-MM-dd"
         start-placeholder="с даты"
-        end-placeholder="по дату">
-      </el-date-picker>
+        end-placeholder="по дату"
+      />
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         Показать
       </el-button>
@@ -20,17 +20,15 @@
         Export
       </el-button>
     </div>
-    <component :is="componentName" :list="list"/>
-    <LoadMore :key="key" :list-query="listQuery" :func="func" @setList="setList"/>
+    <component :is="componentName" :list="list" />
+    <LoadMore :key="key" :list-query="listQuery" :func="func" @setList="setList" />
   </div>
 
 </template>
 
 <script>
 import { fetchPaymentList } from '@/api/admin/bookkeping/payment'
-import MeterReading from '@/components/MeterReading'
-import UserSteadFind from '@/components/UserSteadFind'
-import {parseTime} from "@/utils";
+import { parseTime } from '@/utils'
 import waves from '@/directive/waves'
 import LoadMore from '@/components/LoadMore'
 import Desktop from './Table/Desktop'
@@ -49,7 +47,7 @@ export default {
         return 'dark'
       }
       return 'plain'
-    },
+    }
   },
   components: {
     LoadMore,
@@ -64,11 +62,11 @@ export default {
         page: 1,
         limit: 20,
         find: '',
-        date: [],
+        date: []
       },
       list: [],
       func: fetchPaymentList,
-      payment: {},
+      payment: {}
 
     }
   },
@@ -175,7 +173,7 @@ export default {
           return v[j]
         }
       }))
-    },
+    }
   }
 }
 </script>

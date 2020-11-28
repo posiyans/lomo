@@ -20,24 +20,22 @@
         Добавить
       </el-button>
     </div>
-    <component :is="componentName" :list="list"/>
+    <component :is="componentName" :list="list" />
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
   </div>
 </template>
 
 <script>
-import { fetchAdminArticleList } from '@/api/article'
 import { fetchBillingReestrList } from '@/api/admin/billing'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
-import { fetchCategoryList } from '@/api/category'
 import waves from '@/directive/waves'
-import {mapState} from "vuex";
+import { mapState } from 'vuex'
 import Mobile from './View/Table/Mobile'
 import Desktop from './View/Table/Desktop'
 
 export default {
   name: 'ArticleList',
-  components: { Pagination, Mobile, Desktop  },
+  components: { Pagination, Mobile, Desktop },
   directives: { waves },
   filters: {
     categoryFilter(val) {

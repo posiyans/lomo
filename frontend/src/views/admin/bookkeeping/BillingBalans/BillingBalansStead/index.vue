@@ -1,172 +1,169 @@
 <template>
   <div class="app-container">
-    <div class="ma2" :class="{'text-red': stead.balans < 0}"><b>Счета и платежи по участку № {{stead.number}} размер {{stead.size}} кв.м.</b></div>
-    <div class="ma2" :class="{'text-red': stead.balans < 0}">Баланс:  <b>{{stead.balans}} руб.</b></div>
-<div class="billing-balans-stead">
-    <el-table
-      v-loading="listLoading"
-      :data="list"
-      border
-      fit
-      highlight-current-row
-      style="width: 100%"
-      :row-class-name="tableRowClassName"
-      :summary-method="getSummaries"
-      show-summary
-    >
-      <el-table-column label="Дата" width="100px">
-        <template slot-scope="{row}">
-          <div v-if="row.type == 'invoice'">
-            <span>{{ row.data.created_at | moment('DD-MM-YYYY')}}</span>
+    <div class="ma2" :class="{'text-red': stead.balans < 0}"><b>Счета и платежи по участку № {{ stead.number }} размер {{ stead.size }} кв.м.</b></div>
+    <div class="ma2" :class="{'text-red': stead.balans < 0}">Баланс:  <b>{{ stead.balans }} руб.</b></div>
+    <div class="billing-balans-stead">
+      <el-table
+        v-loading="listLoading"
+        :data="list"
+        border
+        fit
+        highlight-current-row
+        style="width: 100%"
+        :row-class-name="tableRowClassName"
+        :summary-method="getSummaries"
+        show-summary
+      >
+        <el-table-column label="Дата" width="100px">
+          <template slot-scope="{row}">
+            <div v-if="row.type == 'invoice'">
+              <span>{{ row.data.created_at | moment('DD-MM-YYYY') }}</span>
+            </div>
+            <div v-if="row.type == 'payment'">
+              <span>{{ row.data.payment_date | moment('DD-MM-YYYY') }}</span>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" label="Название">
+          <template slot-scope="{ row }">
+            <div v-if="row.type == 'invoice'">
+              Счет: {{ row.data.title }}
+            </div>
+            <div v-if="row.type == 'payment'">
+              Оплата: {{ row.data.discription }}
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column label="Дебет" width="100px" prop="invoice" align="center">
+          <template slot-scope="{row}">
+            <div v-if="row.type == 'invoice'">
+              <span>{{ row.data.price }}</span>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column label="Кредит" width="100px" prop="payment" align="center">
+          <template slot-scope="{row}">
+            <div v-if="row.type == 'payment'">
+              <span>{{ row.data.price }}</span>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column label="Взносы" width="100px" prop="payment2" align="center">
+          <template slot-scope="{row}">
+            <div v-if="row.type == 'payment' && row.data.type == 2">
+              <span>{{ row.data.price }}</span>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column label="Элект-во" prop="payment1" width="100px" align="center">
+          <template slot-scope="{row}">
+            <div v-if="row.type == 'payment' && row.data.type == 1">
+              <span>{{ row.data.price }}</span>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" label="Actions">
+          <template slot-scope="{row}">
+            <el-button type="primary" size="small" icon="el-icon-edit" @click="showMore(row)">
+              Подробнее
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-dialog title="Детали платежа" :visible.sync="dialogPaymentInfoVisible">
+        <div v-if="rowShow.data">
+          <div>
+            Дата оплаты: {{ rowShow.data.payment_date }}
           </div>
-          <div v-if="row.type == 'payment'">
-            <span>{{ row.data.payment_date | moment('DD-MM-YYYY')}}</span>
+          <div>
+            Назначение платежа: {{ rowShow.data.discription }}
           </div>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" label="Название">
-        <template slot-scope="{ row }">
-          <div v-if="row.type == 'invoice'">
-            Счет: {{ row.data.title }}
+          <div>
+            ФИО: {{ rowShow.data.raw_data.val6 }}
           </div>
-          <div v-if="row.type == 'payment'">
-            Оплата: {{ row.data.discription }}
+          <div>
+            Сумма: {{ rowShow.data.price }} руб.
           </div>
-        </template>
-      </el-table-column>
-      <el-table-column label="Дебет" width="100px" prop="invoice" align="center">
-        <template slot-scope="{row}">
-          <div v-if="row.type == 'invoice'">
-            <span>{{ row.data.price}}</span>
+          <div>
+            Оплата:
+            <el-tag type="danger" :effect="rowShow.data.type | type1EffectFilter" @click="selectElect()">
+              <i v-if="rowShow.data.type == 1" class="el-icon-check" />
+              Электоэнергия
+            </el-tag>
+            <el-tag type="success" :effect="rowShow.data.type | type2EffectFilter" @click="rowShow.data.type = 2">
+              <i v-if="rowShow.data.type == 2" class="el-icon-check" />
+              Взносы
+            </el-tag>
+            <div v-if="rowShow.data.type == 1">
+              <div v-if="rowShow.data.meterReading1" class="text-red mt2 mb2">
+                Показания день: <b>{{ rowShow.data.meterReading1 }}</b> кв*ч
+              </div>
+              <div v-if="rowShow.data.meterReading2" class="text-green mt2 mb2">
+                Показания ночь: <b>{{ rowShow.data.meterReading2 }}</b> кв*ч
+              </div>
+            </div>
           </div>
-        </template>
-      </el-table-column>
-      <el-table-column label="Кредит" width="100px" prop="payment" align="center">
-        <template slot-scope="{row}">
-          <div v-if="row.type == 'payment'">
-            <span>{{ row.data.price }}</span>
+          <div>
+            Участок:
           </div>
-        </template>
-      </el-table-column>
-      <el-table-column label="Взносы" width="100px" prop="payment2" align="center">
-        <template slot-scope="{row}">
-          <div v-if="row.type == 'payment' && row.data.type == 2">
-            <span>{{ row.data.price }}</span>
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column label="Элект-во" prop="payment1" width="100px" align="center">
-        <template slot-scope="{row}">
-          <div v-if="row.type == 'payment' && row.data.type == 1">
-            <span>{{ row.data.price }}</span>
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" label="Actions" >
-        <template slot-scope="{row}">
-          <el-button type="primary" size="small" icon="el-icon-edit" @click="showMore(row)">
-            Подробнее
-          </el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-  <el-dialog title="Детали платежа" :visible.sync="dialogPaymentInfoVisible">
-    <div v-if="rowShow.data">
-      <div>
-        Дата оплаты: {{rowShow.data.payment_date}}
-      </div>
-      <div>
-        Назначение платежа: {{rowShow.data.discription}}
-      </div>
-      <div>
-        ФИО: {{rowShow.data.raw_data.val6}}
-      </div>
-      <div>
-        Сумма: {{rowShow.data.price}} руб.
-      </div>
-      <div>
-      Оплата:
-        <el-tag type="danger" :effect="rowShow.data.type | type1EffectFilter" @click="selectElect()">
-          <i v-if="rowShow.data.type == 1" class="el-icon-check"></i>
-          Электоэнергия
-        </el-tag>
-        <el-tag type="success" :effect="rowShow.data.type | type2EffectFilter" @click="rowShow.data.type = 2">
-          <i v-if="rowShow.data.type == 2" class="el-icon-check"></i>
-          Взносы
-        </el-tag>
-        <div v-if="rowShow.data.type == 1">
-          <div v-if="rowShow.data.meterReading1" class="text-red mt2 mb2">
-            Показания день: <b>{{rowShow.data.meterReading1}}</b> кв*ч
-          </div>
-          <div v-if="rowShow.data.meterReading2" class="text-green mt2 mb2">
-            Показания ночь: <b>{{rowShow.data.meterReading2}}</b> кв*ч
-          </div>
+          {{ rowShow }}
         </div>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="dialogPaymentInfoVisible = false">Закрыть</el-button>
+          <el-button type="primary" @click="savePaymenInfo">Сохранить</el-button>
+        </span>
+      </el-dialog>
+      <div v-if="dialogMeterReadingFormVisible">
+        <el-dialog title="Уточнить участок" :visible.sync="dialogMeterReadingFormVisible">
+          <div class="mb2">{{ rowShow.data.discription }}</div>
+          <el-form label-position="top">
+            <el-form-item label="Показания день">
+              <el-input
+                v-model="rowShow.data.meterReading1"
+                placeholder="Показания день"
+                prefix-icon="el-icon-search"
+              />
+            </el-form-item>
+            <el-form-item label="Показания ночь">
+              <el-input
+                v-model="rowShow.data.meterReading2"
+                placeholder="Показания ночь"
+                prefix-icon="el-icon-search"
+              />
+            </el-form-item>
+          </el-form>
+          <span slot="footer" class="dialog-footer">
+            <el-button type="primary" @click="dialogMeterReadingFormVisible = false">Ок</el-button>
+          </span>
+        </el-dialog>
       </div>
-      <div>
-        Участок:
-      </div>
-      {{rowShow}}
     </div>
-    <span slot="footer" class="dialog-footer">
-      <el-button @click="dialogPaymentInfoVisible = false">Закрыть</el-button>
-      <el-button type="primary" @click="savePaymenInfo">Сохранить</el-button>
-    </span>
-  </el-dialog>
-  <div v-if="dialogMeterReadingFormVisible">
-    <el-dialog title="Уточнить участок" :visible.sync="dialogMeterReadingFormVisible">
-      <div class="mb2">{{rowShow.data.discription}}</div>
-      <el-form label-position="top">
-        <el-form-item label="Показания день">
-          <el-input
-            placeholder="Показания день"
-            prefix-icon="el-icon-search"
-            v-model="rowShow.data.meterReading1">
-          </el-input>
-        </el-form-item>
-        <el-form-item label="Показания ночь">
-          <el-input
-            placeholder="Показания ночь"
-            prefix-icon="el-icon-search"
-            v-model="rowShow.data.meterReading2">
-          </el-input>
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="dialogMeterReadingFormVisible = false">Ок</el-button>
-       </span>
-    </el-dialog>
-  </div>
-</div>
-<!--    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />-->
+    <!--    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />-->
   </div>
 </template>
 
 <script>
-import { fetchAdminArticleList } from '@/api/article'
 import { fetchBillingBalansSteadInfo } from '@/api/admin/billing'
 import { updatePaymentInfo } from '@/api/admin/bookkeping/payment'
-import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
-import { fetchCategoryList } from '@/api/category'
+// import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import waves from '@/directive/waves'
-import {mapState} from "vuex"; // waves directive
 
 export default {
-  components: { Pagination },
+  // components: { Pagination },
   directives: { waves },
   filters: {
-    type1EffectFilter(val){
+    type1EffectFilter(val) {
       if (val === 1) {
         return 'dark'
       }
       return 'plain'
     },
-    type2EffectFilter(val){
+    type2EffectFilter(val) {
       if (val === 2) {
         return 'dark'
       }
       return 'plain'
-    },
+    }
   },
   props: {
   },
@@ -274,7 +271,7 @@ export default {
         this.list = response.data.data.invoices
         this.listLoading = false
       })
-    },
+    }
   }
 }
 </script>

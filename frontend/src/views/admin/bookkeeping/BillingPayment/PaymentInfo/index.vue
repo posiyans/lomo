@@ -2,32 +2,32 @@
   <div v-if="load" class="app-container">
     Детали платежа № {{ id }} от {{ payment.payment_date | moment('DD-MM-YYYY') }}
     <div>
-      Дата оплаты: {{payment.payment_date}}
+      Дата оплаты: {{ payment.payment_date }}
     </div>
     <div>
-      Назначение платежа: {{payment.discription}}
+      Назначение платежа: {{ payment.discription }}
     </div>
     <div>
-      ФИО: {{payment.raw_data.val6}}
+      ФИО: {{ payment.raw_data.val6 }}
     </div>
     <div>
-      Участок: <el-button size="mini" type="warning" plain @click="showChangeStead">{{payment.stead_number}}</el-button> ({{payment.raw_data.val5}})
+      Участок: <el-button size="mini" type="warning" plain @click="showChangeStead">{{ payment.stead_number }}</el-button> ({{ payment.raw_data.val5 }})
       <div v-if="changeSteadVizible">
-        <UserSteadFind :userStead="payment.stead_id" @selectStead="setNewStead"/>
+        <UserSteadFind :user-stead="payment.stead_id" @selectStead="setNewStead" />
         <el-button type="success" size="mini" @click="changeStead">Ок</el-button>
       </div>
     </div>
     <div>
-      Сумма: {{payment.price}} руб.
+      Сумма: {{ payment.price }} руб.
     </div>
     <div>
       Оплата:
       <el-tag type="danger" :effect="payment.type | type1EffectFilter" @click="selectElect()">
-        <i v-if="payment.type == 1" class="el-icon-check"></i>
+        <i v-if="payment.type == 1" class="el-icon-check" />
         Электоэнергия
       </el-tag>
       <el-tag type="success" :effect="payment.type | type2EffectFilter" @click="payment.type = 2">
-        <i v-if="payment.type == 2" class="el-icon-check"></i>
+        <i v-if="payment.type == 2" class="el-icon-check" />
         Взносы
       </el-tag>
       <div v-if="payment.type == 1">
@@ -40,7 +40,7 @@
       </div>
       <el-button type="success" @click="savePayment">Сохранить</el-button>
     </div>
-      <MeterReading
+    <MeterReading
       v-if="dialogMeterReadingFormVisible"
       :meter-reading1="payment.raw_data.meterReading1"
       :meter-reading2="payment.raw_data.meterReading2"
@@ -48,7 +48,7 @@
       @save="setMeterReading"
       @close="closeMetering"
     />
-   </div>
+  </div>
 </template>
 
 <script>
@@ -69,7 +69,7 @@ export default {
         return 'dark'
       }
       return 'plain'
-    },
+    }
   },
   components: {
     MeterReading,

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-loading="listLoading" v-if="loadMore" style="width: 100%; margin-top: 5px;"><el-button type="info" plain @click="add" style="width: 100%;">{{ loadMore }}</el-button></div>
+    <div v-if="loadMore" v-loading="listLoading" style="width: 100%; margin-top: 5px;"><el-button type="info" plain style="width: 100%;" @click="add">{{ loadMore }}</el-button></div>
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
   </div>
 </template>
@@ -8,12 +8,18 @@
 <script>
 import Pagination from '@/components/Pagination'
 export default {
-  props: {
-    listQuery: { type: Object },
-    func: { type: Function },
-  },
   components: {
     Pagination
+  },
+  props: {
+    listQuery: {
+      type: Object,
+      default: () => {}
+    },
+    func: {
+      type: Function,
+      default: () => {}
+    }
   },
   data() {
     return {
@@ -30,7 +36,7 @@ export default {
         return 'Загрузить еще'
       }
       return false
-    },
+    }
   },
   mounted() {
     this.getList()
@@ -50,7 +56,7 @@ export default {
             this.offset = response.data.offset
           }
           // if (response.data.status) {
-            this.list = response.data.data
+          this.list = response.data.data
           // }
 
           this.listLoading = false
@@ -80,7 +86,7 @@ export default {
           }, 500)
           this.$emit('setList', this.list)
         })
-    },
+    }
   }
 }
 </script>

@@ -2,26 +2,26 @@
   <div v-if="load" class="app-container">
     Детали счета № {{ id }} от {{ invoice.created_at | moment('DD-MM-YYYY') }}
     <div>
-      Счет на: {{invoice.title}}
+      Счет на: {{ invoice.title }}
     </div>
     <div>
-      Участок: <el-button size="mini" type="warning" plain @click="showSteadBalans">{{invoice.stead_number}}</el-button>
+      Участок: <el-button size="mini" type="warning" plain @click="showSteadBalans">{{ invoice.stead_number }}</el-button>
     </div>
     <div>
-      Сумма: {{invoice.price}} руб.
+      Сумма: {{ invoice.price }} руб.
     </div>
     <div>
       Оплата:
       <el-tag type="danger" :effect="invoice.type | type1EffectFilter">
-        <i v-if="invoice.type == 1" class="el-icon-check"></i>
+        <i v-if="invoice.type == 1" class="el-icon-check" />
         Электоэнергия
       </el-tag>
       <el-tag type="success" :effect="invoice.type | type2EffectFilter">
-        <i v-if="invoice.type == 2" class="el-icon-check"></i>
+        <i v-if="invoice.type == 2" class="el-icon-check" />
         Взносы
       </el-tag>
     </div>
-   </div>
+  </div>
 </template>
 
 <script>
@@ -40,7 +40,7 @@ export default {
         return 'dark'
       }
       return 'plain'
-    },
+    }
   },
   components: {
   },
@@ -48,7 +48,7 @@ export default {
     return {
       id: null,
       load: false,
-      invoice: {},
+      invoice: {}
     }
   },
   created() {
@@ -67,7 +67,7 @@ export default {
           this.load = true
         }
       })
-    },
+    }
   }
 }
 </script>

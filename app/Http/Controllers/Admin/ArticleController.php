@@ -17,7 +17,7 @@ class ArticleController extends Controller
 
 
     /**
-     * проверка на суперадмин или на доступ а админ панель
+     * проверка на суперадмин или на доступ в админ панель
      */
     public function __construct()
     {
@@ -63,7 +63,7 @@ class ArticleController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Создание новой статьи
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -128,7 +128,7 @@ class ArticleController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Обновление статьи
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id

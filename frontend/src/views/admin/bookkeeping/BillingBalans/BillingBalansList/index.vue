@@ -17,8 +17,8 @@
         Добавить выписку
       </el-button>
     </div>
-    <component :is="componentName" :list="list" :listLoading="listLoading"/>
-    <LoadMore :key="key" :list-query="listQuery" :func="func" @setList="setList"/>
+    <component :is="componentName" :list="list" :list-loading="listLoading" />
+    <LoadMore :key="key" :list-query="listQuery" :func="func" @setList="setList" />
   </div>
 </template>
 
@@ -31,7 +31,7 @@ import Desktop from './View/Table/Desktop'
 
 export default {
   name: 'ArticleList',
-  components: { LoadMore, Mobile, Desktop  },
+  components: { LoadMore, Mobile, Desktop },
   directives: { waves },
   filters: {
     balansFilter(val) {
