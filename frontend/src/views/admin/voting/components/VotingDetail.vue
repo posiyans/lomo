@@ -3,7 +3,7 @@
     <el-form ref="postForm" v-loading="loadingForm" :model="postForm" :rules="rules" class="form-container">
       <div class="pt1 createPost-main-container" style="padding-top: 0; padding-bottom: 0">
         <div style="display: inline-block;">
-          <TypeDropdown v-model="postForm.type"/>
+          <TypeDropdown v-model="postForm.type" />
         </div>
         <div style="display: inline-block;">
           <el-button v-loading="loading" type="warning" @click="draftForm">
@@ -24,19 +24,29 @@
             <div class="postInfo-container">
               <el-row v-if="postForm.type === 'owner'">
                 <el-col :span="8" justify="start">
-                  <el-form-item label-width="150px"  label="Время публикации:" class="postInfo-container-item">
-                    <el-date-picker v-model="publishTime" type="datetime" :clearable="false" :picker-options="datePickerOptions" :firstDayOfWeek="2" format="HH:mm dd-MM-yyyy" placeholder="Выберите дату и время" />
+                  <el-form-item label-width="170px"  label="Время публикации:" class="postInfo-container-item" prop="date_publish">
+                    <el-date-picker
+                      v-model="postForm.date_publish"
+                      type="datetime"
+                      :clearable="false"
+                      :picker-options="datePickerOptions"
+                      :firstDayOfWeek="1"
+                      value-format="yyyy-MM-dd HH:mm:ss"
+                      format="HH:mm dd-MM-yyyy"
+                      placeholder="Выберите дату и время"
+                    />
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label-width="160px"  label="Голосование с :" class="postInfo-container-item" required prop="dateStart">
+                  <el-form-item label-width="160px"  label="Голосование с :" class="postInfo-container-item" required prop="dateRange">
                     <el-date-picker
-                      v-model="dataRange"
+                      v-model="postForm.dateRange"
                       type="daterange"
                       range-separator="по"
-                      :firstDayOfWeek="2"
+                      :firstDayOfWeek="1"
                       :picker-options="rangePickerOptions"
                       format="dd-MM-yyyy"
+                      value-format="yyyy-MM-dd"
                       placeholder="Выберите дату и время"
                     />
                   </el-form-item>
@@ -72,7 +82,7 @@
             <el-input v-model="question.text " :rows="1" show-word-limit maxlength="250" type="textarea" class="article-textarea" autosize placeholder="Введите текс вопроса голосования" />
           </el-form-item>
 
-          <el-form-item v-for="(answer, j) in question.answers" style="margin-bottom: 40px;" label-width="100px" :label="`Ответ № ${j+1}`">
+          <el-form-item v-for="(answer, j) in question.answers" :key="answer" style="margin-bottom: 40px;" label-width="100px" :label="`Ответ № ${j+1}`">
             <el-input v-model="answer.text " :rows="1" show-word-limit maxlength="250" type="textarea" class="article-textarea" autosize placeholder="Введите текс ответа" />
           </el-form-item>
           <el-button type="primary" icon="el-icon-circle-plus" class="answer-button" @click="addAnswer(i)">Добавить ответ</el-button>
@@ -113,11 +123,15 @@ const defaultForm = {
       text: '',
       answers: [
         {
-          text: ''
+          text: 'За'
         },
         {
-          text: ''
-        }]
+          text: 'Против'
+        },
+        {
+          text: 'Воздержался'
+        }
+      ]
     }
   ]
 }
@@ -132,7 +146,7 @@ export default {
     }
   },
   data() {
-    var vm = this;
+    var vm = this
     const validateRequire = (rule, value, callback) => {
       if (value === '') {
         this.$message({
@@ -160,9 +174,11 @@ export default {
         // title: [{ validator: validateRequire }],
         title: [{ required: true, message: 'Введите тему голосования' }],
         text: [{ validator: validateRequire }],
-        dateStart: [{ required: true, message: 'Необходимо установить период голосования!' }],
+        // dateStart: [{ required: true, message: 'Необходимо установить период голосования!' }],
+        dateRange: [{ required: true, message: 'Необходимо установить период голосования!' }],
+        date_publish: [{ required: true, message: 'Необходимо установить время публикации' }],
       },
-      datePickerOptions:  {
+      datePickerOptions: {
         disabledDate(time) {
           return time.getTime() < Date.now()
         }
@@ -185,30 +201,30 @@ export default {
       return this.postForm.type
     },
     dataRange: {
-      set(val){
+      set(val) {
         this.postForm.date_start = this.$moment(val[0]).format('YYYY-MM-DD HH:mm:ss')
         this.postForm.date_stop = this.$moment(val[1]).format('YYYY-MM-DD HH:mm:ss')
       },
-      get(){
+      get() {
         return [this.$moment(this.postForm.date_start), this.$moment(this.postForm.date_stop)]
       }
     },
-    typeTitle(){
+    typeTitle() {
       // return this.options.indexOf('')
       return this.options[this.postForm.type]
     },
     contentShortLength() {
       return this.postForm.resume.length
     },
-    publishTime: {
-      get() {
-        return this.$moment(this.postForm.date_publish)
-      },
-      set(val) {
-        this.dataRange = ['','']
-        this.postForm.date_publish = this.$moment(val).format('YYYY-MM-DD HH:mm:ss')
-      }
-    }
+    // publishTime: {
+    //   get() {
+    //     return this.$moment(this.postForm.date_publish)
+    //   },
+    //   set(val) {
+    //     this.dataRange = ['','']
+    //     this.postForm.date_publish = this.$moment(val).format('YYYY-MM-DD HH:mm:ss')
+    //   }
+    // }
   },
   created() {
     this.postForm.uid = this.create_UUID()
@@ -221,11 +237,11 @@ export default {
     }
   },
   methods: {
-    addQuestion(){
-      this.postForm.questions.push({text: '', answers: [{text: ''},{text: ''}]})
+    addQuestion() {
+      this.postForm.questions.push({ text: '', answers: [{ text: 'За' }, { text: 'Против' }, { text: 'Воздержался' }] })
     },
     disabledDate(time) {
-      return time.getTime() > Date.now();
+      return time.getTime() > Date.now()
     },
     addAnswer(question) {
       // if (this.answerCount.length > 5){
@@ -236,20 +252,23 @@ export default {
       //     duration: 2000
       //   })
       // }
-      this.postForm.questions[question].answers.push({text: ''})
+      this.postForm.questions[question].answers.push({ text: '' })
     },
-    create_UUID(){
+    create_UUID() {
       var dt = new Date().getTime()
       var uuid = 'xxxxxxxx-xxxx-voting-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = (dt + Math.random()*16)%16 | 0
-        dt = Math.floor(dt/16)
-        return (c == 'x' ? r : (r&0x3 | 0x8)).toString(16)
+        var r = (dt + Math.random() * 16) % 16 | 0
+        dt = Math.floor(dt / 16)
+        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16)
       })
       return uuid
     },
     fetchData(id) {
       fetchAdminVoting(id).then(response => {
         this.postForm = response.data.data
+        if (this.postForm.type === 'owner') {
+          this.postForm.dateRange = [this.postForm.date_start, this.postForm.date_stop]
+        }
         // set page title
         this.setPageTitle()
         this.loadingForm = false
@@ -267,12 +286,14 @@ export default {
       // this.saveForm()
     },
     saveForm() {
-      // console.log('this.postForm')
-      // console.log(this.postForm)
       this.$refs.postForm.validate(valid => {
         if (valid) {
           this.loading = true
           this.postForm.public = true
+          if (Array.isArray(this.postForm.dateRange)) {
+            this.postForm.date_start = this.postForm.dateRange[0]
+            this.postForm.date_stop = this.postForm.dateRange[1]
+          }
           // console.log('this.postForm')
           // console.log(this.postForm)
           // this.postForm.display_time = this.$moment(this.datetime).format('YYYY-MM-DD HH:mm:ss')
@@ -281,9 +302,9 @@ export default {
             updateVoting({ voting: this.postForm }, id)
               .then(response => {
                 this.postForm = response.data.data
-                // this.postForm.allow_comments = Boolean(response.data.allow_comments)
-                // this.datetime = this.$moment(this.postForm.publish_time)
-                // console.log(response.data)
+                if (this.postForm.type === 'owner') {
+                  this.postForm.dateRange = [this.postForm.date_start, this.postForm.date_stop]
+                }
               })
           } else {
             createVoting({ voting: this.postForm })

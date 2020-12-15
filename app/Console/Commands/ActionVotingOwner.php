@@ -11,7 +11,7 @@ use Illuminate\Console\Command;
 class ActionVotingOwner extends Command
 {
     /**
-     * The name and signature of the console command.
+     * Имя и подпись консольной команды.
      *
      * @var string
      */
@@ -60,7 +60,7 @@ class ActionVotingOwner extends Command
                         $rez->answer_id = $answer->id;
                         $rez->user_id = 1;
                         $rez->stead_id = $stead->id;
-                        //$rez->save();
+                        $rez->save();
                     }
                 } else {
                     echo $stead->number . " воздержался \n";

@@ -74,7 +74,8 @@ $myRoutesForAdmin = [
     'gardening',
     'user',
     'receipt',
-    'billing'
+    'billing',
+    'voting'
 ];
 $myRoutesForUser = [
     'info',

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="listLoading">
+  <div>
     <el-table
       :key="tableKey"
       :data="steads"
@@ -18,85 +18,109 @@
 <!--          <span v-if="listo[row.id]">{{ listo[row.id].user_id }}</span>-->
 <!--        </template>-->
 <!--      </el-table-column>-->
-      <el-table-column v-for="q in questions"  :label="q.text" align="center" :key="q.id">
-        <el-table-column  v-for="a in q.answers" :label="a.text"  align="center" :key="a.id">
+      <el-table-column v-for="(q, qi) in questions"  :label="q.text" align="center">
+        <el-table-column  v-for="(a, ai) in q.answers" :label="a.text"  align="center">
           <template slot-scope="{row}">
             <span v-if="listo[row.id] && listo[row.id][q.id] ==  a.id" style="color: green; font-size: 2em;" ><i class="el-icon-success"></i></span>
           </template>
         </el-table-column>
       </el-table-column>
     </el-table>
+    {{questions}}
+    {{listo}}
+    <LoadMore :key="key" :list-query="listQuery" :func="func" @setList="setList" />
   </div>
 </template>
 
 <script>
-  import { fetchList } from '@/api/stead.js'
-  export default {
-    props:{
-      questions: {
-        type: Array,
-        defaults: []
-      }
-    },
-    data() {
-      return {
-        list: [],
-        listo: {},
-        tableKey: 0,
-        listLoading: false,
-        steads: {},
-        voting: []
-      }
-    },
-    mounted() {
-      this.getSteads()
-    },
-    methods: {
-      getSteads(){
-        const data ={
-          limit: 1000
-        }
-        fetchList(data).then(response => {
-          response.data.data.forEach(item => {
-            this.steads[item.id] = item.number
-          })
-          this.steads = response.data.data
-          this.listLoading = true
-        })
+import { fetchSteadList } from '@/api/stead.js'
+import LoadMore from '@/components/LoadMore'
 
-
-      },
-      getList(){
-        const temp = {}
-        this.questions.forEach(item => {
-          item.answers.forEach(answer => {
-            answer.userAnswers.forEach(user => {
-              if (user.stead_id in temp) {
-                temp[user.stead_id][user.question_id] = user.answer_id
-              } else {
-                temp[user.stead_id] = {[user.question_id]: user.answer_id, user_id: user.user_id}
-              }
-              // const [user.stead_id] = { [user.question_id]: user.answer_id}}
-              // this.list.push(  {[user.stead_id]: { [user.question_id]: user.answer_id}} )
-              // this.list.push({[user.stead_id]: 'trete'})
-            })
-          })
-        })
-        this.listo = temp
-        for(const key in temp) {
-          this.list.push({id: key, quest: temp[key]})
-        }
-        // this.listLoading = true
-        this.tableKey += 1
-      }
-    },
-    watch:{
-      questions(value) {
-        this.getList()
-      }
+export default {
+  props: {
+    questions: {
+      type: Array,
+      defaults: []
     }
-
+  },
+  components: {
+    LoadMore
+  },
+  data() {
+    return {
+      key: 1,
+      func: fetchSteadList,
+      list: [],
+      listo: {},
+      tableKey: 0,
+      listLoading: false,
+      steads: [],
+      voting: [],
+      listQuery: {
+        page: 1,
+        limit: 20
+      },
+    }
+  },
+  mounted() {
+    // this.getSteads()
+  },
+  methods: {
+    setList(val) {
+      this.steads = val
+      // this.listLoading = false
+    },
+    // getSteads() {
+    //   console.log('get stead')
+    //   const data = {
+    //     limit: 1000
+    //   }
+    //   fetchSteadList(this.listQuery).then(response => {
+    //     console.log('getstead')
+    //     console.log(response)
+    //     // response.data.data.forEach(item => {
+    //     //   // this.steads[item.id] = item.number
+    //     // })
+    //     this.steads = response.data.data
+    //     this.listLoading = true
+    //   })
+    //
+    //
+    // },
+    getList() {
+      const temp = {}
+      console.log('getlist')
+      console.log(this.questions)
+      this.questions.forEach(item => {
+        item.answers.forEach(answer => {
+          answer.userAnswers.forEach(user => {
+            if (user.stead_id in temp) {
+              temp[user.stead_id][user.question_id] = user.answer_id
+            } else {
+              temp[user.stead_id] = {[user.question_id]: user.answer_id, user_id: user.user_id}
+            }
+            // const [user.stead_id] = { [user.question_id]: user.answer_id}}
+            // this.list.push(  {[user.stead_id]: { [user.question_id]: user.answer_id}} )
+            // this.list.push({[user.stead_id]: 'trete'})
+          })
+        })
+      })
+      this.listo = temp
+      for(const key in temp) {
+        this.list.push({id: key, quest: temp[key]})
+      }
+      // this.listLoading = true
+      this.tableKey += 1
+    }
+  },
+  watch: {
+    questions(value) {
+      console.log(value)
+     this.getList()
+    }
   }
+
+}
 </script>
 
 <style scoped>

@@ -6,13 +6,15 @@
 </template>
 
 <script>
-import PublicVoting from './result/Public/index.vue'
+import PublicVoting from './Public/index.vue'
+import OwnerVoting from './Owner/index.vue'
 import { fetchAdminVoting } from '@/api/admin/voting/'
 
 export default {
   name: 'AdminVotingResultIndex',
   components: {
     PublicVoting,
+    OwnerVoting
   },
   data() {
     return {
@@ -22,11 +24,10 @@ export default {
   },
   computed: {
     VotingType() {
-      if (this.voting.type === 'public') {
-        return PublicVoting
+      if (this.voting.type === 'owner') {
+        return OwnerVoting
       }
       return PublicVoting
-
     }
   },
   mounted() {

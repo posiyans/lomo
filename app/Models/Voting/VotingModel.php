@@ -106,6 +106,7 @@ class VotingModel extends MyModel
                 }
             }
         }
+        $data = [];
         if ($this->type == 'public') {
             $data = [
                 'id' => $this->id,
@@ -141,6 +142,42 @@ class VotingModel extends MyModel
                 $questions[] = $tmp_quest;
             }
             $data['questions'] = $questions;
+        }
+        if ($this->type == 'owner') {
+            $data = [
+                'id' => $this->id,
+                'title' => $this->title,
+                'description' => $this->description,
+                'type' => $this->type,
+                'comments' => $this->comments,
+                'status' => $status,
+                'files' => $this->files,
+                'questions' => QuestionResource::collection($this->questions),
+                'created_at' => $this->updated_at,
+            ];
+//            $questions = [];
+//            foreach ($this->questions as $question) {
+//                $answers = [];
+//                $myAnswer = $question->checkUserAnswer();
+//                foreach ($question->answers as $answer) {
+//                    $answers[] =  [
+//                        'id'=>$answer->id,
+//                        'text' => $answer->text,
+//                        'isMyAnswer' => $myAnswer ? $myAnswer->answer_id == $answer->id ? true : false : false,
+//                        'userAnswersCount' => count($answer->userAnswers),
+//                    ];
+//                }
+//                $tmp_quest = [
+//                    'id' => $question->id,
+//                    'text' => $question->text,
+//                    'voting_id' => $question->voting_id,
+//                    'answersCount' => $question->allAnswers(),
+//                    'answers' => $answers,
+//                    'myAnswers' => $myAnswer ? $myAnswer->answer_id ? $myAnswer->answer_id : false : false,
+//                ];
+//                $questions[] = $tmp_quest;
+//            }
+//            $data['questions'] = $questions;
         }
         return $data;
 

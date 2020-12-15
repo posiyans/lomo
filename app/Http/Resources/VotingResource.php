@@ -40,19 +40,13 @@ class VotingResource extends JsonResource
             'date_stop'=>$this->date_stop,
             'type'=>$this->type,
             'comments'=>$this->comments,
-//            'comments_list' => CommentResource::collection($this->comments),
             'status'=>$status,
             'public'=>$this->public,
             'files'=>$this->files,
             'countAnswer'=>$this->userAnswer(),
-            'questions'=>QuestionResource::collection($this->questions),
+//            'questions'=>QuestionResource::collection($this->questions),
             'steadsCount'=> Stead::all()->count(),
             'created_at'=>$this->updated_at,
             ];
-//        $this->user->fullName = $this->user->fullName();;
-//        $this->user->fName = $this->user->fName();;
-//        $this->answersrr = QuestionResource::collection($this->questions);
-//        optional($this->questions)->answers();
-//        return parent::toArray($request);
     }
 }

@@ -375,7 +375,7 @@ export const asyncRoutes = [
       },
       {
         path: 'result/:id(\\d+)',
-        component: () => import('@/views/admin/voting/result'),
+        component: () => import('@/views/admin/voting/result/index'),
         name: 'AdminResultVoting',
         meta: {
           title: 'Результаты',

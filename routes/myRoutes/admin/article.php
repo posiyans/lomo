@@ -12,7 +12,7 @@ Route::resource('comment', 'User\CommentController')
     ->only(['store', 'destroy']);
 
 
-Route::resource('voting', 'Admin\AdminVotingController')
-    ->only(['index', 'update', 'store', 'show']);
-Route::resource('voting-result', 'Admin\AdminVotingResultController')
-    ->only(['index', 'update', 'store', 'show']);
+//Route::resource('voting', 'Admin\AdminVotingController')
+//    ->only(['index', 'update', 'store', 'show']);
+//Route::resource('voting-result', 'Admin\AdminVotingResultController')
+//    ->only(['index', 'update', 'store', 'show']);

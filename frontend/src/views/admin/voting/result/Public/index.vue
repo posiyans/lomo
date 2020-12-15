@@ -60,7 +60,7 @@ const Status = selectStatusOptions.reduce((acc, cur) => {
   return acc
 }, {})
 export default {
-  name: 'AdminVotingResult',
+  name: 'AdminPublicVotingResult',
   components: {
     UserAnswer,
   },

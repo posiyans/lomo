@@ -18,7 +18,7 @@
           </div>
 
         </div>
-        <div style="padding-bottom: 5px;">Проголосовало {{ (100*question.answersCount/value.steadsCount).toFixed(2) }}%  ({{ question.answersCount }} участков)</div>
+        <div style="padding-left: 10px; padding-top: 15px;">Проголосовало {{ (100*question.answersCount/value.steadsCount).toFixed(2) }}%  ({{ question.answersCount }} участков)</div>
       </div>
     </div>
   </div>

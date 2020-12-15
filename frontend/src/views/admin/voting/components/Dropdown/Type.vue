@@ -4,13 +4,15 @@
       v-for="item in options"
       :key="item.id"
       :label="item.label"
-      :value="item.id">
+      :value="item.id"
+    >
     </el-option>
   </el-select>
 </template>
 
 <script>
-  import { fetchCategoryList } from '@/api/category'
+import { fetchCategoryList } from '@/api/category'
+
 export default {
   props: {
     value: {
@@ -21,10 +23,10 @@ export default {
   data() {
     return {
       options: [
-        // {
-        //   id: 'owner',
-        //   label: 'Голосование собственников'
-        // },
+        {
+          id: 'owner',
+          label: 'Голосование собственников'
+        },
         {
           id: 'public',
           label: 'Публичное голосование'

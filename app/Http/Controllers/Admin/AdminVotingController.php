@@ -46,7 +46,7 @@ class AdminVotingController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Создать новое голосование
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -54,10 +54,12 @@ class AdminVotingController extends Controller
     public function store(Request $request)
     {
         $data = $request->voting;
+//        dump($data);
         if ($data) {
             $voting = new VotingModel();
             $voting->fill($data);
-            if ($voting->type == 'public'){
+//            dd($voting);
+            if ($voting->type == 'public') {
                 $voting->date_start = '0000-01-01 00:00:00';
                 $voting->date_stop = '9999-01-01 00:00:00';
                 $voting->date_publish = now();
@@ -77,7 +79,7 @@ class AdminVotingController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Получить админом голосование
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
