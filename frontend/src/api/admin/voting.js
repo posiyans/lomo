@@ -31,7 +31,6 @@ export function createVoting(data) {
   })
 }
 
-
 export function fetchVotingResuiltList(query) {
   return request({
     url: '/api/v1/admin/voting-result',
@@ -39,7 +38,6 @@ export function fetchVotingResuiltList(query) {
     params: query
   })
 }
-
 
 export function fetchVotingQuestions(id, query) {
   return request({

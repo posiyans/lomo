@@ -15,18 +15,18 @@
           </el-tag>
         </div>
         <div v-for="(question, i) in questions" :key="question.id">
-          <ResultBlock :question="question" :i="i" :steatCount="voting.steadsCount" />
+          <ResultBlock :question="question" :i="i" :steat-count="voting.steadsCount" />
         </div>
       </el-tab-pane>
       <el-tab-pane label="Участки">
-        <SteadOwnwer :questions="questions" />
+        <SteadResult :questions="questions" />
       </el-tab-pane>
       <el-tab-pane label="Описание">
         <div class="question" v-html="voting.description" />
         <div v-if="voting.files.length > 0" class="question">
           <div class="file-list-header">Файлы:</div>
           <ul>
-            <li v-for="file in voting.files">{{ file.name }}
+            <li v-for="file in voting.files" :key="file.id">{{ file.name }}
               <span class="file-size">{{ file.size | sizeFilter }}</span>
               <el-link :href="file.id | urlFilter " type="success">Скачать</el-link>
             </li>
@@ -40,9 +40,10 @@
 </template>
 
 <script>
-import { fetchVoting, fetchVotingQuestions } from '@/api/admin/voting'
+import { fetchVotingQuestions } from '@/api/admin/voting'
 import waves from '@/directive/waves' // waves directive
-import SteadOwnwer from './SteadOwner.vue' // secondary package based on el-pagination
+// import SteadOwnwer from './SteadOwner.vue' // secondary package based on el-pagination
+import SteadResult from './components/SteadResult' // secondary package based on el-pagination
 import ResultBlock from './components/ResultBlock'
 
 const selectStatusOptions = [
@@ -59,7 +60,7 @@ const Status = selectStatusOptions.reduce((acc, cur) => {
 export default {
   name: 'AdminVotingResult',
   components: {
-    SteadOwnwer,
+    SteadResult,
     ResultBlock
   },
   directives: { waves },
@@ -78,7 +79,7 @@ export default {
     },
     statusFilter(status) {
       return Status[status]
-    },
+    }
   },
   props: {
     value: {
@@ -120,7 +121,7 @@ export default {
         .then(response => {
           this.questions = response.data.data
         })
-    },
+    }
 
   }
 }

@@ -8,26 +8,26 @@
       highlight-current-row
       style="width: 100%;"
     >
-      <el-table-column label="участок"  align="center" width="80">
+      <el-table-column label="участок" align="center" width="80">
         <template slot-scope="{row}">
           <span :class="{red: !listo[row.id], green: listo[row.id]}">{{ row.number }}</span>
         </template>
       </el-table-column>
-<!--      <el-table-column label="Голосовал"  align="center" width="110">-->
-<!--        <template slot-scope="{row}">-->
-<!--          <span v-if="listo[row.id]">{{ listo[row.id].user_id }}</span>-->
-<!--        </template>-->
-<!--      </el-table-column>-->
-      <el-table-column v-for="(q, qi) in questions"  :label="q.text" align="center">
-        <el-table-column  v-for="(a, ai) in q.answers" :label="a.text"  align="center">
+      <!--      <el-table-column label="Голосовал"  align="center" width="110">-->
+      <!--        <template slot-scope="{row}">-->
+      <!--          <span v-if="listo[row.id]">{{ listo[row.id].user_id }}</span>-->
+      <!--        </template>-->
+      <!--      </el-table-column>-->
+      <el-table-column v-for="(q, qi) in questions" :label="q.text" align="center">
+        <el-table-column v-for="(a, ai) in q.answers" :label="a.text" align="center">
           <template slot-scope="{row}">
-            <span v-if="listo[row.id] && listo[row.id][q.id] ==  a.id" style="color: green; font-size: 2em;" ><i class="el-icon-success"></i></span>
+            <span v-if="listo[row.id] && listo[row.id][q.id] == a.id" style="color: green; font-size: 2em;"><i class="el-icon-success" /></span>
           </template>
         </el-table-column>
       </el-table-column>
     </el-table>
-    {{questions}}
-    {{listo}}
+    {{ questions }}
+    {{ listo }}
     <LoadMore :key="key" :list-query="listQuery" :func="func" @setList="setList" />
   </div>
 </template>
@@ -37,14 +37,14 @@ import { fetchSteadList } from '@/api/stead.js'
 import LoadMore from '@/components/LoadMore'
 
 export default {
+  components: {
+    LoadMore
+  },
   props: {
     questions: {
       type: Array,
       defaults: []
     }
-  },
-  components: {
-    LoadMore
   },
   data() {
     return {
@@ -59,7 +59,13 @@ export default {
       listQuery: {
         page: 1,
         limit: 20
-      },
+      }
+    }
+  },
+  watch: {
+    questions(value) {
+      console.log(value)
+      this.getList()
     }
   },
   mounted() {
@@ -97,7 +103,7 @@ export default {
             if (user.stead_id in temp) {
               temp[user.stead_id][user.question_id] = user.answer_id
             } else {
-              temp[user.stead_id] = {[user.question_id]: user.answer_id, user_id: user.user_id}
+              temp[user.stead_id] = { [user.question_id]: user.answer_id, user_id: user.user_id }
             }
             // const [user.stead_id] = { [user.question_id]: user.answer_id}}
             // this.list.push(  {[user.stead_id]: { [user.question_id]: user.answer_id}} )
@@ -106,17 +112,11 @@ export default {
         })
       })
       this.listo = temp
-      for(const key in temp) {
-        this.list.push({id: key, quest: temp[key]})
+      for (const key in temp) {
+        this.list.push({ id: key, quest: temp[key] })
       }
       // this.listLoading = true
       this.tableKey += 1
-    }
-  },
-  watch: {
-    questions(value) {
-      console.log(value)
-     this.getList()
     }
   }
 

@@ -24,13 +24,13 @@
             <div class="postInfo-container">
               <el-row v-if="postForm.type === 'owner'">
                 <el-col :span="8" justify="start">
-                  <el-form-item label-width="170px"  label="Время публикации:" class="postInfo-container-item" prop="date_publish">
+                  <el-form-item label-width="170px" label="Время публикации:" class="postInfo-container-item" prop="date_publish">
                     <el-date-picker
                       v-model="postForm.date_publish"
                       type="datetime"
                       :clearable="false"
                       :picker-options="datePickerOptions"
-                      :firstDayOfWeek="1"
+                      :first-day-of-week="1"
                       value-format="yyyy-MM-dd HH:mm:ss"
                       format="HH:mm dd-MM-yyyy"
                       placeholder="Выберите дату и время"
@@ -38,12 +38,12 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label-width="160px"  label="Голосование с :" class="postInfo-container-item" required prop="dateRange">
+                  <el-form-item label-width="160px" label="Голосование с :" class="postInfo-container-item" required prop="dateRange">
                     <el-date-picker
                       v-model="postForm.dateRange"
                       type="daterange"
                       range-separator="по"
-                      :firstDayOfWeek="1"
+                      :first-day-of-week="1"
                       :picker-options="rangePickerOptions"
                       format="dd-MM-yyyy"
                       value-format="yyyy-MM-dd"
@@ -51,16 +51,16 @@
                     />
                   </el-form-item>
                 </el-col>
-<!--                <el-col :span="8">-->
-<!--                  <el-form-item label-width="160px"  label="Начало голосования:" class="postInfo-container-item">-->
-<!--                    <el-date-picker v-model="displayTime" type="datetime" :firstDayOfWeek="2" format="HH:mm dd-MM-yyyy" placeholder="Выберите дату и время" />-->
-<!--                  </el-form-item>-->
-<!--                </el-col>-->
-<!--                <el-col :span="8">-->
-<!--                  <el-form-item label-width="150px"  label="Конец голосования:" class="postInfo-container-item">-->
-<!--                    <el-date-picker v-model="displayTime" type="datetime" :firstDayOfWeek="2" format="HH:mm dd-MM-yyyy" placeholder="Выберите дату и время" />-->
-<!--                  </el-form-item>-->
-<!--                </el-col>-->
+                <!--                <el-col :span="8">-->
+                <!--                  <el-form-item label-width="160px"  label="Начало голосования:" class="postInfo-container-item">-->
+                <!--                    <el-date-picker v-model="displayTime" type="datetime" :firstDayOfWeek="2" format="HH:mm dd-MM-yyyy" placeholder="Выберите дату и время" />-->
+                <!--                  </el-form-item>-->
+                <!--                </el-col>-->
+                <!--                <el-col :span="8">-->
+                <!--                  <el-form-item label-width="150px"  label="Конец голосования:" class="postInfo-container-item">-->
+                <!--                    <el-date-picker v-model="displayTime" type="datetime" :firstDayOfWeek="2" format="HH:mm dd-MM-yyyy" placeholder="Выберите дату и время" />-->
+                <!--                  </el-form-item>-->
+                <!--                </el-col>-->
               </el-row>
             </div>
           </el-col>
@@ -68,16 +68,16 @@
 
         <div style="padding-left: 5px; padding-bottom: 10px; font-weight: 700;">Подробное описание голосования:</div>
 
-        <el-form-item prop="content" style="margin-bottom: 30px;" >
-          <Tinymce ref="editor" v-model="postForm.description" :id="postForm.uid" :height="400" />
+        <el-form-item prop="content" style="margin-bottom: 30px;">
+          <Tinymce :id="postForm.uid" ref="editor" v-model="postForm.description" :height="400" />
         </el-form-item>
 
         <el-form-item prop="image_uri" style="margin-bottom: 30px;">
-          <Upload v-model="postForm.files" :id="postForm.uid" />
+          <Upload :id="postForm.uid" v-model="postForm.files" />
         </el-form-item>
-        {{postForm.attached_files}}
+        {{ postForm.attached_files }}
 
-        <div v-for="(question, i) in postForm.questions" class="question">
+        <div v-for="(question, i) in postForm.questions" :key="question.id" class="question">
           <el-form-item style="margin-bottom: 40px;" label-width="100px" :label="`Вопрос № ${i+1}`">
             <el-input v-model="question.text " :rows="1" show-word-limit maxlength="250" type="textarea" class="article-textarea" autosize placeholder="Введите текс вопроса голосования" />
           </el-form-item>
@@ -86,7 +86,7 @@
             <el-input v-model="answer.text " :rows="1" show-word-limit maxlength="250" type="textarea" class="article-textarea" autosize placeholder="Введите текс ответа" />
           </el-form-item>
           <el-button type="primary" icon="el-icon-circle-plus" class="answer-button" @click="addAnswer(i)">Добавить ответ</el-button>
-          </div>
+        </div>
         <el-button type="success" icon="el-icon-circle-plus" class="question-button" @click="addQuestion">Добавить вопрос голосования</el-button>
 
       </div>
@@ -98,12 +98,10 @@
 import Tinymce from '@/components/Tinymce'
 import Upload from './upload/index'
 import MDinput from '@/components/MDinput'
-import Sticky from '@/components/Sticky'
 
 import { createVoting, fetchAdminVoting, updateVoting } from '@/api/admin/voting.js'
 
 import { searchUser } from '@/api/remote-search'
-import { CommentDropdown } from './Dropdown'
 import TypeDropdown from './Dropdown/Type.vue'
 const defaultForm = {
   public: false,
@@ -138,7 +136,7 @@ const defaultForm = {
 
 export default {
   name: 'ArticleDetail',
-  components: { Tinymce, MDinput, Upload, Sticky, CommentDropdown, TypeDropdown },
+  components: { Tinymce, MDinput, Upload, TypeDropdown },
   props: {
     isEdit: {
       type: Boolean,
@@ -176,7 +174,7 @@ export default {
         text: [{ validator: validateRequire }],
         // dateStart: [{ required: true, message: 'Необходимо установить период голосования!' }],
         dateRange: [{ required: true, message: 'Необходимо установить период голосования!' }],
-        date_publish: [{ required: true, message: 'Необходимо установить время публикации' }],
+        date_publish: [{ required: true, message: 'Необходимо установить время публикации' }]
       },
       datePickerOptions: {
         disabledDate(time) {
@@ -215,7 +213,7 @@ export default {
     },
     contentShortLength() {
       return this.postForm.resume.length
-    },
+    }
     // publishTime: {
     //   get() {
     //     return this.$moment(this.postForm.date_publish)
@@ -225,6 +223,17 @@ export default {
     //     this.postForm.date_publish = this.$moment(val).format('YYYY-MM-DD HH:mm:ss')
     //   }
     // }
+  },
+  watch: {
+    votingType(val) {
+      if (val === 'public') {
+        this.postForm.date_start = '0000-01-01 00:00:00'
+        this.postForm.date_stop = '9999-01-01 00:00:00'
+      } else {
+        this.postForm.date_start = ''
+        this.postForm.date_stop = ''
+      }
+    }
   },
   created() {
     this.postForm.uid = this.create_UUID()
@@ -345,17 +354,6 @@ export default {
         if (!response.data.items) return
         this.userListOptions = response.data.items.map(v => v.name)
       })
-    }
-  },
-  watch: {
-    votingType(val) {
-      if (val === 'public') {
-        this.postForm.date_start = '0000-01-01 00:00:00'
-        this.postForm.date_stop = '9999-01-01 00:00:00'
-      } else {
-        this.postForm.date_start = ''
-        this.postForm.date_stop = ''
-      }
     }
   }
 }

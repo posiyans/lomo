@@ -22,7 +22,7 @@
       highlight-current-row
       style="width: 100%;"
     >
-      <el-table-column label="№"  align="center" width="80">
+      <el-table-column label="№" align="center" width="80">
         <template slot-scope="{row}">
           <span>{{ row.id }}</span>
         </template>
@@ -30,25 +30,25 @@
       <el-table-column label="Заголовок" min-width="150px">
         <template slot-scope="{row}">
           <span class="link-type">{{ row.title }}</span>
-          <el-button type="success" size="mini" plain  icon="el-icon-s-custom" >{{ row.countAnswer }}</el-button>
+          <el-button type="success" size="mini" plain icon="el-icon-s-custom">{{ row.countAnswer }}</el-button>
         </template>
       </el-table-column>
-      <el-table-column label="Публикация" prop="date_publish" width="150px"  align="center">
+      <el-table-column label="Публикация" prop="date_publish" width="150px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.date_publish  | parseTime(' {d}-{m}-{y} {h}:{i}') }}</span>
+          <span>{{ row.date_publish | parseTime(' {d}-{m}-{y} {h}:{i}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="false" label="Дата начала" prop="date_start" width="150px"  align="center">
+      <el-table-column v-if="false" label="Дата начала" prop="date_start" width="150px" align="center">
         <template slot-scope="{row}">
-          <span v-if="row.type === 'owner'">{{ row.date_start   | parseTime('{d}-{m}-{y}') }}</span>
+          <span v-if="row.type === 'owner'">{{ row.date_start | parseTime('{d}-{m}-{y}') }}</span>
         </template>
       </el-table-column>
       <el-table-column v-if="false" label="Дата конца" prop="date_stop" width="150px" align="center">
         <template slot-scope="{row}">
-          <span v-if="row.type === 'owner'">{{ row.date_stop   | parseTime('{d}-{m}-{y}') }}</span>
+          <span v-if="row.type === 'owner'">{{ row.date_stop | parseTime('{d}-{m}-{y}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Тип" align="center"  width="150px">
+      <el-table-column label="Тип" align="center" width="150px">
         <template slot-scope="{row}">
           <span class="link-type">{{ row.type | typeFilter }}</span>
         </template>
@@ -67,7 +67,7 @@
               Edit
             </el-button>
           </router-link>
-          <router-link v-if="(row.status =='execution' || row.status !=='cancel') &&  row.status !== 'new'" :to="'/admin/voting/result/' + row.id">
+          <router-link v-if="(row.status =='execution' || row.status !=='cancel') && row.status !== 'new'" :to="'/admin/voting/result/' + row.id">
             <el-button type="success" size="small" icon="el-icon-edit">
               Результат
             </el-button>
@@ -94,10 +94,10 @@
         <el-button @click="dialogFormVisible = false">
           Отмена
         </el-button>
-        <el-button type="danger" @click="updateStatus('cancel')" class="mx-4">
+        <el-button type="danger" class="mx-4" @click="updateStatus('cancel')">
           Отменить
         </el-button>
-        <el-button type="success" @click="updateStatus('done')" class="mr-4">
+        <el-button type="success" class="mr-4" @click="updateStatus('done')">
           Закончить голосование
         </el-button>
       </div>
@@ -108,7 +108,6 @@
 <script>
 import { fetchVotingList, updateVoting } from '@/api/admin/voting'
 import waves from '@/directive/waves' // waves directive
-import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 const selectStatusOptions = [
@@ -216,7 +215,7 @@ export default {
     handleModifyStatus(row) {
       this.temp = row
       this.dialogFormVisible = true
-    },
+    }
   }
 }
 </script>

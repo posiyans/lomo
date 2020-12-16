@@ -13,7 +13,6 @@ import '@/styles/index.scss' // global css
 import '@/styles/global2.scss' // global css
 import '@/styles/tachyons.css' // global css
 
-
 import App from './App'
 import store from './store'
 import router from './router'
@@ -21,6 +20,7 @@ import router from './router'
 import './icons' // icon
 import './permission' // permission control
 import './utils/error-log' // error log
+import './utils/filters'
 const moment = require('moment-timezone')
 require('moment/locale/ru')
 moment.locale('ru')
@@ -56,7 +56,8 @@ Vue.use(Element, {
 
 Vue.use(require('vue-moment'), {
   moment
-});
+})
+
 // register global utility filters
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])

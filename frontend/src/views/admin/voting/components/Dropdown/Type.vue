@@ -5,8 +5,7 @@
       :key="item.id"
       :label="item.label"
       :value="item.id"
-    >
-    </el-option>
+    />
   </el-select>
 </template>
 

@@ -1,6 +1,6 @@
 <template>
   <div>
-  <component  v-loading="loading" v-bind:is="VotingType" v-model="voting" @changeResult="getVoting"></component>
+    <component :is="VotingType" v-model="voting" v-loading="loading" @changeResult="getVoting" />
 
   </div>
 </template>
