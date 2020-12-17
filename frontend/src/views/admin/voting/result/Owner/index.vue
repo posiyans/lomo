@@ -2,12 +2,11 @@
   <div class="app-container">
     <h1>{{ value.title }}</h1>
     <div class="filter-container">
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-plus" @click="handleFilter">
+      <el-button v-waves class="filter-item" type="primary" icon="el-icon-plus">
         Проголосовать
       </el-button>
     </div>
-
-    <el-tabs type="border-card">
+    <el-tabs v-model="tabActive" type="border-card">
       <el-tab-pane label="Результат">
         <div>
           <el-tag :type="voting.status | statusColorFilter">
@@ -19,7 +18,7 @@
         </div>
       </el-tab-pane>
       <el-tab-pane label="Участки">
-        <SteadResult :questions="questions" />
+        <SteadResult v-if="tabActive == 1" :questions="questions" />
       </el-tab-pane>
       <el-tab-pane label="Описание">
         <div class="question" v-html="voting.description" />
@@ -89,7 +88,7 @@ export default {
   },
   data() {
     return {
-      tabActive: 1,
+      tabActive: 0,
       id: this.$route.params && this.$route.params.id,
       voting: {
         files: []

@@ -3,25 +3,26 @@
     <h2>Расписание электричек</h2>
     <div>
       <el-radio-group v-model="queryParams.back" @change="getList">
-         <el-radio-button v-for="dt in directions"  :label="dt.key">{{dt.label}}</el-radio-button>
+        <el-radio-button v-for="dt in directions" :key="dt.key" :label="dt.key">{{ dt.label }}</el-radio-button>
       </el-radio-group>
       <el-radio-group v-model="queryParams.type" @change="getList">
-        <el-radio-button v-for="dt in dates"  :label="dt.key">{{dt.label}}</el-radio-button>
+        <el-radio-button v-for="dt in dates" :key="dt.key" :label="dt.key">{{ dt.label }}</el-radio-button>
       </el-radio-group>
     </div>
     <section class="SearchSegments">
       <template v-for="item in list.segments">
-        <article v-if="checked || new Date(item.departure) > new Date() || queryParams.type === '2'" class="SearchSegment" :class="{ isGone: new Date(item.departure) < new Date()  &&  queryParams.type !== '2' }">
+        <article v-if="checked || new Date(item.departure) > new Date() || queryParams.type === '2'" class="SearchSegment" :class="{ isGone: new Date(item.departure) < new Date() && queryParams.type !== '2' }">
           <div class="SegmentHeader">
             <div class="SegmentTitle">
               <div class="SegmentTitle__header"><a
                 :href="'https://rasp.yandex.ru/thread/' + item.thread.uid"
-                :title="'Расписание электрички ' +  item.thread.number + ' ' + item.thread.title"
-                class="Link SegmentTitle__link">
+                :title="'Расписание электрички ' + item.thread.number + ' ' + item.thread.title"
+                class="Link SegmentTitle__link"
+              >
                 <span class="SegmentTitle__number">{{ item.thread.number }}</span>
                 <span class="SegmentTitle__title">{{ item.thread.title }}</span></a></div>
               <div class="SegmentTransport SegmentTitle__transport">
-                <span  class="SegmentTransport__item SegmentTransport__item_subtype" :style="item.thread.transport_subtype.color | colorFilter">{{item.thread.transport_subtype.title}}</span>
+                <span class="SegmentTransport__item SegmentTransport__item_subtype" :style="item.thread.transport_subtype.color | colorFilter">{{ item.thread.transport_subtype.title }}</span>
               </div>
             </div>
           </div>
@@ -29,10 +30,10 @@
             <div class="SearchSegment__times">
               <div class="SearchSegment__dateTime Time_important">
                 <span v-if="queryParams.type === '2'" class="SearchSegment__time">
-                  {{ item.departure.substr(0,5)}}
+                  {{ item.departure.substr(0,5) }}
                 </span>
                 <span v-else class="SearchSegment__time">
-                  {{item.departure | moment('HH:mm')}}
+                  {{ item.departure | moment('HH:mm') }}
                 </span>
               </div>
               <div v-if="!mobile" class="SearchSegment__duration">
@@ -42,31 +43,31 @@
                 </span>
               </div>
               <div v-if="!mobile" class="SearchSegment__dateTime">
-                 <span v-if="queryParams.type === '2'" class="SearchSegment__time">
-                  {{item.arrival.substr(0,5)}}
+                <span v-if="queryParams.type === '2'" class="SearchSegment__time">
+                  {{ item.arrival.substr(0,5) }}
                 </span>
                 <span v-else class="SearchSegment__time">
-                  {{item.arrival | moment('HH:mm')}}
+                  {{ item.arrival | moment('HH:mm') }}
                 </span>
               </div>
             </div>
-            <div class="RailwayTimes SearchSegment__timesRailway"></div>
+            <div class="RailwayTimes SearchSegment__timesRailway" />
             <div class="SearchSegment__stations">
-              <div class="SearchSegment__stationHolder"></div>
-              <div class="SearchSegment__stationHolder"></div>
+              <div class="SearchSegment__stationHolder" />
+              <div class="SearchSegment__stationHolder" />
             </div>
-            <div class="SearchSegment__stops">{{item.stops}}</div>
+            <div class="SearchSegment__stops">{{ item.stops }}</div>
           </div>
-          <div  class="SearchSegment__scheduleAndPrices">
+          <div class="SearchSegment__scheduleAndPrices">
             <div class="SegmentPrices">
-              <div class="TariffsListItem__classTitle"></div>
+              <div class="TariffsListItem__classTitle" />
               <span v-if="item.tickets_info" class="Price TariffsListItem__price">{{ item.tickets_info.places[0].price.whole }} ₽</span>
-              <div>{{item.days}}</div>
+              <div>{{ item.days }}</div>
             </div>
           </div>
         </article>
       </template>
-      <div v-if="queryParams.type === '0'" class="more" @click="checked = !checked">{{checkLabel}}</div>
+      <div v-if="queryParams.type === '0'" class="more" @click="checked = !checked">{{ checkLabel }}</div>
       <div class="yandexLink">
         <div>
           <a href="http://rasp.yandex.ru">Данные предоставлены сервисом Яндекс.Расписания</a>
@@ -78,7 +79,7 @@
 
 <script>
 import { fetchYandexSchedule } from '@/api/yandex/schedule.js'
-import {mapState} from "vuex";
+import { mapState } from 'vuex'
 export default {
   filters: {
     colorFilter(val) {
@@ -95,7 +96,7 @@ export default {
         {
           key: true,
           label: 'Обратно'
-        },
+        }
       ],
       dates: [
         {

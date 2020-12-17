@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin\Voting;
 
+use App\Http\Resources\Admin\Voting\AdminVotingResultResource;
 use App\Http\Resources\AppealResource;
 use App\Http\Resources\ConrtollerResource;
 use App\Http\Resources\VotingResource;
 use App\Models\AppealModel;
+use App\Models\Voting\UserAnswerModel;
 use App\Models\Voting\VotingModel;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -13,7 +15,6 @@ use Illuminate\Support\Facades\Auth;
 
 class AdminVotingResultController extends Controller
 {
-
     /**
      * проверка на суперадмин или на доступ а админ панель
      */
@@ -22,13 +23,27 @@ class AdminVotingResultController extends Controller
         $this->middleware('ability:superAdmin,access-admin-panel');
     }
 
-//    /**
-//     * Display a listing of the resource.
-//     *
-//     * @return \Illuminate\Http\Response
-//     */
-//    public function index(Request $request)
-//    {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index(Request $request)
+    {
+        $voting_id = $request->voting_id;
+        $steads_array = $request->steads;
+        $voting = VotingModel::find($voting_id);
+        if ($voting) {
+            $question_id = [];
+            foreach ($voting->questions as $item) {
+                $question_id[] = $item->id;
+            }
+            $results = UserAnswerModel::query()->whereIn('stead_id', $steads_array)->whereIn('question_id', $question_id)->get();
+//            $result = UserAnswerModel::query()->get();
+            return AdminVotingResultResource::collection($results);
+        }
+        return 'sdfsdfs';
+    }
 //        $query = VotingModel::query();
 //        $votings = $query->paginate($request->limit);
 //        return VotingResource::collection($votings);

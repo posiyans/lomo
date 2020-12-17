@@ -1,18 +1,18 @@
 <template>
   <div class="createPost-container">
-    <el-form ref="reestrForm" :model="postForm" :rules="rules"  :label-position="labelPosition" class="form-container" label-width="180px">
+    <el-form ref="reestrForm" :model="postForm" :rules="rules" :label-position="labelPosition" class="form-container" label-width="180px">
       <div class="pt1 createPost-main-container" style="padding-top: 0; padding-bottom: 0">
-        <el-button v-loading="loading"  type="success" @click="submitForm">
+        <el-button v-loading="loading" type="success" @click="submitForm">
           Сохранить
         </el-button>
-        <el-button v-loading="loading"  type="danger" @click="parseFile">
+        <el-button v-loading="loading" type="danger" @click="parseFile">
           Сбросить данные
         </el-button>
-        <el-button v-loading="loading"  type="primary" @click="publishForm">
+        <el-button v-loading="loading" type="primary" @click="publishForm">
           Зачислить платежи
         </el-button>
       </div>
-      <div class="createPost-main-container billing-bank-reestr-table" >
+      <div class="createPost-main-container billing-bank-reestr-table">
         <el-table
           :data="reestr.data.data"
           border
@@ -21,14 +21,15 @@
         >
           <el-table-column
             v-for="i in sort"
+            :key="i"
             prop="date"
             :label="labelForm[i]"
             align="center"
-            >
+          >
             <template slot-scope="{row}">
-              <span>{{row[`val`+i]}}</span>
+              <span>{{ row[`val`+i] }}</span>
               <span v-if="i == 5">
-                --> <el-tag  :type="row | steadFilter" @click="editStead(row)">{{row['stead'].number}}</el-tag>
+                --> <el-tag :type="row | steadFilter" @click="editStead(row)">{{ row['stead'].number }}</el-tag>
               </span>
             </template>
           </el-table-column>
@@ -39,75 +40,75 @@
           >
             <template slot-scope="{row}">
               <div v-if="row.dubl">
-                 <el-tag type="danger" effect="dark" @click="showDubl(row)">
+                <el-tag type="danger" effect="dark" @click="showDubl(row)">
                   Повтор
                 </el-tag>
               </div>
               <div v-else>
                 <el-tag type="danger" :effect="row.type | type1EffectFilter" @click="selectElect(row)">
-                  <i v-if="row.type == 1" class="el-icon-check"></i>
+                  <i v-if="row.type == 1" class="el-icon-check" />
                   Электоэнергия
                 </el-tag>
                 <el-tag type="success" :effect="row.type | type2EffectFilter" @click="row.type = 2">
-                  <i v-if="row.type == 2" class="el-icon-check"></i>
+                  <i v-if="row.type == 2" class="el-icon-check" />
                   Взносы
                 </el-tag>
                 <div v-if="row.type == 1">
-                  <el-tag v-if="row.meterReading1">1-{{row.meterReading1}}</el-tag>
-                  <el-tag v-if="row.meterReading2">2-{{row.meterReading2}}</el-tag>
+                  <el-tag v-if="row.meterReading1">1-{{ row.meterReading1 }}</el-tag>
+                  <el-tag v-if="row.meterReading2">2-{{ row.meterReading2 }}</el-tag>
                 </div>
               </div>
             </template>
           </el-table-column>
         </el-table>
-  </div>
-  </el-form>
+      </div>
+    </el-form>
     <div v-if="dialogSteadFormVisible">
       <el-dialog title="Уточнить участок" :visible.sync="dialogSteadFormVisible">
-        <UserSteadFind @selectStead="setStead" :userStead="editRow.stead.id"/>
+        <UserSteadFind :user-stead="editRow.stead.id" @selectStead="setStead" />
         <span slot="footer" class="dialog-footer">
-      <el-button @click="dialogSteadFormVisible = false">Cancel</el-button>
-      <el-button type="primary" @click="dialogSteadFormVisible = false">Confirm</el-button>
-    </span>
+          <el-button @click="dialogSteadFormVisible = false">Cancel</el-button>
+          <el-button type="primary" @click="dialogSteadFormVisible = false">Confirm</el-button>
+        </span>
       </el-dialog>
     </div>
     <div v-if="dialogDublFormVisible">
       <el-dialog title="Платеж уже есть в базе" :visible.sync="dialogDublFormVisible">
         <div>
-          Занесено в базу {{editRow.dubl.created_at | moment('DD-MM-YYYY HH:mm')}}
+          Занесено в базу {{ editRow.dubl.created_at | moment('DD-MM-YYYY HH:mm') }}
         </div>
         <div>
-          Платеж № {{editRow.dubl.id}} на сумму {{editRow.dubl.price}} руб.<br>
+          Платеж № {{ editRow.dubl.id }} на сумму {{ editRow.dubl.price }} руб.<br>
           <el-tag type="success">Подробнее</el-tag>
         </div>
         <span slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="dialogDublFormVisible = false">Ок</el-button>
-    </span>
+          <el-button type="primary" @click="dialogDublFormVisible = false">Ок</el-button>
+        </span>
       </el-dialog>
     </div>
     <div v-if="dialogMeterReadingFormVisible">
       <el-dialog title="Уточнить участок" :visible.sync="dialogMeterReadingFormVisible">
-        <div class="mb2">{{editRow.val7}}</div>
+        <div class="mb2">{{ editRow.val7 }}</div>
         <el-form label-position="top">
           <el-form-item label="Показания день">
-          <el-input
-            placeholder="Показания день"
-            prefix-icon="el-icon-search"
-            v-model="editRow.meterReading1">
-          </el-input>
+            <el-input
+              v-model="editRow.meterReading1"
+              placeholder="Показания день"
+              prefix-icon="el-icon-search"
+            />
           </el-form-item>
           <el-form-item label="Показания ночь">
             <el-input
+              v-model="editRow.meterReading2"
               placeholder="Показания ночь"
               prefix-icon="el-icon-search"
-              v-model="editRow.meterReading2">
-            </el-input>
+            />
           </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
           <el-button @click="dialogMeterReadingFormVisible = false">Cancel</el-button>
           <el-button type="primary" @click="dialogMeterReadingFormVisible = false">Confirm</el-button>
-       </span>
+        </span>
       </el-dialog>
     </div>
   </div>
@@ -134,19 +135,18 @@ const labelForm = {
   5: 'Участок',
   6: 'ФИО',
   7: 'Назначение',
-  8: 'Сумма',
+  8: 'Сумма'
 }
-
 
 export default {
   filters: {
-    type1EffectFilter(val){
+    type1EffectFilter(val) {
       if (val === 1) {
         return 'dark'
       }
       return 'plain'
     },
-    type2EffectFilter(val){
+    type2EffectFilter(val) {
       if (val === 2) {
         return 'dark'
       }
@@ -154,7 +154,7 @@ export default {
     },
     steadFilter(val) {
       if (val.val5 === val.stead.number) {
-        return  ''
+        return ''
       }
       return 'danger'
     }
@@ -180,7 +180,7 @@ export default {
       }
     }
     return {
-      sort: [0,1,5,6,8,7],
+      sort: [0, 1, 5, 6, 8, 7],
       reestr: '',
       labelForm,
       editRow: {},
@@ -195,15 +195,15 @@ export default {
       userListOptions: [],
       rules: {
         // image_uri: [{ validator: validateRequire }],
-        title: [{ validator: validateRequire }],
+        title: [{ validator: validateRequire }]
         // text: [{ validator: validateRequire }],
       },
-      tempRoute: {},
+      tempRoute: {}
     }
   },
   computed: {
     ...mapState({
-      device: state => state.app.device,
+      device: state => state.app.device
     }),
     column() {
       return ''
@@ -233,8 +233,8 @@ export default {
   created() {
     // this.getListRate()
     // if (this.isEdit) {
-      const id = this.$route.params && this.$route.params.id
-      this.fetchData(id)
+    const id = this.$route.params && this.$route.params.id
+    this.fetchData(id)
     // }
 
     // Why need to make a copy of this.$route here?
@@ -251,10 +251,10 @@ export default {
       return ''
     },
     publishForm() {
-      publishBillingBankReestr({reestr: this.reestr})
+      publishBillingBankReestr({ reestr: this.reestr })
     },
     parseFile() {
-      BillingBankReestrParse({reestr_id: this.reestr.id}).then(response => {
+      BillingBankReestrParse({ reestr_id: this.reestr.id }).then(response => {
         this.reestr = response.data
       })
     },
@@ -288,17 +288,17 @@ export default {
     //     //   })
     //   })
     // },
-    create_UUID(){
-      var dt = new Date().getTime();
+    create_UUID() {
+      var dt = new Date().getTime()
       var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = (dt + Math.random()*16)%16 | 0
-        dt = Math.floor(dt/16)
-        return (c == 'x' ? r : (r&0x3 | 0x8)).toString(16)
+        var r = (dt + Math.random() * 16) % 16 | 0
+        dt = Math.floor(dt / 16)
+        return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16)
       })
       return uuid
     },
     fetchData(id) {
-      fetchBillingBankReestrInfo({ id: id} ).then(response => {
+      fetchBillingBankReestrInfo({ id: id }).then(response => {
         if (response.data.status) {
           this.reestr = response.data.data
         }
@@ -339,7 +339,7 @@ export default {
       })
     },
     submitForm() {
-      updateBillingBankReestr({reestr: this.reestr})
+      updateBillingBankReestr({ reestr: this.reestr })
       // if (this.exampleRate > 0) {
       //   this.$refs['reestrForm'].validate((valid) => {
       //     if (valid) {
@@ -366,7 +366,6 @@ export default {
 
     },
     draftForm() {
-
       // this.postForm.public = false
       this.saveForm()
     },
@@ -385,9 +384,6 @@ export default {
 .billing-bank-reestr-table >>> .warning-row {
   background: #fff1f1;
 }
-
-
-
 
   .createPost-main-container {
     padding: 40px 45px 20px 50px;

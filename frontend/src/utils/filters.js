@@ -17,3 +17,11 @@ Vue.filter('trimText', function(text, len = 20, dot = true) {
     return text
   }
 })
+
+Vue.filter('sizeFilter', function(size) {
+  if (size) {
+    const i = Math.floor(Math.log(size) / Math.log(1024))
+    return (size / Math.pow(1024, i)).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i]
+  }
+  return ''
+})

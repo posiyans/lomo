@@ -12,11 +12,11 @@
         size="mini"
       >
         <el-form-item label="E-mail">
-          <div class="reset-password" @click="resetPassword" >Забыли пароль?</div>
-          <el-input v-model="form.email"></el-input>
+          <div class="reset-password" @click="resetPassword">Забыли пароль?</div>
+          <el-input v-model="form.email" />
         </el-form-item>
         <el-form-item label="Пароль">
-          <el-input v-model="form.password" show-password></el-input>
+          <el-input v-model="form.password" show-password />
         </el-form-item>
         <el-form-item>
           <el-form-item label="" prop="type">
@@ -36,84 +36,66 @@
 </template>
 
 <script>
-  import RightCard from '@/components/RightCard'
-  import store from '../../store'
-  export default {
-    name: 'LoginForm',
-    components: {
-      RightCard
-    },
-    props: {
-      showLoginForm: {
-        type: Boolean
-      }
-    },
-    data() {
-      return {
-        intervalid: '',
-        newWin: null,
-        form: {
-          email: '',
-          password: '',
-          remember: true
-        }
-      }
-    },
-    mounted() {
-      // console.log(this.showLoginForm)
-    },
-    computed: {
 
-    },
-    methods: {
-      resetPassword(){
-        this.$router.push('/password/reset')
-      },
-      async loginVK() {
-        // console.log('vk')
-
-        const $url = await this.$store.dispatch('user/loginVK')
-        // console.log($url)
-        // console.log(window.location.pathname)
-        // console.log(this.$route.query.page)
-        // console.log(location.href)
-        window.location = $url
-        // window.location = $url + '&redirect_uri=' + location.href
-        // this.newWin = window.open($url, "hello", "width=200,height=200");
-        // this.intervalid = setInterval(() => {
-        //   console.log('interval')
-        //   console.log(this.newWin)
-        //   if (this.newWin === null || this.newWin.closed) {
-        //     clearInterval(this.intervalid)
-        //     store.dispatch('user/getInfo')
-        //   }
-        // }, 1000);
-        // newWin.addEventListener('beforeunload', this.test)
-        // newWin.addEventListener('resultCloseParent', this.test)
-      },
-      register(){
-        // console.log(this.showLoginForm)
-
-        //this.$emit(true)
-        this.$router.push('/')
-
-        // console.log('register')
-      },
-      test() {
-        // console.log('close!!!!!!!!!!!')
-      },
-      login() {
-        this.$store.dispatch('user/login', this.form)
-          .then(() => {
-            this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
-            this.loading = false
-          })
-          .catch(() => {
-            this.loading = false
-          })
+export default {
+  props: {
+    showLoginForm: {
+      type: Boolean
+    }
+  },
+  data() {
+    return {
+      intervalid: '',
+      newWin: null,
+      form: {
+        email: '',
+        password: '',
+        remember: true
       }
     }
+  },
+  methods: {
+    resetPassword() {
+      this.$router.push('/password/reset')
+    },
+    async loginVK() {
+      const $url = await this.$store.dispatch('user/loginVK')
+      // console.log($url)
+      // console.log(window.location.pathname)
+      // console.log(this.$route.query.page)
+      // console.log(location.href)
+      window.location = $url
+      // window.location = $url + '&redirect_uri=' + location.href
+      // this.newWin = window.open($url, "hello", "width=200,height=200");
+      // this.intervalid = setInterval(() => {
+      //   console.log('interval')
+      //   console.log(this.newWin)
+      //   if (this.newWin === null || this.newWin.closed) {
+      //     clearInterval(this.intervalid)
+      //     store.dispatch('user/getInfo')
+      //   }
+      // }, 1000);
+      // newWin.addEventListener('beforeunload', this.test)
+      // newWin.addEventListener('resultCloseParent', this.test)
+    },
+    register() {
+      // console.log(this.showLoginForm)
+      // this.$emit(true)
+      this.$router.push('/')
+      // console.log('register')
+    },
+    login() {
+      this.$store.dispatch('user/login', this.form)
+        .then(() => {
+          this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
+          this.loading = false
+        })
+        .catch(() => {
+          this.loading = false
+        })
+    }
   }
+}
 </script>
 
 <style scoped>
@@ -194,5 +176,3 @@
   /* }*/
 
 </style>
-
-

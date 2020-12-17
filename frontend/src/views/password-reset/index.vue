@@ -2,28 +2,27 @@
   <div class="ps-card">
     <el-card>
       <div class="resume-article-preview-header">
-        <h2 >Сбросить пароль</h2>
+        <h2>Сбросить пароль</h2>
       </div>
-      <div class="article-preview-body" >
+      <div class="article-preview-body">
         <span>Для восстановления пароля введите email использованный при регистрации</span>
       </div>
       <div class="article-preview-body" style="padding-left: 20px; width: 400px">
-          <el-form
-            ref="Resetform"
-            :model="form"
-            label-width="70px"
-            :label-position="mobile ? 'top' : 'left'"
-            :rules="loginRules"
-          >
-            <el-form-item label="E-mail" prop="email">
-              <el-input
-                v-model="form.email"
-                ref="email"
-                style="width: 300px;"
-              ></el-input>
-            </el-form-item>
-
-          </el-form>
+        <el-form
+          ref="Resetform"
+          :model="form"
+          label-width="70px"
+          :label-position="mobile ? 'top' : 'left'"
+          :rules="loginRules"
+        >
+          <el-form-item label="E-mail" prop="email">
+            <el-input
+              ref="email"
+              v-model="form.email"
+              style="width: 300px;"
+            />
+          </el-form-item>
+        </el-form>
       </div>
       <div class="article-preview-footer">
         <el-row type="flex" class="row-bg" justify="space-between" align="center">
@@ -35,65 +34,60 @@
 </template>
 
 <script>
-  import { passwordReset } from '@/api/user/user.js'
-  import {mapState} from "vuex";
-  export default {
-    data() {
-      const validateEmail = (rule, value, callback) => {
-        // console.log('valid eamil')
-        const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/
-        if (!re.test(value )) {
-          callback(new Error('Пожалуйста, введите действующий email'))
-        } else {
-          callback()
-        }
-      }
-      return {
-        form: {
-          email: null
-        },
-        loginRules: {
-          email: [{ required: true, trigger: 'blur', validator: validateEmail }],
-        },
+import { passwordReset } from '@/api/user/user.js'
 
-      }
-    },
-    computed: {
-      mobile() {
-        if (this.$store.state.app.device === 'mobile') {
-          return true
-        }
-        return false
-      }
-    },
-    methods:{
-      reset(){
-        this.$refs.Resetform.validate(valid => {
-          // console.log(valid)
-          if (valid) {
-            const data = {
-              email: this.form.email
-            }
-            passwordReset(data)
-              .then(response =>{
-                if (response.data){
-                  this.$alert('На введенную вами почту было отправлено письмо со ссылкой для востановления пароля.', 'Внимание!!!', {
-                    confirmButtonText: 'OK',
-                  });
-                } else {
-                  this.$alert('Указанная вами почта не найдена, или сервис временно не доступен. Просьба проверить адрес почты или повторить позднее.', 'Ошибка', {
-                    confirmButtonText: 'OK',
-                  });
-                }
-                // console.log(response.data)
-              })
-            // console.log('ok')
-            // password/email
-          }
-        })
+export default {
+  data() {
+    const validateEmail = (rule, value, callback) => {
+      // console.log('valid eamil')
+      const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/
+      if (!re.test(value)) {
+        callback(new Error('Пожалуйста, введите действующий email'))
+      } else {
+        callback()
       }
     }
+    return {
+      form: {
+        email: null
+      },
+      loginRules: {
+        email: [{ required: true, trigger: 'blur', validator: validateEmail }]
+      }
+    }
+  },
+  computed: {
+    mobile() {
+      if (this.$store.state.app.device === 'mobile') {
+        return true
+      }
+      return false
+    }
+  },
+  methods: {
+    reset() {
+      this.$refs.Resetform.validate(valid => {
+        if (valid) {
+          const data = {
+            email: this.form.email
+          }
+          passwordReset(data)
+            .then(response => {
+              if (response.data) {
+                this.$alert('На введенную вами почту было отправлено письмо со ссылкой для востановления пароля.', 'Внимание!!!', {
+                  confirmButtonText: 'OK'
+                })
+              } else {
+                this.$alert('Указанная вами почта не найдена, или сервис временно не доступен. Просьба проверить адрес почты или повторить позднее.', 'Ошибка', {
+                  confirmButtonText: 'OK'
+                })
+              }
+            })
+        }
+      })
+    }
   }
+}
 </script>
 
 <style scoped>

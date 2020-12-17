@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserAnswerModel extends Model
 {
+
+    protected $table = 'user_answer_models';
     //
     public function user() {
         return $this->hasOne('App\User', 'id', 'user_id');

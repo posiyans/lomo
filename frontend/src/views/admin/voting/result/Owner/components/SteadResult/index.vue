@@ -21,14 +21,14 @@
         </el-table-column>
       </el-table-column>
     </el-table>
-    {{ questions }}
-    {{ listo }}
     <LoadMore :key="key" :list-query="listQuery" :func="func" @setList="setList" />
   </div>
 </template>
 
 <script>
 import { fetchSteadList } from '@/api/stead.js'
+import { fetchVotingResults } from '@/api/admin/voting'
+
 import LoadMore from '@/components/LoadMore'
 
 export default {
@@ -57,61 +57,42 @@ export default {
       }
     }
   },
-  watch: {
-    questions(value) {
-      console.log(value)
-      this.getList()
-    }
-  },
   mounted() {
     // this.getSteads()
   },
   methods: {
+    getResult(steads) {
+      const find = []
+      this.steads.forEach(stead => {
+        if (!(stead.id in this.listo)) {
+          // console.log('нет результата ' + stead.number)
+          find.push(stead.id)
+        }
+      })
+      console.log(find)
+      fetchVotingResults({ steads: find, voting_id: this.questions[0].voting_id })
+        .then(response => {
+          console.log(response.data)
+          if (response.data.data) {
+            response.data.data.forEach(item => {
+              if (item.stead_id in this.listo) {
+                this.listo[item.stead_id][item.question_id] = item.answer_id
+              } else {
+                this.listo[item.stead_id] = { [item.question_id]: item.answer_id }
+              }
+            })
+            // this.tableKey += 1
+            // this.listo = response.data.data
+          } else {
+            this.$message.error('Ошибка получения данных')
+          }
+          console.log(this.listo)
+        })
+    },
+
     setList(val) {
       this.steads = val
-      // this.listLoading = false
-    },
-    // getSteads() {
-    //   console.log('get stead')
-    //   const data = {
-    //     limit: 1000
-    //   }
-    //   fetchSteadList(this.listQuery).then(response => {
-    //     console.log('getstead')
-    //     console.log(response)
-    //     // response.data.data.forEach(item => {
-    //     //   // this.steads[item.id] = item.number
-    //     // })
-    //     this.steads = response.data.data
-    //     this.listLoading = true
-    //   })
-    //
-    //
-    // },
-    getList() {
-      const temp = {}
-      console.log('getlist')
-      console.log(this.questions)
-      this.questions.forEach(item => {
-        item.answers.forEach(answer => {
-          answer.userAnswers.forEach(user => {
-            if (user.stead_id in temp) {
-              temp[user.stead_id][user.question_id] = user.answer_id
-            } else {
-              temp[user.stead_id] = { [user.question_id]: user.answer_id, user_id: user.user_id }
-            }
-            // const [user.stead_id] = { [user.question_id]: user.answer_id}}
-            // this.list.push(  {[user.stead_id]: { [user.question_id]: user.answer_id}} )
-            // this.list.push({[user.stead_id]: 'trete'})
-          })
-        })
-      })
-      this.listo = temp
-      for (const key in temp) {
-        this.list.push({ id: key, quest: temp[key] })
-      }
-      // this.listLoading = true
-      this.tableKey += 1
+      this.getResult()
     }
   }
 

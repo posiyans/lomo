@@ -1,9 +1,9 @@
 <template>
-    <el-menu-item v-if="!item.children" :index="item.basePath">{{item.label}}</el-menu-item>
-    <el-submenu v-else :index="item.basePath">
-      <template slot="title">{{item.label}}</template>
-      <sidebar-item v-for="route in item.children" :item="route"/>
-    </el-submenu>
+  <el-menu-item v-if="!item.children" :index="item.basePath">{{ item.label }}</el-menu-item>
+  <el-submenu v-else :index="item.basePath">
+    <template slot="title">{{ item.label }}</template>
+    <sidebar-item v-for="route in item.children" :key="route.id" :item="route" />
+  </el-submenu>
 </template>
 
 <script>

@@ -4,13 +4,14 @@
       v-for="item in options"
       :key="item.id"
       :label="item.label"
-      :value="item.id">
-    </el-option>
+      :value="item.id"
+    />
   </el-select>
 </template>
 
 <script>
-  import { fetchCategoryList } from '@/api/category'
+import { fetchCategoryList } from '@/api/category'
+
 export default {
   props: {
     value: {
@@ -20,8 +21,7 @@ export default {
   },
   data() {
     return {
-      options: [],
-      // value: '',
+      options: []
     }
   },
   computed: {
@@ -40,9 +40,9 @@ export default {
     this.getCategory()
   },
   methods: {
-    getCategory(){
+    getCategory() {
       const listQuery = {
-        children : false
+        children: false
       }
       fetchCategoryList(listQuery)
         .then(response => {

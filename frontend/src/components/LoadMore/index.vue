@@ -83,8 +83,8 @@ export default {
               this.list.push(val)
               this.showCount++
             })
+            this.$emit('setList', this.list)
           }, 500)
-          this.$emit('setList', this.list)
         })
     }
   }

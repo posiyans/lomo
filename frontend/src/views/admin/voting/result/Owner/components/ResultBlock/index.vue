@@ -4,7 +4,7 @@
       <span> {{ question.text }}</span>
     </div>
     <div v-for="(answer, j) in question.answers" :key="answer.id">
-      <div class="answer" :class="question.myAnswers | answerFilter(guest)">
+      <div class="answer">
         <div class="an" :style="answer | resultBackgroundFilter(question)">
           <div class="an-text" @click="vote(answer,question)">
             {{ j+1 }}.
@@ -31,14 +31,6 @@
 // Отрисовка общего результата
 export default {
   filters: {
-    answerFilter(val, guest) {
-      if (guest) {
-        return ''
-      }
-      if (!val) {
-        return 'cursor_pointer'
-      }
-    },
     resultBackgroundFilter(answer, question) {
       const count = question.answers.reduce((sum, item) => { return sum + item.userAnswersCount }, 0)
       return 'width:' + 600 * answer.userAnswersCount / count + 'px;'
@@ -164,8 +156,5 @@ export default {
     padding: 10px;
     /*display: inline;*/
     border-radius: 5px 0 0 5px;
-  }
-  .cursor_pointer {
-    cursor: pointer;
   }
 </style>
