@@ -7,6 +7,7 @@
         v-model="listQuery.date"
         type="daterange"
         range-separator="по"
+        :picker-options="{ firstDayOfWeek: 1}"
         class="filter-item"
         format="dd-MM-yyyy"
         value-format="yyyy-MM-dd"

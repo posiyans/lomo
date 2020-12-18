@@ -1,25 +1,25 @@
 <template>
   <div class="createPost-container">
-    <el-form ref="postForm" :model="postForm" :rules="rules"  :label-position="labelPosition" class="form-container">
+    <el-form ref="postForm" :model="postForm" :rules="rules" :label-position="labelPosition" class="form-container">
       <div class="pt1 createPost-main-container" style="padding-top: 0; padding-bottom: 0">
         <div style="display: inline-block;">
-          <OnMain v-model="postForm.news"/>
+          <OnMain v-model="postForm.news" />
         </div>
         <div style="display: inline-block; ">
-          <CategoryDropdown v-model="postForm.category_id"/>
+          <CategoryDropdown v-model="postForm.category_id" />
         </div>
         <div style="display: inline-block;">
           <CommentDropdown v-model="postForm.allow_comments" />
         </div>
         <div style="display: inline-block;">
-          <el-button v-loading="loading"  type="success" @click="submitForm">
+          <el-button v-loading="loading" type="success" @click="submitForm">
             Опубликовать
           </el-button>
-          </div>
+        </div>
         <div style="display: inline-block;">
-           <el-button v-loading="loading" type="warning" @click="draftForm">
+          <el-button v-loading="loading" type="warning" @click="draftForm">
             Черновик
-           </el-button>
+          </el-button>
         </div>
       </div>
       <div class="createPost-main-container">
@@ -34,13 +34,13 @@
             <div class="postInfo-container">
               <el-row>
                 <el-col :xs="24" :sm="10" justify="start">
-                  <el-form-item label-width="150px"  label="Время публикации:" class="postInfo-container-item">
-                    <el-date-picker v-model="displayTime" type="datetime" :firstDayOfWeek="2" format="HH:mm dd-MM-yyyy" placeholder="Выберите дату и время" />
+                  <el-form-item label-width="150px" label="Время публикации:" class="postInfo-container-item">
+                    <el-date-picker v-model="displayTime" type="datetime" :picker-options="{ firstDayOfWeek: 1}" format="HH:mm dd-MM-yyyy" placeholder="Выберите дату и время" />
                   </el-form-item>
                 </el-col>
                 <el-col :xs="24" :sm="10">
                   <el-form-item style="" label-width="70px" label="UID:">
-                    <el-input v-model="postForm.uid" :rows="1" show-word-limit maxlength="50"   autosize placeholder="Пожалуйста, введите содержание или оставте пустым" />
+                    <el-input v-model="postForm.uid" :rows="1" show-word-limit maxlength="50" autosize placeholder="Пожалуйста, введите содержание или оставте пустым" />
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -53,13 +53,13 @@
         </el-form-item>
 
         <el-form-item prop="content" style="margin-bottom: 30px;">
-          <Tinymce ref="editor" v-model="postForm.text" :id="postForm.uid" :height="400" />
+          <Tinymce :id="postForm.uid" ref="editor" v-model="postForm.text" :height="400" />
         </el-form-item>
 
         <el-form-item prop="image_uri" style="margin-bottom: 30px;">
-          <Upload v-model="postForm.files" :id="postForm.uid" />
+          <Upload :id="postForm.uid" v-model="postForm.files" />
         </el-form-item>
-        {{postForm.attached_files}}
+        {{ postForm.attached_files }}
       </div>
     </el-form>
   </div>
@@ -70,13 +70,11 @@ import Tinymce from '@/components/Tinymce'
 // import Upload from '@/components/Upload/SingleImage3'
 import Upload from './upload/index'
 import MDinput from '@/components/MDinput'
-import Sticky from '@/components/Sticky' // 粘性header组件
-import { validURL } from '@/utils/validate'
 import { fetchArticle, createArticle, updateArticle } from '@/api/article'
 import { searchUser } from '@/api/remote-search'
 import { CommentDropdown, OnMain } from './Dropdown'
 import CategoryDropdown from './Dropdown/Category'
-import { mapState } from "vuex";
+import { mapState } from 'vuex'
 
 const defaultForm = {
   public: false,
@@ -94,7 +92,7 @@ const defaultForm = {
 
 export default {
   name: 'ArticleDetail',
-  components: { Tinymce, MDinput, Upload, Sticky, CommentDropdown, CategoryDropdown, OnMain },
+  components: { Tinymce, MDinput, Upload, CommentDropdown, CategoryDropdown, OnMain },
   props: {
     isEdit: {
       type: Boolean,
@@ -121,14 +119,14 @@ export default {
       rules: {
         // image_uri: [{ validator: validateRequire }],
         title: [{ validator: validateRequire }],
-        text: [{ validator: validateRequire }],
+        text: [{ validator: validateRequire }]
       },
-      tempRoute: {},
+      tempRoute: {}
     }
   },
   computed: {
     ...mapState({
-      device: state => state.app.device,
+      device: state => state.app.device
     }),
     labelPosition() {
       return this.device === 'desktop' ? 'left' : 'top'
@@ -145,7 +143,7 @@ export default {
         return (+new Date(this.datetime))
       },
       set(val) {
-        this.datetime= new Date(val)
+        this.datetime = new Date(val)
       }
     }
   },
@@ -162,12 +160,12 @@ export default {
     this.tempRoute = Object.assign({}, this.$route)
   },
   methods: {
-    create_UUID(){
-      var dt = new Date().getTime();
+    create_UUID() {
+      var dt = new Date().getTime()
       var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = (dt + Math.random()*16)%16 | 0
-        dt = Math.floor(dt/16)
-        return (c == 'x' ? r : (r&0x3 | 0x8)).toString(16)
+        var r = (dt + Math.random() * 16) % 16 | 0
+        dt = Math.floor(dt / 16)
+        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16)
       })
       return uuid
     },
@@ -181,8 +179,9 @@ export default {
         // set page title
         this.setPageTitle()
       }).catch(err => {
-        // console.log(err)
+        console.log(err)
       })
+      return null
     },
     setTagsViewTitle() {
       const title = 'Статья id'
@@ -192,6 +191,7 @@ export default {
     setPageTitle() {
       const title = 'Статья id'
       document.title = `${title} - ${this.postForm.id}`
+      return null
     },
     submitForm() {
       this.postForm.public = true
@@ -214,7 +214,7 @@ export default {
           } else {
             createArticle(this.postForm)
               .then(response => {
-                this.$router.push({ name: 'AdminEditArticle', params: { id:response.data.id } })
+                this.$router.push({ name: 'AdminEditArticle', params: { id: response.data.id }})
               })
           }
           if (this.postForm.public) {
@@ -240,7 +240,6 @@ export default {
       })
     },
     draftForm() {
-
       this.postForm.public = false
       this.saveForm()
     },

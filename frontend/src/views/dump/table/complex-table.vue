@@ -107,7 +107,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="Date" prop="timestamp">
-          <el-date-picker v-model="temp.timestamp" type="datetime" placeholder="Please pick a date" />
+          <el-date-picker v-model="temp.timestamp" :picker-options="{ firstDayOfWeek: 1}" type="datetime" placeholder="Please pick a date" />
         </el-form-item>
         <el-form-item label="Title" prop="title">
           <el-input v-model="temp.title" />

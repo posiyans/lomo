@@ -30,7 +30,6 @@
                       type="datetime"
                       :clearable="false"
                       :picker-options="datePickerOptions"
-                      :first-day-of-week="1"
                       value-format="yyyy-MM-dd HH:mm:ss"
                       format="HH:mm dd-MM-yyyy"
                       placeholder="Выберите дату и время"
@@ -43,7 +42,6 @@
                       v-model="postForm.dateRange"
                       type="daterange"
                       range-separator="по"
-                      :first-day-of-week="1"
                       :picker-options="rangePickerOptions"
                       format="dd-MM-yyyy"
                       value-format="yyyy-MM-dd"
@@ -177,11 +175,13 @@ export default {
         date_publish: [{ required: true, message: 'Необходимо установить время публикации' }]
       },
       datePickerOptions: {
+        firstDayOfWeek: 1,
         disabledDate(time) {
           return time.getTime() < Date.now()
         }
       },
       rangePickerOptions: {
+        firstDayOfWeek: 1,
         disabledDate(time) {
           if (vm.postForm.type === 'owner') {
             if (time.getTime() < (vm.publishTime + 14 * 60 * 60 * 24 * 1000)) {

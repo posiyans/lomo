@@ -20,6 +20,9 @@
       <el-tab-pane label="Участки">
         <SteadResult v-if="tabActive == 1" :questions="questions" />
       </el-tab-pane>
+      <el-tab-pane label="Таблица">
+        <SteadTable v-if="tabActive == 2" :questions="questions" />
+      </el-tab-pane>
       <el-tab-pane label="Описание">
         <div class="question" v-html="voting.description" />
         <div v-if="voting.files.length > 0" class="question">
@@ -43,6 +46,7 @@ import { fetchVotingQuestions } from '@/api/admin/voting'
 import waves from '@/directive/waves' // waves directive
 // import SteadOwnwer from './SteadOwner.vue' // secondary package based on el-pagination
 import SteadResult from './components/SteadResult' // secondary package based on el-pagination
+import SteadTable from './components/SteadTable' // secondary package based on el-pagination
 import ResultBlock from './components/ResultBlock'
 
 const selectStatusOptions = [
@@ -60,6 +64,7 @@ export default {
   name: 'AdminVotingResult',
   components: {
     SteadResult,
+    SteadTable,
     ResultBlock
   },
   directives: { waves },

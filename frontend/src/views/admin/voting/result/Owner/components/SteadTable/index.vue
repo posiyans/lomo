@@ -56,7 +56,7 @@ export default {
       voting: [],
       listQuery: {
         page: 1,
-        limit: 20
+        limit: 1000
       }
     }
   },
