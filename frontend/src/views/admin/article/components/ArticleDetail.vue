@@ -191,7 +191,7 @@ export default {
     setPageTitle() {
       const title = 'Статья id'
       document.title = `${title} - ${this.postForm.id}`
-      return null
+      return false
     },
     submitForm() {
       this.postForm.public = true
