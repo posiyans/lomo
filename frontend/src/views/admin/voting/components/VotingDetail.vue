@@ -73,14 +73,12 @@
         <el-form-item prop="image_uri" style="margin-bottom: 30px;">
           <Upload :id="postForm.uid" v-model="postForm.files" />
         </el-form-item>
-        {{ postForm.attached_files }}
-
         <div v-for="(question, i) in postForm.questions" :key="question.id" class="question">
-          <el-form-item style="margin-bottom: 40px;" label-width="100px" :label="`Вопрос № ${i+1}`">
+          <el-form-item style="margin-bottom: 40px;" label-width="110px" :label="`Вопрос № ${i+1}`">
             <el-input v-model="question.text " :rows="1" show-word-limit maxlength="250" type="textarea" class="article-textarea" autosize placeholder="Введите текс вопроса голосования" />
           </el-form-item>
 
-          <el-form-item v-for="(answer, j) in question.answers" :key="answer.id" style="margin-bottom: 40px;" label-width="100px" :label="`Ответ № ${j+1}`">
+          <el-form-item v-for="(answer, j) in question.answers" :key="answer.id" style="margin-bottom: 40px;" label-width="110px" :label="`Ответ № ${j+1}`">
             <el-input v-model="answer.text " :rows="1" show-word-limit maxlength="250" type="textarea" class="article-textarea" autosize placeholder="Введите текс ответа" />
           </el-form-item>
           <el-button type="primary" icon="el-icon-circle-plus" class="answer-button" @click="addAnswer(i)">Добавить ответ</el-button>
