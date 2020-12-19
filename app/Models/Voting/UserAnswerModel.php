@@ -12,4 +12,8 @@ class UserAnswerModel extends Model
     public function user() {
         return $this->hasOne('App\User', 'id', 'user_id');
     }
+
+    public function stead() {
+        return $this->hasOne('App\Models\Stead', 'id', 'stead_id');
+    }
 }

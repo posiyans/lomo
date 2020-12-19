@@ -74,87 +74,87 @@ export default {
 </script>
 
 <style scoped>
-  /*.question{*/
-  /*  margin-top: 10px;*/
-  /*  !*background-color: #cca0ff;*!*/
-  /*  background: rgb(13,0,236);*/
-  /*  background: linear-gradient(315deg, rgba(13,0,236,1) 0%, rgba(0,112,196,1) 0%, rgba(175,217,249,1) 100%);*/
-  /*  padding: 20px;*/
-  /*  width: 640px;*/
-  /*  border-radius: 10px;*/
-  /*}*/
+/*.question{*/
+/*  margin-top: 10px;*/
+/*  !*background-color: #cca0ff;*!*/
+/*  background: rgb(13,0,236);*/
+/*  background: linear-gradient(315deg, rgba(13,0,236,1) 0%, rgba(0,112,196,1) 0%, rgba(175,217,249,1) 100%);*/
+/*  padding: 20px;*/
+/*  width: 640px;*/
+/*  border-radius: 10px;*/
+/*}*/
 
-  /*.answer {*/
-  /*  width: 600px;*/
-  /*  background-color: #86468f;*/
-  /*  background: rgb(13,0,236);*/
-  /*  background: linear-gradient(135deg, rgba(13,0,236,1) 0%, rgba(0,112,196,1) 0%, rgba(175,217,249,1) 100%);*/
-  /*  color: white;*/
-  /*  !*padding: 5px;*!*/
-  /*  border-radius: 5px;*/
-  /*  margin-bottom: 2px;*/
-  /*}*/
+/*.answer {*/
+/*  width: 600px;*/
+/*  background-color: #86468f;*/
+/*  background: rgb(13,0,236);*/
+/*  background: linear-gradient(135deg, rgba(13,0,236,1) 0%, rgba(0,112,196,1) 0%, rgba(175,217,249,1) 100%);*/
+/*  color: white;*/
+/*  !*padding: 5px;*!*/
+/*  border-radius: 5px;*/
+/*  margin-bottom: 2px;*/
+/*}*/
 
-  /*.an{*/
-  /*  background-color: #0070c4;*/
-  /*  !*width: 100px;*!*/
-  /*  height: 100%;*/
-  /*  !*word-wrap: break-word;*!*/
-  /*  white-space:nowrap;*/
-  /*  padding: 10px;*/
-  /*  !*display: inline;*!*/
-  /*  border-radius: 5px 0 0 5px;*/
-  /*}*/
-  /*.file-size {*/
-  /*  padding-left: 10px;*/
-  /*  color: #999;*/
-  /*}*/
-  /*.file-list-header {*/
-  /*  font-weight: bold;*/
-  /*  color: #1f2d3d;*/
-  /*}*/
-  .question{
-    margin-top: 10px;
-    /*background-color: #cca0ff;*/
-    background: rgb(13,0,236);
-    background: linear-gradient(315deg, rgba(13,0,236,1) 0%, rgba(0,112,196,1) 0%, rgba(175,217,249,1) 100%);
-    padding: 20px;
-    max-width: 640px;
-    border-radius: 10px;
-  }
-  .answer {
-    max-width: 600px;
-    background-color: #86468f;
-    background: rgb(13,0,236);
-    background: linear-gradient(135deg, rgb(13, 0, 236) 0%, rgb(0, 112, 196) 0%, rgb(73, 112, 143) 100%);
-    color: white;
-    /*padding: 5px;*/
-    border-radius: 5px;
-    margin-bottom: 2px;
-    position: relative;
-    height: 36px;
-  }
-  .an{
-    position: absolute;
-    background-color: #3b576d;
-    /*width: 100px;*/
-    height: 100%;
-    /*word-wrap: break-word;*/
-    white-space:nowrap;
-    /*padding: 10px;*/
-    /*display: inline;*/
-    border-radius: 5px 0 0 5px;
-    clear: both;
-  }
-  .an-text{
-    position: absolute;
-    /*background-color: #0070c4;*/
-    /*width: 100px;*/
-    height: 100%;
-    /*word-wrap: break-word;*/
-    white-space:nowrap;
-    padding: 10px;
-    /*display: inline;*/
-    border-radius: 5px 0 0 5px;
-  }
+/*.an{*/
+/*  background-color: #0070c4;*/
+/*  !*width: 100px;*!*/
+/*  height: 100%;*/
+/*  !*word-wrap: break-word;*!*/
+/*  white-space:nowrap;*/
+/*  padding: 10px;*/
+/*  !*display: inline;*!*/
+/*  border-radius: 5px 0 0 5px;*/
+/*}*/
+/*.file-size {*/
+/*  padding-left: 10px;*/
+/*  color: #999;*/
+/*}*/
+/*.file-list-header {*/
+/*  font-weight: bold;*/
+/*  color: #1f2d3d;*/
+/*}*/
+.question{
+  margin-top: 10px;
+  /*background-color: #cca0ff;*/
+  background: rgb(13,0,236);
+  background: linear-gradient(315deg, rgba(13,0,236,1) 0%, rgba(0,112,196,1) 0%, rgba(175,217,249,1) 100%);
+  padding: 20px;
+  max-width: 640px;
+  border-radius: 10px;
+}
+.answer {
+  max-width: 600px;
+  background-color: #86468f;
+  background: rgb(13,0,236);
+  background: linear-gradient(135deg, rgb(13, 0, 236) 0%, rgb(0, 112, 196) 0%, rgb(73, 112, 143) 100%);
+  color: white;
+  /*padding: 5px;*/
+  border-radius: 5px;
+  margin-bottom: 2px;
+  position: relative;
+  height: 36px;
+}
+.an{
+  position: absolute;
+  background-color: #3b576d;
+  /*width: 100px;*/
+  height: 100%;
+  /*word-wrap: break-word;*/
+  white-space:nowrap;
+  /*padding: 10px;*/
+  /*display: inline;*/
+  border-radius: 5px 0 0 5px;
+  clear: both;
+}
+.an-text{
+  position: absolute;
+  /*background-color: #0070c4;*/
+  /*width: 100px;*/
+  height: 100%;
+  /*word-wrap: break-word;*/
+  white-space:nowrap;
+  padding: 10px;
+  /*display: inline;*/
+  border-radius: 5px 0 0 5px;
+}
 </style>

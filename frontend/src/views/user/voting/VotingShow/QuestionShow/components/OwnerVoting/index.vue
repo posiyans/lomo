@@ -1,26 +1,35 @@
 <template>
   <div class="app-container">
     <div>
-      Голосование собственников:
+      Статус голосования:
       <el-tag :type="value.status | statusColorFilter">
         {{ value.status | statusFilter }}
       </el-tag>
-      <div v-for="(question, i) in value.questions" class="question">
-        <div style="padding-bottom: 5px; color: black; font-weight: 600;">{{ i+1 }}.
-          <span> {{ question.text }}</span>
+      <div v-if="value.status == 'new'">
+        <h3>
+          Голосование еще не начето
+        </h3>
+      </div>
+      <div v-if="value.status == 'execution'">
+        <h3>
+          Голосование идет
+        </h3>
+        <TableResult :steads="value.questions" />
+      </div>
+      <div v-if="value.status == 'done'">
+        <div v-for="(question, i) in value.questions">
+          <ResultBlock :question="question" :i="i" :steat-count="value.steadsCount" />
         </div>
-        <div v-for="(answer, j) in question.answers">
-          <div class="answer">
-            <div class="an" :style="answer | resultBackgroundFilter(question)">
-              <!--              {{j+1}}.<span>{{answer.text}} </span> <span>{{answer.userAnswersCount}} </span><span> ({{answer | resultFilter(question) }}%)</span>-->
-              {{ j+1 }}.<span>{{ answer.text }} </span>
-            </div>
-          </div>
-
-        </div>
-        <div style="padding-left: 10px; padding-top: 15px;">Проголосовало {{ (100*question.answersCount/value.steadsCount).toFixed(2) }}%  ({{ question.answersCount }} участков)</div>
+      </div>
+      <div v-if="value.status == 'cancel'">
+        <h3>
+          Голосование отменено
+        </h3>
       </div>
     </div>
+    <pre>
+<!--      {{value}}-->
+    </pre>
   </div>
 </template>
 
@@ -30,7 +39,9 @@ import { fetchUserVoting } from '@/api/user/voting'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-// import SteadOwnwer from './result/SteadOwner.vue' // secondary package based on el-pagination
+
+import ResultBlock from '@/components/VotingOwnerResulBlock'
+import TableResult from './components/TableResult'
 
 const selectStatusOptions = [
   { key: 'new', display_name: 'Новое' },
@@ -46,6 +57,8 @@ const Status = selectStatusOptions.reduce((acc, cur) => {
 export default {
   name: 'AdminVotingResult',
   components: {
+    ResultBlock,
+    TableResult
   },
   directives: { waves },
   filters: {
@@ -81,7 +94,7 @@ export default {
   props: {
     value: {
       type: Object,
-      default: {}
+      default: () => ({})
     }
   },
   data() {
