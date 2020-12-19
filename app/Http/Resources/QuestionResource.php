@@ -24,9 +24,5 @@ class QuestionResource extends JsonResource
 
 //            'answers'=>$this->answers
         ];
-//        $this->user->fullName = $this->user->fullName();;
-//        $this->user->fName = $this->user->fName();;
-//        $this->answers;
-//        return parent::toArray($request);
     }
 }

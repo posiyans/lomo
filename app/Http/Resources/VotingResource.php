@@ -44,7 +44,7 @@ class VotingResource extends JsonResource
             'public'=>$this->public,
             'files'=>$this->files,
             'countAnswer'=>$this->userAnswer(),
-//            'questions'=>QuestionResource::collection($this->questions),
+            'questions'=>QuestionResource::collection($this->questions),
             'steadsCount'=> Stead::all()->count(),
             'created_at'=>$this->updated_at,
             ];
