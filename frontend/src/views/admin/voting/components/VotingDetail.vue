@@ -140,7 +140,6 @@ export default {
     }
   },
   data() {
-    var vm = this
     const validateRequire = (rule, value, callback) => {
       if (value === '') {
         this.$message({
@@ -173,21 +172,23 @@ export default {
         date_publish: [{ required: true, message: 'Необходимо установить время публикации' }]
       },
       datePickerOptions: {
-        firstDayOfWeek: 1,
-        disabledDate(time) {
-          return time.getTime() < Date.now()
-        }
+        firstDayOfWeek: 1
+        // todo откоментировать позже
+        // disabledDate(time) {
+        //   return time.getTime() < Date.now()
+        // }
       },
       rangePickerOptions: {
-        firstDayOfWeek: 1,
-        disabledDate(time) {
-          if (vm.postForm.type === 'owner') {
-            if (time.getTime() < (vm.publishTime + 14 * 60 * 60 * 24 * 1000)) {
-              return true
-            }
-          }
-          return time.getTime() < (Date.now() - 90 * 60 * 24 * 1000)
-        }
+        firstDayOfWeek: 1
+        // todo откоментировать позже
+        // disabledDate(time) {
+        //   if (vm.postForm.type === 'owner') {
+        //     if (time.getTime() < (vm.publishTime + 14 * 60 * 60 * 24 * 1000)) {
+        //       return true
+        //     }
+        //   }
+        //   return time.getTime() < (Date.now() - 90 * 60 * 24 * 1000)
+        // }
       },
       answerCount: ['Ответ № 1', 'Ответ № 2']
     }
