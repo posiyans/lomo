@@ -5,12 +5,14 @@
       class="card-mobile"
     >
       <div class="article-preview-header">
-        <h2>{{ voting.title }}</h2>
+        <h1>{{ VotingTypeText }}</h1>
+
         <div v-if="editor" class="article-setting-icon" @click="editArticle">
           <i class="el-icon-s-tools" />
         </div>
       </div>
       <div class="article-preview-body">
+        <h2>{{ voting.title }}</h2>
         <span v-html="voting.description" />
       </div>
       <div v-if="voting.files && voting.files.length > 0">
@@ -48,6 +50,8 @@
 import { fetchUserVoting } from '@/api/user/voting'
 import Comments from '@/components/Comments/index.vue'
 import QuestionShow from './QuestionShow/index.vue'
+import PublicVoting from '@/views/user/voting/VotingShow/QuestionShow/components/PublicVoting'
+import OwnerVoting from '@/views/user/voting/VotingShow/QuestionShow/components/OwnerVoting'
 
 export default {
   components: { Comments, QuestionShow },
@@ -76,6 +80,12 @@ export default {
     }
   },
   computed: {
+    VotingTypeText() {
+      if (this.voting.type === 'public') {
+        return 'Открытое голосование'
+      }
+      return 'Голосование собственников'
+    },
     editor() {
       if (this.$store.getters.user.allPermissions.includes('сreate-polls')) {
         return true
@@ -117,7 +127,7 @@ export default {
 </script>
 
 <style scoped>
-  .article-preview-header{
+  .article-preview-header {
     padding: 0 20px;
     border-bottom: 1px solid #e6ebf5;
     -webkit-box-sizing: border-box;
@@ -126,6 +136,12 @@ export default {
     /*margin-top: -17px;*/
     position: relative;
   }
+
+  .article-preview-header h1 {
+    font-size: 2vmax;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
   .article-preview-body{
     padding: 20px 0;
   }
@@ -133,7 +149,9 @@ export default {
     text-indent: 1.5em; /* Отступ первой строки */
     text-align: justify; /* Выравнивание по ширине */
   }
-
+  .article-preview-body h2 {
+    margin: 0px 0 10px;
+  }
   .article-preview-footer {
 
   }

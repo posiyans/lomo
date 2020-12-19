@@ -95,14 +95,14 @@ class VotingModel extends MyModel
         if ($this->status == 'new') {
             if ($this->type == 'public'){
                 if (strtotime($this->date_publish) < $datetime->format('U')) {
-                    $status = 'execution';
+                    $this->status = 'execution';
                 }
             } else {
                 if (strtotime($this->date_start) < $datetime->format('U')) {
-                    $status = 'execution';
+                    $this->status  = 'execution';
                 }
                 if (strtotime($this->date_stop) < $datetime->format('U')) {
-                    $status = 'done';
+                    $this->status  = 'done';
                 }
             }
         }
@@ -114,7 +114,7 @@ class VotingModel extends MyModel
                 'description' => $this->description,
                 'type' => $this->type,
                 'comments' => $this->comments,
-                'status' => $status,
+                'status' => $this->status,
                 'files' => $this->files,
                 'questions' => QuestionResource::collection($this->questions),
                 'created_at' => $this->updated_at,
@@ -144,17 +144,19 @@ class VotingModel extends MyModel
             $data['questions'] = $questions;
         }
         if ($this->type == 'owner') {
-            $data = [
-                'id' => $this->id,
-                'title' => $this->title,
-                'description' => $this->description,
-                'type' => $this->type,
-                'comments' => $this->comments,
-                'status' => $status,
-                'files' => $this->files,
-                'questions' => QuestionResource::collection($this->questions),
-                'created_at' => $this->updated_at,
-            ];
+            return $this->retrunOwnerVotinForUser();
+//            $data = [
+//                'id' => $this->id,
+//                'title' => $this->title,
+//                'description' => $this->description,
+//                'type' => $this->type,
+//                'comments' => $this->comments,
+//                'status' => $status,
+//                'files' => $this->files,
+//                'questions' => QuestionResource::collection($this->questions),
+//                'created_at' => $this->updated_at,
+//                'steadsCount'=> Stead::all()->count(),
+//            ];
 //            $questions = [];
 //            foreach ($this->questions as $question) {
 //                $answers = [];
@@ -181,6 +183,42 @@ class VotingModel extends MyModel
         }
         return $data;
 
+    }
+
+
+
+    public function retrunOwnerVotinForUser()
+    {
+        $data = [
+            'id' => $this->id,
+            'title' => $this->title,
+            'description' => $this->description,
+            'type' => $this->type,
+            'comments' => $this->comments,
+            'status' => $this->status,
+            'files' => $this->files,
+//            'questions' => QuestionResource::collection($this->questions),
+            'created_at' => $this->updated_at,
+            'steadsCount'=> Stead::all()->count(),
+        ];
+        if ($this->status == 'execution') {
+            $aaray = [];
+            foreach ($this->questions as $question) {
+                $array[] = $question->id;
+            }
+
+            $steads = UserAnswerModel::query()
+                ->whereIn('question_id', $array)
+                ->select('stead_id')
+                ->distinct()
+                ->get();
+            $temp = [];
+            foreach ($steads as $item) {
+                $temp[$item->stead_id] = $item->stead->number;
+            }
+           $data['questions'] = $temp;
+        }
+        return $data;
     }
 
 }

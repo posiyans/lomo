@@ -17,8 +17,7 @@
         :key="item.id"
         :label="item.number"
         :value="item.id"
-      >
-      </el-option>
+      />
     </el-select>
   </div>
 </template>

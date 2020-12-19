@@ -6,21 +6,20 @@
     </el-tag>
     <div v-for="(question, i) in value.questions" class="question">
       <div style="padding-bottom: 5px; color: black; font-weight: 600;">{{ i+1 }}.
-        <span> {{question.text}}</span>
+        <span> {{ question.text }}</span>
       </div>
       <div v-for="(answer, j) in question.answers">
         <div class="answer" :class="question.myAnswers | answerFilter(guest)">
-          <div class="an" :style="answer | resultBackgroundFilter(question)">
-          </div>
+          <div class="an" :style="answer | resultBackgroundFilter(question)" />
           <div class="an-text" @click="vote(answer,question)">
-            {{j+1}}.
+            {{ j+1 }}.
             <span>
               {{ ansverTextFilter(answer.text) }} - {{ answer.userAnswersCount }}
               <span v-if="answer.isMyAnswer" style="color: #32ff32; font-weight: 600;">
-                <i  class="el-icon-check"></i> {{answer | resultFilter(question) }}%
+                <i class="el-icon-check" /> {{ answer | resultFilter(question) }}%
               </span>
               <span v-else style="color: #ffff0a;">
-                {{answer | resultFilter(question) }}%
+                {{ answer | resultFilter(question) }}%
               </span>
             </span>
           </div>
@@ -31,19 +30,19 @@
         <span v-if="guest" style="color: darkred; padding-right: 50px;">
           Для голосования авторизуйтесь
         </span>
-        Проголосовало {{question.answersCount}} человек
+        Проголосовало {{ question.answersCount }} человек
       </div>
     </div>
     <el-dialog
       title="Голосуем?"
       :visible.sync="voidVisible"
       :width="device =='mobile' ? '95%' : '60%'"
-      >
+    >
       <span><b>Подтведите ответ: </b>{{ answer.text }}</span>
       <span slot="footer" class="dialog-footer">
-    <el-button @click="voidVisible = false">Отмена</el-button>
-    <el-button type="primary" @click="confirmAnswer(answer.id)">Проголосовать</el-button>
-  </span>
+        <el-button @click="voidVisible = false">Отмена</el-button>
+        <el-button type="primary" @click="confirmAnswer(answer.id)">Проголосовать</el-button>
+      </span>
     </el-dialog>
   </div>
 </template>
@@ -89,7 +88,7 @@ export default {
       return color[status]
     },
     resultFilter(answer, question) {
-      const count = question.answers.reduce((sum, item) => { return sum + item.userAnswersCount}, 0)
+      const count = question.answers.reduce((sum, item) => { return sum + item.userAnswersCount }, 0)
       if (count === 0) {
         return 0
       }
@@ -97,7 +96,7 @@ export default {
       // return answer.userAnswersCount/count
     },
     resultBackgroundFilter(answer, question) {
-      const count = question.answers.reduce((sum, item) => { return sum + item.userAnswersCount}, 0)
+      const count = question.answers.reduce((sum, item) => { return sum + item.userAnswersCount }, 0)
       return 'width:' + 100 * answer.userAnswersCount / count + '%;'
       // return answer.userAnswersCount/count
     },
@@ -114,7 +113,7 @@ export default {
     return {
       voidVisible: false,
       answer: {},
-      selectStatusOptions,
+      selectStatusOptions
     }
   },
   computed: {
@@ -175,7 +174,7 @@ export default {
         return val.substr(0, maxLen) + '...'
       }
       return val
-    },
+    }
   }
 }
 </script>

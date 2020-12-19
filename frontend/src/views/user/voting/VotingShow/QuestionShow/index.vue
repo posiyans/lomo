@@ -1,10 +1,10 @@
 <template>
-   <component  v-loading="loading" v-bind:is="VotingType" v-model="voting" v-on:changeResult="getVoting"></component>
+  <component :is="VotingType" v-model="voting" v-loading="loading" @changeResult="getVoting" />
 </template>
 
 <script>
-import PublicVoting from './components/PublicVoting.vue'
-import OwnerVoting from './components/OwnerVoting.vue'
+import PublicVoting from './components/PublicVoting'
+import OwnerVoting from './components/OwnerVoting'
 
 export default {
   name: 'UserVotingIndex',

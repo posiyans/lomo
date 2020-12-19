@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\User;
+namespace App\Http\Controllers\User\Voting;
 
 use App\Http\Resources\AppealResource;
 use App\Http\Resources\ConrtollerResource;
@@ -111,7 +111,7 @@ class UserVotingController extends Controller
                 } else {
                     $user_id = false;
                 }
-                return ['data'=>$voting->userReturn($user_id)];
+                return ['data' => $voting->userReturn($user_id)];
 //                return new VotingResource($voting);
             }
         }

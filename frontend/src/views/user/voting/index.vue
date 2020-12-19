@@ -2,27 +2,27 @@
   <div>
     <div class="filter-container">
       <el-row :gutter="10" class="el-col">
-         <el-col :xs="22" :span="2" :md="6">
-           <el-select v-model="listQuery.type" placeholder="Тип голосования" clearable class="filter-item" style="width: 230px">
-             <el-option v-for="item in TypeObject" :key="item.key" :label="item.title" :value="item.key" />
-           </el-select>
-         </el-col>
-         <el-col :xs="22" :md="6">
-           <el-select v-model="listQuery.status" placeholder="Статус голосования" clearable multiple class="filter-item" style="width: 230px">
-             <el-option v-for="item in StatusObject" :key="item.key" :label="item.title" :value="item.key" />
-           </el-select>
-         </el-col>
-         <el-col :xs="22" :md="6">
-           <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-             Показать
-           </el-button>
-         </el-col>
+        <el-col :xs="22" :span="2" :md="6">
+          <el-select v-model="listQuery.type" placeholder="Тип голосования" clearable class="filter-item" style="width: 230px">
+            <el-option v-for="item in TypeObject" :key="item.key" :label="item.title" :value="item.key" />
+          </el-select>
+        </el-col>
+        <el-col :xs="22" :md="6">
+          <el-select v-model="listQuery.status" placeholder="Статус голосования" clearable multiple class="filter-item" style="width: 230px">
+            <el-option v-for="item in StatusObject" :key="item.key" :label="item.title" :value="item.key" />
+          </el-select>
+        </el-col>
+        <el-col :xs="22" :md="6">
+          <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+            Показать
+          </el-button>
+        </el-col>
       </el-row>
     </div>
-    <div v-loading="listLoading"  v-for="item in list" :key="item.id">
-      <VotingPreview :voting="item"/>
+    <div v-for="item in list" :key="item.id" v-loading="listLoading">
+      <VotingPreview :voting="item" />
     </div>
-    <LoadMore v-loading="addLoading" :length="list.length" :total="total" @download="addVoting"/>
+    <LoadMore v-loading="addLoading" :length="list.length" :total="total" @download="addVoting" />
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="fetchVoting" />
 
   </div>
@@ -73,9 +73,8 @@ export default {
     }
   },
   computed: {
-    loadMore(){
-
-      if (this.total > this.list.length){
+    loadMore() {
+      if (this.total > this.list.length) {
         return 'Загрузить еще'
       }
       return false

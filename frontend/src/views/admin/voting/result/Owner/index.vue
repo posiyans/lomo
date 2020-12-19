@@ -14,6 +14,7 @@
           </el-tag>
         </div>
         <div v-for="(question, i) in questions" :key="question.id">
+          {{}}
           <ResultBlock :question="question" :i="i" :steat-count="voting.steadsCount" />
         </div>
       </el-tab-pane>
@@ -47,7 +48,7 @@ import waves from '@/directive/waves' // waves directive
 // import SteadOwnwer from './SteadOwner.vue' // secondary package based on el-pagination
 import SteadResult from './components/SteadResult' // secondary package based on el-pagination
 import SteadTable from './components/SteadTable' // secondary package based on el-pagination
-import ResultBlock from './components/ResultBlock'
+import ResultBlock from '@/components/VotingOwnerResulBlock'
 
 const selectStatusOptions = [
   { key: 'new', display_name: 'Новое' },

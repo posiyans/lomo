@@ -2,7 +2,7 @@
 
 //Route::get('/', 'UserController@info');
 Route::post('save-user-info', 'UserController@save');
-Route::post('vote', 'User\UserVotingController@addAnswer');
+Route::post('vote', 'User\Voting\UserVotingController@addAnswer');
 
 // Перенесено в all
 //Route::post('steads-list', 'User\SteadController@list');
