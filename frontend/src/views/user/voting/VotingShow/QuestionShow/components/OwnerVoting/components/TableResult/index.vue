@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { fetchSteadList } from '@/api/stead'
+import { getSteadsList } from '@/api/user/stead'
 export default {
   props: {
     steads: {
@@ -73,15 +73,15 @@ export default {
         limit: 1000,
         page: 1
       }
-      fetchSteadList(data)
+      getSteadsList(data)
         .then(response => {
-          if (response.data.data) {
-            this.$message('Данные успешно сохранены')
-            this.list = response.data.data
-          } else {
-            this.$message.error('Ошибка получения данных')
-            // this.$message.error(response.data.data)
-          }
+          // if (response.data.data) {
+          //   this.$message('Данные успешно сохранены')
+          this.list = response.data
+          // } else {
+          //   this.$message.error('Ошибка получения данных')
+          // this.$message.error(response.data.data)
+          // }
           this.syncList()
         })
     }

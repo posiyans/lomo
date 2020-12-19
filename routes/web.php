@@ -66,7 +66,8 @@ $myRoutesForAll = [
     'camera',
     'rate',
     'info',
-    'receipt'
+    'receipt',
+    'voting'
 ];
 $myRoutesForAdmin = [
     'appeal',
