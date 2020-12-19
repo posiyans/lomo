@@ -9,12 +9,12 @@
     <el-tabs v-model="tabActive" type="border-card">
       <el-tab-pane label="Результат">
         <div>
+          Статус:
           <el-tag :type="voting.status | statusColorFilter">
             {{ voting.status | statusFilter }}
           </el-tag>
         </div>
         <div v-for="(question, i) in questions" :key="question.id">
-          {{}}
           <ResultBlock :question="question" :i="i" :steat-count="voting.steadsCount" />
         </div>
       </el-tab-pane>
