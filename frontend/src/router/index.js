@@ -375,7 +375,7 @@ export const asyncRoutes = [
       },
       {
         path: 'addAnswer/:id(\\d+)',
-        component: () => import('@/views/admin/user-answer/add/'),
+        component: () => import('@/views/admin/voting/result/Owner/user-answer/add/'),
         name: 'AdminEditVoting',
         meta: {
           title: 'Правка',

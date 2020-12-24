@@ -9,3 +9,6 @@ Route::resource('voting/result', 'Admin\Voting\AdminVotingResultController')
 Route::resource('voting', 'Admin\AdminVotingController')
     ->only(['index', 'update', 'store', 'show']);
 Route::post('voting/owner/add-answer', 'Admin\Voting\AdminVotingUserAnswerController@addUserAnswer');
+Route::get('voting/owner/get-file', 'Admin\Voting\AdminVotingFileController@getFile');
+Route::post('voting/owner/get-bulletin-list', 'Admin\Voting\AdminVotingFileController@getBulletinList');
+Route::post('voting/owner/upload-file', 'Admin\Voting\AdminVotingFileController@uploadFile');

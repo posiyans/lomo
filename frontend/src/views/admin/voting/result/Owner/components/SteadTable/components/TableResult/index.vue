@@ -55,8 +55,9 @@ export default {
   },
   methods: {
     target(item) {
-      console.log(item)
-      this.$router.push('/admin/voting/addAnswer/' + this.id + '?stead=' + item.id)
+      if (!item.answer) {
+        this.$router.push('/admin/voting/addAnswer/' + this.id + '?stead=' + item.id)
+      }
     },
     syncList() {
       let i = 1

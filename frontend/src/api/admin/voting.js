@@ -54,3 +54,11 @@ export function addUserAswers(data) {
     data
   })
 }
+
+export function getBulletinList(data) {
+  return request({
+    url: '/api/v1/admin/voting/owner/get-bulletin-list',
+    method: 'post',
+    data
+  })
+}

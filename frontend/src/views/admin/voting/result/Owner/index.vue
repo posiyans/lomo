@@ -19,7 +19,7 @@
         </div>
       </el-tab-pane>
       <el-tab-pane label="Участки">
-        <SteadResult v-if="tabActive == 1" :questions="questions" />
+        <SteadResult v-if="tabActive == 1" :id="id" :questions="questions" />
       </el-tab-pane>
       <el-tab-pane label="Таблица">
         <SteadTable v-if="tabActive == 2" :questions="questions" />

@@ -2,11 +2,13 @@
 
 namespace App\Models\Voting;
 
+use App\Http\Controllers\Controller;
 use App\Http\Resources\AnswerResource;
 use App\Http\Resources\QuestionResource;
 use App\Models\Stead;
 use App\Models\Storage\File;
 use App\MyModel;
+use Illuminate\Support\Facades\DB;
 use VK\Actions\Auth;
 
 class VotingModel extends MyModel
@@ -228,29 +230,46 @@ class VotingModel extends MyModel
 
     public function syncOwnerUserAnswer($answer, $stead_id, $user_id)
     {
-        $data = [];
+        DB::beginTransaction();
+        $error = false;
         foreach ($this->questions as $question) {
-            dump($question->id);
-            dump($answer);
             if (array_key_exists($question->id, $answer)) {
                 $question->setOwnerAnswer($answer[$question->id], $stead_id, $user_id);
             } else {
-                $question->deleteOwnerAnswer($stead_id, $user_id);
+//                $question->deleteOwnerAnswer($stead_id, $user_id);
+                $error = true;
             }
         }
-        return $data;
-
+        if ($error) {
+            DB::rollback();
+            return false;
+        }
+        DB::commit();
+        return true;
     }
 
-    public function addUserBelluten($inputFile,  $stead_id, $user_id)
+    public function addUserBelluten($inputFile,  $stead_id)
     {
-
-        $md5 = $this->md5_file($inputFile);
+        $file = new VotingFileModel();
+        $md5 = Controller::md5_file($inputFile);
         $inputFile->move($md5['folder'], $md5['md5']);
-        $file = new File();
         $file->hash = $md5['md5'];
         $file->name = $inputFile->getClientOriginalName();
         $file->size = $inputFile->getSize();
+        $file->type = $inputFile->getClientMimeType();
+        $file->voting_id = $this->id;
+        $file->stead_id = $stead_id;
+        if ($file->save()){
+            $data= [
+                'status' => true,
+                'file' => [
+                    'url' => '/api/v1/admin/voting/owner/get-file?uid='. $file->uid,
+                    'id'=>$file->id,
+                ]
+            ];
+            return $data;
+        }
+        return false;
 
     }
 
