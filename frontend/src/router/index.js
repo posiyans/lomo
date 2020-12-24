@@ -374,6 +374,18 @@ export const asyncRoutes = [
         hidden: true
       },
       {
+        path: 'addAnswer/:id(\\d+)',
+        component: () => import('@/views/admin/user-answer/add/'),
+        name: 'AdminEditVoting',
+        meta: {
+          title: 'Правка',
+          noCache: true,
+          activeMenu: '/voting/list',
+          roles: ['сreate-polls']
+        },
+        hidden: true
+      },
+      {
         path: 'result/:id(\\d+)',
         component: () => import('@/views/admin/voting/result/index'),
         name: 'AdminResultVoting',
@@ -751,42 +763,7 @@ export const asyncRoutes = [
   //   ]
   // },
   //
-  // {
-  //   path: '/excel',
-  //   component: Layout,
-  //   redirect: '/excel/export-excel',
-  //   name: 'Excel',
-  //   meta: {
-  //     title: 'Excel',
-  //     icon: 'excel'
-  //   },
-  //   children: [
-  //     {
-  //       path: 'export-excel',
-  //       component: () => import('@/views/excel/export-excel'),
-  //       name: 'ExportExcel',
-  //       meta: { title: 'Export Excel' }
-  //     },
-  //     {
-  //       path: 'export-selected-excel',
-  //       component: () => import('@/views/excel/select-excel'),
-  //       name: 'SelectExcel',
-  //       meta: { title: 'Export Selected' }
-  //     },
-  //     {
-  //       path: 'export-merge-header',
-  //       component: () => import('@/views/excel/merge-header'),
-  //       name: 'MergeHeader',
-  //       meta: { title: 'Merge Header' }
-  //     },
-  //     {
-  //       path: 'upload-excel',
-  //       component: () => import('@/views/excel/upload-excel'),
-  //       name: 'UploadExcel',
-  //       meta: { title: 'Upload Excel' }
-  //     }
-  //   ]
-  // },
+
   //
   // {
   //   path: '/zip',

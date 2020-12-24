@@ -42,7 +42,7 @@ class AdminVotingResultController extends Controller
 //            $result = UserAnswerModel::query()->get();
             return AdminVotingResultResource::collection($results);
         }
-        return 'sdfsdfs';
+        return false;
     }
 //        $query = VotingModel::query();
 //        $votings = $query->paginate($request->limit);

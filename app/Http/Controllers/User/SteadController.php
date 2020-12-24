@@ -26,9 +26,13 @@ class SteadController extends Controller
     public function list(Request $request)
     {
         $query = $request->input('query');
+        $stead_id = $request->input('stead_id');
         $steads = Stead::query();
         if (isset($query) && !empty($query)){
           $steads->where('number','LIKE', '%'.$query.'%');
+        }
+        if (isset($stead_id) && is_numeric($stead_id)){
+            $steads->where('id',$stead_id);
         }
         $data = $steads->select(['id', 'number', 'size'])->get();
 

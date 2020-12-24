@@ -38,13 +38,6 @@ class FileController extends Controller
      */
     public function store(Request $request)
     {
-
-        $data= [
-            "files"=> [
-                        "file"=> 'https://sun9-23.userapi.com/c638430/v638430487/359b2/eoc8yTAibjo.jpg?ava=1'
-                        ],
-        ];
-
         if (Input::hasFile('file')) {
             $inputFile = Input::file('file');
             $md5 = $this->md5_file($inputFile);

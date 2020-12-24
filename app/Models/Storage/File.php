@@ -26,4 +26,8 @@ class File extends MyModel
         }
     }
 
+//    public static function saveForModel($file, $model) {
+//
+//    }
+
 }

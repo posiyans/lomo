@@ -2,13 +2,14 @@
 
 namespace App\Models\Voting;
 
-use Illuminate\Database\Eloquent\Model;
+use App\MyModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Auth;
 
-class QuestionModel extends Model
+class QuestionModel extends MyModel
 {
     use SoftDeletes;
+//    protected $fillable= [];
 
     public function answers()
     {
@@ -68,5 +69,33 @@ class QuestionModel extends Model
         return true;
     }
 
+
+    public function checkAnswerId($id)
+    {
+        return (boolean)AnswerModel::where('question_id', $this->id)->first();
+    }
+
+    public function setOwnerAnswer($answer, $stead_id, $user_id)
+    {
+        if ($this->checkAnswerId($answer)) {
+            $result = UserAnswerModel::firstOrNew(['question_id' => $this->id, 'stead_id' => $stead_id]);
+            if ($result && $result->answer_id != $answer) {
+                $result->answer_id = $answer;
+                $result->user_id = $user_id;
+                if ($result->save()) {
+                    return $result;
+                }
+            }
+        }
+        return false;
+    }
+
+    public function deleteOwnerAnswer($stead_id, $user_id)
+    {
+        $result = UserAnswerModel::where(['question_id' => $this->id, 'stead_id' => $stead_id])->first();
+        if ($result) {
+                $result->delete();
+        }
+    }
 
 }

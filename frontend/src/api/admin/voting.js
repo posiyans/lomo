@@ -46,3 +46,11 @@ export function fetchVotingQuestions(id, query) {
     params: query
   })
 }
+
+export function addUserAswers(data) {
+  return request({
+    url: '/api/v1/admin/voting/owner/add-answer',
+    method: 'post',
+    data
+  })
+}

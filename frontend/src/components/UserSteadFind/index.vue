@@ -5,6 +5,7 @@
       filterable
       remote
       clearable
+      :disabled="disabled"
       reserve-keyword
       placeholder="Введите номер участка"
       no-data-text="Данный номер не найден"
@@ -29,10 +30,15 @@ export default {
     userStead: {
       type: [String, Number],
       default: ''
+    },
+    stead_id: {
+      type: [Boolean, Number],
+      default: false
     }
   },
   data() {
     return {
+      disabled: false,
       loading: false,
       centerDialogVisible: false,
       gardening: {},
@@ -42,10 +48,38 @@ export default {
     }
   },
   mounted() {
-    this.stead = this.userStead
-    this.findStead()
+    if (this.stead_id) {
+      console.log(this.stead_id)
+      const data = {
+        stead_id: this.stead_id
+      }
+      getSteadsList(data)
+        .then(response => {
+          console.log(response)
+          if (response.data.length === 1) {
+            this.stead = response.data[0].number
+            this.$emit('selectStead', response.data[0])
+            this.disabled = true
+          }
+        })
+    }
+    // this.stead = this.userStead
+    // this.findStead(this.userStead)
+    // this.selectStead()
   },
   methods: {
+    find(val) {
+      const data = {
+        query: val
+      }
+      getSteadsList(data)
+        .then(response => {
+          if (response.data.length === 1) {
+            this.stead = val
+            this.$emit('selectStead', response.data[0])
+          }
+        })
+    },
     findStead(val) {
       this.loading = true
       const data = {
