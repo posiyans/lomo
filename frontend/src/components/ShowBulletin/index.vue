@@ -1,13 +1,13 @@
 <template>
   <div class="block">
     <div v-for="(question, i) in voting.questions" class="question-block">
-      <strong>{{++i}}. {{question.text}}</strong>
+      <strong>{{ ++i }}. {{ question.text }}</strong>
       <div>
         <el-radio-group v-model="radio[question.id]" @change="setAnswer">
           <div v-for="(answer, j) in question.answers" class="answer-block">
-<!--            <div class="answer-text"> {{++j}}. {{answer.text}}</div>-->
+            <!--            <div class="answer-text"> {{++j}}. {{answer.text}}</div>-->
             <div>
-              <el-radio :label="answer.id" border> {{++j}}. {{answer.text}}</el-radio>
+              <el-radio :label="answer.id" border> {{ ++j }}. {{ answer.text }}</el-radio>
             </div>
           </div>
         </el-radio-group>
@@ -30,7 +30,7 @@ export default {
     header: {
       type: Boolean,
       default: true
-    },
+    }
 
   },
   data() {

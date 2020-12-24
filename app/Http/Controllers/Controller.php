@@ -15,7 +15,7 @@ class Controller extends BaseController
         return response($var, $code)->header('Access-Control-Allow-Origin','*')->header('Access-Control-Allow-Headers','Origin, X-Requested-With, Content-Type, Accept, S-Token, U-Token ')->header('Access-Control-Allow-Methods','GET,HEAD,OPTIONS,POST,PUT');
     }
 
-    public function md5_file($file){
+    public static function md5_file($file){
         $md5 = md5_file($file);
         $md5_sm=substr($md5, 0,2);
         $folder = config('filesystems.file_folder');

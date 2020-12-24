@@ -15,12 +15,14 @@ class AddVotingFileTable extends Migration
     {
         Schema::create('voting_files', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('uid')->nullable();
             $table->integer('user_id')->unsigned()->comment('кто загрузил');
             $table->integer('voting_id')->nullable()->comment('id голосования');
-            $table->integer('stead_id')->nullable()->comment('id голосования');
+            $table->integer('stead_id')->nullable()->comment('id участка');
             $table->string('hash')->nullable();
             $table->text('name')->nullable();
             $table->integer('size')->nullable();
+            $table->string('type')->nullable();
             $table->text('discription')->nullable();
             $table->softDeletes();
             $table->timestamps();

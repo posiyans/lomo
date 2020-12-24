@@ -11,7 +11,7 @@
     >
       <el-table-column fixed label="участок" align="center" width="80">
         <template slot-scope="{row}">
-          <span :class="{red: !listo[row.id], green: listo[row.id]}">{{ row.number }}</span>
+          <span :class="{red: !listo[row.id], green: listo[row.id]}" @click="showB(row)">{{ row.number }}</span>
         </template>
       </el-table-column>
       <el-table-column v-for="q in questions" :key="'q' + q.id" :label="q.text" class="do-not-carry" align="center">
@@ -23,27 +23,44 @@
       </el-table-column>
     </el-table>
     <LoadMore :key="key" :list-query="listQuery" :func="func" @setList="setList" />
+    <template v-if="preview">
+      <image-viewer  v-if="showViewer" :on-close="closeViewer" :url-list="previewSrcList"/>
+    </template>
   </div>
 </template>
 
 <script>
 import { fetchSteadList } from '@/api/stead.js'
-import { fetchVotingResults } from '@/api/admin/voting'
+import { fetchVotingResults, getBulletinList } from '@/api/admin/voting'
+import ImageViewer from './image-viewer'
 
 import LoadMore from '@/components/LoadMore'
 
 export default {
   components: {
-    LoadMore
+    LoadMore,
+    ImageViewer
   },
   props: {
     questions: {
       type: Array,
       default: () => { [] }
+    },
+    id: {
+      type: Number,
+      default: 0
     }
   },
+
   data() {
     return {
+      prevOverflow: '',
+      preview: true,
+      showViewer: false,
+      previewSrcList: [
+        'https://fuss10.elemecdn.com/8/27/f01c15bb73e1ef3793e64e6b7bbccjpeg.jpeg',
+        'https://fuss10.elemecdn.com/1/8e/aeffeb4de74e2fde4bd74fc7b4486jpeg.jpeg'
+      ],
       keyc: 1,
       key: 1,
       func: fetchSteadList,
@@ -64,6 +81,27 @@ export default {
     // this.getSteads()
   },
   methods: {
+    closeViewer() {
+      document.body.style.overflow = this.prevOverflow
+      this.showViewer = false
+    },
+    showB(row) {
+      console.log(row)
+      const data = {
+        stead: row.id,
+        voting: this.id
+      }
+      getBulletinList(data)
+        .then(response => {
+          if (response.data.status) {
+            this.previewSrcList = response.data.data
+            this.prevOverflow = document.body.style.overflow
+            document.body.style.overflow = 'hidden'
+            this.showViewer = true
+          }
+        })
+
+    },
     tableRowClassName({ row }) {
       if (!(row.id in this.listo)) {
         return 'warning-row'
