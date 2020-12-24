@@ -2,7 +2,7 @@
   <div class="app-container">
     <h1>{{ value.title }}</h1>
     <div class="filter-container">
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-plus">
+      <el-button v-waves class="filter-item" type="primary" icon="el-icon-plus" @click="addUserAnswer">
         Проголосовать
       </el-button>
     </div>
@@ -121,6 +121,9 @@ export default {
     this.getQuestions()
   },
   methods: {
+    addUserAnswer() {
+      this.$router.push('/admin/voting/addAnswer/' + this.value.id)
+    },
     getQuestions() {
       fetchVotingQuestions(this.voting.id)
         .then(response => {

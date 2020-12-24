@@ -24,6 +24,7 @@ class ArticleModel extends MyModel
     }
     /**
      * прикрепить файлы к модели
+     *
      * @param $files
      */
     public function attachedFiles($files)

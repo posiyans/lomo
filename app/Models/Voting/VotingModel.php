@@ -5,6 +5,7 @@ namespace App\Models\Voting;
 use App\Http\Resources\AnswerResource;
 use App\Http\Resources\QuestionResource;
 use App\Models\Stead;
+use App\Models\Storage\File;
 use App\MyModel;
 use VK\Actions\Auth;
 
@@ -186,7 +187,11 @@ class VotingModel extends MyModel
     }
 
 
-
+    /**
+     *  вернуть согосованеи собственников
+     *
+     * @return array
+     */
     public function retrunOwnerVotinForUser()
     {
         $data = [
@@ -219,6 +224,34 @@ class VotingModel extends MyModel
            $data['questions'] = $temp;
         }
         return $data;
+    }
+
+    public function syncOwnerUserAnswer($answer, $stead_id, $user_id)
+    {
+        $data = [];
+        foreach ($this->questions as $question) {
+            dump($question->id);
+            dump($answer);
+            if (array_key_exists($question->id, $answer)) {
+                $question->setOwnerAnswer($answer[$question->id], $stead_id, $user_id);
+            } else {
+                $question->deleteOwnerAnswer($stead_id, $user_id);
+            }
+        }
+        return $data;
+
+    }
+
+    public function addUserBelluten($inputFile,  $stead_id, $user_id)
+    {
+
+        $md5 = $this->md5_file($inputFile);
+        $inputFile->move($md5['folder'], $md5['md5']);
+        $file = new File();
+        $file->hash = $md5['md5'];
+        $file->name = $inputFile->getClientOriginalName();
+        $file->size = $inputFile->getSize();
+
     }
 
 }
