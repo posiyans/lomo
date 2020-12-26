@@ -1,6 +1,10 @@
 <template>
   <div class="block">
-    <div v-for="(question, i) in voting.questions" class="question-block">
+    <div
+      v-for="(question, i) in voting.questions"
+      class="question-block"
+      :class="{red: !radio[question.id]}"
+    >
       <strong>{{ ++i }}. {{ question.text }}</strong>
       <div>
         <el-radio-group v-model="radio[question.id]" @change="setAnswer">
@@ -59,12 +63,15 @@ export default {
   }
   .block {
     background-color: white;
-    padding-top: 0;
+    padding-top: 15px;
     padding-bottom: 10px;
   }
   .question-block {
-    margin: 20px;
-    margin-top: 0px;
+    margin: 0px;
+    margin-bottom: 20px;
+    background-color: #f5f5f5;
+    padding: 15px;
+    border-radius: 5px;
   }
   .custom-checkbox {
     position: absolute;

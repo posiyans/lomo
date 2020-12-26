@@ -70,19 +70,37 @@ class QuestionModel extends MyModel
     }
 
 
+    /**
+     * проверить принадлежит ли ответ данному вопросу
+     *
+     * @param $id
+     * @return bool
+     */
     public function checkAnswerId($id)
     {
         return (boolean)AnswerModel::where('question_id', $this->id)->first();
     }
 
-    public function setOwnerAnswer($answer, $stead_id, $user_id)
+    /**
+     * добавить ответ участка по голосованию по данному вопросу
+     *
+     * @param $answer
+     * @param $stead_id
+     * @param $user_id
+     * @return false
+     */
+    public function setOwnerAnswer($answer, $stead_id)
     {
         if ($this->checkAnswerId($answer)) {
             $result = UserAnswerModel::firstOrNew(['question_id' => $this->id, 'stead_id' => $stead_id]);
             if ($result && $result->answer_id != $answer) {
                 $result->answer_id = $answer;
-                $result->user_id = $user_id;
-                if ($result->save()) {
+                if ($result->id) {
+                    $text = 'Измение';
+                } else {
+                    $text = 'Добавление';
+                }
+                if ($result->logAndSave($text, $stead_id)) {
                     return $result;
                 }
             }

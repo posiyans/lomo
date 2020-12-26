@@ -190,7 +190,7 @@ class VotingModel extends MyModel
 
 
     /**
-     *  вернуть согосованеи собственников
+     *  вернуть голосование собственников
      *
      * @return array
      */
@@ -228,13 +228,13 @@ class VotingModel extends MyModel
         return $data;
     }
 
-    public function syncOwnerUserAnswer($answer, $stead_id, $user_id)
+    public function syncOwnerUserAnswer($answer, $stead_id)
     {
         DB::beginTransaction();
         $error = false;
         foreach ($this->questions as $question) {
             if (array_key_exists($question->id, $answer)) {
-                $question->setOwnerAnswer($answer[$question->id], $stead_id, $user_id);
+                $question->setOwnerAnswer($answer[$question->id], $stead_id);
             } else {
 //                $question->deleteOwnerAnswer($stead_id, $user_id);
                 $error = true;
@@ -259,7 +259,9 @@ class VotingModel extends MyModel
         $file->type = $inputFile->getClientMimeType();
         $file->voting_id = $this->id;
         $file->stead_id = $stead_id;
-        if ($file->save()){
+        $file->discription = 'stead=' . $stead_id . ', voting=' . $this->id;
+        if ($file->logAndSave('Добавлен беллютень', $stead_id)){
+            $file->deleteOldFile();
             $data= [
                 'status' => true,
                 'file' => [
@@ -272,5 +274,7 @@ class VotingModel extends MyModel
         return false;
 
     }
+
+
 
 }

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\Log;
 use App\Models\Stead;
 
 use App\Notifications\ResetPassword;
@@ -147,6 +148,25 @@ class User extends Authenticatable implements MustVerifyEmail
             $this->email_verified_at = null;
             $this->save();
             $this->sendEmailVerificationNotification();
+            return true;
+        }
+        return false;
+    }
+
+
+    /**
+     * сохранить изменения и добавть логи
+     *
+     * @param null $description
+     * @param null $stead
+     * @param array $options
+     * @return bool
+     */
+    public function logAndSave($description = null, $stead = null, array $options = [])
+    {
+        $original_model = $this->getOriginal();
+        if ($this->save($options)) {
+            return Log::addLog($this, $original_model, $description, $stead);
             return true;
         }
         return false;

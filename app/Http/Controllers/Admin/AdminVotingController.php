@@ -64,7 +64,7 @@ class AdminVotingController extends Controller
                 $voting->date_stop = '9999-01-01 00:00:00';
                 $voting->date_publish = now();
             }
-            $voting->save();
+//            $voting->save();
             if ($voting->save()) {
                 if (isset($data['questions']) && is_array($data['questions'])) {
                     $voting->saveQuestions($data['questions']);
@@ -126,7 +126,6 @@ class AdminVotingController extends Controller
                         $voting->date_start = '0000-01-01 00:00:00';
                         $voting->date_stop = '9999-01-01 00:00:00';
                     }
-                    $voting->save();
                     if ($voting->save()) {
                         if (isset($data['questions']) && is_array($data['questions'])) {
                             $voting->saveQuestions($data['questions']);

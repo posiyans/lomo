@@ -112,8 +112,6 @@ class Stead extends MyModel
     public static function addNote($id, $note){
         $stead = Stead::find($id);
         if ($stead){
-
-//            $stead_clone = clone $stead;
             $discriptions = $stead->discriptions;
             if (isset($discriptions['note'])){
                 $discriptions['note'] .= "\n".$note;
@@ -121,8 +119,7 @@ class Stead extends MyModel
                 $discriptions['note'] = $note;
             }
             $stead->discriptions = $discriptions;
-            if ($stead->save()){
-
+            if ($stead->logAndSave('Изменение в описании', $stead->id)){
                 return $stead;
             }
         }
@@ -139,12 +136,10 @@ class Stead extends MyModel
     {
        $stead = Stead::find($id);
             if ($stead && $model['id'] == $stead->id){
-                $stead_clone = clone $stead;
                 $stead->number =  $model['number'];
                 $stead->size =  $model['size'];
                 $stead->discriptions =  $model['discriptions'];
-                if ($stead->save()){
-                    Log::saveDiff($stead, $stead_clone, 'Изменение данныз об участке');
+                if ($stead->logAndSave('Изменение данных об участке', $stead->id)){
                     return $stead;
                 }
             }

@@ -148,7 +148,7 @@ class ArticleController extends Controller
                 $article->news = $request->news;
                 $article->allow_comments = $request->allow_comments;
                 $article->publish_time = $request->display_time;
-                if ($article->save()) {
+                if ($article->logAndSave('Изменение содержания')) {
                     if (is_array($request->input('files'))) {
                         $article->attachedFiles($request->input('files'));
                     }
