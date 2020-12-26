@@ -1,25 +1,25 @@
 <template>
   <el-container id="main-container">
     <el-container>
-      <el-header style="text-align: right; font-size: 12px">
+      <div class="main-header">
         <hamburger v-if="mobile" :is-active="open_sidebar" class="hamburger-container" @toggleClick="toggleSideBar" />
         <div
-          class="header logo"
+          class="header-block site-title"
         >
-          {{site_name}}
+          {{ site_name }}
         </div>
         <div
-          class="header logo"
+          class="header-block"
         >
-          <TemperWidget/>
+          <TemperWidget />
         </div>
         <div
-          class="header login"
+          class="header-link"
         >
-          <HeaderLink/>
+          <HeaderLink />
         </div>
-      </el-header>
-      <el-row v-if="open_sidebar || !mobile" >
+      </div>
+      <el-row v-if="open_sidebar || !mobile">
         <el-col :span="24">
           <ItemMenu :menu="menu" @toggleClick="open_sidebar = false" />
         </el-col>
@@ -27,12 +27,12 @@
       <el-main class="main-body">
         <el-container>
           <el-main class="main-app">
-            <app-main/>
+            <app-main />
           </el-main>
           <el-aside v-if="asideShow">
-            <LoginForm></LoginForm>
-            <ReceiptForm></ReceiptForm>
-            <WeatherForm></WeatherForm>
+            <LoginForm />
+            <ReceiptForm />
+            <WeatherForm />
           </el-aside>
         </el-container>
       </el-main>
@@ -47,19 +47,19 @@
 </template>
 
 <script>
-import RightPanel from '@/components/RightPanel'
+// import RightPanel from '@/components/RightPanel'
 import HeaderLink from './components/HeaderLink/index.vue'
-import RightCard from '@/components/RightCard/index.vue'
+// import RightCard from '@/components/RightCard/index.vue'
 import ReceiptForm from '@/components/Module/ReceiptForm/index.vue'
 import WeatherForm from '@/components/Module/WeatherForm/index.vue'
 import LoginForm from '@/components/LoginForm'
 import ItemMenu from './menu/ItemMenu.vue'
 import Hamburger from '@/components/Hamburger'
-import { AppMain, Navbar, Settings, Sidebar, TagsView } from './components'
+import { AppMain } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
 import { mapState, mapGetters } from 'vuex'
 import TemperWidget from './components/TemperWidget'
-import store from '../../store'
+// import store from '../../store'
 
 export default {
   name: 'Layout',
@@ -67,17 +67,17 @@ export default {
     TemperWidget,
     AppMain,
     HeaderLink,
-    Navbar,
+    // Navbar,
     ItemMenu,
-    RightPanel,
+    // RightPanel,
     WeatherForm,
     LoginForm,
     ReceiptForm,
-    RightCard,
-    Settings,
-    Sidebar,
-    Hamburger,
-    TagsView
+    // RightCard,
+    // Settings,
+    // Sidebar,
+    Hamburger
+    // TagsView
   },
   mixins: [ResizeMixin],
   data() {
@@ -89,13 +89,6 @@ export default {
       site_name: process.env.VUE_APP_SITE_NAME,
       open_sidebar: false
     }
-  },
-  mounted() {
-    // console.log(this.$route)
-    // console.log('this.menu')
-    // console.log(this.menu)
-    // console.log(this.$store.permission_routes)
-    // console.log(this.$store)
   },
   computed: {
     ...mapState({
@@ -151,7 +144,6 @@ export default {
       this.$router.push('/article/show/term-of-use')
     },
     handleSelect(key, keyPath) {
-
       // console.log(this.$router)
       this.$router.push(key)
       // console.log(key, keyPath)
@@ -159,11 +151,6 @@ export default {
     handleClickOutside() {
       this.$store.dispatch('app/closeSideBar', { withoutAnimation: false })
     }
-  },
-  watch:{
-    // screenResize: {
-    //   return
-    // }
   }
 }
 </script>
@@ -178,34 +165,11 @@ export default {
     padding: 10px 0;
   }
 
- /*.header {*/
- /*  line-height: 60px;*/
- /*}*/
- /* .layout-header {*/
- /*   background-color: #00084c;*/
- /*   color: #fff;*/
- /* }*/
   .hamburger-container {
-    margin-top: 5px;
-    margin-bottom: 5px;
-    margin-right: 10px;
-    line-height: 48px;
-    height: 50px;
     float: left;
-    cursor: pointer;
-    transition: background .3s;
-    background-color: #79e5e5;;
-    border-radius: 10px;
+    transition: background 1s;
+    background-color: #79e5e5;
     -webkit-tap-highlight-color:transparent;
-
-  &:hover {
-     background: rgba(0, 0, 0, .005)
-   }
-  }
-  @media screen and (max-width: 480px) {
-    .hamburger-container {
-      margin-right: 5px;
-    }
   }
 
 </style>

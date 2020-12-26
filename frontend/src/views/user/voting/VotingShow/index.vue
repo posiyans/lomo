@@ -1,11 +1,19 @@
 <template>
   <div>
     <el-card
+      v-if="voting"
       v-loading="loading"
       class="card-mobile"
     >
       <div class="article-preview-header">
-        <h1>{{ VotingTypeText }}</h1>
+        <div class="header">
+          {{ VotingTypeText }}
+          <span>
+            <el-tag :type="voting.status | statusColorFilter">
+              {{ voting.status | statusFilter }}
+            </el-tag>
+          </span>
+        </div>
 
         <div v-if="editor" class="article-setting-icon" @click="editArticle">
           <i class="el-icon-s-tools" />
@@ -13,12 +21,15 @@
       </div>
       <div class="article-preview-body">
         <h2>{{ voting.title }}</h2>
+        <div v-if="voting.type='owner'" class="blue">
+          Дата голосования с {{ voting.date_start | moment('DD-MM-YYYY') }} по {{ voting.date_stop | moment('DD-MM-YYYY') }}
+        </div>
         <span v-html="voting.description" />
       </div>
       <div v-if="voting.files && voting.files.length > 0">
         <div class="file-list-header">Файлы:</div>
         <ul>
-          <li v-for="file in voting.files">{{ file.name }}
+          <li v-for="file in voting.files" :key="file.id">{{ file.name }}
             <span class="file-size">{{ file.size | sizeFilter }}</span>
             <el-link :href="file.id | urlFilter " type="success">Скачать</el-link>
           </li>
@@ -29,9 +40,7 @@
         <el-divider class="divider-footer" />
         <el-row type="flex" class="row-bg" justify="space-between" align="center">
           <el-col :span="14">
-            <span style="padding-left: 20px;">
-              <el-button type="primary" size="mini" @click="back">Назад</el-button>
-            </span>
+            <Back />
             <span v-if="false" style="padding-left: 20px;">
               <el-button v-if="voting.comments==1" type="primary" size="mini" plain icon="el-icon-chat-dot-square">{{ voting.comments.length }}</el-button>
             </span>
@@ -43,28 +52,52 @@
       <!--        <Comments v-model="voting" />-->
       <!--      </div>-->
     </el-card>
+    <el-card
+      v-else
+      v-loading="loading"
+      class="card-mobile"
+      style="min-height: 200px"
+    >
+      <div class="no-found">
+        Голосование не найдено
+      </div>
+    </el-card>
   </div>
 </template>
 
 <script>
 import { fetchUserVoting } from '@/api/user/voting'
-import Comments from '@/components/Comments/index.vue'
 import QuestionShow from './QuestionShow/index.vue'
-import PublicVoting from '@/views/user/voting/VotingShow/QuestionShow/components/PublicVoting'
-import OwnerVoting from '@/views/user/voting/VotingShow/QuestionShow/components/OwnerVoting'
+import Back from '@/components/Back'
 
+const selectStatusOptions = [
+  { key: 'new', display_name: 'Новое' },
+  { key: 'execution', display_name: 'Идет' },
+  { key: 'done', display_name: 'Законченно' },
+  { key: 'cancel', display_name: 'Отмененное' }
+]
+
+const Status = selectStatusOptions.reduce((acc, cur) => {
+  acc[cur.key] = cur.display_name
+  return acc
+}, {})
 export default {
-  components: { Comments, QuestionShow },
+  components: { QuestionShow, Back },
   filters: {
+    statusColorFilter(status) {
+      const color = {
+        new: 'info',
+        execution: '',
+        done: 'success',
+        cancel: 'danger'
+      }
+      return color[status]
+    },
     urlFilter(val) {
       return process.env.VUE_APP_BASE_API + '/api/user/storage/file/' + val
     },
-    sizeFilter(size) {
-      if (size) {
-        const i = Math.floor(Math.log(size) / Math.log(1024))
-        return (size / Math.pow(1024, i)).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i]
-      }
-      return ''
+    statusFilter(status) {
+      return Status[status]
     }
   },
   props: {
@@ -76,7 +109,7 @@ export default {
   data() {
     return {
       loading: true,
-      voting: {}
+      voting: false
     }
   },
   computed: {
@@ -118,7 +151,13 @@ export default {
     fetchVoting() {
       fetchUserVoting(this.$route.params.id)
         .then(response => {
-          this.voting = response.data.data
+          if (response.data.status) {
+            this.voting = response.data.data
+          } else {
+            if (response.data.data) {
+              this.$message.error(response.data.data)
+            }
+          }
           this.loading = false
         })
     }
@@ -127,6 +166,15 @@ export default {
 </script>
 
 <style scoped>
+  .header {
+    margin: 10px 0;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  .header span {
+    margin-left: 10px;
+  }
+
   .article-preview-header {
     padding: 0 20px;
     border-bottom: 1px solid #e6ebf5;

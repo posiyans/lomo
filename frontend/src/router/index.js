@@ -376,7 +376,7 @@ export const asyncRoutes = [
       {
         path: 'addAnswer/:id(\\d+)',
         component: () => import('@/views/admin/voting/result/Owner/user-answer/add/'),
-        name: 'AdminEditVoting',
+        name: 'AdminEditVotingAddAnswer',
         meta: {
           title: 'Правка',
           noCache: true,
@@ -511,7 +511,7 @@ export const asyncRoutes = [
       {
         path: 'billing_reestr_edit/:id(\\d+)',
         component: () => import('@/views/admin/bookkeeping/BillingReestr/BillingReestrList/edit'),
-        name: 'BillingReestrCreate',
+        name: 'BillingReestrEdit',
         hidden: true
 
       },

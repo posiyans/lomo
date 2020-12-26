@@ -1,13 +1,12 @@
 <template>
-  <span v-if="temper" style="font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 1em; color: #1b5fab;">
-      {{temper.temp}}°C
+  <span v-if="temper" class="temp-block">
+    {{ temper.temp }}°C
   </span>
 </template>
 
 <script>
 import { getNowWeatherProHD } from '@/api/temper.js'
 export default {
-  name: 'TemperWidget',
   data() {
     return {
       temper: false
@@ -27,5 +26,10 @@ export default {
 </script>
 
 <style scoped>
+  .temp-block {
+    font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 1em;
+    color: #1b5fab;
+  }
 </style>
 

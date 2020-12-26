@@ -3,12 +3,13 @@
     :default-active="activeIndex"
     class="el-menu-vertical-demo"
     :mode="mode_menu"
-    @select="handleSelect"
     background-color="#545c64"
     text-color="#fff"
-    active-text-color="#ffd04b">
-    <sidebar-item v-for="route in menul" :item="route" :key="route.basePath"/>
-    <el-menu-item v-if="admin && screen_wight > 480" index="/admin-article/list" >Админ панель</el-menu-item>
+    active-text-color="#ffd04b"
+    @select="handleSelect"
+  >
+    <sidebar-item v-for="route in menul" :key="route.basePath" :item="route" />
+    <el-menu-item v-if="admin" index="/admin-article/list">Админ панель</el-menu-item>
   </el-menu>
 </template>
 
@@ -19,19 +20,20 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'MenuItem',
   components: {
-    SidebarItem,
+    SidebarItem
   },
   props: {
     menud: {
-      type: Array
-    },
+      type: Array,
+      default: () => ([])
+    }
   },
   data() {
     return {
       activeIndex: '1',
       form: {
         name: ''
-      },
+      }
     }
   },
   computed: {
@@ -39,11 +41,11 @@ export default {
       'permission_routes',
       'sidebar'
     ]),
-    screen_wight(){
+    screen_wight() {
       return document.documentElement.clientWidth
     },
-    mode_menu(){
-      if(this.screen_wight < 500){
+    mode_menu() {
+      if (this.screen_wight < 500) {
         return 'vertical'
       }
       return 'horizontal'

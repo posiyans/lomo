@@ -13,7 +13,7 @@
           </el-select>
         </el-col>
         <el-col :xs="22" :md="6">
-          <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+          <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
             Показать
           </el-button>
         </el-col>
@@ -22,32 +22,26 @@
     <div v-for="item in list" :key="item.id" v-loading="listLoading">
       <VotingPreview :voting="item" />
     </div>
-    <LoadMore v-loading="addLoading" :length="list.length" :total="total" @download="addVoting" />
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="fetchVoting" />
-
+    <LoadMore :key="'l'+ key" :list-query="listQuery" :func="func" @setList="setList" />
   </div>
 </template>
 
 <script>
 import { fetchUserVotingList } from '@/api/user/voting'
 import VotingPreview from './VotingPreview'
-import Pagination from '@/components/Pagination'
 import LoadMore from '@/components/LoadMore'
-import waves from '@/directive/waves' // waves directive
 
 export default {
   components: {
     VotingPreview,
-    Pagination,
     LoadMore
   },
-  directives: { waves },
   data() {
     return {
+      key: 1,
       listLoading: true,
-      addLoading: false,
-      total: 0,
       list: [],
+      func: fetchUserVotingList,
       TypeObject: [
         {
           key: 'public',
@@ -72,52 +66,15 @@ export default {
       }
     }
   },
-  computed: {
-    loadMore() {
-      if (this.total > this.list.length) {
-        return 'Загрузить еще'
-      }
-      return false
-    }
-  },
-  mounted() {
-    this.fetchVoting()
-  },
   methods: {
+    setList(val) {
+      this.list = val
+      this.listLoading = false
+    },
     handleFilter() {
       this.listQuery.page = 1
-      this.fetchVoting()
-    },
-    add() {
-      this.listQuery.page += 1
-      if (this.$route.params.id) {
-        this.listQuery.category_id = this.$route.params.id
-      }
-
-      fetchUserVotingList(this.listQuery).then(response => {
-        const data = response.data.data
-        data.forEach(item => {
-          this.list.push(item)
-        })
-      })
-    },
-    addVoting() {
-      this.addLoading = true
-      fetchUserVotingList(this.listQuery).then(response => {
-        response.data.data.forEach(item => {
-          this.list.push(item)
-        })
-        this.total = response.data.meta.total
-        this.addLoading = false
-      })
-    },
-    fetchVoting() {
+      this.key++
       this.listLoading = true
-      fetchUserVotingList(this.listQuery).then(response => {
-        this.list = response.data.data
-        this.total = response.data.meta.total
-        this.listLoading = false
-      })
     }
   }
 }
