@@ -74,7 +74,7 @@ export default {
           i += 1
         }
       })
-      this.$message(this.rezult)
+      // this.$message(this.rezult)
       this.key++
     },
     getSteads() {
