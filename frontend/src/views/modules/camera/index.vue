@@ -10,10 +10,11 @@
 export default {
   data() {
     return {
-      src1: '/api/v1/camera/img/1',
-      src2: '/api/v1/camera/img/2'
+      src1: '/api/v1/camera/img/1?s=' + new Date().getTime() + '.jpg',
+      src2: '/api/v1/camera/img/2?s=' + new Date().getTime() + '.jpg'
     }
   },
+
   mounted() {
     // fetch('/camera')
   },

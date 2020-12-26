@@ -17,7 +17,7 @@
       <el-table-column v-for="q in questions" :key="'q' + q.id" :label="q.text" class="do-not-carry" align="center">
         <el-table-column v-for="a in q.answers" :key="'a' + a.id" :label="a.text" align="center">
           <template slot-scope="{row}">
-            <span v-if="listo[row.id] && listo[row.id][q.id] == a.id" :key="keyc" style="color: green; font-size: 2em;"><i class="el-icon-success" /></span>
+            <span v-if="listo[row.id] && listo[row.id][q.id] == a.id" :key="keyc" style="color: green; font-size: 2em;" @click="showB(row)"><i class="el-icon-success" /></span>
           </template>
         </el-table-column>
       </el-table-column>

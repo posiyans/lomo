@@ -66,7 +66,6 @@ const Mode = {
 };
 const mousewheelEventName = isFirefox() ? 'DOMMouseScroll' : 'mousewheel';
 export default {
-  name: 'elImageViewer',
   props: {
     urlList: {
       type: Array,
@@ -211,7 +210,7 @@ export default {
     },
     handleImgError(e) {
       this.loading = false;
-      e.target.alt = '加载失败';
+      e.target.alt = 'Ошибка загрузки';
     },
     handleMouseDown(e) {
       if (this.loading || e.button !== 0) return;
