@@ -79,7 +79,7 @@ class UserController extends Controller
     {
         $data = $request->input();
         $user = Auth::user();
-        $user_clone = clone $user;
+//        $user_clone = clone $user;
         if ($data['user']['id'] == $user->id){
             if ($data['user']['email'] != $user->email)
             {
@@ -117,9 +117,7 @@ class UserController extends Controller
 //            if (isset($data['user']['steads']) && count($data['user']['steads']) == 1){
 //                $user->steads_id = $data['user']['steads'][0];
 //            }
-            if ($user->save()){
-
-            }
+           $user->logAndSave('Изменение персональных данных пользователя');
             // todo Log::saveDiff($user, $user_clone, 'Изменение персональных данных пользователя');
             return json_encode(['status'=>true, 'data'=>$data, [$user, $text]]);
         }

@@ -38,7 +38,7 @@ class AdminVotingUserAnswerController extends Controller
             $stead = Stead::find($stead_id);
             if ($voting && $stead) {
                 if (count($request->answers) > 0 && VotingFileModel::check_availability($voting->id, $stead->id)) {
-                    if ($voting->syncOwnerUserAnswer($request->answers, $stead->id, $user->id)) {
+                    if ($voting->syncOwnerUserAnswer($request->answers, $stead->id)) {
                         return ['status' => true];
                     }
                 }
@@ -46,6 +46,7 @@ class AdminVotingUserAnswerController extends Controller
         }
         return ['status' => false, 'data' => 'Ошибка сохранения данных'];
     }
+
 
 
 }

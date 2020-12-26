@@ -117,6 +117,9 @@ export default {
   },
   mounted() {
     this.voting = this.value
+    if (this.$route.query.tab) {
+      this.tabActive = this.$route.query.tab
+    }
     // this.getVoting()
     this.getQuestions()
   },

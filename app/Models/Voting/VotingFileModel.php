@@ -39,4 +39,19 @@ class VotingFileModel extends MyModel
     {
         return self::where('stead_id', $stead_id)->where('voting_id', $voting_id)->first();
     }
+
+
+    /**
+     *удалить страые файлы белутеней по данному голосованию и участку
+     */
+    public function deleteOldFile()
+    {
+        $files = self::where('stead_id', $this->stead_id)->where('voting_id', $this->voting_id)->get();
+        foreach ($files as $file) {
+            if ($file->id != $this->id) {
+                $file->delete();
+            }
+        }
+    }
+
 }

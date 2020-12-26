@@ -72,11 +72,6 @@
               Результат
             </el-button>
           </router-link>
-          <router-link :to="'/admin/voting/result/' + row.id">
-            <el-button type="success" size="small" icon="el-icon-edit">
-              Результат
-            </el-button>
-          </router-link>
           <el-button v-if="row.status === 'new' || row.status === 'execution'" size="small" type="danger" @click="handleModifyStatus(row)">
             Отменить
           </el-button>

@@ -14,10 +14,6 @@ class SteadResource extends JsonResource
      */
     public function toArray($request)
     {
-//        $this->userFullName();
-//        $this->sdfsdf = 'fgdfgdfgdfg';
-////        $this->user_fullName = optional($this->user)->fullName();
-////        $this->user_fName = optional($this->user)->fName();
         return [
             'id'=> $this->id,
             'number'=>$this->number,
@@ -25,9 +21,7 @@ class SteadResource extends JsonResource
             'user_fullName'=>optional($this->user)->fullName(),
             'user_fName'=>optional($this->user)->fName(),
             'user'=> $this->user ? $this->user : [],
-//            'discriptions' => $this->discriptions
+            'discriptions' => $this->discriptions
         ];
-
-//        return parent::toArray($request);
     }
 }

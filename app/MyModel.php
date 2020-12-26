@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\Log;
 use App\Models\Storage\File;
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,6 +20,17 @@ class MyModel extends Model
     }
 
 
+    public function logAndSave($description = null, $stead = null, array $options = [])
+    {
+        $original_model = $this->getOriginal();
+        if ($this->save($options)) {
+            return Log::addLog($this, $original_model, $description, $stead);
+            return true;
+        }
+        return false;
+    }
+
+
     /**
      * Файлы привязанные к модели
      *
@@ -30,7 +42,7 @@ class MyModel extends Model
     }
 
     /**
-     * Файлы привязанные к модели
+     * Комментарии привязанные к модели
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
