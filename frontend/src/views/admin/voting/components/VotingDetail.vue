@@ -6,9 +6,12 @@
           <TypeDropdown v-model="postForm.type" />
         </div>
         <div style="display: inline-block;">
-          <el-button v-loading="loading" type="warning" @click="draftForm">
+          <el-button v-loading="loading" type="warning" @click="saveForm">
             Сохранить
           </el-button>
+        </div>
+        <div style="display: inline-block;">
+          <el-checkbox v-model="postForm.public" label="Опубликовать" :false-label="0" :true-label="1" border />
         </div>
       </div>
       <div class="createPost-main-container">
@@ -49,16 +52,6 @@
                     />
                   </el-form-item>
                 </el-col>
-                <!--                <el-col :span="8">-->
-                <!--                  <el-form-item label-width="160px"  label="Начало голосования:" class="postInfo-container-item">-->
-                <!--                    <el-date-picker v-model="displayTime" type="datetime" :firstDayOfWeek="2" format="HH:mm dd-MM-yyyy" placeholder="Выберите дату и время" />-->
-                <!--                  </el-form-item>-->
-                <!--                </el-col>-->
-                <!--                <el-col :span="8">-->
-                <!--                  <el-form-item label-width="150px"  label="Конец голосования:" class="postInfo-container-item">-->
-                <!--                    <el-date-picker v-model="displayTime" type="datetime" :firstDayOfWeek="2" format="HH:mm dd-MM-yyyy" placeholder="Выберите дату и время" />-->
-                <!--                  </el-form-item>-->
-                <!--                </el-col>-->
               </el-row>
             </div>
           </el-col>
@@ -106,8 +99,7 @@ const defaultForm = {
   resume: '',
   files: [],
   date_publish: +new Date(),
-  date_start: '',
-  date_stop: '',
+  // dateRange: '',
   id: undefined,
   comments: 0,
   uid: '',
@@ -162,6 +154,7 @@ export default {
       loadingForm: true,
       loading: false,
       userListOptions: [],
+      // dateRange: '',
       rules: {
         // image_uri: [{ validator: validateRequire }],
         // title: [{ validator: validateRequire }],
@@ -194,18 +187,18 @@ export default {
     }
   },
   computed: {
-    votingType() {
-      return this.postForm.type
-    },
-    dataRange: {
-      set(val) {
-        this.postForm.date_start = this.$moment(val[0]).format('YYYY-MM-DD HH:mm:ss')
-        this.postForm.date_stop = this.$moment(val[1]).format('YYYY-MM-DD HH:mm:ss')
-      },
-      get() {
-        return [this.$moment(this.postForm.date_start), this.$moment(this.postForm.date_stop)]
-      }
-    },
+    // votingType() {
+    //   return this.postForm.type
+    // },
+    // dateRange: {
+    //   set(val) {
+    //     this.postForm.date_start = val[0]
+    //     this.postForm.date_stop = val[1]
+    //   },
+    //   get() {
+    //     return [this.postForm.date_start, this.postForm.date_stop]
+    //   }
+    // },
     typeTitle() {
       // return this.options.indexOf('')
       return this.options[this.postForm.type]
@@ -224,15 +217,15 @@ export default {
     // }
   },
   watch: {
-    votingType(val) {
-      if (val === 'public') {
-        this.postForm.date_start = '0000-01-01 00:00:00'
-        this.postForm.date_stop = '9999-01-01 00:00:00'
-      } else {
-        this.postForm.date_start = ''
-        this.postForm.date_stop = ''
-      }
-    }
+    // votingType(val) {
+    //   if (val === 'public') {
+    //     this.postForm.date_start = '0000-01-01'
+    //     this.postForm.date_stop = '9999-01-01'
+    //   } else {
+    //     this.postForm.date_start = ''
+    //     this.postForm.date_stop = ''
+    //   }
+    // }
   },
   created() {
     this.postForm.uid = this.create_UUID()
@@ -275,7 +268,8 @@ export default {
       fetchAdminVoting(id).then(response => {
         this.postForm = response.data.data
         if (this.postForm.type === 'owner') {
-          this.postForm.dateRange = [this.postForm.date_start, this.postForm.date_stop]
+          // this.postForm.dateRange = [this.postForm.date_start, this.postForm.date_stop]
+          // this.dateRange = [this.postForm.date_start, this.postForm.date_stop]
         }
         // set page title
         this.setPageTitle()
@@ -285,39 +279,32 @@ export default {
       })
     },
     setPageTitle() {
-      const title = 'Статья id'
+      const title = 'Голосование id '
       document.title = `${title} - ${this.postForm.id}`
-    },
-    submitForm() {
-      this.postForm.public = true
-      alert('не работает')
-      // this.saveForm()
     },
     saveForm() {
       this.$refs.postForm.validate(valid => {
         if (valid) {
           this.loading = true
-          this.postForm.public = true
           if (Array.isArray(this.postForm.dateRange)) {
             this.postForm.date_start = this.postForm.dateRange[0]
             this.postForm.date_stop = this.postForm.dateRange[1]
           }
-          // console.log('this.postForm')
-          // console.log(this.postForm)
-          // this.postForm.display_time = this.$moment(this.datetime).format('YYYY-MM-DD HH:mm:ss')
           if (this.isEdit) {
             const id = this.$route.params && this.$route.params.id
             updateVoting({ voting: this.postForm }, id)
               .then(response => {
                 this.postForm = response.data.data
                 if (this.postForm.type === 'owner') {
-                  this.postForm.dateRange = [this.postForm.date_start, this.postForm.date_stop]
+                  // this.postForm.dateRange = [this.postForm.date_start, this.postForm.date_stop]
+                  // this.dateRange = [this.postForm.date_start, this.postForm.date_stop]
                 }
               })
           } else {
             createVoting({ voting: this.postForm })
               .then(response => {
-                // this.$router.push({ name: 'AdminEditArticle', params: { id:response.data.id } })
+                console.log(response)
+                this.$router.push('/admin/voting/edit/' + response.data.id)
               })
           }
           if (this.postForm.public) {
@@ -342,11 +329,6 @@ export default {
           return false
         }
       })
-    },
-    draftForm() {
-      this.postForm.public = false
-      // console.log(this.postForm)
-      this.saveForm()
     },
     getRemoteUserList(query) {
       searchUser(query).then(response => {

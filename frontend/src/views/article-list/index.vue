@@ -1,16 +1,18 @@
 <template>
   <div>
-    <div v-if="listLoading"  v-for="item in list" :key="item.id">
-      <ArticlePreview :data="item"/>
+    <div v-if="listLoading">
+      <div v-for="item in list" :key="item.id">
+        <ArticlePreview :data="item" />
+      </div>
     </div>
-    <div v-if="loadMore" style="width: 100%;"><el-button type="warning" plain @click="add" style="width: 100%;">{{ loadMore }}</el-button></div>
+    <div v-if="loadMore" style="width: 100%;"><el-button type="warning" plain style="width: 100%;" @click="add">{{ loadMore }}</el-button></div>
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="fetchArticle" />
 
   </div>
 </template>
 
 <script>
-import { fetchListForCategory, fetchList } from '@/api/article'
+import { fetchListForCategory } from '@/api/article'
 import ArticlePreview from '@/components/ArticlePreview'
 import Pagination from '@/components/Pagination'
 export default {
@@ -33,7 +35,7 @@ export default {
   },
   computed: {
     loadMore() {
-      if (this.total > this.list.length){
+      if (this.total > this.list.length) {
         return 'Загрузить еще'
       }
       return false
@@ -42,8 +44,8 @@ export default {
   mounted() {
     this.fetchArticle()
   },
-  methods:{
-    add(){
+  methods: {
+    add() {
       this.listQuery.page += 1
       if (this.$route.params.id) {
         this.listQuery.category_id = this.$route.params.id
@@ -64,7 +66,7 @@ export default {
 
       fetchListForCategory(this.listQuery).then(response => {
         this.list = response.data.data
-        this.total = response.data.total
+        this.total = response.data.meta.total
         this.listLoading = true
       })
     }

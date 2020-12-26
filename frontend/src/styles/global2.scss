@@ -21,11 +21,33 @@ body {
   margin-top: 60px;
 }
 
-.el-header {
+//.el-header {
+//  background-color: #AFEEEE;
+//  color: #333;
+//  line-height: 60px;
+//}
+
+.main-header {
   background-color: #AFEEEE;
   color: #333;
   line-height: 60px;
+  //text-align: right;
+  font-size: 12px;
+  position: relative;
 }
+.header-block {
+  display: inline-block;
+  font-size: 18px;
+  margin-left: 20px;
+  color: #1b3958;
+}
+
+.header-link {
+  position: absolute;
+  right: 35px;
+  top: 0
+}
+
 .main-app {
   background: #eaebeb;
   color: #333;
@@ -43,16 +65,10 @@ body {
   color: #000;
   text-decoration: none;
 }
-.header.logo {
-  font-size: 18px;
-  padding-left: 10px;
-  color: #1b3958;
-  //text-align: start;
-  float: left;
-}
+
 @media screen and (max-width: 480px) {
-  .header.logo {
-    padding-left: 1px;
+  .header-block {
+    margin-left: 8px;
   }
 }
 .header.login {
@@ -116,11 +132,21 @@ body {
   }
 }
 
-.red {
-  color: red;
-}
-.green {
-  color: green;
+//.red {
+//  color: red;
+//}
+//.green {
+//  color: green;
+//}
+//
+//.blue {
+//  color: blue;
+//}
+.no-found {
+  margin: 50px;
+  font-weight: bold;
+  font-size: 1.5rem;
+  text-align: center;
 }
 
 $spacer: 1rem;

@@ -1,28 +1,37 @@
 <template>
   <div class="resume-ps-card">
     <el-card class="resume-el-card">
-      <div class="resume-article-preview-header">
-        <h2>{{ voting.title }}</h2>
+      <div class="resume-article-preview-header" :style="borderStyle">
+        <div class="voting-header">
+          {{ voting.title }}
+          <div class="voting-header-type" :class="{'red': voting.type == 'owner', 'blue': voting.type == 'public'}">
+            {{ voting.type | typeFilter }}
+          </div>
+        </div>
         <div v-if="editor" class="article-setting-icon" @click="toEdit">
-          <i class="el-icon-s-tools"></i>
+          <i class="el-icon-s-tools" />
         </div>
       </div>
-      <div class="resume-article-preview-body" >
-        <p><span v-html="resume"/></p>
+      <div class="resume-article-preview-body">
+        <p><span v-html="resume" /></p>
       </div>
       <div class="resume-article-preview-footer">
         <el-row type="flex" class="row-bg" justify="space-between" align="center">
           <el-col :span="24">
-              <span class="resume-article-preview-more">
-                <el-button type="primary" size="mini" plain @click="show">Подробнее</el-button>
-              </span>
-            <span class="resume-article-preview-more" style="padding-left: 10px">
-                <el-button type="success" size="mini" plain  icon="el-icon-s-custom" >{{ voting.countAnswer }}</el-button>
-              </span>
+            <span class="resume-article-preview-more">
+              <el-button type="primary" size="mini" plain @click="show">Подробнее</el-button>
+            </span>
+            <span class="resume-article-preview-more" style="padding: 0 5px">
+              <el-button v-if="voting.type == 'owner'" type="success" size="mini" plain icon="el-icon-s-home">{{ voting.countAnswer }}</el-button>
+              <el-button v-else type="success" size="mini" plain icon="el-icon-s-custom">{{ voting.countAnswer }}</el-button>
+            </span>
+            <el-tag :type="voting.status | statusColorFilter">
+              {{ voting.status | statusFilter }}
+            </el-tag>
             <span v-if="false" class="resume-article-preview-more">
-                <el-button v-if="voting.comments =1" type="primary" size="mini" plain icon="el-icon-chat-dot-square" @click="showArticle">{{voting.comments.length }}</el-button>
-              </span>
-            <div class="resume-time-publish">{{publicTime(voting.created_at) }}</div>
+              <el-button v-if="voting.comments =1" type="primary" size="mini" plain icon="el-icon-chat-dot-square" @click="showArticle">{{ voting.comments.length }}</el-button>
+            </span>
+            <div class="resume-time-publish">{{ publicTime(voting.date_publish) }}</div>
           </el-col>
         </el-row>
       </div>
@@ -31,23 +40,59 @@
 </template>
 
 <script>
-import { fetchUserArticle } from "@/api/article"
+const selectStatusOptions = [
+  { key: 'new', display_name: 'Новое' },
+  { key: 'execution', display_name: 'Идет' },
+  { key: 'done', display_name: 'Законченно' },
+  { key: 'cancel', display_name: 'Отмененное' }
+]
+
+const Status = selectStatusOptions.reduce((acc, cur) => {
+  acc[cur.key] = cur.display_name
+  return acc
+}, {})
 export default {
+  filters: {
+    statusColorFilter(status) {
+      const color = {
+        new: 'info',
+        execution: '',
+        done: 'success',
+        cancel: 'danger'
+      }
+      return color[status]
+    },
+    typeFilter(val) {
+      switch (val) {
+        case 'public':
+          return 'Публичное голосование'
+        case 'owner':
+          return 'Голосование собственников'
+        default:
+          return ''
+      }
+    },
+    statusFilter(status) {
+      return Status[status]
+    }
+  },
   props: {
     voting: {
       type: Object,
-      defaults: {}
-    },
-  },
-  filters: {
-  },
-  mounted() {
+      default: () => ({})
+    }
   },
   data() {
     return {
     }
   },
   computed: {
+    borderStyle() {
+      if (this.voting.type === 'owner') {
+        return 'border-bottom: 1px solid #f00;'
+      }
+      return ''
+    },
     editor() {
       if (this.$store.getters.user.allPermissions.includes('сreate-polls')) {
         return true
@@ -64,6 +109,8 @@ export default {
       }
       return ''
     }
+  },
+  mounted() {
   },
   methods: {
     toEdit() {
@@ -83,13 +130,25 @@ export default {
     },
     show() {
       this.$router.push('/voting/show/' + this.voting.id)
-    },
+    }
   }
 }
 </script>
 
 <style scoped>
+  .voting-header {
+    box-sizing: border-box;
+    font-size: 21px;
+    line-height: 24.15px;
+    margin: 18px 0 0;
+    font-weight: bold;
+  }
+  .voting-header-type {
+    font-size: 0.5em;
+    letter-spacing: 2px;
 
+    /*color: #003784;*/
+  }
   .article-setting-icon{
     position: absolute;
     top: 11px;
@@ -108,7 +167,7 @@ export default {
   }
   .resume-time-publish {
     float:right;
-    padding: 10px 20px 0px 5px;
+    padding: 10px 10px 0 0;
     color: #848484;
     height: 100%;
   }

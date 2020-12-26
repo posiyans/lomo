@@ -19,8 +19,9 @@ import router from './router'
 
 import './icons' // icon
 import './permission' // permission control
-import './utils/error-log' // error log
+// import './utils/error-log' // error log
 import './utils/filters'
+
 const moment = require('moment-timezone')
 require('moment/locale/ru')
 moment.locale('ru')

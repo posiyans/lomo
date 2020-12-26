@@ -3,13 +3,11 @@
 namespace App\Models\Voting;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\AnswerResource;
 use App\Http\Resources\QuestionResource;
+use App\Http\Resources\User\Voting\QuestionUserResource;
 use App\Models\Stead;
-use App\Models\Storage\File;
 use App\MyModel;
 use Illuminate\Support\Facades\DB;
-use VK\Actions\Auth;
 
 class VotingModel extends MyModel
 {
@@ -148,41 +146,6 @@ class VotingModel extends MyModel
         }
         if ($this->type == 'owner') {
             return $this->retrunOwnerVotinForUser();
-//            $data = [
-//                'id' => $this->id,
-//                'title' => $this->title,
-//                'description' => $this->description,
-//                'type' => $this->type,
-//                'comments' => $this->comments,
-//                'status' => $status,
-//                'files' => $this->files,
-//                'questions' => QuestionResource::collection($this->questions),
-//                'created_at' => $this->updated_at,
-//                'steadsCount'=> Stead::all()->count(),
-//            ];
-//            $questions = [];
-//            foreach ($this->questions as $question) {
-//                $answers = [];
-//                $myAnswer = $question->checkUserAnswer();
-//                foreach ($question->answers as $answer) {
-//                    $answers[] =  [
-//                        'id'=>$answer->id,
-//                        'text' => $answer->text,
-//                        'isMyAnswer' => $myAnswer ? $myAnswer->answer_id == $answer->id ? true : false : false,
-//                        'userAnswersCount' => count($answer->userAnswers),
-//                    ];
-//                }
-//                $tmp_quest = [
-//                    'id' => $question->id,
-//                    'text' => $question->text,
-//                    'voting_id' => $question->voting_id,
-//                    'answersCount' => $question->allAnswers(),
-//                    'answers' => $answers,
-//                    'myAnswers' => $myAnswer ? $myAnswer->answer_id ? $myAnswer->answer_id : false : false,
-//                ];
-//                $questions[] = $tmp_quest;
-//            }
-//            $data['questions'] = $questions;
         }
         return $data;
 
@@ -204,8 +167,11 @@ class VotingModel extends MyModel
             'comments' => $this->comments,
             'status' => $this->status,
             'files' => $this->files,
-//            'questions' => QuestionResource::collection($this->questions),
+            'questions' => QuestionUserResource::collection($this->questions),
             'created_at' => $this->updated_at,
+            'date_start' => $this->date_start,
+            'date_stop' => $this->date_stop,
+            'date_publish' => $this->updated_at,
             'steadsCount'=> Stead::all()->count(),
         ];
         if ($this->status == 'execution') {
@@ -223,7 +189,8 @@ class VotingModel extends MyModel
             foreach ($steads as $item) {
                 $temp[$item->stead_id] = $item->stead->number;
             }
-           $data['questions'] = $temp;
+           $data['voted'] = $temp;
+//           $data['questions'] = $temp;
         }
         return $data;
     }

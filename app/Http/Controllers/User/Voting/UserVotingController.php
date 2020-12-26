@@ -39,16 +39,17 @@ class UserVotingController extends Controller
             //todo не совсем так нужно рефакторить!!!!
             if (is_array($request->status)) {
                 $status =  $request->status;
-            } elseif (is_string($request->type)){
+            } elseif (is_string($request->type)) {
                 $status = [$request->status];
             } else {
                 $status = false;
             }
-            if ($status){
+            if ($status) {
                 $query->whereIn('status',  $status);
 
             }
         }
+        $query->orderBy('id', 'desc');
         $votings = $query->paginate($request->limit);
         return VotingResource::collection($votings);
     }
@@ -111,11 +112,10 @@ class UserVotingController extends Controller
                 } else {
                     $user_id = false;
                 }
-                return ['data' => $voting->userReturn($user_id)];
-//                return new VotingResource($voting);
+                return ['status' => true, 'data' => $voting->userReturn($user_id)];
             }
         }
-        return [];
+        return ['status' => false];
     }
 
     /**
