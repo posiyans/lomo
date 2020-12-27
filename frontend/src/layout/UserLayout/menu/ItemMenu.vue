@@ -9,9 +9,6 @@
     @select="handleSelect"
   >
     <sidebar-item v-for="route in menul" :key="route.basePath" :item="route" class="db dib-l" />
-    <el-menu-item v-if="admin" index="/admin-article/list" class="dib-l db">
-      Админ панель
-    </el-menu-item>
   </el-menu>
 </template>
 
@@ -55,12 +52,12 @@ export default {
     menul() {
       return this.$store.state.permission.menu
     },
-    admin() {
-      if (this.$store.getters.user.allPermissions.includes('access-admin-panel')) {
-        return true
-      }
-      return false
-    },
+    // admin() {
+    //   if (this.$store.getters.user.allPermissions.includes('access-admin-panel')) {
+    //     return true
+    //   }
+    //   return false
+    // },
     activeMenu() {
       const route = this.$route
       const { meta, path } = route
