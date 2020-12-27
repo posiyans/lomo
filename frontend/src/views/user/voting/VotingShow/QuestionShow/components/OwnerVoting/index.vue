@@ -9,8 +9,8 @@
         </h3>
       </div>
       <div v-if="value.status == 'execution'">
-        <div class="red mb2">
-          Результаты голосования будут показаны по окончания голосования ({{ value.date_stop | moment('DD-MM-YYYY') }})
+        <div class="dark-red mb2">
+          Результаты голосования будут показаны по окончанию голосования ({{ value.date_stop | moment('DD-MM-YYYY') }})
         </div>
         <TableResult :steads="value.voted" />
       </div>

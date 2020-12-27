@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <TableResult v-if="loading" :steads="voting.questions" />
+    <TableResult v-if="loading" :steads="voting.voted" />
   </div>
 </template>
 

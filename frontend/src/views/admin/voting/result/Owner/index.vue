@@ -22,7 +22,7 @@
         <SteadResult v-if="tabActive == 1" :id="id" :questions="questions" />
       </el-tab-pane>
       <el-tab-pane label="Таблица">
-        <SteadTable v-if="tabActive == 2" :questions="questions" />
+        <SteadTable v-if="tabActive == 2" :questions="voting" />
       </el-tab-pane>
       <el-tab-pane label="Описание">
         <div class="question" v-html="voting.description" />
