@@ -12,6 +12,7 @@
 </template>
 
 <script>
+// todo заменить load more
 import { fetchListForCategory } from '@/api/article'
 import ArticlePreview from '@/components/ArticlePreview'
 import Pagination from '@/components/Pagination'

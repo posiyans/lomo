@@ -24,7 +24,7 @@
     </el-table>
     <LoadMore :key="key" :list-query="listQuery" :func="func" @setList="setList" />
     <template v-if="preview">
-      <image-viewer  v-if="showViewer" :on-close="closeViewer" :url-list="previewSrcList"/>
+      <image-viewer v-if="showViewer" :on-close="closeViewer" :url-list="previewSrcList" />
     </template>
   </div>
 </template>
@@ -47,7 +47,7 @@ export default {
       default: () => { [] }
     },
     id: {
-      type: Number,
+      type: [Number, String],
       default: 0
     }
   },
@@ -100,7 +100,6 @@ export default {
             this.showViewer = true
           }
         })
-
     },
     tableRowClassName({ row }) {
       if (!(row.id in this.listo)) {

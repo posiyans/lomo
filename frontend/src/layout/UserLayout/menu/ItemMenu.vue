@@ -8,8 +8,10 @@
     active-text-color="#ffd04b"
     @select="handleSelect"
   >
-    <sidebar-item v-for="route in menul" :key="route.basePath" :item="route" />
-    <el-menu-item v-if="admin" index="/admin-article/list">Админ панель</el-menu-item>
+    <sidebar-item v-for="route in menul" :key="route.basePath" :item="route" class="db dib-l" />
+    <el-menu-item v-if="admin" index="/admin-article/list" class="dib-l db">
+      Админ панель
+    </el-menu-item>
   </el-menu>
 </template>
 

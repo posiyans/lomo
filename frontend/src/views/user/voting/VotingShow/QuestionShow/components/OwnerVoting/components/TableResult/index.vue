@@ -1,15 +1,15 @@
 <template>
   <div>
     <div>
-      <div class="text-red cell"> 0 </div> - номер участка проголосовавшего
+      <div class="dark-green b-ns cell"> {{ countAnwers }}</div> - {{ countAnwers | declOfNum(['участок проголосовал', 'участка проголосовало', 'участков проголосовало']) }}
     </div>
     <div>
-      <div class="text-green cell"> 0 </div> - номер участка не проголосовавшего
+      <div class="red b-ns cell"> {{ countNotAnswer }} </div> - {{ countNotAnswer | declOfNum(['участок не проголосовал', 'участка не проголосовало', 'участоков не проголосовало']) }}
     </div>
     <table>
       <tr v-for="i in line" :key="'c' + i">
         <td v-for="j in column" :key="'l' + i + '-'+ j">
-          <span v-if="i + '-' + j in rezult" :class="{ 'text-red': !rezult[i + '-' + j].answer, 'text-green': rezult[i + '-' + j].answer }">
+          <span v-if="i + '-' + j in rezult" :class="{ 'dark-red': !rezult[i + '-' + j].answer, 'dark-green': rezult[i + '-' + j].answer }">
             {{ rezult[i + '-' + j].number }}
           </span>
         </td>
@@ -46,6 +46,12 @@ export default {
     },
     line() {
       return Math.ceil(this.list.length / this.column)
+    },
+    countAnwers() {
+      return Object.keys(this.steads).length
+    },
+    countNotAnswer() {
+      return this.list.length - this.countAnwers
     }
   },
   mounted() {
