@@ -24,13 +24,15 @@ class AdminVotingController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Получить список голосований
      *
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
         $query = VotingModel::query();
+        $query->orderBy('id', 'desc');
+        // todo добавить фильтры
         $votings = $query->paginate($request->limit);
         return VotingResource::collection($votings);
     }
@@ -54,18 +56,15 @@ class AdminVotingController extends Controller
     public function store(Request $request)
     {
         $data = $request->voting;
-//        dump($data);
         if ($data) {
             $voting = new VotingModel();
             $voting->fill($data);
-//            dd($voting);
             if ($voting->type == 'public') {
                 $voting->date_start = '0000-01-01 00:00:00';
                 $voting->date_stop = '9999-01-01 00:00:00';
                 $voting->date_publish = now();
             }
-//            $voting->save();
-            if ($voting->save()) {
+            if ($voting->logAndSave('Создание голосования')) {
                 if (isset($data['questions']) && is_array($data['questions'])) {
                     $voting->saveQuestions($data['questions']);
                 }
@@ -126,7 +125,7 @@ class AdminVotingController extends Controller
                         $voting->date_start = '0000-01-01 00:00:00';
                         $voting->date_stop = '9999-01-01 00:00:00';
                     }
-                    if ($voting->save()) {
+                    if ($voting->logAndSave('Изменение')) {
                         if (isset($data['questions']) && is_array($data['questions'])) {
                             $voting->saveQuestions($data['questions']);
                         }

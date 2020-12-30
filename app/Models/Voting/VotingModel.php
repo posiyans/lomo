@@ -35,6 +35,12 @@ class VotingModel extends MyModel
     protected $guarded = ['id'];
 //    protected $fillable = [ 'title' ];
 
+
+//{ key: 'new', display_name: 'Новое' },
+//{ key: 'execution', display_name: 'Идет' },
+//{ key: 'done', display_name: 'Законченно' },
+//{ key: 'cancel', display_name: 'Отмененное' }
+
     public function questions()
     {
         return $this->hasMany('App\Models\Voting\QuestionModel', 'voting_id');
@@ -91,58 +97,10 @@ class VotingModel extends MyModel
 
     public function userReturn($user_id = false)
     {
-        $datetime = new \DateTime();
-        $status = $this->status;
-        if ($this->status == 'new') {
-            if ($this->type == 'public'){
-                if (strtotime($this->date_publish) < $datetime->format('U')) {
-                    $this->status = 'execution';
-                }
-            } else {
-                if (strtotime($this->date_start) < $datetime->format('U')) {
-                    $this->status  = 'execution';
-                }
-                if (strtotime($this->date_stop) < $datetime->format('U')) {
-                    $this->status  = 'done';
-                }
-            }
-        }
+        $this->calculateStatus();
         $data = [];
         if ($this->type == 'public') {
-            $data = [
-                'id' => $this->id,
-                'title' => $this->title,
-                'description' => $this->description,
-                'type' => $this->type,
-                'comments' => $this->comments,
-                'status' => $this->status,
-                'files' => $this->files,
-                'questions' => QuestionResource::collection($this->questions),
-                'created_at' => $this->updated_at,
-            ];
-            $questions = [];
-            foreach ($this->questions as $question) {
-                $answers = [];
-                $myAnswer = $question->checkUserAnswer();
-                foreach ($question->answers as $answer) {
-                    $answers[] =  [
-                        'id'=>$answer->id,
-                        'text' => $answer->text,
-                        'isMyAnswer' => $myAnswer ? $myAnswer->answer_id == $answer->id ? true : false : false,
-                        'userAnswersCount' => count($answer->userAnswers),
-                    ];
-                }
-                $tmp_quest = [
-                    'id' => $question->id,
-                    'text' => $question->text,
-                    'voting_id' => $question->voting_id,
-                    'answersCount' => $question->allAnswers(),
-                    'answers' => $answers,
-                    'myAnswers' => $myAnswer ? $myAnswer->answer_id ? $myAnswer->answer_id : false : false,
-                ];
-                $questions[] = $tmp_quest;
-            }
-            $data['questions'] = $questions;
+            return $this->retrunPublicVotinForUser();
         }
         if ($this->type == 'owner') {
             return $this->retrunOwnerVotinForUser();
@@ -151,6 +109,70 @@ class VotingModel extends MyModel
 
     }
 
+
+    public function calculateStatus()
+    {
+        $datetime = new \DateTime();
+         if ($this->status !== 'cancel' || $this->status !== 'done') {
+            if ($this->type == 'public') {
+                if (strtotime($this->date_publish) < $datetime->format('U')) {
+                    $this->status = 'execution';
+                }
+            } else {
+                if (strtotime($this->date_start) < $datetime->format('U')) {
+                    $this->status  = 'execution';
+                }
+                if (strtotime($this->date_stop . ' 23:59:59') < $datetime->format('U')) {
+                    $this->status  = 'done';
+                }
+            }
+        }
+    }
+
+
+    /**
+     * вернуть публичное голосование
+     *
+     * @return array
+     */
+    public function retrunPublicVotinForUser()
+    {
+        $data = [
+            'id' => $this->id,
+            'title' => $this->title,
+            'description' => $this->description,
+            'type' => $this->type,
+            'comments' => $this->comments,
+            'status' => $this->status,
+            'files' => $this->files,
+            'questions' => QuestionResource::collection($this->questions),
+            'created_at' => $this->updated_at,
+        ];
+        $questions = [];
+        foreach ($this->questions as $question) {
+            $answers = [];
+            $myAnswer = $question->checkUserAnswer();
+            foreach ($question->answers as $answer) {
+                $answers[] =  [
+                    'id'=>$answer->id,
+                    'text' => $answer->text,
+                    'isMyAnswer' => $myAnswer ? $myAnswer->answer_id == $answer->id ? true : false : false,
+                    'userAnswersCount' => count($answer->userAnswers),
+                ];
+            }
+            $tmp_quest = [
+                'id' => $question->id,
+                'text' => $question->text,
+                'voting_id' => $question->voting_id,
+                'answersCount' => $question->allAnswers(),
+                'answers' => $answers,
+                'myAnswers' => $myAnswer ? $myAnswer->answer_id ? $myAnswer->answer_id : false : false,
+            ];
+            $questions[] = $tmp_quest;
+        }
+        $data['questions'] = $questions;
+        return $data;
+    }
 
     /**
      *  вернуть голосование собственников
@@ -174,12 +196,10 @@ class VotingModel extends MyModel
             'date_publish' => $this->updated_at,
             'steadsCount'=> Stead::all()->count(),
         ];
-        if ($this->status == 'execution') {
-            $aaray = [];
+        if ($this->status == 'execution' || $this->status == 'done') {
             foreach ($this->questions as $question) {
                 $array[] = $question->id;
             }
-
             $steads = UserAnswerModel::query()
                 ->whereIn('question_id', $array)
                 ->select('stead_id')
@@ -190,7 +210,28 @@ class VotingModel extends MyModel
                 $temp[$item->stead_id] = $item->stead->number;
             }
            $data['voted'] = $temp;
-//           $data['questions'] = $temp;
+        }
+        if ($this->status == 'done') {
+            $questions = [];
+            foreach ($this->questions as $question) {
+                $answers = [];
+                foreach ($question->answers as $answer) {
+                    $answers[] =  [
+                        'id'=>$answer->id,
+                        'text' => $answer->text,
+                        'userAnswersCount' => count($answer->userAnswers),
+                    ];
+                }
+                $tmp_quest = [
+                    'id' => $question->id,
+                    'text' => $question->text,
+                    'voting_id' => $question->voting_id,
+                    'answersCount' => $question->allAnswers(),
+                    'answers' => $answers,
+                ];
+                $questions[] = $tmp_quest;
+            }
+            $data['questions'] = $questions;
         }
         return $data;
     }

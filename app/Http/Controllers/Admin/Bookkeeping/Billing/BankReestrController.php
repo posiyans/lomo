@@ -75,6 +75,36 @@ class BankReestrController extends Controller
 
     public function uploadReestr(Request $request)
     {
+        if ($request->data && is_array($request->data)) {
+                $user = Auth::user();
+                $data = [];
+            foreach ($request->data as $item) {
+                $data[] = BillingPayment::createPlaymen($item);
+                }
+
+                $file = new BillingBankReestr();
+                $file->file_hash = '-';
+//                $file->file_name = $inputFile->getClientOriginalName();
+//                $file->file_size = $inputFile->getSize();
+                $file->user_id = $user->id;
+                $file->parseData($request->data);
+                $file->parseType();
+                $file->parseStead();
+                $file->findDublicate();
+                if ($file->save()) {
+                    return json_encode(['status' => true, 'data' => $file]);
+                }
+                return json_encode(['status' => false, 'data' => 'Ошибка при сохранении файла']);
+//            }
+//            return json_encode(['status' => false, 'data'=>'Фаил имеет неверный формат']);
+        }
+        return json_encode(['status' => false, 'data'=>'Фаил не загружен']);
+    }
+
+
+
+    public function uploadReestrOld(Request $request)
+    {
         if (Input::hasFile('file')) {
             $inputFile = Input::file('file');
             if (BillingBankReestr::checkFile($inputFile)) {
@@ -105,7 +135,7 @@ class BankReestrController extends Controller
         if ($request->reestr_id){
             $reestr = BillingBankReestr::find($request->reestr_id);
             if($reestr) {
-                $reestr->parseData();
+//                $reestr->parseData();
                 $reestr->parseType();
                 $reestr->parseStead();
                 $reestr->findDublicate();
@@ -140,7 +170,7 @@ class BankReestrController extends Controller
             $data=$request->reestr['data'];
             $id = $request->reestr['id'];
             $reestr = BillingBankReestr::find($id);
-            if ($request && $reestr->created_at == $request->reestr['created_at']) {
+            if ($reestr->created_at && $reestr->created_at == $request->reestr['created_at']) {
                 $reestr->data = $data;
                 if ($reestr->save()) {
                     //todo пока некуда разносить

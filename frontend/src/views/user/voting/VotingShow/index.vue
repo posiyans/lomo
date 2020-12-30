@@ -3,7 +3,6 @@
     <el-card
       v-if="voting"
       v-loading="loading"
-      class="card-mobile"
     >
       <div class="article-preview-header">
         <div class="header">
@@ -48,17 +47,13 @@
           <el-col :span="10"><div style="text-align: right; padding: 10px 20px 0px 0;color: #848484; height: 100%;">{{ publicTime(voting.date_publish) }}</div></el-col>
         </el-row>
       </div>
-      <!--      <div v-if="false && voting.comments==1"  class="comments-body">-->
-      <!--        <Comments v-model="voting" />-->
-      <!--      </div>-->
     </el-card>
     <el-card
       v-else
       v-loading="loading"
-      class="card-mobile"
       style="min-height: 200px"
     >
-      <div class="no-found">
+      <div v-if="noFound" class="no-found">
         Голосование не найдено
       </div>
     </el-card>
@@ -109,7 +104,8 @@ export default {
   data() {
     return {
       loading: true,
-      voting: false
+      voting: false,
+      noFound: false
     }
   },
   computed: {
@@ -149,6 +145,7 @@ export default {
       this.$router.back()
     },
     fetchVoting() {
+      this.noFound = false
       fetchUserVoting(this.$route.params.id)
         .then(response => {
           if (response.data.status) {
@@ -157,6 +154,7 @@ export default {
             if (response.data.data) {
               this.$message.error(response.data.data)
             }
+            this.noFound = true
           }
           this.loading = false
         })

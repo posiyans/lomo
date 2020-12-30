@@ -31,9 +31,13 @@ export default {
       type: [String, Number],
       default: ''
     },
-    stead_id: {
+    steadId: {
       type: [Boolean, Number],
       default: false
+    },
+    readOnly: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -59,7 +63,9 @@ export default {
           if (response.data.length === 1) {
             this.stead = response.data[0].number
             this.$emit('selectStead', response.data[0])
-            this.disabled = true
+            if (this.read_only) {
+              this.disabled = true
+            }
           }
         })
     }
