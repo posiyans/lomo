@@ -22,14 +22,18 @@
           <el-table-column
             v-for="i in sort"
             :key="i"
-            prop="date"
             :label="labelForm[i]"
             align="center"
           >
             <template slot-scope="{row}">
-              <span>{{ row[`val`+i] }}</span>
+              <span>{{ row[`val`+ i] }}</span>
               <span v-if="i == 5">
-                --> <el-tag :type="row | steadFilter" @click="editStead(row)">{{ row['stead'].number }}</el-tag>
+                <span v-if="row.stead">
+                  --> <el-tag :type="row | steadFilter" @click="editStead(row)">{{ row.stead.number }}</el-tag>
+                </span>
+                <span v-else>
+                  --> <el-tag :type="row | steadFilter" @click="editStead(row)">---</el-tag>
+                </span>
               </span>
             </template>
           </el-table-column>
@@ -65,10 +69,10 @@
     </el-form>
     <div v-if="dialogSteadFormVisible">
       <el-dialog title="Уточнить участок" :visible.sync="dialogSteadFormVisible">
-        <UserSteadFind :user-stead="editRow.stead.id" @selectStead="setStead" />
+        <UserSteadFind :read_only="false" :stead_id="editRow.stead.id" @selectStead="setStead" />
         <span slot="footer" class="dialog-footer">
-          <el-button @click="dialogSteadFormVisible = false">Cancel</el-button>
-          <el-button type="primary" @click="dialogSteadFormVisible = false">Confirm</el-button>
+          <el-button @click="dialogSteadFormVisible = false">Отмена</el-button>
+          <el-button type="primary" @click="confirmStead">Ок</el-button>
         </span>
       </el-dialog>
     </div>
@@ -153,7 +157,7 @@ export default {
       return 'plain'
     },
     steadFilter(val) {
-      if (val.val5 === val.stead.number) {
+      if (val.stead && val.val5 === val.stead.number) {
         return ''
       }
       return 'danger'
@@ -180,14 +184,18 @@ export default {
       }
     }
     return {
+      // sort: [0, 1, 5, 6, 8, 7],
       sort: [0, 1, 5, 6, 8, 7],
-      reestr: '',
+      reestr: {
+        data: ''
+      },
       labelForm,
       editRow: {},
       dialogSteadFormVisible: false,
       dialogMeterReadingFormVisible: false,
       dialogDublFormVisible: false,
       rateList: [],
+      tempStead: {},
       rate_checked: '',
       datetime: +new Date(),
       postForm: Object.assign({}, defaultForm),
@@ -248,6 +256,9 @@ export default {
       if (row.dubl) {
         return 'warning-row'
       }
+      if (row.error) {
+        return 'warning-row'
+      }
       return ''
     },
     publishForm() {
@@ -267,11 +278,23 @@ export default {
       this.editRow = row
       this.dialogMeterReadingFormVisible = true
     },
+    confirmStead() {
+      this.dialogSteadFormVisible = false
+      if (this.tempStead && this.tempStead.id) {
+        this.editRow.stead.id = this.tempStead.id
+        this.editRow.stead.number = this.tempStead.number
+        if (this.editRow.type) {
+          this.editRow.error = false
+        }
+      }
+    },
     setStead(stead) {
-      this.editRow.stead.id = stead.id
-      this.editRow.stead.number = stead.number
+      this.tempStead = stead
+      // this.editRow.stead.id = stead.id
+      // this.editRow.stead.number = stead.number
     },
     editStead(row) {
+      this.tempStead = false
       this.editRow = row
       this.dialogSteadFormVisible = true
     },
@@ -301,6 +324,7 @@ export default {
       fetchBillingBankReestrInfo({ id: id }).then(response => {
         if (response.data.status) {
           this.reestr = response.data.data
+          console.log(this.reestr)
         }
       })
 

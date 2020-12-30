@@ -96,7 +96,7 @@ class UserVotingController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Вернуть даннае по голосованию
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -147,8 +147,8 @@ class UserVotingController extends Controller
                     $voting->fill($data);
                     $voting->coments = 0;
                     if ($voting->type == 'public'){
-                        $voting->date_start = '0000-01-01 00:00:00';
-                        $voting->date_stop = '9999-01-01 00:00:00';
+                        $voting->date_start = '0000-01-01';
+                        $voting->date_stop = '9999-01-01';
                     }
                     $voting->save();
                     if ($voting->save()) {

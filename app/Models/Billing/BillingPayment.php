@@ -53,6 +53,53 @@ class BillingPayment extends Model
         return parent::save($options);
     }
 
+
+
+    /**
+     * разнести платежку по счетам садоводов
+     *
+     * @param BillingBankReestr $reestr
+     * @return bool
+     */
+    public static function createPlayment(array $item)
+    {
+        try {
+            $date = date_create_from_format('d-m-Y H-i-s', $item[0]. ' ' .$item[1]);
+            $payment_data = date_format($date, 'Y-m-d H:i:s');
+            $payment = new self;
+            $payment->price = (float)str_replace(',', '.', $item[8]);
+            $payment->transaction = $item[4];
+            $payment->payment_date = $payment_data;
+//                    $payment->stead_id = $item['stead']['id'];
+                $payment->discription = $item[7];
+//                    $payment->type = $item['type'];
+//                    $payment->reestr_id = $reestr->id;
+                $payment->payment_type = 1;
+                $payment->raw_data = $item;
+                $payment->user_id = Auth::user()->id;
+//                dump($payment);
+            if ($payment->checkNoDublicate()) {
+                if (!$payment->save()) {
+                    return false;
+                }
+            } else {
+               $payment->dubl = true;
+               return $payment;
+            }
+            return $payment;
+        } catch (\Exception $e) {
+            return false;
+        }
+        return false;
+    }
+
+
+    /**
+     * разнести платежку по счетам садоводов
+     *
+     * @param BillingBankReestr $reestr
+     * @return bool
+     */
     public static function smashTheReestr(BillingBankReestr $reestr)
     {
         try {
@@ -63,19 +110,20 @@ class BillingPayment extends Model
                 $temp_time = explode('-', $item['val1']);
                 $payment_data = $temp_date[2] . '-' . $temp_date[1] . '-' . $temp_date[0] . ' ' . $temp_time[0] . ':' . $temp_time[1] . ':' . $temp_time[2];
                 $payment = new self;
-                $payment->stead_id = $item['stead']['id'];
-                $payment->discription = $item['val7'];
-                $payment->type = $item['type'];
+                $payment->price = (float)str_replace(',', '.', $item['val8']);
                 $payment->transaction = $item['val4'];
-                $payment->price = (float)$item['val8'];
                 $payment->payment_date = $payment_data;
-                $payment->reestr_id = $reestr->id;
-                $payment->payment_type = 1;
-                $payment->raw_data = $item;
-                $payment->user_id = Auth::user()->id;
+                if ($payment->checkNoDublicate()) {
+                    $payment->stead_id = $item['stead']['id'];
+                    $payment->discription = $item['val7'];
+                    $payment->type = $item['type'];
+                    $payment->reestr_id = $reestr->id;
+                    $payment->payment_type = 1;
+                    $payment->raw_data = $item;
+                    $payment->user_id = Auth::user()->id;
 //                dump($payment);
 //                dump($payment->checkNoDublicate());
-                if ($payment->checkNoDublicate()) {
+//                if ($payment->checkNoDublicate()) {
                     if (!$payment->save()) {
                         $status = false;
                     }
@@ -96,8 +144,6 @@ class BillingPayment extends Model
             ->where('price', $this->price)
             ->where('transaction', $this->transaction)
             ->first();
-//        dump($this->payment_date);
-//        dump($find);
         if ($find){
             return false;
         } else {
@@ -164,5 +210,51 @@ class BillingPayment extends Model
                $item->delete();
            }
        }
+    }
+
+
+    /**попробывать получить номер участка
+     *
+     *
+     * @param int $col
+     * @return $this
+     */
+    public function parseStead($col = 5)
+    {
+        $d =
+
+        $data = $this->raw_data;
+        $str = mb_strtolower($data[$col]);
+        $str = str_replace('-', '/', $str);
+        $str = str_replace('-', '/', $str);
+        $str = str_replace(',', '/', $str);
+        $str = str_replace('участок', '', $str);
+        $str = str_replace('№', '', $str);
+        $str = str_replace(' ', '', $str);
+        $stead = Stead::query()->where('number', 'like', "%{$str}%")->first();
+        if(!$stead) {
+            $str = str_replace('Л сч 502 10линия', '502', $data['val'.$col]);
+            $str = str_replace('Л сч502 10линия', '502', $str);
+            $str = str_replace('288, 289', '288', $str);
+            $str = str_replace('526/525', '525/526', $str);
+            $stead = Stead::query()->where('number', 'like', "%{$str}%")->first();
+        }
+            if ($stead) {
+                $data['stead'] = ['id' => $stead->id, 'number' => $stead->number];
+                if ($stead->number == mb_strtolower($data[$col])) {
+                    $this->stead_id = $stead->id;
+                } else {
+                    $data['error'] = true;
+                    $error[] = $data;
+                }
+            } else {
+                $data['stead'] = ['id' => '', 'number' => '-'];
+                $data['error'] = true;
+                $error[] = $data;
+            }
+
+        $d['data'] = array_merge($error, $ok);
+        $this->data  = $d;
+        return $this;
     }
 }

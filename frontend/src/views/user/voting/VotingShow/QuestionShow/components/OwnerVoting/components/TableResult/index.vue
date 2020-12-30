@@ -40,7 +40,7 @@ export default {
     },
     column() {
       if (this.mobile) {
-        return 6
+        return 5
       }
       return 15
     },

@@ -29,7 +29,7 @@
       </el-table-column>
       <el-table-column label="Заголовок" min-width="150px">
         <template slot-scope="{row}">
-          <span class="link-type">{{ row.title }}</span>
+          <span class="link-type" @click="showResult(row.id)">{{ row.title }}</span>
           <el-button type="success" size="mini" plain icon="el-icon-s-custom">{{ row.countAnswer }}</el-button>
         </template>
       </el-table-column>
@@ -176,7 +176,8 @@ export default {
     this.getList()
   },
   methods: {
-    showResult(row) {
+    showResult(id) {
+      this.$router.push('/admin/voting/result/' + id)
     },
     getList() {
       this.listLoading = true
