@@ -1,8 +1,14 @@
 <template>
   <div class="app-container">
     <h2>Камеры</h2>
-    <img class="camera_img" :src="src1" @click="limgClick(1)" />
-    <img class="camera_img" :src="src2" @click="limgClick(2)" />
+    <el-image
+      :src="url1"
+      :preview-src-list="urlAll"
+    />
+    <el-image
+      :src="url2"
+      :preview-src-list="urlAll"
+    />
   </div>
 </template>
 
@@ -14,33 +20,20 @@ export default {
       src2: '/api/v1/camera/img/2?s=' + new Date().getTime() + '.jpg'
     }
   },
-
-  mounted() {
-    // fetch('/camera')
-  },
-  methods: {
-    limgClick(val) {
-      // if (val === 1) {
-      //   if (this.src1 === '/camera/img/1') {
-      //     this.src1 = '/camera/img/gif1'
-      //   } else {
-      //     this.src1 = '/camera/img/1'
-      //   }
-      // }
-      // if (val === 2) {
-      //   if (this.src2 === '/camera/img/2') {
-      //     this.src2 = '/camera/img/gif2'
-      //   } else {
-      //     this.src2 = '/camera/img/2'
-      //   }
-      // }
+  computed: {
+    url1() {
+      return process.env.VUE_APP_BASE_API + this.src1
+    },
+    url2() {
+      return process.env.VUE_APP_BASE_API + this.src2
+    },
+    urlAll() {
+      return [process.env.VUE_APP_BASE_API + this.src1, process.env.VUE_APP_BASE_API + this.src2]
     }
   }
 }
 </script>
 
 <style scoped>
-  .camera_img{
-    width: 100%;
-  }
+
 </style>

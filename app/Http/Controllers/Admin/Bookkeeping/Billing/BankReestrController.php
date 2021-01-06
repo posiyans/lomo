@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Bookkeeping\Billing;
 
 use App\Http\Resources\Admin\Bookkeeping\AdminBalansSteadResource;
+use App\Http\Resources\Admin\Bookkeeping\AdminPaymentResource;
 use App\Models\Billing\BillingBankReestr;
 use App\Models\Billing\BillingInvoice;
 use App\Models\Billing\BillingPayment;
@@ -76,27 +77,14 @@ class BankReestrController extends Controller
     public function uploadReestr(Request $request)
     {
         if ($request->data && is_array($request->data)) {
-                $user = Auth::user();
-                $data = [];
+            $data = [];
             foreach ($request->data as $item) {
-                $data[] = BillingPayment::createPlaymen($item);
+                $playment = BillingPayment::createPlayment($item);
+                if ($playment) {
+                    $data[] = new AdminPaymentResource($playment);
                 }
-
-                $file = new BillingBankReestr();
-                $file->file_hash = '-';
-//                $file->file_name = $inputFile->getClientOriginalName();
-//                $file->file_size = $inputFile->getSize();
-                $file->user_id = $user->id;
-                $file->parseData($request->data);
-                $file->parseType();
-                $file->parseStead();
-                $file->findDublicate();
-                if ($file->save()) {
-                    return json_encode(['status' => true, 'data' => $file]);
-                }
-                return json_encode(['status' => false, 'data' => 'Ошибка при сохранении файла']);
-//            }
-//            return json_encode(['status' => false, 'data'=>'Фаил имеет неверный формат']);
+            }
+            return json_encode(['status' => true, 'data' => $data]);
         }
         return json_encode(['status' => false, 'data'=>'Фаил не загружен']);
     }

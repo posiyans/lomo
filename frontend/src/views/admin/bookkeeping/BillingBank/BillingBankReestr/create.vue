@@ -1,47 +1,35 @@
 <template>
   <div class="app-container">
     <div style="display: inline-block;">
-      <div>
-        Добавить выписку из банка
-      </div>
-    <el-upload
-      class="upload-demo"
-      ref="upload"
-      with-credentials
-      :headers="token"
-      :action="url"
-      :auto-upload="false"
-      :on-success="handleSuccess"
-    >
-      <el-button slot="trigger" size="small" type="primary">Выбрать фаил</el-button>
-      <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">Загрузить</el-button>
-      <div class="el-upload__tip" slot="tip">Выписка из банка формата csv</div>
-    </el-upload>
+      <el-button type="primary">Добавить выписку из банка</el-button>
     </div>
     <div class="mt4">
       <el-table
         :data="list"
         border
-        style="width: 100%">
+        style="width: 100%"
+      >
         <el-table-column
           label="№ выписки"
-          width="180">
+          width="180"
+        >
           <template slot-scope="{row}">
-            {{row.id}}
+            {{ row.id }}
           </template>
         </el-table-column>
         <el-table-column
           label="Дата загрузки"
-          width="180">
+          width="180"
+        >
           <template slot-scope="{row}">
-            {{row.created_at}}
+            {{ row.created_at }}
           </template>
         </el-table-column>
         <el-table-column
           label="Имя файла"
         >
           <template slot-scope="{row}">
-            {{row.file_name}}
+            {{ row.file_name }}
           </template>
         </el-table-column>
         <el-table-column
@@ -49,7 +37,7 @@
         >
           <template slot-scope="{row}">
             <span v-if="row.data.data">
-              {{row.data.data.length}}
+              {{ row.data.data.length }}
             </span>
           </template>
         </el-table-column>
@@ -63,23 +51,24 @@
           </template>
         </el-table-column>
       </el-table>
-      </div>
+    </div>
   </div>
 <!--  <BilligBankReestr :is-edit="false" />-->
 </template>
 
 <script>
-import BilligBankReestr from './components/BillingBankReestrDetail.vue'
+// import BilligBankReestr from './components/BillingBankReestrDetail.vue'
 import { fetchBillingBankReestrList } from '@/api/admin/billing'
 export default {
   components:
     {
-      BilligBankReestr
+      // BilligBankReestr
     },
   data() {
     return {
       token: { 'X-XSRF-TOKEN': this.getCookie('XSRF-TOKEN') },
       list: [],
+      showl: 0,
       listQuery: {
         page: 1,
         limit: 20,
@@ -92,7 +81,7 @@ export default {
   computed: {
     url() {
       return process.env.VUE_APP_BASE_API + '/api/v1/admin/billing/bank-reestr/upload'
-    },
+    }
   },
   mounted() {
     this.getList()
@@ -125,7 +114,7 @@ export default {
       return matches ? decodeURIComponent(matches[1]) : undefined
     },
     submitUpload() {
-      this.$refs.upload.submit();
+      this.$refs.upload.submit()
     }
   }
 }

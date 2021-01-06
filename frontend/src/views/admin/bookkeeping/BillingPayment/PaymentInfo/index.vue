@@ -8,10 +8,10 @@
       Назначение платежа: {{ payment.discription }}
     </div>
     <div>
-      ФИО: {{ payment.raw_data.val6 }}
+      ФИО: {{ payment.raw_data[6] }}
     </div>
     <div>
-      Участок: <el-button size="mini" type="warning" plain @click="showChangeStead">{{ payment.stead_number }}</el-button> ({{ payment.raw_data.val5 }})
+      Участок: <el-button size="mini" type="warning" plain @click="showChangeStead">{{ payment.stead.number }}</el-button> ({{ payment.raw_data[5] }})
       <div v-if="changeSteadVizible">
         <UserSteadFind :user-stead="payment.stead_id" @selectStead="setNewStead" />
         <el-button type="success" size="mini" @click="changeStead">Ок</el-button>
@@ -112,7 +112,7 @@ export default {
     getData() {
       this.load = false
       fetchPaymentInfo(this.id).then(response => {
-        if (response.data.status) {
+        if (response.data.data) {
           this.payment = response.data.data
           this.load = true
         }

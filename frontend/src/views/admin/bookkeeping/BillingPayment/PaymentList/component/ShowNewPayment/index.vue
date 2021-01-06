@@ -2,21 +2,25 @@
   <div class="createPost-container">
     <el-form ref="reestrForm" :model="postForm" :rules="rules" :label-position="labelPosition" class="form-container" label-width="180px">
       <div class="pt1 createPost-main-container" style="padding-top: 0; padding-bottom: 0">
-        <el-button v-loading="loading" type="success" @click="submitForm" />
-        <el-button v-loading="loading" type="danger" @click="parseFile">
-          Сбросить данные
-        </el-button>
         <el-button v-loading="loading" type="primary" @click="close">
           Все платежи
         </el-button>
       </div>
       <div class="createPost-main-container billing-bank-reestr-table">
         <el-table
-          :data="reestr.data.data"
+          :data="list"
           border
           style="width: 100%"
           :row-class-name="tableRowClassName"
         >
+          <el-table-column
+            label="Дата"
+            align="center"
+          >
+            <template slot-scope="{ row }">
+              <span>{{ row.payment_date | moment("DD-MM-YYYY HH:mm") }}</span>
+            </template>
+          </el-table-column>
           <el-table-column
             v-for="i in sort"
             :key="i"
@@ -24,7 +28,7 @@
             align="center"
           >
             <template slot-scope="{row}">
-              <span>{{ row[`val`+ i] }}</span>
+              <span>{{ row.raw_data[i] }}</span>
               <span v-if="i == 5">
                 <span v-if="row.stead">
                   --> <el-tag :type="row | steadFilter" @click="editStead(row)">{{ row.stead.number }}</el-tag>
@@ -42,16 +46,16 @@
           >
             <template slot-scope="{row}">
               <div v-if="row.dubl">
-                <el-tag type="danger" effect="dark" @click="showDubl(row)">
+                <el-tag type="danger" effect="dark">
                   Повтор
                 </el-tag>
               </div>
               <div v-else>
-                <el-tag type="danger" :effect="row.type | type1EffectFilter" @click="selectElect(row)">
+                <el-tag type="danger" :effect="row.type | type1EffectFilter" @click="changeType(row, 1)">
                   <i v-if="row.type == 1" class="el-icon-check" />
                   Электоэнергия
                 </el-tag>
-                <el-tag type="success" :effect="row.type | type2EffectFilter" @click="row.type = 2">
+                <el-tag type="success" :effect="row.type | type2EffectFilter" @click="changeType(row, 2)">
                   <i v-if="row.type == 2" class="el-icon-check" />
                   Взносы
                 </el-tag>
@@ -66,7 +70,10 @@
       </div>
     </el-form>
     <div v-if="dialogSteadFormVisible">
-      <el-dialog title="Уточнить участок" :visible.sync="dialogSteadFormVisible">
+      <el-dialog
+        title="Укажите участок"
+        :visible.sync="dialogSteadFormVisible"
+      >
         <UserSteadFind :read_only="false" :stead_id="editRow.stead.id" @selectStead="setStead" />
         <span slot="footer" class="dialog-footer">
           <el-button @click="dialogSteadFormVisible = false">Отмена</el-button>
@@ -74,22 +81,8 @@
         </span>
       </el-dialog>
     </div>
-    <div v-if="dialogDublFormVisible">
-      <el-dialog title="Платеж уже есть в базе" :visible.sync="dialogDublFormVisible">
-        <div>
-          Занесено в базу {{ editRow.dubl.created_at | moment('DD-MM-YYYY HH:mm') }}
-        </div>
-        <div>
-          Платеж № {{ editRow.dubl.id }} на сумму {{ editRow.dubl.price }} руб.<br>
-          <el-tag type="success">Подробнее</el-tag>
-        </div>
-        <span slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="dialogDublFormVisible = false">Ок</el-button>
-        </span>
-      </el-dialog>
-    </div>
     <div v-if="dialogMeterReadingFormVisible">
-      <el-dialog title="Уточнить участок" :visible.sync="dialogMeterReadingFormVisible">
+      <el-dialog title="Введите показания" :visible.sync="dialogMeterReadingFormVisible">
         <div class="mb2">{{ editRow.val7 }}</div>
         <el-form label-position="top">
           <el-form-item label="Показания день">
@@ -120,10 +113,9 @@
 import { fetchBillingBankReestrInfo, updateBillingBankReestr, BillingBankReestrParse, publishBillingBankReestr } from '@/api/admin/billing'
 import { searchUser } from '@/api/remote-search'
 import { mapState } from 'vuex'
-// import { Money } from 'v-money'
 import { fetchList } from '@/api/rate'
-// import readFileInputEventAsArrayBuffer from './readFileDoc'
 import UserSteadFind from '@/components/UserSteadFind'
+import { updatePaymentInfo } from '@/api/admin/bookkeping/payment'
 
 const defaultForm = {
   title: '',
@@ -155,7 +147,7 @@ export default {
       return 'plain'
     },
     steadFilter(val) {
-      if (val.stead && val.val5 === val.stead.number) {
+      if (val.stead && val.raw_data[5] === val.stead.number) {
         return ''
       }
       return 'danger'
@@ -164,6 +156,10 @@ export default {
   // name: 'ArticleDetail',
   components: { UserSteadFind },
   props: {
+    list: {
+      type: Array,
+      default: () => ([])
+    },
     isEdit: {
       type: Boolean,
       default: false
@@ -183,7 +179,8 @@ export default {
     }
     return {
       // sort: [0, 1, 5, 6, 8, 7],
-      sort: [0, 1, 5, 6, 8, 7],
+      // sort: [0, 1, 5, 6, 8, 7],
+      sort: [5, 6, 8, 7],
       reestr: {
         data: ''
       },
@@ -191,7 +188,6 @@ export default {
       editRow: {},
       dialogSteadFormVisible: false,
       dialogMeterReadingFormVisible: false,
-      dialogDublFormVisible: false,
       rateList: [],
       tempStead: {},
       rate_checked: '',
@@ -246,7 +242,7 @@ export default {
     // Why need to make a copy of this.$route here?
     // Because if you enter this page and quickly switch tag, may be in the execution of the setTagsViewTitle function, this.$route is no longer pointing to the current page
     // https://github.com/PanJiaChen/vue-element-admin/issues/1221
-    this.tempRoute = Object.assign({}, this.$route)
+    // this.tempRoute = Object.assign({}, this.$route)
   },
   methods: {
     close() {
@@ -270,20 +266,34 @@ export default {
         this.reestr = response.data
       })
     },
-    showDubl(row) {
-      this.editRow = row
-      this.dialogDublFormVisible = true
+    changeType(row, type) {
+      if (row.type !== type) {
+        row.type = type
+        this.saveData(row.id, { type: row.type })
+      }
+      if (type === 1) {
+        this.editRow = row
+        this.dialogMeterReadingFormVisible = true
+      }
     },
-    selectElect(row) {
-      row.type = 1
-      this.editRow = row
-      this.dialogMeterReadingFormVisible = true
+    saveData(id, data) {
+      updatePaymentInfo(id, data)
+        .then(response => {
+          if (response.data.status) {
+            this.$message('Данные успешно сохранены')
+          } else {
+            if (response.data.data) {
+              this.$message.error(response.data.data)
+            }
+          }
+        })
     },
     confirmStead() {
       this.dialogSteadFormVisible = false
       if (this.tempStead && this.tempStead.id) {
         this.editRow.stead.id = this.tempStead.id
         this.editRow.stead.number = this.tempStead.number
+        this.saveData(this.editRow.id, { stead_id: this.tempStead.id })
         if (this.editRow.type) {
           this.editRow.error = false
         }
@@ -295,9 +305,11 @@ export default {
       // this.editRow.stead.number = stead.number
     },
     editStead(row) {
-      this.tempStead = false
-      this.editRow = row
-      this.dialogSteadFormVisible = true
+      if (!row.dubl) {
+        this.tempStead = false
+        this.editRow = row
+        this.dialogSteadFormVisible = true
+      }
     },
     // parseFile() {
     //   this.file = this.$refs.file.files[0]

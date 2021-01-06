@@ -116,9 +116,9 @@ class PaymentController extends Controller
     public function update(Request $request, $id)
     {
         $payment = BillingPayment::find($id);
-        $payment->stead_id = $request->stead_id;
-        $payment->payment_type = $request->payment_type;
-        $payment->raw_data = $request->raw_data;
+        $payment->stead_id = $request->stead_id ? $request->stead_id :  $payment->stead_id;
+        $payment->type = $request->type ? $request->type : $payment->type;
+//        $payment->raw_data = $request->raw_data ? $request->raw_data : $payment->raw_data;
         if ($payment->save()) {
             $payment->setMeterReading();
             return json_encode(['status'=>true, 'data'=>$payment]);

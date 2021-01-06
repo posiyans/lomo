@@ -6,7 +6,7 @@
         class="upload-demo"
         action="#"
         multiple
-        :limit="10"
+        :limit="50"
         :on-exceed="handleExceed"
         :auto-upload="false"
       >
@@ -60,7 +60,7 @@
       </tr>
     </table>
     <div class="pa3">
-      <el-button type="success" @click="upload">Загрузить</el-button>
+      <el-button type="danger" plain @click="close">Отмена</el-button><el-button type="success" @click="upload">Загрузить</el-button>
     </div>
   </div>
 </template>
@@ -111,6 +111,9 @@ export default {
     }
   },
   methods: {
+    close() {
+      this.$emit('close')
+    },
     handleExceed(files, fileList) {
       this.$message.warning(`Ограничение - 10 файлов`)
     },
@@ -169,11 +172,12 @@ export default {
         uploadDischarge({ data: this.data_ok })
           .then(response => {
             if (response.data.status) {
-
-            // this. = response.data.data
+              this.$emit('showPayment', response.data.data)
+              // this. = response.data.data
             } else {
-              this.$message.error('Ошибка сохранения')
-              this.$message.error(response.data.data)
+              if (response.data.data) {
+                this.$message.error(response.data.data)
+              }
             }
           })
       }).catch(() => {})
