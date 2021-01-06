@@ -1,28 +1,38 @@
 <template>
   <div class="app-container">
-    <div class="ma2"><b>Платежи садоводов</b></div>
-    <div class="filter-container">
-      <el-input v-model="listQuery.find" placeholder="Найти сумму или участок" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-date-picker
-        v-model="listQuery.date"
-        type="daterange"
-        range-separator="по"
-        :picker-options="{ firstDayOfWeek: 1}"
-        class="filter-item"
-        format="dd-MM-yyyy"
-        value-format="yyyy-MM-dd"
-        start-placeholder="с даты"
-        end-placeholder="по дату"
-      />
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-        Показать
-      </el-button>
-      <el-button v-if="false" v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
-        Export
-      </el-button>
+    <div v-if="show === 0">
+      <div class="ma2"><b>Платежи садоводов</b></div>
+      <div class="filter-container">
+        <el-input
+          v-model="listQuery.find"
+          placeholder="Найти сумму, участок, дату"
+          style="width: 200px;"
+          clearable
+          class="filter-item"
+          @clear="handleFilter"
+          @keyup.enter.native="handleFilter"
+        />
+        <el-date-picker
+          v-model="listQuery.date"
+          type="daterange"
+          range-separator="по"
+          :picker-options="{ firstDayOfWeek: 1}"
+          class="filter-item"
+          format="dd-MM-yyyy"
+          value-format="yyyy-MM-dd"
+          start-placeholder="с даты"
+          end-placeholder="по дату"
+        />
+        <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+          Показать
+        </el-button>
+        <el-button v-waves class="filter-item" type="primary" @click="addPayment">Добавить выписку из банка</el-button>
+      </div>
+      <component :is="componentName" :list="list" />
+      <LoadMore v-if="!loadMoreDisable" :key="key" :list-query="listQuery" :func="func" @setList="setList" />
     </div>
-    <component :is="componentName" :list="list" />
-    <LoadMore :key="key" :list-query="listQuery" :func="func" @setList="setList" />
+    <AddPayment v-if="show === 1" @close="closeAddPaymentForm" @showPayment="showPayment" />
+    <ShowNewPayment v-if="show === 2" :list="newList" @close="closeShowPaymentForm" />
   </div>
 
 </template>
@@ -34,6 +44,8 @@ import waves from '@/directive/waves'
 import LoadMore from '@/components/LoadMore'
 import Desktop from './Table/Desktop'
 import Mobile from './Table/Mobile'
+import AddPayment from './component/AddPayment'
+import ShowNewPayment from './component/ShowNewPayment'
 
 export default {
   filters: {
@@ -53,12 +65,16 @@ export default {
   components: {
     LoadMore,
     Desktop,
-    Mobile
+    Mobile,
+    AddPayment,
+    ShowNewPayment
   },
   directives: { waves },
   data() {
     return {
       key: 1,
+      show: 0,
+      loadMoreDisable: false,
       listQuery: {
         page: 1,
         limit: 20,
@@ -66,6 +82,7 @@ export default {
         date: []
       },
       list: [],
+      newList: [],
       func: fetchPaymentList,
       payment: {}
 
@@ -89,12 +106,27 @@ export default {
     this.handleFilter()
   },
   methods: {
+    closeShowPaymentForm() {
+      this.show = 0
+      this.newList = []
+    },
+    showPayment(data) {
+      this.loadMoreDisable = true
+      this.newList = data
+      this.show = 2
+    },
+    closeAddPaymentForm() {
+      this.show = 0
+    },
+    addPayment() {
+      this.show = 1
+    },
     setList(val) {
-      console.log('setlist')
       this.list = val
       this.listLoading = false
     },
     handleFilter() {
+      this.loadMoreDisable = false
       this.listQuery.page = 1
       this.key++
       this.listLoading = true

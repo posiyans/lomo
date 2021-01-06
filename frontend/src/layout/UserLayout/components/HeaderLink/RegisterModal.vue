@@ -1,6 +1,8 @@
 <template>
-  <div class="heade ml2 mr6-ns">
-    <el-button type="text" @click="showLoginForm = !showLoginForm">Регистрация</el-button>
+  <div class="ml2 mr2 mr4-ns">
+    <el-button type="text" @click="showLoginForm = !showLoginForm">
+      Регистрация
+    </el-button>
     <el-dialog
       title=""
       :fullscreen="device == 'mobile' ? true : false"
@@ -8,10 +10,10 @@
       width="600px"
       center
     >
-      <div slot="title" style="background-color: rgb(84, 92, 100); color: #ffffff; font-weight: bold; font-size: 16px">
+      <div slot="title" class="main-header__modal_title">
         Регистрация на сайте
       </div>
-      <div class="login-form">
+      <div class="main-header_login-form">
         <el-form
           ref="Registerform"
           :model="form"
@@ -41,7 +43,7 @@
               tabindex="3"
             />
           </el-form-item>
-          <el-form-item label="Потвердить пароль" prop="password_confirmation">
+          <el-form-item label="Подтвердить пароль" prop="password_confirmation">
             <el-input
               v-model="form.password_confirmation"
               show-password
@@ -49,12 +51,21 @@
             />
           </el-form-item>
           <el-form-item>
-            <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleRegister">Зарегистрироваться</el-button>
+            <el-button :loading="loading" size="default" class="w-100" type="primary" @click.native.prevent="handleRegister">Зарегистрироваться</el-button>
           </el-form-item>
         </el-form>
-        <div style="line-height: 30px;"><div style="display: inline-block; width: 80px;">или через</div><div style="display: inline-block;"><div @click="loginVK"><img src="/images/vk-banner.png" width="100px"></div></div></div>
+        <div class="flex">
+          <div>
+            или через
+          </div>
+          <div class="ml2">
+            <div @click="loginVK">
+              <img src="/images/vk-banner.png" width="100px">
+            </div>
+          </div>
+        </div>
       </div>
-      <div v-if="device === 'mobile'" slot="footer" style="background-color: rgb(84, 92, 100); color: #ffffff; font-weight: bold; font-size: 16px">
+      <div v-if="device === 'mobile'" slot="footer" class="main-header__modal_title">
         <el-button type="primary" @click="showLoginForm = false">Закрыть</el-button>
       </div>
     </el-dialog>

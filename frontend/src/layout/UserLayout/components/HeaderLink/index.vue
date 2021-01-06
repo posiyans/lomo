@@ -1,23 +1,23 @@
 <template>
   <div>
-    <el-row v-if="roleGuest" >
-      <el-col :span="11">
-          <LoginModal/>
-      </el-col>
-      <el-col :span="12" :offset="1">
-        <RegisterModal/>
-      </el-col>
-    </el-row>
+    <div v-if="roleGuest" class="flex">
+      <div>
+        <LoginModal />
+      </div>
+      <div>
+        <RegisterModal />
+      </div>
+    </div>
     <el-row v-else justify="end">
       <el-col :span="24">
         <el-dropdown @command="handleCommand">
           <span class="el-dropdown-link">
-            {{ user.name }}<i class="el-icon-arrow-down el-icon--right"></i>
+            {{ user.name }}<i class="el-icon-arrow-down el-icon--right" />
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item v-if="admin" command="adminPanel">Админ панель</el-dropdown-item>
             <el-dropdown-item command="profile">Профиль</el-dropdown-item>
-            <el-dropdown-item command="logout" divided >Выход</el-dropdown-item>
+            <el-dropdown-item command="logout" divided>Выход</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-col>
@@ -26,7 +26,8 @@
       title="Регистрация"
       :visible.sync="showRegisterForm"
       width="300px"
-      center>
+      center
+    >
       <div>
         <div>Зарегистрироваться и войти через</div>
         <div @click="loginVK"><img src="/images/vk-banner.png" width="100px"></div>

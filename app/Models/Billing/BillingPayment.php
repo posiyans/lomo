@@ -13,7 +13,8 @@ class BillingPayment extends Model
     protected $casts = [
         'raw_data' => 'array',
         'history' => 'array',
-        'price'=> 'float',
+        'price' => 'float',
+        'error' => 'boolean'
     ];
 
     public function stead()
@@ -21,12 +22,20 @@ class BillingPayment extends Model
         return $this->hasOne(Stead::class, 'id', 'stead_id');
     }
 
-    public function steadNumber()
+    public function steadObject(array $attributes = [])
     {
+        $data = [];
         if ($this->stead) {
-            return $this->stead->number;
+            if (count($attributes) == 0) {
+                $attributes = $this->stead->getAttributes();
+            }
+            foreach ($attributes as $item) {
+                if(isset($this->stead[$item])) {
+                  $data[$item] = $this->stead[$item];
+                }
+            }
         }
-        return '';
+        return $data;
     }
 
     /**
@@ -70,23 +79,20 @@ class BillingPayment extends Model
             $payment->price = (float)str_replace(',', '.', $item[8]);
             $payment->transaction = $item[4];
             $payment->payment_date = $payment_data;
-//                    $payment->stead_id = $item['stead']['id'];
-                $payment->discription = $item[7];
-//                    $payment->type = $item['type'];
-//                    $payment->reestr_id = $reestr->id;
-                $payment->payment_type = 1;
-                $payment->raw_data = $item;
-                $payment->user_id = Auth::user()->id;
-//                dump($payment);
+            $payment->discription = $item[7];
+            $payment->payment_type = 1;
+            $payment->raw_data = $item;
+            $payment->user_id = Auth::user()->id;
+            $payment->parseType();
+            $payment->parseStead();
             if ($payment->checkNoDublicate()) {
-                if (!$payment->save()) {
-                    return false;
+                if ($payment->save()) {
+                    return $payment;
                 }
             } else {
                $payment->dubl = true;
                return $payment;
             }
-            return $payment;
         } catch (\Exception $e) {
             return false;
         }
@@ -221,8 +227,6 @@ class BillingPayment extends Model
      */
     public function parseStead($col = 5)
     {
-        $d =
-
         $data = $this->raw_data;
         $str = mb_strtolower($data[$col]);
         $str = str_replace('-', '/', $str);
@@ -240,21 +244,38 @@ class BillingPayment extends Model
             $stead = Stead::query()->where('number', 'like', "%{$str}%")->first();
         }
             if ($stead) {
-                $data['stead'] = ['id' => $stead->id, 'number' => $stead->number];
-                if ($stead->number == mb_strtolower($data[$col])) {
-                    $this->stead_id = $stead->id;
-                } else {
-                    $data['error'] = true;
-                    $error[] = $data;
+                $this->stead_id = $stead->id;
+                if ($stead->number != mb_strtolower($data[$col])) {
+                    $this->error = true;
                 }
-            } else {
-                $data['stead'] = ['id' => '', 'number' => '-'];
-                $data['error'] = true;
-                $error[] = $data;
             }
+        return $this;
+    }
 
-        $d['data'] = array_merge($error, $ok);
-        $this->data  = $d;
+
+    public function parseType($col = 7)
+    {
+        $data = $this->raw_data;
+        $type_1 = ['энер', 'свет',  'эл', 'эн.' ,'ээ','квт', 'счетчик', 'показан'];
+        $type_2 = ['взнос', 'членск', 'целев', 'мусор' , 'земля', 'налог', 'ежегодный', 'чл.вз.', 'отходы'];
+        $type = false;
+        $str = mb_strtolower($data[$col]);
+        foreach ($type_2 as $item) {
+            if (stristr($str, $item) && !$type) {
+                $type = 2;
+            }
+        }
+        foreach ($type_1 as $item) {
+            if (stristr($str, $item) && !$type) {
+                $type = 1;
+            }
+        }
+
+        if ($type) {
+            $this->type = $type;
+        } else {
+            $this->error = true;
+        }
         return $this;
     }
 }

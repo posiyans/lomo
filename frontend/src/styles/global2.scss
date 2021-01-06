@@ -33,7 +33,8 @@ body {
   line-height: 60px;
   //text-align: right;
   font-size: 12px;
-  position: relative;
+  //position: relative;
+  display: flex;
 }
 .header-block {
   display: inline-block;
@@ -42,10 +43,27 @@ body {
   color: #1b3958;
 }
 
+.main-header__modal_title {
+  background-color: rgb(84, 92, 100);
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 16px
+}
+
+
+
+.main-header_login-form {
+  line-height: 1.5em;
+}
+
+
+
+
 .header-link {
-  position: absolute;
-  right: 35px;
-  top: 0
+  //position: absolute;
+  //right: 35px;
+  //top: 0
+  margin-left: auto;
 }
 
 .main-app {

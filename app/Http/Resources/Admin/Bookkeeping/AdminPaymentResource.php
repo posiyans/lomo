@@ -15,7 +15,7 @@ class AdminPaymentResource extends JsonResource
     public function toArray($request)
     {
         $data = parent::toArray($request);
-        $data['stead_number'] = $this->steadNumber();
+        $data['stead'] = $this->steadObject(['id', 'number']);
         return $data;
     }
 }
