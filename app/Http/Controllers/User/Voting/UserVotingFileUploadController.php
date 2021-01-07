@@ -4,16 +4,14 @@ namespace App\Http\Controllers\User\Voting;
 
 
 use App\Models\AppealModel;
-use App\Models\Notification\Sms\Sms;
 use App\Models\Stead;
 use App\Models\Voting\VotingFileModel;
 use App\Models\Voting\VotingModel;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Mail;
+use Ramsey\Uuid\Uuid;
 
 
 class UserVotingFileUploadController extends Controller
@@ -33,13 +31,14 @@ class UserVotingFileUploadController extends Controller
                 $md5 = Controller::md5_file($inputFile);
                 $inputFile->move($md5['folder'], $md5['md5']);
                 $file->hash = $md5['md5'];
+                $file->uid = Uuid::uuid4()->toString();
                 $file->name = $inputFile->getClientOriginalName();
                 $file->size = $inputFile->getSize();
                 $file->type = $inputFile->getClientMimeType();
                 $file->voting_id = $voitng_id;
                 $file->discription = 'phone=' . $phone . ', stead=' . $stead_id . ', voting=' . $voitng_id;
                 $file->logAndSave('Загружен бюллетень', $stead_id);
-                self::createAppeal($inputFile, $md5['md5'], $phone, $stead->number, $voitng_id);
+                self::createAppeal($inputFile, $file->uid, $phone, $stead->number, $voitng_id);
                 if (self::sendEmail($inputFile, $md5['folder'] .'/'. $md5['md5'],  $phone, $stead->number)) {
                     return ['status' => true, 'data' => 'Фаил успешно отправлен'];
                 }
