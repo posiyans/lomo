@@ -68,9 +68,10 @@ export default {
             }
           }
         })
+    } else {
+      this.findStead()
     }
     // this.stead = this.userStead
-    // this.findStead(this.userStead)
     // this.selectStead()
   },
   methods: {

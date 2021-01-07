@@ -214,6 +214,11 @@ export const constantRoutes = [
         component: () => import('@/views/user/voting/VotingShow/index'),
         name: 'UserVotingShow',
         hidden: true
+      },
+      {
+        path: 'send-file/:id',
+        component: () => import('@/views/user/voting/SendFiles/index'),
+        hidden: true
       }
     ]
   },

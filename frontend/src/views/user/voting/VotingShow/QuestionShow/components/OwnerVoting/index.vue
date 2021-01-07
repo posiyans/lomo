@@ -9,6 +9,9 @@
         <ShowBulletin :voting="value" />
       </div>
       <div v-if="value.status == 'execution'">
+        <div class="pb3">
+          <el-link type="danger" @click="sendFile">Проголосовать!!!</el-link>
+        </div>
         <div class="b-ns"> Вопросы голосования</div>
         <ShowBulletin :voting="value" />
         <div class="dark-red mb2">
@@ -57,6 +60,16 @@ export default {
     value: {
       type: Object,
       default: () => ({})
+    }
+  },
+  computed: {
+    link() {
+      return '/voting/send-file/' + this.value.id
+    }
+  },
+  methods: {
+    sendFile() {
+      this.$router.push(this.link)
     }
   }
 }
