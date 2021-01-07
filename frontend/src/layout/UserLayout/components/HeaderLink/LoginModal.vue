@@ -45,7 +45,7 @@
           </div>
         </div>
       </div>
-      <div v-if="device === 'mobile'" slot="footer" class="main-header__modal_title">
+      <div slot="footer" class="main-header__modal_title">
         <el-button type="primary" @click="showLoginForm = false">Закрыть</el-button>
       </div>
     </el-dialog>

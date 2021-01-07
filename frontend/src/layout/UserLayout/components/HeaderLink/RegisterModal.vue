@@ -17,7 +17,7 @@
         <el-form
           ref="Registerform"
           :model="form"
-          label-width="160px"
+          label-width="170px"
           :label-position="label_position"
           size="mini"
           :rules="loginRules"
@@ -65,7 +65,7 @@
           </div>
         </div>
       </div>
-      <div v-if="device === 'mobile'" slot="footer" class="main-header__modal_title">
+      <div slot="footer" class="main-header__modal_title">
         <el-button type="primary" @click="showLoginForm = false">Закрыть</el-button>
       </div>
     </el-dialog>
