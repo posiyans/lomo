@@ -23,3 +23,18 @@ export function userAddAnswerToVoting(data) {
   })
 }
 
+export function votingSendSms(data) {
+  return request({
+    url: '/api/v1/user/voting/sms/send',
+    method: 'post',
+    data
+  })
+}
+
+export function votingValidSms(data) {
+  return request({
+    url: '/api/v1/user/voting/sms/valid',
+    method: 'post',
+    data
+  })
+}

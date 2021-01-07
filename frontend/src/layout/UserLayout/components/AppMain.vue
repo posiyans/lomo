@@ -14,7 +14,7 @@ export default {
   computed: {
     cachedViews() {
       // console.log('this.$store.state.tagsView.cachedViews')
-      // console.log(this.$store.state.tagsView.cachedViews)
+      console.log(this.$store.state.tagsView.cachedViews)
       return this.$store.state.tagsView.cachedViews
     },
     key() {

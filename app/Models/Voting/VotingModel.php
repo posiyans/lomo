@@ -268,7 +268,7 @@ class VotingModel extends MyModel
         $file->voting_id = $this->id;
         $file->stead_id = $stead_id;
         $file->discription = 'stead=' . $stead_id . ', voting=' . $this->id;
-        if ($file->logAndSave('Добавлен беллютень', $stead_id)){
+        if ($file->logAndSave('Добавлен бюллетень', $stead_id)){
             $file->deleteOldFile();
             $data= [
                 'status' => true,

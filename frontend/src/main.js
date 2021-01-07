@@ -22,6 +22,9 @@ import './permission' // permission control
 // import './utils/error-log' // error log
 import './utils/filters'
 
+import VueMask from 'v-mask'
+Vue.use(VueMask)
+
 const moment = require('moment-timezone')
 require('moment/locale/ru')
 moment.locale('ru')
