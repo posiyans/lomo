@@ -55,7 +55,6 @@ class UserVotingSmsController extends Controller
         $code = str_replace('-', '', $code);
         if ($this->sanitazePhone($phone)) {
             if (Sms::validCode($this->sanitazePhone($phone), $code)) {
-//            if ($code == 1234) {
                 $minutes = 60*24*30;
                 Cookie::queue('snt_vt_ph', json_encode([$this->sanitazePhone($phone)]), $minutes);
                 return ['status' => true, 'data' => ['phone' => $phone]];

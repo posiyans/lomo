@@ -30,7 +30,7 @@ class Sms extends MyModel
                 $model->status = $sms->getStatus();
                 $model->sms_id = $sms->getSmsId();
                 $model->price = $sms->getPrice();
-                if ($model->logAndSave('Отправка СМС на '. $phone . ' код: ' . $code) && $model->status == 'ok') {
+                if ($model->logAndSave('Отправка СМС на '. $phone . ' код: ' . $code) && $model->status == 'OK') {
                     return true;
                 }
             }
@@ -53,8 +53,6 @@ class Sms extends MyModel
 
     public static function validCode($phone, $code)
     {
-        var_dump($phone);
-        var_dump($code);
         $valid = self::where('phone', $phone)->where('text', $code)->where('type', 'code')->first();
         if($valid) {
             $valid->type = 'old_code';
