@@ -26,6 +26,8 @@ class VotingFileModel extends MyModel
     {
         if (Auth::check()) {
             $this->user_id = Auth::user()->id;
+        } else {
+            $this->user_id = 0;
         }
         $this->uid = Uuid::uuid4()->toString();
     }

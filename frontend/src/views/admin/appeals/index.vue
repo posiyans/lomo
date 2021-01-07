@@ -245,18 +245,6 @@ export default {
       }
       this.handleFilter()
     },
-    // resetTemp() {
-    //   this.temp = {
-    //     id: undefined,
-    //     user: {},
-    //     importance: 1,
-    //     remark: '',
-    //     timestamp: new Date(),
-    //     title: '',
-    //     status: 'published',
-    //     type: ''
-    //   }
-    // },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
       this.temp.timestamp = new Date(this.temp.timestamp)

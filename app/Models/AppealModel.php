@@ -19,7 +19,7 @@ class AppealModel extends MyModel
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        if (Auth::user()->id) {
+        if (Auth::check()) {
             $this->user_id = Auth::user()->id;
         } else {
             $this->user_id = 0;
