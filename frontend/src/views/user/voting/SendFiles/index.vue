@@ -165,13 +165,13 @@ export default {
     },
     codeChange() {
       if (this.codeNumber.length === 7) {
-        //
         const data = {
           phone: this.phone,
           code: this.codeNumber
         }
         votingValidSms(data)
           .then(response => {
+            console.log(response.data.status)
             if (response.data.status) {
               this.code = true
             } else {
@@ -195,9 +195,9 @@ export default {
           .then(response => {
             if (response.data.status) {
               if (response.data.send) {
-                this.$message.success('Смс успешно отправлено')
+                this.$message.success('СМС успешно отправлено')
               } else {
-                this.$message.success('Номер уже потдвержден')
+                this.$message.success('Номер уже подтверждён')
                 this.code = true
               }
             } else {
@@ -207,6 +207,7 @@ export default {
             }
           })
       }).catch(() => {
+        this.$message.error('Ошибка отправки СМС')
       })
     },
     setStead(val) {

@@ -21,12 +21,11 @@ class SmsController extends BaseController implements SmsInterface {
     public static function sendSms($phone, $text)
     {
         // TODO: Implement sendSms() method.
-        //$apikey=env('SMS_API_KEY');
         $object = new self();
-        var_dump(self::$apikey);
         $smsru = new \SMSRU(self::$apikey);
         $data = new \stdClass();
         $data->to = $phone;
+        $data->test = env('SMS_TEST', 0); // 1 для тестов
         $data->text = $text; // Текст сообщения
         $data->partner_id = '2316'; // Текст сообщения
         $object->object = $smsru->send_one($data); // Отправка сообщения и возврат данных в переменную.
