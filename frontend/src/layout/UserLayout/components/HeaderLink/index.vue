@@ -8,8 +8,8 @@
         <RegisterModal />
       </div>
     </div>
-    <el-row v-else justify="end">
-      <el-col :span="24">
+    <div v-else class="flex">
+      <div class="ml2 mr2 mr4-ns">
         <el-dropdown @command="handleCommand">
           <span class="el-dropdown-link">
             {{ user.name }}<i class="el-icon-arrow-down el-icon--right" />
@@ -20,8 +20,8 @@
             <el-dropdown-item command="logout" divided>Выход</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-      </el-col>
-    </el-row>
+      </div>
+    </div>
     <el-dialog
       title="Регистрация"
       :visible.sync="showRegisterForm"
