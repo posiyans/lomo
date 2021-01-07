@@ -62,7 +62,7 @@
       </div>
       <div v-if="code" сlass="pt3 pb6">
         <div class="pt3 pb3">
-          <el-checkbox v-model="checked">Я подтверджаю, что предоставленные персональные данные являются достоверными и даю согласие на их использование, обработку и хранение.</el-checkbox>
+          <el-checkbox v-model="checked">Я подтверджаю, что предоставленные персональные данные являются достоверными и я даю своё согласие на их использование, обработку и хранение.</el-checkbox>
         </div>
         <el-button type="success" :disabled="!checked" @click="submitUpload">Отправить файл</el-button>
       </div>
