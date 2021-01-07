@@ -15,7 +15,7 @@
           :label-position="labelPosition"
         >
           <el-form-item label="E-mail">
-            <el-input v-model="user.email"  :readonly="email_write" placeholder="Укажите свой электронный ящик"></el-input>
+            <el-input v-model="user.email" type="email" :readonly="email_write"  placeholder="Укажите свой электронный ящик"></el-input>
           </el-form-item>
           <el-form-item label="Фамилия">
             <el-input v-model="user.last_name"></el-input>
@@ -27,7 +27,7 @@
             <el-input v-model="user.middle_name"></el-input>
           </el-form-item>
           <el-form-item label="Телефон">
-            <el-input v-model="user.phone"></el-input>
+            <el-input v-model="user.phone" v-mask="'+7(###)###-##-##'"></el-input>
           </el-form-item>
           <el-form-item label="Адрес регистрации/почтовый адрес">
             <el-input type="textarea" v-model="user.adres"></el-input>
@@ -179,7 +179,6 @@ export default {
           if (this.user.email.substr(0, 8) === 'no_email') {
             this.user.email = ''
             this.email_write = false
-
           }
         })
       getSteadsList()
