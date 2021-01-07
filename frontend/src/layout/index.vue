@@ -56,6 +56,7 @@ export default {
   @import "~@/styles/variables.scss";
 
   .app-wrapper {
+    background: #ffffff;
     @include clearfix;
     position: relative;
     height: 100%;
