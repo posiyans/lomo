@@ -80,6 +80,11 @@ class UserVotingSmsController extends Controller
 
     public function sendSms($phone)
     {
-        return Sms::sendCode($phone);
+        try {
+            return Sms::sendCode($phone);
+        } catch (Exception $e)
+        {
+            return false;
+        }
     }
 }

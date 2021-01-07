@@ -46,7 +46,7 @@ class AdminVotingFileController extends Controller
                 return response()->download($path, $file->name);
             }
         }
-        return $this->response(['error'=>$path], 404);
+        return $this->response(['error'=>true], 404);
     }
 
     public function uploadFile(Request $request)
