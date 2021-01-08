@@ -39,7 +39,6 @@
       <el-footer class="footer">
         <div align="center">
           <div class="el-link" @click="showPersonal"> Внимание!!! Оставаясь на данном сайте вы соглашаетесь с политикой обработки пересональных данных</div>
-
         </div>
       </el-footer>
     </el-container>
@@ -121,17 +120,8 @@ export default {
       return true
     },
     mobile() {
-      // if (this.$route.fullPath !== '/index') {
-      //   return false
-      // }
-      if (this.device === 'mobile') {
-        return true
-      }
-      return false
+      return this.device === 'mobile'
     },
-    // screenResize() {
-    //   return window.screen.width
-    // },
     path() {
       return this.$route.fullPath
     }

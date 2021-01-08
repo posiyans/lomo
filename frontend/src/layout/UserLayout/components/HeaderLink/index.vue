@@ -11,9 +11,15 @@
     <div v-else class="flex">
       <div class="ml2 mr2 mr4-ns">
         <el-dropdown @command="handleCommand">
-          <span class="el-dropdown-link">
-            {{ user.name }}<i class="el-icon-arrow-down el-icon--right" />
-          </span>
+          <div class="flex items-center">
+            <div class="fw6 pr2">
+              {{ user.name }}
+            </div>
+            <div class="header-avatar-wrapper">
+              <img :src="avatarUrl">
+            </div>
+            <i class="el-icon-arrow-down el-icon--right" />
+          </div>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item v-if="admin" command="adminPanel">Админ панель</el-dropdown-item>
             <el-dropdown-item command="profile">Профиль</el-dropdown-item>
@@ -42,8 +48,6 @@ import { mapGetters } from 'vuex'
 import LoginModal from './LoginModal'
 import RegisterModal from './RegisterModal'
 
-// import {AppMain, Navbar, Settings, Sidebar, TagsView} from "../../layout/UserLayout/components";
-// import ItemMenu from "./../../menu/ItemMenu";
 export default {
   name: 'HeaderLink',
   components: {
@@ -85,6 +89,16 @@ export default {
     },
     key() {
       return this.$route.path
+    },
+    avatarUrl() {
+      if (this.$store.getters.user.avatar) {
+        if (this.$store.getters.user.avatar[0] === '/') {
+          return process.env.VUE_APP_BASE_API + this.$store.getters.user.avatar
+        }
+        return this.$store.getters.user.avatar
+      } else {
+        return process.env.VUE_APP_BASE_API + '/images/default-avatar.jpg'
+      }
     }
   },
   methods: {
