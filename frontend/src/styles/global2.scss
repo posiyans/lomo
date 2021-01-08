@@ -72,16 +72,19 @@ body {
 }
 
 .main-app {
-  background: #eaebeb;
+  //background: #eaebeb;
+  background: #eef1f6;;
   color: #333;
   margin-bottom: 20px;
   padding: 5px 0;
 }
 
 .el-aside {
-  color: #333;
-  bottom:0;
-  height: 100%;
+  //color: #333;
+  //bottom:0;
+  //height: 100%;
+  padding: 8px;
+  border-radius: 0;
 }
 
 .header a {
@@ -111,6 +114,17 @@ body {
   margin: 7px 0 7px 7px; /* Отступы вокруг картинки */
 }
 
+.header-avatar-wrapper {
+  //padding-left: 10px;
+}
+
+.header-avatar-wrapper img{
+  display: block;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
 .welcome-avatar-wrapper {
   margin-top: 5px;
   position: relative;
@@ -133,7 +147,7 @@ body {
 }
 .article-setting-icon{
   position: absolute;
-  top: 11px;
+  top: 8px;
   right: 24px;
   cursor: pointer;
   color: #1890ff;

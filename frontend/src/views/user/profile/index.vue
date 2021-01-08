@@ -4,10 +4,10 @@
       <div class="article-preview-header">
         <h2>Профиль</h2>
       </div>
-      <div class="article-preview-body" style="padding: 0 10px; max-width: 600px; margin: 0 auto" >
-        <AvatarUpload v-model="user.avatar" :userId="user.id"/>
+      <div class="article-preview-body" style="padding: 0 10px; max-width: 600px; margin: 0 auto">
+        <AvatarUpload v-model="user.avatar" :user-id="user.id" />
       </div>
-      <div class="article-preview-body" style="padding: 0 10px; max-width: 600px; margin: 0 auto" >
+      <div class="article-preview-body" style="padding: 0 10px; max-width: 600px; margin: 0 auto">
         <el-form
           ref="form"
           :model="form"
@@ -15,26 +15,26 @@
           :label-position="labelPosition"
         >
           <el-form-item label="E-mail">
-            <el-input v-model="user.email" type="email" :readonly="email_write"  placeholder="Укажите свой электронный ящик"></el-input>
+            <el-input v-model="user.email" type="email" :readonly="email_write" placeholder="Укажите свой электронный ящик" />
           </el-form-item>
           <el-form-item label="Фамилия">
-            <el-input v-model="user.last_name"></el-input>
+            <el-input v-model="user.last_name" />
           </el-form-item>
           <el-form-item label="Имя">
-            <el-input v-model="user.name"></el-input>
+            <el-input v-model="user.name" />
           </el-form-item>
           <el-form-item label="Отчество">
-            <el-input v-model="user.middle_name"></el-input>
+            <el-input v-model="user.middle_name" />
           </el-form-item>
           <el-form-item label="Телефон">
-            <el-input v-model="user.phone" v-mask="'+7(###)###-##-##'"></el-input>
+            <el-input v-model="user.phone" v-mask="'+7(###)###-##-##'" />
           </el-form-item>
           <el-form-item label="Адрес регистрации/почтовый адрес">
-            <el-input type="textarea" v-model="user.adres"></el-input>
+            <el-input v-model="user.adres" type="textarea" />
           </el-form-item>
           <div class="message">Все поля обязтельны для заполнения, и необходимы для вашей идентификации администрацией сайта </div>
           <el-form-item label="Собственник">
-            <el-checkbox v-model="owner" name="type"></el-checkbox>
+            <el-checkbox v-model="owner" name="type" />
           </el-form-item>
           <el-form-item v-if="user.steads_id" label="Номер Участка(ов)">
             <el-select
@@ -46,31 +46,32 @@
               placeholder="Введите номер участка"
               no-data-text="Данный номер не найден"
               :remote-method="findStead"
-              :loading="loading">
+              :loading="loading"
+            >
               <el-option
                 v-for="item in steadsList"
                 :key="item.id"
                 :label="item.number"
-                :value="item.id">
-              </el-option>
+                :value="item.id"
+              />
             </el-select>
           </el-form-item>
           <el-form-item label="Cогласен">
             <el-tooltip class="item" effect="light" content="Cогласен на обработку персональных данных и с условиями пользовательского соглашения" placement="top">
-            <el-checkbox
-              v-model="user.consent_personal"
-              label="на обработку персональных данных"
-              name="type"
-            />
+              <el-checkbox
+                v-model="user.consent_personal"
+                label="на обработку персональных данных"
+                name="type"
+              />
             </el-tooltip>
           </el-form-item>
           <el-form-item label="Прикрепить соц.сеть">
-            <div v-if="user.socialList.includes('vkontakte')" class="socalConfirmed" ><img src="/images/vk-banner.png" width="100px"></div>
+            <div v-if="user.socialList.includes('vkontakte')" class="socalConfirmed"><img src="/images/vk-banner.png" width="100px"></div>
             <div v-else @click="loginVK"><img src="/images/vk-banner.png" width="100px"></div>
 
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="saveData" :disabled="!user.consent_personal">Сохранить</el-button>
+            <el-button type="primary" :disabled="!user.consent_personal" @click="saveData">Сохранить</el-button>
             <el-button>Отменить</el-button>
           </el-form-item>
         </el-form>
@@ -93,7 +94,7 @@ export default {
     }
   },
   components: {
-    AvatarUpload,
+    AvatarUpload
   },
   data() {
     return {

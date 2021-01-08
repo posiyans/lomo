@@ -3,16 +3,16 @@
     <template>
       <div align="center" class="plugin-welcome">
         <div class="welcome-avatar-wrapper">
-          <img :src="avatarUrl+'?imageView2/1/w/80/h/80'">
+          <img :src="avatarUrl">
         </div>
         <div class="center">{{ user.last_name }} {{ user.name }}</div>
         <div>{{ user.middle_name }}</div>
-<!--        <div>-->
-<!--          <el-button type="warning" size="mini" plain>Сообщения</el-button>-->
-<!--        </div>-->
-<!--        <div>-->
-<!--          <el-button type="success" size="mini" plain>Показания счетчиков</el-button>-->
-<!--        </div>-->
+        <!--        <div>-->
+        <!--          <el-button type="warning" size="mini" plain>Сообщения</el-button>-->
+        <!--        </div>-->
+        <!--        <div>-->
+        <!--          <el-button type="success" size="mini" plain>Показания счетчиков</el-button>-->
+        <!--        </div>-->
         <div>
           <el-button type="text" @click="toProfile">Профиль</el-button>
         </div>
@@ -25,7 +25,7 @@
 <script>
 import RightCard from '@/components/RightCard'
 import { mapGetters } from 'vuex'
-import store from '../../store'
+// import store from '../../store'
 export default {
   name: 'LoginForm',
   components: {
@@ -69,10 +69,7 @@ export default {
       this.$router.push('/user/profile')
     },
     async logout() {
-      console.log('user logouut')
       await this.$store.dispatch('user/logout')
-      // await this.$store.dispatch('user/getInfo')
-      // await this.$store.dispatch('permission/getMenu')
     }
   }
 }
@@ -80,31 +77,27 @@ export default {
 
 <style scoped>
 
-  .login-form >>> .el-form-item--medium .el-form-item__label {
-    line-height: 0px;
-    padding: 0;
-  }
-  .login-form >>> .el-form-item__label {
-    padding: 0;
-  }
-
-  .login-form >>> .el-form-item {
-    margin-bottom: 6px;
-
-  }
-  /*.login-form {*/
-  /*  position: static;*/
+  /*.login-form >>> .el-form-item--medium .el-form-item__label {*/
+  /*  line-height: 0px;*/
+  /*  padding: 0;*/
   /*}*/
 
-  .login-form a{
-    /*position: relative;*/
-    /*top: 20px;*/
-    float: right;
-    font-size: 12px;
-    margin-top: -28px;
-    margin-right: 10px;
+  /*.login-form >>> .el-form-item__label {*/
+  /*  padding: 0;*/
+  /*}*/
 
-  }
+  /*.login-form >>> .el-form-item {*/
+  /*  margin-bottom: 6px;*/
+
+  /*}*/
+
+  /*.login-form a{*/
+  /*  float: right;*/
+  /*  font-size: 12px;*/
+  /*  margin-top: -28px;*/
+  /*  margin-right: 10px;*/
+
+  /*}*/
 
   .right-welcome >>> .avatar-wrapper {
     margin-top: 5px;
@@ -126,14 +119,5 @@ export default {
     }
   }
 
-  /*.header {*/
-  /*  line-height: 60px;*/
-  /*}*/
-  /* .layout-header {*/
-  /*   background-color: #00084c;*/
-  /*   color: #fff;*/
-  /* }*/
-
 </style>
-
 
