@@ -17,3 +17,6 @@ Route::post('billing/bank-reestr-update', 'Admin\Bookkeeping\Billing\BankReestrC
 Route::post('billing/bank-reestr-publish', 'Admin\Bookkeeping\Billing\BankReestrController@publish');
 Route::post('billing/bank-reestr-parse', 'Admin\Bookkeeping\Billing\BankReestrController@parseReestr');
 Route::post('billing/bank-reestr-publish', 'Admin\Bookkeeping\Billing\BankReestrController@publish');
+
+// Электроэнергия
+Route::get('billing/communal/stead/get/{id}', 'Admin\Bookkeeping\Communal\ElectroSteadController@list');

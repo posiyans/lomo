@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Models\Gardening;
 use App\Models\Stead;
 
-use App\Models\ReceiptType;
+use App\Models\Receipt\ReceiptType;
 
 class QrCodeModel
 {

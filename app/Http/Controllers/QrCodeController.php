@@ -6,7 +6,7 @@ use App\Models\Gardening;
 use Illuminate\Http\Request;
 use App\Models\QrCodeModel;
 use App\Models\Stead;
-use App\Models\ReceiptType;
+use App\Models\Receipt\ReceiptType;
 
 class QrCodeController extends Controller
 {

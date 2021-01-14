@@ -10,7 +10,7 @@ use App\Permission;
 use App\Role;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Auth;;
+use Auth;
 
 class PaymentController extends Controller
 {
@@ -34,6 +34,8 @@ class PaymentController extends Controller
         $query = BillingPayment::query();
         if ($request->find) {
             $query->where('price', 'like', "%$request->find%");
+            $query->orWhere('transaction', 'like', "%$request->find%");
+
             $steads = Stead::query()->where('number', 'like', "%$request->find%")->get(['id']);
             $query->orWhereIn('stead_id', $steads);
         }
@@ -116,12 +118,15 @@ class PaymentController extends Controller
     public function update(Request $request, $id)
     {
         $payment = BillingPayment::find($id);
-        $payment->stead_id = $request->stead_id ? $request->stead_id :  $payment->stead_id;
+        $payment->stead_id = $request->has('stead_id') ? $request->stead_id :  $payment->stead_id;
         $payment->type = $request->type ? $request->type : $payment->type;
+        $payment->discription = $request->has('discription') ? $request->discription : $payment->discription;
+        $payment->error = $request->has('error') ? $request->error : $payment->error;
+
 //        $payment->raw_data = $request->raw_data ? $request->raw_data : $payment->raw_data;
         if ($payment->save()) {
-            $payment->setMeterReading();
-            return json_encode(['status'=>true, 'data'=>$payment]);
+            $payment->setMeterReading($request->instr_read);
+            return json_encode(['status'=>true, 'data'=>new AdminPaymentResource($payment)]);
         }
         return json_encode(['status'=>false]);
 

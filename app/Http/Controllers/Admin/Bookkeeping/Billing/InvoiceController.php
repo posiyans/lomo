@@ -11,7 +11,7 @@ use App\Permission;
 use App\Role;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Auth;;
+use Auth;
 
 class InvoiceController extends Controller
 {

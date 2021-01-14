@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ReceiptType;
+use App\Models\Receipt\ReceiptType;
 use Illuminate\Http\Request;
 use App\Models\Stead;
-use App\Models\InstrumentReadings;
-use App\Models\MeteringDevice;
+use App\Models\Receipt\InstrumentReadings;
+use App\Models\Receipt\MeteringDevice;
 use App\Models\Gardening;
 
 

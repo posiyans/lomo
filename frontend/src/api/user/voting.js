@@ -38,3 +38,11 @@ export function votingValidSms(data) {
     data
   })
 }
+
+export function getQuestionResult(data) {
+  return request({
+    url: '/api/v1/user/voting/question/result/get',
+    method: 'post',
+    data: data
+  })
+}

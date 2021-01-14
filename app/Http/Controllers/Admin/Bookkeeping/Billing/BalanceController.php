@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Bookkeeping\Billing;
 
 use App\Http\Resources\Admin\Bookkeeping\AdminBalansSteadResource;
+use App\Http\Resources\Admin\Bookkeeping\AdminPaymentResource;
 use App\Models\Billing\BillingInvoice;
 use App\Models\Billing\BillingPayment;
 use App\Models\Billing\BillingReestr;
@@ -11,7 +12,7 @@ use App\Permission;
 use App\Role;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Auth;;
+use Auth;
 
 class BalanceController extends Controller
 {
@@ -124,8 +125,9 @@ class BalanceController extends Controller
             while (isset($balans[$time])) {
                 $time++;
             }
-            $balans[$time] = ['type' => 'payment', 'data'=>$payment];
+            $balans[$time] = ['type' => 'payment', 'data'=>new AdminPaymentResource($payment)];
         }
+        ksort($balans);
         $rezult['invoices'] = array_values($balans);
 
         return ['status'=>true, 'data'=>$rezult];

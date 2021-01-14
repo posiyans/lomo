@@ -102,13 +102,23 @@ class Log extends MyModel
         }
         $diff = [];
         foreach (array_keys($attributes) as $attribute) {
-            if (!isset($model_old[$attribute]) || $model_old[$attribute] != $model_new->{$attribute}) {
-                $diff[] = [
-                    $attribute => [
-                        'new' => $model_new->$attribute,
-                        'old' => isset($model_old[$attribute]) ? $model_old[$attribute] : ''
-                    ]
-                ];
+            if (!isset($model_old[$attribute]) || $model_old[$attribute] != $model_new->$attribute) {
+                $new = true;
+                // todo не работает с json объектами!!!!
+                if (is_array($model_new->$attribute) && $model_old[$attribute] != json_encode($model_new->$attribute)) {
+                 //   $new = false;
+                }
+                if ($model_new->$attribute == null && (!isset($model_old[$attribute]) || $model_old[$attribute] == '')) {
+                   $new = false;
+                }
+                if ($new) {
+                    $diff[] = [
+                        $attribute => [
+                            'new' => $model_new->$attribute,
+                            'old' => isset($model_old[$attribute]) ? $model_old[$attribute] : ''
+                        ]
+                    ];
+                }
             }
         }
         if (count($diff) > 0) {
@@ -121,7 +131,7 @@ class Log extends MyModel
             $log->value = $diff;
             if ($log->save())
             {
-                return true;
+                return $log;
             }
         }
         return false;

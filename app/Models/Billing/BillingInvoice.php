@@ -2,7 +2,7 @@
 
 namespace App\Models\Billing;
 
-use App\Models\InstrumentReadings;
+use App\Models\Receipt\InstrumentReadings;
 use App\Models\Stead;
 use Illuminate\Database\Eloquent\Model;
 
@@ -37,8 +37,17 @@ class BillingInvoice extends Model
         }
         return '';
     }
+
+//    /**
+//     *создать счет на электроэнергию на основании показаний из платежки
+//     */
+//    public static function createInvoiceCommunalForPayment()
+//    {
+//
+//    }
+
     /**
-     * создать счет для участка
+     * создать счет на взносы для участка
      *
      * @param $stead_id
      * @param $title
@@ -46,7 +55,7 @@ class BillingInvoice extends Model
      * @param $price
      * @return BillingInvoice|false
      */
-    public static function createInviceСontributions($stead_id, $title, $reestr_id, $price)
+    public static function createInvoiceСontributions($stead_id, $title, $reestr_id, $price)
     {
         $invoce = new BillingInvoice();
         $invoce->stead_id = $stead_id;
