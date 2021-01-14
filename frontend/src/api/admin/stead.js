@@ -16,7 +16,6 @@ export function fetchSteadInfo(id) {
   })
 }
 
-
 export function updateStead(id, data) {
   return request({
     url: '/api/v1/admin/stead/' + id,

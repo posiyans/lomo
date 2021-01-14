@@ -42,7 +42,8 @@
                 placement="top"
                 width="200"
                 trigger="click"
-                :content="row.discription">
+                :content="row.discription"
+              >
                 <span slot="reference">{{ row.price }}</span>
               </el-popover>
             </div>
@@ -59,7 +60,7 @@
             <el-tag v-if="row.type == 2" type="success">Взносы</el-tag>
             <div v-if="row.type == 1">
               <span v-for="i in row.instr_read" :key="i.value">
-                <el-tag v-if="i.value" type="success">{{ i.device }}-{{i.value}}</el-tag>
+                <el-tag v-if="i.value" type="success">{{ i.device }}-{{ i.value }}</el-tag>
               </span>
             </div>
           </span>
@@ -74,7 +75,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <PaymentInfo v-if="showPaymentInfo" :payment="itemPayment" @close="closePaymentInfo"/>
+    <PaymentInfo v-if="showPaymentInfo" :payment="itemPayment" @close="closePaymentInfo" />
   </div>
 </template>
 

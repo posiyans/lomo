@@ -15,7 +15,7 @@
       <el-table-column min-width="300px" label="Название">
         <template slot-scope="{row}">
           <span>{{ row.name }}</span>
-          <el-tag>{{ row.discription}}</el-tag>
+          <el-tag>{{ row.discription }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column align="center" label="Readings" width="95">
@@ -51,8 +51,8 @@
               v-for="item in tabMapOptions"
               :key="item.key"
               :label="item.label"
-              :value="item.key">
-            </el-option>
+              :value="item.key"
+            />
           </el-select>
         </el-form-item>
         <el-form-item label="Название">
@@ -64,24 +64,24 @@
         <el-form-item v-if="rating.type_id == 2" label="Тариф на 1 сотку">
           <el-input v-model="rating.rate.ratio_a" placeholder="Оплата" />
         </el-form-item>
-        <el-form-item  v-if="rating.type_id == 2" label="Тариф на 1 участок">
+        <el-form-item v-if="rating.type_id == 2" label="Тариф на 1 участок">
           <el-input v-model="rating.rate.ratio_b" placeholder="Оплата" />
         </el-form-item>
 
-        <el-form-item  v-if="rating.type_id == 1" label="Тариф на 1 кВт/ч">
+        <el-form-item v-if="rating.type_id == 1" label="Тариф на 1 кВт/ч">
           <el-input v-model="rating.rate.ratio_a" placeholder="Оплата" />
         </el-form-item>
         <el-form-item label="Описание оплаты">
-          <el-input v-model="rate_disc" placeholder="Оплата" readonly/>
+          <el-input v-model="rate_disc" placeholder="Оплата" readonly />
         </el-form-item>
         <el-form-item label="Статус">
           <el-checkbox
             v-model="rating.enable"
             label="Действующий"
-            :true-label=1
-            :false-label=0
+            :true-label="1"
+            :false-label="0"
             border
-          ></el-checkbox>
+          />
         </el-form-item>
       </el-form>
       <div style="text-align:right;">
@@ -133,25 +133,25 @@ export default {
       loading: false
     }
   },
-  computed:{
-    rate_disc(){
+  computed: {
+    rate_disc() {
       if (this.rating.type_id == 1) {
         return this.rating.rate.ratio_a + ' руб*кВт/ч'
       }
       if (this.rating.type_id == 2) {
         let text = ''
-        if (this.rating.rate.ratio_a > 0){
+        if (this.rating.rate.ratio_a > 0) {
           text += this.rating.rate.ratio_a + ' руб с сотки'
         }
-        if (this.rating.rate.ratio_b > 0){
-          if (this.rating.rate.ratio_a > 0){
+        if (this.rating.rate.ratio_b > 0) {
+          if (this.rating.rate.ratio_a > 0) {
             text += ' и '
           }
           text += this.rating.rate.ratio_b + ' руб с участка'
         }
         return text
       }
-      return '';
+      return ''
     }
   },
   mounted() {
@@ -170,7 +170,7 @@ export default {
       this.rating = row
       this.dialogVisible = true
     },
-    confirmRate(){
+    confirmRate() {
       this.rating.rate.discription = this.rate_disc
       updateRate(this.rating)
         .then(response => {

@@ -58,7 +58,7 @@ export default {
     addReceipt() {
       this.$prompt('Введите название типа платежа', 'Добавить', {
         confirmButtonText: 'Добавить',
-        cancelButtonText: 'Отмена',
+        cancelButtonText: 'Отмена'
       }).then(({ value }) => {
         createReceiptType({ name: value })
           .then(response => {
@@ -71,7 +71,6 @@ export default {
               }
             }
           })
-
       }).catch(() => {
 
       })

@@ -10,9 +10,9 @@
       <el-tab-pane label="Приборы учета">
         <MeteringDevices :stead="stead" />
       </el-tab-pane>
-<!--      <el-tab-pane label="Геометрия">-->
-<!--        <Geometry :stead="stead" />-->
-<!--      </el-tab-pane>-->
+      <!--      <el-tab-pane label="Геометрия">-->
+      <!--        <Geometry :stead="stead" />-->
+      <!--      </el-tab-pane>-->
     </el-tabs>
   </div>
 </template>

@@ -10,17 +10,17 @@
         <tr class="bg-black-05">
           <th>Поле</th>
           <th>Значение</th>
-          <th></th>
+          <th />
         </tr>
         <tr>
           <td>id</td>
-          <td>{{payment.id}}</td>
-          <td></td>
+          <td>{{ payment.id }}</td>
+          <td />
         </tr>
         <tr>
           <td>Дата</td>
           <td>{{ payment.payment_date | moment('DD-MM-YYYY HH:mm') }}</td>
-          <td></td>
+          <td />
         </tr>
         <tr class="black" :class="{'bg-washed-red': stead_error}">
           <td>Участок</td>
@@ -33,24 +33,24 @@
               {{ payment.stead.number }}
             </span>
           </td>
-          <td><el-button type="primary" size="mini" plain icon="el-icon-edit"></el-button></td>
+          <td><el-button type="primary" size="mini" plain icon="el-icon-edit" /></td>
         </tr>
         <tr>
           <td>ФИО</td>
           <td>
             {{ payment.raw_data[6] }}
           </td>
-          <td></td>
+          <td />
         </tr>
         <tr>
           <td>Сумма</td>
           <td>{{ payment.price }}</td>
-          <td></td>
+          <td />
         </tr>
         <tr>
           <td>Назначение</td>
           <td>{{ payment.raw_data[7] }}</td>
-          <td></td>
+          <td />
         </tr>
         <tr class="black" :class="{'bg-washed-red': type_error}">
           <td>Тип платежа</td>
@@ -60,9 +60,9 @@
           </td>
           <td>
             <el-popconfirm
-              confirm-button-text='Взносы'
+              confirm-button-text="Взносы"
               confirm-button-type="success"
-              cancel-button-text='Электроэнергия'
+              cancel-button-text="Электроэнергия"
               cancel-button-type="danger"
               icon="el-icon-info"
               icon-color="red"
@@ -78,17 +78,17 @@
           <td>Показания эл.эн.</td>
           <td>
             <span v-for="i in payment.instr_read" :key="i.value" class="pl2">
-              <el-tag v-if="i.value" type="success">{{ i.device }}-{{i.value}}</el-tag>
+              <el-tag v-if="i.value" type="success">{{ i.device }}-{{ i.value }}</el-tag>
             </span>
           </td>
           <td>
-            <el-button type="primary" size="mini" plain icon="el-icon-edit" @click="setMetering"/>
+            <el-button type="primary" size="mini" plain icon="el-icon-edit" @click="setMetering" />
           </td>
         </tr>
         <tr>
           <td>Примечание</td>
           <td>
-            <div v-html="payment.discription"></div>
+            <div v-html="payment.discription" />
           </td>
           <td>
             <el-button type="primary" size="mini" plain icon="el-icon-edit" @click="editDescription" />
@@ -103,12 +103,11 @@
           <td>
             <div v-if="showRaw">
               <pre>
-                {{payment.raw_data}}
+                {{ payment.raw_data }}
               </pre>
             </div>
           </td>
-          <td>
-          </td>
+          <td />
         </tr>
       </table>
       <div v-if="payment.error">
@@ -133,6 +132,9 @@ import { updatePaymentInfo } from '@/api/admin/bookkeping/payment'
 import ChangeMetersData from '@/components/Bookkeeping/ChangeMetersData'
 
 export default {
+  components: {
+    ChangeMetersData
+  },
   props: {
     payment: {
       type: Object,
@@ -142,9 +144,6 @@ export default {
       type: Boolean,
       default: false
     }
-  },
-  components: {
-    ChangeMetersData
   },
   data() {
     return {

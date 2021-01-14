@@ -2,40 +2,44 @@
   <div>
     <el-table
       :data="stead.discriptions.geodata.geometry.coordinates[0][0]"
-      style="width: 100%">
+      style="width: 100%"
+    >
       <el-table-column
 
         label="x"
-        width="180">
+        width="180"
+      >
         <template slot-scope="{row}">
           <span>
-            {{row[0]}}
+            {{ row[0] }}
           </span>
         </template>
       </el-table-column>
       <el-table-column
         label="y"
-        width="180">
+        width="180"
+      >
         <template slot-scope="{row}">
           <span>
-            {{row[1]}}
+            {{ row[1] }}
           </span>
         </template>
       </el-table-column>
       <el-table-column
         label="y"
-        width="180">
+        width="180"
+      >
         <template slot-scope="{row}">
           <span>
-            {{row[1]}}
+            {{ row[1] }}
           </span>
         </template>
       </el-table-column>
     </el-table>
-    <YandexMap :coords="krd" :center="center"/>
+    <YandexMap :coords="krd" :center="center" />
     <pre>
-      {{center}}
-      {{krd}}
+      {{ center }}
+      {{ krd }}
     </pre>
   </div>
 </template>
@@ -44,14 +48,14 @@
 import { updateStead } from '@/api/admin/stead'
 import YandexMap from '@/components/YandexMap'
 export default {
+  components: {
+    YandexMap
+  },
   props: {
     stead: {
       type: Object,
       dafault: () => ({})
     }
-  },
-  components: {
-    YandexMap
   },
   data() {
     return {
@@ -114,7 +118,6 @@ export default {
         .then(response => {
           if (response.data.status) {
             this.$message('Данные успешно сохранены')
-
           } else {
             if (response.data.data) {
               this.$message.error(response.data.data)

@@ -1,12 +1,12 @@
 <template>
   <div class="app-container">
-     <el-tag>Настройки</el-tag>
+    <el-tag>Настройки</el-tag>
     <el-tabs type="border-card" class="setting-body">
       <el-tab-pane label="Реквизиты">
-        <GardeningCommponent/>
+        <GardeningCommponent />
       </el-tab-pane>
       <el-tab-pane label="Меню сайта">
-        <MainSiteMenu/>
+        <MainSiteMenu />
       </el-tab-pane>
     </el-tabs>
   </div>

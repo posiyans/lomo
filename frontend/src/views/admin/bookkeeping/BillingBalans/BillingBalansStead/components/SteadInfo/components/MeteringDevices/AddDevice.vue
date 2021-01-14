@@ -1,13 +1,13 @@
 <template>
   <div class="pt3">
     <div class="pa3">
-    {{device}}
+      {{ device }}
 
     </div>
     <el-form
+      ref="addForm"
       :model="device"
       :rules="rules"
-      ref="addForm"
       label-width="120px"
       class="demo-ruleForm"
       label-position="top"
@@ -20,28 +20,28 @@
         >
           <el-option
             v-for="item in typeList"
-            :label="item.name"
             :key="item.id"
+            :label="item.name"
             :value="item.id"
-          ></el-option>
+          />
         </el-select>
-          <el-select v-model="device.type_id" placeholder="Тип прибора">
-            <el-option
-              v-for="item in itemsTypeList"
-              :label="item.name"
-              :key="item.id"
-              :value="item.id"
-            ></el-option>
-          </el-select>
+        <el-select v-model="device.type_id" placeholder="Тип прибора">
+          <el-option
+            v-for="item in itemsTypeList"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item label="Модель прибора" prop="device_brand">
-        <el-input v-model="device.device_brand"></el-input>
+        <el-input v-model="device.device_brand" />
       </el-form-item>
       <el-form-item label="Серийный номер" prop="serial_number">
-        <el-input v-model="device.serial_number"></el-input>
+        <el-input v-model="device.serial_number" />
       </el-form-item>
       <el-form-item label="Начальные показания" prop="initial_data">
-        <el-input v-model="device.initial_data" type="number"></el-input>
+        <el-input v-model="device.initial_data" type="number" />
       </el-form-item>
       <el-form-item label="Дата установки" prop="installation_date">
         <el-date-picker
@@ -50,8 +50,8 @@
           format="dd-MM-yyyy"
           value-format="yyyy-MM-dd"
           :picker-options="datePickerOptions"
-          placeholder="Дата установки">
-        </el-date-picker>
+          placeholder="Дата установки"
+        />
       </el-form-item>
       <el-form-item label="Дата следующей поверки" prop="verification_date">
         <el-date-picker
@@ -60,11 +60,11 @@
           format="dd-MM-yyyy"
           value-format="yyyy-MM-dd"
           :picker-options="datePickerOptions"
-          placeholder="Дата следующей поверки">
-        </el-date-picker>
+          placeholder="Дата следующей поверки"
+        />
       </el-form-item>
       <el-form-item label="Примечание" prop="discriptions">
-        <el-input type="textarea" v-model="device.descriptions"></el-input>
+        <el-input v-model="device.descriptions" type="textarea" />
       </el-form-item>
       <el-form-item>
         <el-button @click="close">Отмена</el-button>
@@ -79,7 +79,7 @@ import { fetchReceiptTypeList, getReceiptTypeInfo } from '@/api/admin/setting/re
 import { addDeviceForStead } from '@/api/admin/bookkeping/metering-device'
 export default {
   props: {
-    stead_id: {
+    steadId: {
       type: Number,
       default: 0
     }
