@@ -29,6 +29,9 @@
           <el-tab-pane label="Участки">
             <TableResult :steads="value.voted" />
           </el-tab-pane>
+          <el-tab-pane label="Подробнее">
+            <TableResultFull :steads="value.voted" :question="value.questions"/>
+          </el-tab-pane>
         </el-tabs>
       </div>
       <div v-if="value.status == 'cancel'">
@@ -43,8 +46,8 @@
 <script>
 
 import ShowBulletin from './components/ShowBulletin'
-// import ResultBlock from '@/components/VotingOwnerResulBlock'
 import TableResult from './components/TableResult'
+import TableResultFull from './components/TableResultFull'
 import ResultBlock from '@/components/VotingOwnerResulBlock'
 
 export default {
@@ -52,7 +55,8 @@ export default {
     // ResultBlock,
     TableResult,
     ShowBulletin,
-    ResultBlock
+    ResultBlock,
+    TableResultFull
 
   },
 

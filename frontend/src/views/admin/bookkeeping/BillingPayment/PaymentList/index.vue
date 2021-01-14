@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div v-if="show === 0">
-      <div class="ma2"><b>Платежи садоводов</b></div>
+      <div class="ma2 fw6">Платежи</div>
       <div class="filter-container">
         <el-input
           v-model="listQuery.find"

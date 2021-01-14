@@ -3,8 +3,9 @@ namespace App\Models;
 
 use App\Models\Billing\BillingInvoice;
 use App\Models\Billing\BillingPayment;
+use App\Models\Receipt\DeviceRegisterModel;
 use App\MyModel;
-use App\Models\InstrumentReadings;
+use App\Models\Receipt\InstrumentReadings;
 use App\User;
 use Illuminate\Support\Facades\Cookie;
 
@@ -17,6 +18,7 @@ class Stead extends MyModel
     protected $fillable = ['number', 'discriptions'];
     protected $casts = [
         'discriptions' => 'array',
+        'options' => 'array',
     ];
     //
 
@@ -132,17 +134,15 @@ class Stead extends MyModel
      * @param $model
      * @return bool
      */
-    public static function updateStead($id, $model)
+    public function updateStead($model)
     {
-       $stead = Stead::find($id);
-            if ($stead && $model['id'] == $stead->id){
-                $stead->number =  $model['number'];
-                $stead->size =  $model['size'];
-                $stead->discriptions =  $model['discriptions'];
-                if ($stead->logAndSave('Изменение данных об участке', $stead->id)){
-                    return $stead;
-                }
-            }
+        $this->number =  $model['number'];
+        $this->size =  $model['size'];
+        $this->discriptions =  $model['discriptions'];
+        $this->options =  $model['options'];
+        if ($this->logAndSave('Изменение данных об участке', $this->id)){
+            return $this;
+        }
         return false;
     }
 
@@ -212,6 +212,18 @@ class Stead extends MyModel
         return $balans;
     }
 
+
+
+    public function addMeteringDevice($request)
+    {
+        $device = new DeviceRegisterModel();
+        $device->fill($request->all());
+        if ($device->logAndSave('Добавлен прибор', $this->id))
+        {
+            return $device;
+        }
+        return false;
+    }
 
 //    public function lastPayment()
 //    {

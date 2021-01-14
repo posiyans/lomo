@@ -24,7 +24,7 @@ class MyModel extends Model
     {
         $original_model = $this->getOriginal();
         if ($this->save($options)) {
-            return Log::addLog($this, $original_model, $description, $stead);
+            Log::addLog($this, $original_model, $description, $stead);
             return true;
         }
         return false;

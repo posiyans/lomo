@@ -34,7 +34,7 @@
         :coords="i.krd"
         :marker-fill="i.color"
         :marker-stroke="{color: '#ff0000', width: 1}"
-        :balloon="{header: 'Уччасток ' + i.number, body: i.size+' кв.м'}"
+        :balloon="{header: 'Участок ' + i.number, body: i.size+' кв.м'}"
       />
 
 

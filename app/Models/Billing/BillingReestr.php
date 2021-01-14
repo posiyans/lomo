@@ -108,7 +108,7 @@ class BillingReestr extends Model
         $steads = Stead::all();
         foreach ($steads as $stead) {
             $price = $this->ratio_a * $stead->size * 0.01 + $this->ratio_b;
-            $payment = BillingInvoice::createInviceСontributions($stead->id, $this->title, $this->id, $price);
+            $payment = BillingInvoice::createInvoiceСontributions($stead->id, $this->title, $this->id, $price);
             if (!$payment) {
                 DB::rollBack();
             }

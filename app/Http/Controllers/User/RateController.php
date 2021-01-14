@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Models\MeteringDevice;
-use App\Models\Rate;
+use App\Models\Receipt\MeteringDevice;
+use App\Models\Receipt\Rate;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 

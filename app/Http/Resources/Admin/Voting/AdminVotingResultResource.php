@@ -30,8 +30,8 @@ class AdminVotingResultResource extends JsonResource
 //            'userAnswersCount' => count($this->userAnswers),
 //            'userAnswers' => $this->getUserAnswers(),
         ];
-//        $this->user->fullName = $this->user->fullName();;
-//        $this->user->fName = $this->user->fName();;
+//        $this->user->fullName = $this->user->fullName();
+//        $this->user->fName = $this->user->fName();
 //        $this->answers;
 //        return parent::toArray($request);
     }

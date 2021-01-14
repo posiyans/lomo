@@ -150,12 +150,12 @@
 </template>
 
 <script>
-import { fetchSteadList, updateStead } from '@/api/stead'
+import { fetchSteadList, updateStead } from '@/api/admin/stead'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination'
 import { mapState } from "vuex"
-import { fetchList } from '@/api/admin/rate'
+import { fetchList } from '@/api/admin/setting/rate'
 import { getReceipt } from '@/api/admin/receipt'
 import { saveAs } from 'file-saver'
 export default {

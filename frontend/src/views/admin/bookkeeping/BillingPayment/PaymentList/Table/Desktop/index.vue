@@ -30,12 +30,26 @@
       </el-table-column>
       <el-table-column label="Назначение" align="center">
         <template slot-scope="{row}">
-          <span class="do-not-carry">{{ row.discription }}</span>
+          <span class="do-not-carry">{{ row.raw_data[7] }}</span>
         </template>
       </el-table-column>
       <el-table-column label="Сумма" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.price }}</span>
+          <div v-if="row.discription">
+            <div class="relative dib pr2 pt2">
+              <div class="absolute top-0 right-0 dark-red fw6">!</div>
+              <el-popover
+                placement="top"
+                width="200"
+                trigger="click"
+                :content="row.discription">
+                <span slot="reference">{{ row.price }}</span>
+              </el-popover>
+            </div>
+          </div>
+          <div v-else>
+            <span>{{ row.price }}</span>
+          </div>
         </template>
       </el-table-column>
       <el-table-column label="Тип" align="center">
@@ -43,6 +57,11 @@
           <span>
             <el-tag v-if="row.type == 1" type="danger">Электричество</el-tag>
             <el-tag v-if="row.type == 2" type="success">Взносы</el-tag>
+            <div v-if="row.type == 1">
+              <span v-for="i in row.instr_read" :key="i.value">
+                <el-tag v-if="i.value" type="success">{{ i.device }}-{{i.value}}</el-tag>
+              </span>
+            </div>
           </span>
         </template>
       </el-table-column>
@@ -50,12 +69,12 @@
         <template slot-scope="{row}">
           <span>
             <el-tag v-if="row.dubl" type="danger">Повтор</el-tag>
-            <el-button type="primary" icon="el-icon-edit" @click="showPayment(row.id)">Подробнее</el-button>
+            <el-button type="primary" icon="el-icon-edit" @click="showPayment(row)">Подробнее</el-button>
           </span>
         </template>
       </el-table-column>
     </el-table>
-    <PaymentInfo :id="showId" />
+    <PaymentInfo v-if="showPaymentInfo" :payment="itemPayment" @close="closePaymentInfo"/>
   </div>
 </template>
 
@@ -74,7 +93,9 @@ export default {
   },
   data() {
     return {
-      showId: {}
+      showId: {},
+      itemPayment: {},
+      showPaymentInfo: false
     }
   },
   methods: {
@@ -87,9 +108,13 @@ export default {
     showStead(id) {
       this.$router.push('/bookkeping/billing_balance_stead/' + id)
     },
-    showPayment(id) {
-      this.showId = id
+    showPayment(row) {
+      this.itemPayment = row
+      this.showPaymentInfo = true
       // this.$router.push('/bookkeping/payment_info/' + id)
+    },
+    closePaymentInfo() {
+      this.showPaymentInfo = false
     }
   }
 
@@ -99,5 +124,12 @@ export default {
 <style scoped>
   .billing-bank-reestr-table >>> .warning-row {
     background: #fff1f1;
+  }
+  .item {
+    margin-top: 10px;
+    margin-right: 40px;
+  }
+  .item >>> .el-badge__content.is-fixed {
+    right: 0;
   }
 </style>

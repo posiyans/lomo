@@ -2,12 +2,14 @@
 
 namespace App\Models\Billing;
 
-use App\Models\InstrumentReadings;
+use App\Models\Receipt\InstrumentReadings;
+use App\Models\Log;
 use App\Models\Stead;
+use App\MyModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
-class BillingPayment extends Model
+class BillingPayment extends MyModel
 {
     //
     protected $casts = [
@@ -16,6 +18,11 @@ class BillingPayment extends Model
         'price' => 'float',
         'error' => 'boolean'
     ];
+
+    public function instrumentReadings()
+    {
+      return $this->hasMany(InstrumentReadings::class, 'payment_id', 'id');
+    }
 
     public function stead()
     {
@@ -39,27 +46,24 @@ class BillingPayment extends Model
     }
 
     /**
-     * добавить историю и сохранить
+     * добавить лог, историю и сохранить
      *
      * @return bool|void
      */
     public function save(array $options = [])
     {
+        $original_model = $this->getOriginal();
         $history = $this->history;
-        $history[] = [
-            'stead_id'=> $this->stead_id,
-            'discription'=> $this->discription,
-            'type'=> $this->type,
-            'price'=> $this->price,
-            'payment_date'=> $this->payment_date,
-            'reestr_id'=> $this->reestr_id,
-            'payment_type'=> $this->payment_type,
-            'user_id'=> $this->user_id,
-            'invoice_id'=> $this->invoice_id,
-            'date'=> time(),
-        ];
-        $this->history = $history;
-        return parent::save($options);
+        $log = Log::addLog($this, $original_model, 'Изменение', $this->stead_id);
+        if ($log) {
+            $time = date('Y-m-d H:i:s');
+            $history[] = ['date' => $time, 'user_id' => Auth::user()->id, 'data' => $log->value];
+            $this->history = $history;
+        }
+        if (parent::save($options)) {
+            return true;
+        }
+        return false;
     }
 
 
@@ -79,7 +83,7 @@ class BillingPayment extends Model
             $payment->price = (float)str_replace(',', '.', $item[8]);
             $payment->transaction = $item[4];
             $payment->payment_date = $payment_data;
-            $payment->discription = $item[7];
+            $payment->discription = '';
             $payment->payment_type = 1;
             $payment->raw_data = $item;
             $payment->user_id = Auth::user()->id;
@@ -179,34 +183,31 @@ class BillingPayment extends Model
     /**
      * установить показания счетчиков по этому платежу
      */
-    public function setMeterReading()
+    public function setMeterReading($data)
     {
-        if (isset($this->raw_data['meterReading1']) && !empty($this->raw_data['meterReading1']) && is_numeric($this->raw_data['meterReading1'])) {
-            $meter = InstrumentReadings::firstOrNew([
-//                'stead_id' => $this->stead_id,
-                'payment_id' => $this->id,
-                'device_id' =>  1
-            ]);
-            $meter->stead_id = $this->stead_id;
-            $meter->value = $this->raw_data['meterReading1'];
-            $meter->created_at = $this->payment_date;
-            $meter->save();
-        }
-        if (isset($this->raw_data['meterReading2']) && !empty($this->raw_data['meterReading2']) && is_numeric($this->raw_data['meterReading2'])) {
-            $meter = InstrumentReadings::firstOrNew([
-//                'stead_id' => $this->stead_id,
-                'payment_id' => $this->id,
-                'device_id' => 2
-            ]);
-            $meter->stead_id = $this->stead_id;
-            $meter->value = $this->raw_data['meterReading2'];
-            $meter->created_at = $this->payment_date;
-            $meter->save();
+        if ($data) {
+            foreach ($data as $item) {
+                $meter = InstrumentReadings::firstOrNew([
+                    'payment_id' => $this->id,
+                    'device_id' =>  $item['device']
+                ]);
+                $meter->stead_id = $this->stead_id;
+                $meter->value = (int)$item['value'];
+                $meter->created_at = $this->payment_date;
+                if ($item['value']) {
+                    $meter->logAndSave('Показания из платежки');
+                } else {
+                    if ($meter->id) {
+                        $meter->delete();
+                    }
+                }
+            }
+//            BillingInvoice::createInvoiceCommunalForPayment($this);
         }
     }
 
     /**
-     *удалить показания счетчиков по этомк платежу
+     *удалить показания счетчиков по этому платежу
      */
     public function deleteMeterReading()
     {
