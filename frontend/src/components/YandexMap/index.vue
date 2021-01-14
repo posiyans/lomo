@@ -30,7 +30,7 @@ export default {
       type: Array,
       default: () => ([59.110174, 30.473105])
     }
-  },
+  }
 }
 </script>
 

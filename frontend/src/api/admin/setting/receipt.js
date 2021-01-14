@@ -8,7 +8,6 @@ export function fetchReceiptTypeList(query) {
   })
 }
 
-
 export function getReceiptTypeInfo(id, query) {
   return request({
     url: '/api/v1/admin/setting/receipt-type/' + id,

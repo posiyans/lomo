@@ -8,13 +8,14 @@
       Расчитывается
       <el-select
         v-model="type.depends"
-        placeholder="placeholder">
+        placeholder="placeholder"
+      >
         <el-option
           v-for="item in typeReceipt"
           :key="item.key"
           :label="item.label"
-          :value="item.key">
-        </el-option>
+          :value="item.key"
+        />
       </el-select>
     </div>
     <div v-if="type.depends == 2">
@@ -25,74 +26,78 @@
       Выставлять счета автоматически
       <el-select
         v-model="type.auto_invoice"
-        placeholder="Выставлять счета автоматически">
+        placeholder="Выставлять счета автоматически"
+      >
         <el-option
           label="Да"
-          :value="true">
-        </el-option>
+          :value="true"
+        />
         <el-option
           label="Нет"
-          :value="false">
-        </el-option>
+          :value="false"
+        />
       </el-select>
     </div>
     <div v-if="type.auto_invoice">
       Период оплаты
       <el-select
         v-model="type.payment_period "
-        placeholder="placeholder">
+        placeholder="placeholder"
+      >
         <el-option
           v-for="item in periodReceipt"
           :key="item.key"
           :label="item.label"
-          :value="item.key">
-        </el-option>
+          :value="item.key"
+        />
       </el-select>
     </div>
     <div v-if="type.auto_invoice">
       Дата выставления счета
       <el-select
         v-model="type.options.payment_date"
-        placeholder="Дата">
+        placeholder="Дата"
+      >
         <el-option
           v-for="item in 30"
           :key="item"
           :label="item"
-          :value="item">
-        </el-option>
+          :value="item"
+        />
       </el-select>
       <el-select
         v-if="type.payment_period > 1"
         v-model="type.options.payment_month"
-        placeholder="Месяц с которого начинать отсчет">
+        placeholder="Месяц с которого начинать отсчет"
+      >
         <el-option
           v-for="item in month"
           :key="item.key"
           :label="item.label"
-          :value="item.key">
-        </el-option>
+          :value="item.key"
+        />
       </el-select>
     </div>
     <div>
       Фразы для поиска назначениях платежа
       <el-tag
-        :key="tag"
         v-for="tag in type.options.tag"
+        :key="tag"
         closable
         :disable-transitions="false"
-        @close="handleClose(tag)">
-        {{tag}}
+        @close="handleClose(tag)"
+      >
+        {{ tag }}
       </el-tag>
       <el-input
-        class="input-new-tag"
         v-if="inputVisible"
-        v-model="inputValue"
         ref="saveTagInput"
+        v-model="inputValue"
+        class="input-new-tag"
         size="mini"
         @keyup.enter.native="handleInputConfirm"
         @blur="handleInputConfirm"
-      >
-      </el-input>
+      />
       <el-button v-else class="button-new-tag" size="small" @click="showInput">+ добавить фразу</el-button>
     </div>
     <el-button type="primary" @click="saveReceiptType">Сохранить</el-button>
@@ -124,7 +129,7 @@ export default {
         { label: 'Март', key: 3 },
         { label: 'Апрель', key: 4 },
         { label: 'Май', key: 5 },
-        { label: 'Июнь', key: 6 },
+        { label: 'Июнь', key: 6 }
       ],
       periodReceipt: [
         { label: 'ежемесячно', key: 1 },

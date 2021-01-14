@@ -19,27 +19,27 @@
       highlight-current-row
       style="width: 100%;"
     >
-      <el-table-column label="№"  align="center" width="80px">
+      <el-table-column label="№" align="center" width="80px">
         <template slot-scope="{row}">
           <span>{{ row.number }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Размер, кв.м"  align="center" width="80px">
-      <template slot-scope="{row}">
-        <span>{{ row.size }}</span>
-      </template>
-    </el-table-column>
-      <el-table-column v-if="device === 'desktop'" label="Собственник"  align="center"min-width="150px">
+      <el-table-column label="Размер, кв.м" align="center" width="80px">
+        <template slot-scope="{row}">
+          <span>{{ row.size }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column v-if="device === 'desktop'" label="Собственник" align="center"min-width="150px">
         <template slot-scope="{row}">
           <span :class="row | fioStyleFilter">{{ row | fioFilter }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="device === 'desktop'" label="Телефон"  align="center" width="150px">
+      <el-table-column v-if="device === 'desktop'" label="Телефон" align="center" width="150px">
         <template slot-scope="{row}">
           <span>{{ row.user.phone }}</span>
         </template>
       </el-table-column>
-      <el-table-column  v-if="device === 'desktop'" label="Email"  align="center" width="150px">
+      <el-table-column v-if="device === 'desktop'" label="Email" align="center" width="150px">
         <template slot-scope="{row}">
           <span>{{ row.user.email }}</span>
         </template>
@@ -61,7 +61,7 @@
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
-    <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible" width="95%" >
+    <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible" width="95%">
       <el-form ref="dataForm" :rules="rules" :model="temp" :label-position="labelPosition" label-width="150px" style="">
         <el-form-item label="Номер участка" prop="number">
           <el-input v-model="temp.number" :readonly="!editor" />
@@ -80,7 +80,7 @@
           <span>{{ temp.user.email }}</span>
         </el-form-item>
         <el-form-item label="Примечание">
-          <el-input v-model="temp.discriptions.note" :autosize="{ minRows: 2}" type="textarea" placeholder="Место для заметок"  :readonly="!editor" />
+          <el-input v-model="temp.discriptions.note" :autosize="{ minRows: 2}" type="textarea" placeholder="Место для заметок" :readonly="!editor" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -92,7 +92,7 @@
         </el-button>
       </div>
     </el-dialog>
-    <el-dialog title="Добавить примечание" :visible.sync="dialogNoteVisible" width="80%" >
+    <el-dialog title="Добавить примечание" :visible.sync="dialogNoteVisible" width="80%">
       <el-form :label-position="labelPosition" label-width="150px">
         <el-form-item label="Примечание">
           <el-input v-model="newNote" :autosize="{ minRows: 2}" type="textarea" placeholder="Место для заметок" />
@@ -107,9 +107,9 @@
         </el-button>
       </div>
     </el-dialog>
-    <el-dialog title="Скачать квитанцию" :visible.sync="dialogReceipShow" :width="device === 'mobile' ? '100%' : '500px'" >
+    <el-dialog title="Скачать квитанцию" :visible.sync="dialogReceipShow" :width="device === 'mobile' ? '100%' : '500px'">
       <div class="pl4-ns">
-        <div class="pb4">Собственник: <span v-if="receiptData.discriptions"><b>{{receiptData.discriptions.fio}}</b></span></div>
+        <div class="pb4">Собственник: <span v-if="receiptData.discriptions"><b>{{ receiptData.discriptions.fio }}</b></span></div>
         <el-form :label-position="labelPosition" label-width="100px">
           <el-form-item label="Оплата">
             <el-select
@@ -122,21 +122,20 @@
                 :key="item.key"
                 :label="item.label"
                 :value="item.key"
-              >
-              </el-option>
+              />
             </el-select>
           </el-form-item>
         </el-form>
-        <template  v-for="i in rate" >
+        <template v-for="i in rate">
           <div class="pb1">
-            {{i.name}} - {{i.rate.discription}}
+            {{ i.name }} - {{ i.rate.discription }}
             <span v-if="i.rate.ratio_a > 0">
-               * {{receiptData.size/100}} = {{(receiptData.size/100 * i.rate.ratio_a).toFixed(2)}} руб.
+              * {{ receiptData.size/100 }} = {{ (receiptData.size/100 * i.rate.ratio_a).toFixed(2) }} руб.
             </span>
           </div>
         </template>
-        <div class="pt4"><b>Итого: </b>{{receiptData.size | totalFilter(rate)}} руб.</div>
-        <div slot="footer" class="dialog-footer tr mt4 mr4-ns " >
+        <div class="pt4"><b>Итого: </b>{{ receiptData.size | totalFilter(rate) }} руб.</div>
+        <div slot="footer" class="dialog-footer tr mt4 mr4-ns ">
           <el-button @click="dialogReceipShow = false">
             Закрыть
           </el-button>
@@ -154,7 +153,7 @@ import { fetchSteadList, updateStead } from '@/api/admin/stead'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination'
-import { mapState } from "vuex"
+import { mapState } from 'vuex'
 import { fetchList } from '@/api/admin/setting/rate'
 import { getReceipt } from '@/api/admin/receipt'
 import { saveAs } from 'file-saver'
@@ -184,7 +183,7 @@ export default {
         return ''
       }
       return 'grey'
-    },
+    }
   },
   data() {
     return {
@@ -225,7 +224,7 @@ export default {
   },
   computed: {
     ...mapState({
-      device: state => state.app.device,
+      device: state => state.app.device
     }),
     labelPosition() {
       return this.device === 'desktop' ? 'left' : 'top'
@@ -235,7 +234,7 @@ export default {
         return true
       }
       return false
-    },
+    }
   },
   mounted() {
     this.getList()
@@ -352,7 +351,7 @@ export default {
           return v[j]
         }
       }))
-    },
+    }
     // getSortClass: function(key) {
     //   const sort = this.listQuery.sort
     //   return sort === `+${key}` ? 'ascending' : 'descending'

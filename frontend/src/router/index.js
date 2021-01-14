@@ -549,24 +549,24 @@ export const asyncRoutes = [
   //       component: () => import('@/views/admin/bookkeeping/BillingInvoice/InvoiceInfo/index'),
   //       hidden: true
   //     },
-      // {
-      //   path: 'billing_bank_reestr_upload',
-      //   component: () => import('@/views/admin/bookkeeping/BillingBank/BillingBankReestr/create'),
-      //   meta: {
-      //     title: 'Выписки',
-      //     icon: 'documentation',
-      //     affix: true
-      //   }
-      // },
-      // {
-      //   path: 'billing_bank_reestr_upload_new',
-      //   component: () => import('@/views/admin/bookkeeping/BillingBank/BillingBankReestr/parse/index'),
-      //   meta: {
-      //     title: 'Выписки2',
-      //     icon: 'documentation',
-      //     affix: true
-      //   }
-      // },
+  // {
+  //   path: 'billing_bank_reestr_upload',
+  //   component: () => import('@/views/admin/bookkeeping/BillingBank/BillingBankReestr/create'),
+  //   meta: {
+  //     title: 'Выписки',
+  //     icon: 'documentation',
+  //     affix: true
+  //   }
+  // },
+  // {
+  //   path: 'billing_bank_reestr_upload_new',
+  //   component: () => import('@/views/admin/bookkeeping/BillingBank/BillingBankReestr/parse/index'),
+  //   meta: {
+  //     title: 'Выписки2',
+  //     icon: 'documentation',
+  //     affix: true
+  //   }
+  // },
   //     {
   //       path: 'billing_bank_reestr/:id(\\d+)',
   //       component: () => import('@/views/admin/bookkeeping/BillingBank/BillingBankReestr/edit'),

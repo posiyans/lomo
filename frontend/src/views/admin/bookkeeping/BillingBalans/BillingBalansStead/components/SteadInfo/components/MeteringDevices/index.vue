@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-button type="primary" size="small" @click="addSteadShow = !addSteadShow">Добавить прибор учета</el-button>
-    <AddDevice v-if="addSteadShow" :stead_id="stead.id" @close="addSteadShow = false" @reload="getDevice"/>
+    <AddDevice v-if="addSteadShow" :stead_id="stead.id" @close="addSteadShow = false" @reload="getDevice" />
     <el-table
       :data="devices"
       style="width: 100%"
@@ -19,30 +19,32 @@
       <el-table-column
         prop="date"
         label="Прибор"
-       >
+      >
         <template slot-scope="{row}">
-          <span>{{row.device_brand}} <i>{{row.serial_number}}</i></span>
+          <span>{{ row.device_brand }} <i>{{ row.serial_number }}</i></span>
         </template>
       </el-table-column>
       <el-table-column
         prop="date"
         label="Начальные показания"
         align="center"
-        width="180">
+        width="180"
+      >
         <template slot-scope="{row}">
-          <span>{{row.initial_data}}</span>
+          <span>{{ row.initial_data }}</span>
         </template>
       </el-table-column>
       <el-table-column
         prop="date"
         label="Последние показания"
         align="center"
-        width="180">
+        width="180"
+      >
         <template slot-scope="{row}">
           <div v-if="row.last_reading">
-            <div>{{row.last_reading.value}}</div>
+            <div>{{ row.last_reading.value }}</div>
             <div>
-              {{row.last_reading.created_at | moment('DD-MM-YYYY')}}
+              {{ row.last_reading.created_at | moment('DD-MM-YYYY') }}
             </div>
           </div>
         </template>
@@ -51,38 +53,41 @@
         prop="date"
         label="Даты"
         align="center"
-        width="300">
+        width="300"
+      >
         <template slot-scope="{row}">
           <div>
             <span>
               установки
             </span>
-            {{row.installation_date | moment('DD-MM-YYYY')}}
+            {{ row.installation_date | moment('DD-MM-YYYY') }}
           </div>
           <div>
             <span>
               годен до
             </span>
-            {{row.verification_date | moment('DD-MM-YYYY')}}
+            {{ row.verification_date | moment('DD-MM-YYYY') }}
           </div>
         </template>
       </el-table-column>
       <el-table-column
         prop="date"
         label="Примечание"
-        width="180">
+        width="180"
+      >
         <template slot-scope="{row}">
-          <span>{{row.descriptions}}</span>
+          <span>{{ row.descriptions }}</span>
         </template>
       </el-table-column>
       <el-table-column
         prop="date"
         label=""
-        width="180">
+        width="180"
+      >
         <template slot-scope="{row}">
           <el-tag v-if="row.active" type="success">Активный</el-tag>
           <el-tag v-if="!row.active" type="danger">Не рабочий</el-tag>
-          <el-button type="primary" icon="el-icon-edit" size="mini" @click="editDevice(row)"></el-button>
+          <el-button type="primary" icon="el-icon-edit" size="mini" @click="editDevice(row)" />
         </template>
       </el-table-column>
     </el-table>
@@ -90,17 +95,17 @@
       title="Редактироовать"
       :visible.sync="dialogVisible"
       width="30%"
-      >
+    >
       <el-form
+        ref="editForm"
         :model="editRow"
         :rules="rules"
-        ref="editForm"
         label-width="120px"
         class="demo-ruleForm"
         label-position="top"
       >
         <el-form-item label="Начальные показания" prop="initial_data">
-          <el-input v-model="editRow.initial_data" type="number"></el-input>
+          <el-input v-model="editRow.initial_data" type="number" />
         </el-form-item>
         <el-form-item label="Дата следующей поверки" prop="verification_date">
           <el-date-picker
@@ -109,21 +114,21 @@
             format="dd-MM-yyyy"
             value-format="yyyy-MM-dd"
             :picker-options="datePickerOptions"
-            placeholder="Дата следующей поверки">
-          </el-date-picker>
+            placeholder="Дата следующей поверки"
+          />
         </el-form-item>
         <el-form-item label="Примечание" prop="discriptions">
-          <el-input type="textarea" v-model="editRow.descriptions"></el-input>
+          <el-input v-model="editRow.descriptions" type="textarea" />
         </el-form-item>
         <el-form-item label="Статус" prop="active">
           <el-switch
-            style="display: block"
             v-model="editRow.active"
+            style="display: block"
             active-color="#13ce66"
             inactive-color="#ff4949"
             active-text="Активный"
-            inactive-text="Не рабочий">
-          </el-switch>
+            inactive-text="Не рабочий"
+          />
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -186,16 +191,16 @@ export default {
         // disabledDate(time) {
         //   return time.getTime() < Date.now()
         // }
-      },
+      }
 
     }
+  },
+  computed: {
   },
   mounted() {
     this.stead_loc = this.stead
     this.id = this.$route.params && this.$route.params.id
     this.getDevice()
-  },
-  computed: {
   },
   methods: {
     editDevice(row) {

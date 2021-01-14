@@ -30,7 +30,7 @@
             <TableResult :steads="value.voted" />
           </el-tab-pane>
           <el-tab-pane label="Подробнее">
-            <TableResultFull :steads="value.voted" :question="value.questions"/>
+            <TableResultFull :steads="value.voted" :question="value.questions" />
           </el-tab-pane>
         </el-tabs>
       </div>

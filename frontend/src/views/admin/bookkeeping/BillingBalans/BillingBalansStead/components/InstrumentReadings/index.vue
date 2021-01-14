@@ -9,24 +9,24 @@
       >
         <el-option
           v-for="item in typeList"
-          :label="item.name"
           :key="item.id"
+          :label="item.name"
           :value="item.id"
-        ></el-option>
+        />
       </el-select>
       <el-select
-        :disabled="!listQuery.primaryType"
         v-model="listQuery.type_id"
+        :disabled="!listQuery.primaryType"
         placeholder="Тип прибора"
-        @change="getList"
         clearable
+        @change="getList"
       >
         <el-option
           v-for="item in itemsTypeList"
-          :label="item.name"
           :key="item.id"
+          :label="item.name"
           :value="item.id"
-        ></el-option>
+        />
       </el-select>
     </div>
     <el-table
@@ -35,38 +35,44 @@
       border
       show-summary
       :summary-method="getSummaries"
-      style="width: 100%">
+      style="width: 100%"
+    >
       <el-table-column
         label="Дата"
-        width="180">
+        width="180"
+      >
         <template slot-scope="{row}">
           <span>{{ row.created_at }}</span>
         </template>
       </el-table-column>
       <el-table-column
         label=""
-        width="180">
+        width="180"
+      >
         <template slot-scope="{row}">
           <span>{{ row.type_name }}</span>
         </template>
       </el-table-column>
       <el-table-column
         label="Показания"
-        width="180">
+        width="180"
+      >
         <template slot-scope="{row}">
           <span>{{ row.value }}</span>
         </template>
       </el-table-column>
       <el-table-column
         label="Разница"
-        width="180">
+        width="180"
+      >
         <template slot-scope="{row}">
           <span>{{ row.delta }}</span>
         </template>
       </el-table-column>
       <el-table-column
         label="Тариф"
-        width="180">
+        width="180"
+      >
         <template slot-scope="{row}">
           <span>{{ row.price }}</span>
         </template>
@@ -74,14 +80,16 @@
       <el-table-column
         label="Сумма"
         prop="summa"
-        width="180">
+        width="180"
+      >
         <template slot-scope="{row}">
           <span>{{ row.summa.toFixed(2) }}</span>
         </template>
       </el-table-column>
       <el-table-column
         label=""
-        width="180">
+        width="180"
+      >
         <template slot-scope="{row}">
           <span>{{ row.payment_id }}</span>
         </template>
@@ -210,7 +218,7 @@ export default {
             }
           }
         })
-    },
+    }
   }
 }
 </script>

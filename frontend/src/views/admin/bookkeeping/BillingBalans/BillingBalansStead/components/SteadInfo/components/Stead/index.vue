@@ -6,19 +6,19 @@
           id
         </td>
         <td>
-          {{stead.id}}
+          {{ stead.id }}
         </td>
-        <td></td>
+        <td />
       </tr>
       <tr>
         <td>
           Номер
         </td>
         <td>
-          {{stead.number}}
+          {{ stead.number }}
         </td>
         <td>
-          <el-button type="primary" size="mini" plain icon="el-icon-edit" @click="editNumber"/>
+          <el-button type="primary" size="mini" plain icon="el-icon-edit" @click="editNumber" />
         </td>
       </tr>
       <tr>
@@ -50,10 +50,10 @@
           Примечание
         </td>
         <td>
-          {{stead.discriptions.note}}
+          {{ stead.discriptions.note }}
         </td>
         <td>
-          <el-button type="primary" size="mini" plain icon="el-icon-edit" @click="editNote"/>
+          <el-button type="primary" size="mini" plain icon="el-icon-edit" @click="editNote" />
         </td>
       </tr>
     </table>

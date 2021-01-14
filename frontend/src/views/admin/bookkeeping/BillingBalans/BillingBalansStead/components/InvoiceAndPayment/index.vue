@@ -49,7 +49,8 @@
                     placement="top"
                     width="200"
                     trigger="click"
-                    :content="row.data.discription">
+                    :content="row.data.discription"
+                  >
                     <span slot="reference">{{ row.data.price }}</span>
                   </el-popover>
                 </div>

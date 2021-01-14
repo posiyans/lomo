@@ -2,8 +2,8 @@
   <el-dialog
     title="Введите показания"
     :visible.sync="dialogVisible"
-    @close="close"
     width="400px"
+    @close="close"
   >
     <div class="mb2 do-not-carry">{{ discription }}</div>
     <div style="width: 200px;">

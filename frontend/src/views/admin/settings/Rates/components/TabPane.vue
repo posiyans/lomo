@@ -24,7 +24,7 @@
       <el-table-column min-width="300px" label="Название платежа">
         <template slot-scope="{row}">
           <span>{{ row.name }}</span>
-          <el-tag>{{ row.discription}}</el-tag>
+          <el-tag>{{ row.discription }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column align="center" label="Readings" width="95">
@@ -63,23 +63,23 @@
         <el-form-item v-if="type.depends == 1" label="Тариф на 1 сотку">
           <el-input v-model="rating.rate.ratio_a" placeholder="Оплата" />
         </el-form-item>
-        <el-form-item  v-if="type.depends === 1" label="Тариф на 1 участок">
+        <el-form-item v-if="type.depends === 1" label="Тариф на 1 участок">
           <el-input v-model="rating.rate.ratio_b" placeholder="Оплата" />
         </el-form-item>
-        <el-form-item  v-if="type.depends == 2" :label="rateLabel">
+        <el-form-item v-if="type.depends == 2" :label="rateLabel">
           <el-input v-model="rating.rate.ratio_a" placeholder="Оплата" />
         </el-form-item>
         <el-form-item label="Описание оплаты">
-          <el-input v-model="rate_disc" placeholder="Оплата" readonly/>
+          <el-input v-model="rate_disc" placeholder="Оплата" readonly />
         </el-form-item>
         <el-form-item label="Статус">
           <el-checkbox
             v-model="rating.enable"
             label="Действующий"
-            :true-label=1
-            :false-label=0
+            :true-label="1"
+            :false-label="0"
             border
-          ></el-checkbox>
+          />
         </el-form-item>
       </el-form>
       <div style="text-align:right;">

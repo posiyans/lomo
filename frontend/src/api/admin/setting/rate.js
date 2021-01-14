@@ -24,7 +24,6 @@ export function createRate(data) {
   })
 }
 
-
 // export function fetchArticle(id) {
 //   return request({
 //     url: '/vue-element-admin/article/detail',

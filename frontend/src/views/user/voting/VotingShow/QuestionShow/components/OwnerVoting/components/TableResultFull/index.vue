@@ -4,17 +4,15 @@
       <el-select
         v-model="question_id"
         placeholder="Выбрать вопрос"
-        @change="getResult"
         style="width: 300px;"
+        @change="getResult"
       >
         <el-option
           v-for="item in question"
           :key="item.id"
           :label="item.text"
           :value="item.id"
-
-        >
-        </el-option>
+        />
       </el-select>
 
     </div>
@@ -22,20 +20,18 @@
       <div class="dark-green b-ns cell"> За </div>
       <div class="red b-ns cell">Против </div>
     </div>
-    <div>
-    </div>
+    <div />
     <div class="flex">
       <div class="b-ns cell" style="color: #ffa200">Воздержался </div>
       <div class="b-ns cell">Не голосовал</div>
     </div>
-    <div>
-    </div>
+    <div />
     <table :key="tablkey">
       <tr v-for="i in line" :key="'c' + i">
         <td v-for="j in column" :key="'l' + i + '-'+ j">
-<!--          <span v-if="i + '-' + j in rezult" :class="{ 'dark-red': !rezult[i + '-' + j].answer, 'dark-green': rezult[i + '-' + j].answer }">-->
-<!--            {{ rezult[i + '-' + j].number }}-->
-<!--          </span>-->
+          <!--          <span v-if="i + '-' + j in rezult" :class="{ 'dark-red': !rezult[i + '-' + j].answer, 'dark-green': rezult[i + '-' + j].answer }">-->
+          <!--            {{ rezult[i + '-' + j].number }}-->
+          <!--          </span>-->
           <span v-if="i + '-' + j in rezult" :style="color[rezult[i + '-' + j].answer]">
             {{ rezult[i + '-' + j].number }}
           </span>
@@ -57,7 +53,7 @@ export default {
     question: {
       type: Object,
       default: () => {}
-    },
+    }
   },
   data() {
     return {
@@ -99,7 +95,7 @@ export default {
         q.answers.forEach(a => {
           this.color[a.id] = 'color: #ffa200'
           if (a.text.toLowerCase() == 'за') {
-            this.color[a.id] = 'color: #137752'
+            this.color[a.id] = 'color: #00ff00'
           }
           if (a.text.toLowerCase() == 'против') {
             this.color[a.id] = 'color: #ff0000'

@@ -6,7 +6,7 @@
           ФИО
         </td>
         <td>
-          {{stead.discriptions.fio}}
+          {{ stead.discriptions.fio }}
         </td>
         <td>
           <el-button type="primary" size="mini" plain icon="el-icon-edit" />
@@ -17,7 +17,7 @@
           Адрес
         </td>
         <td>
-          {{stead.options.adres}}
+          {{ stead.options.adres }}
         </td>
         <td>
           <el-button type="primary" size="mini" plain icon="el-icon-edit" />
@@ -28,7 +28,7 @@
           Телефон
         </td>
         <td>
-          {{stead.options.phone}}
+          {{ stead.options.phone }}
         </td>
         <td>
           <el-button type="primary" size="mini" plain icon="el-icon-edit" @click="editPhone" />
@@ -39,10 +39,10 @@
           Телефон доп.
         </td>
         <td>
-          {{stead.options.phone_add}}
+          {{ stead.options.phone_add }}
         </td>
         <td>
-          <el-button type="primary" size="mini" plain icon="el-icon-edit" @click="editPhoneAdd"/>
+          <el-button type="primary" size="mini" plain icon="el-icon-edit" @click="editPhoneAdd" />
         </td>
       </tr>
       <tr>
@@ -50,10 +50,10 @@
           Примечание
         </td>
         <td>
-          {{stead.options.note}}
+          {{ stead.options.note }}
         </td>
         <td>
-          <el-button type="primary" size="mini" plain icon="el-icon-edit" @click="editNote"/>
+          <el-button type="primary" size="mini" plain icon="el-icon-edit" @click="editNote" />
         </td>
       </tr>
     </table>
@@ -77,10 +77,10 @@ export default {
       }
     }
   },
+  computed: {
+  },
   mounted() {
     this.stead_loc = this.stead
-  },
-  computed: {
   },
   methods: {
     editPhone() {
