@@ -1,5 +1,9 @@
 <template>
   <div>
+    <div class="filter-container">
+      <el-input v-model="listQuery.title" placeholder="поиск" class="filter-item"  style="width: 150px;" @keyup.enter.native="findStead"></el-input>
+      <el-button type="primary" class="filter-item" @click="findStead">Найти</el-button>
+    </div>
     <el-table
       :key="tableKey"
       v-loading="loading"
@@ -30,7 +34,7 @@
 </template>
 
 <script>
-import { fetchSteadList } from '@/api/stead.js'
+import { fetchSteadList } from '@/api/admin/stead.js'
 import { fetchVotingResults, getBulletinList } from '@/api/admin/voting'
 import ImageViewer from './image-viewer'
 
@@ -57,10 +61,7 @@ export default {
       prevOverflow: '',
       preview: true,
       showViewer: false,
-      previewSrcList: [
-        'https://fuss10.elemecdn.com/8/27/f01c15bb73e1ef3793e64e6b7bbccjpeg.jpeg',
-        'https://fuss10.elemecdn.com/1/8e/aeffeb4de74e2fde4bd74fc7b4486jpeg.jpeg'
-      ],
+      previewSrcList: [],
       keyc: 1,
       key: 1,
       func: fetchSteadList,
@@ -73,7 +74,8 @@ export default {
       voting: [],
       listQuery: {
         page: 1,
-        limit: 20
+        limit: 20,
+        title: ''
       }
     }
   },
@@ -81,6 +83,9 @@ export default {
     // this.getSteads()
   },
   methods: {
+    findStead() {
+      this.key++
+    },
     closeViewer() {
       document.body.style.overflow = this.prevOverflow
       this.showViewer = false
