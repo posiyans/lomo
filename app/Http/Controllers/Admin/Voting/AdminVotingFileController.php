@@ -74,7 +74,7 @@ class AdminVotingFileController extends Controller
             $voting = VotingModel::find($voitng_id);
             $stead = Stead::find($stead_id);
             if ($voting && $stead) {
-                $items = VotingFileModel::where('stead_id', $stead->id)->where('voting_id', $voting->id)->get();
+                $items = VotingFileModel::where('stead_id', $stead->id)->where('voting_id', $voting->id)->orderBy('created_at', 'desc')->get();
                 if (count($items) > 0 ) {
                     $data = [];
                     foreach ($items as $item) {
