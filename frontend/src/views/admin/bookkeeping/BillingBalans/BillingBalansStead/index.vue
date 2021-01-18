@@ -4,13 +4,13 @@
     <div class="ma2" :class="{'text-red': stead.balans < 0}">Баланс:  <b>{{ stead.balans }} руб.</b></div>
     <el-tabs type="border-card">
       <el-tab-pane label="Платежи">
-        <InvoiceAndPayment />
+        <InvoiceAndPayment :key="key" @reload="key++" />
       </el-tab-pane>
       <el-tab-pane label="Показания">
-        <InstrumentReadings />
+        <InstrumentReadings :key="key" @reload="key++" />
       </el-tab-pane>
       <el-tab-pane label="Данные">
-        <SteadInfo />
+        <SteadInfo :key="key" @reload="key++" />
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -33,6 +33,7 @@ export default {
   },
   data() {
     return {
+      key: 1,
       stead: '',
       id: 0
     }

@@ -125,7 +125,9 @@ class PaymentController extends Controller
 
 //        $payment->raw_data = $request->raw_data ? $request->raw_data : $payment->raw_data;
         if ($payment->save()) {
-            $payment->setMeterReading($request->instr_read);
+            if ($request->type_depends) {
+                $payment->setMeterReading($request->instr_read);
+            }
             return json_encode(['status'=>true, 'data'=>new AdminPaymentResource($payment)]);
         }
         return json_encode(['status'=>false]);

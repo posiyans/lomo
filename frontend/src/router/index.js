@@ -11,6 +11,8 @@ import UserLayout from '@/layout/UserLayout'
 /* Router Modules */
 // import componentsRouter from './modules/components'
 // import chartsRouter from './modules/charts'
+import bookkepingRouter from './modules/bookkeeping'
+import settingRouter from './modules/setting'
 // import tableRouter from './modules/table'
 // import nestedRouter from './modules/nested'
 
@@ -479,101 +481,7 @@ export const asyncRoutes = [
       }
     ]
   },
-  // {
-  //   path: '/bookkeping',
-  //   component: Layout,
-  //   redirect: '/bookkeping/billing_reestr',
-  //   meta: {
-  //     title: 'Бухгалтерия',
-  //     icon: 'documentation',
-  //     roles: ['edit-rate']
-  //   },
-  //   children: [
-  //     {
-  //       path: 'billing_reestr_create',
-  //       component: () => import('@/views/admin/bookkeeping/BillingReestr/BillingReestrList/create'),
-  //       name: 'BillingReestrCreate',
-  //       hidden: true
-  //
-  //     },
-  //     {
-  //       path: 'billing_reestr_edit/:id(\\d+)',
-  //       component: () => import('@/views/admin/bookkeeping/BillingReestr/BillingReestrList/edit'),
-  //       name: 'BillingReestrEdit',
-  //       hidden: true
-  //
-  //     },
-  //     {
-  //       path: 'billing_reestr',
-  //       component: () => import('@/views/admin/bookkeeping/BillingReestr/BillingReestrList/index'),
-  //       name: 'BillingReestrList',
-  //       meta: {
-  //         title: 'Начисления',
-  //         icon: 'documentation',
-  //         affix: true
-  //       }
-  //     },
-  //
-  //     {
-  //       path: 'billing_balance',
-  //       component: () => import('@/views/admin/bookkeeping/BillingBalans/BillingBalansList/index'),
-  //       name: 'BillingBalansLists',
-  //       meta: {
-  //         title: 'Баланс',
-  //         icon: 'documentation',
-  //         affix: true
-  //       }
-  //     },
-  //     {
-  //       path: 'billing_balance_stead/:id(\\d+)',
-  //       component: () => import('@/views/admin/bookkeeping/BillingBalans/BillingBalansStead/index'),
-  //       name: 'BillingBalansStead',
-  //       hidden: true
-  //     },
-  //     {
-  //       path: 'payment_list',
-  //       component: () => import('@/views/admin/bookkeeping/BillingPayment/PaymentList/index'),
-  //       meta: {
-  //         title: 'Платежи',
-  //         icon: 'documentation',
-  //         affix: true
-  //       }
-  //     },
-  //     {
-  //       path: 'payment_info/:id(\\d+)',
-  //       component: () => import('@/views/admin/bookkeeping/BillingPayment/PaymentInfo/index'),
-  //       hidden: true
-  //     },
-  //     {
-  //       path: 'invoice_info/:id(\\d+)',
-  //       component: () => import('@/views/admin/bookkeeping/BillingInvoice/InvoiceInfo/index'),
-  //       hidden: true
-  //     },
-  // {
-  //   path: 'billing_bank_reestr_upload',
-  //   component: () => import('@/views/admin/bookkeeping/BillingBank/BillingBankReestr/create'),
-  //   meta: {
-  //     title: 'Выписки',
-  //     icon: 'documentation',
-  //     affix: true
-  //   }
-  // },
-  // {
-  //   path: 'billing_bank_reestr_upload_new',
-  //   component: () => import('@/views/admin/bookkeeping/BillingBank/BillingBankReestr/parse/index'),
-  //   meta: {
-  //     title: 'Выписки2',
-  //     icon: 'documentation',
-  //     affix: true
-  //   }
-  // },
-  //     {
-  //       path: 'billing_bank_reestr/:id(\\d+)',
-  //       component: () => import('@/views/admin/bookkeeping/BillingBank/BillingBankReestr/edit'),
-  //       hidden: true
-  //     }
-  //   ]
-  // },
+  bookkepingRouter,
   {
     path: '/permissions',
     component: Layout,
@@ -590,104 +498,7 @@ export const asyncRoutes = [
       }
     ]
   },
-  // {
-  //   path: '/admin/settings',
-  //   component: Layout,
-  //   redirect: '/admin/settings/menu',
-  //   meta: {
-  //     title: 'Настройки',
-  //     icon: 'example'
-  //   },
-  //   children: [
-  //     {
-  //       path: 'menu',
-  //       component: () => import('@/views/admin/settings/MenuSite/index'),
-  //       name: 'MenuSite',
-  //       meta: {
-  //         title: 'Меню сайта',
-  //         icon: 'documentation',
-  //         affix: true,
-  //         roles: ['gardening-edit'] }
-  //     },
-  //     {
-  //       path: 'gardening',
-  //       component: () => import('@/views/admin/settings/Gardenings/index'),
-  //       name: 'Settings',
-  //       meta: {
-  //         title: 'Настройки',
-  //         icon: 'documentation',
-  //         affix: true,
-  //         roles: ['gardening-edit'] }
-  //     },
-  //     {
-  //       path: 'rate',
-  //       component: () => import('@/views/admin/settings/Rates/index'),
-  //       name: 'Rate',
-  //       meta: {
-  //         title: 'Тарифы',
-  //         icon: 'documentation',
-  //         affix: true,
-  //         roles: ['edit-rate']
-  //       }
-  //     },
-  //   ]
-  // },
-  // {
-  //   path: '/permission',
-  //   component: Layout,
-  //   redirect: '/permission2/page',
-  //   alwaysShow: true, // will always show the root menu
-  //   name: 'Permission',
-  //   meta: {
-  //     title: 'Permission5',
-  //     icon: 'lock',
-  //     roles: ['ladmin', 'editor'] // you can set roles in root nav
-  //   },
-  //   children: [
-  //     {
-  //       path: 'page',
-  //       component: () => import('@/views/permission2/page'),
-  //       name: 'PagePermission',
-  //       meta: {
-  //         title: 'Page Permission2',
-  //         roles: ['admin'] // or you can only set roles in sub nav
-  //       }
-  //     },
-  //     {
-  //       path: 'directive',
-  //       component: () => import('@/views/permission2/directive'),
-  //       name: 'DirectivePermission',
-  //       meta: {
-  //         title: 'Directive Permission'
-  //         // if do not set roles, means: this page does not require permission
-  //       }
-  //     },
-  //     {
-  //       path: 'role',
-  //       component: () => import('@/views/permission2/role'),
-  //       name: 'RolePermission',
-  //       meta: {
-  //         title: 'Role Permission',
-  //         roles: ['admin']
-  //       }
-  //     }
-  //   ]
-  // },
-  //
-  // {
-  //   path: '/icon',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       component: () => import('@/views/icons/index'),
-  //       name: 'Icons',
-  //       meta: { title: 'Icons', icon: 'icon', noCache: true, roles: ['access-admin-panel'] }
-  //     }
-  //   ]
-  // },
-
-  /** when your routing map is too long, you can split it into small modules **/
+  settingRouter,
   // componentsRouter,
   // chartsRouter,
   // nestedRouter,

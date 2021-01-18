@@ -18,8 +18,8 @@
           <el-tag style="cursor: pointer" @click="showStead(row.stead_id)">
             {{ row.stead.number }}
           </el-tag>
-          <span v-if="row.stead.number !== row.raw_data[5]">
-            ({{ row.raw_data[5] }})
+          <span v-if="row.error">
+            ({{ row.raw_data[2] }})
           </span>
         </template>
       </el-table-column>
@@ -30,7 +30,7 @@
       </el-table-column>
       <el-table-column label="Назначение" align="center">
         <template slot-scope="{row}">
-          <span class="do-not-carry">{{ row.raw_data[7] }}</span>
+          <span class="do-not-carry">{{ row.raw_data[4] }}</span>
         </template>
       </el-table-column>
       <el-table-column label="Сумма" align="center">
@@ -56,12 +56,11 @@
       <el-table-column label="Тип" align="center">
         <template slot-scope="{row}">
           <span>
-            <el-tag v-if="row.type == 1" type="danger">Электричество</el-tag>
-            <el-tag v-if="row.type == 2" type="success">Взносы</el-tag>
-            <div v-if="row.type == 1">
-              <span v-for="i in row.instr_read" :key="i.value">
-                <el-tag v-if="i.value" type="success">{{ i.device }}-{{ i.value }}</el-tag>
-              </span>
+            <div v-if="row.type">
+              <el-tag type="success">{{ row.type_name }}</el-tag>
+              <!--              <span v-for="i in row.instr_read" :key="i.value">-->
+              <!--                <el-tag v-if="i.value" type="success">{{ i.device }}-{{ i.value }}</el-tag>-->
+              <!--              </span>-->
             </div>
           </span>
         </template>
@@ -69,8 +68,7 @@
       <el-table-column label="" align="center">
         <template slot-scope="{row}">
           <span>
-            <el-tag v-if="row.dubl" type="danger">Повтор</el-tag>
-            <el-button type="primary" icon="el-icon-edit" @click="showPayment(row)">Подробнее</el-button>
+            <el-button type="primary" icon="el-icon-info" @click="showPayment(row)">Подробнее</el-button>
           </span>
         </template>
       </el-table-column>

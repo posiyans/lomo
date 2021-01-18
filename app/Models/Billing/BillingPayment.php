@@ -4,6 +4,7 @@ namespace App\Models\Billing;
 
 use App\Models\Receipt\InstrumentReadings;
 use App\Models\Log;
+use App\Models\Receipt\ReceiptType;
 use App\Models\Stead;
 use App\MyModel;
 use Illuminate\Database\Eloquent\Model;
@@ -24,10 +25,21 @@ class BillingPayment extends MyModel
       return $this->hasMany(InstrumentReadings::class, 'payment_id', 'id');
     }
 
+    /**
+     * получить участок который платил
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
     public function stead()
     {
         return $this->hasOne(Stead::class, 'id', 'stead_id');
     }
+
+    public function getType()
+    {
+      return $this->hasOne(ReceiptType::class, 'id', 'type');
+    }
+
 
     public function steadObject(array $attributes = [])
     {
@@ -53,12 +65,12 @@ class BillingPayment extends MyModel
     public function save(array $options = [])
     {
         $original_model = $this->getOriginal();
-        $history = $this->history;
+//        $history = $this->history;
         $log = Log::addLog($this, $original_model, 'Изменение', $this->stead_id);
         if ($log) {
             $time = date('Y-m-d H:i:s');
-            $history[] = ['date' => $time, 'user_id' => Auth::user()->id, 'data' => $log->value];
-            $this->history = $history;
+//            $history[] = ['date' => $time, 'user_id' => Auth::user()->id, 'data' => $log->value];
+            $this->history = '';
         }
         if (parent::save($options)) {
             return true;
@@ -75,6 +87,44 @@ class BillingPayment extends MyModel
      * @return bool
      */
     public static function createPlayment(array $item)
+    {
+        try {
+            $date = date_create_from_format('Y-m-d H:i:s', $item[0]);
+            $payment_data = date_format($date, 'Y-m-d H:i:s');
+            $payment = new self;
+            $payment->price = (float)str_replace(',', '.', $item[1]);
+//            $payment->transaction = $item[4];
+            $payment->payment_date = $payment_data;
+            $payment->discription = '';
+            $payment->payment_type = 1;
+            $payment->raw_data = $item;
+            $payment->user_id = Auth::user()->id;
+            $payment->parseType();
+            $payment->parseStead();
+//            $payment->history = [];
+
+            if ($payment->checkNoDublicate()) {
+                if ($payment->save()) {
+                    return $payment;
+                }
+            } else {
+               $payment->dubl = true;
+               return $payment;
+            }
+        } catch (\Exception $e) {
+            return false;
+        }
+        return false;
+    }
+
+
+    /**
+     * разнести платежку по счетам садоводов
+     * @deprecated
+     * @param BillingBankReestr $reestr
+     * @return bool
+     */
+    public static function createPlaymentOLd(array $item)
     {
         try {
             $date = date_create_from_format('d-m-Y H-i-s', $item[0]. ' ' .$item[1]);
@@ -94,8 +144,8 @@ class BillingPayment extends MyModel
                     return $payment;
                 }
             } else {
-               $payment->dubl = true;
-               return $payment;
+                $payment->dubl = true;
+                return $payment;
             }
         } catch (\Exception $e) {
             return false;
@@ -152,7 +202,7 @@ class BillingPayment extends MyModel
         $find = BillingPayment::query()
             ->where('payment_date', $this->payment_date)
             ->where('price', $this->price)
-            ->where('transaction', $this->transaction)
+//            ->where('transaction', $this->transaction)
             ->first();
         if ($find){
             return false;
@@ -226,52 +276,86 @@ class BillingPayment extends MyModel
      * @param int $col
      * @return $this
      */
-    public function parseStead($col = 5)
+    public function parseStead($col = 2)
     {
         $data = $this->raw_data;
         $str = mb_strtolower($data[$col]);
-        $str = str_replace('-', '/', $str);
-        $str = str_replace('-', '/', $str);
-        $str = str_replace(',', '/', $str);
-        $str = str_replace('участок', '', $str);
-        $str = str_replace('№', '', $str);
-        $str = str_replace(' ', '', $str);
-        $stead = Stead::query()->where('number', 'like', "%{$str}%")->first();
-        if(!$stead) {
-            $str = str_replace('Л сч 502 10линия', '502', $data['val'.$col]);
-            $str = str_replace('Л сч502 10линия', '502', $str);
-            $str = str_replace('288, 289', '288', $str);
-            $str = str_replace('526/525', '525/526', $str);
+        if ($str) {
+            $str = str_replace('-', '/', $str);
+            $str = str_replace('-', '/', $str);
+            $str = str_replace(',', '/', $str);
+            $str = str_replace('участок', '', $str);
+            $str = str_replace('№', '', $str);
+            $str = str_replace(' ', '', $str);
             $stead = Stead::query()->where('number', 'like', "%{$str}%")->first();
-        }
+            if (!$stead) {
+                $str = str_replace('Л сч 502 10линия', '502', $data['val' . $col]);
+                $str = str_replace('Л сч502 10линия', '502', $str);
+                $str = str_replace('288, 289', '288', $str);
+                $str = str_replace('526/525', '525/526', $str);
+                $stead = Stead::query()->where('number', 'like', "%{$str}%")->first();
+            }
             if ($stead) {
                 $this->stead_id = $stead->id;
                 if ($stead->number != mb_strtolower($data[$col])) {
                     $this->error = true;
                 }
             }
+        } else {
+            $error = false;
+            $str = mb_strtolower($data[4]);
+            $c = explode(';', $str);
+            if (count($c) == 4) {
+                $stead = Stead::query()->where('number', 'like', "%{$c[2]}%")->first();
+                if ($stead) {
+                    $this->stead_id = $stead->id;
+                }
+            }
+            if (!$this->stead_id){
+                $str = str_replace('№', '', $str);
+                $str = str_replace('участки', '!@!', $str);
+                $str = str_replace('участка', '!@!', $str);
+                $str = str_replace('участок', '!@!', $str);
+                $str = str_replace('уч.', '!@!', $str);
+                $str = str_replace('уч', '!@!', $str);
+                $str = str_replace('лс', '!@!', $str);
+                $c = explode('!@!', $str);
+                if (count($c) > 1) {
+                    $text = trim($c[1]);
+                    $text = str_replace(',', ' ', $text);
+                    $text = str_replace('.', ' ', $text);
+                    $text = str_replace(';', ' ', $text);
+                    $n = explode(' ', $text);
+                    $stead = Stead::query()->where('number', 'like', "%{$n[0]}%")->first();
+                    if ($stead) {
+                        $this->stead_id = $stead->id;
+                    }
+                }
+            }
+            $this->error = true;
+        }
         return $this;
     }
 
 
-    public function parseType($col = 7)
+    public function parseType($col = 4)
     {
         $data = $this->raw_data;
-        $type_1 = ['энер', 'свет',  'эл', 'эн.' ,'ээ','квт', 'счетчик', 'показан'];
-        $type_2 = ['взнос', 'членск', 'целев', 'мусор' , 'земля', 'налог', 'ежегодный', 'чл.вз.', 'отходы'];
-        $type = false;
         $str = mb_strtolower($data[$col]);
-        foreach ($type_2 as $item) {
-            if (stristr($str, $item) && !$type) {
-                $type = 2;
-            }
-        }
-        foreach ($type_1 as $item) {
-            if (stristr($str, $item) && !$type) {
-                $type = 1;
-            }
-        }
+        $typeList = ReceiptType::all();
+        $type = false;
+        foreach ($typeList as $item) {
+            $options = $item->options;
+            if (isset($options['tag'])) {
+                $tags = $options['tag'];
+                foreach ($tags as $tag) {
+                    if (stristr($str, $tag) && !$type) {
+                        $type = $item->id;
+                    }
+                }
 
+            }
+        }
         if ($type) {
             $this->type = $type;
         } else {

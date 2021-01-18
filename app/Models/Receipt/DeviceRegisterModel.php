@@ -34,12 +34,12 @@ class DeviceRegisterModel extends MyModel
 
     public function getReadings()
     {
-        return $this->hasMany(InstrumentReadings::class, 'instrument_serial', 'serial_number')->where('device_id', $this->type_id)->orderBy('created_at', 'desc');
+        return $this->hasMany(InstrumentReadings::class, 'device_id', 'id')->orderBy('created_at', 'desc');
     }
 
     public function getLastReading()
     {
-        return  InstrumentReadings::where('instrument_serial', $this->serial_number)->where('device_id', $this->type_id)->orderBy('created_at', 'desc')-> first();
+        return  InstrumentReadings::where('device_id', $this->id)->orderBy('created_at', 'desc')-> first();
     }
 
 

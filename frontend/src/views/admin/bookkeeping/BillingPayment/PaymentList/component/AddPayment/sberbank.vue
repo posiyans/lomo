@@ -1,5 +1,5 @@
 <template>
-  <div style="background-color: white;">
+  <div>
     <div>
       <el-upload
         ref="upload"
@@ -12,12 +12,43 @@
       >
         <el-button slot="trigger" size="small" type="primary">Выбрать файлы</el-button>
         <el-button style="margin-left: 10px;" size="small" type="success" @click="onFileChange">Загрузить данные</el-button>
-        <div slot="tip" class="el-upload__tip">txt,cvs,xlsx выписки из банка</div>
+        <div slot="tip" class="el-upload__tip">txt или cvs выписки из банка</div>
       </el-upload>
 
     </div>
-    <div>
-      Загруженно {{ fileCount }} файлов
+    <!--    <input type="file" @change="onFileChange" class="inputFile" />-->
+    <div v-if="is_error" class="dark-red">
+      <div class="f3 pa3">Ошибка разбора файла</div>
+      <div v-if="summa != item_summa" class="ba pa3">
+        Не совпадает сумма строк и контрольных точек
+        <div class="mt1">
+          Сумма по строкам
+          <span class="dark-blue">
+            {{ item_summa.toFixed(2) }}
+          </span>
+        </div>
+        <div class="mt1">
+          Котрольная сумма
+          <span class="dark-blue">
+            {{ summa.toFixed(2) }}
+          </span>
+        </div>
+      </div>
+      <div v-if="data" class="ba">
+        <div class="pa3 f4">
+          Ошибка разбора строк
+        </div>
+        <el-input
+          v-model="data"
+          type="textarea"
+          placeholder=""
+          :rows="row"
+        />
+        <div class="pa3">
+          <el-button type="primary" @click="parseData">Обновить</el-button>
+
+        </div>
+      </div>
     </div>
     <table>
       <tr>
@@ -37,16 +68,9 @@
 <script>
 import readFile from './readFile'
 import { uploadDischarge } from '@/api/admin/bookkeping/bank'
-// import UploadExcel from '@/components/UploadExcel'
-
 export default {
-  components: {
-    // UploadExcel
-  },
   data() {
     return {
-      fileCount: 0,
-      key: 1,
       row: 0,
       originalData: '',
       data: '',
@@ -56,10 +80,17 @@ export default {
       name: [
         '№',
         'дата',
-        'Сумма',
-        'Участок',
+        'время',
+        '-',
+        '-',
+        '-',
+        'участок',
         'ФИО',
-        'Назначение'
+        'Назначение',
+        'Сумма',
+        'Сумма',
+        '-',
+        '-'
       ]
     }
   },
@@ -93,19 +124,16 @@ export default {
       this.data_ok = []
       const files = this.$refs.upload.uploadFiles
       if (!files.length) return
-      console.log(files)
-      // let c = 0
-      this.data_ok = []
-      this.fileCount = 0
+      let c = 0
       files.forEach(i => {
-        readFile(i.raw).then(text => {
-          text.forEach(i => {
-            this.data_ok.push(i)
-          })
+        readFile(i.raw, text => {
+          this.data += text
+          c++
+          if (c === files.length) {
+            this.parseData()
+          }
         })
-        this.fileCount++
       })
-      this.$refs.upload.clearFiles()
     },
     parseData() {
       this.$refs.upload.clearFiles()
