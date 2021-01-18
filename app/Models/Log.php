@@ -105,9 +105,9 @@ class Log extends MyModel
             if (!isset($model_old[$attribute]) || $model_old[$attribute] != $model_new->$attribute) {
                 $new = true;
                 // todo не работает с json объектами!!!!
-                if (is_array($model_new->$attribute) && $model_old[$attribute] != json_encode($model_new->$attribute)) {
-                 //   $new = false;
-                }
+//                if (is_array($model_new->$attribute) && $model_old[$attribute] != json_encode($model_new->$attribute)) {
+//                 //   $new = false;
+//                }
                 if ($model_new->$attribute == null && (!isset($model_old[$attribute]) || $model_old[$attribute] == '')) {
                    $new = false;
                 }

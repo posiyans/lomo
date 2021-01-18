@@ -125,11 +125,10 @@ const defaultForm = {
 
 const labelForm = {
   0: 'Дата',
-  1: 'Время',
-  5: 'Участок',
-  6: 'ФИО',
-  7: 'Назначение',
-  8: 'Сумма'
+  2: 'Участок',
+  3: 'ФИО',
+  4: 'Назначение',
+  1: 'Сумма'
 }
 
 export default {
@@ -147,7 +146,7 @@ export default {
       return 'plain'
     },
     steadFilter(val) {
-      if (val.stead && val.raw_data[5] === val.stead.number) {
+      if (val.stead && val.raw_data[2] === val.stead.number) {
         return ''
       }
       return 'danger'
@@ -178,9 +177,7 @@ export default {
       }
     }
     return {
-      // sort: [0, 1, 5, 6, 8, 7],
-      // sort: [0, 1, 5, 6, 8, 7],
-      sort: [5, 6, 8, 7],
+      sort: [1, 2, 3, 4],
       reestr: {
         data: ''
       },

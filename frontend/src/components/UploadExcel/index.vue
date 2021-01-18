@@ -64,11 +64,12 @@ export default {
       const files = e.target.files
       const rawFile = files[0] // only use files[0]
       if (!rawFile) return
+      console.log('handleClick')
       this.upload(rawFile)
     },
     upload(rawFile) {
       this.$refs['excel-upload-input'].value = null // fix can't select the same excel
-
+      console.log(rawFile)
       if (!this.beforeUpload) {
         this.readerData(rawFile)
         return
@@ -79,16 +80,16 @@ export default {
       }
     },
     readerData(rawFile) {
+      console.log('readerData')
       this.loading = true
       return new Promise((resolve, reject) => {
         const reader = new FileReader()
         reader.onload = e => {
-          const data = e.target.result
-          const workbook = XLSX.read(data, { type: 'array' })
+          const workbook = XLSX.read(reader, { type: 'array', dateNF: 'YYYY-MM-DD' })
           const firstSheetName = workbook.SheetNames[0]
           const worksheet = workbook.Sheets[firstSheetName]
           const header = this.getHeaderRow(worksheet)
-          const results = XLSX.utils.sheet_to_json(worksheet)
+          const results = XLSX.utils.sheet_to_json(worksheet, { raw: true, blankrows: false })
           this.generateData({ header, results })
           this.loading = false
           resolve()

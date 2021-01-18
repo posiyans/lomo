@@ -28,7 +28,7 @@
               Счет: {{ row.data.title }}
             </div>
             <div v-if="row.type == 'payment'">
-              Оплата: {{ row.data.raw_data[7] }}
+              Оплата: {{ row.data.raw_data[4] }}
             </div>
           </template>
         </el-table-column>
@@ -83,6 +83,7 @@
           </template>
         </el-table-column>
       </el-table>
+      <PaymentInfo v-if="showPaymentInfo" :payment="itemPayment" @close="closePaymentInfo" />
       <el-dialog title="Детали платежа" :visible.sync="dialogPaymentInfoVisible">
         <div v-if="rowShow.data">
           <div>
@@ -159,9 +160,10 @@ import { fetchBillingBalansSteadInfo } from '@/api/admin/billing'
 import { updatePaymentInfo } from '@/api/admin/bookkeping/payment'
 // import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import waves from '@/directive/waves'
+import PaymentInfo from './components/PaymetnInfo'
 
 export default {
-  // components: { Pagination },
+  components: { PaymentInfo },
   directives: { waves },
   filters: {
     type1EffectFilter(val) {
@@ -181,6 +183,8 @@ export default {
   },
   data() {
     return {
+      showPaymentInfo: false,
+      itemPayment: '',
       id: '',
       stead: '',
       list: [],
@@ -211,9 +215,16 @@ export default {
     this.getData()
   },
   methods: {
+    closePaymentInfo() {
+      this.showPaymentInfo = false
+      this.$emit('reload')
+    },
     showMore(row) {
       if (row.type === 'payment') {
-        this.$router.push('/bookkeping/payment_info/' + row.data.id)
+        // this.$router.push('/bookkeping/payment_info/' + row.data.id)
+        console.log(row)
+        this.showPaymentInfo = true
+        this.itemPayment = row.data
       }
       if (row.type === 'invoice') {
         this.$router.push('/bookkeping/invoice_info/' + row.data.id)

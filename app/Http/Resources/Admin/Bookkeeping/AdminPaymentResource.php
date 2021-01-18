@@ -16,13 +16,32 @@ class AdminPaymentResource extends JsonResource
     {
         $data = parent::toArray($request);
         $data['stead'] = $this->steadObject(['id', 'number']);
-        $tmp = [];
-        if ($this->type == 1) {
-            foreach ($this->instrumentReadings as $item) {
-                $tmp['d'.$item->device_id] = ['device' => $item->device_id, 'value'=>$item->value];
+        $type = $this->getType;
+        $data['type_name'] = '';
+        $data['type_depends'] = false;
+        if ($type) {
+            $data['type_name'] = $type->name;
+            if ($type->depends == 2) {
+                $data['type_depends'] = true;
+                $dep = $type->MeteringDevice;
+                $dep_temp = [];
+                foreach ($dep as $item) {
+                  $dep_temp[] = ['id' => $item->id, 'name' => $item->name];
+                }
+
+                $data['depends'] = $dep_temp;
+                $tmp = [];
+                if ($this->type == 1) {
+                    foreach ($this->instrumentReadings as $item) {
+                        $tmp['d'.$item->device_id] = ['device' => $item->device_id, 'value'=>$item->value];
+                    }
+                }
+                $data['instr_read'] = $tmp;
             }
         }
-        $data['instr_read'] = $tmp;
+
+
+
         return $data;
     }
 }

@@ -8,6 +8,14 @@ export function fetchCommunalListForStead(id, params) {
   })
 }
 
+export function addInstrumentReadings(id, data) {
+  return request({
+    url: '/api/v1/admin/billing/communal/stead/add-reading/' + id,
+    method: 'post',
+    data: data
+  })
+}
+
 // export function fetchPaymentInfo(id) {
 //   return request({
 //     url: '/api/v1/admin/billing/payment/' + id,

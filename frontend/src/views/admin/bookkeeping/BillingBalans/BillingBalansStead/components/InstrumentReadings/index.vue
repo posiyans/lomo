@@ -28,6 +28,7 @@
           :value="item.id"
         />
       </el-select>
+      <el-button type="success" class="item-filter" plain @click="addReadings">Добавить показания</el-button>
     </div>
     <el-table
       v-if="list.length > 0"
@@ -95,15 +96,24 @@
         </template>
       </el-table-column>
     </el-table>
+    <AddReadingDialog
+      v-if="addReadingDialogShow"
+      :stead_id="id"
+      @close="closeReadingsDialog"
+    />
   </div>
 </template>
 
 <script>
 import { fetchCommunalListForStead } from '@/api/admin/bookkeping/communal'
 import { fetchReceiptTypeList, getReceiptTypeInfo } from '@/api/admin/setting/receipt'
+import AddReadingDialog from './components/AddReadingsDialog'
+
 export default {
+  components: { AddReadingDialog },
   data() {
     return {
+      addReadingDialogShow: false,
       list: [],
       id: '',
       old1: 39100,
@@ -113,8 +123,6 @@ export default {
       primaryType: '',
       typeList: [],
       listQuery: {
-        page: 1,
-        limit: 20,
         primaryType: '',
         type_id: ''
       }
@@ -126,6 +134,12 @@ export default {
     this.getTypeList()
   },
   methods: {
+    addReadings() {
+      this.addReadingDialogShow = true
+    },
+    closeReadingsDialog() {
+      this.addReadingDialogShow = false
+    },
     getSummaries(param) {
       const { columns, data } = param
       const sums = []

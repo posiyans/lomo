@@ -20,3 +20,4 @@ Route::post('billing/bank-reestr-publish', 'Admin\Bookkeeping\Billing\BankReestr
 
 // Электроэнергия
 Route::get('billing/communal/stead/get/{id}', 'Admin\Bookkeeping\Communal\ElectroSteadController@list');
+Route::post('billing/communal/stead/add-reading/{id}', 'Admin\Bookkeeping\Communal\ElectroSteadController@addInstrumentReadings');
