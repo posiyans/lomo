@@ -51,7 +51,7 @@
         width="180"
       >
         <template slot-scope="{row}">
-          <span>{{ row.type_name }}</span>
+          <span>{{ row.type_name[1] }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -84,7 +84,7 @@
         width="180"
       >
         <template slot-scope="{row}">
-          <span>{{ row.summa.toFixed(2) }}</span>
+          <span>{{ row.summa }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -92,7 +92,10 @@
         width="180"
       >
         <template slot-scope="{row}">
-          <span>{{ row.payment_id }}</span>
+          <div>
+            <el-button v-if="!row.invoice_id && row.summa > 0" type="primary" @click="addInvoice(row)">Выставить счет</el-button>
+          </div>
+          <span v-if="row.invoice_id">Счет № {{ row.invoice_id }}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -108,6 +111,7 @@
 import { fetchCommunalListForStead } from '@/api/admin/bookkeping/communal'
 import { fetchReceiptTypeList, getReceiptTypeInfo } from '@/api/admin/setting/receipt'
 import AddReadingDialog from './components/AddReadingsDialog'
+import { addInvoiceForReadings } from '@/api/admin/bookkeping/invoice'
 
 export default {
   components: { AddReadingDialog },
@@ -134,10 +138,37 @@ export default {
     this.getTypeList()
   },
   methods: {
+    reload() {
+      this.$emit('reload')
+      this.getList()
+      this.getTypeList()
+    },
+    addInvoice(row) {
+      this.$confirm('Выставить счет на сумму ' + row.summa + ' руб.?', 'Внимание!', {
+        confirmButtonText: 'Выставить',
+        cancelButtonText: 'Отмена',
+        type: 'warning'
+      }).then(() => {
+        addInvoiceForReadings(row.id)
+          .then(response => {
+            if (response.data.status) {
+              this.$message('Счет успешно добавлен')
+              this.reload()
+            } else {
+              if (response.data.data) {
+                this.$message.error(response.data.data)
+              }
+            }
+          })
+      }).catch(() => {
+
+      })
+    },
     addReadings() {
       this.addReadingDialogShow = true
     },
     closeReadingsDialog() {
+      this.$emit('reload')
       this.addReadingDialogShow = false
     },
     getSummaries(param) {
@@ -173,24 +204,25 @@ export default {
       fetchCommunalListForStead(this.id, this.listQuery)
         .then(response => {
           if (response.data.status) {
-            this.list = []
-            this.summa = 0
-            response.data.data.forEach(item => {
-              if (item.device_id === 1) {
-                item.delta = item.value - this.old1
-                item.summa = item.delta * item.price
-                this.summa += item.summa
-                this.list.push(item)
-                this.old1 = +item.value
-              }
-              if (item.device_id === 2) {
-                item.delta = item.value - this.old2
-                item.summa = item.delta * item.price
-                this.summa += item.summa
-                this.list.push(item)
-                this.old2 = +item.value
-              }
-            })
+            // this.list = []
+            // this.summa = 0
+            this.list = response.data.data
+            // response.data.data.forEach(item => {
+            //   if (item.device_id === 1) {
+            //     item.delta = item.value - this.old1
+            //     item.summa = item.delta * item.price
+            //     this.summa += item.summa
+            //     this.list.push(item)
+            //     this.old1 = +item.value
+            //   }
+            //   if (item.device_id === 2) {
+            //     item.delta = item.value - this.old2
+            //     item.summa = item.delta * item.price
+            //     this.summa += item.summa
+            //     this.list.push(item)
+            //     this.old2 = +item.value
+            //   }
+            // })
           } else {
             if (response.data.data) {
               this.$message.error(response.data.data)

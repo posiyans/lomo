@@ -84,7 +84,7 @@
           <td>
             <div class="flex">
               <div v-for="dep in payment.depends" :key="dep.id" class="b--dark-green br2 b--solid bw1 mh1 ph2 pv1" @click="setMetering(dep)">
-                {{ dep.name }}:
+                {{ dep.name[1] }}:
                 <span v-if="payment.instr_read['d' + dep.id]">
                   {{ payment.instr_read['d' + dep.id].value }}
                 </span>

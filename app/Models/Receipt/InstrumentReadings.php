@@ -18,22 +18,59 @@ class InstrumentReadings extends MyModel
         'stead_id', 'payment_id', 'device_id'
     ];
 
-    public function MeteringDevice()
+    public function deviceRegister()
     {
-        return $this->hasOne(MeteringDevice::class, 'id', 'device_id');
+        return $this->hasOne(DeviceRegisterModel::class, 'id', 'device_id');
+    }
+
+    public function deviceTypeName()
+    {
+        return $this->deviceRegister->getTypeName();
     }
 
     public function getPrice()
     {
         $price = Rate::query()
-            ->where('device_id', $this->device_id)
+            ->where('device_id', $this->deviceRegister->type_id)
             ->where('created_at', '<', $this->created_at)
             ->orderBy('created_at', 'desc')
             ->first();
         return $price->ratio_a;
     }
 
+    /**
+     * получить придыдущее показание
+     *
+     * @return \Illuminate\Database\Eloquent\HigherOrderBuilderProxy|mixed
+     */
+    public function getPreviousReadings()
+    {
+        $item = self::query()
+            ->where('device_id', $this->device_id)
+            ->where('created_at', '<=', $this->created_at)
+            ->where('id', '<', $this->id)
+            ->orderBy('created_at', 'desc')
+            ->first();
+        if ($item) {
+            return $item->value;
+        }
+        $item = DeviceRegisterModel::find($this->device_id);
+        return $item->initial_data;
+    }
 
+
+
+    public function checkForLatestData()
+    {
+        $item = self::query()
+            ->where('device_id', $this->device_id)
+            ->where('value', '>', $this->value)
+            ->first();
+        if ($item) {
+            return false;
+        }
+        return true;
+    }
 
 
 }

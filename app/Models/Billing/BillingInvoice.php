@@ -4,9 +4,9 @@ namespace App\Models\Billing;
 
 use App\Models\Receipt\InstrumentReadings;
 use App\Models\Stead;
-use Illuminate\Database\Eloquent\Model;
+use App\MyModel;
 
-class BillingInvoice extends Model
+class BillingInvoice extends MyModel
 {
 
 
@@ -68,6 +68,32 @@ class BillingInvoice extends Model
         }
         return false;
     }
+
+    /**
+     * добавить счет
+     *
+     * @param $stead_id участок
+     * @param $price сумма
+     * @param $title счет на что
+     * @param $receipt_type тип счета
+     * @return BillingInvoice|false
+     */
+    public static function createInvoiceForStead($stead_id, $price, $title, $receipt_type, $date = false)
+    {
+        $invoice = new self();
+        $invoice->title = $title;
+        $invoice->stead_id = $stead_id;
+        $invoice->type = $receipt_type;
+        $invoice->price = (float)$price;
+        if ($date) {
+            $invoice->created_at = $date;
+        }
+        if ($invoice->logAndSave('Добавлен счет', $stead_id)) {
+            return $invoice;
+        }
+        return false;
+    }
+
 
     /**
      * получить счета для участка

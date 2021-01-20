@@ -53,19 +53,19 @@ class ReceiptController extends Controller
         return view('receipt/index', ['stead' => $steadModel, 'receipts' => $ReceiptType]);
     }
 
-    public function ticket($id, Request $request)
-    {
-        $stead = $request->stead;
-        $steadModel = Stead::where(['number' => $stead])->first();
-        $steadModel->setSession($request);
-        if ($request->save == "on") {
-            $steadModel->saveData($request);
-        }
-        $ReceiptType = ReceiptType::findOrFail((int)$id);
-        $ReceiptType->saveInstrumentReadings($steadModel, $request);
-        $cash = $ReceiptType->getCash($steadModel->id);
-        return view('receipt/ticket', ['stead' => $steadModel, 'receipt' => 1, 'devices' => $ReceiptType, 'cash' => $cash]);
-    }
+//    public function ticket($id, Request $request)
+//    {
+//        $stead = $request->stead;
+//        $steadModel = Stead::where(['number' => $stead])->first();
+//        $steadModel->setSession($request);
+//        if ($request->save == "on") {
+//            $steadModel->saveData($request);
+//        }
+//        $ReceiptType = ReceiptType::findOrFail((int)$id);
+//        $ReceiptType->saveInstrumentReadings($steadModel, $request);
+//        $cash = $ReceiptType->getCash($steadModel->id);
+//        return view('receipt/ticket', ['stead' => $steadModel, 'receipt' => 1, 'devices' => $ReceiptType, 'cash' => $cash]);
+//    }
 
 
 

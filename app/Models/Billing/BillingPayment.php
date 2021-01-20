@@ -2,8 +2,10 @@
 
 namespace App\Models\Billing;
 
+use App\Models\Receipt\DeviceRegisterModel;
 use App\Models\Receipt\InstrumentReadings;
 use App\Models\Log;
+use App\Models\Receipt\MeteringDevice;
 use App\Models\Receipt\ReceiptType;
 use App\Models\Stead;
 use App\MyModel;
@@ -40,7 +42,18 @@ class BillingPayment extends MyModel
       return $this->hasOne(ReceiptType::class, 'id', 'type');
     }
 
+    public function getDeviceReestrForPayment()
+    {
+        $type = MeteringDevice::where('type_id', $this->payment_type)->pluck('id');
+        return $this->hasMany(DeviceRegisterModel::class, 'stead_id', 'stead_id')->whereIn('type_id', $type);
+    }
 
+    /**
+     * todo зачем это????
+     *
+     * @param array $attributes
+     * @return array
+     */
     public function steadObject(array $attributes = [])
     {
         $data = [];
@@ -197,6 +210,11 @@ class BillingPayment extends MyModel
         return true;
     }
 
+    /**
+     * проверить наличие данного платежа в базе
+     *
+     * @return bool
+     */
     public function checkNoDublicate()
     {
         $find = BillingPayment::query()
@@ -232,28 +250,30 @@ class BillingPayment extends MyModel
 
     /**
      * установить показания счетчиков по этому платежу
+     * todo добавить деталирвки в отдачу
+     *
      */
     public function setMeterReading($data)
     {
         if ($data) {
             foreach ($data as $item) {
                 $meter = InstrumentReadings::firstOrNew([
-                    'payment_id' => $this->id,
+                    'value' => (int)$item['value'],
                     'device_id' =>  $item['device']
                 ]);
+                $meter->payment_id = $this->id;
                 $meter->stead_id = $this->stead_id;
                 $meter->value = (int)$item['value'];
                 $meter->created_at = $this->payment_date;
-                if ($item['value']) {
-                    $meter->logAndSave('Показания из платежки');
-                } else {
-                    if ($meter->id) {
-                        $meter->delete();
+                if ($meter->checkForLatestData()) {
+                    if ($meter->logAndSave('Показания из платежки')) {
+                        return true;
                     }
                 }
             }
 //            BillingInvoice::createInvoiceCommunalForPayment($this);
         }
+        return false;
     }
 
     /**

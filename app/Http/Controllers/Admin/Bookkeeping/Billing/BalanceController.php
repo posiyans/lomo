@@ -7,6 +7,7 @@ use App\Http\Resources\Admin\Bookkeeping\AdminPaymentResource;
 use App\Models\Billing\BillingInvoice;
 use App\Models\Billing\BillingPayment;
 use App\Models\Billing\BillingReestr;
+use App\Models\Receipt\ReceiptType;
 use App\Models\Stead;
 use App\Permission;
 use App\Role;
@@ -27,8 +28,10 @@ class BalanceController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * список участков  балансом
      *
+     * $request->category  с долгами, или без
+     * $request->payment когда был последний платеж
      * @return \Illuminate\Http\Response
      */
     public function list(Request $request)
@@ -38,13 +41,10 @@ class BalanceController extends Controller
             $cat = [];
             if ($request->category) {
                 foreach ($steads as $stead) {
-                    if ($request->category == 1 && $stead->getBalans() >= 0) {
+                    $balans = $stead->getBalans($request->get('receipt_type', false));
+                    if ($request->category == 1 && $balans >= 0) {
                         $cat[] = $stead;
-                    } else if ($request->category == 2 && $stead->getBalans() < 0) {
-                        $cat[] = $stead;
-                    } else if ($request->category == 3 && $stead->getBalans(2) < 0) {
-                        $cat[] = $stead;
-                    } else if ($request->category == 4 && $stead->getBalans(1) < 0) {
+                    } else if ($request->category == 2 && $balans < 0) {
                         $cat[] = $stead;
                     }
                 }
@@ -53,22 +53,22 @@ class BalanceController extends Controller
             }
             $data = [];
             if ($request->payment && $request->month) {
-                $now = strtotime("-".(int)$request->month." month");
-                foreach ($cat as $item) {
-                    if ($item->lastPayment) {
-                        $d = strtotime($item->lastPayment->payment_date);
-//                        return json_encode([$d, $now]);
-                        if ($request->payment == 1 && $d < $now) {
-                            $data[] = $item;
-                        } else if ($request->payment == 2 && $d > $now) {
-                            $data[] = $item;
-                        }
-                    } else {
-                        if ($request->payment == 1) {
-                          $data[] = $item;
-                        }
-                    }
-                }
+//                $now = strtotime("-".(int)$request->month." month");
+//                foreach ($cat as $item) {
+//                    if ($item->lastPayment) {
+//                        $d = strtotime($item->lastPayment->payment_date);
+////                        return json_encode([$d, $now]);
+//                        if ($request->payment == 1 && $d < $now) {
+//                            $data[] = $item;
+//                        } else if ($request->payment == 2 && $d > $now) {
+//                            $data[] = $item;
+//                        }
+//                    } else {
+//                        if ($request->payment == 1) {
+//                          $data[] = $item;
+//                        }
+//                    }
+//                }
             } else {
                 $data = $cat;
             }
@@ -78,16 +78,24 @@ class BalanceController extends Controller
                 $i = 1;
                 foreach ($data as $item) {
                     if ($i > $request->limit * ($request->page-1) && $i <= $request->limit * ($request->page)) {
-                        $r[] = [
+                        $temp = [
                             'id'=>$item->id,
                             'number' => $item->number,
                             'size' => $item->size,
-                            'balans' => round($item->getBalans(), 2),
-                            'balans_1' => round($item->getBalans(1), 2),
-                            'balans_2' => round($item->getBalans(2), 2),
+                            'balans_all' => round($item->getBalans(), 2),
+//                            'balans_1' => round($item->getBalans(1), 2),
+//                            'balans_2' => round($item->getBalans(2), 2),
                             'last_payment' => $item->lastPayment,
                         ];
+                        $types = ReceiptType::getReceiptTypeIds();
+                        $temp_balans = [];
+                        foreach ($types  as $type) {
+                            $temp_balans[$type] = round($item->getBalans($type), 2);
+                        }
+                        $temp['balans'] =  $temp_balans;
+                        $r[] = $temp;
                     }
+
                     $i++;
                 }
             } else {

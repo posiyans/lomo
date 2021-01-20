@@ -12,17 +12,12 @@
     </el-table-column>
     <el-table-column align="center" label="Баланс" width="100px">
       <template slot-scope="{row}">
-        <span :class="row.balans | balansFilter">{{ row.balans }}</span>
+        <span :class="row.balans_all | balansFilter">{{ row.balans_all }}</span>
       </template>
     </el-table-column>
-    <el-table-column align="center" label="Взносы" width="100px">
+    <el-table-column v-for="item in type" :key="item.id" align="center" :label="item.name" width="100px">
       <template slot-scope="{row}">
-        <span :class="row.balans_2 | balansFilter">{{ row.balans_2 }}</span>
-      </template>
-    </el-table-column>
-    <el-table-column align="center" label="Электричество" width="150px">
-      <template slot-scope="{row}">
-        <span :class="row.balans_1 | balansFilter">{{ row.balans_1 }}</span>
+        <span :class="row.balans[item.id] | balansFilter">{{ row.balans[item.id] }}</span>
       </template>
     </el-table-column>
     <el-table-column align="center" width="150px" label="Последний платеж">
@@ -59,6 +54,10 @@ export default {
     }
   },
   props: {
+    type: {
+      type: Array,
+      default: () => { [] }
+    },
     list: {
       type: Array,
       default: () => { [] }

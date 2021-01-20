@@ -7,6 +7,13 @@ export function fetchInvoiceInfo(id) {
   })
 }
 
+export function addInvoiceForReadings(id) {
+  return request({
+    url: '/api/v1/admin/billing/insrumet-readings/add-invoice/' + id,
+    method: 'post'
+  })
+}
+
 // export function updatePaymentInfo(id, data) {
 //   return request({
 //     url: '/api/v1/admin/billing/payment/' + id,
