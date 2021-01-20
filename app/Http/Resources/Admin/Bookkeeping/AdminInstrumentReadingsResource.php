@@ -16,7 +16,12 @@ class AdminInstrumentReadingsResource extends JsonResource
     {
         $data = parent::toArray($request);
         $data['price'] = $this->getPrice();
-        $data['type_name'] = $this->MeteringDevice->name;
+        $data['type_name'] = $this->deviceTypeName();
+        $temp = $this->getPreviousReadings();
+        $data['prev_value'] = $temp;
+        $data['delta'] = $this->value - $temp;
+        $data['summa'] = ($this->value - $temp) * $data['price'];
+
         return $data;
     }
 }

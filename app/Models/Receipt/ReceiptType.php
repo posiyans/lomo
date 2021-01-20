@@ -62,4 +62,10 @@ class ReceiptType extends MyModel
         }
         return $cash;
     }
+
+
+    public static function getReceiptTypeIds()
+    {
+        return self::pluck('id');
+    }
 }

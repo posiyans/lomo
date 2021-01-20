@@ -97,25 +97,22 @@ export default {
         })
     },
     saveData() {
-      console.log('savedata')
       if (this.listQuery.value > 0) {
         addInstrumentReadings(this.stead_id, this.listQuery)
           .then(response => {
             if (response.data.status) {
               if (response.data.error) {
-                this.$confirm(response.data.data, 'Внимание!', {
-                  confirmButtonText: 'Сохранить',
-                  cancelButtonText: 'Отмена',
-                  type: 'warning'
-                }).then(() => {
-                  this.listQuery.test = false
-                  this.saveData()
-                }).catch(() => {
+                this.$alert(response.data.data, 'Внимание!', {
+                  confirmButtonText: 'Ок',
+                  type: 'warning',
+                  callback: action => {
+                    this.dialogVisible = false
+                  }
                 })
               } else {
                 this.$message('Данные успешно сохранены')
+                this.dialogVisible = false
               }
-              // this. = response.data.data
             } else {
               if (response.data.data) {
                 this.$message.error(response.data.data)

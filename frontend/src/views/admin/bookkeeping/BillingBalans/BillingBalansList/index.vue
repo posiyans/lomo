@@ -6,6 +6,9 @@
       <el-select v-model="listQuery.category" placeholder="Долги" clearable class="filter-item" style="width: 130px" @change="changeCategory">
         <el-option v-for="item in categoryArray" :key="item.key" :label="item.value" :value="item.key" />
       </el-select>
+      <el-select v-if="listQuery.category" v-model="listQuery.receipt_type" placeholder="по" clearable class="filter-item" style="width: 130px" @change="changeCategory">
+        <el-option v-for="item in receiptTypes" :key="item.id" :label="item.name" :value="item.id" />
+      </el-select>
       <el-select v-model="listQuery.payment" placeholder="Последний платеж" clearable class="filter-item" style="width: 200px" @change="changePayment">
         <el-option v-for="item in statusArray" :key="item.key" :label="item.value" :value="item.key" />
       </el-select>
@@ -17,7 +20,7 @@
         Добавить выписку
       </el-button>
     </div>
-    <component :is="componentName" :list="list" :list-loading="listLoading" />
+    <component :is="componentName" :list="list" :list-loading="listLoading" :type="receiptTypes" />
     <LoadMore :key="key" :list-query="listQuery" :func="func" @setList="setList" />
   </div>
 </template>
@@ -28,6 +31,7 @@ import waves from '@/directive/waves'
 import LoadMore from '@/components/LoadMore'
 import Mobile from './View/Table/Mobile'
 import Desktop from './View/Table/Desktop'
+import { fetchReceiptTypeList } from '@/api/admin/setting/receipt'
 
 export default {
   name: 'ArticleList',
@@ -41,22 +45,6 @@ export default {
       if (val > 0) {
         return 'text-green'
       }
-    },
-    categoryFilter(val) {
-      if (val) {
-        return val
-      }
-      return 'Укажете категорию'
-    },
-    statusFilter(status) {
-      return status ? 'success' : 'info'
-    },
-
-    publicFilter(status) {
-      return status === 1 ? 'Опубликовано' : 'Черновик'
-    },
-    commentFilter(status) {
-      return status === 1 ? 'Разрешены' : 'Отключены'
     }
   },
   data() {
@@ -72,16 +60,7 @@ export default {
         {
           key: 2,
           value: 'С долгами'
-        },
-        {
-          key: 3,
-          value: 'Долги по взносам'
-        },
-        {
-          key: 4,
-          value: 'Долги по электроэнергии'
         }
-
       ],
       statusArray: [
         {
@@ -96,13 +75,15 @@ export default {
       listLoading: true,
       key: 0,
       listQuery: {
+        receipt_type: '',
         page: 1,
         limit: 50,
         find: null,
         payment: null,
         category: null,
         month: 1
-      }
+      },
+      receiptTypes: []
     }
   },
   computed: {
@@ -121,8 +102,21 @@ export default {
   },
   mounted() {
     this.handleFilter()
+    this.getTypeList()
   },
   methods: {
+    getTypeList() {
+      fetchReceiptTypeList()
+        .then(response => {
+          if (response.data.status) {
+            this.receiptTypes = response.data.data
+          } else {
+            if (response.data.data) {
+              this.$message.error(response.data.data)
+            }
+          }
+        })
+    },
     setList(val) {
       this.list = val
       this.listLoading = false
@@ -177,7 +171,6 @@ export default {
     handleFilter() {
       this.listQuery.page = 1
       this.key++
-      // this.getList()
       this.listLoading = true
     }
   }

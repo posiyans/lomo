@@ -32,26 +32,18 @@ class ElectroSteadController extends Controller
     {
         $stead = Stead::find($id);
         if ($stead) {
+
             $query = InstrumentReadings::where('stead_id', $id);
-            if ($request->type_id) {
-                $query->where('device_id', $request->type_id);
-            } else {
-                if ($request->primaryType) {
-                    $types = MeteringDevice::where('type_id', $request->primaryType)
-                        ->where('enable', 1)
-                        ->pluck('id');
-//                return $types;
-                    $query->whereIn('device_id', $types);
-                }
+            if ($request->type_id || $request->primaryType) {
+                $types_id = MeteringDevice::getDeviceIdForStead($request->primaryType, $stead->id, $request->type_id);
+                $query->whereIn('device_id', $types_id);
             }
             $items = $query->orderBy('created_at', 'asc')
                 ->paginate($request->limit);
             $rez = ['status' => true];
             $rez['data'] = AdminInstrumentReadingsResource::collection($items);
-//        dd($rez);
             return $rez;
         }
-
     }
 
     public function info(Request $request)
@@ -59,6 +51,13 @@ class ElectroSteadController extends Controller
         return 'info';
     }
 
+    /**
+     * добавить показания прибора
+     *
+     * @param $id участка дял проверки
+     * @param Request $request
+     * @return array
+     */
     public function addInstrumentReadings($id, Request $request)
     {
         $device_id = $request->device_id;
@@ -67,8 +66,8 @@ class ElectroSteadController extends Controller
             $device = DeviceRegisterModel::find($device_id);
             if ($device && $device->stead_id == $id) {
                 $last = $device->getLastReading();
-                if ($last && $last->value > $value && $request->test == true) {
-                    return ['status' => true, 'error'=> true, 'data'=>'Предыдущие показания больше теущих! Сохраниить?'];
+                if ($last && $last->value > $value) {
+                    return ['status' => true, 'error'=> true, 'data'=>'Предыдущие показания больше текущих!'];
                 }
                 $readding = new InstrumentReadings();
                 $readding->stead_id = $device->stead_id;
@@ -78,7 +77,6 @@ class ElectroSteadController extends Controller
                 if ($readding->save()) {
                     return ['status' => true, 'error'=> false, 'data'=>$readding];
                 }
-
             }
 
         }

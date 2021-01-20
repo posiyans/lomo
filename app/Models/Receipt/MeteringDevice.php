@@ -57,6 +57,13 @@ class MeteringDevice extends MyModel
     }
 
 
+    /**
+     * незнаю что
+     *
+     * @param $stead_id
+     * @param int $n
+     * @return float|int|mixed
+     */
     public function getTicket($stead_id, $n=0){
         $receiptType = $this->receiptType;
         $description = '';
@@ -95,6 +102,22 @@ class MeteringDevice extends MyModel
         }
         return $this->cash;
 
+    }
+
+    public static function getDeviceIdForStead($type, $stead_id, $subtype = false)
+    {
+        if ($subtype) {
+            $device = DeviceRegisterModel::where('stead_id', $stead_id)
+                ->where('type_id', $subtype)
+                ->pluck('id');
+        } else {
+            $metering_device = self::where('type_id', $type)->where('enable', 1)->pluck('id');
+            $device = DeviceRegisterModel::where('stead_id', $stead_id)
+                ->whereIn('type_id', $metering_device)
+                ->pluck('id');
+        }
+
+        return $device;
     }
 
 }
