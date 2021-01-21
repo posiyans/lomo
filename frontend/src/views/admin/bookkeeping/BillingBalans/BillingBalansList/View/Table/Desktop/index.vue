@@ -32,7 +32,7 @@
     <el-table-column align="center" label="Actions" width="180px">
       <template slot-scope="scope">
         <router-link :to="'/bookkeping/billing_balance_stead/'+scope.row.id">
-          <el-button type="primary" size="small" icon="el-icon-edit">
+          <el-button type="primary" size="small" icon="el-icon-info">
             Подробнее
           </el-button>
         </router-link>

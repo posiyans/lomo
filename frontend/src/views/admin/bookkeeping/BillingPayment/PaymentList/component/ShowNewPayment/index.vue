@@ -1,74 +1,135 @@
 <template>
   <div class="createPost-container">
-    <el-form ref="reestrForm" :model="postForm" :rules="rules" :label-position="labelPosition" class="form-container" label-width="180px">
-      <div class="pt1 createPost-main-container" style="padding-top: 0; padding-bottom: 0">
-        <el-button v-loading="loading" type="primary" @click="close">
-          Все платежи
-        </el-button>
-      </div>
-      <div class="createPost-main-container billing-bank-reestr-table">
-        <el-table
-          :data="list"
-          border
-          style="width: 100%"
-          :row-class-name="tableRowClassName"
+    <div class="pt1 createPost-main-container" style="padding-top: 0; padding-bottom: 0">
+      <el-button v-loading="loading" type="primary" @click="close">
+        Все платежи
+      </el-button>
+    </div>
+    <div class="createPost-main-container billing-bank-reestr-table">
+      {{ typeName }}
+      <el-table
+        :data="list"
+        border
+        style="width: 100%"
+        :row-class-name="tableRowClassName"
+      >
+        <el-table-column
+          label="Дата"
+          align="center"
+          width="150px"
         >
-          <el-table-column
-            label="Дата"
-            align="center"
-          >
-            <template slot-scope="{ row }">
-              <span>{{ row.payment_date | moment("DD-MM-YYYY HH:mm") }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column
-            v-for="i in sort"
-            :key="i"
-            :label="labelForm[i]"
-            align="center"
-          >
-            <template slot-scope="{row}">
-              <span>{{ row.raw_data[i] }}</span>
-              <span v-if="i == 5">
-                <span v-if="row.stead">
-                  --> <el-tag :type="row | steadFilter" @click="editStead(row)">{{ row.stead.number }}</el-tag>
-                </span>
-                <span v-else>
-                  --> <el-tag :type="row | steadFilter" @click="editStead(row)">---</el-tag>
-                </span>
+          <template slot-scope="{ row }">
+            <span>{{ row.payment_date | moment("DD-MM-YYYY HH:mm") }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="Сумма"
+          align="center"
+          width="80px"
+        >
+          <template slot-scope="{ row }">
+            <span>{{ row.price }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="Участок"
+          align="center"
+          width="150px"
+        >
+          <template slot-scope="{ row }">
+            <span v-if="row.raw_data[2] === row.stead.number">{{ row.stead.number }}</span>
+            <span v-else>
+              {{ row.raw_data[2] }} -> {{ row.stead.number }}
+            </span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="Назначение"
+          align="center"
+          width="150px"
+        >
+          <template slot-scope="{ row }">
+            <span>{{ row.raw_data[3] }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="ФИО"
+          align="center"
+          width="150px"
+        >
+          <template slot-scope="{ row }">
+            <span>{{ row.raw_data[4] }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          v-for="i in sort"
+          :key="i"
+          :label="labelForm[i]"
+          align="center"
+        >
+          <template slot-scope="{row}">
+            <span>{{ row.raw_data[i] }}</span>
+            <span v-if="i == 5">
+              <span v-if="row.stead">
+                --> <el-tag :type="row | steadFilter" @click="editStead(row)">{{ row.stead.number }}</el-tag>
               </span>
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="date"
-            label="Оплата"
-            align="center"
-          >
-            <template slot-scope="{row}">
-              <div v-if="row.dubl">
-                <el-tag type="danger" effect="dark">
-                  Повтор
-                </el-tag>
-              </div>
-              <div v-else>
-                <el-tag type="danger" :effect="row.type | type1EffectFilter" @click="changeType(row, 1)">
-                  <i v-if="row.type == 1" class="el-icon-check" />
-                  Электоэнергия
-                </el-tag>
-                <el-tag type="success" :effect="row.type | type2EffectFilter" @click="changeType(row, 2)">
-                  <i v-if="row.type == 2" class="el-icon-check" />
-                  Взносы
-                </el-tag>
-                <div v-if="row.type == 1">
-                  <el-tag v-if="row.meterReading1">1-{{ row.meterReading1 }}</el-tag>
-                  <el-tag v-if="row.meterReading2">2-{{ row.meterReading2 }}</el-tag>
-                </div>
-              </div>
-            </template>
-          </el-table-column>
-        </el-table>
-      </div>
-    </el-form>
+              <span v-else>
+                --> <el-tag :type="row | steadFilter" @click="editStead(row)">---</el-tag>
+              </span>
+            </span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="date"
+          label="Оплата"
+          align="center"
+        >
+          <template slot-scope="{row}">
+            <div v-if="row.dubl">
+              <el-tag type="danger" effect="dark">
+                Повтор
+              </el-tag>
+            </div>
+            <div v-else>
+
+              <el-dropdown @click.native="dropClick(row)" @command="setType">
+                <span class="el-dropdown-link">
+                  <span v-if="typeName[row.type]">
+                    {{ typeName[row.type].name }}
+                  </span>
+                  <span v-else class="dark-red">-------!</span>
+                  <i class="el-icon-arrow-down el-icon--right" />
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item
+                    v-for="item in typeList"
+                    :key="item.id"
+                    :command="item.id"
+                  >
+                    {{ item.name }}
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+              <!--                <div v-if="row.type == 1">-->
+              <!--                  <el-tag v-if="row.meterReading1">1-{{ row.meterReading1 }}</el-tag>-->
+              <!--                  <el-tag v-if="row.meterReading2">2-{{ row.meterReading2 }}</el-tag>-->
+              <!--                </div>-->
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label=""
+          align="center"
+          width="180px"
+        >
+          <template slot-scope="{ row }">
+            <span v-if="!row.dubl && row.error">
+              <el-button type="success" @click="paymentOk(row)">Подтвердить</el-button>
+            </span>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
     <div v-if="dialogSteadFormVisible">
       <el-dialog
         title="Укажите участок"
@@ -110,18 +171,10 @@
 </template>
 
 <script>
-import { fetchBillingBankReestrInfo, updateBillingBankReestr, BillingBankReestrParse, publishBillingBankReestr } from '@/api/admin/billing'
-import { searchUser } from '@/api/remote-search'
-import { mapState } from 'vuex'
-import { fetchList } from '@/api/rate'
+
 import UserSteadFind from '@/components/UserSteadFind'
 import { updatePaymentInfo } from '@/api/admin/bookkeping/payment'
-
-const defaultForm = {
-  title: '',
-  ratio_a: 0,
-  ratio_b: 0
-}
+import { fetchReceiptTypeList } from '@/api/admin/setting/receipt'
 
 const labelForm = {
   0: 'Дата',
@@ -165,83 +218,70 @@ export default {
     }
   },
   data() {
-    const validateRequire = (rule, value, callback) => {
-      if (value === '') {
-        this.$message({
-          message: rule.field + ' Обязательное поле',
-          type: 'error'
-        })
-        callback(new Error(' Обязательное поле'))
-      } else {
-        callback()
-      }
-    }
     return {
-      sort: [1, 2, 3, 4],
-      reestr: {
-        data: ''
-      },
+      editType: '',
+      typeList: [],
+      typeName: {},
+      sort: [],
       labelForm,
       editRow: {},
       dialogSteadFormVisible: false,
       dialogMeterReadingFormVisible: false,
-      rateList: [],
       tempStead: {},
-      rate_checked: '',
-      datetime: +new Date(),
-      postForm: Object.assign({}, defaultForm),
       loading: false,
-      userListOptions: [],
-      rules: {
-        // image_uri: [{ validator: validateRequire }],
-        title: [{ validator: validateRequire }]
-        // text: [{ validator: validateRequire }],
-      },
-      tempRoute: {}
+      userListOptions: []
     }
   },
   computed: {
-    ...mapState({
-      device: state => state.app.device
-    }),
-    column() {
-      return ''
-    },
-    exampleRate() {
-      return (6 * this.postForm.ratio_a + this.postForm.ratio_b).toFixed(2)
-    },
-    labelPosition() {
-      return this.device === 'desktop' ? 'left' : 'top'
-    },
-    contentShortLength() {
-      return this.postForm.resume.length
-    },
-    displayTime: {
-      // set and get is useful when the data
-      // returned by the back end api is different from the front end
-      // back end return => "2013-06-25 06:59:25"
-      // front end need timestamp => 1372114765000
-      get() {
-        return (+new Date(this.datetime))
-      },
-      set(val) {
-        this.datetime = new Date(val)
-      }
-    }
   },
   created() {
-    // this.getListRate()
-    // if (this.isEdit) {
-    // const id = this.$route.params && this.$route.params.id
-    // this.fetchData(id)
-    // }
-
-    // Why need to make a copy of this.$route here?
-    // Because if you enter this page and quickly switch tag, may be in the execution of the setTagsViewTitle function, this.$route is no longer pointing to the current page
-    // https://github.com/PanJiaChen/vue-element-admin/issues/1221
-    // this.tempRoute = Object.assign({}, this.$route)
+    this.getTypeList()
   },
   methods: {
+    paymentOk(row) {
+      row.error = false
+      this.savePayment(row)
+    },
+    dropClick(row) {
+      this.editType = row
+    },
+    setType(val) {
+      this.editType.type = val
+      this.savePayment(this.editType)
+    },
+    savePayment(data) {
+      updatePaymentInfo(data.id, data)
+        .then(response => {
+          if (response.data.status) {
+            this.$message('Данные успешно сохранены')
+            // todo вернуть данные наверх!!!!
+            // this. = response.data.data
+          } else {
+            if (response.data.data) {
+              this.$message.error(response.data.data)
+            }
+          }
+        })
+    },
+    getTypeList() {
+      fetchReceiptTypeList()
+        .then(response => {
+          if (response.data.status) {
+            this.typeList = response.data.data
+            response.data.data.forEach(item => {
+              console.log('item')
+              console.log(item)
+
+              this.typeName = Object.assign({}, this.typeName, { [item.id]: item })
+            })
+            console.log(this.typeName)
+          } else {
+            if (response.data.data) {
+              this.$message.error(response.data.data)
+            }
+          }
+        })
+    },
     close() {
       this.$emit('close')
     },
@@ -254,14 +294,6 @@ export default {
         return 'warning-row'
       }
       return ''
-    },
-    publishForm() {
-      publishBillingBankReestr({ reestr: this.reestr })
-    },
-    parseFile() {
-      BillingBankReestrParse({ reestr_id: this.reestr.id }).then(response => {
-        this.reestr = response.data
-      })
     },
     changeType(row, type) {
       if (row.type !== type) {
@@ -307,160 +339,12 @@ export default {
         this.editRow = row
         this.dialogSteadFormVisible = true
       }
-    },
-    // parseFile() {
-    //   this.file = this.$refs.file.files[0]
-    //   readFileInputEventAsArrayBuffer(this.file, arrayBuffer => {
-    //     console.log(arrayBuffer)
-    //     // mammoth.convertToHtml({ arrayBuffer: arrayBuffer })
-    //     //   .then(result => {
-    //     //     this.text = result.value
-    //     //     this.strToarray(result.value)
-    //     //     this.parserOk = true
-    //     //     this.parserButton = true
-    //     //   })
-    //   })
-    // },
-    create_UUID() {
-      var dt = new Date().getTime()
-      var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = (dt + Math.random() * 16) % 16 | 0
-        dt = Math.floor(dt / 16)
-        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16)
-      })
-      return uuid
-    },
-    fetchData(id) {
-      fetchBillingBankReestrInfo({ id: id }).then(response => {
-        if (response.data.status) {
-          this.reestr = response.data.data
-          console.log(this.reestr)
-        }
-      })
-
-      // fetchArticle(id).then(response => {
-      //   this.postForm = response.data
-      //   // this.postForm.allow_comments = Boolean(response.data.allow_comments)
-      //   this.datetime = this.$moment(this.postForm.publish_time)
-      //   this.setTagsViewTitle()
-      //
-      //   // set page title
-      //   this.setPageTitle()
-      // }).catch(err => {
-      //   // console.log(err)
-      // })
-    },
-    setTagsViewTitle() {
-      const title = 'Статья id'
-      const route = Object.assign({}, this.tempRoute, { title: `${title}-${this.postForm.id}` })
-      this.$store.dispatch('tagsView/updateVisitedView', route)
-    },
-    setPageTitle() {
-      const title = 'Статья id'
-      document.title = `${title} - ${this.postForm.id}`
-    },
-    changeRate() {
-      this.postForm.title = this.rate_checked.discription + ' ' + new Date().getFullYear() + ' год'
-      console.log(this.rate_checked.rate.ratio_a)
-      this.postForm.ratio_a = +this.rate_checked.rate.ratio_a
-      // this.postForm.ratio_a = 2
-      this.postForm.ratio_b = +this.rate_checked.rate.ratio_b
-      // this.postForm.ratio_b = 3
-    },
-    getListRate() {
-      fetchList({ type: 2 }).then(response => {
-        this.rateList = response.data.data
-      })
-    },
-    submitForm() {
-      updateBillingBankReestr({ reestr: this.reestr })
-      // if (this.exampleRate > 0) {
-      //   this.$refs['reestrForm'].validate((valid) => {
-      //     if (valid) {
-      //       this.saveForm()
-      //     } else {
-      //       this.$message.error('Введите описание!!!')
-      //     }
-      //   })
-      // } else {
-      //
-      //   this.$message.error('Ничего не начисленно!!!')
-      // }
-      // this.postForm.public = true
-      // this.saveForm()
-    },
-    saveForm() {
-      // createBillingReestr(this.postForm)
-      // this.$notify({
-      //   title: 'успех',
-      //   message: 'Статья успешно опубликована',
-      //   type: 'success',
-      //   duration: 2000
-      // })
-
-    },
-    draftForm() {
-      // this.postForm.public = false
-      this.saveForm()
-    },
-    getRemoteUserList(query) {
-      searchUser(query).then(response => {
-        if (!response.data.items) return
-        this.userListOptions = response.data.items.map(v => v.name)
-      })
     }
+
   }
 }
 </script>
 
 <style scoped>
 
-.billing-bank-reestr-table >>> .warning-row {
-  background: #fff1f1;
-}
-
-  .createPost-main-container {
-    padding: 40px 45px 20px 50px;
-  }
-  .createPost-container {
-    position: relative;
-    .postInfo-container {
-      position: relative;
-      margin-bottom: 10px;
-      .postInfo-container-item {
-        float: left;
-      }
-    }
-    .word-counter {
-      width: 100px;
-      position: absolute;
-      right: 10px;
-      top: 0px;
-    }
-  }
-
-  .article-textarea /deep/ {
-    textarea {
-      padding-right: 40px;
-      resize: none;
-      border: none;
-      border-radius: 0px;
-      border-bottom: 1px solid #bfcbd9;
-    }
-  }
-
-  @media screen and (max-width: 700px) {
-    .createPost-main-container {
-      padding: 40px 6px 20px 6px;
-
-      .postInfo-container {
-        position: relative;
-        margin-bottom: 10px;
-
-        .postInfo-container-item {
-          float: left;
-        }
-      }
-    }
-  }
 </style>

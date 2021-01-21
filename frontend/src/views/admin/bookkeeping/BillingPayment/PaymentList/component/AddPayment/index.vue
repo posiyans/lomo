@@ -6,13 +6,13 @@
         class="upload-demo"
         action="#"
         multiple
-        :limit="50"
+        :limit="100"
         :on-exceed="handleExceed"
         :auto-upload="false"
+        :on-change="onFileChange"
       >
         <el-button slot="trigger" size="small" type="primary">Выбрать файлы</el-button>
-        <el-button style="margin-left: 10px;" size="small" type="success" @click="onFileChange">Загрузить данные</el-button>
-        <div slot="tip" class="el-upload__tip">txt,cvs,xlsx выписки из банка</div>
+        <div slot="tip" class="el-upload__tip">txt,cvs,xlsx выписки из банка, до 100 файлов</div>
       </el-upload>
 
     </div>
@@ -84,7 +84,7 @@ export default {
       this.$emit('close')
     },
     handleExceed(files, fileList) {
-      this.$message.warning(`Ограничение - 10 файлов`)
+      this.$message.warning(`Ограничение - 100 файлов`)
     },
     onFileChange(e) {
       this.data = ''
