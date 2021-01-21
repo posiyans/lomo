@@ -61,7 +61,6 @@
         <tr class="black" :class="{'bg-washed-red': type_error}">
           <td>Тип платежа</td>
           <td>
-            {{ payment.type_depends }}
             <el-dropdown @command="setType">
               <span class="el-dropdown-link">
                 {{ payment.type_name }}<i class="el-icon-arrow-down el-icon--right" />
