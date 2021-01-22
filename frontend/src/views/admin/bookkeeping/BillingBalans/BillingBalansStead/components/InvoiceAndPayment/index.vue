@@ -1,18 +1,18 @@
 <template>
   <div>
+    <el-button type="primary" size="small" plain>Добавить счет</el-button>
     <div class="billing-balans-stead">
       <el-table
         v-loading="listLoading"
         :data="list"
         border
         fit
-        highlight-current-row
         style="width: 100%"
         :row-class-name="tableRowClassName"
         :summary-method="getSummaries"
         show-summary
       >
-        <el-table-column label="Дата" width="100px">
+        <el-table-column label="Дата" align="center" width="100px">
           <template slot-scope="{row}">
             <div v-if="row.type == 'invoice'">
               <span>{{ row.data.created_at | moment('DD-MM-YYYY') }}</span>
@@ -39,28 +39,28 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="Кредит" width="100px" prop="payment" align="center">
-          <template slot-scope="{row}">
-            <div v-if="row.type == 'payment'">
-              <div v-if="row.data.discription">
-                <div class="relative dib pr2 pt2">
-                  <div class="absolute top-0 right-0 dark-red fw6">!</div>
-                  <el-popover
-                    placement="top"
-                    width="200"
-                    trigger="click"
-                    :content="row.data.discription"
-                  >
-                    <span slot="reference">{{ row.data.price }}</span>
-                  </el-popover>
-                </div>
-              </div>
-              <div v-else>
-                <span>{{ row.data.price }}</span>
-              </div>
-            </div>
-          </template>
-        </el-table-column>
+        <!--        <el-table-column label="Кредит" width="100px" prop="payment" align="center">-->
+        <!--          <template slot-scope="{row}">-->
+        <!--            <div v-if="row.type == 'payment'">-->
+        <!--              <div v-if="row.data.discription">-->
+        <!--                <div class="relative dib pr2 pt2">-->
+        <!--                  <div class="absolute top-0 right-0 dark-red fw6">!</div>-->
+        <!--                  <el-popover-->
+        <!--                    placement="top"-->
+        <!--                    width="200"-->
+        <!--                    trigger="click"-->
+        <!--                    :content="row.data.discription"-->
+        <!--                  >-->
+        <!--                    <span slot="reference">{{ row.data.price }}</span>-->
+        <!--                  </el-popover>-->
+        <!--                </div>-->
+        <!--              </div>-->
+        <!--              <div v-else>-->
+        <!--                <span>{{ row.data.price }}</span>-->
+        <!--              </div>-->
+        <!--            </div>-->
+        <!--          </template>-->
+        <!--        </el-table-column>-->
         <el-table-column label="Взносы" width="100px" prop="payment2" align="center">
           <template slot-scope="{row}">
             <div v-if="row.type == 'payment' && row.data.type == 2">
@@ -77,13 +77,13 @@
         </el-table-column>
         <el-table-column align="center" label="Actions">
           <template slot-scope="{row}">
-            <el-button type="primary" size="small" icon="el-icon-edit" @click="showMore(row)">
+            <el-button type="primary" size="small" icon="el-icon-info" @click="showMore(row)">
               Подробнее
             </el-button>
           </template>
         </el-table-column>
       </el-table>
-      <PaymentInfo v-if="showPaymentInfo" :payment="itemPayment" @close="closePaymentInfo" />
+      <PaymentInfo v-if="showPaymentInfo" :payment_id="itemPayment.id" @close="closePaymentInfo" />
       <el-dialog title="Детали платежа" :visible.sync="dialogPaymentInfoVisible">
         <div v-if="rowShow.data">
           <div>
@@ -160,7 +160,7 @@ import { fetchBillingBalansSteadInfo } from '@/api/admin/billing'
 import { updatePaymentInfo } from '@/api/admin/bookkeping/payment'
 // import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import waves from '@/directive/waves'
-import PaymentInfo from './components/PaymetnInfo'
+import PaymentInfo from '@/components/BillingPaymetnInfo'
 
 export default {
   components: { PaymentInfo },

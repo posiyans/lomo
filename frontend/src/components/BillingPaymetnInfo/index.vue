@@ -61,7 +61,6 @@
         <tr class="black" :class="{'bg-washed-red': type_error}">
           <td>Тип платежа</td>
           <td>
-            {{ payment.type_depends }}
             <el-dropdown @command="setType">
               <span class="el-dropdown-link">
                 {{ payment.type_name }}<i class="el-icon-arrow-down el-icon--right" />
@@ -82,14 +81,28 @@
         <tr v-if="payment.type_depends">
           <td>Показания</td>
           <td>
-            <div class="flex">
-              <div v-for="dep in payment.depends" :key="dep.id" class="b--dark-green br2 b--solid bw1 mh1 ph2 pv1" @click="setMetering(dep)">
-                {{ dep.name }}:
-                <span v-if="payment.instr_read['d' + dep.id]">
+            <div v-if="payment.depends.length > 0" class="flex">
+              <div
+                v-for="dep in payment.depends"
+                :key="dep.id"
+                class="flex br2 b--solid bw1 mh1 ph2 pv1"
+                :class="{'b--dark-green': payment.instr_read['d' + dep.id] && payment.instr_read['d' + dep.id].value, 'b--dark-red': !payment.instr_read['d' + dep.id]}"
+                @click="setMetering(dep)"
+              >
+                <div>
+                  <div>
+                    {{ dep.name[1] }}:
+                  </div>
+                  <div class="f7 gray">
+                    sn: {{ dep.serial_number }}
+                  </div>
+                </div>
+                <div v-if="payment.instr_read['d' + dep.id]">
                   {{ payment.instr_read['d' + dep.id].value }}
-                </span>
+                </div>
               </div>
             </div>
+            <div v-else class="red"> Приборы не найдены</div>
           </td>
           <td />
         </tr>
@@ -121,7 +134,7 @@
 </template>
 
 <script>
-import { updatePaymentInfo } from '@/api/admin/bookkeping/payment'
+import { updatePaymentInfo, fetchPaymentInfo } from '@/api/admin/bookkeping/payment'
 import ChangeMetersData from '@/components/Bookkeeping/ChangeMetersData'
 import { fetchReceiptTypeList } from '@/api/admin/setting/receipt'
 import UserSteadFind from '@/components/UserSteadFind'
@@ -132,17 +145,14 @@ export default {
     UserSteadFind
   },
   props: {
-    payment: {
-      type: Object,
-      default: () => ({})
-    },
-    showDialog: {
-      type: Boolean,
-      default: false
+    paymentId: {
+      type: [Number, String],
+      default: ''
     }
   },
   data() {
     return {
+      payment: {},
       findSteadShow: false,
       dialogVisible: true,
       meteringShow: false,
@@ -160,9 +170,22 @@ export default {
     }
   },
   mounted() {
+    this.getPaymetData()
     this.getReceipt()
   },
   methods: {
+    getPaymetData() {
+      fetchPaymentInfo(this.payment_id)
+        .then(response => {
+          if (response.data.status) {
+            this.payment = response.data.data
+          } else {
+            if (response.data.data) {
+              this.$message.error(response.data.data)
+            }
+          }
+        })
+    },
     saveNewStead() {
       this.findSteadShow = false
       this.payment.stead = this.tempStead
@@ -246,7 +269,10 @@ export default {
       updatePaymentInfo(this.payment.id, this.payment)
         .then(response => {
           if (response.data.status) {
-            this.$message('Данные успешно сохранены')
+            if (!response.data.device) {
+              this.$message.error('Ошибка при добавлении показаний!')
+            }
+            this.getPaymetData()
             // todo вернуть данные наверх!!!!
             // this. = response.data.data
           } else {

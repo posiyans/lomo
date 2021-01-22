@@ -6,7 +6,6 @@
       </el-button>
     </div>
     <div class="createPost-main-container billing-bank-reestr-table">
-      {{ typeName }}
       <el-table
         :data="list"
         border
@@ -38,45 +37,25 @@
         >
           <template slot-scope="{ row }">
             <span v-if="row.raw_data[2] === row.stead.number">{{ row.stead.number }}</span>
-            <span v-else>
+            <span v-else class="dark-red" @click="editStead(row)">
               {{ row.raw_data[2] }} -> {{ row.stead.number }}
             </span>
           </template>
         </el-table-column>
         <el-table-column
-          label="Назначение"
+          label="ФИО"
           align="center"
-          width="150px"
         >
           <template slot-scope="{ row }">
             <span>{{ row.raw_data[3] }}</span>
           </template>
         </el-table-column>
         <el-table-column
-          label="ФИО"
+          label="Назначение"
           align="center"
-          width="150px"
         >
           <template slot-scope="{ row }">
             <span>{{ row.raw_data[4] }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          v-for="i in sort"
-          :key="i"
-          :label="labelForm[i]"
-          align="center"
-        >
-          <template slot-scope="{row}">
-            <span>{{ row.raw_data[i] }}</span>
-            <span v-if="i == 5">
-              <span v-if="row.stead">
-                --> <el-tag :type="row | steadFilter" @click="editStead(row)">{{ row.stead.number }}</el-tag>
-              </span>
-              <span v-else>
-                --> <el-tag :type="row | steadFilter" @click="editStead(row)">---</el-tag>
-              </span>
-            </span>
           </template>
         </el-table-column>
         <el-table-column
@@ -346,5 +325,7 @@ export default {
 </script>
 
 <style scoped>
-
+  .billing-bank-reestr-table >>> .warning-row {
+    background: #fff1f1;
+  }
 </style>

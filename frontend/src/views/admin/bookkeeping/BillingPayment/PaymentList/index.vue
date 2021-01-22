@@ -110,6 +110,8 @@ export default {
     closeShowPaymentForm() {
       this.show = 0
       this.newList = []
+      this.listQuery.page = 1
+      this.key++
     },
     showPayment(data) {
       this.loadMoreDisable = true

@@ -255,6 +255,7 @@ class BillingPayment extends MyModel
      */
     public function setMeterReading($data)
     {
+        $status = true;
         if ($data) {
             foreach ($data as $item) {
                 $meter = InstrumentReadings::firstOrNew([
@@ -266,14 +267,16 @@ class BillingPayment extends MyModel
                 $meter->value = (int)$item['value'];
                 $meter->created_at = $this->payment_date;
                 if ($meter->checkForLatestData()) {
-                    if ($meter->logAndSave('Показания из платежки')) {
-                        return true;
+                    if (!$meter->logAndSave('Показания из платежки')) {
+                        $status = false;
                     }
+                } else {
+                    $status = false;
                 }
             }
 //            BillingInvoice::createInvoiceCommunalForPayment($this);
         }
-        return false;
+        return $status;
     }
 
     /**

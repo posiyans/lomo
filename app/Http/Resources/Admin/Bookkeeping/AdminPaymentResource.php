@@ -26,7 +26,7 @@ class AdminPaymentResource extends JsonResource
                 $dep = $this->getDeviceReestrForPayment;
                 $dep_temp = [];
                 foreach ($dep as $item) {
-                  $dep_temp[] = ['id' => $item->id, 'name' => $item->getTypeName(), $item];
+                  $dep_temp[] = ['id' => $item->id, 'name' => $item->getTypeName(), 'serial_number' => $item->serial_number];
                 }
 
                 $data['depends'] = $dep_temp;

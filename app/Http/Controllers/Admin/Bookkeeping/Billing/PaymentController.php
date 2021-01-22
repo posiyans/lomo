@@ -93,7 +93,7 @@ class PaymentController extends Controller
     public function show($id)
     {
         $data= BillingPayment::find($id);
-        return new AdminPaymentResource($data);
+        return ['status' => true, 'data' => new AdminPaymentResource($data)];
 //        return json_encode(['status'=>true, 'data'=>$data]);
     }
 
@@ -125,10 +125,11 @@ class PaymentController extends Controller
 
 //        $payment->raw_data = $request->raw_data ? $request->raw_data : $payment->raw_data;
         if ($payment->save()) {
+            $device = true;
             if ($request->type_depends) {
-                $payment->setMeterReading($request->instr_read);
+                $device = $payment->setMeterReading($request->instr_read);
             }
-            return json_encode(['status'=>true, 'data'=>new AdminPaymentResource($payment)]);
+            return json_encode(['status'=>true, 'data'=>new AdminPaymentResource($payment), 'device' => $device]);
         }
         return json_encode(['status'=>false]);
 
