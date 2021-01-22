@@ -59,7 +59,11 @@ class InstrumentReadings extends MyModel
     }
 
 
-
+    /**
+     * проверить значение показания на то что они больше предыдущих
+     *
+     * @return bool
+     */
     public function checkForLatestData()
     {
         $item = self::query()
@@ -69,7 +73,20 @@ class InstrumentReadings extends MyModel
         if ($item) {
             return false;
         }
-        return true;
+        $item = self::query()
+            ->where('device_id', $this->device_id)
+            ->where('value', '<', $this->value)
+            ->first();
+        if ($item) {
+            return true;
+        }
+        $item = DeviceRegisterModel::query()
+            ->where('id', $this->device_id)
+            ->first();
+        if ($item && $item->initial_data < $this->value) {
+            return true;
+        }
+        return false;
     }
 
 

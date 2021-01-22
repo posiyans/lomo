@@ -13,24 +13,9 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Номер участка" align="center" width="125px">
-        <template slot-scope="{row}">
-          <el-tag style="cursor: pointer" @click="showStead(row.stead_id)">
-            {{ row.stead.number }}
-          </el-tag>
-          <span v-if="row.error">
-            ({{ row.raw_data[2] }})
-          </span>
-        </template>
-      </el-table-column>
       <el-table-column label="Время" align="center">
         <template slot-scope="{row}">
           <span>{{ row.payment_date | moment("DD-MM-YYYY HH:mm") }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="Назначение" align="center">
-        <template slot-scope="{row}">
-          <span class="do-not-carry">{{ row.raw_data[4] }}</span>
         </template>
       </el-table-column>
       <el-table-column label="Сумма" align="center">
@@ -53,6 +38,21 @@
           </div>
         </template>
       </el-table-column>
+      <el-table-column label="Назначение" align="center">
+        <template slot-scope="{row}">
+          <span class="do-not-carry">{{ row.raw_data[4] }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="Номер участка" align="center" width="125px">
+        <template slot-scope="{row}">
+          <el-tag style="cursor: pointer" @click="showStead(row.stead_id)">
+            {{ row.stead.number }}
+          </el-tag>
+          <span v-if="row.error">
+            ({{ row.raw_data[2] }})
+          </span>
+        </template>
+      </el-table-column>
       <el-table-column label="Тип" align="center">
         <template slot-scope="{row}">
           <span>
@@ -73,12 +73,12 @@
         </template>
       </el-table-column>
     </el-table>
-    <PaymentInfo v-if="showPaymentInfo" :payment="itemPayment" @close="closePaymentInfo" />
+    <PaymentInfo v-if="showPaymentInfo" :payment_id="itemPayment.id" @close="closePaymentInfo" />
   </div>
 </template>
 
 <script>
-import PaymentInfo from './../../component/PaymetnInfo'
+import PaymentInfo from '@/components/BillingPaymetnInfo'
 
 export default {
   components: {
