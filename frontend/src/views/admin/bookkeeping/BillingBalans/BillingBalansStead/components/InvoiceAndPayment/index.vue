@@ -32,47 +32,10 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="Дебет" width="100px" prop="invoice" align="center">
+        <el-table-column v-for="item in receiptTypes" :key="item.id" align="center" :label="item.name" :prop="item.id" width="150px">
           <template slot-scope="{row}">
-            <div v-if="row.type == 'invoice'">
-              <span>{{ row.data.price }}</span>
-            </div>
-          </template>
-        </el-table-column>
-        <!--        <el-table-column label="Кредит" width="100px" prop="payment" align="center">-->
-        <!--          <template slot-scope="{row}">-->
-        <!--            <div v-if="row.type == 'payment'">-->
-        <!--              <div v-if="row.data.discription">-->
-        <!--                <div class="relative dib pr2 pt2">-->
-        <!--                  <div class="absolute top-0 right-0 dark-red fw6">!</div>-->
-        <!--                  <el-popover-->
-        <!--                    placement="top"-->
-        <!--                    width="200"-->
-        <!--                    trigger="click"-->
-        <!--                    :content="row.data.discription"-->
-        <!--                  >-->
-        <!--                    <span slot="reference">{{ row.data.price }}</span>-->
-        <!--                  </el-popover>-->
-        <!--                </div>-->
-        <!--              </div>-->
-        <!--              <div v-else>-->
-        <!--                <span>{{ row.data.price }}</span>-->
-        <!--              </div>-->
-        <!--            </div>-->
-        <!--          </template>-->
-        <!--        </el-table-column>-->
-        <el-table-column label="Взносы" width="100px" prop="payment2" align="center">
-          <template slot-scope="{row}">
-            <div v-if="row.type == 'payment' && row.data.type == 2">
-              <span>{{ row.data.price }}</span>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column label="Элект-во" prop="payment1" width="100px" align="center">
-          <template slot-scope="{row}">
-            <div v-if="row.type == 'payment' && row.data.type == 1">
-              <span>{{ row.data.price }}</span>
-            </div>
+            <span v-if="row.type =='payment' && row.data.type === item.id">{{ row.data.price | formatPrice }}</span>
+            <span v-if="row.type =='invoice' && row.data.type === item.id">-{{ row.data.price | formatPrice }}</span>
           </template>
         </el-table-column>
         <el-table-column align="center" label="Actions">
@@ -83,87 +46,21 @@
           </template>
         </el-table-column>
       </el-table>
-      <PaymentInfo v-if="showPaymentInfo" :payment_id="itemPayment.id" @close="closePaymentInfo" />
-      <el-dialog title="Детали платежа" :visible.sync="dialogPaymentInfoVisible">
-        <div v-if="rowShow.data">
-          <div>
-            Дата оплаты: {{ rowShow.data.payment_date }}
-          </div>
-          <div>
-            Назначение платежа: {{ rowShow.data.discription }}
-          </div>
-          <div>
-            ФИО: {{ rowShow.data.raw_data.val6 }}
-          </div>
-          <div>
-            Сумма: {{ rowShow.data.price }} руб.
-          </div>
-          <div>
-            Оплата:
-            <el-tag type="danger" :effect="rowShow.data.type | type1EffectFilter" @click="selectElect()">
-              <i v-if="rowShow.data.type == 1" class="el-icon-check" />
-              Электоэнергия
-            </el-tag>
-            <el-tag type="success" :effect="rowShow.data.type | type2EffectFilter" @click="rowShow.data.type = 2">
-              <i v-if="rowShow.data.type == 2" class="el-icon-check" />
-              Взносы
-            </el-tag>
-            <div v-if="rowShow.data.type == 1">
-              <div v-if="rowShow.data.meterReading1" class="text-red mt2 mb2">
-                Показания день: <b>{{ rowShow.data.meterReading1 }}</b> кв*ч
-              </div>
-              <div v-if="rowShow.data.meterReading2" class="text-green mt2 mb2">
-                Показания ночь: <b>{{ rowShow.data.meterReading2 }}</b> кв*ч
-              </div>
-            </div>
-          </div>
-          <div>
-            Участок:
-          </div>
-          {{ rowShow }}
-        </div>
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="dialogPaymentInfoVisible = false">Закрыть</el-button>
-          <el-button type="primary" @click="savePaymenInfo">Сохранить</el-button>
-        </span>
-      </el-dialog>
-      <div v-if="dialogMeterReadingFormVisible">
-        <el-dialog title="Уточнить участок" :visible.sync="dialogMeterReadingFormVisible">
-          <div class="mb2">{{ rowShow.data.discription }}</div>
-          <el-form label-position="top">
-            <el-form-item label="Показания день">
-              <el-input
-                v-model="rowShow.data.meterReading1"
-                placeholder="Показания день"
-                prefix-icon="el-icon-search"
-              />
-            </el-form-item>
-            <el-form-item label="Показания ночь">
-              <el-input
-                v-model="rowShow.data.meterReading2"
-                placeholder="Показания ночь"
-                prefix-icon="el-icon-search"
-              />
-            </el-form-item>
-          </el-form>
-          <span slot="footer" class="dialog-footer">
-            <el-button type="primary" @click="dialogMeterReadingFormVisible = false">Ок</el-button>
-          </span>
-        </el-dialog>
-      </div>
+      <PaymentInfo v-if="showPaymentInfo" :payment_id="itemSelected.id" @close="closePaymentInfo" />
+      <InvoiceInfo v-if="showInvoiceInfo" :invoice_id="itemSelected.id" @close="closeInvoiceInfo" />
     </div>
   </div>
 </template>
 
 <script>
 import { fetchBillingBalansSteadInfo } from '@/api/admin/billing'
-import { updatePaymentInfo } from '@/api/admin/bookkeping/payment'
-// import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import waves from '@/directive/waves'
 import PaymentInfo from '@/components/BillingPaymetnInfo'
+import InvoiceInfo from '@/components/BillingInvoiceInfo'
+import { fetchReceiptTypeList } from '@/api/admin/setting/receipt'
 
 export default {
-  components: { PaymentInfo },
+  components: { PaymentInfo, InvoiceInfo },
   directives: { waves },
   filters: {
     type1EffectFilter(val) {
@@ -183,16 +80,16 @@ export default {
   },
   data() {
     return {
+      receiptTypes: [],
+      showInvoiceInfo: false,
       showPaymentInfo: false,
-      itemPayment: '',
+      itemSelected: '',
       id: '',
       stead: '',
       list: [],
       total: 0,
       rowShow: {},
       listLoading: true,
-      dialogPaymentInfoVisible: false,
-      dialogMeterReadingFormVisible: false,
       listQuery: {
         page: 1,
         limit: 20,
@@ -204,44 +101,49 @@ export default {
   },
   computed: {
     mobile() {
-      if (this.$store.state.app.device === 'mobile') {
-        return true
-      }
-      return false
+      return this.$store.state.app.device === 'mobile'
     }
   },
   created() {
     this.id = this.$route.params && this.$route.params.id
     this.getData()
+    this.getTypeList()
   },
   methods: {
+    closeInvoiceInfo() {
+      this.showInvoiceInfo = false
+      this.showPaymentInfo = false
+    },
+    getTypeList() {
+      fetchReceiptTypeList()
+        .then(response => {
+          if (response.data.status) {
+            this.receiptTypes = response.data.data
+          } else {
+            if (response.data.data) {
+              this.$message.error(response.data.data)
+            }
+          }
+        })
+    },
     closePaymentInfo() {
       this.showPaymentInfo = false
       this.$emit('reload')
     },
     showMore(row) {
+      this.itemSelected = row.data
       if (row.type === 'payment') {
-        // this.$router.push('/bookkeping/payment_info/' + row.data.id)
-        console.log(row)
+        this.showInvoiceInfo = false
         this.showPaymentInfo = true
-        this.itemPayment = row.data
       }
       if (row.type === 'invoice') {
-        this.$router.push('/bookkeping/invoice_info/' + row.data.id)
+        this.showPaymentInfo = false
+        this.showInvoiceInfo = true
+        console.log(this.showInvoiceInfo)
       }
-    },
-    savePaymenInfo() {
-      this.dialogPaymentInfoVisible = false
-      updatePaymentInfo(this.rowShow.id, this.rowShow)
-    },
-    selectElect(row) {
-      this.rowShow.data.type = 1
-      // this.editRow = row
-      this.dialogMeterReadingFormVisible = true
-    },
-    showPayment(row) {
-      this.rowShow = row
-      this.dialogPaymentInfoVisible = true
+      // if (row.type === 'invoice') {
+      //   this.$router.push('/bookkeping/invoice_info/' + row.data.id)
+      // }
     },
     getSummaries(param) {
       const { columns, data } = param
@@ -253,14 +155,17 @@ export default {
         }
         if (column.property) {
           const values = data.map(item => {
-            if (column.property === 'payment1' && item.type === 'payment' && item.data.type === 1) {
-              return item.data.price
-            }
-            if (column.property === 'payment2' && item.type === 'payment' && item.data.type === 2) {
-              return item.data.price
-            }
-            if (item.type === column.property) {
-              return item.data.price
+            // if (column.property === 'payment1' && item.type === 'payment' && item.data.type === 1) {
+            //   return item.data.price
+            // }
+            // if (column.property === 'payment2' && item.type === 'payment' && item.data.type === 2) {
+            //   return item.data.price
+            // }
+            if (column.property === item.data.type) {
+              if (item.type === 'payment') {
+                return item.data.price
+              }
+              return -item.data.price
             }
             return 0
           })
@@ -289,6 +194,7 @@ export default {
       return ''
     },
     getData() {
+      this.listLoading = true
       fetchBillingBalansSteadInfo({ stead_id: this.id }).then(response => {
         this.stead = response.data.data.stead_info
         this.list = response.data.data.invoices

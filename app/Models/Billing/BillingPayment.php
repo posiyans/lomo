@@ -133,6 +133,7 @@ class BillingPayment extends MyModel
 
     /**
      * разнести платежку по счетам садоводов
+     *
      * @deprecated
      * @param BillingBankReestr $reestr
      * @return bool

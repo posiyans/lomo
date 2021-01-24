@@ -17,6 +17,7 @@ class AdminInvoiceResource extends JsonResource
         $data = parent::toArray($request);
         $data['stead_number'] = $this->steadNumber();
         $data['metersData'] = $this->metersData;
+        $data['type_name'] = $this->receiptType->name;
         return ['status'=>true, 'data'=>$data];
     }
 }

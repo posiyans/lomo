@@ -35,13 +35,20 @@ class PaymentController extends Controller
         if ($request->find) {
             $query->where('price', 'like', "%$request->find%");
             $query->orWhere('transaction', 'like', "%$request->find%");
-
             $steads = Stead::query()->where('number', 'like', "%$request->find%")->get(['id']);
             $query->orWhereIn('stead_id', $steads);
         }
         if ($request->date && is_array($request->date)) {
             $query->whereBetween('payment_date', [$request->date[0],  $request->date[1].' 23:59:59']);
         }
+        if ($request->status && $request->status == 1) {
+            $query->where('error', 1);
+        }
+        if ($request->status && $request->status == 2) {
+            $query->where('error', '!=', 1);
+        }
+
+
 //        if ($request->type) {
 //            $query->where('type', $request->type);
 //        }

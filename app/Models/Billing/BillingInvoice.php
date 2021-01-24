@@ -3,6 +3,7 @@
 namespace App\Models\Billing;
 
 use App\Models\Receipt\InstrumentReadings;
+use App\Models\Receipt\ReceiptType;
 use App\Models\Stead;
 use App\MyModel;
 
@@ -18,6 +19,11 @@ class BillingInvoice extends MyModel
     public function metersData()
     {
         return $this->hasMany(InstrumentReadings::class, 'invoice_id', 'id');
+    }
+
+    public function ReceiptType()
+    {
+        return $this->hasOne(ReceiptType::class, 'id', 'type');
     }
 
     /**
