@@ -36,8 +36,14 @@
       border
       show-summary
       :summary-method="getSummaries"
-      style="width: 100%"
+      style="width: 100%; max-height: 400px;"
+      @selection-change="handleSelectionChange"
     >
+      <el-table-column
+        type="selection"
+        width="55"
+        align="center"
+      />
       <el-table-column
         label="Дата"
         width="180"
@@ -99,6 +105,15 @@
         </template>
       </el-table-column>
     </el-table>
+    <div v-if="selectRows.length > 0">
+      <el-select v-model="action" placeholder="Действие">
+        <el-option label="Выставить счета" value="1" />
+        <el-option label="Сгруппировать по датам и выставить счет" value="2" />
+        <el-option label="Выставить 1 счет на все" value="3" />
+      </el-select>
+      <el-button type="primary" :disabled="!action">Выполнить</el-button>
+    </div>
+    {{ selectRows }}
     <AddReadingDialog
       v-if="addReadingDialogShow"
       :stead_id="id"
@@ -117,6 +132,7 @@ export default {
   components: { AddReadingDialog },
   data() {
     return {
+      selectRows: [],
       addReadingDialogShow: false,
       list: [],
       id: '',
@@ -129,7 +145,9 @@ export default {
       listQuery: {
         primaryType: '',
         type_id: ''
-      }
+      },
+      action: ''
+
     }
   },
   mounted() {
@@ -138,6 +156,10 @@ export default {
     this.getTypeList()
   },
   methods: {
+    handleSelectionChange(val) {
+      console.log(val)
+      this.selectRows = val
+    },
     reload() {
       this.$emit('reload')
       this.getList()

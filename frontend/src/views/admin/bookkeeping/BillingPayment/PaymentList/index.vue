@@ -12,6 +12,17 @@
           @clear="handleFilter"
           @keyup.enter.native="handleFilter"
         />
+        <el-select
+          v-model="listQuery.status"
+          placeholder="Статус"
+          class="filter-item"
+          clearable
+          @change="handleFilter"
+        >
+          <el-option label="Все" value="" />
+          <el-option label="Только с ошибками" value="1" />
+          <el-option label="Только без ошибок" value="2" />
+        </el-select>
         <el-date-picker
           v-model="listQuery.date"
           type="daterange"
@@ -28,7 +39,7 @@
         </el-button>
         <el-button v-waves class="filter-item" type="primary" @click="addPayment">Добавить выписку из банка</el-button>
       </div>
-      <component :is="componentName" :list="list" />
+      <component :is="componentName" :list="list" @reload="key ++" />
       <LoadMore v-if="!loadMoreDisable" :key="key" :list-query="listQuery" :func="func" @setList="setList" />
     </div>
     <AddPayment v-if="show === 1" @close="closeAddPaymentForm" @showPayment="showPayment" />
@@ -77,6 +88,7 @@ export default {
       show: 0,
       loadMoreDisable: false,
       listQuery: {
+        status: '',
         page: 1,
         limit: 20,
         find: '',

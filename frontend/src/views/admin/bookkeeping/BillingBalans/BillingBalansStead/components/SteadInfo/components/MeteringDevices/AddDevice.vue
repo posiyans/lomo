@@ -1,9 +1,5 @@
 <template>
   <div class="pt3">
-    <div class="pa3">
-      {{ device }}
-
-    </div>
     <el-form
       ref="addForm"
       :model="device"

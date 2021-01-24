@@ -40,7 +40,7 @@ class AddInvoiceController extends Controller
             $price = $item->getPrice();
             $old = $item->getPreviousReadings();
             $stead_id = $item->deviceRegister->stead_id;
-            $receipt_type = $item->deviceRegister->type_id;
+            $receipt_type = $item->deviceRegister->meteringDevice->type_id;
             $delta = $item->value - $old;
             if ($price > 0 && $delta > 0) {
                $summa = $delta *  $price;

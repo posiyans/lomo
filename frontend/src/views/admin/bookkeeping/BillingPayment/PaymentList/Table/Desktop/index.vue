@@ -13,12 +13,12 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Время" align="center">
+      <el-table-column label="Время" align="center" width="100px">
         <template slot-scope="{row}">
-          <span>{{ row.payment_date | moment("DD-MM-YYYY HH:mm") }}</span>
+          <span>{{ row.payment_date | moment("DD-MM-YYYY") }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Сумма" align="center">
+      <el-table-column label="Сумма" align="center" width="100px">
         <template slot-scope="{row}">
           <div v-if="row.discription">
             <div class="relative dib pr2 pt2">
@@ -114,6 +114,7 @@ export default {
     },
     closePaymentInfo() {
       this.showPaymentInfo = false
+      this.$emit('reload')
     }
   }
 

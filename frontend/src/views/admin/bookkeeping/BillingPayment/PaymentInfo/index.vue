@@ -24,7 +24,7 @@
       Оплата:
       <el-tag type="danger" :effect="payment.type | type1EffectFilter" @click="selectElect()">
         <i v-if="payment.type == 1" class="el-icon-check" />
-        Электоэнергия
+        Электоэнергия!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!111
       </el-tag>
       <el-tag type="success" :effect="payment.type | type2EffectFilter" @click="payment.type = 2">
         <i v-if="payment.type == 2" class="el-icon-check" />

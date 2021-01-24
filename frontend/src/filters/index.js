@@ -61,6 +61,16 @@ export function toThousandFilter(num) {
 }
 
 /**
+ * число 10000.11 => '10 000,11'
+ * @param value
+ * @returns {string}
+ */
+export function formatPrice(value) {
+  const val = (value / 1).toFixed(2).replace('.', ',')
+  return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+}
+
+/**
  * Upper case first char
  * @param {String} string
  */
