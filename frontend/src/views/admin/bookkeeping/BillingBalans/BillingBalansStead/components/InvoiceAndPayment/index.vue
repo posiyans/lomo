@@ -132,6 +132,7 @@ export default {
     },
     showMore(row) {
       this.itemSelected = row.data
+      console.log(this.itemSelected)
       if (row.type === 'payment') {
         this.showInvoiceInfo = false
         this.showPaymentInfo = true

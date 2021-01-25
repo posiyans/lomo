@@ -56,13 +56,13 @@
         width="300"
       >
         <template slot-scope="{row}">
-          <div>
+          <div v-if="row.installation_date">
             <span>
               установки
             </span>
             {{ row.installation_date | moment('DD-MM-YYYY') }}
           </div>
-          <div>
+          <div v-if="row.verification_date">
             <span>
               годен до
             </span>
