@@ -114,15 +114,15 @@ export default {
           { required: true, message: 'Укажите серийный номер прибора', trigger: 'blur' },
           { min: 3, message: 'Более  3 символов', trigger: 'blur' }
         ],
-        installation_date: [
-          { required: true, message: 'Укажите дату установки', trigger: 'change' }
-        ],
+        // installation_date: [
+        //   { required: true, message: 'Укажите дату установки', trigger: 'change' }
+        // ],
         initial_data: [
           { required: true, message: 'Укажите начальные показания прибора', trigger: 'change' }
         ],
-        verification_date: [
-          { required: true, message: 'PУкажите дату следующей поверки прибора', trigger: 'change' }
-        ],
+        // verification_date: [
+        //   { required: true, message: 'PУкажите дату следующей поверки прибора', trigger: 'change' }
+        // ],
         descriptions: [
           { max: 250, message: 'Не более 250 символов', trigger: 'blur' }
         ]
