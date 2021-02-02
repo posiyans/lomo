@@ -5,12 +5,15 @@ body {
   font-variant: normal;
   font-size: 14px;
   color: #444;
+
+  //background: url("./images/bg.png");
+}
+#main-container {
   background: url("./images/bg5.jpg");
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-position: top;
   background-color: #e8f3f7;
-  //background: url("./images/bg.png");
 }
 #layout {
   width: 1180px;

@@ -46,10 +46,10 @@ export default {
       this.listLoading = true
       this.func(this.listQuery)
         .then(response => {
+          this.total = 0
           if (response.data.total) {
             this.total = response.data.total
-          }
-          if (response.data.meta.total) {
+          } else if (response.data.meta && response.data.meta.total) {
             this.total = response.data.meta.total
           }
           if (response.data.offset) {
@@ -70,10 +70,10 @@ export default {
       this.listLoading = true
       this.func(this.listQuery)
         .then(response => {
+          this.total = 0
           if (response.data.total) {
             this.total = response.data.total
-          }
-          if (response.data.meta.total) {
+          } else if (response.data.meta && response.data.meta.total) {
             this.total = response.data.meta.total
           }
           // this.list = []

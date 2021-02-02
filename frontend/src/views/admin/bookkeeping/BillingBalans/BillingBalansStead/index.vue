@@ -21,10 +21,10 @@ import waves from '@/directive/waves'
 import InvoiceAndPayment from './components/InvoiceAndPayment'
 import InstrumentReadings from './components/InstrumentReadings'
 import SteadInfo from './components/SteadInfo'
-import { fetchBillingBalansSteadInfo } from '@/api/admin/billing'
+// import { fetchBillingBalansSteadInfo } from '@/api/admin/billing'
+import { fetchSteadInfo } from '@/api/admin/stead'
 
 export default {
-  // components: { Pagination },
   directives: { waves },
   components: {
     InvoiceAndPayment,
@@ -63,8 +63,8 @@ export default {
       })
     },
     getData() {
-      fetchBillingBalansSteadInfo({ stead_id: this.id }).then(response => {
-        this.stead = response.data.data.stead_info
+      fetchSteadInfo(this.id).then(response => {
+        this.stead = response.data.data
         this.listLoading = false
       })
     }

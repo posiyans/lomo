@@ -14,14 +14,14 @@ const bookkepingRouter = {
   children: [
     {
       path: 'billing_reestr_create',
-      component: () => import('@/views/admin/bookkeeping/BillingReestr/BillingReestrList/create'),
+      component: () => import('@/views/admin/bookkeeping/BillingAddInvoiceForAllStead/add'),
       name: 'BillingReestrCreate',
       hidden: true
 
     },
     {
       path: 'billing_reestr_edit/:id(\\d+)',
-      component: () => import('@/views/admin/bookkeeping/BillingReestr/BillingReestrList/edit'),
+      component: () => import('@/views/admin/bookkeeping/BillingAddInvoiceForAllStead/edit'),
       name: 'BillingReestrEdit',
       hidden: true
 

@@ -37,7 +37,7 @@
           Кадастровый номер
         </td>
         <td>
-          <a :href="kadastr_url" target="_blank" class="pointer">
+          <a v-if="stead && stead.discriptions && stead.discriptions.kadastr" :href="kadastr_url" target="_blank" class="pointer">
             {{ stead.discriptions.kadastr }}
           </a>
         </td>
@@ -50,7 +50,9 @@
           Примечание
         </td>
         <td>
-          {{ stead.discriptions.note }}
+          <span v-if="stead && stead.discriptions && stead.discriptions.note">
+            {{ stead.discriptions.note }}
+          </span>
         </td>
         <td>
           <el-button type="primary" size="mini" plain icon="el-icon-edit" @click="editNote" />
@@ -66,7 +68,7 @@ export default {
   props: {
     stead: {
       type: Object,
-      dafault: () => ({})
+      default: () => ({})
     }
   },
   data() {

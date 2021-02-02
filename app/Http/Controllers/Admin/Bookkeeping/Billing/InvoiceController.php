@@ -55,14 +55,25 @@ class InvoiceController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Добавить счет
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        return 'store';
+        if ($request->price && is_numeric($request->price) && $request->stead['id']) {
+            $invoice = new BillingInvoice();
+            $invoice->fill($request->all());
+            $invoice->price = $request->price;
+            $invoice->stead_id  = $request->stead['id'];
+            $invoice->user_id = Auth::user()->id;
+            if ($invoice->logAndSave('Добавлен счет')) {
+                return ['status' => true, 'data' => $invoice];
+            }
+
+        }
+        return ['status' => false];
     }
 
     /**
@@ -98,16 +109,14 @@ class InvoiceController extends Controller
      */
     public function update(Request $request, $id)
     {
-//        $payment = BillingPayment::find($id);
-//        $payment->stead_id = $request->stead_id;
-//        $payment->payment_type = $request->payment_type;
-//        $payment->raw_data = $request->raw_data;
-//        if ($payment->save()) {
-//            $payment->setMeterReading();
-//            return json_encode(['status'=>true, 'data'=>$payment]);
-//        }
-//        return json_encode(['status'=>false]);
-
+        $invoice = BillingInvoice::find($id);
+        if ($invoice->id == $request->id) {
+            $invoice->discription = $request->has('discription') ? $request->discription : $invoice->discription;
+        }
+        if ($invoice->save()) {
+            return json_encode(['status'=>true, 'data'=> new AdminInvoiceResource($invoice)]);
+        }
+        return json_encode(['status'=>false]);
     }
 
     /**

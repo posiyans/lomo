@@ -10,6 +10,7 @@ use App\MyModel;
 class BillingInvoice extends MyModel
 {
 
+    protected $fillable = ['title', 'type', 'discription'];
 
     /**
      * получить участок счета

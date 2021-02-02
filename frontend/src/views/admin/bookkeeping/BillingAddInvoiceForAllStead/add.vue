@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import BilligReestr from './components/BillingReestrDetail.vue'
+import BilligReestr from './index'
 
 export default {
   components: { BilligReestr }

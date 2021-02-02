@@ -9,10 +9,10 @@
       <el-select v-if="listQuery.category" v-model="listQuery.receipt_type" placeholder="по" clearable class="filter-item" style="width: 130px" @change="changeCategory">
         <el-option v-for="item in receiptTypes" :key="item.id" :label="item.name" :value="item.id" />
       </el-select>
-      <el-select v-model="listQuery.payment" placeholder="Последний платеж" clearable class="filter-item" style="width: 200px" @change="changePayment">
-        <el-option v-for="item in statusArray" :key="item.key" :label="item.value" :value="item.key" />
-      </el-select>
-      <el-input v-if="listQuery.payment" v-model="listQuery.month" type="number" placeholder="n месяцев" clearable style="width: 90px;" class="filter-item" @keyup.enter.native="changePayment" />
+      <!--      <el-select v-model="listQuery.payment" placeholder="Последний платеж" clearable class="filter-item" style="width: 200px" @change="changePayment">-->
+      <!--        <el-option v-for="item in statusArray" :key="item.key" :label="item.value" :value="item.key" />-->
+      <!--      </el-select>-->
+      <!--      <el-input v-if="listQuery.payment" v-model="listQuery.month" type="number" placeholder="n месяцев" clearable style="width: 90px;" class="filter-item" @keyup.enter.native="changePayment" />-->
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         Показать
       </el-button>

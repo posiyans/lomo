@@ -18,7 +18,7 @@ class AdminBalansSteadResource extends JsonResource
         $types = ReceiptType::getReceiptTypeIds();
         $temp_balans = [];
         foreach ($types  as $type) {
-            $temp_balans[$type] = round($this->getBalans($type), 2);
+            $temp_balans['d'.$type] = round($this->getBalans($type), 2);
         }
         return [
             'id'=>$this->id,

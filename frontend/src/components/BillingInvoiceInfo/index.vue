@@ -34,7 +34,7 @@
         <tr>
           <td>Сумма</td>
           <td>
-            {{ invoice.price }}
+            {{ invoice.price | formatPrice }}
           </td>
           <td />
         </tr>
@@ -72,14 +72,14 @@
 </template>
 
 <script>
-import { fetchInvoiceInfo } from '@/api/admin/bookkeping/invoice'
+import { fetchInvoiceInfo, updateInvoice } from '@/api/admin/bookkeping/invoice'
 import { fetchReceiptTypeList } from '@/api/admin/setting/receipt'
 
 export default {
   components: {
   },
   props: {
-    invoiceId: {
+    id: {
       type: [Number, String],
       default: ''
     }
@@ -109,7 +109,7 @@ export default {
   },
   methods: {
     getInvoiceData() {
-      fetchInvoiceInfo(this.invoice_id)
+      fetchInvoiceInfo(this.id)
         .then(response => {
           if (response.data.status) {
             this.invoice = response.data.data
@@ -120,54 +120,9 @@ export default {
           }
         })
     },
-    // saveNewStead() {
-    //   this.findSteadShow = false
-    //   this.invoice.stead = this.tempStead
-    //   this.invoice.stead_id = this.tempStead.id
-    //   this.saveData()
-    // },
-    // setStead(val) {
-    //   this.tempStead = val
-    // },
-    // changeStead() {
-    //   this.findSteadShow = !this.findSteadShow
-    // },
     close() {
       this.$emit('close')
     },
-    // meteringClose() {
-    //   this.meteringShow = false
-    // },
-    // saveMetering(val) {
-    //   this.payment.instr_read = val
-    //   this.saveData()
-    // },
-    // setMetering(val) {
-    //   this.$prompt(val.name, 'Укажите', {
-    //     confirmButtonText: 'Сохранить',
-    //     cancelButtonText: 'Отмена',
-    //     inputValue: this.payment.instr_read['d' + val.id] ? this.payment.instr_read['d' + val.id].value : ''
-    //     // inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
-    //   }).then(({ value }) => {
-    //     const di = `d` + val.id
-    //     this.payment.instr_read = Object.assign({}, this.payment.instr_read, { [di]: { device: val.id, value: value }})
-    //     this.saveData()
-    //   }).catch(() => {
-    //
-    //   })
-    //   // this.meteringShow = true
-    // },
-    // confirmData() {
-    //   this.$confirm('Установить что что все данные в платеже проверены?', 'Внимание!', {
-    //     confirmButtonText: 'Да',
-    //     cancelButtonText: 'Нет',
-    //     type: 'warning'
-    //   }).then(() => {
-    //     this.payment.error = false
-    //     this.saveData()
-    //   }).catch(() => {
-    //   })
-    // },
     getReceipt() {
       fetchReceiptTypeList()
         .then(response => {
@@ -180,41 +135,29 @@ export default {
           }
         })
     },
-    setType(val) {
-      this.payment.type = val
-      this.payment.type_name = this.receipType.find(item => { return item.id === val }).name
-      this.payment.type_depends = this.receipType.find(item => { return item.id === val }).depends === 2
-      this.payment.depends = this.receipType.find(item => { return item.id === val })
-
-      this.saveData()
-    },
     editDescription() {
       this.$prompt('Добавить', 'Примечание', {
         confirmButtonText: 'Сохранить',
         cancelButtonText: 'Отмена',
-        inputValue: this.payment.discription
+        inputValue: this.invoice.discription
       }).then(({ value }) => {
-        this.payment.discription = value
+        this.invoice.discription = value
         this.saveData()
       }).catch(() => {
       })
     },
     saveData() {
-      // updatePaymentInfo(this.payment.id, this.payment)
-      //   .then(response => {
-      //     if (response.data.status) {
-      //       if (!response.data.device) {
-      //         this.$message.error('Ошибка при добавлении показаний!')
-      //       }
-      //       this.getPaymetData()
-      //       // todo вернуть данные наверх!!!!
-      //       // this. = response.data.data
-      //     } else {
-      //       if (response.data.data) {
-      //         this.$message.error(response.data.data)
-      //       }
-      //     }
-      //   })
+      updateInvoice(this.invoice.id, this.invoice)
+        .then(response => {
+          if (response.data.status) {
+            this.getInvoiceData()
+            // this.close()
+          } else {
+            if (response.data.data) {
+              this.$message.error(response.data.data)
+            }
+          }
+        })
     }
   }
 }

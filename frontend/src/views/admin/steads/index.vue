@@ -29,7 +29,7 @@
           <span>{{ row.size }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="device === 'desktop'" label="Собственник" align="center"min-width="150px">
+      <el-table-column v-if="device === 'desktop'" label="Собственник" align="center" min-width="150px">
         <template slot-scope="{row}">
           <span :class="row | fioStyleFilter">{{ row | fioFilter }}</span>
         </template>
@@ -61,37 +61,6 @@
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
-    <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible" width="95%">
-      <el-form ref="dataForm" :rules="rules" :model="temp" :label-position="labelPosition" label-width="150px" style="">
-        <el-form-item label="Номер участка" prop="number">
-          <el-input v-model="temp.number" :readonly="!editor" />
-        </el-form-item>
-        <el-form-item label="Площадь, км.м" prop="size">
-          <el-input v-model="temp.size" :readonly="!editor" />
-        </el-form-item>
-        <el-form-item label="Владелец">
-          <span :class="temp | fioStyleFilter">{{ temp | fioFilter }}</span>
-        </el-form-item>
-
-        <el-form-item label="Телефон">
-          <span>{{ temp.user.phone }}</span>
-        </el-form-item>
-        <el-form-item label="Email">
-          <span>{{ temp.user.email }}</span>
-        </el-form-item>
-        <el-form-item label="Примечание">
-          <el-input v-model="temp.discriptions.note" :autosize="{ minRows: 2}" type="textarea" placeholder="Место для заметок" :readonly="!editor" />
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">
-          Закрыть
-        </el-button>
-        <el-button v-if="editor" type="primary" @click="updateData">
-          Сохранить
-        </el-button>
-      </div>
-    </el-dialog>
     <el-dialog title="Добавить примечание" :visible.sync="dialogNoteVisible" width="80%">
       <el-form :label-position="labelPosition" label-width="150px">
         <el-form-item label="Примечание">
@@ -126,14 +95,14 @@
             </el-select>
           </el-form-item>
         </el-form>
-        <template v-for="i in rate">
+        <div v-for="i in rate" :key="i.name">
           <div class="pb1">
             {{ i.name }} - {{ i.rate.discription }}
             <span v-if="i.rate.ratio_a > 0">
               * {{ receiptData.size/100 }} = {{ (receiptData.size/100 * i.rate.ratio_a).toFixed(2) }} руб.
             </span>
           </div>
-        </template>
+        </div>
         <div class="pt4"><b>Итого: </b>{{ receiptData.size | totalFilter(rate) }} руб.</div>
         <div slot="footer" class="dialog-footer tr mt4 mr4-ns ">
           <el-button @click="dialogReceipShow = false">
@@ -208,13 +177,10 @@ export default {
         number: '',
         size: ''
       },
-      dialogFormVisible: false,
       dialogNoteVisible: false,
       dialogReceipShow: false,
       receiptData: {},
       newNote: '',
-      dialogStatus: '',
-
       rules: {
         number: [{ required: true, message: 'Обязательное поле', trigger: 'change' }],
         size: [{ required: true, message: 'Обязательное поле', trigger: 'change' }]
@@ -303,9 +269,8 @@ export default {
     },
 
     handleUpdate(row) {
-      this.temp = row // copy obj
-      this.dialogStatus = 'Участок № ' + this.temp.number
-      this.dialogFormVisible = true
+      // this.temp = row // copy obj
+      this.$router.push('/bookkeping/billing_balance_stead/' + row.id)
     },
     updateData() {
       if (this.editor) {
