@@ -73,7 +73,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <PaymentInfo v-if="showPaymentInfo" :payment_id="itemPayment.id" @close="closePaymentInfo" />
+    <PaymentInfo v-if="showPaymentInfo" :id="itemPayment.id" @close="closePaymentInfo" />
   </div>
 </template>
 

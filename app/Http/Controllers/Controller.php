@@ -34,4 +34,21 @@ class Controller extends BaseController
             return false;
         }
     }
+
+    /**
+     * пагинация для массива
+     *
+     * @param $array
+     * @param int $page
+     * @param int $limit
+     * @return array
+     */
+    public function paginate($array, $page = 1, $limit = 20)
+    {
+        if ($page < 1 ) {
+            $page = 1;
+        }
+        $offset = ($page - 1) * $limit;
+        return array_slice($array, $offset, $limit);
+    }
 }

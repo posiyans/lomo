@@ -50,7 +50,7 @@
         </tr>
         <tr>
           <td>Сумма</td>
-          <td>{{ payment.price }}</td>
+          <td>{{ payment.price | formatPrice }}</td>
           <td />
         </tr>
         <tr>
@@ -145,7 +145,7 @@ export default {
     UserSteadFind
   },
   props: {
-    paymentId: {
+    id: {
       type: [Number, String],
       default: ''
     }
@@ -175,7 +175,7 @@ export default {
   },
   methods: {
     getPaymetData() {
-      fetchPaymentInfo(this.payment_id)
+      fetchPaymentInfo(this.id)
         .then(response => {
           if (response.data.status) {
             this.payment = response.data.data

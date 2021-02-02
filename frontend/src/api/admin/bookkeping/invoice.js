@@ -14,6 +14,22 @@ export function addInvoiceForReadings(id) {
   })
 }
 
+export function updateInvoice(id, data) {
+  return request({
+    url: '/api/v1/admin/billing/invoice/' + id,
+    method: 'put',
+    data: data
+  })
+}
+
+export function addInvoiceForStead(data) {
+  return request({
+    url: '/api/v1/admin/billing/invoice/',
+    method: 'post',
+    data: data
+  })
+}
+
 // export function updatePaymentInfo(id, data) {
 //   return request({
 //     url: '/api/v1/admin/billing/payment/' + id,

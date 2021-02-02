@@ -6,7 +6,9 @@
           ФИО
         </td>
         <td>
-          {{ stead.discriptions.fio }}
+          <span v-if="stead && stead.discriptions && stead.discriptions.fio">
+            {{ stead.discriptions.fio }}
+          </span>
         </td>
         <td>
           <el-button type="primary" size="mini" plain icon="el-icon-edit" />
@@ -17,7 +19,9 @@
           Адрес
         </td>
         <td>
-          {{ stead.options.adres }}
+          <span v-if="stead && stead.options && stead.options.adres">
+            {{ stead.options.adres }}
+          </span>
         </td>
         <td>
           <el-button type="primary" size="mini" plain icon="el-icon-edit" />
@@ -28,7 +32,9 @@
           Телефон
         </td>
         <td>
-          {{ stead.options.phone }}
+          <span v-if="stead && stead.options && stead.options.phone ">
+            {{ stead.options.phone }}
+          </span>
         </td>
         <td>
           <el-button type="primary" size="mini" plain icon="el-icon-edit" @click="editPhone" />
@@ -39,7 +45,9 @@
           Телефон доп.
         </td>
         <td>
-          {{ stead.options.phone_add }}
+          <span v-if="stead && stead.options && stead.options.phone_add">
+            {{ stead.options.phone_add }}
+          </span>
         </td>
         <td>
           <el-button type="primary" size="mini" plain icon="el-icon-edit" @click="editPhoneAdd" />
@@ -50,7 +58,9 @@
           Примечание
         </td>
         <td>
-          {{ stead.options.note }}
+          <span v-if="stead && stead.options && stead.options.note">
+            {{ stead.options.note }}
+          </span>
         </td>
         <td>
           <el-button type="primary" size="mini" plain icon="el-icon-edit" @click="editNote" />
@@ -66,7 +76,7 @@ export default {
   props: {
     stead: {
       type: Object,
-      dafault: () => ({})
+      default: () => ({})
     }
   },
   data() {

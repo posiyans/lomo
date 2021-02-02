@@ -4,19 +4,21 @@ namespace App\Http\Controllers\User;
 
 use App\Models\Receipt\MeteringDevice;
 use App\Models\Receipt\Rate;
+use App\Models\Receipt\ReceiptType;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class RateController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * получить список возможных начислений
      *
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
-        $models = MeteringDevice::where('type_id', $request->type)->where('enable', 1)->get();
+        $type = ReceiptType::where('depends',  $request->type)->pluck('id');;
+        $models = MeteringDevice::whereIn('type_id', $type)->where('enable', 1)->get();
         foreach ($models as $model) {
              $model->rateNow();
         }

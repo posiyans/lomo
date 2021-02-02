@@ -16,8 +16,6 @@ class AddAutoInvoiceColumnToReceiptTypes extends Migration
         Schema::table('receipt_types', function (Blueprint $table) {
             $table->boolean('auto_invoice')->after('name')->default(false)->comment('автоматическое выставление счета');
             $table->json('options')->after('auto_invoice')->nullable()->comment('опции для участка');
-            $table->integer('payment_period')->nullable()->comment('период оплаты')->change();
-
         });
     }
 

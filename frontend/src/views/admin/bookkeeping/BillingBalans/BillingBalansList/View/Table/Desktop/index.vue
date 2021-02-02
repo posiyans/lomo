@@ -1,6 +1,6 @@
 <template>
   <el-table v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
-    <el-table-column label="Номер участка" align="center" width="125px">
+    <el-table-column label="Участок" align="center" width="125px">
       <template slot-scope="{row}">
         <span>{{ row.number }}</span>
       </template>
@@ -12,12 +12,12 @@
     </el-table-column>
     <el-table-column align="center" label="Баланс" width="100px">
       <template slot-scope="{row}">
-        <span :class="row.balans_all | balansFilter">{{ row.balans_all }}</span>
+        <span :class="row.balans_all | balansFilter">{{ row.balans_all | formatPrice }}</span>
       </template>
     </el-table-column>
     <el-table-column v-for="item in type" :key="item.id" align="center" :label="item.name" width="100px">
       <template slot-scope="{row}">
-        <span :class="row.balans[item.id] | balansFilter">{{ row.balans[item.id] }}</span>
+        <span :class="row.balans['d' + item.id] | balansFilter">{{ row.balans['d' + item.id] | formatPrice }}</span>
       </template>
     </el-table-column>
     <el-table-column align="center" width="150px" label="Последний платеж">

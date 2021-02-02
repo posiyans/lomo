@@ -1,25 +1,11 @@
 <template>
-  <div class="createPost-container">
-    <div class="ml4-ns">
-      <el-button @click="$router.push('/bookkeping/billing_reestr')">Начисления</el-button>
+  <div class="app-container">
+    <div>
+      <el-button type="primary" @click="$router.push('/bookkeping/billing_reestr')">Все начисления</el-button>
     </div>
-    <el-form ref="reestrForm" :model="postForm" :rules="rules"  :label-position="labelPosition" class="form-container" label-width="180px">
-      <div class="pt1 createPost-main-container" style="padding-top: 0; padding-bottom: 0">
-        <div style="display: inline-block; padding-right: 10px; padding-top: 20px;">
-          <b>Сделать начисления всем садоводам</b>
-        </div>
-        <div v-if="isEdit" style="display: inline-block;">
-          <el-button v-loading="loading"  type="danger" @click="submitForm">
-            Пересчитать
-          </el-button>
-        </div>
-        <div v-else style="display: inline-block;">
-          <el-button v-loading="loading"  type="danger" @click="submitForm">
-            Начислить
-          </el-button>
-        </div>
-      </div>
-      <div class="createPost-main-container" style="max-width: 650px;">
+    <div class="page-title">Сделать начисления всем садоводам</div>
+    <el-form ref="reestrForm" :model="postForm" :rules="rules" :label-position="labelPosition" class="form-container" label-width="180px">
+      <el-form-item style="" prop="title" label="Начислить">
         <el-select
           v-model="rate_checked"
           placeholder="Заполнить"
@@ -29,28 +15,39 @@
             v-for="item in rateList"
             :key="item.id"
             :label="item.name"
-            :value="item">
-          </el-option>
+            :value="item"
+          />
         </el-select>
-        <el-form-item style="margin-bottom: 10px;" prop="title" label="Описание">
-          <el-input v-model="postForm.title" placeholder="На что и за какой период делается начисление"/>
-        </el-form-item>
-        <el-form-item label="Начислить на 1 сотку:">
-          <money v-model="postForm.ratio_a" placeholder="Начисление на 1 сотку участка" v-bind="money_a">
-          </money>
-        </el-form-item>
-        <el-form-item label="Начислить на 1 участок:">
-          <money v-model="postForm.ratio_b" placeholder="Начисление на 1 участок, внезависимости от площади" v-bind="money_b">
-          </money>
-        </el-form-item>
-
+      </el-form-item>
+      <el-form-item style="" prop="title" label="Описание">
+        <el-input v-model="postForm.title" placeholder="На что и за какой период делается начисление" />
+      </el-form-item>
+      <el-form-item label="Начислить на 1 сотку:">
+        <money v-model="postForm.ratio_a" placeholder="Начисление на 1 сотку участка" v-bind="money_a" />
+      </el-form-item>
+      <el-form-item label="Начислить на 1 участок:">
+        <money v-model="postForm.ratio_b" placeholder="Начисление на 1 участок, внезависимости от площади" v-bind="money_b" />
+      </el-form-item>
+      <el-form-item label="">
         <div style="color: #1b5fab;">
           Например на 1 участок площадью 6 соток будет начисленно {{ exampleRate }} рублей
         </div>
         <div v-if="postForm.updated_at" class="mt2" style="color: #ff0000">
-          Начисленно {{postForm.updated_at | moment("DD MMMM YYYY в HH:mm")}}
+          Начисленно {{ postForm.updated_at | moment("DD MMMM YYYY в HH:mm") }}
         </div>
-      </div>
+      </el-form-item>
+      <el-form-item>
+        <div v-if="isEdit" style="display: inline-block;">
+          <el-button v-loading="loading" type="danger" @click="submitForm">
+            Пересчитать
+          </el-button>
+        </div>
+        <div v-else style="display: inline-block;">
+          <el-button v-loading="loading" type="danger" @click="submitForm">
+            Начислить
+          </el-button>
+        </div>
+      </el-form-item>
     </el-form>
   </div>
 </template>
@@ -110,8 +107,8 @@ export default {
       postForm: Object.assign({}, defaultForm),
       loading: false,
       rules: {
-        title: [{ validator: validateRequire }],
-      },
+        title: [{ validator: validateRequire }]
+      }
     }
   },
   computed: {
@@ -120,7 +117,7 @@ export default {
     },
     labelPosition() {
       return this.$store.state.app.device === 'desktop' ? 'left' : 'top'
-    },
+    }
   },
   created() {
     this.getListRate()
@@ -136,9 +133,7 @@ export default {
           this.postForm = response.data.data
           this.setPageTitle()
         }
-      }).catch(err => {
-        // console.log(err)
-      })
+      }).catch({})
     },
     setTagsViewTitle() {
       const title = 'Статья id'
@@ -155,7 +150,7 @@ export default {
       this.postForm.ratio_b = +this.rate_checked.rate.ratio_b
     },
     getListRate() {
-      fetchList({ type: 2 }).then(response => {
+      fetchList({ type: 1 }).then(response => {
         this.rateList = response.data.data
       })
     },
@@ -177,55 +172,57 @@ export default {
       }
     },
     updateForm() {
-      updateBillingReestr(this.id, this.postForm).then(response => {
-        if (response.data.status) {
-          this.$notify({
-            title: 'успех',
-            message: 'Начисления сделаны',
-            type: 'success',
-            duration: 2000
-          })
-          this.$router.push('/bookkeping/billing_reestr')
-        }
+      this.$confirm('Вы точно хотите изменить начисления?', 'Внимание', {
+        confirmButtonText: 'Да',
+        cancelButtonText: 'Нет',
+        type: 'warning'
+      }).then(() => {
+        updateBillingReestr(this.id, this.postForm).then(response => {
+          if (response.data.status) {
+            this.$notify({
+              title: 'успех',
+              message: 'Начисления перепроведенны',
+              type: 'success',
+              duration: 2000
+            })
+            this.$router.push('/bookkeping/billing_reestr')
+          }
+        })
+      }).catch(() => {
       })
     },
     saveForm() {
-      createBillingReestr(this.postForm).then(response => {
-        if (response.data.status) {
-          this.$notify({
-            title: 'успех',
-            message: 'Начисления перепроведенны',
-            type: 'success',
-            duration: 2000
-          })
-          this.$router.push('/bookkeping/billing_reestr')
-        }
+      this.$confirm('Вы точно хотите начислить?', 'Внимание', {
+        confirmButtonText: 'Да',
+        cancelButtonText: 'Нет',
+        type: 'warning'
+      }).then(() => {
+        createBillingReestr(this.postForm).then(response => {
+          if (response.data.status) {
+            this.$notify({
+              title: 'успех',
+              message: 'Начисления сделаны',
+              type: 'success',
+              duration: 2000
+            })
+            this.$router.push('/bookkeping/billing_reestr')
+          }
+        })
+      }).catch(() => {
       })
-    },
+    }
   }
 }
 </script>
 
 <style scoped>
-  .createPost-main-container {
-    padding: 40px 45px 20px 50px;
-  }
   .createPost-container {
     position: relative;
-  }
-
-  .article-textarea /deep/ {
-    textarea {
-      padding-right: 40px;
-      resize: none;
-      border: none;
-      border-radius: 0px;
-      border-bottom: 1px solid #bfcbd9;
-    }
+    padding: 40px 45px 20px 25px;
   }
 
   @media screen and (max-width: 700px) {
-    .createPost-main-container {
+    .createPost-container {
       padding: 40px 6px 20px 6px;
     }
   }
