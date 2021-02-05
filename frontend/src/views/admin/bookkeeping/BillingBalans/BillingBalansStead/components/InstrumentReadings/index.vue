@@ -30,90 +30,99 @@
       </el-select>
       <el-button type="success" class="item-filter" plain @click="addReadings">Добавить показания</el-button>
     </div>
-    <el-table
-      v-if="list.length > 0"
-      :data="list"
-      border
-      show-summary
-      :summary-method="getSummaries"
-      style="width: 100%; max-height: 400px;"
-      @selection-change="handleSelectionChange"
-    >
-      <el-table-column
-        type="selection"
-        width="55"
-        align="center"
-      />
-      <el-table-column
-        label="Дата"
-        width="180"
+    <div class="scroll-block">
+
+      <el-table
+        v-if="list.length > 0"
+        :data="list"
+        border
+        show-summary
+        :summary-method="getSummaries"
+        style="width: 100%"
+        @selection-change="handleSelectionChange"
       >
-        <template slot-scope="{row}">
-          <span>{{ row.created_at }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label=""
-        width="180"
-      >
-        <template slot-scope="{row}">
-          <span>{{ row.type_name[1] }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="Показания"
-        width="180"
-      >
-        <template slot-scope="{row}">
-          <span>{{ row.value }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="Разница"
-        width="180"
-      >
-        <template slot-scope="{row}">
-          <span>{{ row.delta }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="Тариф"
-        width="180"
-      >
-        <template slot-scope="{row}">
-          <span>{{ row.price }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="Сумма"
-        prop="summa"
-        width="180"
-      >
-        <template slot-scope="{row}">
-          <span>{{ row.summa }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label=""
-        width="180"
-      >
-        <template slot-scope="{row}">
-          <div>
-            <el-button v-if="!row.invoice_id && row.summa > 0" type="primary" @click="addInvoice(row)">Выставить счет</el-button>
-          </div>
-          <span v-if="row.invoice_id">Счет № {{ row.invoice_id }}</span>
-        </template>
-      </el-table-column>
-    </el-table>
-    <div v-if="selectRows.length > 0">
-      <el-select v-model="action" placeholder="Действие">
-        <el-option label="Выставить счета" value="1" />
-        <el-option label="Сгруппировать по датам и выставить счет" value="2" />
-        <el-option label="Выставить 1 счет на все" value="3" />
-      </el-select>
-      <el-button type="primary" :disabled="!action">Выполнить</el-button>
+        <el-table-column
+          type="selection"
+          width="55"
+          align="center"
+        />
+        <el-table-column
+          label="Дата"
+          width="180"
+        >
+          <template slot-scope="{row}">
+            <span>{{ row.created_at }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="Прибор"
+        >
+          <template slot-scope="{row}">
+            <span>{{ row.type_name[1] }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="Показания"
+          width="180"
+          align="center"
+        >
+          <template slot-scope="{row}">
+            <span>{{ row.value }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="Разница"
+          width="180"
+          align="center"
+        >
+          <template slot-scope="{row}">
+            <span>{{ row.delta }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="Тариф"
+          width="180"
+          align="center"
+        >
+          <template slot-scope="{row}">
+            <span>{{ row.price }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="Сумма"
+          prop="summa"
+          width="180"
+          align="center"
+        >
+          <template slot-scope="{row}">
+            <span>{{ row.summa | formatPrice }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label=""
+          width="200"
+          align="center"
+        >
+          <template slot-scope="{row}">
+            <div>
+              <el-button v-if="!row.invoice_id && row.summa > 0" type="primary" @click="addInvoice(row)">Выставить счет</el-button>
+            </div>
+            <span v-if="row.invoice_id">Счет № {{ row.invoice_id }}</span>
+          </template>
+        </el-table-column>
+      </el-table>
     </div>
-    {{ selectRows }}
+    <div v-if="selectRows.length > 0" class="filter-container">
+      <el-select v-model="action" placeholder="Действие">
+        <el-option
+          v-for="item in actionList"
+          :key="item.key"
+          :label="item.label"
+          :value="item.key"
+        />
+      </el-select>
+      <el-button type="primary" :disabled="!action" @click="actionSubmite">Выполнить</el-button>
+    </div>
     <AddReadingDialog
       v-if="addReadingDialogShow"
       :stead_id="id"
@@ -126,7 +135,7 @@
 import { fetchCommunalListForStead } from '@/api/admin/bookkeping/communal'
 import { fetchReceiptTypeList, getReceiptTypeInfo } from '@/api/admin/setting/receipt'
 import AddReadingDialog from './components/AddReadingsDialog'
-import { addInvoiceForReadings } from '@/api/admin/bookkeping/invoice'
+import { addInvoiceForReadings, addInvoiceForGroupReadings } from '@/api/admin/bookkeping/invoice'
 
 export default {
   components: { AddReadingDialog },
@@ -146,7 +155,21 @@ export default {
         primaryType: '',
         type_id: ''
       },
-      action: ''
+      action: 2,
+      actionList: [
+        {
+          key: 2,
+          label: 'Сгруппировать по месяцам и выставить счет'
+        },
+        {
+          key: 1,
+          label: 'Выставить отдельные счета'
+        }
+        // {
+        //   key: 3,
+        //   label: 'Выставить 1 счет на все'
+        // },
+      ]
 
     }
   },
@@ -156,6 +179,36 @@ export default {
     this.getTypeList()
   },
   methods: {
+    actionSubmite() {
+      const text = this.actionList.find(item => {
+        if (this.action === item.key) {
+          return true
+        }
+      })
+      this.$confirm(text.label + '?', 'Внимание!', {
+        confirmButtonText: 'Да',
+        cancelButtonText: 'Нет',
+        type: 'warning'
+      }).then(() => {
+        const data = {
+          action: this.action,
+          readings: this.selectRows.map(item => { return item.id })
+        }
+        console.log(data)
+        addInvoiceForGroupReadings(data)
+          .then(response => {
+            if (response.data.status) {
+              this.$message('Данные успешно сохранены')
+              this.getList()
+              this.$emit('reload')
+            } else if (response.data.data) {
+              this.$message.error(response.data.data)
+            }
+          })
+      }).catch(() => {
+
+      })
+    },
     handleSelectionChange(val) {
       console.log(val)
       this.selectRows = val
@@ -292,5 +345,11 @@ export default {
 </script>
 
 <style scoped>
-
+  .scroll-block {
+    max-height: 400px;
+    overflow-y: scroll;
+    scrollbar-width: thin;
+    border: 1px solid;
+    margin-bottom: 10px;
+  }
 </style>

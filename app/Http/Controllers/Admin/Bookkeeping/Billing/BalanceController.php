@@ -155,4 +155,17 @@ class BalanceController extends Controller
 //        return ['status'=>true, 'data'=>$article, 'total'=>$article->total()];
     }
 
+
+    public function allBalance(Request $request)
+    {
+       $stead = Stead::find($request->id);
+        $types = ReceiptType::all();
+        $result = ['balans_all' => round($stead->getBalans(), 2)];
+        $temp_balans = [];
+        foreach ($types as $type) {
+            $temp_balans[] = ['name' => $type->name, 'price' => round($stead->getBalans($type->id), 2)];
+        }
+        $result['balans'] = $temp_balans;
+       return ['status' => true, 'data' => $result];
+    }
 }

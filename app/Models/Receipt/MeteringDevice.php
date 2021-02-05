@@ -3,6 +3,7 @@
 namespace App\Models\Receipt;
 
 
+use App\Models\Stead;
 use App\MyModel;
 
 /*

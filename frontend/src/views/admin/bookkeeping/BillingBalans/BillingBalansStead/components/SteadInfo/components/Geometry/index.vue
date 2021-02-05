@@ -54,7 +54,7 @@ export default {
   props: {
     stead: {
       type: Object,
-      dafault: () => ({})
+      default: () => {}
     }
   },
   data() {
@@ -68,15 +68,15 @@ export default {
     },
     krd() {
       return this.stead.coordinates.krd
-      const kdr = []
-      this.stead.discriptions.geodata.geometry.coordinates[0][0].forEach(item => {
-        kdr.push([item[1], item[0]])
-      })
-      return [kdr, []]
+      // const kdr = []
+      // this.stead.discriptions.geodata.geometry.coordinates[0][0].forEach(item => {
+      //   kdr.push([item[1], item[0]])
+      // })
+      // return [kdr, []]
     },
     center() {
       return this.stead.coordinates.center
-      return [this.stead.discriptions.geodata.properties.center.y, this.stead.discriptions.geodata.properties.center.x]
+      // return [this.stead.discriptions.geodata.properties.center.y, this.stead.discriptions.geodata.properties.center.x]
     }
   },
   methods: {

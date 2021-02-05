@@ -39,6 +39,7 @@
       >
         <el-table-column
           type="index"
+          align="center"
           width="50"
         />
         <el-table-column label="Дата" align="center" width="100px">
@@ -51,19 +52,9 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column align="center" label="Название">
+        <el-table-column align="center" label="Назначение">
           <template slot-scope="{ row }">
-            <div v-if="row.type == 'invoice'">
-              Счет: {{ row.data.title }}
-            </div>
-            <div v-if="row.type == 'payment'">
-              Оплата: {{ row.data.raw_data[4] }}
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column v-for="item in receiptTypes" :key="item.id" align="center" :label="item.name" :prop="item.id.toString()" width="150px">
-          <template slot-scope="{row}">
-            <div v-if="row.data.discription && row.data.type === item.id">
+            <div v-if="row.data.discription">
               <div class="relative dib pr2 pt2">
                 <div class="absolute top-0 right-0 dark-red fw6">!</div>
                 <el-popover
@@ -72,25 +63,50 @@
                   trigger="click"
                   :content="row.data.discription"
                 >
-                  <span slot="reference">
-                    <span v-if="row.type =='payment' && row.data.type === item.id">{{ row.data.price | formatPrice }}</span>
-                    <span v-if="row.type =='invoice' && row.data.type === item.id">-{{ row.data.price | formatPrice }}</span>
-                  </span>
+                  <div slot="reference">
+                    <div v-if="row.type == 'invoice'">
+                      Счет: {{ row.data.title }}
+                    </div>
+                    <div v-if="row.type == 'payment'">
+                      Оплата: {{ row.data.raw_data[4] }}
+                    </div>
+                  </div>
                 </el-popover>
               </div>
             </div>
-            <div v-if="!row.data.discription && row.data.type === item.id">
+            <div v-if="!row.data.discription">
+              <div v-if="row.type == 'invoice'">
+                Счет: {{ row.data.title }}
+              </div>
+              <div v-if="row.type == 'payment'">
+                Оплата: {{ row.data.raw_data[4] }}
+              </div>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column v-for="item in receiptTypes" :key="item.id" align="center" :label="item.name" :prop="item.id.toString()" width="150px">
+          <template slot-scope="{row}">
+            <div>
               <span v-if="row.type =='payment' && row.data.type === item.id">{{ row.data.price | formatPrice }}</span>
               <span v-if="row.type =='invoice' && row.data.type === item.id">-{{ row.data.price | formatPrice }}</span>
             </div>
 
           </template>
         </el-table-column>
-        <el-table-column align="center" label="Actions">
+        <el-table-column label="Actions">
           <template slot-scope="{row}">
-            <el-button type="primary" size="small" icon="el-icon-info" @click="showMore(row)">
-              Подробнее
-            </el-button>
+            <div>
+              <el-button type="primary" size="small" icon="el-icon-info" @click="showMore(row)">
+                Подробнее
+              </el-button>
+              <div v-if="row.data.type_depends" class="inst_read">
+                <span v-for="d in row.data.depends" :key="d.id">
+                  <span v-if="row.data.instr_read['d' + d.id]">
+                    {{ row.data.instr_read['d' + d.id].value }}
+                  </span>
+                </span>
+              </div>
+            </div>
           </template>
         </el-table-column>
       </el-table>
@@ -311,6 +327,13 @@ export default {
 </script>
 
 <style scoped>
+  .inst_read {
+    font-size: 0.8em;
+    margin-bottom: -5px;
+    margin-top: -6px;
+    color: blueviolet;
+    display: inline-block;
+  }
   .table-filter-header {
     display: flex;
     margin-bottom: 15px;
