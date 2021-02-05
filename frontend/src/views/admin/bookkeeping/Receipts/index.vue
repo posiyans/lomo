@@ -1,7 +1,12 @@
 <template>
   <div class="app-container">
-    <div class="">
-      Участки c
+    <div class="admin-parge-title">Квитанции</div>
+
+    <div class="filter-container">
+      <span class="filter-container__item">
+        Участки c
+
+      </span>
       <el-select
         v-model="listQuery.stead_min"
         filterable
@@ -10,15 +15,19 @@
         placeholder="Введите номер участка"
         no-data-text="Данный номер не найден"
         :remote-method="findSteadMin"
-        :loading="loading">
+        :loading="loading"
+        class="filter-container__item"
+      >
         <el-option
           v-for="item in steadsListMin"
           :key="item.id"
           :label="item.number"
-          :value="item.id">
-        </el-option>
+          :value="item.id"
+        />
       </el-select>
-      по
+      <span class="filter-container__item">
+        по
+      </span>
       <el-select
         v-model="listQuery.stead_max"
         filterable
@@ -27,40 +36,43 @@
         placeholder="Введите номер участка"
         no-data-text="Данный номер не найден"
         :remote-method="findSteadMax"
-        :loading="loading">
+        class="filter-container__item"
+        :loading="loading"
+      >
         <el-option
           v-for="item in steadsListMax"
           :key="item.id"
           :label="item.number"
-          :value="item.id">
-        </el-option>
+          :value="item.id"
+        />
       </el-select>
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="showReestr">
+      <el-button v-waves class="filter-container__item" type="primary" icon="el-icon-search" @click="showReestr">
         Показать
       </el-button>
-      <el-button v-waves class="filter-item" type="success" icon="el-icon-download" @click="downloadDialogVisible = !downloadDialogVisible">
+      <el-button v-waves class="filter-container__item" type="success" icon="el-icon-download" @click="downloadDialogVisible = !downloadDialogVisible">
         Скачать
       </el-button>
-      <el-checkbox v-model="listQuery.reestr">Включить реест в фаил</el-checkbox>
-      <el-checkbox v-model="listQuery.fio">Включить ФИО в фаил</el-checkbox>
+      <el-checkbox v-model="listQuery.reestr" class="filter-container__item">Включить реест в фаил</el-checkbox>
+      <el-checkbox v-model="listQuery.fio" class="filter-container__item">Включить ФИО в фаил</el-checkbox>
     </div>
-    <ShowTable v-if="list.length > 0" v-loading="loading" :list="list"/>
+    <ShowTable v-if="list.length > 0" v-loading="loading" :list="list" />
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="showReestr" />
     <el-dialog
       title="Внимание"
       :visible.sync="downloadDialogVisible"
       width="30%"
-      center>
+      center
+    >
       <div>Скачать текущую страницу или весь диапазон??</div>
       <div class="pt3">
-        При загрузке большого диапозона, создание файла может занять некоторое<br> временя,  так что наберитесь терпения!!
+        При загрузке большого диапозона, создание файла может занять некоторое<br> временя,  так что наберитесь терпения!
       </div>
 
       <span slot="footer" class="dialog-footer">
-    <el-button @click="downloadDialogVisible = false" style="margin-right: 20px;">Отмена</el-button>
-    <el-button type="primary" @click="downloadReestr(true)" style="margin-right: 20px;">Страницу</el-button>
-    <el-button type="danger" @click="downloadReestr(false)">Все</el-button>
-  </span>
+        <el-button style="margin-right: 20px;" @click="downloadDialogVisible = false">Отмена</el-button>
+        <el-button type="primary" style="margin-right: 20px;" @click="downloadReestr(true)">Страницу</el-button>
+        <el-button type="danger" @click="downloadReestr(false)">Все</el-button>
+      </span>
     </el-dialog>
   </div>
 </template>
@@ -104,7 +116,7 @@ export default {
         {
           key: 1,
           label: 'Печатать реестр'
-        },
+        }
       ]
     }
   },

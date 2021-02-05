@@ -94,7 +94,7 @@
     <el-dialog
       title="Редактироовать"
       :visible.sync="dialogVisible"
-      width="30%"
+      :width="mobile ? '100%' : '600px'"
     >
       <el-form
         ref="editForm"
@@ -147,7 +147,7 @@ export default {
   props: {
     stead: {
       type: Object,
-      dafault: () => ({})
+      default: () => {}
     }
   },
   data() {
@@ -196,6 +196,9 @@ export default {
     }
   },
   computed: {
+    mobile() {
+      return this.$store.state.app.device === 'mobile'
+    }
   },
   mounted() {
     this.stead_loc = this.stead

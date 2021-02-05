@@ -63,6 +63,16 @@ const bookkepingRouter = {
       }
     },
     {
+      path: 'contributions',
+      component: () => import('@/views/admin/bookkeeping/Receipts/index'),
+      name: 'AdminReceipts',
+      meta: {
+        title: 'Квитанции',
+        icon: 'documentation',
+        affix: true
+      }
+    },
+    {
       path: 'payment_info/:id(\\d+)',
       component: () => import('@/views/admin/bookkeeping/BillingPayment/PaymentInfo/index'),
       hidden: true

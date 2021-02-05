@@ -7,6 +7,14 @@ export function fetchInvoiceInfo(id) {
   })
 }
 
+export function addInvoiceForGroupReadings(data) {
+  return request({
+    url: '/api/v1/admin/billing/insrumet-readings/add-group-invoice',
+    method: 'post',
+    data: data
+  })
+}
+
 export function addInvoiceForReadings(id) {
   return request({
     url: '/api/v1/admin/billing/insrumet-readings/add-invoice/' + id,

@@ -56,8 +56,6 @@ export function fetchReestr($id) {
   })
 }
 
-
-
 // export function updateArticle(data) {
 //   return request({
 //     url: '/api/v1/article/update',
@@ -65,7 +63,6 @@ export function fetchReestr($id) {
 //     data
 //   })
 // }
-
 
 export function fetchBillingBalansList(query) {
   return request({
@@ -78,6 +75,14 @@ export function fetchBillingBalansList(query) {
 export function fetchBillingBalansSteadInfo(query) {
   return request({
     url: '/api/v1/admin/billing/balance-info',
+    method: 'get',
+    params: query
+  })
+}
+
+export function fetchBillingAllBalansForStead(query) {
+  return request({
+    url: '/api/v1/admin/billing/balance-for-stead',
     method: 'get',
     params: query
   })
@@ -122,6 +127,4 @@ export function publishBillingBankReestr(data) {
     data: data
   })
 }
-
-
 

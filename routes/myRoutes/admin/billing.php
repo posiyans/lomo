@@ -2,6 +2,8 @@
 // бухгалтерия
 Route::get('billing/balance-info', 'Admin\Bookkeeping\Billing\BalanceController@info');
 Route::get('billing/balance-list', 'Admin\Bookkeeping\Billing\BalanceController@list');
+Route::get('billing/balance-for-stead', 'Admin\Bookkeeping\Billing\BalanceController@allBalance');
+
 Route::resource('billing/reestr', 'Admin\Bookkeeping\Billing\ReestrController')
     ->only(['index', 'show', 'update', 'store']);
 

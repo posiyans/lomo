@@ -186,6 +186,15 @@ aside {
     margin-bottom: 10px;
   }
 }
+.filter-container__item {
+  display: inline-block;
+  vertical-align: middle;
+  margin-bottom: 10px;
+  margin-right: 10px;
+  margin-left: 0 !important;
+  max-width: 220px;
+}
+
 
 //refine vue-multiselect plugin
 .multiselect {
