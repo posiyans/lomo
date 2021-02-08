@@ -1,13 +1,13 @@
 <template>
   <el-table :data="list" border fit highlight-current-row style="width: 100%">
-    <el-table-column  label="Название">
+    <el-table-column label="Название">
       <template slot-scope="{row}">
         <span>{{ row.name }}</span>
       </template>
     </el-table-column>
-    <el-table-column  align="center" label="Тариф">
+    <el-table-column align="center" label="Тариф">
       <template slot-scope="{row}">
-        <span>{{ row.rate.discription }}</span>
+        <span>{{ row.rate.description }}</span>
       </template>
     </el-table-column>
   </el-table>
@@ -48,25 +48,25 @@ export default {
       loading: false
     }
   },
-  computed:{
-    rate_disc(){
+  computed: {
+    rate_disc() {
       if (this.rating.type_id == 1) {
         return this.rating.rate.ratio_a + ' руб*кВт/ч'
       }
       if (this.rating.type_id == 2) {
         let text = ''
-        if (this.rating.rate.ratio_a > 0){
+        if (this.rating.rate.ratio_a > 0) {
           text += this.rating.rate.ratio_a + ' руб с сотки'
         }
-        if (this.rating.rate.ratio_b > 0){
-          if (this.rating.rate.ratio_a > 0){
+        if (this.rating.rate.ratio_b > 0) {
+          if (this.rating.rate.ratio_a > 0) {
             text += ' и '
           }
           text += this.rating.rate.ratio_b + ' руб с участка'
         }
         return text
       }
-      return '';
+      return ''
     }
   },
   mounted() {
@@ -80,7 +80,7 @@ export default {
         this.list = response.data.data
         this.loading = false
       })
-    },
+    }
   }
 }
 </script>

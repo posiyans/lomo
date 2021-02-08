@@ -15,8 +15,8 @@ class AdminSteadResource extends JsonResource
     public function toArray($request)
     {
         $temp = [];
-        if (isset($this->discriptions['geodata'])) {
-            $js=$this->discriptions['geodata'];
+        if (isset($this->descriptions['geodata'])) {
+            $js=$this->descriptions['geodata'];
             $temp = [
                 'center' => [$js['properties']['center']['y'],$js['properties']['center']['x']],
             ];

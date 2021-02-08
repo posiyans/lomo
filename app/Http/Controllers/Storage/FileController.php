@@ -63,9 +63,9 @@ class FileController extends Controller
                 }
             }
             if ($request->model == 'avatar') {
-                $file->discription = 'avatar';
+                $file->description = 'avatar';
                 if ($request->uid) {
-                  $file->discription .= '_'.$request->uid;
+                  $file->description .= '_'.$request->uid;
                 }
             }
             if ($file->save()){

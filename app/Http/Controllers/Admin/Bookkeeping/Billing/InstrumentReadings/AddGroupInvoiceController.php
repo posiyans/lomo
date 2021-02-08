@@ -88,6 +88,11 @@ class AddGroupInvoiceController  extends Controller
         return false;
     }
 
+    /**
+     *
+     * @param $items
+     * @return bool
+     */
     public function groupForDateAndSetInvoice($items)
     {
         $groups = $this->groupForDate($items);
@@ -128,6 +133,13 @@ class AddGroupInvoiceController  extends Controller
     }
 
 
+    /**
+     * выставить счет группе показний
+     *
+     * @param $items
+     * @param false $date
+     * @return bool
+     */
     public function setInvoiceForGroupReading($items, $date = false)
     {
         $price = 0;

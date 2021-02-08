@@ -7,8 +7,8 @@
           ФИО
         </td>
         <td>
-          <span v-if="stead && stead.discriptions && stead.discriptions.fio">
-            {{ stead.discriptions.fio }}
+          <span v-if="stead && stead.descriptions && stead.descriptions.fio">
+            {{ stead.descriptions.fio }}
           </span>
         </td>
         <td>
@@ -83,7 +83,7 @@ export default {
   data() {
     return {
       stead_loc: {
-        discriptions: {},
+        descriptions: {},
         options: {}
       }
     }

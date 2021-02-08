@@ -21,7 +21,7 @@ class SteadResource extends JsonResource
             'user_fullName'=>optional($this->user)->fullName(),
             'user_fName'=>optional($this->user)->fName(),
             'user'=> $this->user ? $this->user : [],
-            'discriptions' => $this->discriptions
+            'descriptions' => $this->descriptions
         ];
     }
 }

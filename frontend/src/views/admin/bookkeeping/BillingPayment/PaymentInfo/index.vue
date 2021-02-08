@@ -5,7 +5,7 @@
       Дата оплаты: {{ payment.payment_date }}
     </div>
     <div>
-      Назначение платежа: {{ payment.discription }}
+      Назначение платежа: {{ payment.description }}
     </div>
     <div>
       ФИО: {{ payment.raw_data[6] }}
@@ -44,7 +44,7 @@
       v-if="dialogMeterReadingFormVisible"
       :meter-reading1="payment.raw_data.meterReading1"
       :meter-reading2="payment.raw_data.meterReading2"
-      :discription="payment.discription"
+      :description="payment.description"
       @save="setMeterReading"
       @close="closeMetering"
     />

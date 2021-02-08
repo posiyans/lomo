@@ -26,9 +26,18 @@
   font-weight: 600;
 }
 
+
 //дополнения для element
 @media only screen and (max-width: 990px) {
   .el-message-box {
     width: 320px;
   }
+  .el-tabs--border-card > .el-tabs__content {
+    padding-left: 3px;
+    padding-right: 3px;
+  }
+}
+
+.el-table__expanded-cell[class*="cell"] {
+  padding: 5px;
 }

@@ -39,6 +39,28 @@ class InstrumentReadings extends MyModel
     }
 
     /**
+     * получить модель придыдущих показаний
+     *
+     * @return \Illuminate\Database\Eloquent\HigherOrderBuilderProxy|mixed
+     */
+    public function getPreviousReadingsModel()
+    {
+        $item = self::query()
+            ->where('device_id', $this->device_id)
+            ->where('created_at', '<=', $this->created_at)
+            ->where('id', '<', $this->id)
+            ->orderBy('created_at', 'desc')
+            ->first();
+        if ($item) {
+            return $item;
+        }
+        $item = DeviceRegisterModel::find($this->device_id);
+        return $item;
+    }
+
+
+
+    /**
      * получить придыдущее показание
      *
      * @return \Illuminate\Database\Eloquent\HigherOrderBuilderProxy|mixed
@@ -49,6 +71,27 @@ class InstrumentReadings extends MyModel
             ->where('device_id', $this->device_id)
             ->where('created_at', '<=', $this->created_at)
             ->where('id', '<', $this->id)
+            ->orderBy('created_at', 'desc')
+            ->first();
+        if ($item) {
+            return $item->value;
+        }
+        $item = DeviceRegisterModel::find($this->device_id);
+        return $item->initial_data;
+    }
+
+    /**
+     * получить придыдущее показание
+     *
+     * @return \Illuminate\Database\Eloquent\HigherOrderBuilderProxy|mixed
+     */
+    public function getPreviousInvoiceReadings()
+    {
+        $item = self::query()
+            ->where('device_id', $this->device_id)
+            ->where('created_at', '<=', $this->created_at)
+            ->where('id', '<', $this->id)
+            ->whereNotNull('invoice_id')
             ->orderBy('created_at', 'desc')
             ->first();
         if ($item) {

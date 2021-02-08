@@ -37,10 +37,23 @@ class DeviceRegisterModel extends MyModel
         return $this->hasMany(InstrumentReadings::class, 'device_id', 'id')->orderBy('created_at', 'desc');
     }
 
+    /**
+     * получить последние показани по прибору
+     * @return mixed
+     */
     public function getLastReading()
     {
-        return  InstrumentReadings::where('device_id', $this->id)->orderBy('created_at', 'desc')-> first();
+        return  InstrumentReadings::where('device_id', $this->id)->orderBy('created_at', 'desc')->first();
     }
 
+
+    /**
+     * получить последние показяния по которым выставлен счет
+     * @return mixed
+     */
+    public function getLastInvoiceReading()
+    {
+        return  InstrumentReadings::where('device_id', $this->id)->whereNotNull('invoice_id')->orderBy('created_at', 'desc')-> first();
+    }
 
 }

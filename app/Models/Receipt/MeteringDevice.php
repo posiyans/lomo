@@ -32,13 +32,16 @@ class MeteringDevice extends MyModel
             $this->rate =  [
                 'ratio_a' => 0,
                 'ratio_b' => 0,
-                'discription' => ''
+                'description' => ''
                 ];
         }
+        return $this->rate;
     }
 
     /**
      * получить n-ое показание прибора
+     *
+     * @deprecated
      * @param $n
      * @return int
      */
@@ -50,6 +53,8 @@ class MeteringDevice extends MyModel
     /**
      * получить последние показание прибора
      * и занести его в атрибут LastIndication
+     *
+     * @deprecated
      * @return int|mixed
      */
     public function getLastIndication($stead_id) {
@@ -57,6 +62,10 @@ class MeteringDevice extends MyModel
         return $this->LastIndication;
     }
 
+    public function getDeviceForStead($stead_id)
+    {
+        return DeviceRegisterModel::where('type_id', $this->id)->where('stead_id', $stead_id)->where('active', 1)->get();
+    }
 
     /**
      * незнаю что

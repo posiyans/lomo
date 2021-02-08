@@ -3,18 +3,18 @@
     <div class="ml4-ns">
       <el-button @click="$router.push('/bookkeping/billing_reestr')">Начисления</el-button>
     </div>
-    <el-form ref="reestrForm" :model="postForm" :rules="rules"  :label-position="labelPosition" class="form-container" label-width="180px">
+    <el-form ref="reestrForm" :model="postForm" :rules="rules" :label-position="labelPosition" class="form-container" label-width="180px">
       <div class="pt1 createPost-main-container" style="padding-top: 0; padding-bottom: 0">
         <div style="display: inline-block; padding-right: 10px; padding-top: 20px;">
           <b>Сделать нацислеения всем садоводам</b>
         </div>
         <div v-if="isEdit" style="display: inline-block;">
-          <el-button v-loading="loading"  type="danger" @click="submitForm">
+          <el-button v-loading="loading" type="danger" @click="submitForm">
             Пересчитать
           </el-button>
         </div>
         <div v-else style="display: inline-block;">
-          <el-button v-loading="loading"  type="danger" @click="submitForm">
+          <el-button v-loading="loading" type="danger" @click="submitForm">
             Начислить
           </el-button>
         </div>
@@ -29,27 +29,25 @@
             v-for="item in rateList"
             :key="item.id"
             :label="item.name"
-            :value="item">
-          </el-option>
+            :value="item"
+          />
         </el-select>
         <el-form-item style="margin-bottom: 10px;" prop="title" label="Описание">
-          <el-input v-model="postForm.title" placeholder="На что и за какой период делается начисление"/>
+          <el-input v-model="postForm.title" placeholder="На что и за какой период делается начисление" />
         </el-form-item>
         <el-form-item label="Начислить на 1 сотку:">
-          <money v-model="postForm.ratio_a" placeholder="Начисление на 1 сотку участка" v-bind="money_a">
-          </money>
+          <money v-model="postForm.ratio_a" placeholder="Начисление на 1 сотку участка" v-bind="money_a" />
         </el-form-item>
         <el-form-item label="Начислить на 1 участок:">
-          <money v-model="postForm.ratio_b" placeholder="Начисление на 1 участок, внезависимости от площади" v-bind="money_b">
-          </money>
+          <money v-model="postForm.ratio_b" placeholder="Начисление на 1 участок, внезависимости от площади" v-bind="money_b" />
         </el-form-item>
 
-    <div style="color: #1b5fab;">
-      Например на 1 участок площадью 6 соток будет начисленно {{exampleRate}} рублей
-    </div>
-  </div>
-  </el-form>
-    {{postForm}}
+        <div style="color: #1b5fab;">
+          Например на 1 участок площадью 6 соток будет начисленно {{ exampleRate }} рублей
+        </div>
+      </div>
+    </el-form>
+    {{ postForm }}
   </div>
 </template>
 
@@ -113,15 +111,15 @@ export default {
       userListOptions: [],
       rules: {
         // image_uri: [{ validator: validateRequire }],
-        title: [{ validator: validateRequire }],
+        title: [{ validator: validateRequire }]
         // text: [{ validator: validateRequire }],
       },
-      tempRoute: {},
+      tempRoute: {}
     }
   },
   computed: {
     ...mapState({
-      device: state => state.app.device,
+      device: state => state.app.device
     }),
     exampleRate() {
       return (6 * this.postForm.ratio_a + this.postForm.ratio_b).toFixed(2)
@@ -141,7 +139,7 @@ export default {
         return (+new Date(this.datetime))
       },
       set(val) {
-        this.datetime= new Date(val)
+        this.datetime = new Date(val)
       }
     }
   },
@@ -158,12 +156,12 @@ export default {
     this.tempRoute = Object.assign({}, this.$route)
   },
   methods: {
-    create_UUID(){
-      var dt = new Date().getTime();
+    create_UUID() {
+      var dt = new Date().getTime()
       var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = (dt + Math.random()*16)%16 | 0
-        dt = Math.floor(dt/16)
-        return (c == 'x' ? r : (r&0x3 | 0x8)).toString(16)
+        var r = (dt + Math.random() * 16) % 16 | 0
+        dt = Math.floor(dt / 16)
+        return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16)
       })
       return uuid
     },
@@ -190,7 +188,7 @@ export default {
       document.title = `${title} - ${this.postForm.id}`
     },
     changeRate() {
-      this.postForm.title = this.rate_checked.discription + ' ' + new Date().getFullYear() + ' год'
+      this.postForm.title = this.rate_checked.description + ' ' + new Date().getFullYear() + ' год'
       console.log(this.rate_checked.rate.ratio_a)
       this.postForm.ratio_a = +this.rate_checked.rate.ratio_a
       // this.postForm.ratio_a = 2
@@ -212,7 +210,6 @@ export default {
           }
         })
       } else {
-
         this.$message.error('Ничего не начисленно!!!')
       }
       // this.postForm.public = true
@@ -226,10 +223,8 @@ export default {
         type: 'success',
         duration: 2000
       })
-
     },
     draftForm() {
-
       // this.postForm.public = false
       this.saveForm()
     },

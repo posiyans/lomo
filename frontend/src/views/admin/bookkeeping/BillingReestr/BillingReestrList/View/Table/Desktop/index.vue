@@ -1,34 +1,24 @@
 <template>
-  <el-table v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
+  <el-table :data="list" border fit highlight-current-row style="width: 100%">
     <el-table-column align="center" label="ID" width="80">
       <template slot-scope="{ row }">
-        <el-tag :type="row.public | statusFilter">
+        <span>
           {{ row.id }}
-        </el-tag>
+        </span>
       </template>
     </el-table-column>
-    <el-table-column min-width="300px" label="Заголовок">
+    <el-table-column min-width="300px" label="Назначение">
       <template slot-scope="{row}">
         <span>{{ row.title }}</span>
       </template>
     </el-table-column>
-    <el-table-column align="center" label="На 1 сотку">
+    <el-table-column align="center" label="Описание" style="padding-top: 0;">
       <template slot-scope="{row}">
-        <span>{{ row.ratio_a }}</span>
-      </template>
-    </el-table-column>
-    <el-table-column align="center" label="На 1 Участок">
-      <template slot-scope="{row}">
-        <span>{{ row.ratio_b }}</span>
-      </template>
-    </el-table-column>
-    <el-table-column align="center" label="Actions" width="120">
-      <template slot-scope="scope">
-        <router-link :to="'/bookkeping/billing_reestr_edit/'+scope.row.id">
-          <el-button type="primary" size="small" icon="el-icon-edit">
-            Edit
-          </el-button>
-        </router-link>
+        <div style="font-size: 0.65rem; line-height: 0.75rem">
+          <div v-for="item in row.options" :key="item.id">
+            {{ item.name }} {{ item.rate.description }}
+          </div>
+        </div>
       </template>
     </el-table-column>
   </el-table>
@@ -36,24 +26,6 @@
 
 <script>
 export default {
-  filters: {
-    categoryFilter(val) {
-      if (val) {
-        return val
-      }
-      return 'Укажете категорию'
-    },
-    statusFilter(status) {
-      return status ? 'success' : 'info'
-    },
-
-    publicFilter(status) {
-      return status === 1 ? 'Опубликовано' : 'Черновик'
-    },
-    commentFilter(status) {
-      return status === 1 ? 'Разрешены' : 'Отключены'
-    }
-  },
   props: {
     list: {
       type: Array,

@@ -111,7 +111,7 @@ class InvoiceController extends Controller
     {
         $invoice = BillingInvoice::find($id);
         if ($invoice->id == $request->id) {
-            $invoice->discription = $request->has('discription') ? $request->discription : $invoice->discription;
+            $invoice->description = $request->has('description') ? $request->description : $invoice->description;
         }
         if ($invoice->save()) {
             return json_encode(['status'=>true, 'data'=> new AdminInvoiceResource($invoice)]);

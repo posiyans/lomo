@@ -57,7 +57,7 @@
         <tr>
           <td>Примечание</td>
           <td>
-            <div v-html="invoice.discription" />
+            <div v-html="invoice.description" />
           </td>
           <td>
             <el-button type="primary" size="mini" plain icon="el-icon-edit" @click="editDescription" />
@@ -139,9 +139,9 @@ export default {
       this.$prompt('Добавить', 'Примечание', {
         confirmButtonText: 'Сохранить',
         cancelButtonText: 'Отмена',
-        inputValue: this.invoice.discription
+        inputValue: this.invoice.description
       }).then(({ value }) => {
-        this.invoice.discription = value
+        this.invoice.description = value
         this.saveData()
       }).catch(() => {
       })

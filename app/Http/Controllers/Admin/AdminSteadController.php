@@ -67,7 +67,6 @@ class AdminSteadController extends Controller
      */
     public function show($id, Request $request)
     {
-
         $stead = Stead::find($id);
         $data = new AdminSteadResource($stead);
 

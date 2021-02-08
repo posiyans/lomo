@@ -15,9 +15,9 @@ use Illuminate\Support\Facades\Cookie;
  */
 class Stead extends MyModel
 {
-    protected $fillable = ['number', 'discriptions'];
+    protected $fillable = ['number', 'descriptions'];
     protected $casts = [
-        'discriptions' => 'array',
+        'descriptions' => 'array',
         'options' => 'array',
     ];
     //
@@ -124,13 +124,13 @@ class Stead extends MyModel
     public static function addNote($id, $note){
         $stead = Stead::find($id);
         if ($stead){
-            $discriptions = $stead->discriptions;
-            if (isset($discriptions['note'])){
-                $discriptions['note'] .= "\n".$note;
+            $descriptions = $stead->descriptions;
+            if (isset($descriptions['note'])){
+                $descriptions['note'] .= "\n".$note;
             } else {
-                $discriptions['note'] = $note;
+                $descriptions['note'] = $note;
             }
-            $stead->discriptions = $discriptions;
+            $stead->descriptions = $descriptions;
             if ($stead->logAndSave('Изменение в описании', $stead->id)){
                 return $stead;
             }
@@ -148,7 +148,7 @@ class Stead extends MyModel
     {
         $this->number =  $model['number'];
         $this->size =  $model['size'];
-        $this->discriptions =  $model['discriptions'];
+        $this->descriptions =  $model['descriptions'];
         $this->options =  $model['options'];
         if ($this->logAndSave('Изменение данных об участке', $this->id)){
             return $this;

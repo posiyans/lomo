@@ -3,15 +3,15 @@
 namespace App\Models\Billing;
 
 use App\Models\Stead;
-use Illuminate\Database\Eloquent\Model;
+use App\MyModel;
 use DB;
+use Illuminate\Support\Facades\Auth;
 
-class BillingReestr extends Model
+class BillingReestr extends MyModel
 {
     protected $casts = [
         'history' => 'array',
-        'ratio_a'=> 'float',
-        'ratio_b'=> 'float',
+        'options' => 'array',
     ];
 
     public function invoices()
@@ -31,15 +31,18 @@ class BillingReestr extends Model
      */
     public function save(array $options = [])
     {
-        $history = $this->history;
-        $history[] = [
-            'user_id'=> $this->user_id,
-            'title'=> $this->title,
-            'ratio_a'=> $this->ratio_a,
-            'ratio_b'=> $this->ratio_b,
-            'date'=> time(),
-        ];
-        $this->history = $history;
+        if (Auth::check()) {
+            $this->user_id = Auth::user()->id;
+        } else {
+            $this->user_id = 0;
+        }
+//        $history = $this->history;
+//        $history[] = [
+//            'user_id'=> $this->user_id,
+//            'title'=> $this->title,
+//            'date'=> time(),
+//        ];
+        $this->history = [];
         return parent::save($options);
     }
     //

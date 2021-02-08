@@ -10,7 +10,7 @@ use App\MyModel;
 class BillingInvoice extends MyModel
 {
 
-    protected $fillable = ['title', 'type', 'discription'];
+    protected $fillable = ['title', 'type', 'description'];
 
     /**
      * получить участок счета
@@ -85,13 +85,15 @@ class BillingInvoice extends MyModel
      * @param $receipt_type тип счета
      * @return BillingInvoice|false
      */
-    public static function createInvoiceForStead($stead_id, $price, $title, $receipt_type, $date = false)
+    public static function createInvoiceForStead($stead_id, $price, $title, $receipt_type, $date = false, $reestr = null, $description = '')
     {
         $invoice = new self();
         $invoice->title = $title;
         $invoice->stead_id = $stead_id;
         $invoice->type = $receipt_type;
         $invoice->price = (float)$price;
+        $invoice->reestr_id = $reestr;
+        $invoice->description = $description;
         if ($date) {
             $invoice->created_at = $date;
         }

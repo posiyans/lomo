@@ -47,7 +47,6 @@ export function updateBillingReestr(id, data) {
     data
   })
 }
-updateBillingReestr
 
 export function fetchReestr($id) {
   return request({

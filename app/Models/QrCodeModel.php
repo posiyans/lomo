@@ -48,7 +48,7 @@ class QrCodeModel
         if (is_int($stead)){
             $stead = Stead::findOrFail($stead);
         }
-        $fio = isset($stead->discriptions['fio']) ? $stead->discriptions['fio'] : '';
+        $fio = isset($stead->descriptions['fio']) ? $stead->descriptions['fio'] : '';
         $str = strpos($fio, "19");
         if ($str) {
             $fio = substr($fio, 0, $str);
@@ -88,10 +88,10 @@ class QrCodeModel
     /**
      * установить назначение платежа
      *
-     * @param $discription
+     * @param $description
      */
-    public function setDiscription($discription){
-        $this->out .= '|Purpose=' . mb_substr($discription, 0, 115);
+    public function setDescription($description){
+        $this->out .= '|Purpose=' . mb_substr($description, 0, 115);
     }
 
     /**
@@ -123,10 +123,10 @@ class QrCodeModel
             $steadModel = Stead::findOrFail((int)$steadModel);
         }
         $cash = 0;
-        $discription = '';
+        $description = '';
         foreach ($ReceiptType->MeteringDevice as $MeteringDevice) {
             $cash += $MeteringDevice->getTicket($steadModel->id);
-            $discription .= $MeteringDevice->name . ' ' . $MeteringDevice->cash_description . ' ';
+            $description .= $MeteringDevice->name . ' ' . $MeteringDevice->cash_description . ' ';
         }
 //        полное назначение не проходит в банк клиенте
 //        $this->out .= '|Purpose=' . $ReceiptType->name . ' ' . $discription;

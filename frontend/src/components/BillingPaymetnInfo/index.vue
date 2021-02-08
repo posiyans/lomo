@@ -109,7 +109,7 @@
         <tr>
           <td>Примечание</td>
           <td>
-            <div v-html="payment.discription" />
+            <div v-html="payment.description" />
           </td>
           <td>
             <el-button type="primary" size="mini" plain icon="el-icon-edit" @click="editDescription" />
@@ -125,7 +125,7 @@
     </el-dialog>
     <ChangeMetersData
       v-if="meteringShow"
-      :discription="payment.raw_data[7]"
+      :description="payment.raw_data[7]"
       :data="payment.instr_read"
       @close="meteringClose"
       @saveData="saveMetering"
@@ -258,9 +258,9 @@ export default {
       this.$prompt('Добавить', 'Примечание', {
         confirmButtonText: 'Сохранить',
         cancelButtonText: 'Отмена',
-        inputValue: this.payment.discription
+        inputValue: this.payment.description
       }).then(({ value }) => {
-        this.payment.discription = value
+        this.payment.description = value
         this.saveData()
       }).catch(() => {
       })

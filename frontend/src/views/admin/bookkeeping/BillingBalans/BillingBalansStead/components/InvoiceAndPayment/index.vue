@@ -54,14 +54,14 @@
         </el-table-column>
         <el-table-column align="center" label="Назначение">
           <template slot-scope="{ row }">
-            <div v-if="row.data.discription">
+            <div v-if="row.data.description">
               <div class="relative dib pr2 pt2">
                 <div class="absolute top-0 right-0 dark-red fw6">!</div>
                 <el-popover
                   placement="top"
                   width="200"
                   trigger="click"
-                  :content="row.data.discription"
+                  :content="row.data.description"
                 >
                   <div slot="reference">
                     <div v-if="row.type == 'invoice'">
@@ -74,7 +74,7 @@
                 </el-popover>
               </div>
             </div>
-            <div v-if="!row.data.discription">
+            <div v-if="!row.data.description">
               <div v-if="row.type == 'invoice'">
                 Счет: {{ row.data.title }}
               </div>

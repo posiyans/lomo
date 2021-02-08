@@ -2,21 +2,20 @@
   <div class="app-container">
     <div class="ma2"><b>Начисления</b></div>
     <div class="filter-container">
-      <el-input v-model="listQuery.find" placeholder="Поиск по заголовку" clearable style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.find" placeholder="Поиск по заголовку" clearable style="width: 200px;" class="filter-container__item" @keyup.enter.native="handleFilter" />
       <el-select
         v-model="listQuery.type"
         placeholder="Тип"
-        clearable
-        class="filter-item"
+        class="filter-container__item"
         style="width: 160px"
         @change="handleFilter"
       >
-        <el-option v-for="item in categoryArray" :key="item.key" :label="item.title" :value="item.key" />
+        <el-option v-for="item in receiptTypes" :key="item.id" :label="item.name" :value="item.id" />
       </el-select>
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+      <el-button v-waves class="filter-container__item" type="primary" icon="el-icon-search" @click="handleFilter">
         Показать
       </el-button>
-      <el-button v-waves class="filter-item" type="danger" icon="el-icon-plus" @click="add">
+      <el-button v-waves class="filter-container__item" type="danger" icon="el-icon-plus" @click="add">
         Добавить
       </el-button>
     </div>
@@ -32,6 +31,7 @@ import waves from '@/directive/waves'
 import { mapState } from 'vuex'
 import Mobile from './View/Table/Mobile'
 import Desktop from './View/Table/Desktop'
+import { fetchReceiptTypeList } from '@/api/admin/setting/receipt'
 
 export default {
   name: 'ArticleList',
@@ -59,16 +59,7 @@ export default {
     return {
       list: null,
       total: 0,
-      categoryArray: [
-        {
-          key: 1,
-          title: 'Электроэнергия'
-        },
-        {
-          key: 2,
-          title: 'Взносы'
-        }
-      ],
+      receiptTypes: [],
       listLoading: true,
       listQuery: {
         page: 1,
@@ -95,22 +86,34 @@ export default {
       return Desktop
     }
   },
+  created() {
+    this.getTypeList()
+  },
   mounted() {
     this.getList()
     // this.getCategoryList()
   },
   methods: {
+    getTypeList() {
+      fetchReceiptTypeList()
+        .then(response => {
+          if (response.data.status) {
+            this.receiptTypes = []
+            response.data.data.forEach(item => {
+              // if (!item.auto_invoice) {
+              this.receiptTypes.push(item)
+              // }
+            })
+            if (this.receiptTypes.length === 1) {
+              this.listQuery.type = this.receiptTypes[0].id
+            }
+          } else if (response.data.data) {
+            this.$message.error(response.data.data)
+          }
+        })
+    },
     add() {
       this.$router.push('/bookkeping/billing_reestr_create')
-    },
-    categoryTitle(id) {
-      let label = false
-      this.categoryArray.forEach(i => {
-        if (i.id === id) {
-          label = i.label
-        }
-      })
-      return label
     },
     getList() {
       this.listLoading = true
