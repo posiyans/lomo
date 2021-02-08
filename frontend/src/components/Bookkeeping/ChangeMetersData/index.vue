@@ -5,7 +5,7 @@
     width="400px"
     @close="close"
   >
-    <div class="mb2 do-not-carry">{{ discription }}</div>
+    <div class="mb2 do-not-carry">{{ description }}</div>
     <div style="width: 200px;">
       <el-form label-position="top">
         <el-form-item label="Показания день">
@@ -36,7 +36,7 @@
 <script>
 export default {
   props: {
-    discription: {
+    description: {
       type: String,
       default: ''
     },

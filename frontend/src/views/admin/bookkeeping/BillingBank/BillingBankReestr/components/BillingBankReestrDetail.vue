@@ -351,7 +351,7 @@ export default {
       document.title = `${title} - ${this.postForm.id}`
     },
     changeRate() {
-      this.postForm.title = this.rate_checked.discription + ' ' + new Date().getFullYear() + ' год'
+      this.postForm.title = this.rate_checked.description + ' ' + new Date().getFullYear() + ' год'
       console.log(this.rate_checked.rate.ratio_a)
       this.postForm.ratio_a = +this.rate_checked.rate.ratio_a
       // this.postForm.ratio_a = 2

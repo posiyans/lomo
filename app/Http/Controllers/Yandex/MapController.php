@@ -111,8 +111,8 @@ class  MapController extends Controller
         $steads = Stead::all();
         $data = [];
         foreach ($steads as $item) {
-            if (isset($item->discriptions['geodata'])) {
-                $js=$item->discriptions['geodata'];
+            if (isset($item->descriptions['geodata'])) {
+                $js=$item->descriptions['geodata'];
                 $temp = [
                     'center' => [$js['properties']['center']['y'],$js['properties']['center']['x']],
                     'size' => $item->size,

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin\Bookkeeping\Billing;
 
+use App\Http\Controllers\Admin\Bookkeeping\Billing\RegisterOfCharges\AddOneTimeRegisterOfChargesController;
+use App\Http\Controllers\Admin\Bookkeeping\Billing\RegisterOfCharges\AddRegisterOfChargesController;
 use App\Models\Billing\BillingReestr;
 use App\Permission;
 use App\Role;
@@ -58,20 +60,35 @@ class ReestrController extends Controller
      */
     public function store(Request $request)
     {
-        if (isset($request->title) && !empty($request->title)) {
-            $ratio_a = (isset($request->ratio_a) && !empty($request->ratio_a)) ? $request->ratio_a : false;
-            $ratio_b = (isset($request->ratio_b) && !empty($request->ratio_b)) ? $request->ratio_b : false;
-            if ($ratio_a || $ratio_b) {
-                $user_id = Auth::user()->id;
-                $reestr = BillingReestr::createСontributions($user_id, $request->title, $ratio_a,  $ratio_b);
-                if ($reestr) {
-                    return ['status'=>true, 'data'=>$reestr];
-                }
-                //todo нужно поставить симафор!!!!
-                return ['status'=>false, 'data'=>'Ошибка при сохранении'];
+
+        $one_time = $request->post('one_time', false );
+        $title = $request->post('title', false);
+        $type = $request->post('type', false);
+        if ($type) {
+            if ($one_time) {
+                $ratio_a = $request->post('ratio_a', 0);
+                $ratio_b = $request->post('ratio_b', 0);
+                return AddOneTimeRegisterOfChargesController::addRegister($title, $type, $ratio_a, $ratio_b);
+            } else {
+                $date = $request->post('nowDate', false);
+                $receipt = $request->post('receipt', []);
+                return AddRegisterOfChargesController::addRegister($type, $receipt, $date, $title);
             }
         }
-        return ['status'=>false, 'data'=>'Нет данных'];
+//        if (isset($request->title) && !empty($request->title)) {
+//            $ratio_a = (isset($request->ratio_a) && !empty($request->ratio_a)) ? $request->ratio_a : false;
+//            $ratio_b = (isset($request->ratio_b) && !empty($request->ratio_b)) ? $request->ratio_b : false;
+//            if ($ratio_a || $ratio_b) {
+//                $user_id = Auth::user()->id;
+//                $reestr = BillingReestr::createСontributions($user_id, $request->title, $ratio_a,  $ratio_b);
+//                if ($reestr) {
+//                    return ['status'=>true, 'data'=>$reestr];
+//                }
+//                //todo нужно поставить симафор!!!!
+//                return ['status'=>false, 'data'=>'Ошибка при сохранении'];
+//            }
+//        }
+//        return ['status'=>false, 'data'=>'Нет данных111'];
     }
 
     /**

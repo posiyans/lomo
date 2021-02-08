@@ -31,7 +31,7 @@ class AdminRateController extends Controller
         foreach ($models as $model) {
              $model->rateNow();
         }
-        return ['data'=>$models];
+        return ['status' => true, 'data'=>$models];
 
         //
     }
@@ -63,14 +63,14 @@ class AdminRateController extends Controller
                     $rate->type_id = $type->id;
                     $rate->name = $request->name;
                     $rate->enable = $request->enable;
-                    $rate->discription = $request->discription;
+                    $rate->description = $request->description;
                     $rate->logAndSave('Добавление');
                     if ($request->rate) {
                         $r = new Rate();
                         $r->device_id = $rate->id;
                         $r->ratio_a = $request->rate['ratio_a'] ?? 0;
                         $r->ratio_b = $request->rate['ratio_b'] ?? 0;
-                        $r->discription = $request->rate['discription'];
+                        $r->description = $request->rate['description'];
                         $r->logAndSave('Добавление');
                     }
                 }
@@ -117,14 +117,14 @@ class AdminRateController extends Controller
 //                $rate->type_id = $request->type_id;
                 $rate->name = $request->name;
                 $rate->enable = $request->enable;
-                $rate->discription = $request->discription;
+                $rate->description = $request->description;
                 $rate->logAndSave('Изменение');
                 if ($request->rate) {
                     $r = new Rate();
                     $r->device_id = $rate->id;
                     $r->ratio_a = $request->rate['ratio_a'];
                     $r->ratio_b = $request->rate['ratio_b'];
-                    $r->discription = $request->rate['discription'];
+                    $r->description = $request->rate['description'];
                     $r->logAndSave('Изменение');
                 }
                 return json_encode(['status' => true, 'data' => $rate]);

@@ -1,7 +1,6 @@
 <template>
   <div class="app-container">
     <div class="admin-parge-title">Квитанции</div>
-
     <div class="filter-container">
       <span class="filter-container__item">
         Участки c

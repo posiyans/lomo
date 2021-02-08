@@ -20,14 +20,14 @@
       </el-table-column>
       <el-table-column label="Сумма" align="center" width="100px">
         <template slot-scope="{row}">
-          <div v-if="row.discription">
+          <div v-if="row.description">
             <div class="relative dib pr2 pt2">
               <div class="absolute top-0 right-0 dark-red fw6">!</div>
               <el-popover
                 placement="top"
                 width="200"
                 trigger="click"
-                :content="row.discription"
+                :content="row.description"
               >
                 <span slot="reference">{{ row.price }}</span>
               </el-popover>

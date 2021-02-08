@@ -14,7 +14,7 @@
     <el-table-column min-width="300px" label="Title">
       <template slot-scope="{row}">
         <span>{{ row.name }}</span>
-        <el-tag>{{ row.discription}}</el-tag>
+        <el-tag>{{ row.description }}</el-tag>
       </template>
     </el-table-column>
     <el-table-column align="center" label="Readings" width="95">
@@ -22,36 +22,36 @@
         <span>{{ scope.row.pageviews }}</span>
       </template>
     </el-table-column>
-<!--    <el-table-column width="180px" align="center" label="Date">-->
-<!--      <template slot-scope="scope">-->
-<!--        <span>{{ scope.row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>-->
-<!--      </template>-->
-<!--    </el-table-column>-->
+    <!--    <el-table-column width="180px" align="center" label="Date">-->
+    <!--      <template slot-scope="scope">-->
+    <!--        <span>{{ scope.row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>-->
+    <!--      </template>-->
+    <!--    </el-table-column>-->
 
-<!--    <el-table-column min-width="300px" label="Title">-->
-<!--      <template slot-scope="{row}">-->
-<!--        <span>{{ row.title }}</span>-->
-<!--        <el-tag>{{ row.type }}</el-tag>-->
-<!--      </template>-->
-<!--    </el-table-column>-->
+    <!--    <el-table-column min-width="300px" label="Title">-->
+    <!--      <template slot-scope="{row}">-->
+    <!--        <span>{{ row.title }}</span>-->
+    <!--        <el-tag>{{ row.type }}</el-tag>-->
+    <!--      </template>-->
+    <!--    </el-table-column>-->
 
-<!--    <el-table-column width="110px" align="center" label="Author">-->
-<!--      <template slot-scope="scope">-->
-<!--        <span>{{ scope.row.author }}</span>-->
-<!--      </template>-->
-<!--    </el-table-column>-->
+    <!--    <el-table-column width="110px" align="center" label="Author">-->
+    <!--      <template slot-scope="scope">-->
+    <!--        <span>{{ scope.row.author }}</span>-->
+    <!--      </template>-->
+    <!--    </el-table-column>-->
 
-<!--    <el-table-column width="120px" label="Importance">-->
-<!--      <template slot-scope="scope">-->
-<!--        <svg-icon v-for="n in +scope.row.importance" :key="n" icon-class="star" />-->
-<!--      </template>-->
-<!--    </el-table-column>-->
+    <!--    <el-table-column width="120px" label="Importance">-->
+    <!--      <template slot-scope="scope">-->
+    <!--        <svg-icon v-for="n in +scope.row.importance" :key="n" icon-class="star" />-->
+    <!--      </template>-->
+    <!--    </el-table-column>-->
 
-<!--    <el-table-column align="center" label="Readings" width="95">-->
-<!--      <template slot-scope="scope">-->
-<!--        <span>{{ scope.row.pageviews }}</span>-->
-<!--      </template>-->
-<!--    </el-table-column>-->
+    <!--    <el-table-column align="center" label="Readings" width="95">-->
+    <!--      <template slot-scope="scope">-->
+    <!--        <span>{{ scope.row.pageviews }}</span>-->
+    <!--      </template>-->
+    <!--    </el-table-column>-->
 
     <el-table-column class-name="status-col" label="Status" width="140">
       <template slot-scope="{row}">

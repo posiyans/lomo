@@ -50,14 +50,14 @@ class RateController extends Controller
            $rate->type_id = $request->type_id;
            $rate->name = $request->name;
            $rate->enable = $request->enable;
-           $rate->discription = $request->discription;
+           $rate->description = $request->description;
            $rate->save();
            if ($request->rate) {
                $r = new Rate();
                $r->device_id = $rate->id;
                $r->ratio_a = $request->rate['ratio_a'];
                $r->ratio_b = $request->rate['ratio_b'];
-               $r->discription = $request->rate['discription'];
+               $r->description = $request->rate['description'];
                $r->save();
            }
            return json_encode(['status'=>true, 'data'=>$rate]);

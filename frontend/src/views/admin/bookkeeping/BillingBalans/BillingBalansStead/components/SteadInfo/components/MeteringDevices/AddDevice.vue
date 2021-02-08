@@ -59,7 +59,7 @@
           placeholder="Дата следующей поверки"
         />
       </el-form-item>
-      <el-form-item label="Примечание" prop="discriptions">
+      <el-form-item label="Примечание" prop="descriptions">
         <el-input v-model="device.descriptions" type="textarea" />
       </el-form-item>
       <el-form-item>

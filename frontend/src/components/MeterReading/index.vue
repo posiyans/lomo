@@ -5,27 +5,27 @@
       :visible.sync="dialogMeterReadingFormVisible"
       @close="close"
     >
-      <div class="mb2">{{discription}}</div>
+      <div class="mb2">{{ description }}</div>
       <el-form label-position="top">
         <el-form-item label="Показания день">
           <el-input
+            v-model="d1"
             placeholder="Показания день"
             prefix-icon="el-icon-search"
-            v-model="d1">
-          </el-input>
+          />
         </el-form-item>
         <el-form-item label="Показания ночь">
           <el-input
+            v-model="d2"
             placeholder="Показания ночь"
             prefix-icon="el-icon-search"
-            v-model="d2">
-          </el-input>
+          />
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-          <el-button type="danger" @click="close">Отмена</el-button>
-          <el-button type="primary" @click="save">Ок</el-button>
-       </span>
+        <el-button type="danger" @click="close">Отмена</el-button>
+        <el-button type="primary" @click="save">Ок</el-button>
+      </span>
     </el-dialog>
   </div>
 </template>
@@ -33,7 +33,7 @@
 <script>
 export default {
   props: {
-    discription: {
+    description: {
       type: String,
       default: ''
     },
@@ -44,13 +44,13 @@ export default {
     meterReading2: {
       type: String,
       default: null
-    },
+    }
   },
   data() {
     return {
       dialogMeterReadingFormVisible: true,
       d1: null,
-      d2: null,
+      d2: null
     }
   },
   created() {

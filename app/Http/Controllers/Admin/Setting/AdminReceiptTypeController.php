@@ -63,6 +63,7 @@ class AdminReceiptTypeController extends Controller
     }
 
     /**
+     * todo не то что должно быть !!!
      * Display the specified resource.
      *
      * @param  int  $id

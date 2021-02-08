@@ -37,8 +37,8 @@
           Кадастровый номер
         </td>
         <td>
-          <a v-if="stead && stead.discriptions && stead.discriptions.kadastr" :href="kadastr_url" target="_blank" class="pointer">
-            {{ stead.discriptions.kadastr }}
+          <a v-if="stead && stead.descriptions && stead.descriptions.kadastr" :href="kadastr_url" target="_blank" class="pointer">
+            {{ stead.descriptions.kadastr }}
           </a>
         </td>
         <td>
@@ -50,8 +50,8 @@
           Примечание
         </td>
         <td>
-          <span v-if="stead && stead.discriptions && stead.discriptions.note">
-            {{ stead.discriptions.note }}
+          <span v-if="stead && stead.descriptions && stead.descriptions.note">
+            {{ stead.descriptions.note }}
           </span>
         </td>
         <td>
@@ -78,7 +78,7 @@ export default {
   },
   computed: {
     kadastr_url() {
-      return 'https://pkk.rosreestr.ru/#/search/?text=' + this.stead.discriptions.kadastr
+      return 'https://pkk.rosreestr.ru/#/search/?text=' + this.stead.descriptions.kadastr
     }
   },
   methods: {
@@ -97,9 +97,9 @@ export default {
       this.$prompt('Примечание', 'Изменить', {
         confirmButtonText: 'Сохранить',
         cancelButtonText: 'Отмена',
-        inputValue: this.stead.discriptions.note
+        inputValue: this.stead.descriptions.note
       }).then(({ value }) => {
-        this.stead.discriptions.note = value
+        this.stead.descriptions.note = value
         this.saveData()
       }).catch(() => {
       })

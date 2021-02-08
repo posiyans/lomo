@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-table
-      :data="stead.discriptions.geodata.geometry.coordinates[0][0]"
+      :data="stead.descriptions.geodata.geometry.coordinates[0][0]"
       style="width: 100%"
     >
       <el-table-column
@@ -64,7 +64,7 @@ export default {
   },
   computed: {
     kadastr_url() {
-      return 'https://pkk.rosreestr.ru/#/search/?text=' + this.stead.discriptions.kadastr
+      return 'https://pkk.rosreestr.ru/#/search/?text=' + this.stead.descriptions.kadastr
     },
     krd() {
       return this.stead.coordinates.krd
@@ -95,9 +95,9 @@ export default {
       this.$prompt('Примечание', 'Изменить', {
         confirmButtonText: 'Сохранить',
         cancelButtonText: 'Отмена',
-        inputValue: this.stead.discriptions.note
+        inputValue: this.stead.descriptions.note
       }).then(({ value }) => {
-        this.stead.discriptions.note = value
+        this.stead.descriptions.note = value
         this.saveData()
       }).catch(() => {
       })

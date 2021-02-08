@@ -38,7 +38,7 @@
         />
       </el-select>
     </div>
-    <div v-if="type.auto_invoice">
+    <div>
       Период оплаты
       <el-select
         v-model="type.payment_period "

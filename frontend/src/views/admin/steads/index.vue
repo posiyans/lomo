@@ -78,7 +78,7 @@
     </el-dialog>
     <el-dialog title="Скачать квитанцию" :visible.sync="dialogReceipShow" :width="device === 'mobile' ? '100%' : '500px'">
       <div class="pl4-ns">
-        <div class="pb4">Собственник: <span v-if="receiptData.discriptions"><b>{{ receiptData.discriptions.fio }}</b></span></div>
+        <div class="pb4">Собственник: <span v-if="receiptData.descriptions"><b>{{ receiptData.descriptions.fio }}</b></span></div>
         <el-form :label-position="labelPosition" label-width="100px">
           <el-form-item label="Оплата">
             <el-select
@@ -97,7 +97,7 @@
         </el-form>
         <div v-for="i in rate" :key="i.name">
           <div class="pb1">
-            {{ i.name }} - {{ i.rate.discription }}
+            {{ i.name }} - {{ i.rate.description }}
             <span v-if="i.rate.ratio_a > 0">
               * {{ receiptData.size/100 }} = {{ (receiptData.size/100 * i.rate.ratio_a).toFixed(2) }} руб.
             </span>
@@ -142,8 +142,8 @@ export default {
       if (row.user_fullName) {
         return row.user_fullName
       }
-      if (row.discriptions) {
-        return row.discriptions.fio
+      if (row.descriptions) {
+        return row.descriptions.fio
       }
       return ''
     },
@@ -173,7 +173,7 @@ export default {
       },
       temp: {
         user: {},
-        discriptions: {},
+        descriptions: {},
         number: '',
         size: ''
       },

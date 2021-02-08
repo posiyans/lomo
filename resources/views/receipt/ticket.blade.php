@@ -15,7 +15,7 @@
                             <ul class="list-group">
                                 <li class="list-group-item active">{{ $devices->name }}</li>
                                 @foreach ($devices->MeteringDevice as $device)
-                                    <li class="list-group-item">Оплата {{ $device->discription }} {{ $device->cash_description }} руб.
+                                    <li class="list-group-item">Оплата {{ $device->description }} {{ $device->cash_description }} руб.
                                     </li>
                                 @endforeach
                                 <li class="list-group-item active">Итого: <b>{{$cash}} руб.</b></li>

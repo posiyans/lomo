@@ -20,8 +20,8 @@
       <el-form-item label="Cумма" prop="price">
         <el-input v-model="ruleForm.price" />
       </el-form-item>
-      <el-form-item label="Примечание" prop="discription">
-        <el-input v-model="ruleForm.discription" type="textarea" />
+      <el-form-item label="Примечание" prop="description">
+        <el-input v-model="ruleForm.description" type="textarea" />
       </el-form-item>
       <el-form-item>
         <el-button @click="resetForm">Отмена</el-button>
@@ -65,7 +65,7 @@ export default {
         title: '',
         type: '',
         price: 0,
-        discription: ''
+        description: ''
       },
       rules: {
         title: [

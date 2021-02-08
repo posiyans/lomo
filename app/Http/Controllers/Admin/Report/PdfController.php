@@ -77,14 +77,14 @@ class PdfController extends Controller
         if (is_int($steadModel)) {
             $steadModel = Stead::find($steadModel);
         }
-        $discription = '';
+        $description = '';
         $cash = 0;
         mb_internal_encoding('UTF-8');
         foreach ($ReceiptType->MeteringDevice as $MeteringDevice) {
             $cash += $MeteringDevice->getTicket($steadModel->id);
-            $discription .= $MeteringDevice->name.' '.$MeteringDevice->cash_description . ' ';
+            $description .= $MeteringDevice->name.' '.$MeteringDevice->cash_description . ' ';
         }
-        $text = $ReceiptType->name.' '.$discription;
+        $text = $ReceiptType->name.' '.$description;
         $s_arr = [-0.5, 70];
         $pdf->SetFont('freesans', '',9);
         foreach ($s_arr as $s) {
@@ -99,7 +99,7 @@ class PdfController extends Controller
     {
         $steadModel = Stead::find($stead_id);
         if ($steadModel) {
-            $fio = isset($steadModel->discriptions['fio']) ? $steadModel->discriptions['fio'] : '';
+            $fio = isset($steadModel->descriptions['fio']) ? $steadModel->descriptions['fio'] : '';
             $fio = str_replace('8', ' ', $fio);
             $fio = str_replace('(', ' ', $fio);
             $fio = str_replace('?', ' ', $fio);
@@ -210,7 +210,7 @@ class PdfController extends Controller
 //            $pdf->Cell(10, 6, $key, 'LR', 0, 'C', $fill);
             $pdf->Cell(20, 6, $value->number, 'LR', 0, 'C', $fill);
             $pdf->Cell(25, 6, $value->size, 'LR', 0, 'C', $fill);
-            $fio = isset($value->discriptions['fio']) ? $value->discriptions['fio'] : '';
+            $fio = isset($value->descriptions['fio']) ? $value->descriptions['fio'] : '';
             $fio= str_replace('8', ' ', $fio);
             $fio= str_replace('(', ' ', $fio);
             $fio= str_replace('?', ' ', $fio);
@@ -725,14 +725,14 @@ class PdfController extends Controller
 
             $pdf->Text(80, $s + 69, $summa_rub);
             $pdf->Text(103.5, $s + 69, $summa_kop);
-            $discription = '';
+            $description = '';
             $cash = 0;
             mb_internal_encoding('UTF-8');
             foreach ($ReceiptType->MeteringDevice as $MeteringDevice) {
                 $cash += $MeteringDevice->getTicket($steadModel->id);
-                $discription .= $MeteringDevice->name.' '.$MeteringDevice->cash_description . ' ';
+                $description .= $MeteringDevice->name.' '.$MeteringDevice->cash_description . ' ';
             }
-            $text = $ReceiptType->name.' '.$discription;
+            $text = $ReceiptType->name.' '.$description;
             $pdf->Text(88, $s+63, mb_substr($text, 0, 55));
             $pdf->Text(60, $s+68, mb_substr($text, 55));
             $pdf->Text(82, $s + 74, floor($cash));
@@ -770,7 +770,7 @@ class PdfController extends Controller
         $code = new QrCodeModel;
         $code->fillDetailsGardient($gardient);
         $code->fillFioUser($fio);
-        $code->setDiscription($descript);
+        $code->setDescription($descript);
         $code->setCash((int)$cash*100);
         $code->setSteadNumber($stead_number);
 //        $code->fillDetailsDevice($ReceiptType, $steadModel);
@@ -1007,7 +1007,7 @@ class PdfController extends Controller
 //            $pdf->Cell(10, 6, $key, 'LR', 0, 'C', $fill);
             $pdf->Cell(20, 6, $value->number, 'LR', 0, 'C', $fill);
             $pdf->Cell(30, 6, $value->size, 'LR', 0, 'C', $fill);
-            $fio = isset($value->discriptions['fio']) ? $value->discriptions['fio'] : '';
+            $fio = isset($value->descriptions['fio']) ? $value->descriptions['fio'] : '';
             $str = strpos($fio, "19");
             if ($str) {
                 $fio = substr($fio, 0, $str);
@@ -1198,7 +1198,7 @@ class PdfController extends Controller
                 $pdf->Text(59, $s + 42.5, $gardient->BankName);
 
 //Заполняем данные клиента
-                $fio = isset($steadModel->discriptions['fio']) ? $steadModel->discriptions['fio'] : '';
+                $fio = isset($steadModel->descriptions['fio']) ? $steadModel->descriptions['fio'] : '';
                 $str = strpos($fio, "19");
                 if ($str) {
                     $fio = substr($fio, 0, $str);
@@ -1262,14 +1262,14 @@ class PdfController extends Controller
 
                 $pdf->Text(80, $s + 69, $summa_rub);
                 $pdf->Text(103.5, $s + 69, $summa_kop);
-                $discription = '';
+                $description = '';
                 $cash = 0;
                 mb_internal_encoding('UTF-8');
                 foreach ($ReceiptType->MeteringDevice as $MeteringDevice) {
                     $cash += $MeteringDevice->getTicket($steadModel->id);
-                    $discription .= $MeteringDevice->name.' '.$MeteringDevice->cash_description . ' ';
+                    $description .= $MeteringDevice->name.' '.$MeteringDevice->cash_description . ' ';
                 }
-                $text = $ReceiptType->name.' '.$discription;
+                $text = $ReceiptType->name.' '.$description;
                 $pdf->Text(88, $s+63, mb_substr($text, 0, 55));
                 $pdf->Text(60, $s+68, mb_substr($text, 55));
                 $pdf->Text(82, $s + 74, floor($cash));

@@ -1,13 +1,8 @@
 <template>
-  <el-table v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
+  <el-table :data="list" border fit highlight-current-row style="width: 100%">
     <el-table-column min-width="160px" label="Заголовок">
       <template slot-scope="{row}">
         <span class="do-not-carry">{{ row.id }}. {{ row.title }}</span>
-      </template>
-    </el-table-column>
-    <el-table-column align="center" label="сотка/участок">
-      <template slot-scope="{row}">
-        <span>{{ row.ratio_a }}</span>/<span>{{ row.ratio_b }}</span>
       </template>
     </el-table-column>
     <el-table-column align="center" label="Actions">
@@ -19,29 +14,20 @@
         </router-link>
       </template>
     </el-table-column>
+    <el-table-column type="expand">
+      <template slot-scope="props">
+        <div style="font-size: 0.65rem; line-height: 0.75rem">
+          <div v-for="item in props.row.options" :key="item.id">
+            {{ item.name }} {{ item.rate.description }}
+          </div>
+        </div>
+      </template>
+    </el-table-column>
   </el-table>
 </template>
 
 <script>
 export default {
-  filters: {
-    categoryFilter(val) {
-      if (val) {
-        return val
-      }
-      return 'Укажете категорию'
-    },
-    statusFilter(status) {
-      return status ? 'success' : 'info'
-    },
-
-    publicFilter(status) {
-      return status === 1 ? 'Опубликовано' : 'Черновик'
-    },
-    commentFilter(status) {
-      return status === 1 ? 'Разрешены' : 'Отключены'
-    }
-  },
   props: {
     list: {
       type: Array,

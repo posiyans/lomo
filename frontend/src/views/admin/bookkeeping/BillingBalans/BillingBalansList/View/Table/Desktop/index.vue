@@ -24,7 +24,7 @@
       <template slot-scope="{row}">
         <span v-if="row.last_payment">
           {{ row.last_payment.payment_date }}<br>
-          <i>{{ row.last_payment.discription }}</i><br>
+          <i>{{ row.last_payment.description }}</i><br>
           {{ row.last_payment.price }} руб.
         </span>
       </template>

@@ -36,7 +36,7 @@ class UserVotingFileUploadController extends Controller
                 $file->size = $inputFile->getSize();
                 $file->type = $inputFile->getClientMimeType();
                 $file->voting_id = $voitng_id;
-                $file->discription = 'phone=' . $phone . ', stead=' . $stead_id . ', voting=' . $voitng_id;
+                $file->description = 'phone=' . $phone . ', stead=' . $stead_id . ', voting=' . $voitng_id;
                 $file->logAndSave('Загружен бюллетень', $stead_id);
                 self::createAppeal($inputFile, $file->uid, $phone, $stead->number, $voitng_id);
                 if (self::sendEmail($inputFile, $md5['folder'] .'/'. $md5['md5'],  $phone, $stead->number)) {

@@ -117,7 +117,7 @@
             placeholder="Дата следующей поверки"
           />
         </el-form-item>
-        <el-form-item label="Примечание" prop="discriptions">
+        <el-form-item label="Примечание" prop="descriptions">
           <el-input v-model="editRow.descriptions" type="textarea" />
         </el-form-item>
         <el-form-item label="Статус" prop="active">
@@ -156,7 +156,7 @@ export default {
       editRow: {},
       addSteadShow: false,
       stead_loc: {
-        discriptions: {},
+        descriptions: {},
         options: {}
       },
       id: '',

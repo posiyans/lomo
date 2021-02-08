@@ -108,7 +108,7 @@ class BillingPayment extends MyModel
             $payment->price = (float)str_replace(',', '.', $item[1]);
 //            $payment->transaction = $item[4];
             $payment->payment_date = $payment_data;
-            $payment->discription = '';
+            $payment->description = '';
             $payment->payment_type = 1;
             $payment->raw_data = $item;
             $payment->user_id = Auth::user()->id;
@@ -147,7 +147,7 @@ class BillingPayment extends MyModel
             $payment->price = (float)str_replace(',', '.', $item[8]);
             $payment->transaction = $item[4];
             $payment->payment_date = $payment_data;
-            $payment->discription = '';
+            $payment->description = '';
             $payment->payment_type = 1;
             $payment->raw_data = $item;
             $payment->user_id = Auth::user()->id;
@@ -189,7 +189,7 @@ class BillingPayment extends MyModel
                 $payment->payment_date = $payment_data;
                 if ($payment->checkNoDublicate()) {
                     $payment->stead_id = $item['stead']['id'];
-                    $payment->discription = $item['val7'];
+                    $payment->description = $item['val7'];
                     $payment->type = $item['type'];
                     $payment->reestr_id = $reestr->id;
                     $payment->payment_type = 1;

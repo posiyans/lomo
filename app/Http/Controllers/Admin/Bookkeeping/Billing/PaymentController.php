@@ -127,7 +127,7 @@ class PaymentController extends Controller
         $payment = BillingPayment::find($id);
         $payment->stead_id = $request->has('stead_id') ? $request->stead_id :  $payment->stead_id;
         $payment->type = $request->type ? $request->type : $payment->type;
-        $payment->discription = $request->has('discription') ? $request->discription : $payment->discription;
+        $payment->description = $request->has('description') ? $request->description : $payment->description;
         $payment->error = $request->has('error') ? $request->error : $payment->error;
 
 //        $payment->raw_data = $request->raw_data ? $request->raw_data : $payment->raw_data;

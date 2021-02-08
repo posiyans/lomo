@@ -1,52 +1,58 @@
 <template>
-  <div class="app-container">
-    <div>
-      <el-button type="primary" @click="$router.push('/bookkeping/billing_reestr')">Все начисления</el-button>
-    </div>
+  <div>
     <div class="page-title">Сделать начисления всем садоводам</div>
     <el-form ref="reestrForm" :model="postForm" :rules="rules" :label-position="labelPosition" class="form-container" label-width="180px">
-      <el-form-item style="" prop="title" label="Начислить">
+      <el-form-item label="Начислить">
         <el-select
-          v-model="rate_checked"
-          placeholder="Заполнить"
+          v-model="postForm.type"
+          placeholder="Тип"
+          class="filter-container__item"
+          style="width: 160px"
+          @change="changeType"
+        >
+          <el-option v-for="item in receiptTypes" :key="item.id" :label="item.name" :value="item.id" />
+        </el-select>
+        <el-select
+          v-model="postForm.receipt"
+          placeholder="Выбрать"
+          multiple
+          collapse-tags
+          class="filter-container__item"
           @change="changeRate"
         >
           <el-option
             v-for="item in rateList"
             :key="item.id"
             :label="item.name"
-            :value="item"
+            :value="item.id"
           />
         </el-select>
+        <el-date-picker
+          v-if="showDate"
+          v-model="postForm.nowDate"
+          type="month"
+          format="MMMM yyyy"
+          value-format="yyyy-MM-dd"
+          class="filter-container__item"
+          placeholder="Месяц на который делается начисление"
+          @change="changeRate"
+        />
+        <div class="filter-container__item" @click="showDate = !showDate">
+          <i class="el-icon-setting" />
+        </div>
       </el-form-item>
       <el-form-item style="" prop="title" label="Описание">
         <el-input v-model="postForm.title" placeholder="На что и за какой период делается начисление" />
       </el-form-item>
-      <el-form-item label="Начислить на 1 сотку:">
-        <money v-model="postForm.ratio_a" placeholder="Начисление на 1 сотку участка" v-bind="money_a" />
+      <div class="admin-parge-title text-green">Начислить</div>
+      <el-form-item v-for="item in receiptArray" :key="item.id" :label="item.name">
+        <el-input v-model="item.rate.description" placeholder="" disabled style="width: 220px;" />
       </el-form-item>
-      <el-form-item label="Начислить на 1 участок:">
-        <money v-model="postForm.ratio_b" placeholder="Начисление на 1 участок, внезависимости от площади" v-bind="money_b" />
-      </el-form-item>
-      <el-form-item label="">
-        <div style="color: #1b5fab;">
-          Например на 1 участок площадью 6 соток будет начисленно {{ exampleRate }} рублей
-        </div>
-        <div v-if="postForm.updated_at" class="mt2" style="color: #ff0000">
-          Начисленно {{ postForm.updated_at | moment("DD MMMM YYYY в HH:mm") }}
-        </div>
-      </el-form-item>
+      <el-form-item label="" />
       <el-form-item>
-        <div v-if="isEdit" style="display: inline-block;">
-          <el-button v-loading="loading" type="danger" @click="submitForm">
-            Пересчитать
-          </el-button>
-        </div>
-        <div v-else style="display: inline-block;">
-          <el-button v-loading="loading" type="danger" @click="submitForm">
-            Начислить
-          </el-button>
-        </div>
+        <el-button v-loading="loading" type="danger" @click="submitForm">
+          Начислить
+        </el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -55,13 +61,9 @@
 <script>
 import { createBillingReestr, fetchReestr, updateBillingReestr } from '@/api/admin/billing'
 import { Money } from 'v-money'
-import { fetchList } from '@/api/rate'
-
-const defaultForm = {
-  title: '',
-  ratio_a: 0,
-  ratio_b: 0
-}
+// import { fetchList } from '@/api/rate'
+import { fetchReceiptTypeList, getReceiptTypeInfo } from '@/api/admin/setting/receipt'
+import { fetchList } from '@/api/admin/setting/rate'
 
 export default {
   components: { Money },
@@ -92,6 +94,9 @@ export default {
         precision: 2,
         masked: false
       },
+      showDate: false,
+      nowDate: new Date(),
+      receiptTypes: [],
       id: '',
       money_b: {
         decimal: ',',
@@ -102,9 +107,13 @@ export default {
         masked: false
       },
       rateList: [],
-      rate_checked: '',
       datetime: +new Date(),
-      postForm: Object.assign({}, defaultForm),
+      postForm: {
+        type: '',
+        receipt: [],
+        nowDate: new Date(),
+        title: ''
+      },
       loading: false,
       rules: {
         title: [{ validator: validateRequire }]
@@ -112,6 +121,9 @@ export default {
     }
   },
   computed: {
+    receiptArray() {
+      return this.rateList.filter(i => this.postForm.receipt.indexOf(i.id) !== -1)
+    },
     exampleRate() {
       return (6 * this.postForm.ratio_a + this.postForm.ratio_b).toFixed(2)
     },
@@ -120,56 +132,103 @@ export default {
     }
   },
   created() {
-    this.getListRate()
+    // поставить предыдущий месяц
+
+    this.postForm.nowDate = this.$moment(this.postForm.nowDate.setMonth(this.postForm.nowDate.getMonth() - 1)).format('YYYY-MM-DD')
+
+    this.getTypeList()
     if (this.isEdit) {
       this.id = this.$route.params && this.$route.params.id
       this.fetchData(this.id)
     }
   },
   methods: {
-    fetchData(id) {
-      fetchReestr(id).then(response => {
-        if (response.data.status) {
-          this.postForm = response.data.data
-          this.setPageTitle()
-        }
-      }).catch({})
+    changeType() {
+      this.postForm.receipt = []
+      this.postForm.title = ''
+      this.getListRate()
     },
-    setTagsViewTitle() {
-      const title = 'Статья id'
-      const route = Object.assign({}, this.tempRoute, { title: `${title}-${this.postForm.id}` })
-      this.$store.dispatch('tagsView/updateVisitedView', route)
-    },
-    setPageTitle() {
-      const title = 'Начисление'
-      document.title = `${title} - ${this.postForm.title}`
-    },
-    changeRate() {
-      this.postForm.title = this.rate_checked.discription + ' ' + new Date().getFullYear() + ' год'
-      this.postForm.ratio_a = +this.rate_checked.rate.ratio_a
-      this.postForm.ratio_b = +this.rate_checked.rate.ratio_b
-    },
-    getListRate() {
-      fetchList({ type: 1 }).then(response => {
-        this.rateList = response.data.data
-      })
-    },
-    submitForm() {
-      if (this.exampleRate > 0) {
-        this.$refs['reestrForm'].validate((valid) => {
-          if (valid) {
-            if (this.isEdit) {
-              this.updateForm()
-            } else {
-              this.saveForm()
+    getTypeList() {
+      fetchReceiptTypeList()
+        .then(response => {
+          if (response.data.status) {
+            this.receiptTypes = []
+            response.data.data.forEach(item => {
+              // if (!item.auto_invoice) {
+              this.receiptTypes.push(item)
+              // }
+            })
+            if (this.receiptTypes.length === 1) {
+              this.listQuery.type = this.receiptTypes[0].id
             }
-          } else {
-            this.$message.error('Введите описание!!!')
+          } else if (response.data.data) {
+            this.$message.error(response.data.data)
           }
         })
-      } else {
-        this.$message.error('Ничего не начисленно!!!')
+    },
+    fetchData(id) {
+      // fetchReestr(id).then(response => {
+      //   if (response.data.status) {
+      //     this.postForm = response.data.data
+      //   }
+      // }).catch({})
+    },
+    changeRate() {
+      // this.postForm.title = this.receipt.discription + ' ' + new Date().getFullYear() + ' год'
+      const type = this.receiptTypes.find(i => i.id === this.postForm.type)
+      this.postForm.title = type.name + ' '
+      if (type.payment_period === 12) {
+        this.postForm.title += this.$moment(this.postForm.nowDate).format('y')
       }
+      if (type.payment_period === 6) {
+        if (this.$moment().format('Q') < 3) {
+          this.postForm.title += this.$moment(this.postForm.nowDate).format('1 полугодие YYYY')
+        } else {
+          this.postForm.title += this.$moment(this.postForm.nowDate).format('2 полугодие YYYY')
+        }
+      }
+      if (type.payment_period === 3) {
+        this.postForm.title += this.$moment(this.postForm.nowDate).format('Qo квартал YYYY')
+      }
+      if (type.payment_period === 1) {
+        this.postForm.title += this.$moment(this.postForm.nowDate).format('MMMM YYYY')
+      }
+      this.postForm.title += ' ('
+      this.postForm.receipt.forEach((item, i) => {
+        if (i > 0) {
+          this.postForm.title += ', '
+        }
+        this.postForm.title += this.rateList.find(i => i.id === item).name
+      })
+      this.postForm.title += ')'
+      // this.postForm.ratio_b = +this.receipt.rate.ratio_b
+    },
+    getListRate() {
+      fetchList({ type: this.postForm.type })
+        .then(response => {
+          if (response.data.status) {
+            this.rateList = response.data.data
+          } else if (response.data.data) {
+            this.$message.error(response.data.data)
+          }
+        })
+    },
+    submitForm() {
+      // if (this.exampleRate > 0) {
+      this.$refs['reestrForm'].validate((valid) => {
+        if (valid) {
+          if (this.isEdit) {
+            this.updateForm()
+          } else {
+            this.saveForm()
+          }
+        } else {
+          this.$message.error('Введите описание!!!')
+        }
+      })
+      // } else {
+      //   this.$message.error('Ничего не начисленно!!!')
+      // }
     },
     updateForm() {
       this.$confirm('Вы точно хотите изменить начисления?', 'Внимание', {

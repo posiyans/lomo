@@ -15,7 +15,7 @@
       <el-table-column min-width="300px" label="Название">
         <template slot-scope="{row}">
           <span>{{ row.name }}</span>
-          <el-tag>{{ row.discription }}</el-tag>
+          <el-tag>{{ row.description }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column align="center" label="Readings" width="95">
@@ -25,7 +25,7 @@
       </el-table-column>
       <el-table-column width="180px" align="center" label="Тариф">
         <template slot-scope="{row}">
-          <span>{{ row.rate.discription }}</span>
+          <span>{{ row.rate.description }}</span>
         </template>
       </el-table-column>
       <el-table-column class-name="status-col" label="Status" width="140">
@@ -59,7 +59,7 @@
           <el-input v-model="rating.name" placeholder="Название" />
         </el-form-item>
         <el-form-item label="что оплачиваем ">
-          <el-input v-model="rating.discription" placeholder="Оплата" />
+          <el-input v-model="rating.description" placeholder="Оплата" />
         </el-form-item>
         <el-form-item v-if="rating.type_id == 2" label="Тариф на 1 сотку">
           <el-input v-model="rating.rate.ratio_a" placeholder="Оплата" />
@@ -171,7 +171,7 @@ export default {
       this.dialogVisible = true
     },
     confirmRate() {
-      this.rating.rate.discription = this.rate_disc
+      this.rating.rate.description = this.rate_disc
       updateRate(this.rating)
         .then(response => {
           if (response.data.status) {

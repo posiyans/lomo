@@ -19,13 +19,13 @@ const bookkepingRouter = {
       hidden: true
 
     },
-    {
-      path: 'billing_reestr_edit/:id(\\d+)',
-      component: () => import('@/views/admin/bookkeeping/BillingAddInvoiceForAllStead/edit'),
-      name: 'BillingReestrEdit',
-      hidden: true
-
-    },
+    // {
+    //   path: 'billing_reestr_edit/:id(\\d+)',
+    //   component: () => import('@/views/admin/bookkeeping/BillingAddInvoiceForAllStead/edit'),
+    //   name: 'BillingReestrEdit',
+    //   hidden: true
+    //
+    // },
     {
       path: 'billing_reestr',
       component: () => import('@/views/admin/bookkeeping/BillingReestr/BillingReestrList/index'),

@@ -15,7 +15,7 @@
                             <div>
                                 <ui>
                                     @foreach ($devices as $device)
-                                        <li>{{ $device->discription }} {{ $device->rate->discription }}.</li>
+                                        <li>{{ $device->description }} {{ $device->rate->description }}.</li>
                                     @endforeach
                                 </ui>
                             </div>
@@ -33,7 +33,7 @@
                         @if ($receipt->depends == 2)
                             @foreach ($devices as $device)
                                 <div class="form-group">
-                                    <label for="number">Показание {{ $device->discription }}</label>
+                                    <label for="number">Показание {{ $device->description }}</label>
                                     <input type="text" class="form-control" name="device[{{ $device->id }}]" id="number" value="">
                                     @if ($device->LastIndication)
                                         <small  class="form-text text-muted">
