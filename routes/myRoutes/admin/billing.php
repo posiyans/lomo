@@ -5,7 +5,7 @@ Route::get('billing/balance-list', 'Admin\Bookkeeping\Billing\BalanceController@
 Route::get('billing/balance-for-stead', 'Admin\Bookkeeping\Billing\BalanceController@allBalance');
 
 Route::resource('billing/reestr', 'Admin\Bookkeeping\Billing\ReestrController')
-    ->only(['index', 'show', 'update', 'store']);
+    ->only(['index', 'show', 'update', 'store', 'destroy']);
 
 Route::resource('billing/payment', 'Admin\Bookkeeping\Billing\PaymentController')
     ->only(['index', 'show', 'update', 'store']);

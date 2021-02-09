@@ -8,6 +8,13 @@ export function fetchBillingReestrList(query) {
   })
 }
 
+export function DeleteReestr(id) {
+  return request({
+    url: '/api/v1/admin/billing/reestr/' + id,
+    method: 'delete'
+  })
+}
+
 // export function updateAppel(data, id) {
 //   return request({
 //     url: '/api/v1/admin/appeal/' + id,

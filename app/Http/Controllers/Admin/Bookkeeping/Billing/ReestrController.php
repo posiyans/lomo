@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Bookkeeping\Billing;
 
 use App\Http\Controllers\Admin\Bookkeeping\Billing\RegisterOfCharges\AddOneTimeRegisterOfChargesController;
 use App\Http\Controllers\Admin\Bookkeeping\Billing\RegisterOfCharges\AddRegisterOfChargesController;
+use App\Http\Controllers\Admin\Bookkeeping\Billing\RegisterOfCharges\DeleteRegisterOfChargesController;
 use App\Models\Billing\BillingReestr;
 use App\Permission;
 use App\Role;
@@ -60,35 +61,22 @@ class ReestrController extends Controller
      */
     public function store(Request $request)
     {
-
-        $one_time = $request->post('one_time', false );
-        $title = $request->post('title', false);
-        $type = $request->post('type', false);
-        if ($type) {
-            if ($one_time) {
-                $ratio_a = $request->post('ratio_a', 0);
-                $ratio_b = $request->post('ratio_b', 0);
-                return AddOneTimeRegisterOfChargesController::addRegister($title, $type, $ratio_a, $ratio_b);
-            } else {
-                $date = $request->post('nowDate', false);
-                $receipt = $request->post('receipt', []);
-                return AddRegisterOfChargesController::addRegister($type, $receipt, $date, $title);
+        if ($this->middleware('ability:superAdmin,reestr-edit')) {
+            $one_time = $request->post('one_time', false);
+            $title = $request->post('title', false);
+            $type = $request->post('type', false);
+            if ($type) {
+                if ($one_time) {
+                    $ratio_a = $request->post('ratio_a', 0);
+                    $ratio_b = $request->post('ratio_b', 0);
+                    return AddOneTimeRegisterOfChargesController::addRegister($title, $type, $ratio_a, $ratio_b);
+                } else {
+                    $date = $request->post('nowDate', false);
+                    $receipt = $request->post('receipt', []);
+                    return AddRegisterOfChargesController::addRegister($type, $receipt, $date, $title);
+                }
             }
         }
-//        if (isset($request->title) && !empty($request->title)) {
-//            $ratio_a = (isset($request->ratio_a) && !empty($request->ratio_a)) ? $request->ratio_a : false;
-//            $ratio_b = (isset($request->ratio_b) && !empty($request->ratio_b)) ? $request->ratio_b : false;
-//            if ($ratio_a || $ratio_b) {
-//                $user_id = Auth::user()->id;
-//                $reestr = BillingReestr::createСontributions($user_id, $request->title, $ratio_a,  $ratio_b);
-//                if ($reestr) {
-//                    return ['status'=>true, 'data'=>$reestr];
-//                }
-//                //todo нужно поставить симафор!!!!
-//                return ['status'=>false, 'data'=>'Ошибка при сохранении'];
-//            }
-//        }
-//        return ['status'=>false, 'data'=>'Нет данных111'];
     }
 
     /**
@@ -123,21 +111,21 @@ class ReestrController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if (isset($request->title) && !empty($request->title)) {
-            $ratio_a = (isset($request->ratio_a) && !empty($request->ratio_a)) ? $request->ratio_a : false;
-            $ratio_b = (isset($request->ratio_b) && !empty($request->ratio_b)) ? $request->ratio_b : false;
-            if ($ratio_a || $ratio_b) {
-                $user_id = Auth::user()->id;
-                $reestr = BillingReestr::find($id);
-                if ($reestr) {
-                    $rez = $reestr->updateСontributions($user_id, $request->title, $ratio_a,  $ratio_b);
-                    if ($rez) {
-                        return json_encode(['status'=>true, 'data'=>$rez]);
-                    }
-                }
-            }
-        }
-        return json_encode(['status'=>false]);
+//        if (isset($request->title) && !empty($request->title)) {
+//            $ratio_a = (isset($request->ratio_a) && !empty($request->ratio_a)) ? $request->ratio_a : false;
+//            $ratio_b = (isset($request->ratio_b) && !empty($request->ratio_b)) ? $request->ratio_b : false;
+//            if ($ratio_a || $ratio_b) {
+//                $user_id = Auth::user()->id;
+//                $reestr = BillingReestr::find($id);
+//                if ($reestr) {
+//                    $rez = $reestr->updateСontributions($user_id, $request->title, $ratio_a,  $ratio_b);
+//                    if ($rez) {
+//                        return json_encode(['status'=>true, 'data'=>$rez]);
+//                    }
+//                }
+//            }
+//        }
+//        return json_encode(['status'=>false]);
 
     }
 
@@ -149,6 +137,10 @@ class ReestrController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if ($this->middleware('ability:superAdmin,reestr-edit')) {
+            return DeleteRegisterOfChargesController::deleteRegister($id);
+        }
+//        return $id;
+
     }
 }

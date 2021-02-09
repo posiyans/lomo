@@ -114,8 +114,10 @@ class AddRegisterOfChargesController extends Controller
                 }
             }
             $description .= 'Итого: ' . $summa . ' руб.';
-            if (!BillingInvoice::createInvoiceForStead($stead->id, $summa, $title, $type, $date = false, $reestr_id, $description)) {
-                $status = false;
+            if ($summa > 0) {
+                if (!BillingInvoice::createInvoiceForStead($stead->id, $summa, $title, $type, $date = false, $reestr_id, $description)) {
+                    $status = false;
+                }
             }
         }
             return $status;

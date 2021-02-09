@@ -6,9 +6,13 @@ use App\Models\Stead;
 use App\MyModel;
 use DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 class BillingReestr extends MyModel
 {
+    use SoftDeletes;
+
     protected $casts = [
         'history' => 'array',
         'options' => 'array',

@@ -6,9 +6,12 @@ use App\Models\Receipt\InstrumentReadings;
 use App\Models\Receipt\ReceiptType;
 use App\Models\Stead;
 use App\MyModel;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class BillingInvoice extends MyModel
 {
+
+    use SoftDeletes;
 
     protected $fillable = ['title', 'type', 'description'];
 
