@@ -15,11 +15,11 @@
       <el-button v-waves class="filter-container__item" type="primary" icon="el-icon-search" @click="handleFilter">
         Показать
       </el-button>
-      <el-button v-waves class="filter-container__item" type="danger" icon="el-icon-plus" @click="add">
+      <el-button v-if="roles.indexOf('reestr-edit') != -1" v-waves class="filter-container__item" type="danger" icon="el-icon-plus" @click="add">
         Добавить
       </el-button>
     </div>
-    <component :is="componentName" :list="list" />
+    <component :is="componentName" :list="list" @reload="getList" />
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
   </div>
 </template>
@@ -28,7 +28,6 @@
 import { fetchBillingReestrList } from '@/api/admin/billing'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import waves from '@/directive/waves'
-import { mapState } from 'vuex'
 import Mobile from './View/Table/Mobile'
 import Desktop from './View/Table/Desktop'
 import { fetchReceiptTypeList } from '@/api/admin/setting/receipt'
@@ -70,14 +69,14 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      device: state => state.app.device
-    }),
     mobile() {
-      if (this.device === 'mobile') {
-        return true
-      }
-      return false
+      return this.$store.state.app.device === 'mobile'
+    },
+    user() {
+      return this.$store.state.user
+    },
+    roles() {
+      return this.user.roles
     },
     componentName() {
       if (this.mobile) {

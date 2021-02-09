@@ -81,7 +81,6 @@ class LaratrustSeeder extends Seeder
         'show-users' => 'Просмотр пользователей',
         'edit-rate' => 'Правка тарифов',
         'edit-menu' => 'Редактирование меню',
-        'bookkeeper' => 'Бухгалтер',
         'reestr-edit' => 'Редактирование начислений'
 
 
