@@ -7,7 +7,7 @@
         v-model="listQuery.type"
         placeholder="Тип"
         class="filter-container__item"
-        style="width: 160px"
+        clearable
         @change="handleFilter"
       >
         <el-option v-for="item in receiptTypes" :key="item.id" :label="item.name" :value="item.id" />

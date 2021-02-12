@@ -19,10 +19,10 @@ export function getReceiptForSteadList(data) {
   })
 }
 
-export function getReestrForSteadList(data) {
+export function getReceiptList(params) {
   return request({
-    url: '/api/v1/admin/receipt/get-reestr-for-list-steads',
-    method: 'post',
-    data: data
+    url: '/api/v1/admin/receipt/get-list',
+    method: 'get',
+    params: params
   })
 }

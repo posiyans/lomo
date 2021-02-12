@@ -31,6 +31,7 @@ moment.locale('ru')
 moment.tz.setDefault('Europe/Moscow')
 
 import * as filters from './filters' // global filters
+
 import YmapPlugin from 'vue-yandex-maps'
 
 const settings = {

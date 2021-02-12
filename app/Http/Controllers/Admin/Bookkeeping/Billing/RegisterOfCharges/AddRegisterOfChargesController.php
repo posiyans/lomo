@@ -21,6 +21,14 @@ use Illuminate\Support\Facades\DB;
 class AddRegisterOfChargesController extends Controller
 {
 
+    /**
+     * проверка на суперадмин или на доступ а админ панель
+     */
+    public function __construct()
+    {
+        $this->middleware('ability:superAdmin,access-admin-panel');
+    }
+
 
     /**
      * сделать переодическое начисление
@@ -62,6 +70,15 @@ class AddRegisterOfChargesController extends Controller
     }
 
 
+    /**
+     * сделать начисление зависищае от площади учатска
+     *
+     * @param $title
+     * @param $devices
+     * @param $type
+     * @param $reestr_id
+     * @return bool
+     */
     public  function setInvoiceForStead($title, $devices, $type, $reestr_id)
     {
         $steads = Stead::all();
@@ -95,6 +112,15 @@ class AddRegisterOfChargesController extends Controller
     }
 
 
+    /**
+     * сделать начисление по приборам учета в зависимости от показаний (электричесто, вода)
+     *
+     * @param $title
+     * @param $devices
+     * @param $type
+     * @param $reestr_id
+     * @return bool
+     */
     public function setInvoiceForDevice($title, $devices, $type, $reestr_id)
     {
         $steads = Stead::all();
@@ -103,6 +129,7 @@ class AddRegisterOfChargesController extends Controller
             $description = '';
             $summa = 0;
             foreach ($devices as $device) {
+                $device->rateNow();
                 $device_list = $device->getDeviceForStead($stead->id);
                 if (count($device_list) > 0) {
                     foreach ($device_list as $register) {
@@ -126,6 +153,7 @@ class AddRegisterOfChargesController extends Controller
 
     /**
      * получить сумму и описание по итерациям по показаниям до показния на которой у же выставлен счет
+     *
      * @param $last_readings от какого показания выставить счета
      * @return array
      */

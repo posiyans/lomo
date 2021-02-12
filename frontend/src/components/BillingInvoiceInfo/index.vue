@@ -34,7 +34,7 @@
         <tr>
           <td>Сумма</td>
           <td>
-            {{ invoice.price | formatPrice }}
+            {{ invoice.price | formatPrice }} руб.
           </td>
           <td />
         </tr>
@@ -57,7 +57,7 @@
         <tr>
           <td>Примечание</td>
           <td>
-            <div v-html="invoice.description" />
+            <div v-for="item in descriptionList" :key="item" class="f7">{{ item }}</div>
           </td>
           <td>
             <el-button type="primary" size="mini" plain icon="el-icon-edit" @click="editDescription" />
@@ -96,6 +96,9 @@ export default {
     }
   },
   computed: {
+    descriptionList() {
+      return this.invoice.description.split('@')
+    }
     // stead_error() {
     //   return this.payment.stead.number !== this.payment.raw_data[2]
     // },
