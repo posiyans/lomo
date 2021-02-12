@@ -30,89 +30,89 @@
       </el-select>
       <el-button type="success" class="item-filter" plain @click="addReadings">Добавить показания</el-button>
     </div>
-    <div class="scroll-block">
+    <!--    <div class="scroll-block">-->
 
-      <el-table
-        v-if="list.length > 0"
-        :data="list"
-        border
-        show-summary
-        :summary-method="getSummaries"
-        style="width: 100%"
-        @selection-change="handleSelectionChange"
+    <el-table
+      v-if="list.length > 0"
+      :data="list"
+      border
+      show-summary
+      :summary-method="getSummaries"
+      style="width: 100%"
+      @selection-change="handleSelectionChange"
+    >
+      <el-table-column
+        type="selection"
+        width="55"
+        align="center"
+      />
+      <el-table-column
+        label="Дата"
+        width="180"
       >
-        <el-table-column
-          type="selection"
-          width="55"
-          align="center"
-        />
-        <el-table-column
-          label="Дата"
-          width="180"
-        >
-          <template slot-scope="{row}">
-            <span>{{ row.created_at }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="Прибор"
-        >
-          <template slot-scope="{row}">
-            <span>{{ row.type_name[1] }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="Показания"
-          width="180"
-          align="center"
-        >
-          <template slot-scope="{row}">
-            <span>{{ row.value }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="Разница"
-          width="180"
-          align="center"
-        >
-          <template slot-scope="{row}">
-            <span>{{ row.delta }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="Тариф"
-          width="180"
-          align="center"
-        >
-          <template slot-scope="{row}">
-            <span>{{ row.price }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="Сумма"
-          prop="summa"
-          width="180"
-          align="center"
-        >
-          <template slot-scope="{row}">
-            <span>{{ row.summa | formatPrice }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          label=""
-          width="200"
-          align="center"
-        >
-          <template slot-scope="{row}">
-            <div>
-              <el-button v-if="!row.invoice_id && row.summa > 0" type="primary" @click="addInvoice(row)">Выставить счет</el-button>
-            </div>
-            <span v-if="row.invoice_id">Счет № {{ row.invoice_id }}</span>
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
-    <div v-if="selectRows.length > 0" class="filter-container">
+        <template slot-scope="{row}">
+          <span>{{ row.created_at }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="Прибор"
+      >
+        <template slot-scope="{row}">
+          <span>{{ row.type_name[1] }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="Показания"
+        width="180"
+        align="center"
+      >
+        <template slot-scope="{row}">
+          <span>{{ row.value }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="Разница"
+        width="180"
+        align="center"
+      >
+        <template slot-scope="{row}">
+          <span>{{ row.delta }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="Тариф"
+        width="180"
+        align="center"
+      >
+        <template slot-scope="{row}">
+          <span>{{ row.price }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="Сумма"
+        prop="summa"
+        width="180"
+        align="center"
+      >
+        <template slot-scope="{row}">
+          <span>{{ row.summa | formatPrice }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label=""
+        width="200"
+        align="center"
+      >
+        <template slot-scope="{row}">
+          <div>
+            <el-button v-if="!row.invoice_id && row.summa > 0" type="primary" @click="addInvoice(row)">Выставить счет</el-button>
+          </div>
+          <span v-if="row.invoice_id">Счет № {{ row.invoice_id }}</span>
+        </template>
+      </el-table-column>
+    </el-table>
+    <!--    </div>-->
+    <div v-if="selectRows.length > 0" class="filter-container mt2">
       <el-select v-model="action" placeholder="Действие">
         <el-option
           v-for="item in actionList"

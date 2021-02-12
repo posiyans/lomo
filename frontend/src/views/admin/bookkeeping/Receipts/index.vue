@@ -2,48 +2,41 @@
   <div class="app-container">
     <div class="admin-parge-title">Квитанции</div>
     <div class="filter-container">
-      <span class="filter-container__item">
-        Участки c
-
-      </span>
       <el-select
-        v-model="listQuery.stead_min"
+        v-model="listQuery.stead"
         filterable
         remote
         reserve-keyword
-        placeholder="Введите номер участка"
+        placeholder="Участок"
         no-data-text="Данный номер не найден"
-        :remote-method="findSteadMin"
+        :remote-method="findStead"
         :loading="loading"
         class="filter-container__item"
+        style="width: 100px;"
       >
         <el-option
-          v-for="item in steadsListMin"
+          v-for="item in steadsList"
           :key="item.id"
           :label="item.number"
           :value="item.id"
         />
       </el-select>
-      <span class="filter-container__item">
-        по
-      </span>
       <el-select
-        v-model="listQuery.stead_max"
-        filterable
-        remote
-        reserve-keyword
-        placeholder="Введите номер участка"
-        no-data-text="Данный номер не найден"
-        :remote-method="findSteadMax"
+        v-model="listQuery.type"
+        placeholder="Тип"
+        clearable
         class="filter-container__item"
-        :loading="loading"
       >
-        <el-option
-          v-for="item in steadsListMax"
-          :key="item.id"
-          :label="item.number"
-          :value="item.id"
-        />
+        <el-option v-for="item in receiptTypes" :key="item.id" :label="item.name" :value="item.id" />
+      </el-select>
+      <el-select
+        v-model="listQuery.is_playment"
+        placeholder="Оплата"
+        clearable
+        class="filter-container__item"
+      >
+        <el-option label="только оплаченные" value="1" />
+        <el-option label="только неоплаченные" value="2" />
       </el-select>
       <el-button v-waves class="filter-container__item" type="primary" icon="el-icon-search" @click="showReestr">
         Показать
@@ -78,11 +71,12 @@
 
 <script>
 import { getSteadsList } from '@/api/user/stead.js'
-import { getReestrForSteadList, getReceiptForSteadList } from '@/api/admin/receipt.js'
+import { getReceiptList, getReceiptForSteadList } from '@/api/admin/receipt.js'
 import ShowTable from './ShowTable'
 import waves from '@/directive/waves'
 import Pagination from '@/components/Pagination/index'
 import { saveAs } from 'file-saver'
+import { fetchReceiptTypeList } from '@/api/admin/setting/receipt'
 
 export default {
   components: {
@@ -94,18 +88,18 @@ export default {
       loading: false,
       stead_min: null,
       stead_max: null,
-      steadsListMin: [],
+      steadsList: [],
       steadsListMax: [],
       downloadDialogVisible: false,
       total: 0,
       list: [],
+      receiptTypes: [],
       listQuery: {
-        reestr: true,
-        fio: false,
+        stead: '',
+        is_playment: '',
+        type: '',
         page: 1,
-        limit: 20,
-        stead_min: null,
-        stead_max: null
+        limit: 20
       },
       reestrType: [
         {
@@ -119,10 +113,31 @@ export default {
       ]
     }
   },
+  created() {
+    this.getTypeList()
+    this.findStead()
+  },
   mounted() {
-    this.getStead()
   },
   methods: {
+    getTypeList() {
+      fetchReceiptTypeList()
+        .then(response => {
+          if (response.data.status) {
+            this.receiptTypes = []
+            response.data.data.forEach(item => {
+              // if (!item.auto_invoice) {
+              this.receiptTypes.push(item)
+              // }
+            })
+            if (this.receiptTypes.length === 1) {
+              this.listQuery.type = this.receiptTypes[0].id
+            }
+          } else if (response.data.data) {
+            this.$message.error(response.data.data)
+          }
+        })
+    },
     downloadReestr(padding = true) {
       this.showReestr()
       this.$message('Запрос отправлен ожидайте файл!')
@@ -139,36 +154,27 @@ export default {
     getStead() {
       getSteadsList()
         .then(response => {
-          this.steadsListMin = response.data
-          this.steadsListMax = response.data
+          this.steadsList = response.data
         })
     },
     showReestr() {
+      console.log('dfsdfsdfsfs')
       this.loading = true
-      getReestrForSteadList(this.listQuery).then(response => {
-        if (response.data.status) {
-          this.list = response.data.data
-          this.total = response.data.total
-          this.loading = false
-        }
+      getReceiptList(this.listQuery).then(response => {
+        // if (response.data.status) {
+        this.list = response.data.data
+        this.total = response.data.total
+        this.loading = false
+        // }
       })
     },
-    findSteadMin(query) {
+    findStead(query = '') {
       const data = {
         query: query
       }
       getSteadsList(data)
         .then(response => {
-          this.steadsListMin = response.data
-        })
-    },
-    findSteadMax(query) {
-      const data = {
-        query: query
-      }
-      getSteadsList(data)
-        .then(response => {
-          this.steadsListMax = response.data
+          this.steadsList = response.data
         })
     }
   }
