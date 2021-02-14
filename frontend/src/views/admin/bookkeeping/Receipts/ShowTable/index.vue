@@ -14,7 +14,7 @@
       </el-table-column>
       <el-table-column label="Номер участка" align="center" width="160">
         <template slot-scope="{row}">
-          <span>{{ row.stead_id }}</span>
+          <span>{{ row.stead_number }}</span>
         </template>
       </el-table-column>
       <el-table-column label="Назначение" align="center">
@@ -27,10 +27,11 @@
           <span>{{ row.price | formatPrice }} руб.</span>
         </template>
       </el-table-column>
-      <el-table-column label="" align="center" width="160">
+      <el-table-column label="" align="center" width="300">
         <template slot-scope="{row}">
           <span>
             <el-button type="primary" size="small" @click="showMore(row)">Подробнее</el-button>
+            <el-button type="success" size="small" @click="printPdf(row)">Квитанция</el-button>
           </span>
         </template>
       </el-table-column>
@@ -41,6 +42,8 @@
 
 <script>
 import InvoiceInfo from '@/components/BillingInvoiceInfo'
+import { getReceiptForInvoice } from '@/api/admin/receipt'
+import { saveAs } from 'file-saver'
 
 export default {
   components: {
@@ -68,8 +71,17 @@ export default {
       this.itemSelected = row
       this.showInvoiceInfo = true
     },
-    findStead() {
-
+    printPdf(row) {
+      const data = {
+        invoices: [row.id]
+      }
+      getReceiptForInvoice(data)
+        .then(response => {
+          saveAs(new Blob([response.data], {
+            type: response.data.type
+          }), 'Квитанция.pdf')
+          this.$message.success('Фаил успешно скачен.')
+        })
     }
   }
 }

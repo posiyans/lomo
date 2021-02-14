@@ -9,6 +9,22 @@ export function getReceipt(data) {
   })
 }
 
+/**
+ * получить квитанцию для счета
+ *
+ * @param {Data} data
+ */
+export function getReceiptForInvoice(params) {
+  request.defaults.timeout = ''
+  return request({
+    url: '/api/v1/admin/receipt/get-for-invoices',
+    method: 'get',
+    responseType: 'blob',
+    params: params
+  })
+}
+
+// todo удалить позже
 export function getReceiptForSteadList(data) {
   request.defaults.timeout = ''
   return request({

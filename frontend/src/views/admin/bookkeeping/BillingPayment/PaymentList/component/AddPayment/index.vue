@@ -1,5 +1,6 @@
 <template>
-  <div style="background-color: white;">
+  <div class="app-container">
+    <div class="page-title">Добавить выписку из банка</div>
     <div>
       <el-upload
         ref="upload"
@@ -16,20 +17,23 @@
       </el-upload>
 
     </div>
-    <div>
+    <div class="mt2">
       Загруженно {{ fileCount }} файлов
     </div>
-    <table>
-      <tr>
-        <th v-for="h in name" :key="h">{{ h }}</th>
-      </tr>
-      <tr v-for="(line, j) in data_ok" :key="line">
-        <td>{{ ++j }}</td>
-        <td v-for="i in line" :key="i">{{ i }}</td>
-      </tr>
-    </table>
-    <div class="pa3">
-      <el-button type="danger" plain @click="close">Отмена</el-button><el-button type="success" @click="upload">Загрузить</el-button>
+    <div v-if="data_ok.length > 0">
+      <table>
+        <tr>
+          <th v-for="h in name" :key="h">{{ h }}</th>
+        </tr>
+        <tr v-for="(line, j) in data_ok" :key="line">
+          <td>{{ ++j }}</td>
+          <td v-for="i in line" :key="i">{{ i }}</td>
+        </tr>
+      </table>
+      <div class="pa3">
+        <el-button type="danger" plain @click="close">Отмена</el-button>
+        <el-button v-loading="loading" type="success" @click="upload">Загрузить</el-button>
+      </div>
     </div>
   </div>
 </template>
@@ -53,6 +57,7 @@ export default {
       data_ok: [],
       data_error: [],
       summa: 0,
+      loading: false,
       name: [
         '№',
         'дата',
@@ -87,6 +92,7 @@ export default {
       this.$message.warning(`Ограничение - 100 файлов`)
     },
     onFileChange(e) {
+      this.loading = false
       this.data = ''
       this.row = 0
       this.summa = 0
@@ -102,9 +108,10 @@ export default {
           text.forEach(i => {
             this.data_ok.push(i)
           })
+          this.fileCount++
         })
-        this.fileCount++
       })
+      this.loading = false
       this.$refs.upload.clearFiles()
     },
     parseData() {
@@ -141,15 +148,15 @@ export default {
         cancelButtonText: 'Нет',
         type: 'warning'
       }).then(() => {
+        this.loading = true
         uploadDischarge({ data: this.data_ok })
           .then(response => {
             if (response.data.status) {
+              this.loading = false
               this.$emit('showPayment', response.data.data)
               // this. = response.data.data
-            } else {
-              if (response.data.data) {
-                this.$message.error(response.data.data)
-              }
+            } else if (response.data.data) {
+              this.$message.error(response.data.data)
             }
           })
       }).catch(() => {})

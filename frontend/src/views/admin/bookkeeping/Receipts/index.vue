@@ -13,6 +13,7 @@
         :loading="loading"
         class="filter-container__item"
         style="width: 100px;"
+        @click="showReestr"
       >
         <el-option
           v-for="item in steadsList"
@@ -26,6 +27,7 @@
         placeholder="Тип"
         clearable
         class="filter-container__item"
+        @click="showReestr"
       >
         <el-option v-for="item in receiptTypes" :key="item.id" :label="item.name" :value="item.id" />
       </el-select>
@@ -96,7 +98,7 @@ export default {
       receiptTypes: [],
       listQuery: {
         stead: '',
-        is_playment: '',
+        is_playment: '2',
         type: '',
         page: 1,
         limit: 20
@@ -118,6 +120,7 @@ export default {
     this.findStead()
   },
   mounted() {
+    this.showReestr()
   },
   methods: {
     getTypeList() {

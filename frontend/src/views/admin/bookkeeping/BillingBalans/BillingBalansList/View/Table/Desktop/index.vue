@@ -22,9 +22,9 @@
     </el-table-column>
     <el-table-column align="center" width="150px" label="Последний платеж">
       <template slot-scope="{row}">
-        <span v-if="row.last_payment">
+        <span v-if="row.last_payment" class="f7">
           {{ row.last_payment.payment_date }}<br>
-          <i>{{ row.last_payment.description }}</i><br>
+          <i>{{ row.last_payment.raw_data[4] }}</i><br>
           {{ row.last_payment.price }} руб.
         </span>
       </template>

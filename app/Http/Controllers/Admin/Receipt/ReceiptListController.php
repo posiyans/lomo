@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Receipt;
 
 use App\Http\Controllers\Admin\Report\PdfController;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Admin\Bookkeeping\AdminInvoiceResource;
 use App\Models\Billing\BillingInvoice;
 use App\Models\Receipt\ReceiptType;
 use Illuminate\Http\Request;
@@ -34,7 +35,8 @@ class ReceiptListController extends Controller
         $this->steadFilter($stead);
         $this->isPaymentFilter($is_playment);
         $this->typeFilter($type);
-        return $this->query->paginate($request->limit);
+        $data = $this->query->paginate($request->limit);
+        return AdminInvoiceResource::collection($data);
 
     }
 

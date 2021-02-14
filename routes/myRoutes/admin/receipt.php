@@ -6,3 +6,4 @@ Route::post('receipt/get-for-list-steads', 'Admin\ReceiptController@getReceiptFo
 
 
 Route::get('receipt/get-list', 'Admin\Receipt\ReceiptListController@index');
+Route::get('receipt/get-for-invoices', 'Admin\Receipt\GetReceiptForInvoicesController@index');
