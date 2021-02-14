@@ -1,21 +1,21 @@
 <template>
   <div class="app-container">
     <div v-if="show === 0">
-      <div class="ma2 fw6">Платежи</div>
+      <div class="page-title">Платежи</div>
       <div class="filter-container">
         <el-input
           v-model="listQuery.find"
           placeholder="Найти сумму, участок, дату"
           style="width: 200px;"
           clearable
-          class="filter-item"
+          class="filter-container__item"
           @clear="handleFilter"
           @keyup.enter.native="handleFilter"
         />
         <el-select
           v-model="listQuery.status"
           placeholder="Статус"
-          class="filter-item"
+          class="filter-container__item"
           clearable
           @change="handleFilter"
         >
@@ -28,19 +28,19 @@
           type="daterange"
           range-separator="по"
           :picker-options="{ firstDayOfWeek: 1}"
-          class="filter-item"
+          class="filter-container__item"
           format="dd-MM-yyyy"
           value-format="yyyy-MM-dd"
           start-placeholder="с даты"
           end-placeholder="по дату"
         />
-        <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+        <el-button v-waves class="filter-container__item" type="primary" icon="el-icon-search" @click="handleFilter">
           Показать
         </el-button>
-        <el-button v-waves class="filter-item" type="primary" @click="addPayment">Добавить выписку из банка</el-button>
+        <el-button v-waves class="filter-container__item" type="success" @click="addPayment">Добавить выписку из банка</el-button>
       </div>
-      <component :is="componentName" :list="list" @reload="key ++" />
-      <LoadMore v-if="!loadMoreDisable" :key="key" :list-query="listQuery" :func="func" @setList="setList" />
+      <component :is="componentName" :list="list" @reload="key++" />
+      <LoadMore :key="key" :list-query="listQuery" :func="func" @setList="setList" />
     </div>
     <AddPayment v-if="show === 1" @close="closeAddPaymentForm" @showPayment="showPayment" />
     <ShowNewPayment v-if="show === 2" :list="newList" @close="closeShowPaymentForm" />
@@ -86,7 +86,6 @@ export default {
     return {
       key: 1,
       show: 0,
-      loadMoreDisable: false,
       listQuery: {
         status: '',
         page: 1,
@@ -126,7 +125,6 @@ export default {
       this.key++
     },
     showPayment(data) {
-      this.loadMoreDisable = true
       this.newList = data
       this.show = 2
     },
@@ -141,30 +139,10 @@ export default {
       this.listLoading = false
     },
     handleFilter() {
-      this.loadMoreDisable = false
       this.listQuery.page = 1
       this.key++
       this.listLoading = true
     },
-    // changeStead(data) {
-    //   this.$confirm('ВЫ действительно хотите сменить участок для платежа?', 'Внимание!!!', {
-    //     confirmButtonText: 'Да',
-    //     cancelButtonText: 'Нет',
-    //     type: 'error'
-    //   }).then(() => {
-    //     this.payment.stead_id = this.newStead.id
-    //     this.payment.stead_number = this.newStead.number
-    //     this.changeSteadVizible = false
-    //   }).catch(() => {
-    //     this.changeSteadVizible = false
-    //   })
-    // },
-    // setNewStead(data) {
-    //   this.newStead = data
-    // },
-    // showChangeStead() {
-    //   this.changeSteadVizible = true
-    // },
     getData() {
       // this.load = false
       fetchPaymentList(this.listQuery).then(response => {
@@ -174,31 +152,6 @@ export default {
         }
       })
     },
-    // selectElect() {
-    //   console.log('fsdfsdfs')
-    //   this.payment.type = 1
-    //   this.dialogMeterReadingFormVisible = true
-    // },
-    // closeMetering() {
-    //   this.dialogMeterReadingFormVisible = false
-    // },
-    // setMeterReading(val) {
-    //   if (val[0]) {
-    //     this.payment.raw_data.meterReading1 = val[0]
-    //   }
-    //   if (val[1]) {
-    //     this.payment.raw_data.meterReading2 = val[1]
-    //   }
-    // },
-    // savePayment() {
-    //   updatePaymentInfo(this.payment.id, this.payment).then(response => {
-    //     if (response.data.status) {
-    //       this.$message('Данные сохранены')
-    //     } else {
-    //       this.$message.error('Ошибка при сохранении')
-    //     }
-    //   })
-    // }
     handleDownload() {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {

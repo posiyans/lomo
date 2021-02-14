@@ -85,8 +85,8 @@ class InvoiceController extends Controller
     public function show($id)
     {
         $data= BillingInvoice::find($id);
-        return new AdminInvoiceResource($data);
-//        return json_encode(['status'=>true, 'data'=>$data]);
+        $rez =  new AdminInvoiceResource($data);
+        return ['data' => $rez, 'status' => true];
     }
 
     /**

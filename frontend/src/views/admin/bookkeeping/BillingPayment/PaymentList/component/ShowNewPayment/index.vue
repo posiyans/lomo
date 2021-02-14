@@ -1,6 +1,6 @@
 <template>
-  <div class="createPost-container">
-    <div class="pt1 createPost-main-container" style="padding-top: 0; padding-bottom: 0">
+  <div class="app-container">
+    <div class="page-title">
       <el-button v-loading="loading" type="primary" @click="close">
         Все платежи
       </el-button>
@@ -89,10 +89,6 @@
                   </el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
-              <!--                <div v-if="row.type == 1">-->
-              <!--                  <el-tag v-if="row.meterReading1">1-{{ row.meterReading1 }}</el-tag>-->
-              <!--                  <el-tag v-if="row.meterReading2">2-{{ row.meterReading2 }}</el-tag>-->
-              <!--                </div>-->
             </div>
           </template>
         </el-table-column>
