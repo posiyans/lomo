@@ -1,10 +1,10 @@
 <template>
   <div class="app-container">
-    <h2>Тарифы</h2>
+    <div class="page-title">Тарифы</div>
     <el-tabs v-model="activeName" style="margin-top:15px;" type="border-card">
-      <el-tab-pane v-for="item in tabMapOptions" :key="item.key" :label="item.label" :name="item.key">
+      <el-tab-pane v-for="item in typeList" :key="item.id" :label="item.name" :name="item.id">
         <keep-alive>
-          <tab-pane v-if="activeName==item.key" :type="item.key" @create="showCreatedTimes" />
+          <tab-pane v-if="activeName==item.id" :type="item.id" />
         </keep-alive>
       </el-tab-pane>
     </el-tabs>
@@ -13,18 +13,14 @@
 
 <script>
 import tabPane from './components/TabPane'
-
+import { getReceiptTypeList } from '@/api/all/receipt'
 export default {
   name: 'Tab',
   components: { tabPane },
   data() {
     return {
-      tabMapOptions: [
-        { label: 'Коммунальные', key: '1' },
-        { label: 'Взносы', key: '2' }
-      ],
-      activeName: '1',
-      createdTimes: 0
+      typeList: [],
+      activeName: 1
     }
   },
   watch: {
@@ -32,24 +28,32 @@ export default {
       this.$router.push(`${this.$route.path}?tab=${val}`)
     }
   },
+  created() {
+    this.getReceipList()
+  },
   mounted() {
     // init the default selected tab
     const tab = this.$route.query.tab
     if (tab) {
-      this.activeName = tab
+      this.activeName = +tab
     }
   },
   methods: {
-    showCreatedTimes() {
-      this.createdTimes = this.createdTimes + 1
+    getReceipList() {
+      getReceiptTypeList()
+        .then(response => {
+          if (response.data.status) {
+            this.typeList = response.data.data
+          } else if (response.data.data) {
+            this.$message.error(response.data.data)
+          }
+        })
     }
   }
 }
 </script>
 
 <style scoped>
-  .tab-container {
-    margin: 30px;
-  }
+
 </style>
 

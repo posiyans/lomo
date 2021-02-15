@@ -17,15 +17,6 @@
 import { fetchList } from '@/api/rate'
 
 export default {
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        1: 'success',
-        0: 'danger'
-      }
-      return statusMap[status]
-    }
-  },
   props: {
     type: {
       type: String,
@@ -34,40 +25,14 @@ export default {
   },
   data() {
     return {
-      tabMapOptions: [
-        { label: 'Коммунальные', key: '1' },
-        { label: 'Взносы', key: '2' }
-      ],
       list: null,
       listQuery: {
-        page: 1,
-        limit: 5,
-        type: this.type,
-        sort: '+id'
+        type: this.type
       },
       loading: false
     }
   },
   computed: {
-    rate_disc() {
-      if (this.rating.type_id == 1) {
-        return this.rating.rate.ratio_a + ' руб*кВт/ч'
-      }
-      if (this.rating.type_id == 2) {
-        let text = ''
-        if (this.rating.rate.ratio_a > 0) {
-          text += this.rating.rate.ratio_a + ' руб с сотки'
-        }
-        if (this.rating.rate.ratio_b > 0) {
-          if (this.rating.rate.ratio_a > 0) {
-            text += ' и '
-          }
-          text += this.rating.rate.ratio_b + ' руб с участка'
-        }
-        return text
-      }
-      return ''
-    }
   },
   mounted() {
     this.getList()
@@ -75,9 +40,10 @@ export default {
   methods: {
     getList() {
       this.loading = true
-      this.$emit('create') // for test
       fetchList(this.listQuery).then(response => {
-        this.list = response.data.data
+        if (response.data.status) {
+          this.list = response.data.data
+        }
         this.loading = false
       })
     }
