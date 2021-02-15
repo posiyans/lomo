@@ -57,13 +57,14 @@
             </el-select>
           </el-form-item>
           <el-form-item label="Cогласен">
-            <el-tooltip class="item" effect="light" content="Cогласен на обработку персональных данных и с условиями пользовательского соглашения" placement="top">
-              <el-checkbox
-                v-model="user.consent_personal"
-                label="на обработку персональных данных"
-                name="type"
-              />
-            </el-tooltip>
+            <div class="flex">
+              <div>
+                <el-checkbox v-model="user.consent_personal" />
+              </div>
+              <div class="do-not-carry personal" :class="{ blue: user.consent_personal }">
+                Я подтверждаю своё согласие на обработку и передачу информации в электронной Форме (обращения) (в том числе персональных данных) по открытым каналам связи сети Интернет.
+              </div>
+            </div>
           </el-form-item>
           <el-form-item label="Прикрепить соц.сеть">
             <div v-if="user.socialList.includes('vkontakte')" class="socalConfirmed"><img src="/images/vk-banner.png" width="100px"></div>

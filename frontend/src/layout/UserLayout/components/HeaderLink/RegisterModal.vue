@@ -50,8 +50,18 @@
               tabindex="4"
             />
           </el-form-item>
+          <el-form-item label="">
+            <div class="flex">
+              <div>
+                <el-checkbox v-model="personal" />
+              </div>
+              <div class="do-not-carry personal" :class="{ blue: personal }">
+                Я подтверждаю своё согласие на обработку и передачу информации в электронной Форме (обращения) (в том числе персональных данных) по открытым каналам связи сети Интернет.
+              </div>
+            </div>
+          </el-form-item>
           <el-form-item>
-            <el-button :loading="loading" size="default" class="w-100" type="primary" @click.native.prevent="handleRegister">Зарегистрироваться</el-button>
+            <el-button :loading="loading" size="default" class="w-100" type="primary" :disabled="!personal" @click.native.prevent="handleRegister">Зарегистрироваться</el-button>
           </el-form-item>
         </el-form>
         <div class="flex">
@@ -112,6 +122,7 @@ export default {
       }
     }
     return {
+      personal: false,
       loading: false,
       form: {
         name: '',
@@ -225,3 +236,11 @@ export default {
   }
 }
 </script>
+
+<style scope>
+  .personal {
+    margin-left: 10px;
+    font-size: 0.9em;
+    line-height: 1.3em;
+  }
+</style>
