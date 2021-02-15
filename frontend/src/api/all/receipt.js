@@ -8,3 +8,10 @@ export function getReceiptForStead(data) {
     data: data
   })
 }
+
+export function getReceiptTypeList() {
+  return request({
+    url: '/api/v1/receipt/get-receipt-type-list',
+    method: 'get'
+  })
+}

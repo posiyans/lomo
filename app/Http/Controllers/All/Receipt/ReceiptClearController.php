@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\All;
+namespace App\Http\Controllers\All\Receipt;
 
 use App\Http\Controllers\Admin\Report\PdfController;
 use App\Http\Controllers\Admin\Report\PrimaryPdfController;

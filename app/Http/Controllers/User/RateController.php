@@ -17,12 +17,12 @@ class RateController extends Controller
      */
     public function index(Request $request)
     {
-        $type = ReceiptType::where('depends',  $request->type)->pluck('id');;
+        $type = ReceiptType::where('id',  $request->type)->pluck('id');;
         $models = MeteringDevice::whereIn('type_id', $type)->where('enable', 1)->get();
         foreach ($models as $model) {
              $model->rateNow();
         }
-        return ['data'=>$models];
+        return ['status'=>true, 'data'=>$models];
 
         //
     }
