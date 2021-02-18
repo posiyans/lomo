@@ -1,8 +1,8 @@
 <template>
   <div class="app-container">
     <div class="ma2" :class="{'text-red': stead.balans_all < 0}"><b>Участок № {{ stead.number }} размер {{ stead.size }} кв.м.</b></div>
-    <div class="ma2" :class="{'text-red': balans.balans_all < 0}">Баланс:  <b>{{ balans.balans_all | formatPrice }} руб.</b></div>
-    <div v-for="item in balans.balans" :key="item.name" class="ma2" :class="{'text-red': item.price < 0}">{{ item.name }}:  <b>{{ item.price | formatPrice }} руб.</b></div>
+    <div class="ma2" :class="{'text-red': balans.balans_all < 0, 'dark-green': balans.balans_all >= 0}">Баланс:  <b>{{ balans.balans_all | formatPrice }} руб.</b></div>
+    <div v-for="item in balans.balans" :key="item.name" class="ma2" :class="{'text-red': item.price < 0, 'dark-green': item.price >= 0}">{{ item.name }}:  <b>{{ item.price | formatPrice }} руб.</b></div>
     <el-tabs type="border-card">
       <el-tab-pane label="Платежи">
         <InvoiceAndPayment :key="key[1]" @reload="reload(1)" />
