@@ -433,23 +433,23 @@ export const asyncRoutes = [
       }
     ]
   },
-  {
-    path: '/mail',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/clear/index'),
-        name: 'Mail',
-        meta: {
-          title: 'Рассылка',
-          icon: 'documentation',
-          affix: true,
-          roles: ['send-mail-spam']
-        }
-      }
-    ]
-  },
+  // {
+  //   path: '/mail',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/clear/index'),
+  //       name: 'Mail',
+  //       meta: {
+  //         title: 'Рассылка',
+  //         icon: 'documentation',
+  //         affix: true,
+  //         roles: ['send-mail-spam']
+  //       }
+  //     }
+  //   ]
+  // },
   bookkepingRouter,
   {
     path: '/permissions',
