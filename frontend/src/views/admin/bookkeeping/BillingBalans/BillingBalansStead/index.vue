@@ -1,5 +1,6 @@
 <template>
   <div class="app-container">
+    <UserSteadFind :stead-id="id" @selectStead="changeStead" />
     <div class="ma2" :class="{'text-red': stead.balans_all < 0}"><b>Участок № {{ stead.number }} размер {{ stead.size }} кв.м.</b></div>
     <div class="ma2" :class="{'text-red': balans.balans_all < 0, 'dark-green': balans.balans_all >= 0}">Баланс:  <b>{{ balans.balans_all | formatPrice }} руб.</b></div>
     <div v-for="item in balans.balans" :key="item.name" class="ma2" :class="{'text-red': item.price < 0, 'dark-green': item.price >= 0}">{{ item.name }}:  <b>{{ item.price | formatPrice }} руб.</b></div>
@@ -24,13 +25,15 @@ import InstrumentReadings from './components/InstrumentReadings'
 import SteadInfo from './components/SteadInfo'
 import { fetchBillingAllBalansForStead } from '@/api/admin/billing'
 import { fetchSteadInfo } from '@/api/admin/stead'
+import UserSteadFind from '@/components/UserSteadFind'
 
 export default {
   directives: { waves },
   components: {
     InvoiceAndPayment,
     InstrumentReadings,
-    SteadInfo
+    SteadInfo,
+    UserSteadFind
   },
   data() {
     return {
@@ -58,6 +61,9 @@ export default {
     this.getBalans()
   },
   methods: {
+    changeStead(val) {
+      this.$router.push('/bookkeping/billing_balance_stead/' + val.id)
+    },
     reload(val) {
       [1, 2, 3].forEach(item => {
         if (item !== val) {

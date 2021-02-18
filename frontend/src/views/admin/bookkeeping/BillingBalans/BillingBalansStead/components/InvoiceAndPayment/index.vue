@@ -207,7 +207,7 @@ export default {
       this.listLoading = true
     },
     setList(val) {
-      console.log('setliast')
+      // console.log('setliast')
       this.list = val
       this.listLoading = false
     },
@@ -240,7 +240,7 @@ export default {
     },
     showMore(row) {
       this.itemSelected = row.data
-      console.log(this.itemSelected)
+      // console.log(this.itemSelected)
       if (row.type === 'payment') {
         this.showInvoiceInfo = false
         this.showPaymentInfo = true
@@ -248,7 +248,7 @@ export default {
       if (row.type === 'invoice') {
         this.showPaymentInfo = false
         this.showInvoiceInfo = true
-        console.log(this.showInvoiceInfo)
+        // console.log(this.showInvoiceInfo)
       }
       // if (row.type === 'invoice') {
       //   this.$router.push('/bookkeping/invoice_info/' + row.data.id)

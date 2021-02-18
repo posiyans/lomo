@@ -36,8 +36,6 @@
       v-if="list.length > 0"
       :data="list"
       border
-      show-summary
-      :summary-method="getSummaries"
       style="width: 100%"
       @selection-change="handleSelectionChange"
     >
@@ -194,7 +192,7 @@ export default {
           action: this.action,
           readings: this.selectRows.map(item => { return item.id })
         }
-        console.log(data)
+        // console.log(data)
         addInvoiceForGroupReadings(data)
           .then(response => {
             if (response.data.status) {
@@ -210,7 +208,7 @@ export default {
       })
     },
     handleSelectionChange(val) {
-      console.log(val)
+      // console.log(val)
       this.selectRows = val
     },
     reload() {
@@ -246,35 +244,35 @@ export default {
       this.$emit('reload')
       this.addReadingDialogShow = false
     },
-    getSummaries(param) {
-      const { columns, data } = param
-      const sums = []
-      columns.forEach((column, index) => {
-        if (index === 0) {
-          sums[index] = 'Итого'
-          return
-        }
-        if (column.property === 'summa') {
-          const values = data.map(item => {
-            return item.summa
-          })
-          if (!values.every(value => isNaN(value))) {
-            sums[index] = values.reduce((prev, curr) => {
-              const value = Number(curr)
-              if (!isNaN(value)) {
-                return prev + curr
-              } else {
-                return prev
-              }
-            }, 0)
-          } else {
-            sums[index] = 'N/A'
-          }
-        }
-      })
-      sums[5] = sums[5].toFixed(2)
-      return sums
-    },
+    // getSummaries(param) {
+    //   const { columns, data } = param
+    //   const sums = []
+    //   columns.forEach((column, index) => {
+    //     if (index === 0) {
+    //       sums[index] = 'Итого'
+    //       return
+    //     }
+    //     if (column.property === 'summa') {
+    //       const values = data.map(item => {
+    //         return item.summa
+    //       })
+    //       if (!values.every(value => isNaN(value))) {
+    //         sums[index] = values.reduce((prev, curr) => {
+    //           const value = Number(curr)
+    //           if (!isNaN(value)) {
+    //             return prev + curr
+    //           } else {
+    //             return prev
+    //           }
+    //         }, 0)
+    //       } else {
+    //         sums[index] = 'N/A'
+    //       }
+    //     }
+    //   })
+    //   sums[5] = sums[5].toFixed(2)
+    //   return sums
+    // },
     getList() {
       fetchCommunalListForStead(this.id, this.listQuery)
         .then(response => {
@@ -328,7 +326,6 @@ export default {
     },
     getItemsTypeList() {
       this.getList()
-      console.log('getItemsTypeList')
       getReceiptTypeInfo(this.listQuery.primaryType)
         .then(response => {
           if (response.data.status) {
