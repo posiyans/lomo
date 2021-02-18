@@ -160,7 +160,6 @@ export default {
         })
     },
     getItemsTypeList() {
-      console.log('getItemsTypeList')
       this.device.type_id = ''
       getReceiptTypeInfo(this.primaryType)
         .then(response => {
@@ -175,12 +174,12 @@ export default {
         })
     },
     submitForm() {
-      console.log('submit')
+      // console.log('submit')
       this.$refs['addForm'].validate((valid) => {
         if (valid) {
           this.addDevice()
         } else {
-          console.log('error submit!!')
+          // console.log('error submit!!')
           return false
         }
       })

@@ -24,7 +24,7 @@ export default {
   props: {
     value: {
       type: Array,
-      default: []
+      default: () => ([])
     },
     id: {
       type: String,
@@ -61,7 +61,7 @@ export default {
     handleSuccess(response, file, fileList) {
       // console.log('handleSuccess')
       // console.log(response)
-      file.id = file.response.files.id,
+      file.id = file.response.files.id
       // console.log(file)
       // console.log(fileList)
       this.fileList = fileList
@@ -88,7 +88,7 @@ export default {
       this.fileList = fileList
     },
     handlePreview(file) {
-      console.log(file)
+      // console.log(file)
     },
     handleExceed(files, fileList) {
       this.$message.warning(`The limit is 3, you selected ${files.length} files this time, add up to ${files.length + fileList.length} totally`)

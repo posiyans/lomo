@@ -41,3 +41,11 @@
 .el-table__expanded-cell[class*="cell"] {
   padding: 5px;
 }
+
+.el-form-item--medium .el-form-item__label {
+  line-height: 0;
+}
+
+.el-form-item {
+  margin-bottom: 30px;
+}

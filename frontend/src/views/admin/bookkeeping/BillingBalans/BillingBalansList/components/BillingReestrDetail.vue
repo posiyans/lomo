@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import { fetchArticle, createArticle, updateArticle } from '@/api/article'
+import { fetchArticle } from '@/api/article'
 import { createBillingReestr } from '@/api/admin/billing'
 import { searchUser } from '@/api/remote-search'
 import { mapState } from 'vuex'
@@ -161,7 +161,7 @@ export default {
       var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
         var r = (dt + Math.random() * 16) % 16 | 0
         dt = Math.floor(dt / 16)
-        return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16)
+        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16)
       })
       return uuid
     },
@@ -174,7 +174,7 @@ export default {
 
         // set page title
         this.setPageTitle()
-      }).catch(err => {
+      }).catch(() => {
         // console.log(err)
       })
     },
@@ -189,7 +189,7 @@ export default {
     },
     changeRate() {
       this.postForm.title = this.rate_checked.description + ' ' + new Date().getFullYear() + ' год'
-      console.log(this.rate_checked.rate.ratio_a)
+      // console.log(this.rate_checked.rate.ratio_a)
       this.postForm.ratio_a = +this.rate_checked.rate.ratio_a
       // this.postForm.ratio_a = 2
       this.postForm.ratio_b = +this.rate_checked.rate.ratio_b

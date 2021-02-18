@@ -32,7 +32,7 @@ export default {
       default: ''
     },
     steadId: {
-      type: [Boolean, Number],
+      type: [Boolean, Number, String],
       default: false
     },
     readOnly: {
