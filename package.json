@@ -11,7 +11,7 @@
     },
     "devDependencies": {
         "@mdi/font": "^4.7.95",
-        "axios": "^0.18",
+        "axios": "^0.21",
         "bootstrap": "^4.1.0",
         "cross-env": "^5.1",
         "deepmerge": "^4.2.2",
@@ -59,7 +59,7 @@
         "vue-chartjs": "^3.4.2",
         "vue-moment": "^4.1.0",
         "vuetify": "^2.2.1",
-        "axios": "0.18.1",
+        "axios": "0.21.1",
         "clipboard": "2.0.4",
         "codemirror": "5.45.0",
         "driver.js": "0.9.5",
