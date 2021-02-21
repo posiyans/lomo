@@ -1,19 +1,18 @@
 <template>
-  <div
-  >
+  <div>
     <div
       v-loading="loading"
+      id="chartOldm"
       element-loading-text="Загрузка..."
       element-loading-spinner="el-icon-loading"
       element-loading-background="rgba(0, 0, 0, 0.8)"
-      id="chartOldm"
       :style="{height:'500px', width: '100%'}"
     />
   </div>
 </template>
 
 <script>
-import {  getTemper, gettestTemper } from '@/api/temper.js'
+import { getTemper } from '@/api/temper.js'
 import echarts from 'echarts'
 export default {
   props: {
@@ -60,21 +59,19 @@ export default {
         for (const temp of response.data.temper) {
           const tt = this.$moment(temp.time).format()
 
-          this.data.push({name: temp.time, value: [tt, temp.temp]})
+          this.data.push({ name: temp.time, value: [tt, temp.temp] })
           // this.data.push({name: tt, value: [tt, temp.temp]})
-          this.datav = [{name:temp.time, value: [tt, temp.temp]}]
+          this.datav = [{ name: temp.time, value: [tt, temp.temp] }]
         }
         for (const temp of response.data.sunrise) {
-          this.dataSun.push([{xAxis: temp.start}, {xAxis: temp.stop}]);
+          this.dataSun.push([{ xAxis: temp.start }, { xAxis: temp.stop }])
         }
         for (const temp of response.data.dusk) {
-          this.dataSumer.push([{xAxis: temp.start}, {xAxis: temp.stop}]);
+          this.dataSumer.push([{ xAxis: temp.start }, { xAxis: temp.stop }])
         }
         this.loading = false
         this.initChart()
-
       })
-
     },
     initChart() {
       this.chartold = echarts.init(document.getElementById('chartOldm'))
@@ -113,10 +110,10 @@ export default {
             filterMode: 'filter',
             start: 65,
             end: 100
-          },
+          }
         ],
         xAxis: [{
-          type: 'time',
+          type: 'time'
           // boundaryGap: false,
           // minorTick: {
           //   show: true
@@ -134,8 +131,7 @@ export default {
           boundaryGap: false,
           splitLine: {
             show: true
-          },
-
+          }
         }],
         visualMap: [{
           orient: 'horizontal',
