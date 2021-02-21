@@ -4,22 +4,22 @@
       <div class="resume-article-preview-header">
         <h2>{{ article.title }}</h2>
         <div v-if="editor" class="article-setting-icon" @click="editArticle">
-          <i class="el-icon-s-tools"></i>
+          <i class="el-icon-s-tools" />
         </div>
       </div>
-      <div class="resume-article-preview-body" >
-        <p><span v-html="resume"/></p>
+      <div class="resume-article-preview-body">
+        <p v-html="resume" />
       </div>
       <div class="resume-article-preview-footer">
-        <el-row type="flex" class="row-bg" justify="space-between" align="center">
+        <el-row type="flex" class="row-bg" justify="space-between">
           <el-col :span="24">
-              <span class="resume-article-preview-more">
-                <el-button type="primary" size="mini" plain @click="showArticle">Подробнее</el-button>
-              </span>
-              <span class="resume-article-preview-more">
-                <el-button v-if="article.allow_comments==1" type="primary" size="mini" plain icon="el-icon-chat-dot-square" @click="showArticle">{{ article.comments.length }}</el-button>
-              </span>
-            <div class="resume-time-publish">{{publicTime(article.publish_time) }}</div>
+            <span class="resume-article-preview-more">
+              <el-button type="primary" size="mini" plain @click="showArticle">Подробнее</el-button>
+            </span>
+            <span class="resume-article-preview-more">
+              <el-button v-if="article.allow_comments === 1" type="primary" size="mini" plain icon="el-icon-chat-dot-square" @click="showArticle">{{ article.comments.length }}</el-button>
+            </span>
+            <div class="resume-time-publish">{{ publicTime(article.publish_time) }}</div>
           </el-col>
         </el-row>
       </div>
@@ -28,24 +28,16 @@
 </template>
 
 <script>
-import { fetchUserArticle } from "@/api/article"
+import { fetchUserArticle } from '@/api/article'
 export default {
   props: {
     id: {
       type: Number,
       default: 0
     },
-    data: Object,
-    default: {}
-  },
-  filters: {
-  },
-  mounted() {
-    if (this.id > 0) {
-      this.fetchArticle()
-    } else {
-      // console.log('props ddata')
-      this.article = this.data
+    data: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {
@@ -57,18 +49,21 @@ export default {
   },
   computed: {
     editor() {
-      if (this.$store.getters.user.allPermissions.includes('create-article')) {
-        return true
-      }
-      return false
+      return !!this.$store.getters.user.allPermissions.includes('create-article')
     },
     resume() {
       if (this.article.resume) {
         return this.article.resume
       }
-      const size = 190
       const newsText = this.article.text.split('</p>')
       return newsText[0] + '</p>'
+    }
+  },
+  mounted() {
+    if (this.id > 0) {
+      this.fetchArticle()
+    } else {
+      this.article = this.data
     }
   },
   methods: {
@@ -80,16 +75,15 @@ export default {
     publicTime(val) {
       const time = (this.$moment() - this.$moment(val)) / 1000
       if (time > 24 * 3600 * 360) {
-        return this.$moment(val).format('DD MMM YYYY в HH:mm')
+        return this.$moment(val).format('DD MMM YYYY')
       }
-      if (time > 24 * 3600 * 2) {
-        return this.$moment(val).format('DD MMM в HH:mm')
+      if (time > 24 * 3600 * 10) {
+        return this.$moment(val).format('DD MMM')
       }
-      return this.$moment(val).fromNow()
+      return this.$moment(val).format('DD MMM в HH:mm')
     },
     showArticle() {
       this.$router.push('/article/show/' + this.article.id)
-
     },
     fetchArticle() {
       fetchUserArticle(this.id)
@@ -105,7 +99,7 @@ export default {
 
   .article-setting-icon{
     position: absolute;
-    top: 11px;
+    top: 5px;
     right: 24px;
     cursor: pointer;
     color: #1890ff;
@@ -121,7 +115,7 @@ export default {
   }
   .resume-time-publish {
     float:right;
-    padding: 10px 20px 0px 5px;
+    padding: 10px 20px 0 5px;
     color: #848484;
     height: 100%;
   }
@@ -133,8 +127,12 @@ export default {
     color: #303133;
     position: relative;
   }
-  .resume-article-preview-body{
-    padding: 20px 0;
+  .resume-article-preview-body {
+    padding: 10px 0;
+    line-height: 1.4;
+  }
+  .resume-article-preview-body p{
+    text-indent: 1.5em;
   }
   .resume-article-preview-footer {
 
@@ -145,7 +143,7 @@ export default {
   .resume-article-preview-body >>> img{
     width: 100px;
     float:left; /* Выравнивание по левому краю */
-    margin: 0px 20px 0 0; /* Отступы вокруг картинки */
+    margin: 0 20px 0 0; /* Отступы вокруг картинки */
   }
   .article-preview-more {
     padding-left: 20px;
@@ -164,7 +162,7 @@ export default {
       right: 20px;
     }
     .resume-article-preview-body{
-      padding: 10px 5px;
+      padding: 0 5px;
     }
     .resume-article-preview-body >>> img{
       width: 100px;
