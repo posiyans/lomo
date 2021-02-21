@@ -7,6 +7,7 @@ use App\Models\Receipt\ReceiptType;
 use App\Models\Stead;
 use App\MyModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 class BillingInvoice extends MyModel
 {
@@ -14,6 +15,19 @@ class BillingInvoice extends MyModel
     use SoftDeletes;
 
     protected $fillable = ['title', 'type', 'description'];
+
+    protected $casts = [
+        'paid' => 'boolean',
+        'price' => 'float',
+    ];
+
+
+    public function payments()
+    {
+        return $this->hasMany(BillingPayment::class, 'invoice_id', 'id');
+    }
+
+
 
     /**
      * получить участок счета
@@ -124,4 +138,19 @@ class BillingInvoice extends MyModel
         return $invoices;
     }
 
+
+    /**
+     * установить что платеж от этого счета
+     *
+     * @param BillingPayment $payment
+     * @return bool
+     */
+    public function match(BillingPayment $payment)
+    {
+        $payment->invoice_id = $this->id;
+        if ($payment->logAndSave('Сопоставили платеж')) {
+            return true;
+        }
+        return false;
+    }
 }

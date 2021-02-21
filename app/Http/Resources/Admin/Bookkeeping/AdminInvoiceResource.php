@@ -18,6 +18,8 @@ class AdminInvoiceResource extends JsonResource
         $data['stead_number'] = $this->steadNumber();
         $data['metersData'] = $this->metersData;
         $data['type_name'] = $this->receiptType->name;
+        $data['payments'] = $this->payments;
+
         return $data;
     }
 }

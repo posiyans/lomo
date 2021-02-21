@@ -30,7 +30,7 @@
                 {{ payment.raw_data[2] }} -->
                 {{ payment.stead.number }}
               </span>
-              <span v-else>
+              <span v-else @click="putStead(payment.stead.id)">
                 {{ payment.stead.number }}
               </span>
             </div>
@@ -174,6 +174,9 @@ export default {
     this.getReceipt()
   },
   methods: {
+    putStead(id) {
+      this.$router.push('/bookkeping/billing_balance_stead/' + id)
+    },
     getPaymetData() {
       fetchPaymentInfo(this.id)
         .then(response => {

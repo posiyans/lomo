@@ -38,6 +38,30 @@ export function addInvoiceForStead(data) {
   })
 }
 
+export function addPaymentForInvoice(data) {
+  return request({
+    url: '/api/v1/admin/billing/change-invoice/add-payment',
+    method: 'post',
+    data: data
+  })
+}
+
+export function deletePaymentForInvoice(data) {
+  return request({
+    url: '/api/v1/admin/billing/change-invoice/delete-payment',
+    method: 'post',
+    data: data
+  })
+}
+
+export function changeStatusForInvoice(data) {
+  return request({
+    url: '/api/v1/admin/billing/change-invoice/change-status',
+    method: 'post',
+    data: data
+  })
+}
+
 // export function updatePaymentInfo(id, data) {
 //   return request({
 //     url: '/api/v1/admin/billing/payment/' + id,

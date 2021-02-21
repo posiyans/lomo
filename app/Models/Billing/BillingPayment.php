@@ -11,6 +11,7 @@ use App\Models\Stead;
 use App\MyModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class BillingPayment extends MyModel
 {
@@ -387,4 +388,5 @@ class BillingPayment extends MyModel
         }
         return $this;
     }
+
 }

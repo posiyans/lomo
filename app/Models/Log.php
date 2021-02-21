@@ -22,7 +22,9 @@ class Log extends MyModel
             $this->user_id = Auth::user()->id;
         }
         $this ->action = debug_backtrace()[1]['function'];
-        $this ->user_agent = $_SERVER['REMOTE_ADDR'].'/'.$_SERVER['HTTP_USER_AGENT'];
+        $this->user_agent = '';
+        $this->user_agent .= isset($_SERVER['REMOTE_ADDR']) ? '_'.$_SERVER['REMOTE_ADDR'] : '';
+        $this->user_agent .= isset($_SERVER['HTTP_USER_AGENT']) ? '_'.$_SERVER['HTTP_USER_AGENT'] : '';
     }
 
     /**

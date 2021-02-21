@@ -9,6 +9,10 @@ Route::resource('billing/reestr', 'Admin\Bookkeeping\Billing\ReestrController')
 
 Route::resource('billing/payment', 'Admin\Bookkeeping\Billing\PaymentController')
     ->only(['index', 'show', 'update', 'store']);
+// счета
+Route::post('billing/change-invoice/add-payment', 'Admin\Bookkeeping\Billing\Invoice\ChangeStatusInvoiceController@addPaymentForInvoice');
+Route::post('billing/change-invoice/delete-payment', 'Admin\Bookkeeping\Billing\Invoice\ChangeStatusInvoiceController@deletePaymentForInvoice');
+Route::post('billing/change-invoice/change-status', 'Admin\Bookkeeping\Billing\Invoice\ChangeStatusInvoiceController@changeStatus');
 Route::resource('billing/invoice', 'Admin\Bookkeeping\Billing\InvoiceController')
     ->only(['index', 'show', 'update', 'store']);
 
@@ -23,3 +27,5 @@ Route::post('billing/bank-reestr-publish', 'Admin\Bookkeeping\Billing\BankReestr
 // Электроэнергия
 Route::get('billing/communal/stead/get/{id}', 'Admin\Bookkeeping\Communal\ElectroSteadController@list');
 Route::post('billing/communal/stead/add-reading/{id}', 'Admin\Bookkeeping\Communal\ElectroSteadController@addInstrumentReadings');
+
+
