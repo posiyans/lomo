@@ -29,6 +29,7 @@
       </el-select>
       <el-button type="primary" size="small" plain class="table-filter-header__item" @click="handleFilter">Показать</el-button>
       <el-button type="success" size="small" plain class="table-filter-header__item" @click="addInvoiceShow = true">Добавить счет</el-button>
+      <el-button type="warning" size="small" plain class="table-filter-header__item" @click="addPaymentShow = true">Добавить платеж</el-button>
     </div>
     <div class="billing-balans-stead">
       <el-table
@@ -116,6 +117,9 @@
         </el-table-column>
         <el-table-column label="" align="center" width="100px">
           <template slot-scope="{row}">
+            <div v-if="row.type === 'payment' && row.data.payment_type === 2 " class="red f7">
+              в кассу
+            </div>
             <div v-if="row.data.type_depends" class="inst_read">
               <span v-for="d in row.data.depends" :key="d.id">
                 <span v-if="row.data.instr_read['d' + d.id]">
@@ -137,6 +141,14 @@
       >
         <AddInvoiceForStead :stead="stead" @close="closeAddForm" />
       </el-dialog>
+      <el-dialog
+        title="Добавить платеж наличкой"
+        :visible.sync="addPaymentShow"
+        top="10px"
+        :width="mobile ? '100%' : '600px'"
+      >
+        <AddPaymentForStead :stead="stead" @close="closeAddForm" />
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -148,11 +160,12 @@ import PaymentInfo from '@/components/BillingPaymetnInfo'
 import InvoiceInfo from '@/components/BillingInvoiceInfo'
 import { fetchReceiptTypeList } from '@/api/admin/setting/receipt'
 import AddInvoiceForStead from '@/components/AddInvoiceForStead'
+import AddPaymentForStead from '@/components/AddPaymentForStead'
 import LoadMore from '@/components/LoadMore'
 import { fetchSteadInfo } from '@/api/admin/stead'
 
 export default {
-  components: { PaymentInfo, InvoiceInfo, AddInvoiceForStead, LoadMore },
+  components: { PaymentInfo, InvoiceInfo, AddInvoiceForStead, LoadMore, AddPaymentForStead },
   directives: { waves },
   filters: {
     type1EffectFilter(val) {
@@ -173,6 +186,7 @@ export default {
       key: 1,
       func: fetchBillingBalansSteadInfo,
       addInvoiceShow: false,
+      addPaymentShow: false,
       receiptTypes: [],
       showInvoiceInfo: false,
       showPaymentInfo: false,
@@ -233,9 +247,10 @@ export default {
       this.key++
     },
     closeAddForm() {
+      this.$emit('reload')
       this.addInvoiceShow = false
+      this.addPaymentShow = false
       this.key++
-      // this.getData()
     },
     getTypeList() {
       fetchReceiptTypeList()

@@ -23,3 +23,10 @@ export function updatePaymentInfo(id, data) {
   })
 }
 
+export function addPaymentForStead(data) {
+  return request({
+    url: '/api/v1/admin/billing/payment/',
+    method: 'post',
+    data: data
+  })
+}

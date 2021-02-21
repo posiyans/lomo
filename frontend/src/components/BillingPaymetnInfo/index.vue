@@ -10,7 +10,11 @@
         <tr class="bg-black-05">
           <th>Поле</th>
           <th>Значение</th>
-          <th />
+          <th>
+            <div v-if="payment.payment_type === 2" class="red">
+              Платеж в кассу
+            </div>
+          </th>
         </tr>
         <tr>
           <td>id</td>

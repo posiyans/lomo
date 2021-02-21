@@ -23,6 +23,8 @@ class BillingPayment extends MyModel
         'error' => 'boolean'
     ];
 
+    protected $fillable = ['type', 'description'];
+
     public function instrumentReadings()
     {
       return $this->hasMany(InstrumentReadings::class, 'payment_id', 'id');

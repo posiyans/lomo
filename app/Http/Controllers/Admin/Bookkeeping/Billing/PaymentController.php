@@ -21,7 +21,7 @@ class PaymentController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('ability:superAdmin,access-admin-panel');
+        $this->middleware('ability:superAdmin,reestr-edit');
     }
 
     /**
@@ -74,21 +74,27 @@ class PaymentController extends Controller
      */
     public function store(Request $request)
     {
-        return 'store';
-//        if (isset($request->title) && !empty($request->title)) {
-//            $ratio_a = (isset($request->ratio_a) && !empty($request->ratio_a)) ? $request->ratio_a : false;
-//            $ratio_b = (isset($request->ratio_b) && !empty($request->ratio_b)) ? $request->ratio_b : false;
-//            if ($ratio_a || $ratio_b) {
-//                $user_id = Auth::user()->id;
-//                $reestr = BillingReestr::createСontributions($user_id, $request->title, $ratio_a,  $ratio_b);
-//                if ($reestr) {
-//                    return ['status'=>true, 'data'=>$reestr];
-//                }
-//                //todo нужно поставить симафор!!!!
-//                return ['status'=>false, 'data'=>'Ошибка при сохранении'];
-//            }
-//        }
-//        return ['status'=>false, 'data'=>'Нет данных'];
+        if ($request->price && is_numeric($request->price) && $request->stead['id']) {
+            $payment = new BillingPayment();
+            $payment->fill($request->all());
+            $raw = [
+                date('y-m-d H:i:s'),
+                $request->price,
+                $request->stead['number'],
+                'Платеж внесен в кассу',
+                $request->title,
+            ];
+            $payment->raw_data = $raw;
+            $payment->price = $request->price;
+            $payment->stead_id  = $request->stead['id'];
+            $payment->user_id = Auth::user()->id;
+            $payment->payment_type = 2;
+            $payment->payment_date = date('y-m-d H:i:s');
+            if ($payment->logAndSave('Добавлен счет')) {
+                return ['status' => true, 'data' => $payment];
+            }
+        }
+        return ['status' => false];
     }
 
     /**
