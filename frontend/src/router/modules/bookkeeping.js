@@ -1,6 +1,6 @@
 /** When your routing table is too long, you can split it into small modules**/
 
-import Layout from '@/layout'
+import Layout from '@/layout/AdminLayout'
 
 const bookkepingRouter = {
   path: '/bookkeping',
@@ -19,13 +19,6 @@ const bookkepingRouter = {
       hidden: true
 
     },
-    // {
-    //   path: 'billing_reestr_edit/:id(\\d+)',
-    //   component: () => import('@/views/admin/bookkeeping/BillingAddInvoiceForAllStead/edit'),
-    //   name: 'BillingReestrEdit',
-    //   hidden: true
-    //
-    // },
     {
       path: 'billing_reestr',
       component: () => import('@/views/admin/bookkeeping/BillingReestr/BillingReestrList/index'),

@@ -1,11 +1,10 @@
 <template>
   <el-card class="right-cart">
     <div slot="header">
-      <span>{{ header}} </span>
+      <span>{{ header }} </span>
     </div>
     <div class="body">
-    <slot>sdfsdf</slot>
-
+      <slot />
     </div>
   </el-card>
 </template>
@@ -13,23 +12,11 @@
 <script>
 export default {
   name: 'RightCard',
-  components: {
-  },
   props: {
     header: {
       type: String,
       default: ''
     }
-  },
-  data() {
-    return {}
-  },
-  mounted() {
-  },
-  computed: {
-  },
-  methods: {
-
   }
 }
 </script>
@@ -42,7 +29,8 @@ export default {
     color: #ffffff;
   }
   .right-cart {
-    margin-top: 5px;
+    /*margin-top: 5px;*/
+    margin-bottom: 5px;
   }
   .body {
     word-wrap: break-word;

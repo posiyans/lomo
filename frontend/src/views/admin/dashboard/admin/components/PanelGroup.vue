@@ -23,7 +23,7 @@
             Обращенией
           </div>
           <count-to :start-val="0" :end-val="countAppealOpen" :duration="3000" class="card-panel-num" />
-          <span class="card-panel-num" >
+          <span class="card-panel-num">
             (
             <count-to :start-val="0" :end-val="countAppeal" :duration="3000" class="card-panel-num" />
             )
@@ -65,7 +65,7 @@ import CountTo from 'vue-count-to'
 import { fetchList } from '@/api/admin/user.js'
 import { fetchAppelList } from '@/api/admin/appeal'
 import { fetchVotingList } from '@/api/admin/voting'
-import { fetchSteadList } from '@/api/stead'
+import { fetchSteadList } from '@/api/admin/stead'
 export default {
   components: {
     CountTo
@@ -76,8 +76,7 @@ export default {
       countAppeal: 0,
       countAppealOpen: 0,
       countVoting: 0,
-      countStead: 0,
-
+      countStead: 0
     }
   },
   mounted() {
@@ -194,7 +193,7 @@ export default {
       float: right;
       font-weight: bold;
       margin: 26px;
-      margin-left: 0px;
+      margin-left: 0;
 
       .card-panel-text {
         line-height: 18px;

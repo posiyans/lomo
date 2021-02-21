@@ -1,53 +1,55 @@
 <template>
-  <el-container id="main-container">
-    <el-container>
-      <div class="main-header">
-        <hamburger v-if="mobile" :is-active="open_sidebar" class="hamburger-container" @toggleClick="toggleSideBar" />
-        <div
-          class="header-block site-title"
-        >
-          {{ site_name }}
-        </div>
-        <div
-          class="header-block"
-        >
-          <TemperWidget />
-        </div>
-        <div
-          class="header-link"
-        >
-          <HeaderLink />
-        </div>
-      </div>
-      <el-row v-if="open_sidebar || !mobile">
-        <el-col :span="24">
-          <ItemMenu :menu="menu" @toggleClick="open_sidebar = false" />
-        </el-col>
-      </el-row>
-      <el-main class="main-body">
-        <el-container>
-          <el-main class="main-app">
-            <app-main />
-          </el-main>
-          <el-aside v-if="asideShow">
-            <LoginForm />
-            <ReceiptForm />
-            <WeatherForm />
-          </el-aside>
-        </el-container>
-      </el-main>
-      <el-footer class="footer">
-        <div align="center">
-          <div class="el-link" @click="showPersonal"> Внимание!!! Оставаясь на данном сайте вы соглашаетесь с политикой обработки пересональных данных</div>
-          <div class="tr mr2 mt2 light-blue ">
-            <a href="https://github.com/posiyans/lomo">
-              @posiyans
-            </a>
+  <div class="main-background">
+    <el-container id="main-container">
+      <el-container>
+        <div class="main-header">
+          <hamburger v-if="mobile" :is-active="open_sidebar" class="hamburger-container" @toggleClick="toggleSideBar" />
+          <div
+            class="header-block site-title"
+          >
+            {{ site_name }}
+          </div>
+          <div
+            class="header-block"
+          >
+            <TemperWidget />
+          </div>
+          <div
+            class="header-link"
+          >
+            <HeaderLink />
           </div>
         </div>
-      </el-footer>
+        <el-row v-if="open_sidebar || !mobile">
+          <el-col :span="24">
+            <ItemMenu :menu="menu" @toggleClick="open_sidebar = false" />
+          </el-col>
+        </el-row>
+        <el-main class="main-body">
+          <el-container>
+            <el-main class="main-app">
+              <app-main />
+            </el-main>
+            <el-aside v-if="asideShow">
+              <LoginForm />
+              <ReceiptForm />
+              <WeatherForm />
+            </el-aside>
+          </el-container>
+        </el-main>
+        <el-footer class="footer">
+          <div align="center">
+            <div class="el-link" @click="showPersonal"> Внимание!!! Оставаясь на данном сайте вы соглашаетесь с политикой обработки пересональных данных</div>
+            <div class="tr mr2 mt2 light-blue ">
+              <a href="https://github.com/posiyans/lomo">
+                @posiyans
+              </a>
+            </div>
+          </div>
+        </el-footer>
+      </el-container>
     </el-container>
-  </el-container>
+  </div>
 </template>
 
 <script>
