@@ -61,7 +61,7 @@ class ReceiptListController extends Controller
         if ($is_playment == 1) {
             $this->query->whereNotNull('payment_id');
         }
-        if ($is_playment == 1) {
+        if ($is_playment == 2) {
             $this->query->whereNull('payment_id');
         }
     }

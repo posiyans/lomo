@@ -34,13 +34,13 @@
             </div>
           </div>
           <div v-else>
-            <span>{{ row.price }}</span>
+            <span>{{ row.price | formatPrice }}</span>
           </div>
         </template>
       </el-table-column>
       <el-table-column label="Назначение" align="center">
         <template slot-scope="{row}">
-          <span class="do-not-carry">{{ row.raw_data[4] }}</span>
+          <span class="do-not-carry f7">{{ row.raw_data[4] }}</span>
         </template>
       </el-table-column>
       <el-table-column label="Номер участка" align="center" width="125px">
@@ -53,7 +53,7 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column label="Тип" align="center">
+      <el-table-column label="Тип" align="center" width="160px">
         <template slot-scope="{row}">
           <span>
             <div v-if="row.type">
@@ -65,7 +65,7 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column label="" align="center">
+      <el-table-column label="" align="center" width="200px">
         <template slot-scope="{row}">
           <span>
             <el-button type="primary" icon="el-icon-info" @click="showPayment(row)">Подробнее</el-button>

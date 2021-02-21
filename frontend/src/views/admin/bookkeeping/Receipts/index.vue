@@ -27,7 +27,7 @@
         placeholder="Тип"
         clearable
         class="filter-container__item"
-        @click="showReestr"
+        @change="showReestr"
       >
         <el-option v-for="item in receiptTypes" :key="item.id" :label="item.name" :value="item.id" />
       </el-select>
@@ -36,6 +36,7 @@
         placeholder="Оплата"
         clearable
         class="filter-container__item"
+        @change="showReestr"
       >
         <el-option label="только оплаченные" value="1" />
         <el-option label="только неоплаченные" value="2" />
@@ -50,7 +51,7 @@
       <el-checkbox v-model="listQuery.fio" class="filter-container__item">Включить ФИО в фаил</el-checkbox>
     </div>
     <ShowTable v-if="list.length > 0" v-loading="loading" :list="list" />
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="showReestr" />
+    <LoadMore :key="key" :list-query="listQuery" :func="func" @setList="setList" />
     <el-dialog
       title="Внимание"
       :visible.sync="downloadDialogVisible"
@@ -76,17 +77,19 @@ import { getSteadsList } from '@/api/user/stead.js'
 import { getReceiptList, getReceiptForSteadList } from '@/api/admin/receipt.js'
 import ShowTable from './ShowTable'
 import waves from '@/directive/waves'
-import Pagination from '@/components/Pagination/index'
 import { saveAs } from 'file-saver'
 import { fetchReceiptTypeList } from '@/api/admin/setting/receipt'
+import LoadMore from '@/components/LoadMore'
 
 export default {
   components: {
-    ShowTable, Pagination
+    ShowTable, LoadMore
   },
   directives: { waves },
   data() {
     return {
+      key: 1,
+      func: getReceiptList,
       loading: false,
       stead_min: null,
       stead_max: null,
@@ -120,7 +123,7 @@ export default {
     this.findStead()
   },
   mounted() {
-    this.showReestr()
+    // this.showReestr()
   },
   methods: {
     getTypeList() {
@@ -142,7 +145,7 @@ export default {
         })
     },
     downloadReestr(padding = true) {
-      this.showReestr()
+      // this.showReestr()
       this.$message('Запрос отправлен ожидайте файл!')
       const data = this.listQuery
       data.padding = padding
@@ -160,16 +163,20 @@ export default {
           this.steadsList = response.data
         })
     },
+    setList(val) {
+      this.list = val
+    },
     showReestr() {
-      console.log('dfsdfsdfsfs')
-      this.loading = true
-      getReceiptList(this.listQuery).then(response => {
-        // if (response.data.status) {
-        this.list = response.data.data
-        this.total = response.data.total
-        this.loading = false
-        // }
-      })
+      this.listQuery.page = 1
+      this.key++
+      // this.loading = true
+      // getReceiptList(this.listQuery).then(response => {
+      //   // if (response.data.status) {
+      //   this.list = response.data.data
+      //   this.total = response.data.total
+      //   this.loading = false
+      //   // }
+      // })
     },
     findStead(query = '') {
       const data = {

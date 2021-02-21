@@ -22,7 +22,9 @@
         @change="handleFilter"
       >
         <el-option label="Все" value="" />
-        <el-option label="Счета" value="invoice" />
+        <el-option label="Все счета" value="invoice_all" />
+        <el-option label="Неоплаченные счета" value="invoice_no_paid" />
+        <el-option label="Оплаченные счета" value="invoice_paid" />
         <el-option label="Платежи" value="payment" />
       </el-select>
       <el-button type="primary" size="small" plain class="table-filter-header__item" @click="handleFilter">Показать</el-button>
@@ -88,24 +90,38 @@
           <template slot-scope="{row}">
             <div>
               <span v-if="row.type =='payment' && row.data.type === item.id">{{ row.data.price | formatPrice }}</span>
-              <span v-if="row.type =='invoice' && row.data.type === item.id">-{{ row.data.price | formatPrice }}</span>
+              <span v-if="row.type =='invoice' && row.data.type === item.id">
+                -{{ row.data.price | formatPrice }}
+              </span>
             </div>
 
           </template>
         </el-table-column>
-        <el-table-column label="Actions">
+        <el-table-column label="Actions" align="center" width="160px">
           <template slot-scope="{row}">
-            <div>
-              <el-button type="primary" size="small" icon="el-icon-info" @click="showMore(row)">
+            <div v-if="row.type =='invoice'">
+              <el-button v-if="row.data.paid" type="success" size="small" icon="el-icon-info" style="width: 120px;" @click="showMore(row)">
+                Оплачен
+              </el-button>
+              <el-button v-if="!row.data.paid" type="primary" size="small" icon="el-icon-info" style="width: 120px;" @click="showMore(row)">
                 Подробнее
               </el-button>
-              <div v-if="row.data.type_depends" class="inst_read">
-                <span v-for="d in row.data.depends" :key="d.id">
-                  <span v-if="row.data.instr_read['d' + d.id]">
-                    {{ row.data.instr_read['d' + d.id].value }}
-                  </span>
+            </div>
+            <div v-if="row.type =='payment'">
+              <el-button type="primary" size="small" icon="el-icon-info" :plain="row.data.invoice_id" style="width: 120px;" @click="showMore(row)">
+                Подробнее
+              </el-button>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column label="" align="center" width="100px">
+          <template slot-scope="{row}">
+            <div v-if="row.data.type_depends" class="inst_read">
+              <span v-for="d in row.data.depends" :key="d.id">
+                <span v-if="row.data.instr_read['d' + d.id]">
+                  {{ row.data.instr_read['d' + d.id].value }}
                 </span>
-              </div>
+              </span>
             </div>
           </template>
         </el-table-column>
@@ -248,51 +264,7 @@ export default {
       if (row.type === 'invoice') {
         this.showPaymentInfo = false
         this.showInvoiceInfo = true
-        // console.log(this.showInvoiceInfo)
       }
-      // if (row.type === 'invoice') {
-      //   this.$router.push('/bookkeping/invoice_info/' + row.data.id)
-      // }
-    },
-    getSummaries(param) {
-      const { columns, data } = param
-      const sums = []
-      columns.forEach((column, index) => {
-        if (index === 0) {
-          sums[index] = 'Итого'
-          return
-        }
-        if (column.property) {
-          const values = data.map(item => {
-            // if (column.property === 'payment1' && item.type === 'payment' && item.data.type === 1) {
-            //   return item.data.price
-            // }
-            // if (column.property === 'payment2' && item.type === 'payment' && item.data.type === 2) {
-            //   return item.data.price
-            // }
-            if (column.property === item.data.type.toString()) {
-              if (item.type === 'payment') {
-                return item.data.price
-              }
-              return -item.data.price
-            }
-            return 0
-          })
-          if (!values.every(value => isNaN(value))) {
-            sums[index] = values.reduce((prev, curr) => {
-              const value = Number(curr)
-              if (!isNaN(value)) {
-                return prev + curr
-              } else {
-                return prev
-              }
-            }, 0)
-          } else {
-            sums[index] = 'N/A'
-          }
-        }
-      })
-      return sums
     },
     getSteadInfo() {
       fetchSteadInfo(this.id)
@@ -308,11 +280,15 @@ export default {
     },
     tableRowClassName({ row, rowIndex }) {
       if (row.type === 'invoice') {
-        return 'warning-row'
+        if (!row.data.paid) {
+          return 'warning-row'
+        }
       } else if (row.type === 'payment') {
-        return 'success-row'
+        if (!row.data.invoice_id) {
+          return 'success-row'
+        }
       }
-      return ''
+      return 'silver'
     },
     getData() {
       this.listLoading = true
