@@ -1,11 +1,14 @@
 <?php
+
+namespace Database\Seeders;
+
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use App\Models\Laratrust\Role;
 use App\Models\Laratrust\Permission;
-use App\Models\Laratrust\User;
+use App\Models\User;
 
 class LaratrustSeeder extends Seeder
 {
