@@ -52,14 +52,12 @@ export default {
     }
   },
   mounted() {
-    if (this.stead_id) {
-      console.log(this.stead_id)
+    if (this.steadId) {
       const data = {
-        stead_id: this.stead_id
+        stead_id: this.steadId
       }
       getSteadsList(data)
         .then(response => {
-          console.log(response)
           if (response.data.length === 1) {
             this.stead = response.data[0].number
             this.$emit('selectStead', response.data[0])
@@ -71,11 +69,9 @@ export default {
     } else {
       this.findStead()
     }
-    // this.stead = this.userStead
-    // this.selectStead()
   },
   methods: {
-    find(val) {
+    find(val = '') {
       const data = {
         query: val
       }
@@ -87,7 +83,7 @@ export default {
           }
         })
     },
-    findStead(val) {
+    findStead(val = '') {
       this.loading = true
       const data = {
         query: val
@@ -99,12 +95,18 @@ export default {
         })
     },
     selectStead() {
-      const data = this.SteadsList.find(i => {
-        if (i.id === this.stead) {
-          return true
-        }
-      })
-      this.$emit('selectStead', data)
+      console.log('change')
+      if (this.stead) {
+        const data = this.SteadsList.find(i => {
+          if (i.id === this.stead) {
+            return true
+          }
+        })
+        this.$emit('selectStead', data)
+      } else {
+        this.findStead()
+        this.$emit('selectStead', '')
+      }
     }
   }
 }

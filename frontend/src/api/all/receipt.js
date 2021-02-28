@@ -9,9 +9,19 @@ export function getReceiptForStead(data) {
   })
 }
 
-export function getReceiptTypeList() {
+export function getReceiptTypeList(params) {
   return request({
     url: '/api/v1/receipt/get-receipt-type-list',
-    method: 'get'
+    method: 'get',
+    params: params
+  })
+}
+
+export function getReceiptForParams(data) {
+  return request({
+    url: '/api/v1/receipt/get-receipt-for-params',
+    method: 'post',
+    responseType: 'blob',
+    data: data
   })
 }

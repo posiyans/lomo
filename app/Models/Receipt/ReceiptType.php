@@ -64,6 +64,16 @@ class ReceiptType extends MyModel
     }
 
 
+    /**
+     * проверить относится ли подгрупа к данной группе
+     *
+     * @param $id
+     */
+    public function checkForType($id)
+    {
+        return MeteringDevice::where('type_id', $this->id)->where('id', $id)->first();
+    }
+
     public static function getReceiptTypeIds()
     {
         return self::pluck('id');

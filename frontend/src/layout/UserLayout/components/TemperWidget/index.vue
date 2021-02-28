@@ -1,5 +1,5 @@
 <template>
-  <span v-if="temper" class="temp-block">
+  <span v-if="temper" class="temp-block pointer" @click="pushToGraf">
     {{ temper.temp }}°C
   </span>
 </template>
@@ -16,6 +16,9 @@ export default {
     this.fetchTemp()
   },
   methods: {
+    pushToGraf() {
+      this.$router.push('/modules/weather')
+    },
     fetchTemp() {
       getNowWeatherProHD().then(response => {
         this.temper = response.data.temper
@@ -28,7 +31,6 @@ export default {
 <style scoped>
   .temp-block {
     font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    font-size: 1em;
     color: #1b5fab;
   }
 </style>

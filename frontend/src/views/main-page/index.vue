@@ -1,19 +1,15 @@
 <template>
-  <div>
-    <div v-if="listLoading"  v-for="item in list" :key="item.id">
-      <ArticlePreview :data="item"/>
-    </div>
+  <div v-if="listLoading">
+    <ArticlePreview v-for="item in list" :key="item.id" :data="item" />
   </div>
 </template>
 
 <script>
 import ArticlePreview from '@/components/ArticlePreview'
-import { fetchListForCategory, fetchList } from '@/api/article'
+import { fetchListForCategory } from '@/api/article'
 export default {
   components: {
     ArticlePreview
-  },
-  computed: {
   },
   data() {
     return {
@@ -27,11 +23,13 @@ export default {
       }
     }
   },
+  computed: {
+  },
   mounted() {
     this.fetchArticle()
   },
-  methods:{
-    add(){
+  methods: {
+    add() {
       // console.log('ADD!!!')
       this.listQuery.page += 1
       if (this.$route.params.id) {
@@ -47,7 +45,7 @@ export default {
         })
       })
     },
-    fetchArticle(){
+    fetchArticle() {
       // console.log('fewtch!!!')
       // console.log(this.listQuery)
       this.listLoading = false

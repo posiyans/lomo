@@ -5,6 +5,8 @@
 @import './sidebar.scss';
 @import './btn.scss';
 @import './my-style.scss';
+@import './primary-block.scss';
+
 
 body {
   height: 100%;
@@ -122,6 +124,7 @@ aside {
 
 //main-container全局样式
 .app-container {
+  background-color: #fff;
   padding: 20px;
 }
 @media screen and (max-width: 700px) {

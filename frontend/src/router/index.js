@@ -13,6 +13,8 @@ import UserLayout from '@/layout/UserLayout'
 // import chartsRouter from './modules/charts'
 import bookkepingRouter from './modules/bookkeeping'
 import settingRouter from './modules/setting'
+import allInstrumentReading from './modules/all_instrument_reading'
+
 // import tableRouter from './modules/table'
 // import nestedRouter from './modules/nested'
 
@@ -109,7 +111,8 @@ export const constantRoutes = [
         component: () => import('@/views/main-page/index'),
         name: 'Dashboard',
         meta: { title: 'Сайт', icon: 'link', affix: true }
-      }
+      },
+      allInstrumentReading
     ]
   },
   {
@@ -256,6 +259,7 @@ export const constantRoutes = [
       }
     ]
   },
+  allInstrumentReading,
   // {
   //   path: '/dash',
   //   component: Layout,

@@ -37,7 +37,7 @@
             </el-aside>
           </el-container>
         </el-main>
-        <el-footer class="footer">
+        <div class="footer">
           <div align="center">
             <div class="el-link" @click="showPersonal"> Внимание!!! Оставаясь на данном сайте вы соглашаетесь с политикой обработки пересональных данных</div>
             <div class="tr mr2 mt2 light-blue ">
@@ -46,16 +46,15 @@
               </a>
             </div>
           </div>
-        </el-footer>
+        </div>
+        <el-footer style="height: 0" />
       </el-container>
     </el-container>
   </div>
 </template>
 
 <script>
-// import RightPanel from '@/components/RightPanel'
 import HeaderLink from './components/HeaderLink/index.vue'
-// import RightCard from '@/components/RightCard/index.vue'
 import ReceiptForm from '@/components/Module/ReceiptForm/index.vue'
 import WeatherForm from '@/components/Module/WeatherForm/index.vue'
 import LoginForm from '@/components/LoginForm'
@@ -65,7 +64,6 @@ import { AppMain } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
 import { mapState, mapGetters } from 'vuex'
 import TemperWidget from './components/TemperWidget'
-// import store from '../../store'
 
 export default {
   name: 'Layout',
@@ -73,17 +71,11 @@ export default {
     TemperWidget,
     AppMain,
     HeaderLink,
-    // Navbar,
     ItemMenu,
-    // RightPanel,
     WeatherForm,
     LoginForm,
     ReceiptForm,
-    // RightCard,
-    // Settings,
-    // Sidebar,
     Hamburger
-    // TagsView
   },
   mixins: [ResizeMixin],
   data() {
@@ -160,6 +152,9 @@ export default {
     background-color: #AFEEEE;
     color:#333;
     padding: 10px 0;
+    box-sizing: border-box;
+    flex-shrink: 0;
+    display: block;
   }
 
   .hamburger-container {

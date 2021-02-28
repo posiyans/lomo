@@ -16,7 +16,7 @@
       <div v-if="article.files && article.files.length > 0">
         <div class="file-list-header">Файлы:</div>
         <ul>
-          <li v-for="file in article.files">{{ file.name }}
+          <li v-for="file in article.files" :key="file.id">{{ file.name }}
             <span class="file-size">{{ file.size | sizeFilter }}</span>
             <el-link :href="file.id | urlFilter " type="success">Скачать</el-link>
           </li>
@@ -115,25 +115,18 @@ export default {
 </script>
 
 <style scoped>
-  .article-preview-header{
+  .article-preview-header {
     padding: 0 20px;
     border-bottom: 1px solid #e6ebf5;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     color: #303133;
-    /*margin-top: -17px;*/
     position: relative;
   }
-  .article-preview-body{
-    padding: 20px 0;
-  }
   .article-preview-body {
+    padding: 20px 0;
     text-indent: 1.5em; /* Отступ первой строки */
     text-align: justify; /* Выравнивание по ширине */
-  }
-
-  .article-preview-footer {
-
   }
   .comments-body {
     border-radius: 5px;
