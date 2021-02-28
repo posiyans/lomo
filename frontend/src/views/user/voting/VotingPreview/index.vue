@@ -157,7 +157,8 @@ export default {
     color: #1890ff;
   }
   .resume-ps-card{
-    padding: 0 5px 10px 5px;
+    padding: 0;
+    padding-bottom: 5px;
   }
   .resume-ps-card >>> el-card__body {
     padding-bottom: 5px;
