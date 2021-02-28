@@ -4,6 +4,8 @@ namespace App\Models;
 use App\Models\Billing\BillingInvoice;
 use App\Models\Billing\BillingPayment;
 use App\Models\Receipt\DeviceRegisterModel;
+use App\Models\Receipt\MeteringDevice;
+use App\Models\Receipt\ReceiptType;
 use App\MyModel;
 use App\Models\Receipt\InstrumentReadings;
 use App\User;
@@ -249,17 +251,44 @@ class Stead extends MyModel
     }
 
 
-
-    public function addMeteringDevice($request)
+    /**
+     * добавить прибор учета для участка
+     * todo переснести отсюда!!!
+     *
+     * @param $options
+     * @return DeviceRegisterModel|false
+     */
+    public function addMeteringDevice($options)
     {
         $device = new DeviceRegisterModel();
-        $device->fill($request->all());
+        $device->fill($options);
         if ($device->logAndSave('Добавлен прибор', $this->id))
         {
             return $device;
         }
         return false;
     }
+
+
+    /**
+     * получить массив приброров опрделенного типа по участку
+     *
+     * @param ReceiptType $receipt_type тип взносов
+     * @return mixed
+     */
+    public function getMeteringDevice(ReceiptType $receipt_type)
+    {
+        if ($receipt_type->depends == 2) {
+            $metering_device = $receipt_type->MeteringDevice;
+            $ar = $metering_device->map(function ($i) {
+                return $i->id;
+            });
+            return DeviceRegisterModel::whereIn('type_id', $ar)->where('stead_id', $this->id)->where('active', 1)->get();
+        }
+        return false;
+    }
+
+
 
 //    public function lastPayment()
 //    {

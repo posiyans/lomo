@@ -56,7 +56,7 @@
           :auto-upload="false"
           class="upload-demo"
         >
-          <el-button slot="trigger" type="primary">Выбрать фаил</el-button>
+          <el-button slot="trigger" type="primary">Выбрать файл</el-button>
           <div slot="tip" class="el-upload__tip">Фото или скан заполненного бюллетеня размером не более 5Mb</div>
         </el-upload>
       </div>

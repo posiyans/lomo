@@ -1,28 +1,27 @@
 <template>
   <div class="main-comments">
-    <div v-for="i in value.comments_show" class="comments-post">
+    <div v-for="i in value.comments_show" :key="i.id" class="comments-post">
       <el-row>
-        <el-col :xs="4" :sm="2" :lg="1" align="middle" >
-          <el-avatar :size="40" :src="i.avatar | avatarUrl"/>
+        <el-col :xs="4" :sm="2" :lg="1" align="middle">
+          <el-avatar :size="40" :src="i.avatar | avatarUrl" />
         </el-col>
         <el-col :xs="20" :sm="22" :lg="23">
           <div class="comment_author">
-            {{i.userName}}
+            {{ i.userName }}
           </div>
           <div class="reply_text">
             <div>
-              <div class="wall_reply_text" v-html="$options.filters.marked(i.message)">
-              </div>
+              <div class="wall_reply_text" v-html="$options.filters.marked(i.message)" />
             </div>
           </div>
           <div class="comment_date">
-            {{i.created_at | moment(' DD MMM  в HH:mm')}}
+            {{ i.created_at | moment(' DD MMM  в HH:mm') }}
           </div>
-          <el-divider class="divider"></el-divider>
+          <el-divider class="divider" />
         </el-col>
-          <div v-if="deleteAccess" class="article-setting-icon" @click="deleteComment(i)">
-            <i class="el-icon-delete-solid"></i>
-          </div>
+        <div v-if="deleteAccess" class="article-setting-icon" @click="deleteComment(i)">
+          <i class="el-icon-delete-solid" />
+        </div>
       </el-row>
 
     </div>
@@ -30,18 +29,18 @@
       Вам запрещено оставлять комментарии!!!
     </div>
     <el-row v-else-if="user" class="send" align="middle">
-      <el-col :xs="4" :sm="2" :lg="1"><el-avatar :size="40" :src="user.avatar | avatarUrl"></el-avatar></el-col>
+      <el-col :xs="4" :sm="2" :lg="1"><el-avatar :size="40" :src="user.avatar | avatarUrl" /></el-col>
       <el-col :xs="16" :sm="18" :lg="19">
         <el-input
+          v-model="newComment"
           type="textarea"
           autosize
           placeholder="Написать комментарий..."
-          v-model="newComment">
-        </el-input>
+        />
       </el-col>
       <el-col :xs="4" :sm="2" :lg="1">
         <div class="comment-send" @click="sendComment">
-          <i class="el-icon-s-promotion"></i>
+          <i class="el-icon-s-promotion" />
         </div>
       </el-col>
     </el-row>
@@ -56,27 +55,27 @@ import { addComment, deleteComment } from '@/api/user/comment.js'
 // var marked = require('marked')
 
 export default {
-  props: {
-     value: {
-       type: Object,
-       defaults: {}
-     }
-  },
   filters: {
     mFilter(val) {
       return 'dasdasdasd' + val
     },
-    avatarUrl(val){
-      if ( val[0] === '/') {
+    avatarUrl(val) {
+      if (val[0] === '/') {
         return process.env.VUE_APP_BASE_API + val
       }
       return val
     }
   },
+  props: {
+    value: {
+      type: Object,
+      default: () => ({})
+    }
+  },
   data() {
     return {
       newComment: '',
-      items: [],
+      items: []
     }
   },
   computed: {

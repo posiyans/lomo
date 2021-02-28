@@ -1,5 +1,5 @@
 <template>
-  <div :id="id" :class="className" :style="{height:height,width:width}"/>
+  <div :id="id" :class="className" :style="{height:height,width:width}" />
 </template>
 
 <script>
@@ -22,18 +22,16 @@ export default {
   },
   mounted() {
     getTemper().then(response => {
-      const data = response.data;
+      // const data = response.data
       for (const temp of response.data.temper) {
-        this.data.push({ name: temp.time, value: [temp.time, temp.temp] });
-        this.datav =[{ name: temp.time, value: [temp.time, temp.temp] }];
-
-
+        this.data.push({ name: temp.time, value: [temp.time, temp.temp] })
+        this.datav = [{ name: temp.time, value: [temp.time, temp.temp] }]
       }
       for (const temp of response.data.sunrise) {
-        this.dataSun.push([{xAxis: temp.start}, {xAxis: temp.stop}]);
+        this.dataSun.push([{ xAxis: temp.start }, { xAxis: temp.stop }])
       }
       for (const temp of response.data.dusk) {
-        this.dataSumer.push([{xAxis: temp.start}, {xAxis: temp.stop}]);
+        this.dataSumer.push([{ xAxis: temp.start }, { xAxis: temp.stop }])
       }
       this.initChart()
     })
@@ -81,7 +79,7 @@ export default {
             type: 'slider',
             xAxisIndex: [0],
             filterMode: 'filter'
-          },
+          }
         ],
         xAxis: [{
           type: 'time',
@@ -97,7 +95,7 @@ export default {
           boundaryGap: false,
           splitLine: {
             show: true
-          },
+          }
 
         }],
         visualMap: [{

@@ -15,7 +15,7 @@
     </div>
     <div v-if="stead.size > 0" class="pt1" style="color: #1b5fab"><b>Итого: <span style="color: red">{{ stead.size | totalFilter(rate) }} руб.</span></b></div>
     <div class="mt4 mb2" style="font-size: large" :class="{red: !stead.size > 0}">Укажите номер участка.</div>
-    <UserSteadFind @selectStead="setStead" />
+    <UserSteadFind :stead-id="stead_id" @selectStead="setStead" />
     <div v-if="stead.size > 0" class="pt1" style="color: red">
       Внимание! Проверте данные.<br>
       Участок № <span style="color: #004fa5"><b>{{ stead.number }} </b></span> размер
@@ -33,6 +33,7 @@ import UserSteadFind from '@/components/UserSteadFind'
 import { fetchList } from '@/api/rate'
 import { getReceiptForStead } from '@/api/all/receipt'
 import { saveAs } from 'file-saver'
+import Cookies from 'js-cookie'
 
 export default {
   filters: {
@@ -56,6 +57,7 @@ export default {
   data() {
     return {
       getSteadsList: [],
+      stead_id: '',
       stead: '',
       show: false,
       rate: []
@@ -64,6 +66,7 @@ export default {
   mounted() {
     this.show = this.dialogVisible
     this.getRateList()
+    this.stead_id = Cookies.get('mySteadId') || ''
   },
   methods: {
     download() {
@@ -74,12 +77,16 @@ export default {
         saveAs(new Blob([response.data], {
           type: response.data.type
         }), 'Квитанция_' + this.stead.number + '.pdf')
-        this.$message('Фаил успешно скачен.')
+        this.$message('Файл успешно скачан.')
         this.show = false
       })
     },
     setStead(val) {
-      this.stead = val
+      if (val.id) {
+        this.stead = val
+      } else {
+        this.stead = ''
+      }
     },
     close() {
       this.$emit('close')

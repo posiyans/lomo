@@ -23,9 +23,21 @@ class InstrumentReadings extends MyModel
         return $this->hasOne(DeviceRegisterModel::class, 'id', 'device_id');
     }
 
+    /**
+     * вернуть название типа и подтип устройства
+     * @return mixed
+     */
     public function deviceTypeName()
     {
         return $this->deviceRegister->getTypeName();
+    }
+
+    /**
+     * получить единицы измерения
+     */
+    public function getUnit()
+    {
+        return $this->deviceRegister->MeteringDevice->receiptType->options['unit_name'];
     }
 
     public function getPrice()
@@ -40,6 +52,7 @@ class InstrumentReadings extends MyModel
 
     /**
      * получить модель придыдущих показаний
+     * todo переделать !!
      *
      * @return \Illuminate\Database\Eloquent\HigherOrderBuilderProxy|mixed
      */

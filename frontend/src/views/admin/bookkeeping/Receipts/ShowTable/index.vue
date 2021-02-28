@@ -94,7 +94,7 @@ export default {
           saveAs(new Blob([response.data], {
             type: response.data.type
           }), 'Квитанция.pdf')
-          this.$message.success('Фаил успешно скачен.')
+          this.$message.success('Файл успешно скачан.')
         })
     }
   }

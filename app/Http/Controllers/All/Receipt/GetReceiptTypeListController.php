@@ -18,9 +18,14 @@ class GetReceiptTypeListController extends Controller
 
 
 
-    public function index()
+    public function index(Request $request)
     {
-        $receipt = ReceiptType::all();
+        $query = ReceiptType::query();
+        $depends = $request->get('depends', false);
+        if ($depends) {
+            $query->where('depends', $depends);
+        }
+        $receipt = $query->get();
         return ['status' => true, 'data' => $receipt];
     }
 

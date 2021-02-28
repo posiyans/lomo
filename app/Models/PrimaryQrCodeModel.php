@@ -37,7 +37,6 @@ class PrimaryQrCodeModel
      */
     public function setDescription($description){
         if ($description) {
-//            $this->out .= '|Purpose=' . mb_substr($description, 0, 115);
             $this->out .= '|Purpose=' . $description;
         }
     }

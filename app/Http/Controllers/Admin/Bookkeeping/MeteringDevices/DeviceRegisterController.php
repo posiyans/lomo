@@ -61,7 +61,8 @@ class DeviceRegisterController extends Controller
         if ($request->stead_id) {
             $stead = Stead::find($request->stead_id);
             if ($stead) {
-                $device = $stead->addMeteringDevice($request);
+                $options = $request->all();
+                $device = $stead->addMeteringDevice($options);
                 if ($device) {
                     return ['status' => true, 'data' => $device];
                 }

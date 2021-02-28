@@ -47,8 +47,8 @@
       <el-button v-waves class="filter-container__item" type="success" icon="el-icon-download" @click="downloadDialogVisible = !downloadDialogVisible">
         Скачать
       </el-button>
-      <el-checkbox v-model="listQuery.reestr" class="filter-container__item">Включить реест в фаил</el-checkbox>
-      <el-checkbox v-model="listQuery.fio" class="filter-container__item">Включить ФИО в фаил</el-checkbox>
+      <el-checkbox v-model="listQuery.reestr" class="filter-container__item">Включить реест в файл</el-checkbox>
+      <el-checkbox v-model="listQuery.fio" class="filter-container__item">Включить ФИО в файл</el-checkbox>
     </div>
     <ShowTable v-if="list.length > 0" v-loading="loading" :list="list" />
     <LoadMore :key="key" :list-query="listQuery" :func="func" @setList="setList" />
@@ -145,7 +145,6 @@ export default {
         })
     },
     downloadReestr(padding = true) {
-      // this.showReestr()
       this.$message('Запрос отправлен ожидайте файл!')
       const data = this.listQuery
       data.padding = padding
@@ -154,7 +153,7 @@ export default {
         saveAs(new Blob([response.data], {
           type: response.data.type
         }), 'Квитанция.pdf')
-        this.$message('Фаил успешно скачен.')
+        this.$message('Файл успешно скачан.')
       })
     },
     getStead() {

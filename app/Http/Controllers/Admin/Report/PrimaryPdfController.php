@@ -135,7 +135,11 @@ class PrimaryPdfController extends Controller
             $this->pdf->Text(75, $s + 51, $stead);
 
             $this->pdf->SetFont('freesans', '',9);
-            $t1 = substr($purpose, 0, strrpos(substr($purpose, 0, 110), ' '));
+            if (strlen($purpose) > 100) {
+                $t1 = substr($purpose, 0, strrpos(substr($purpose, 0, 110), ' '));
+            } else {
+               $t1 = $purpose;
+            }
             $this->pdf->Text(88, $s + 63, $t1);
             $this->pdf->Text(55, $s + 68, mb_substr($purpose, strlen($t1)));
             if ($cash) {
