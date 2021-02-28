@@ -1,7 +1,7 @@
 <?php
 namespace App\Models;
 
-use App\MyModel;
+use App\Models\MyModel;
 
 /**
  * Модель для садоводсва

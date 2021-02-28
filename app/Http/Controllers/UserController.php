@@ -6,7 +6,7 @@ use App\Models\AppealModel;
 use App\Models\Log;
 use App\Models\Stead;
 use App\Models\Temper\TemperModel;
-use App\Permission;
+use App\Models\Laratrust\Permission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;

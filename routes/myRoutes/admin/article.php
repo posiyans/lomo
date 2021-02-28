@@ -2,13 +2,13 @@
 
 
 
-Route::resource('category', 'Admin\CategoryController')
+Route::resource('category', 'App\Http\Controllers\Admin\CategoryController')
     ->only(['index', 'update', 'store']);
-Route::resource('article', 'Admin\ArticleController')
+Route::resource('article', 'App\Http\Controllers\Admin\ArticleController')
     ->only(['index', 'update', 'store', 'show']);
 
 
-Route::resource('comment', 'User\CommentController')
+Route::resource('comment', 'App\Http\Controllers\User\CommentController')
     ->only(['store', 'destroy']);
 
 

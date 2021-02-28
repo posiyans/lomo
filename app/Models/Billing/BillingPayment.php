@@ -8,7 +8,7 @@ use App\Models\Log;
 use App\Models\Receipt\MeteringDevice;
 use App\Models\Receipt\ReceiptType;
 use App\Models\Stead;
-use App\MyModel;
+use App\Models\MyModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;

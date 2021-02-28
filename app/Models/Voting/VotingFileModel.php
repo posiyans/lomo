@@ -2,7 +2,7 @@
 
 namespace App\Models\Voting;
 
-use App\MyModel;
+use App\Models\MyModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;

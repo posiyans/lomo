@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use App\Permission;
-use App\Role;
-use App\User;
+use App\Models\Laratrust\Permission;
+use App\Models\Laratrust\Role;
+use App\Models\User;
 use Illuminate\Console\Command;
 
 class SetRoleForUser extends Command
@@ -45,7 +45,8 @@ class SetRoleForUser extends Command
             if ($user){
                 $role = Role::where('name', $this->argument('role'))->first();
                 if ($role){
-                    $user->attachRole($role);
+                    // todo поверить
+                    $user->syncRolesWithoutDetaching([$role->id]);
                     echo "Ok \n";
                     return '';
                 }

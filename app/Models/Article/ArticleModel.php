@@ -3,7 +3,7 @@
 namespace App\Models\Article;
 
 use App\Models\Storage\File;
-use App\MyModel;
+use App\Models\MyModel;
 
 class ArticleModel extends MyModel
 {

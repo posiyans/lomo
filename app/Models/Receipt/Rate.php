@@ -2,7 +2,7 @@
 
 namespace App\Models\Receipt;
 
-use App\MyModel;
+use App\Models\MyModel;
 
 /**
  * Модель тарифоф для приборов учета

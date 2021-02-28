@@ -6,9 +6,9 @@ use App\Models\Billing\BillingPayment;
 use App\Models\Receipt\DeviceRegisterModel;
 use App\Models\Receipt\MeteringDevice;
 use App\Models\Receipt\ReceiptType;
-use App\MyModel;
+use App\Models\MyModel;
 use App\Models\Receipt\InstrumentReadings;
-use App\User;
+use App\Models\User;
 use Illuminate\Support\Facades\Cookie;
 
 

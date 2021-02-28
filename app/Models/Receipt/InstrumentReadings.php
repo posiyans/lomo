@@ -1,7 +1,7 @@
 <?php
 namespace App\Models\Receipt;
 
-use App\MyModel;
+use App\Models\MyModel;
 
 /**
  * Модель для показаний

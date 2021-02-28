@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\QuestionResource;
 use App\Http\Resources\User\Voting\QuestionUserResource;
 use App\Models\Stead;
-use App\MyModel;
+use App\Models\MyModel;
 use Illuminate\Support\Facades\DB;
 
 class VotingModel extends MyModel

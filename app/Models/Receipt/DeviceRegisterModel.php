@@ -2,7 +2,7 @@
 
 namespace App\Models\Receipt;
 
-use App\MyModel;
+use App\Models\MyModel;
 
 class DeviceRegisterModel extends MyModel
 {
