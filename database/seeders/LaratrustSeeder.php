@@ -3,9 +3,9 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use App\Role;
-use App\Permission;
-use App\User;
+use App\Models\Laratrust\Role;
+use App\Models\Laratrust\Permission;
+use App\Models\Laratrust\User;
 
 class LaratrustSeeder extends Seeder
 {
@@ -82,11 +82,5 @@ class LaratrustSeeder extends Seeder
         'edit-rate' => 'Правка тарифов',
         'edit-menu' => 'Редактирование меню',
         'reestr-edit' => 'Редактирование начислений'
-
-
-
-
-
-
     ];
 }
