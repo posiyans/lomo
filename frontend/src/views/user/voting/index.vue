@@ -1,23 +1,16 @@
 <template>
-  <div>
+  <div class="app-container">
+    <div class="page-title">Голосования</div>
     <div class="filter-container">
-      <el-row :gutter="10" class="el-col">
-        <el-col :xs="22" :span="2" :md="6">
-          <el-select v-model="listQuery.type" placeholder="Тип голосования" clearable class="filter-item" style="width: 230px">
-            <el-option v-for="item in TypeObject" :key="item.key" :label="item.title" :value="item.key" />
-          </el-select>
-        </el-col>
-        <el-col :xs="22" :md="6">
-          <el-select v-model="listQuery.status" placeholder="Статус голосования" clearable multiple class="filter-item" style="width: 230px">
-            <el-option v-for="item in StatusObject" :key="item.key" :label="item.title" :value="item.key" />
-          </el-select>
-        </el-col>
-        <el-col :xs="22" :md="6">
-          <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-            Показать
-          </el-button>
-        </el-col>
-      </el-row>
+      <el-select v-model="listQuery.type" placeholder="Тип голосования" clearable class="filter-container__item" style="width: 230px">
+        <el-option v-for="item in TypeObject" :key="item.key" :label="item.title" :value="item.key" />
+      </el-select>
+      <el-select v-model="listQuery.status" placeholder="Статус голосования" clearable multiple class="filter-container__item" style="width: 230px">
+        <el-option v-for="item in StatusObject" :key="item.key" :label="item.title" :value="item.key" />
+      </el-select>
+      <el-button class="filter-container__item" type="primary" icon="el-icon-search" @click="handleFilter">
+        Показать
+      </el-button>
     </div>
     <div v-for="item in list" :key="item.id" v-loading="listLoading">
       <VotingPreview :voting="item" />
@@ -81,8 +74,5 @@ export default {
 </script>
 
 <style scoped>
- .filter-container {
-   padding-left: 25px;
-   padding-top: 10px;
- }
+
 </style>
