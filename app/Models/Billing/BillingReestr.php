@@ -3,7 +3,7 @@
 namespace App\Models\Billing;
 
 use App\Models\Stead;
-use App\MyModel;
+use App\Models\MyModel;
 use DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\SoftDeletes;

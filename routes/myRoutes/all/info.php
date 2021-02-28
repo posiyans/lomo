@@ -1,4 +1,4 @@
 <?php
 
-Route::post('user/steads-list', 'User\SteadController@list');
+Route::post('user/steads-list', 'App\Http\Controllers\User\SteadController@list');
 

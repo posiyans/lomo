@@ -1,5 +1,5 @@
 <?php
 
 
-Route::resource('stead', 'Admin\AdminSteadController')
+Route::resource('stead', 'App\Http\Controllers\Admin\AdminSteadController')
     ->only(['index', 'show', 'update']);

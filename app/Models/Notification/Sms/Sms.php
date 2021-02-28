@@ -3,7 +3,7 @@
 namespace App\Models\Notification\Sms;
 
 use App\Http\Controllers\Admin\Bookkeeping\Billing\PaymentController;
-use App\MyModel;
+use App\Models\MyModel;
 use Illuminate\Database\Eloquent\Model;
 
 class Sms extends MyModel

@@ -6,8 +6,8 @@ use App\Http\Controllers\Admin\Bookkeeping\Billing\RegisterOfCharges\AddOneTimeR
 use App\Http\Controllers\Admin\Bookkeeping\Billing\RegisterOfCharges\AddRegisterOfChargesController;
 use App\Http\Controllers\Admin\Bookkeeping\Billing\RegisterOfCharges\DeleteRegisterOfChargesController;
 use App\Models\Billing\BillingReestr;
-use App\Permission;
-use App\Role;
+use App\Models\Laratrust\Permission;
+use App\Models\Laratrust\Role;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Auth;

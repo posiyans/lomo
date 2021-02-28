@@ -1,4 +1,4 @@
 <?php
 
-Route::resource('comment', 'User\CommentController')
+Route::resource('comment', 'App\Http\Controllers\User\CommentController')
     ->only(['store']);

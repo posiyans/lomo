@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Permission;
-use App\Role;
+use App\Models\Laratrust\Permission;
+use App\Models\Laratrust\Role;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Auth;

@@ -5,7 +5,7 @@ namespace App\Models\Billing;
 use App\Models\Receipt\InstrumentReadings;
 use App\Models\Receipt\ReceiptType;
 use App\Models\Stead;
-use App\MyModel;
+use App\Models\MyModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 

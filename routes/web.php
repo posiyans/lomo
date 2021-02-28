@@ -11,52 +11,17 @@ define('__ROOT__', dirname(__FILE__));
 |
 */
 
-//Route::get('/', function () {
-//    return view('welcome');
-//});
-////Route::get('/', 'HomeController@index');
-Route::get('/api/v1/test', 'Admin\Report\PdfController@report');
-//Route::get('/api/v1/test_s', 'TestController@index');
-//Auth::routes();
+
+
+Route::get('/api/v1/test', 'App\Http\Controllers\Admin\Report\PdfController@report');
+
 
 Route::group(['prefix' => '/api'], function() {
-    // маршруты для callback контакта
-//    Route::get('vk', 'HomeController@vk')->name('vk');
-    Route::get('vk/auth/callback', 'VkController@vkcalback');
+    Route::get('vk/auth/callback', 'App\Http\Controllers\VkController@vkcalback');
 });
 Route::group(['prefix' => '/api/v1'], function() {
-//    //маршруты авторизации и регистрации
-//    Route::post('/register', 'Auth\RegisterController@register');
-//    Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail');
-//    Route::post('password/reset', 'Auth\ResetPasswordController@reset');
-//    Route::post('login', 'Auth\LoginController@login');
-//    Route::get('email/verify/{id}', 'Auth\VerificationController@verify')->name('api.verification.verify');
-
-    // пустая квитанция
-//    Route::get('receipt/get-receipt-clear', 'PdfController@clearReceipt');
-    // пустой QR code
-//    Route::get('receipt/get-qrcode-clear', 'QrCodeController@qrCodeClear');
-
-//    // получить картинку с камеры (для cron)
-//    Route::get('camera', 'Camera\CameraController@index');
-//    // вывести последнюю картинку
-//    Route::get('camera/img/{id?}', 'Camera\CameraController@getImages');
-//    //    склесть gif из картинок с камеры (на будующее)
-//    Route::get('/api/v1/camera/create-gif/{token?}', 'Camera\CameraController@createGif');
-
 
 });
-
-
-//Route::match(['get', 'post'], '/ticket/{id}', 'ReceiptController@ticket')->name('ticket');
-//Route::get('/qrcode/ticket/{id}/{fio}', 'QrCodeController@getImage');
-
-//Route::get('/pdf/ticket/{id}/{stead}', 'PdfController@renderPdf')->name('renderPdf');
-//Route::match(['get', 'post'], '/receipt/{id?}', 'ReceiptController@index')->name('receipt');
-//Route::match(['get', 'post'], '/report', 'ReceiptController@index')->name('report');
-//Route::get('/personal', function () {
-//    return view('personal');
-//})->name('personal');
 
 $myRoutesForAll = [
     'yandex',
@@ -117,12 +82,4 @@ Route::group(['prefix' => '/api/v1'], function() use ($myRoutesForAll, $myRoutes
 });
 
 
-
-//Route::resource('/api/v1/user/gardening', 'User\GardeningController')
-//    ->only(['index', 'show']);
-
-//Route::resource('/api/v1/user/rate', 'User\RateController')
-//    ->only(['index']);
-
-
-Route::resource('/api/user/storage/file', 'Storage\FileController');
+Route::resource('/api/user/storage/file', 'App\Http\Controllers\Storage\FileController');

@@ -2,6 +2,6 @@
 
 
 
-Route::get('yandex/rasp', 'Yandex\ScheduleController@index');
-Route::get('yandex/get-map', 'Yandex\MapController@getMap');
+Route::get('yandex/rasp', 'App\Http\Controllers\Yandex\ScheduleController@index');
+Route::get('yandex/get-map', 'App\Http\Controllers\Yandex\MapController@getMap');
 

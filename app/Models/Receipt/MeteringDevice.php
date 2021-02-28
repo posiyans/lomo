@@ -4,7 +4,7 @@ namespace App\Models\Receipt;
 
 
 use App\Models\Stead;
-use App\MyModel;
+use App\Models\MyModel;
 
 /*
  * Модель приборов учета
@@ -14,7 +14,7 @@ class MeteringDevice extends MyModel
     //
 
     protected $casts = [
-        'enable' => 'bollean',
+        'enable' => 'boolean',
     ];
     public function receiptType()
     {

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\LinkedSocialAccounts;
+use App\Models\Socials\LinkedSocialAccounts;
 use App\Models\Temper\TemperModel;
 use App\User;
 use Illuminate\Http\Request;
@@ -59,7 +59,7 @@ class VkController extends Controller
 
     public static function getUrl(){
         $value = config('services.vkontakte');
-        //dd($value);
+//        dd($value);
         $url = 'http://oauth.vk.com/authorize';
         $actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]/api/vk/auth/callback";
         $params = array(

@@ -52,7 +52,7 @@ class PdfController extends Controller
     {
         $ReceiptType = 2;
         set_time_limit(700);
-        $steads = Stead::all();
+        $steads = Stead::where('id', '<', 5)->get();
         $pdf = new \TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
         $pdf->setPrintHeader(false);
         $pdf->setPrintFooter(false);
@@ -62,7 +62,7 @@ class PdfController extends Controller
             $this->createClearReceipt($pdf);
             $this->createQRcode($pdf, $steadModel->id);
             $this->fillGadeningData($pdf);
-            $this->fillUserData($pdf, $steadModel);
+            //$this->fillUserData($pdf, $steadModel);
             $this->fillAmountData($pdf, $ReceiptType, $steadModel->id);
 
         }

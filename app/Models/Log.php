@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\MyModel;
+use App\Models\MyModel;
 Use Illuminate\Support\Facades\Auth;
 
 /**

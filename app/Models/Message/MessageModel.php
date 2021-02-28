@@ -2,8 +2,8 @@
 
 namespace App\Models\Message;
 
-use App\MyModel;
-use App\User;
+use App\Models\MyModel;
+use App\Models\User;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 
