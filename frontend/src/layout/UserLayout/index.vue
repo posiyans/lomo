@@ -40,11 +40,11 @@
         <div class="footer">
           <div align="center">
             <div class="el-link" @click="showPersonal"> Внимание!!! Оставаясь на данном сайте вы соглашаетесь с политикой обработки пересональных данных</div>
-            <div class="tr mr2 mt2 light-blue ">
-              <a href="https://github.com/posiyans/lomo">
-                @posiyans
-              </a>
-            </div>
+            <!--            <div class="tr mr2 mt2 light-blue ">-->
+            <!--              <a href="https://github.com/posiyans/lomo">-->
+            <!--                @posiyans-->
+            <!--              </a>-->
+            <!--            </div>-->
           </div>
         </div>
         <el-footer style="height: 0" />
