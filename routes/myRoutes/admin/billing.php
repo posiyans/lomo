@@ -1,15 +1,7 @@
 <?php
 // бухгалтерия
-use App\Http\Controllers\Admin\Bookkeeping\Billing\InstrumentReadings\DeleteReadingController;
-use App\Http\Controllers\Admin\Bookkeeping\Billing\InstrumentReadings\ReadingForSteadController;
-use App\Http\Controllers\Admin\Bookkeeping\Billing\Balance\BalanceForStead\BalanceForSteadXlsxFileController;
-// получить баланс по участку  (счета и плтежи)
 Route::get('billing/balance-info', 'App\Http\Controllers\Admin\Bookkeeping\Billing\BalanceController@info');
-// получить баланс по участку  (счета и плтежи) в xlsx
-Route::get('billing/balance-for-stead-xlsx', [BalanceForSteadXlsxFileController::class, 'index']);
-
 Route::get('billing/balance-list', 'App\Http\Controllers\Admin\Bookkeeping\Billing\BalanceController@list');
-Route::post('billing/balance-xlsx', 'App\Http\Controllers\Admin\Bookkeeping\Billing\Balance\BalanceList\GetXlsxFileController@index');
 Route::get('billing/balance-for-stead', 'App\Http\Controllers\Admin\Bookkeeping\Billing\BalanceController@allBalance');
 
 Route::resource('billing/reestr', 'App\Http\Controllers\Admin\Bookkeeping\Billing\ReestrController')
@@ -32,24 +24,8 @@ Route::post('billing/bank-reestr-publish', 'App\Http\Controllers\Admin\Bookkeepi
 Route::post('billing/bank-reestr-parse', 'App\Http\Controllers\Admin\Bookkeeping\Billing\BankReestrController@parseReestr');
 Route::post('billing/bank-reestr-publish', 'App\Http\Controllers\Admin\Bookkeeping\Billing\BankReestrController@publish');
 
-// получить показания по участку
-Route::get('billing/communal/stead/get/{stead}', [ReadingForSteadController::class, 'list'])
-    ->missing(function () {
-        return response()->json([
-            'status' => false,
-            'error' => 'Обьект не найден'
-        ], 200);
-    });
-
-//удалить показания
-Route::delete('billing/communal/stead/delete-reading/{reading}', [DeleteReadingController::class, 'delete'])
-    ->missing(function () {
-        return response()->json([
-            'status' => false,
-            'error' => 'Обьект не найден'
-        ], 200);
-    });
-
+// Электроэнергия
+Route::get('billing/communal/stead/get/{id}', 'App\Http\Controllers\Admin\Bookkeeping\Communal\ElectroSteadController@list');
 Route::post('billing/communal/stead/add-reading/{id}', 'App\Http\Controllers\Admin\Bookkeeping\Communal\ElectroSteadController@addInstrumentReadings');
 
 

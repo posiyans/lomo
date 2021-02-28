@@ -3,14 +3,12 @@ namespace App\Models;
 
 use App\Models\Billing\BillingInvoice;
 use App\Models\Billing\BillingPayment;
-use App\Models\Owner\OwnerUserSteadModel;
 use App\Models\Receipt\DeviceRegisterModel;
 use App\Models\Receipt\MeteringDevice;
 use App\Models\Receipt\ReceiptType;
 use App\Models\MyModel;
 use App\Models\Receipt\InstrumentReadings;
 use App\Models\User;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Cookie;
 
 
@@ -27,35 +25,23 @@ class Stead extends MyModel
     //
 
     public $userFullName = '';
-
-
-
     /**
-     * получить все платежи по участку
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * отношение с пользователем
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function Owners()
+    public function user()
     {
-        return $this->hasMany(OwnerUserSteadModel::class, 'stead_id', 'id');
+        return $this->hasOne(User::class, 'id', 'user_id');
     }
-//    /**
-//     * отношение с пользователем
-//     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-//     */
-//    public function user()
-//    {
-//        return $this->hasOne(User::class, 'id', 'user_id');
-//    }
-//
-//    public function userFullName()
-//    {
-//        if ($this->user){
-//            $this->userFullName = $this->user->fullName();
-//            return $this->userFullName;
-//        }
-//        return '';
-//    }
+
+    public function userFullName()
+    {
+        if ($this->user){
+            $this->userFullName = $this->user->fullName();
+            return $this->userFullName;
+        }
+        return '';
+    }
 
     /**
      * получить показания приборов по участку
@@ -79,10 +65,35 @@ class Stead extends MyModel
         return $this->hasOne(Gardening::class, 'id', 'gardening_id');
     }
 
+//    public function MeteringDevice()
+//    {
+//        return $this->hasMany(MeteringDevice::class, 'steads_id', 'id');
+//    }
+
+//    public function getIndication($n=false) {
+//        $devices = MeteringDevice::where('enable', 1)->get();
+//        $ind= [];
+//        foreach ($devices as $device){
+//            $indications = InstrumentReadings::where('type_id', $device->id)
+//                ->where('stead_id', $this->id)
+//                ->orderBy('created_at', 'desc')
+//                ->limit(2)
+//                ->get();
+//            $device->val_new = isset($indications[0]->value) ? $indications[0]->value : 0;
+//            $device->val_old = isset($indications[1]->value) ? $indications[1]->value : 0;
+//            $device->value = $device->val_new - $device->val_old;
+//            $device->rateNow();
+//            $device->cash = $device->value * $device->rate->ratio_a  + $device->rate->ratio_b;
+//            $ind[$device->id] = $device;
+//        }
+//        $this->Indications = $ind;
+//    }
+
+
     /**
      * Сохрание данных об участке
      * todo передалать создать сущьность владелец
-     * @deprecated
+     *
      * @param $request
      */
     public function saveData($request){
@@ -220,26 +231,23 @@ class Stead extends MyModel
      */
     public function getBalans($type = false)
     {
-        $keyName = 'balans_stead-' . $this->id . '_type-' . $type;
-        return  Cache::tags(['balans', 'invoice', 'payment'])->remember($keyName, 6000 ,function () use ($type) {
-            $balans = 0;
-            if (!$type) {
-                foreach ($this->invoices as $invoice) {
-                    $balans -= $invoice->price;
-                }
-                foreach ($this->payment as $invoice) {
-                    $balans += $invoice->price;
-                }
-            } else {
-                foreach ($this->InvoicesForReceipt($type) as $invoice) {
-                    $balans -= $invoice->price;
-                }
-                foreach ($this->PaymentForReceipt($type) as $invoice) {
-                    $balans += $invoice->price;
-                }
+        $balans = 0;
+        if (!$type) {
+            foreach ($this->invoices as $invoice) {
+                $balans -= $invoice->price;
             }
-            return $balans;
-        });
+            foreach ($this->payment as $invoice) {
+                $balans += $invoice->price;
+            }
+        } else {
+            foreach ($this->InvoicesForReceipt($type) as $invoice) {
+                $balans -= $invoice->price;
+            }
+            foreach ($this->PaymentForReceipt($type) as $invoice) {
+                $balans += $invoice->price;
+            }
+        }
+        return $balans;
     }
 
 
