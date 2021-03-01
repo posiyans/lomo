@@ -46,10 +46,11 @@ class LaratrustSeeder extends Seeder
         }
         $user = User::find(1);
         if ($user && $role){
-            $user->syncRolesWithoutDetaching(['superAdmin', 'admin']);
+            //$user->syncRolesWithoutDetaching(['superAdmin', 'admin']);
             //$user->attachRole($role);
 //            $user->attachRole('admin');
         }
+        DB::update("update role_user set user_type = ? where user_type = ?", ['App\Models\User', 'App\User']);
     }
 
 
