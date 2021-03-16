@@ -40,10 +40,10 @@ export default {
   },
   methods: {
     showStead(id) {
-      this.$router.push('/bookkeping/billing_balance_stead/' + id)
+      this.$router.push('/admin/bookkeping/billing_balance_stead/' + id)
     },
     showInvoice(id) {
-      this.$router.push('/bookkeping/invoice_info/' + id)
+      this.$router.push('/admin/bookkeping/invoice_info/' + id)
     }
   }
 

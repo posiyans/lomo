@@ -44,6 +44,7 @@ $myRoutesForAdmin = [
     'voting',
     'setting',
     'stead',
+    'owner',
     'metering_devices'
 ];
 $myRoutesForUser = [

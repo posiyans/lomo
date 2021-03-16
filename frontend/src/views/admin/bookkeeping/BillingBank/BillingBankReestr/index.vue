@@ -1,55 +1,55 @@
 <template>
   <div class="app-container">
-    <div class="ma2"><b>Счета и платежи по участку № {{stead.number}} размер {{stead.size}} кв.м.</b></div>
-    <div class="ma2">Валанс:  <b>{{stead.balans}} руб.</b></div>
-<!--    <div class="filter-container">-->
-<!--      <el-input v-model="listQuery.find" placeholder="Поиск" clearable style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />-->
-<!--      &lt;!&ndash;      <el-select v-model="listQuery.importance" placeholder="Imp" clearable style="width: 90px" class="filter-item">&ndash;&gt;-->
-<!--      &lt;!&ndash;        <el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item" />&ndash;&gt;-->
-<!--      &lt;!&ndash;      </el-select>&ndash;&gt;-->
-<!--      <el-select v-model="listQuery.category" placeholder="Раздел" clearable class="filter-item" style="width: 130px">-->
-<!--        <el-option v-for="item in categoryArray" :key="item.id" :label="item.label" :value="item.id" />-->
-<!--      </el-select>-->
-<!--      <el-select v-model="listQuery.status" placeholder="Статус" clearable class="filter-item" style="width: 130px">-->
-<!--        <el-option v-for="item in statusArray" :key="item.key" :label="item.value" :value="item.key" />-->
-<!--      </el-select>-->
-<!--      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">-->
-<!--        Показать-->
-<!--      </el-button>-->
-<!--      <el-button v-waves class="filter-item" type="danger" icon="el-icon-plus" @click="add">-->
-<!--        Добавить-->
-<!--      </el-button>-->
-<!--    </div>-->
+    <div class="ma2"><b>Счета и платежи по участку № {{ stead.number }} размер {{ stead.size }} кв.м.</b></div>
+    <div class="ma2">Валанс:  <b>{{ stead.balans }} руб.</b></div>
+    <!--    <div class="filter-container">-->
+    <!--      <el-input v-model="listQuery.find" placeholder="Поиск" clearable style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />-->
+    <!--      &lt;!&ndash;      <el-select v-model="listQuery.importance" placeholder="Imp" clearable style="width: 90px" class="filter-item">&ndash;&gt;-->
+    <!--      &lt;!&ndash;        <el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item" />&ndash;&gt;-->
+    <!--      &lt;!&ndash;      </el-select>&ndash;&gt;-->
+    <!--      <el-select v-model="listQuery.category" placeholder="Раздел" clearable class="filter-item" style="width: 130px">-->
+    <!--        <el-option v-for="item in categoryArray" :key="item.id" :label="item.label" :value="item.id" />-->
+    <!--      </el-select>-->
+    <!--      <el-select v-model="listQuery.status" placeholder="Статус" clearable class="filter-item" style="width: 130px">-->
+    <!--        <el-option v-for="item in statusArray" :key="item.key" :label="item.value" :value="item.key" />-->
+    <!--      </el-select>-->
+    <!--      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">-->
+    <!--        Показать-->
+    <!--      </el-button>-->
+    <!--      <el-button v-waves class="filter-item" type="danger" icon="el-icon-plus" @click="add">-->
+    <!--        Добавить-->
+    <!--      </el-button>-->
+    <!--    </div>-->
 
     <el-table v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
       <el-table-column label="Дата">
         <template slot-scope="{row}">
-          <span>{{ row.created_at | moment('DD-MM-YYYY')}}</span>
+          <span>{{ row.created_at | moment('DD-MM-YYYY') }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="Название">
         <template slot-scope="{ row }">
-            {{ row.title }}
+          {{ row.title }}
         </template>
       </el-table-column>
       <el-table-column label="Дебет">
         <template slot-scope="{row}">
-            <span>{{ row.price}}</span>
+          <span>{{ row.price }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Кредит">
-        <template slot-scope="{row}">
-<!--          <span>{{ // row.price}}</span>-->
-        </template>
-      </el-table-column>
-<!--      <el-table-column label="Размер, кв.м.">-->
-<!--        <template slot-scope="{row}">-->
-<!--          <span>{{ row.size}}</span>-->
-<!--        </template>-->
-<!--      </el-table-column>-->
-      <el-table-column align="center" label="Actions" >
+      <!--      <el-table-column label="Кредит">-->
+      <!--        <template slot-scope="{row}">-->
+      <!--          &lt;!&ndash;          <span>{{ // row.price}}</span>&ndash;&gt;-->
+      <!--        </template>-->
+      <!--      </el-table-column>-->
+      <!--      <el-table-column label="Размер, кв.м.">-->
+      <!--        <template slot-scope="{row}">-->
+      <!--          <span>{{ row.size}}</span>-->
+      <!--        </template>-->
+      <!--      </el-table-column>-->
+      <el-table-column align="center" label="Actions">
         <template slot-scope="scope">
-          <router-link :to="'/bookkeping/billing_balance_stead/'+scope.row.id">
+          <router-link :to="'/admin/bookkeping/billing_balance_stead/'+scope.row.id">
             <el-button type="primary" size="small" icon="el-icon-edit">
               Подробнее
             </el-button>
@@ -63,12 +63,12 @@
 </template>
 
 <script>
-import { fetchAdminArticleList } from '@/api/article'
+// import { fetchAdminArticleList } from '@/api/article'
 import { fetchBillingBalansSteadInfo } from '@/api/admin/billing'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import { fetchCategoryList } from '@/api/category'
 import waves from '@/directive/waves'
-import {mapState} from "vuex"; // waves directive
+import { mapState } from 'vuex' // waves directive
 
 export default {
   name: 'ArticleList',
@@ -150,7 +150,7 @@ export default {
   },
   methods: {
     getData() {
-      fetchBillingBalansSteadInfo({stead_id: this.id}).then(response => {
+      fetchBillingBalansSteadInfo({ stead_id: this.id }).then(response => {
         console.log(response)
         this.stead = response.data.data.stead_info
         this.list = response.data.data.invoices
@@ -158,7 +158,7 @@ export default {
       })
     },
     add() {
-      this.$router.push('/bookkeping/billing_reestr_create')
+      this.$router.push('/admin/bookkeping/billing_reestr_create')
     },
     categoryTitle(id) {
       let label = false
@@ -179,11 +179,11 @@ export default {
     },
     getList() {
       this.listLoading = true
-      fetchBillingNBalansList(this.listQuery).then(response => {
-        this.listLoading = false
-        this.list = response.data.data
-        this.total = response.data.meta.total
-      })
+      // fetchBillingNBalansList(this.listQuery).then(response => {
+      //   this.listLoading = false
+      //   this.list = response.data.data
+      //   this.total = response.data.meta.total
+      // })
     },
     handleFilter() {
       this.getList()

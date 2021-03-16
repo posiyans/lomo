@@ -38,14 +38,15 @@ class BalanceController extends Controller
     public function list(Request $request)
     {
         if ($request->category || $request->payment) {
+            $zeroline = $request->get('zeroLine', 0);
             $steads = Stead::all();
             $cat = [];
             if ($request->category) {
                 foreach ($steads as $stead) {
                     $balans = $stead->getBalans($request->get('receipt_type', false));
-                    if ($request->category == 1 && $balans >= 0) {
+                    if ($request->category == 1 && $balans >= $zeroline) {
                         $cat[] = $stead;
-                    } else if ($request->category == 2 && $balans < 0) {
+                    } else if ($request->category == 2 && $balans < $zeroline) {
                         $cat[] = $stead;
                     }
                 }

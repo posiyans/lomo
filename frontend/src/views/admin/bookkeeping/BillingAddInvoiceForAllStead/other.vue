@@ -187,7 +187,7 @@ export default {
               type: 'success',
               duration: 2000
             })
-            this.$router.push('/bookkeping/billing_reestr')
+            this.$router.push('/admin/bookkeping/billing_reestr')
           }
         })
       }).catch(() => {
@@ -207,7 +207,7 @@ export default {
               type: 'success',
               duration: 2000
             })
-            this.$router.push('/bookkeping/billing_reestr')
+            this.$router.push('/admin/bookkeping/billing_reestr')
           }
         })
       }).catch(() => {

@@ -112,7 +112,7 @@ export default {
         })
     },
     add() {
-      this.$router.push('/bookkeping/billing_reestr_create')
+      this.$router.push('/admin/bookkeping/billing_reestr_create')
     },
     getList() {
       this.listLoading = true

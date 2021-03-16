@@ -1,11 +1,11 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.title" placeholder="Поиск" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-select v-model="listQuery.type" placeholder="Статус" clearable class="filter-item" style="width: 130px">
+      <el-input v-model="listQuery.title" placeholder="Поиск" style="width: 200px;" class="filter-container__item" @keyup.enter.native="handleFilter" />
+      <el-select v-model="listQuery.type" placeholder="Статус" clearable class="filter-container__item" style="width: 130px">
         <el-option v-for="item in userTypeObject" :key="item.key" :label="item.display_name" :value="item.key" />
       </el-select>
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+      <el-button v-waves class="filter-container__item" type="primary" icon="el-icon-search" @click="handleFilter">
         Показать
       </el-button>
     </div>
@@ -36,37 +36,37 @@
           >
             {{ row | fullNameFilter }}<br>
           </span>
-          <span v-if="row.last_connect">{{row.last_connect | moment('from')}}</span>
+          <span v-if="row.last_connect">{{ row.last_connect | moment('from') }}</span>
         </template>
       </el-table-column>
       <el-table-column v-if="mobile || !mobile" label="Участок" align="center">
         <template slot-scope="{row}">
-          <span v-for="(stead, i) of row.steads" :key="stead.id" class="link-type" >
-            <span v-if=" i > 0" >, </span>
+          <span v-for="(stead, i) of row.steads" :key="stead.id" class="link-type">
+            <span v-if=" i > 0">, </span>
             <span>{{ stead.number }}</span>
           </span>
         </template>
       </el-table-column>
-      <el-table-column v-if="!mobile" label="Телефон" align="center"  width="150px">
-      <template slot-scope="{row}">
-        <span lass="link-type" >
-           {{ row.phone }}</span>
-      </template>
-      </el-table-column>
-      <el-table-column  v-if="!mobile" label="Email" align="center"  width="250px">
+      <el-table-column v-if="!mobile" label="Телефон" align="center" width="150px">
         <template slot-scope="{row}">
-        <span
-          class="link-type"
-          :class="{
-          'gren' : row.email_verified_at,
-          'grey' : !row.email_verified_at
-          }"
-          :title="row.email_verified_at ? '' : 'Не подтвержден'"
-        >
-           {{ row.email }}</span>
+          <span lass="link-type">
+            {{ row.phone }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Статус" class-name="status-col" >
+      <el-table-column v-if="!mobile" label="Email" align="center" width="250px">
+        <template slot-scope="{row}">
+          <span
+            class="link-type"
+            :class="{
+              'gren' : row.email_verified_at,
+              'grey' : !row.email_verified_at
+            }"
+            :title="row.email_verified_at ? '' : 'Не подтвержден'"
+          >
+            {{ row.email }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="Статус" class-name="status-col">
         <template slot-scope="{row}">
           <span
             :class="{'gren' : row.steads.length > 0}"
@@ -78,7 +78,7 @@
       </el-table-column>
       <el-table-column label="Actions" align="center" class-name="">
         <template slot-scope="{ row }">
-          <el-button type="primary" size="small" @click="handleUpdate(row)" circle>
+          <el-button type="primary" size="small" circle @click="handleUpdate(row)">
             <svg-icon icon-class="edit" />
           </el-button>
         </template>
@@ -88,12 +88,12 @@
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
     <el-dialog :title="editFio" :visible.sync="dialogFormVisible" top="10px" :width="mobile ? '100%' : '50%'">
-      <UserInfo v-if="dialogFormVisible" v-model="temp"/>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="close">
-            Закрыть
-          </el-button>
-        </div>
+      <UserInfo v-if="dialogFormVisible" v-model="temp" />
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="close">
+          Закрыть
+        </el-button>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -105,14 +105,13 @@ import Pagination from '@/components/Pagination' // secondary package based on e
 import UserInfo from './../components/UserInfo.vue'
 
 const userTypeObject = [
-  { key: 'owner', display_name: 'Собственник'}
+  { key: 'owner', display_name: 'Собственник' }
 ]
 
-const userType = userTypeObject.reduce((acc, cur) => {
-  acc[cur.key] = cur.display_name
-  return acc
-}, {})
-
+// const userType = userTypeObject.reduce((acc, cur) => {
+//   acc[cur.key] = cur.display_name
+//   return acc
+// }, {})
 
 export default {
   name: 'AdminUserList',
@@ -122,8 +121,8 @@ export default {
   },
   directives: { waves },
   filters: {
-    ownerFilter(val){
-      if (val && val.length > 0){
+    ownerFilter(val) {
+      if (val && val.length > 0) {
         return 'Собственник'
       }
       return 'Пользователь'
@@ -141,7 +140,7 @@ export default {
       }
       return result
       // return user.last_name + ' ' +user.name + ' ' + user.moddle_name
-    },
+    }
     // statusFilter(status) {
     //   const statusMap = {
     //     close: 'success',
@@ -169,16 +168,12 @@ export default {
         page: 1,
         limit: 20,
         title: undefined,
-        type: undefined,
+        type: undefined
       },
       userTypeObject,
       temp: {},
-      dialogFormVisible: false,
+      dialogFormVisible: false
     }
-  },
-  mounted() {
-    this.getList()
-    // this.fetchSteads()
   },
   computed: {
     mobile() {
@@ -201,6 +196,10 @@ export default {
       return fio
     }
   },
+  mounted() {
+    this.getList()
+    // this.fetchSteads()
+  },
   methods: {
     getList() {
       this.listLoading = true
@@ -218,7 +217,7 @@ export default {
     handleUpdate(row) {
       // this.$router.push('/users/show/' + row.id)
       this.temp = Object.assign({}, row) // copy obj
-      this.temp.steads = this.temp.steads.map(i => {return i.id})
+      this.temp.steads = this.temp.steads.map(i => { return i.id })
       this.dialogFormVisible = true
     },
     close() {

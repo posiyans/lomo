@@ -3,6 +3,7 @@ namespace App\Models;
 
 use App\Models\Billing\BillingInvoice;
 use App\Models\Billing\BillingPayment;
+use App\Models\Owner\OwnerUserSteadModel;
 use App\Models\Receipt\DeviceRegisterModel;
 use App\Models\Receipt\MeteringDevice;
 use App\Models\Receipt\ReceiptType;
@@ -25,6 +26,18 @@ class Stead extends MyModel
     //
 
     public $userFullName = '';
+
+
+
+    /**
+     * получить все платежи по участку
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function Owners()
+    {
+        return $this->hasMany(OwnerUserSteadModel::class, 'stead_id', 'id');
+    }
     /**
      * отношение с пользователем
      * @return \Illuminate\Database\Eloquent\Relations\HasOne

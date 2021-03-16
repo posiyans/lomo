@@ -151,7 +151,7 @@ export default {
 
 <style>
   .file-size {
-    padding-left: 10px;
+    padding: 0 10px;
     color: #999;
   }
   .file-list-header {

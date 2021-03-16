@@ -88,7 +88,7 @@ export default {
   },
   methods: {
     show(id) {
-      this.$router.push('/bookkeping/billing_bank_reestr/' + id)
+      this.$router.push('/admin/bookkeping/billing_bank_reestr/' + id)
     },
     getList() {
       fetchBillingBankReestrList(this.listQuery).then(response => {
@@ -99,7 +99,7 @@ export default {
     },
     handleSuccess(response, file, fileList) {
       if (response.status) {
-        this.$router.push('/bookkeping/billing_bank_reestr/' + response.data.id)
+        this.$router.push('/admin/bookkeping/billing_bank_reestr/' + response.data.id)
       } else {
         this.$message.error(response.data)
       }
