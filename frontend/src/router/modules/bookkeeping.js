@@ -3,9 +3,9 @@
 import Layout from '@/layout/AdminLayout'
 
 const bookkepingRouter = {
-  path: '/bookkeping',
+  path: '/admin/bookkeping',
   component: Layout,
-  redirect: '/bookkeping/billing_reestr',
+  redirect: '/admin/bookkeping/billing_reestr',
   meta: {
     title: 'Бухгалтерия',
     icon: 'documentation',

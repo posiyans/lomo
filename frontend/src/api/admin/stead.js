@@ -12,7 +12,6 @@ export function fetchSteadInfo(id) {
   return request({
     url: '/api/v1/admin/stead/' + id,
     method: 'get'
-    // params: query
   })
 }
 
@@ -21,5 +20,12 @@ export function updateStead(id, data) {
     url: '/api/v1/admin/stead/' + id,
     method: 'put',
     data: data
+  })
+}
+
+export function getOwnerForStead(id) {
+  return request({
+    url: '/api/v1/admin/stead/get-owner/' + id,
+    method: 'get'
   })
 }

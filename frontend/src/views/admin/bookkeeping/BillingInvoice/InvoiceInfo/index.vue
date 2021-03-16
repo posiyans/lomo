@@ -57,7 +57,7 @@ export default {
   },
   methods: {
     showSteadBalans() {
-      this.$router.push('/bookkeping/billing_balance_stead/' + this.invoice.stead_id)
+      this.$router.push('/admin/bookkeping/billing_balance_stead/' + this.invoice.stead_id)
     },
     getData() {
       this.load = false

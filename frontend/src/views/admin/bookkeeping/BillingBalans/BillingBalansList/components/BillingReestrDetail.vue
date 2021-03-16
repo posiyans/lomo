@@ -1,7 +1,7 @@
 <template>
   <div class="createPost-container">
     <div class="ml4-ns">
-      <el-button @click="$router.push('/bookkeping/billing_reestr')">Начисления</el-button>
+      <el-button @click="$router.push('/admin/bookkeping/billing_reestr')">Начисления</el-button>
     </div>
     <el-form ref="reestrForm" :model="postForm" :rules="rules" :label-position="labelPosition" class="form-container" label-width="180px">
       <div class="pt1 createPost-main-container" style="padding-top: 0; padding-bottom: 0">

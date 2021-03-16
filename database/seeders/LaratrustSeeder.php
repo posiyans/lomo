@@ -85,6 +85,8 @@ class LaratrustSeeder extends Seeder
         'show-users' => 'Просмотр пользователей',
         'edit-rate' => 'Правка тарифов',
         'edit-menu' => 'Редактирование меню',
-        'reestr-edit' => 'Редактирование начислений'
+        'reestr-edit' => 'Редактирование начислений',
+        'access-to-personal' => 'Доступ к персональным данным',
+        'write-personal-data' => 'Изменение персональных данных'
     ];
 }

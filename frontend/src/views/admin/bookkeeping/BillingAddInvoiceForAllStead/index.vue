@@ -59,14 +59,14 @@
 </template>
 
 <script>
-import { createBillingReestr, fetchReestr, updateBillingReestr } from '@/api/admin/billing'
-import { Money } from 'v-money'
+import { createBillingReestr, updateBillingReestr } from '@/api/admin/billing'
+// import { Money } from 'v-money'
 // import { fetchList } from '@/api/rate'
-import { fetchReceiptTypeList, getReceiptTypeInfo } from '@/api/admin/setting/receipt'
+import { fetchReceiptTypeList } from '@/api/admin/setting/receipt'
 import { fetchList } from '@/api/admin/setting/rate'
 
 export default {
-  components: { Money },
+  // components: { Money },
   props: {
     isEdit: {
       type: Boolean,
@@ -244,7 +244,7 @@ export default {
               type: 'success',
               duration: 2000
             })
-            this.$router.push('/bookkeping/billing_reestr')
+            this.$router.push('/admin/bookkeping/billing_reestr')
           }
         })
       }).catch(() => {
@@ -264,7 +264,7 @@ export default {
               type: 'success',
               duration: 2000
             })
-            this.$router.push('/bookkeping/billing_reestr')
+            this.$router.push('/admin/bookkeping/billing_reestr')
           }
         })
       }).catch(() => {

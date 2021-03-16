@@ -105,12 +105,12 @@ export default {
       return ''
     },
     showStead(id) {
-      this.$router.push('/bookkeping/billing_balance_stead/' + id)
+      this.$router.push('/admin/bookkeping/billing_balance_stead/' + id)
     },
     showPayment(row) {
       this.itemPayment = row
       this.showPaymentInfo = true
-      // this.$router.push('/bookkeping/payment_info/' + id)
+      // this.$router.push('/admin/bookkeping/payment_info/' + id)
     },
     closePaymentInfo() {
       this.showPaymentInfo = false

@@ -62,7 +62,7 @@ export default {
   },
   methods: {
     changeStead(val) {
-      this.$router.push('/bookkeping/billing_balance_stead/' + val.id)
+      this.$router.push('/admin/bookkeping/billing_balance_stead/' + val.id)
     },
     reload(val) {
       [1, 2, 3].forEach(item => {

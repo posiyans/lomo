@@ -14,6 +14,7 @@ import UserLayout from '@/layout/UserLayout'
 import bookkepingRouter from './modules/bookkeeping'
 import settingRouter from './modules/setting'
 import allInstrumentReading from './modules/all_instrument_reading'
+import owner from './modules/owner'
 
 // import tableRouter from './modules/table'
 // import nestedRouter from './modules/nested'
@@ -33,7 +34,7 @@ import allInstrumentReading from './modules/all_instrument_reading'
     title: 'title'               the name show in sidebar and breadcrumb (recommend set)
     icon: 'svg-name'             the icon show in the sidebar
     noCache: true                if set true, the page will no be cached(default is false)
-    affix: true                  if set true, the tag will affix in the tags-view
+    affix: true                  if set true, the tag will affix in the tags-view (если установлено true, тег будет добавлен в теги-view )
     breadcrumb: false            if set false, the item will hidden in breadcrumb(default is true)
     activeMenu: '/example/list'  if set path, the sidebar will highlight the path you set
   }
@@ -311,12 +312,12 @@ export const constantRoutes = [
   },
 
   {
-    path: '/steads',
+    path: '/admin/steads',
     component: Layout,
     children: [
       {
         path: 'index',
-        component: () => import('@/views/admin/steads/index'),
+        component: () => import('@/views/admin/steads/SteadList/index'),
         name: 'Steads',
         meta: { title: 'Участки', icon: 'documentation', affix: true }
       }
@@ -330,6 +331,7 @@ export const constantRoutes = [
  * the routes that need to be dynamically loaded based on user roles
  */
 export const asyncRoutes = [
+  owner,
   {
     path: '/appeals',
     component: Layout,

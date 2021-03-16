@@ -31,19 +31,23 @@
       </el-table-column>
       <el-table-column v-if="device === 'desktop'" label="Собственник" align="center" min-width="150px">
         <template slot-scope="{row}">
-          <span :class="row | fioStyleFilter">{{ row | fioFilter }}</span>
+          <div>
+            <div v-for="item in row.owners" :key="item.uid">
+              {{ item.fullName }}
+            </div>
+          </div>
         </template>
       </el-table-column>
-      <el-table-column v-if="device === 'desktop'" label="Телефон" align="center" width="150px">
-        <template slot-scope="{row}">
-          <span>{{ row.user.phone }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column v-if="device === 'desktop'" label="Email" align="center" width="150px">
-        <template slot-scope="{row}">
-          <span>{{ row.user.email }}</span>
-        </template>
-      </el-table-column>
+      <!--      <el-table-column v-if="device === 'desktop'" label="Телефон" align="center" width="150px">-->
+      <!--        <template slot-scope="{row}">-->
+      <!--          <span>{{ row.user.phone }}</span>-->
+      <!--        </template>-->
+      <!--      </el-table-column>-->
+      <!--      <el-table-column v-if="device === 'desktop'" label="Email" align="center" width="150px">-->
+      <!--        <template slot-scope="{row}">-->
+      <!--          <span>{{ row.user.email }}</span>-->
+      <!--        </template>-->
+      <!--      </el-table-column>-->
       <el-table-column label="Actions" align="center" width="270px" class-name="small-padding fixed-width">
         <template slot-scope="{ row }">
           <el-button type="success" size="small" @click="AddNoteShow(row)">
@@ -270,7 +274,7 @@ export default {
 
     handleUpdate(row) {
       // this.temp = row // copy obj
-      this.$router.push('/bookkeping/billing_balance_stead/' + row.id)
+      this.$router.push('/admin/bookkeping/billing_balance_stead/' + row.id)
     },
     updateData() {
       if (this.editor) {
