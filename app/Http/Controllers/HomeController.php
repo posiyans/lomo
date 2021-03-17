@@ -95,58 +95,5 @@ class HomeController extends Controller
             }
         }
         return json_encode($data);
-//        foreach ($steads as $item) {
-//            echo "Участок ". $item->number . "<br />\n";
-//            echo $item->discriptions['kadastr'];
-//            echo "<br>";
-//            if (isset($item->discriptions['kadastr']) && !empty($item->discriptions['kadastr'])) {
-//                $f = __DIR__ . '/rosreestr_json/' . $item->discriptions['kadastr'] . "\n.json";
-//                if (file_exists($f)) {
-//
-//                    $js = json_decode(file_get_contents($f), true);
-//                    $discriptions = $item->discriptions;
-//                    $discriptions['geodata'] = $js;
-//                    $item->discriptions = $discriptions;
-////                    $item->save();
-////                    dump($js);
-//                    echo "уes!!!!!";
-//                    echo "<br>";
-//                }
-//                else {
-//                    echo "Участок ". $item->number . "<br />\n";
-//                    echo "NO!!!!!";
-//                    echo $f;
-//                    echo "<br>";
-//                }
-//            }
-//
-//        }
-//            if (file_exists( __DIR__.'/rosreestr_json/'.$item)) {
-//                __DIR__.'/rosreestr_json/'.$item
-//            }
-//            $js = json_decode(file_get_contents(__DIR__.'/rosreestr_json/'.$item));
-//            if(isset($js->properties)) {
-////                dump($js->properties);
-//                $temp = [
-//                    'center' => [$js->properties->center->y,$js->properties->center->x],
-//                    'size' => $js->properties->area_value,
-//                    'address' => $js->properties->address
-//                ];
-//                if (isset($js->geometry->coordinates)) {
-//                    $ks = $js->geometry->coordinates[0][0];
-//                    $l=[];
-//                    foreach ($ks as $k) {
-//                        $l[]=[$k[1]+0.00004500100000, $k[0]+0.00006000100000];
-//                    }
-//                    $temp['krd'] = [$l, []];
-//                }
-//                $data[] = $temp;
-//            }
-////            dump($js);
-//        }
-////        dump($js->geometry->coordinates[0][0]);
-//        return json_encode($data);
-
-
     }
 }
