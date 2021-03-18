@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
 
 
-class GetOwnerListController
+class GetOwnerList
 {
     public $status = true;
     public $error = false;

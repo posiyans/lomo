@@ -62,6 +62,17 @@ class OwnerUserModel extends MyModel
         return $this->getValue('surname', ''). ' ' . $this->getValue('name', ''). ' ' . $this->getValue('middle_name', '');
     }
 
+    public function smallName()
+    {
+        $str = $this->getValue('surname', '');
+        if (strlen($this->getValue('name', '')) > 0) {
+            $str .= ' ' . mb_substr($this->getValue('name', ''), 0, 1). '.';
+        }
+        if (strlen($this->getValue('middle_name', '')) > 0) {
+            $str .= ' ' . mb_substr($this->getValue('middle_name', ''), 0, 1). '.';
+        }
+        return $str;
+    }
 
     /**
      * отношения со свойствами

@@ -1,70 +1,19 @@
 <template>
   <div>
-    переделать!!!
     <table>
-      <tr>
+      <tr v-for="item in owners" :key="item.uid">
         <td>
           ФИО
         </td>
         <td>
-          <span v-if="stead && stead.descriptions && stead.descriptions.fio">
-            {{ stead.descriptions.fio }}
+          <span>
+            {{ item.owner_fullName }} {{ item.proportion | propFilter }}
           </span>
         </td>
-        <td>
-          <el-button type="primary" size="mini" plain icon="el-icon-edit" />
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Адрес
-        </td>
-        <td>
-          <span v-if="stead && stead.options && stead.options.adres">
-            {{ stead.options.adres }}
-          </span>
-        </td>
-        <td>
-          <el-button type="primary" size="mini" plain icon="el-icon-edit" />
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Телефон
-        </td>
-        <td>
-          <span v-if="stead && stead.options && stead.options.phone ">
-            {{ stead.options.phone }}
-          </span>
-        </td>
-        <td>
-          <el-button type="primary" size="mini" plain icon="el-icon-edit" @click="editPhone" />
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Телефон доп.
-        </td>
-        <td>
-          <span v-if="stead && stead.options && stead.options.phone_add">
-            {{ stead.options.phone_add }}
-          </span>
-        </td>
-        <td>
-          <el-button type="primary" size="mini" plain icon="el-icon-edit" @click="editPhoneAdd" />
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Примечание
-        </td>
-        <td>
-          <span v-if="stead && stead.options && stead.options.note">
-            {{ stead.options.note }}
-          </span>
-        </td>
-        <td>
-          <el-button type="primary" size="mini" plain icon="el-icon-edit" @click="editNote" />
+        <td v-if="personal">
+          <div class="pointer" @click="showOwner(item.id)">
+            <el-button type="primary" size="mini" plain icon="el-icon-edit" />
+          </div>
         </td>
       </tr>
     </table>
@@ -73,7 +22,16 @@
 
 <script>
 import { updateStead } from '@/api/admin/stead'
+import { getOwnerForStead } from '@/api/admin/stead'
 export default {
+  filters: {
+    propFilter(val) {
+      if (val < 100) {
+        return '(' + val + '%)'
+      }
+      return ''
+    }
+  },
   props: {
     stead: {
       type: Object,
@@ -82,6 +40,7 @@ export default {
   },
   data() {
     return {
+      owners: [],
       stead_loc: {
         descriptions: {},
         options: {}
@@ -89,11 +48,31 @@ export default {
     }
   },
   computed: {
+    personal() {
+      return this.$store.state.user.info.allPermissions.includes('access-to-personal')
+    }
   },
   mounted() {
     this.stead_loc = this.stead
+    this.getOwnerList()
   },
   methods: {
+    showOwner(id) {
+      this.$router.push('/admin/owner/show-info/' + id)
+    },
+    getOwnerList() {
+      getOwnerForStead(this.stead.id)
+        .then(response => {
+          if (response.data.status) {
+            this.$message('Данные успешно сохранены')
+            this.owners = response.data.data
+          } else {
+            if (response.data.error) {
+              this.$message.error(response.data.error)
+            }
+          }
+        })
+    },
     editPhone() {
       this.$prompt('Телефон', 'Изменить', {
         confirmButtonText: 'Сохранить',

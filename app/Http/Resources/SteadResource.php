@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Auth;
 
 class SteadResource extends JsonResource
 {
@@ -17,8 +18,14 @@ class SteadResource extends JsonResource
         $owners = $this->owners;
         $ownre_user = [];
         foreach ($owners as $owner) {
+            $user = Auth::user();
+            if ($user->ability(['superAdmin'], ['access-to-personal'])) {
+                $owner_name = $owner->owner->fullName();
+            } else {
+                $owner_name = $owner->owner->smalllName();
+            }
             $ownre_user[] = [
-                'fullName' => $owner->owner->fullName(),
+                'fullName' => $owner_name,
                 'uid' => $owner->owner_uid,
                 'proportion' => $owner->proportion
             ];

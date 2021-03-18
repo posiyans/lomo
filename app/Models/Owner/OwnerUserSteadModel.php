@@ -12,7 +12,7 @@ class OwnerUserSteadModel extends MyModel
 
     public function ownerFullName()
     {
-        return $this->owner->fullName;
+        return $this->owner->fullName();
     }
 
     public function owner()
