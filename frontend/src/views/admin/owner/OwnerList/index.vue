@@ -9,8 +9,9 @@
         Добавить
       </el-button>
     </div>
-    <ShowTable :list="list" :loading="loading" />
-    <LoadMore :key="key" :list-query="listQuery" :func="func" @setList="setList" />
+
+    <ShowTable :list="list" :loading="loading" :offset="offset" />
+    <LoadMore :key="key" :list-query="listQuery" :func="func" @setList="setList" @setOffset="setOffset" />
   </div>
 </template>
 
@@ -32,6 +33,7 @@ export default {
     return {
       key: 0,
       list: null,
+      offset: 0,
       func: fetchOwnerUserList,
       loading: true,
       listQuery: {
@@ -50,6 +52,9 @@ export default {
   mounted() {
   },
   methods: {
+    setOffset(val) {
+      this.offset = val
+    },
     addOwner() {
       this.$router.push('/admin/owner/add')
     },

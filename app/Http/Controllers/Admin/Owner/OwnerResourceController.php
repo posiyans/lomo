@@ -37,6 +37,7 @@ class OwnerResourceController extends Controller
             'status' => $owner->status,
             'data' => AdminOwnerListResource::collection($owner->rezult),
             'total' => $owner->total,
+            'offset' => $owner->offset,
             'error' => $owner->error
         ];
 

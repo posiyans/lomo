@@ -21,10 +21,11 @@ use Ramsey\Uuid\Uuid;
 
 class GetOwnerListController
 {
-    public $status;
+    public $status = true;
     public $error = false;
     public $rezult;
     public $total;
+    public $offset;
     protected $data;
 
     /**
@@ -79,7 +80,7 @@ class GetOwnerListController
         if ($page < 1 ) {
             $page = 1;
         }
-        $offset = ($page - 1) * $limit;
-        return array_slice($array, $offset, $limit);
+        $this->offset = ($page - 1) * $limit;
+        return array_slice($array, $this->offset, $limit);
     }
 }

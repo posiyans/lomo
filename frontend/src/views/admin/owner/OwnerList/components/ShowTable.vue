@@ -11,7 +11,7 @@
     >
       <el-table-column v-if="!mobile" label="№" align="center" width="40">
         <template slot-scope="scope">
-          <span>{{ scope.$index + 1 }}</span>
+          <span>{{ scope.$index + offset + 1 }}</span>
         </template>
       </el-table-column>
       <el-table-column label="ФИО" min-width="100px">
@@ -78,6 +78,10 @@ export default {
     }
   },
   props: {
+    offset: {
+      type: Number,
+      default: 0
+    },
     loading: {
       type: Boolean,
       default: false
@@ -131,7 +135,7 @@ export default {
   },
   methods: {
     pushToStead(id) {
-      this.$route.push('/admin/bookkeping/billing_balance_stead/' + id)
+      this.$router.push('/admin/bookkeping/billing_balance_stead/' + id)
     },
     showInfo(row) {
       console.log('/admin/owner/show-info/' + row.id)
