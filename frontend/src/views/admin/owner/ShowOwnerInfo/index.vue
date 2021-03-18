@@ -42,7 +42,7 @@
           <td>
             <div class="relative">
               <div class="stead-group">
-                <div v-for="stead in form.steads" :key="stead.id" class="stead-group__button" @click="openSteadInfo(stead.id)">
+                <div v-for="stead in form.steads" :key="stead.id" class="stead-group__button" @click="openSteadInfo(stead.stead_id)">
                   {{ stead.number }} {{ stead.proportion | propFilter }}
                 </div>
               </div>
