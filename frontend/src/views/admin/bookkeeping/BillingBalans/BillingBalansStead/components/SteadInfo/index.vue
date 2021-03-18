@@ -5,7 +5,7 @@
         <Stead :stead="stead" />
       </el-tab-pane>
       <el-tab-pane label="Владелец">
-        <Owner :stead="stead" />
+        <Owner v-if="stead" :stead="stead" />
       </el-tab-pane>
       <el-tab-pane label="Приборы учета">
         <MeteringDevices :stead="stead" />
@@ -22,18 +22,18 @@ import { fetchSteadInfo } from '@/api/admin/stead'
 import Stead from './components/Stead'
 import Owner from './components/Owner'
 import MeteringDevices from './components/MeteringDevices'
-import Geometry from './components/Geometry'
+// import Geometry from './components/Geometry'
 
 export default {
   components: {
     Stead,
     Owner,
-    MeteringDevices,
-    Geometry
+    MeteringDevices
+    // Geometry
   },
   data() {
     return {
-      stead: {},
+      stead: null,
       id: ''
     }
   },

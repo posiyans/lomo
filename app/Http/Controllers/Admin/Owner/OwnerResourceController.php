@@ -32,7 +32,7 @@ class OwnerResourceController extends Controller
     public function index(Request $request)
     {
 
-        $owner = new GetOwnerListController($request);
+        $owner = new GetOwnerList($request);
         return [
             'status' => $owner->status,
             'data' => AdminOwnerListResource::collection($owner->rezult),
