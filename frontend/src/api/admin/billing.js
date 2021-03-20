@@ -78,6 +78,16 @@ export function fetchBillingBalansList(query) {
   })
 }
 
+export function fetchBillingBalansXLSX(data) {
+  request.defaults.timeout = ''
+  return request({
+    url: '/api/v1/admin/billing/balance-xlsx',
+    method: 'post',
+    responseType: 'blob',
+    data: data
+  })
+}
+
 export function fetchBillingBalansSteadInfo(query) {
   return request({
     url: '/api/v1/admin/billing/balance-info',
