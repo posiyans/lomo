@@ -16,6 +16,9 @@
       <el-button v-waves class="filter-container__item" type="primary" icon="el-icon-search" @click="handleFilter">
         Показать
       </el-button>
+      <el-button v-waves class="filter-container__item" type="primary" icon="el-icon-download" @click="getExcel">
+        XLSX
+      </el-button>
       <el-button v-waves class="filter-container__item" icon="el-icon-setting" @click="settingShow" />
     </div>
     <component :is="componentName" :list="list" :list-loading="listLoading" :type="receiptTypes" />
@@ -42,13 +45,14 @@
 </template>
 
 <script>
-import { fetchBillingBalansList } from '@/api/admin/billing'
+import { fetchBillingBalansList, fetchBillingBalansXLSX } from '@/api/admin/billing'
 import waves from '@/directive/waves'
 import LoadMore from '@/components/LoadMore'
 import Mobile from './View/Table/Mobile'
 import Desktop from './View/Table/Desktop'
 import { fetchReceiptTypeList } from '@/api/admin/setting/receipt'
 import Cookies from 'js-cookie'
+import { saveAs } from 'file-saver'
 
 export default {
   name: 'ArticleList',
@@ -96,6 +100,7 @@ export default {
       listLoading: true,
       key: 0,
       listQuery: {
+        type: 'json',
         zeroLine: 0,
         receipt_type: '',
         page: 1,
@@ -130,6 +135,15 @@ export default {
     this.getTypeList()
   },
   methods: {
+    getExcel() {
+      const data = Object.assign({}, this.listQuery)
+      data.type = 'xlsx'
+      fetchBillingBalansXLSX(data).then(response => {
+        const blob = new Blob([response.data])
+        saveAs(blob, 'Список.xlsx')
+        this.$message('Файл успешно скачан.')
+      })
+    },
     settingShow() {
       this.dialogSettingVisible = true
     },

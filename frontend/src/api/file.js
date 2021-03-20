@@ -8,5 +8,6 @@ export function uploadFile(data) {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
-    })
+    }
+  )
 }
