@@ -7,6 +7,8 @@ use App\Models\Receipt\ReceiptType;
 use App\Models\Stead;
 use App\Models\MyModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class BillingInvoice extends MyModel
@@ -20,6 +22,19 @@ class BillingInvoice extends MyModel
         'paid' => 'boolean',
         'price' => 'float',
     ];
+
+
+
+    /**
+     * сохранить и очисть зависящие кеши
+     *
+     * @return bool|void
+     */
+    public function save(array $options = [])
+    {
+        Cache::tags('invoice')->flush();
+        return parent::save($options);
+    }
 
 
     public function payments()

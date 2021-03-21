@@ -33,6 +33,7 @@ class AddOneTimeRegisterOfChargesController extends Controller
      */
     public static function addRegister($title, $type, $ratio_a, $ratio_b)
     {
+
         $reestr = new BillingReestr();
         $reestr->title = $title;
         $reestr->type = 0;

@@ -7,6 +7,7 @@ use App\Models\MyModel;
 use DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
 
 
 class BillingReestr extends MyModel
@@ -47,6 +48,7 @@ class BillingReestr extends MyModel
 //            'date'=> time(),
 //        ];
         $this->history = [];
+        Cache::tags('invoice')->flush();
         return parent::save($options);
     }
     //

@@ -2,7 +2,7 @@
 // бухгалтерия
 Route::get('billing/balance-info', 'App\Http\Controllers\Admin\Bookkeeping\Billing\BalanceController@info');
 Route::get('billing/balance-list', 'App\Http\Controllers\Admin\Bookkeeping\Billing\BalanceController@list');
-Route::post('billing/balance-xlsx', 'App\Http\Controllers\Admin\Bookkeeping\Billing\Balance\GetXlsxFileController@index');
+Route::post('billing/balance-xlsx', 'App\Http\Controllers\Admin\Bookkeeping\Billing\Balance\BalanceList\GetXlsxFileController@index');
 Route::get('billing/balance-for-stead', 'App\Http\Controllers\Admin\Bookkeeping\Billing\BalanceController@allBalance');
 
 Route::resource('billing/reestr', 'App\Http\Controllers\Admin\Bookkeeping\Billing\ReestrController')

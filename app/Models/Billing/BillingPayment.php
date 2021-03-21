@@ -11,6 +11,7 @@ use App\Models\Stead;
 use App\Models\MyModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class BillingPayment extends MyModel
@@ -24,6 +25,25 @@ class BillingPayment extends MyModel
     ];
 
     protected $fillable = ['type', 'description'];
+
+    /**
+     * добавить лог, историю , очисть зависящие кеши и сохранить
+     *
+     * @return bool|void
+     */
+    public function save(array $options = [])
+    {
+        $original_model = $this->getOriginal();
+        Log::addLog($this, $original_model, 'Изменение', $this->stead_id);
+        Cache::tags('payment')->flush();
+        return parent::save($options);
+    }
+
+
+
+
+
+
 
     public function instrumentReadings()
     {
@@ -51,50 +71,27 @@ class BillingPayment extends MyModel
         return $this->hasMany(DeviceRegisterModel::class, 'stead_id', 'stead_id')->whereIn('type_id', $type);
     }
 
-    /**
-     * todo зачем это????
-     *
-     * @param array $attributes
-     * @return array
-     */
-    public function steadObject(array $attributes = [])
-    {
-        $data = [];
-        if ($this->stead) {
-            if (count($attributes) == 0) {
-                $attributes = $this->stead->getAttributes();
-            }
-            foreach ($attributes as $item) {
-                if(isset($this->stead[$item])) {
-                  $data[$item] = $this->stead[$item];
-                }
-            }
-        }
-        return $data;
-    }
-
-    /**
-     * добавить лог, историю и сохранить
-     *
-     * @return bool|void
-     */
-    public function save(array $options = [])
-    {
-        $original_model = $this->getOriginal();
-//        $history = $this->history;
-        $log = Log::addLog($this, $original_model, 'Изменение', $this->stead_id);
-        if ($log) {
-            $time = date('Y-m-d H:i:s');
-//            $history[] = ['date' => $time, 'user_id' => Auth::user()->id, 'data' => $log->value];
-            $this->history = '';
-        }
-        if (parent::save($options)) {
-            return true;
-        }
-        return false;
-    }
-
-
+//    /**
+//     * todo зачем это????
+//     *
+//     * @param array $attributes
+//     * @return array
+//     */
+//    public function steadObject(array $attributes = [])
+//    {
+//        $data = [];
+//        if ($this->stead) {
+//            if (count($attributes) == 0) {
+//                $attributes = $this->stead->getAttributes();
+//            }
+//            foreach ($attributes as $item) {
+//                if(isset($this->stead[$item])) {
+//                  $data[$item] = $this->stead[$item];
+//                }
+//            }
+//        }
+//        return $data;
+//    }
 
     /**
      * разнести платежку по счетам садоводов

@@ -64,7 +64,6 @@ export default {
       getOwnerForStead(this.stead.id)
         .then(response => {
           if (response.data.status) {
-            this.$message('Данные успешно сохранены')
             this.owners = response.data.data
           } else {
             if (response.data.error) {

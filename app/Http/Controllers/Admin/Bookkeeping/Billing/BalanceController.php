@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Bookkeeping\Billing;
 
+use App\Http\Controllers\Admin\Bookkeeping\Billing\Balance\BalanceList\GetListController;
 use App\Http\Resources\Admin\Bookkeeping\AdminBalansSteadResource;
 use App\Http\Resources\Admin\Bookkeeping\AdminInvoiceResource;
 use App\Http\Resources\Admin\Bookkeeping\AdminPaymentResource;
@@ -37,82 +38,12 @@ class BalanceController extends Controller
      */
     public function list(Request $request)
     {
-        if ($request->category || $request->payment) {
-            $zeroline = $request->get('zeroLine', 0);
-            $steads = Stead::all();
-            $cat = [];
-            if ($request->category) {
-                foreach ($steads as $stead) {
-                    $balans = $stead->getBalans($request->get('receipt_type', false));
-                    if ($request->category == 1 && $balans >= $zeroline) {
-                        $cat[] = $stead;
-                    } else if ($request->category == 2 && $balans < $zeroline) {
-                        $cat[] = $stead;
-                    }
-                }
-            } else {
-                $cat = $steads;
-            }
-            $data = [];
-//            if ($request->payment && $request->month) {
-//                $now = strtotime("-".(int)$request->month." month");
-//                foreach ($cat as $item) {
-//                    if ($item->lastPayment) {
-//                        $d = strtotime($item->lastPayment->payment_date);
-////                        return json_encode([$d, $now]);
-//                        if ($request->payment == 1 && $d < $now) {
-//                            $data[] = $item;
-//                        } else if ($request->payment == 2 && $d > $now) {
-//                            $data[] = $item;
-//                        }
-//                    } else {
-//                        if ($request->payment == 1) {
-//                          $data[] = $item;
-//                        }
-//                    }
-//                }
-//            } else {
-                $data = $cat;
-//            }
-            $total = count($data);
-            if ($request->limit && $request->page) {
-                $r = [];
-                $i = 1;
-                foreach ($data as $item) {
-                    if ($i > $request->limit * ($request->page-1) && $i <= $request->limit * ($request->page)) {
-                        $temp = [
-                            'id'=>$item->id,
-                            'number' => $item->number,
-                            'size' => $item->size,
-                            'balans_all' => round($item->getBalans(), 2),
-//                            'balans_1' => round($item->getBalans(1), 2),
-//                            'balans_2' => round($item->getBalans(2), 2),
-                            'last_payment' => $item->lastPayment,
-                        ];
-                        $types = ReceiptType::getReceiptTypeIds();
-                        $temp_balans = [];
-                        foreach ($types  as $type) {
-                            $temp_balans['d'.$type] = round($item->getBalans($type), 2);
-                        }
-                        $temp['balans'] =  $temp_balans;
-                        $r[] = $temp;
-                    }
+        $data = GetListController::getData($request);
+        $total = count($data);
+        $offset = ($request->page - 1) * $request->limit;
+        $steads = $this->paginate($data, $request->page, $request->limit);
+        return ['status' => true, 'total' => $total, 'offset' => $offset, 'data' => AdminBalansSteadResource::collection($steads)];
 
-                    $i++;
-                }
-            } else {
-                $r = $data;
-            }
-//            return AdminBalansSteadResource::collection($data);
-            return json_encode(['status'=>true, 'data'=>$r, 'meta' => ['total'=>$total]]);
-        } else {
-            $query = Stead::query();
-            if ($request->find) {
-                $query->where('number', 'like', "%$request->find%");
-            }
-            $steads = $query->paginate($request->limit);
-            return AdminBalansSteadResource::collection($steads);
-        }
     }
 
     public function info(Request $request)

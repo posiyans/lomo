@@ -10,6 +10,7 @@ use App\Models\Receipt\ReceiptType;
 use App\Models\MyModel;
 use App\Models\Receipt\InstrumentReadings;
 use App\Models\User;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Cookie;
 
 
@@ -219,23 +220,26 @@ class Stead extends MyModel
      */
     public function getBalans($type = false)
     {
-        $balans = 0;
-        if (!$type) {
-            foreach ($this->invoices as $invoice) {
-                $balans -= $invoice->price;
+        $keyName = 'balans_stead-' . $this->id . '_type-' . $type;
+        return  Cache::tags(['balans', 'invoice', 'payment'])->remember($keyName, 6000 ,function () use ($type) {
+            $balans = 0;
+            if (!$type) {
+                foreach ($this->invoices as $invoice) {
+                    $balans -= $invoice->price;
+                }
+                foreach ($this->payment as $invoice) {
+                    $balans += $invoice->price;
+                }
+            } else {
+                foreach ($this->InvoicesForReceipt($type) as $invoice) {
+                    $balans -= $invoice->price;
+                }
+                foreach ($this->PaymentForReceipt($type) as $invoice) {
+                    $balans += $invoice->price;
+                }
             }
-            foreach ($this->payment as $invoice) {
-                $balans += $invoice->price;
-            }
-        } else {
-            foreach ($this->InvoicesForReceipt($type) as $invoice) {
-                $balans -= $invoice->price;
-            }
-            foreach ($this->PaymentForReceipt($type) as $invoice) {
-                $balans += $invoice->price;
-            }
-        }
-        return $balans;
+            return $balans;
+        });
     }
 
 
