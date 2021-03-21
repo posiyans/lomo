@@ -94,7 +94,7 @@ class OwnerUserModel extends MyModel
     {
         $cacheName = 'ownerUser_'. $this->uid .'_Field_' . $name;
 
-        $data = Cache::remember($cacheName, 600, function () use ($name) {
+        $data = Cache::tags('owner_user')->remember($cacheName, 6000, function () use ($name) {
             $model = OwnerUserValueModel::where('property', $name)->where('uid', $this->uid)->first();
             if ($model) {
                 return $model->value;

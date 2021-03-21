@@ -1,24 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Bookkeeping\Billing\Balance;
+namespace App\Http\Controllers\Admin\Bookkeeping\Billing\Balance\BalanceList;
 
-use App\Http\Resources\Admin\Bookkeeping\AdminBalansSteadResource;
-use App\Http\Resources\Admin\Bookkeeping\AdminInvoiceResource;
-use App\Http\Resources\Admin\Bookkeeping\AdminPaymentResource;
-use App\Models\Billing\BillingInvoice;
-use App\Models\Billing\BillingPayment;
-use App\Models\Billing\BillingReestr;
-use App\Models\Receipt\InstrumentReadings;
-use App\Models\Laratrust\Permission;
-use App\Models\Laratrust\Role;
+
 use App\Models\Receipt\ReceiptType;
 use App\Models\Stead;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Auth;
-use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class GetXlsxFileController extends Controller
@@ -45,28 +35,7 @@ class GetXlsxFileController extends Controller
      */
     public function index(Request $request)
     {
-        $zeroline = $request->get('zeroLine', 0);
-        if ($request->find) {
-            $this->query->where('number', 'like', "%$request->find%");
-        }
-        $steads = $this->query->get();
-
-        if ($request->category || $request->payment) {
-            $data = [];
-            if ($request->category) {
-                foreach ($steads as $stead) {
-                    $balans = $stead->getBalans($request->get('receipt_type', false));
-                    if ($request->category == 1 && $balans >= $zeroline) {
-                        $data[] = $stead;
-                    } else if ($request->category == 2 && $balans < $zeroline) {
-                        $data[] = $stead;
-                    }
-                }
-            }
-
-        } else {
-            $data = $steads;
-        }
+        $data = GetListController::getData($request);
         $this->generateXLSX($data);
     }
 

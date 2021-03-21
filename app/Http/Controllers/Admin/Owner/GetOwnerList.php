@@ -43,7 +43,7 @@ class GetOwnerList
 
     public function getAllOwner()
     {
-        $this->data = Cache::remember('allOwnerList', 600 ,function () {
+        $this->data = Cache::tags('owner_user')->remember('allOwnerList', 6000 ,function () {
             $data = [];
             $owners = OwnerUserModel::all();
             foreach ($owners as $owner) {
