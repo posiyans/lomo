@@ -35,13 +35,10 @@ class BillingPayment extends MyModel
     {
         $original_model = $this->getOriginal();
         Log::addLog($this, $original_model, 'Изменение', $this->stead_id);
+        $this->history = '';
         Cache::tags('payment')->flush();
         return parent::save($options);
     }
-
-
-
-
 
 
 
@@ -106,7 +103,6 @@ class BillingPayment extends MyModel
             $payment_data = date_format($date, 'Y-m-d H:i:s');
             $payment = new self;
             $payment->price = (float)str_replace(',', '.', $item[1]);
-//            $payment->transaction = $item[4];
             $payment->payment_date = $payment_data;
             $payment->description = '';
             $payment->payment_type = 1;
@@ -114,8 +110,6 @@ class BillingPayment extends MyModel
             $payment->user_id = Auth::user()->id;
             $payment->parseType();
             $payment->parseStead();
-//            $payment->history = [];
-
             if ($payment->checkNoDublicate()) {
                 if ($payment->save()) {
                     return $payment;
