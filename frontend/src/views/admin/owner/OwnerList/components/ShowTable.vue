@@ -24,7 +24,7 @@
       <el-table-column label="Участок" align="center" width="100px">
         <template slot-scope="{row}">
           <div class="stead-group">
-            <div v-for="stead in row.steads" :Key="stead.id" class="stead-group__button" @click="pushToStead(stead.id)">
+            <div v-for="stead in row.steads" :Key="stead.id" class="stead-group__button" @click="pushToStead(stead.stead_id)">
               {{ stead.number }}  {{ stead.proportion | propFilter }}
             </div>
           </div>
