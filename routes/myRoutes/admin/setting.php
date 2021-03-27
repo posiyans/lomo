@@ -10,3 +10,4 @@ Route::resource('/setting/rate', 'App\Http\Controllers\Admin\Setting\AdminRateCo
 Route::get('/setting/camera/get-list', 'App\Http\Controllers\Admin\Setting\Camera\AdminCameraGetListController@index');
 Route::post('/setting/camera/add', 'App\Http\Controllers\Admin\Setting\Camera\AdminCameraAddController@index');
 Route::post('/setting/camera/update', 'App\Http\Controllers\Admin\Setting\Camera\AdminCameraUpdateController@index');
+Route::get('/setting/camera/reload/{id}', 'App\Http\Controllers\Admin\Setting\Camera\AdminCameraRefreshController@index');

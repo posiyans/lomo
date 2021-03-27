@@ -1,9 +1,16 @@
 <template>
-  <div class="app-container">
+  <div :key="key" class="app-container">
     <div v-for="item in list" :key="item.id" class="flex mt2 relative">
-      <div class="primary-block__setting" @click="editItem(item)">
-        <i class="el-icon-s-tools" />
+      <div class="primary-block__setting flex">
+        <div class="mr2" @click="editItem(item)">
+          <i class="el-icon-s-tools" />
+        </div>
+        <div>
+          <i class="el-icon-refresh-right" @click="refresh(item.id)" />
+
+        </div>
       </div>
+
       <div class="pa2" style="max-width: 50%">
         <div class="mb2">
           <strong>Название:</strong>
@@ -39,13 +46,13 @@
       :destroy-on-close="false"
       width="600px"
     >
-      <AddCamera :item="activeItem" :edit="edit" @reload="close" />
+      <AddCamera v-if="showAddForm" :item="activeItem" :edit="edit" @reload="close" />
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { fetchCameraList } from '@/api/admin/setting/camera'
+import { fetchCameraList, refreshCamera } from '@/api/admin/setting/camera'
 import AddCamera from './components/AddCamera'
 export default {
   components: { AddCamera },
@@ -57,6 +64,7 @@ export default {
   },
   data() {
     return {
+      key: 1,
       showAddForm: false,
       list: [],
       edit: false,
@@ -67,6 +75,18 @@ export default {
     this.getList()
   },
   methods: {
+    refresh(id) {
+      refreshCamera(id)
+        .then(response => {
+          if (response.data.status) {
+            this.getList()
+          } else {
+            if (response.data.data) {
+              this.$message.error(response.data.data)
+            }
+          }
+        })
+    },
     editItem(item) {
       this.edit = true
       this.activeItem = item

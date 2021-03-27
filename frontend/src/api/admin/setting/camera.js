@@ -23,3 +23,10 @@ export function updateCamera(data) {
     data
   })
 }
+
+export function refreshCamera(id) {
+  return request({
+    url: '/api/v1/admin/setting/camera/reload/' + id,
+    method: 'get'
+  })
+}
