@@ -42,6 +42,16 @@ const settingRouter = {
         affix: true,
         roles: ['edit-rate']
       }
+    },
+    {
+      path: 'camera',
+      component: () => import('@/views/admin/settings/CameraSetting/index'),
+      name: 'CameraSetting',
+      meta: {
+        title: 'Камеры',
+        icon: 'documentation',
+        affix: true
+      }
     }
   ]
 
