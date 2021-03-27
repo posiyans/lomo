@@ -142,7 +142,7 @@
         <AddInvoiceForStead :stead="stead" @close="closeAddForm" />
       </el-dialog>
       <el-dialog
-        title="Добавить платеж наличкой"
+        title="Добавить платеж"
         :visible.sync="addPaymentShow"
         top="10px"
         :width="mobile ? '100%' : '600px'"
