@@ -3,14 +3,8 @@
 namespace App\Http\Controllers\Admin\Setting\Camera;
 
 use App\Models\Options\GlobalOptionModel;
-use App\Models\Receipt\MeteringDevice;
-use App\Models\Receipt\Rate;
-use App\Models\Receipt\ReceiptType;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use phpDocumentor\Reflection\Types\AbstractList;
-use phpDocumentor\Reflection\Types\Mixed_;
 
 class AdminCameraAddController extends Controller
 {
