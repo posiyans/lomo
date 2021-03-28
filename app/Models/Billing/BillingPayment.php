@@ -305,9 +305,10 @@ class BillingPayment extends MyModel
             $str = str_replace('участок', '', $str);
             $str = str_replace('№', '', $str);
             $str = str_replace(' ', '', $str);
+            $str = preg_replace('/[^0-9\/]/', '', $str);
             $stead = Stead::query()->where('number', 'like', "%{$str}%")->first();
             if (!$stead) {
-                $str = str_replace('Л сч 502 10линия', '502', $data['val' . $col]);
+                $str = str_replace('Л сч 502 10линия', '502', $data[$col]);
                 $str = str_replace('Л сч502 10линия', '502', $str);
                 $str = str_replace('288, 289', '288', $str);
                 $str = str_replace('526/525', '525/526', $str);
