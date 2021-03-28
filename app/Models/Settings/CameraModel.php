@@ -20,7 +20,7 @@ class CameraModel
         $this->id = $option['id'];
         $this->url = $option['value']['url'] ?? '';
         $this->name = $option['value']['name'] ?? '';
-        $this->ttl = $option['value']['ttl'] ?? 3600;
+        $this->ttl = (int)$option['value']['ttl'] ?? 3600;
         $this->access = $option['value']['access'] ?? 'all';
         $this->cache_name = static::$cache_prefix . $this->id;
        // $this->img = $this->updateCache();
@@ -61,6 +61,7 @@ class CameraModel
           $item = GlobalOptionModel::where('id', $this->id)->where('name', $optionName)->first();
           if ($item) {
               $item->value = $this;
+              Cache::tags('Camera')->forget($this->cache_name);
               return $item->save();
           }
         }
@@ -149,7 +150,7 @@ class CameraModel
                     $count = $count - 1;
                     return $this->rtspToJpeg($count);
                 } else {
-                return false;
+                    return false;
                 }
             }
         }
