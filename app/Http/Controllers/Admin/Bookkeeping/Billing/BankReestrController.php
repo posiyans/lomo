@@ -86,6 +86,12 @@ class BankReestrController extends Controller
             }
             return json_encode(['status' => true, 'data' => $data]);
         }
+        if ($request->item && is_array($request->item)) {
+            $playment = BillingPayment::createPlayment($request->item);
+                if ($playment) {
+                    return json_encode(['status' => true, 'data' => new AdminPaymentResource($playment)]);
+                }
+        }
         return json_encode(['status' => false, 'data'=>'Фаил не загружен']);
     }
 

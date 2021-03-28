@@ -56,6 +56,11 @@ const bookkepingRouter = {
       }
     },
     {
+      path: 'payment_add',
+      component: () => import('@/views/admin/bookkeeping/BillingPayment/PaymentAdd/index'),
+      hidden: true
+    },
+    {
       path: 'contributions',
       component: () => import('@/views/admin/bookkeeping/Receipts/index'),
       name: 'AdminReceipts',

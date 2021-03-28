@@ -132,7 +132,7 @@ export default {
       this.show = 0
     },
     addPayment() {
-      this.show = 1
+      this.$router.push('/admin/bookkeping/payment_add')
     },
     setList(val) {
       this.list = val
