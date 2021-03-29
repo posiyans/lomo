@@ -30,3 +30,13 @@ export function addPaymentForStead(data) {
     data: data
   })
 }
+
+export function fetchPaymentListinFile(params) {
+  request.defaults.timeout = ''
+  return request({
+    url: '/api/v1/admin/billing/payment',
+    method: 'get',
+    responseType: 'blob',
+    params: params
+  })
+}

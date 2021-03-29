@@ -37,6 +37,9 @@
         <el-button v-waves class="filter-container__item" type="primary" icon="el-icon-search" @click="handleFilter">
           Показать
         </el-button>
+        <el-button v-waves class="filter-container__item" type="primary" icon="el-icon-search" @click="uploadFile">
+          EXCEL
+        </el-button>
         <el-button v-waves class="filter-container__item" type="success" @click="addPayment">Добавить выписку из банка</el-button>
       </div>
       <component :is="componentName" :list="list" @reload="key++" />
@@ -49,7 +52,7 @@
 </template>
 
 <script>
-import { fetchPaymentList } from '@/api/admin/bookkeping/payment'
+import { fetchPaymentList, fetchPaymentListinFile } from '@/api/admin/bookkeping/payment'
 import { parseTime } from '@/utils'
 import waves from '@/directive/waves'
 import LoadMore from '@/components/LoadMore'
@@ -58,6 +61,7 @@ import Desktop from './Table/Desktop'
 import Mobile from './Table/Desktop'
 import AddPayment from './component/AddPayment'
 import ShowNewPayment from './component/ShowNewPayment'
+import { saveAs } from 'file-saver'
 
 export default {
   filters: {
@@ -118,6 +122,18 @@ export default {
     this.handleFilter()
   },
   methods: {
+    uploadFile() {
+      this.$message('скачиваем')
+      const data = Object.assign({}, this.listQuery)
+      data.file = 'xlsx'
+      delete data.page
+      delete data.limit
+      fetchPaymentListinFile(data).then(response => {
+        const blob = new Blob([response.data])
+        saveAs(blob, 'Список.xlsx')
+        this.$message('Файл успешно скачан.')
+      })
+    },
     closeShowPaymentForm() {
       this.show = 0
       this.newList = []
