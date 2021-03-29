@@ -229,6 +229,7 @@ export default {
         })
     },
     onFileChange(e) {
+      this.addCol = false
       this.loading = false
       this.data = ''
       this.row = 0

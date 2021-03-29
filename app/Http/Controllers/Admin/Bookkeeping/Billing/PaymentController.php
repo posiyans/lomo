@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Bookkeeping\Billing;
 
+use App\Http\Controllers\Admin\Bookkeeping\Billing\Payment\PaymentList\PaymentListXlsxFileController;
 use App\Http\Resources\Admin\Bookkeeping\AdminPaymentResource;
 use App\Models\Billing\BillingPayment;
 use App\Models\Billing\BillingReestr;
@@ -52,7 +53,16 @@ class PaymentController extends Controller
 //        if ($request->type) {
 //            $query->where('type', $request->type);
 //        }
-        $items = $query->orderBy('payment_date', 'desc')->paginate($request->limit);
+
+        $query->orderBy('payment_date', 'desc');
+        if ($request->limit) {
+            $items = $query->paginate($request->limit);
+        } else {
+            $items = $query->get();
+        }
+        if ($request->file == 'xlsx') {
+            return PaymentListXlsxFileController::save($items);
+        }
         return AdminPaymentResource::collection($items);
     }
 
