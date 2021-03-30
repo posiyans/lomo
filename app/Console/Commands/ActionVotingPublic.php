@@ -6,7 +6,7 @@ use App\Models\Stead;
 use App\Models\Voting\AnswerModel;
 use App\Models\Voting\UserAnswerModel;
 use App\Models\Voting\VotingModel;
-use App\User;
+use App\Models\User;
 use Illuminate\Console\Command;
 
 class ActionVotingPublic extends Command
