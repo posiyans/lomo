@@ -14,7 +14,7 @@ class CreateInstrumentReadingsTable extends Migration
     public function up()
     {
         Schema::create('instrument_readings', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->integer('stead_id');
             $table->integer('device_id');
             $table->string('instrument_serial')->nullable();

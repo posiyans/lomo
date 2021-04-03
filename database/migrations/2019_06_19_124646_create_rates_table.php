@@ -14,7 +14,7 @@ class CreateRatesTable extends Migration
     public function up()
     {
         Schema::create('rates', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->integer('device_id');
             $table->string('ratio_a');
             $table->string('ratio_b');

@@ -14,7 +14,7 @@ class CreateCategoryModelsTable extends Migration
     public function up()
     {
         Schema::create('category_models', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('name')->nullable();
             $table->integer('parent')->nullable();
             $table->boolean('show_menu')->default(false);

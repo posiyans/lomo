@@ -14,7 +14,7 @@ class CreateCommentModelsTable extends Migration
     public function up()
     {
         Schema::create('comment_models', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->integer('user_id')->comment('id пользователя');
             $table->integer('article_id')->comment('id статьи');
             $table->integer('comment_id')->nullable()->comment('id коментария на который отвечают');

@@ -14,7 +14,7 @@ class CreateBillingPaymentsTable extends Migration
     public function up()
     {
         Schema::create('billing_payments', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->integer('stead_id');
             $table->string('discription')->nullable();
             $table->integer('type');

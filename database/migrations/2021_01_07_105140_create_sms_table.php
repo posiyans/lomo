@@ -14,7 +14,7 @@ class CreateSmsTable extends Migration
     public function up()
     {
         Schema::create('notification_sms', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->integer('user_id')->nullable()->comment('кому отправленно');
             $table->integer('sender_id')->nullable()->comment('кто отправлял');
             $table->string('phone')->comment('номер телефона');

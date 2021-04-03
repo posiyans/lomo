@@ -14,7 +14,7 @@ class CreateQuestionModelsTable extends Migration
     public function up()
     {
         Schema::create('question_models', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->integer('voting_id');
             $table->string('text');
             $table->softDeletes();

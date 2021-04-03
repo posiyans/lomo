@@ -14,7 +14,7 @@ class CreateVotingModelsTable extends Migration
     public function up()
     {
         Schema::create('voting_models', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('title');
             $table->text('description')->nullable();
             $table->dateTime('date_publish');
