@@ -14,11 +14,11 @@ class CreateMeteringDevicesTable extends Migration
     public function up()
     {
         Schema::create('metering_devices', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('type_id');
             $table->string('name')->nullable();
             $table->string('discription')->nullable();
-            $table->integer('enable')->nullable(); 
+            $table->integer('enable')->nullable();
             $table->timestamps();
         });
     }

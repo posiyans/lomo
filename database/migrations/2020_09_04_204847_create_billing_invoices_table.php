@@ -14,7 +14,7 @@ class CreateBillingInvoicesTable extends Migration
     public function up()
     {
         Schema::create('billing_invoices', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('title');
             $table->integer('stead_id');
             $table->integer('type');

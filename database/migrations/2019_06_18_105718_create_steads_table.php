@@ -14,7 +14,7 @@ class CreateSteadsTable extends Migration
     public function up()
     {
         Schema::create('steads', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->integer('gardening_id');
             $table->string('number');
             $table->string('surname')->nullable();

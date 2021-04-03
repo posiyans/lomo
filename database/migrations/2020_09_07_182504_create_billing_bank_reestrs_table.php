@@ -14,7 +14,7 @@ class CreateBillingBankReestrsTable extends Migration
     public function up()
     {
         Schema::create('billing_bank_reestrs', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->json('data');
             $table->integer('user_id');
             $table->string('file_hash');

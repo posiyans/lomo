@@ -14,7 +14,7 @@ class AddVotingFileTable extends Migration
     public function up()
     {
         Schema::create('voting_files', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('uid')->nullable();
             $table->integer('user_id')->unsigned()->comment('кто загрузил');
             $table->integer('voting_id')->nullable()->comment('id голосования');

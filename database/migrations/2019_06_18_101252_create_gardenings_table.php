@@ -14,7 +14,7 @@ class CreateGardeningsTable extends Migration
     public function up()
     {
         Schema::create('gardenings', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('name');
             $table->string('full_name');
             $table->string('PersonalAcc')->nullable();

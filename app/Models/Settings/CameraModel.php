@@ -136,7 +136,7 @@ class CameraModel
             umask(0);
             mkdir($folder, 0777, true);
         }
-        $file = $folder . '/' . date('Y-m-d_h:i:s') . '.jpg';
+        $file = $folder . '/' . date('Y-m-d_H:i:s') . '.jpg';
         $ffmpeg = env('FFMPEG_BIN',false);
         if ($ffmpeg) {
 //            echo $ffmpeg . " -rtsp_transport tcp  -y -i " . $this->url . " -f image2 -vframes 1 " . $file;

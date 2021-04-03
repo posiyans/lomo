@@ -14,7 +14,7 @@ class CreateMessageModelsTable extends Migration
     public function up()
     {
         Schema::create('message_models', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->integer('user_id');
             $table->string('channel_name')->nullable();
             $table->string('commentable_type')->nullable();

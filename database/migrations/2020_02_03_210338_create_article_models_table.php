@@ -14,7 +14,7 @@ class CreateArticleModelsTable extends Migration
     public function up()
     {
         Schema::create('article_models', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('title')->nullable();
             $table->string('uid')->nullable();
             $table->string('resume')->nullable();

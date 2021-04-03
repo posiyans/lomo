@@ -14,7 +14,7 @@ class CreateUserAnswerModelsTable extends Migration
     public function up()
     {
         Schema::create('user_answer_models', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->integer('question_id')->comment('id вопроса');
             $table->integer('answer_id')->comment('id ответа');
             $table->integer('user_id')->comment('id пользователя');

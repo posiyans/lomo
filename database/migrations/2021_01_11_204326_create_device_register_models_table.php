@@ -14,7 +14,7 @@ class CreateDeviceRegisterModelsTable extends Migration
     public function up()
     {
         Schema::create('device_register', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->integer('type_id')->comment('тип прибора');
             $table->integer('stead_id')->comment('к какому участку отностся');
             $table->integer('initial_data')->comment('начальные показания');

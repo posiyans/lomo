@@ -14,7 +14,7 @@ class CreateBillingReestrsTable extends Migration
     public function up()
     {
         Schema::create('billing_reestrs', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('title');
             $table->integer('type');
             $table->float('ratio_a');
