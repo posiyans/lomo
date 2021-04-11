@@ -5,10 +5,11 @@ namespace App\Models\Owner;
 use App\Models\MyModel;
 use App\Models\Stead;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class OwnerUserSteadModel extends MyModel
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     public function ownerFullName()
     {

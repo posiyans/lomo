@@ -53,6 +53,7 @@
           </td>
         </tr>
       </table>
+      <el-button type="danger" @click="deleteOwner">Удалить</el-button>
     </div>
     <el-dialog
       title="Добавить участок собственнику"
@@ -66,7 +67,7 @@
 </template>
 
 <script>
-import { getOwnerUserInfo, getOwnerFieldList, updateOwnerUserInfo } from '@/api/admin/owner/owner-api'
+import { getOwnerUserInfo, getOwnerFieldList, updateOwnerUserInfo, deleteOwnerUser } from '@/api/admin/owner/owner-api'
 import EditForm from './componets/EditForm'
 import AddSteadForm from './componets/AddsteadForm'
 
@@ -120,6 +121,26 @@ export default {
     this.getOwner()
   },
   methods: {
+    deleteOwner() {
+      this.$confirm('Вы точно хотите удалить собственника?', 'Винимание!', {
+        confirmButtonText: 'ДА!',
+        cancelButtonText: 'Нет',
+        type: 'error'
+      }).then(() => {
+        deleteOwnerUser(this.id)
+          .then(response => {
+            if (response.data.status) {
+              this.$message('Данные успешно удалены')
+              this.$router.push('/admin/owner/show-list')
+            } else {
+              if (response.data.data) {
+                this.$message.error('Ошибка удаления!')
+              }
+            }
+          })
+      }).catch(() => {
+      })
+    },
     closeAddForm() {
       this.addSteadFormShow = false
     },

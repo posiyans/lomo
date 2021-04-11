@@ -4,11 +4,12 @@ namespace App\Models\Owner;
 
 use App\Models\MyModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
 
 class OwnerUserModel extends MyModel
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     public $fields = [
         'surname' => [
@@ -94,11 +95,10 @@ class OwnerUserModel extends MyModel
     {
         $cacheName = 'ownerUser_'. $this->uid .'_Field_' . $name;
 
-        $data = Cache::tags('owner_user')->remember($cacheName, 6000, function () use ($name) {
+        $data = Cache::tags(['owner_user', 'owner_user_fields'])->remember($cacheName, 6000, function () use ($name) {
             $model = OwnerUserValueModel::where('property', $name)->where('uid', $this->uid)->first();
             if ($model) {
                 return $model->value;
-//                return '';
             }
             return false;
         });
@@ -108,6 +108,12 @@ class OwnerUserModel extends MyModel
         return $default;
     }
 
+    /**
+     * Установить занчения поля
+     * @param $property String имя
+     * @param $value String значение
+     * @return bool
+     */
     public function setValue($property, $value)
     {
         $model = OwnerUserValueModel::firstOrCreate(['uid'=>$this->uid, 'property'=>$property]);
@@ -116,6 +122,34 @@ class OwnerUserModel extends MyModel
             return true;
         }
         return false;
+    }
+
+    /**
+     * удалить поле
+     *
+     * @param $property String имя поля
+     * @return $this
+     */
+    public function delValue($property)
+    {
+        $models = OwnerUserValueModel::where('property', $property)->where('uid', $this->uid)->get();
+        foreach ($models as $model) {
+            $model->delete();
+        }
+        return $this;
+    }
+
+    /**
+     * улить все поля
+     *
+     * @return $this
+     */
+    public function delAllValue()
+    {
+        foreach ($this->fields as $key => $field) {
+            $this>$this->delValue($key);
+        }
+        return $this;
     }
 
     public function steads()

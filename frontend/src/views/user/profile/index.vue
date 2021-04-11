@@ -12,7 +12,7 @@
           ref="form"
           :model="form"
           label-width="220px"
-          :label-position="labelPosition"
+          label-position="top"
         >
           <el-form-item label="E-mail">
             <el-input v-model="user.email" type="email" :readonly="email_write" placeholder="Укажите свой электронный ящик" />
@@ -73,7 +73,7 @@
           </el-form-item>
           <el-form-item>
             <el-button type="primary" :disabled="!user.consent_personal" @click="saveData">Сохранить</el-button>
-            <el-button>Отменить</el-button>
+            <el-button @click="resetProfile">Отменить</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -160,6 +160,9 @@ export default {
       const $url = await this.$store.dispatch('user/loginVK')
       window.location = $url
     },
+    resetProfile() {
+      this.getInfo()
+    },
     saveData() {
       if (this.user.consent_personal) {
         const data = {
@@ -204,7 +207,7 @@ export default {
 <style scoped>
   .message{
     color: #bd0000;
-    padding-left: 50px;
+    margin-bottom: 1em;
   }
   .socalConfirmed{
     opacity: 0.3;

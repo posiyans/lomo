@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -43,12 +44,19 @@ class Controller extends BaseController
      * @param int $limit
      * @return array
      */
-    public function paginate($array, $page = 1, $limit = 20)
+    public function paginate($array, $limit = false, $page = false)
     {
+        if (!$page) {
+            $page = request()->get('page', 1);
+        }
+        if (!$limit) {
+            $limit = request()->get('limit', 20);
+        }
+
         if ($page < 1 ) {
             $page = 1;
         }
-        $offset = ($page - 1) * $limit;
-        return array_slice($array, $offset, $limit);
+        $this->offset = ($page - 1) * $limit;
+        return array_slice($array, $this->offset, $limit);
     }
 }

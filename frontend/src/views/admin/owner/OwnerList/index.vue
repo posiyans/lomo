@@ -8,6 +8,9 @@
       <el-button v-waves class="filter-container__item" type="success" icon="el-icon-plus" @click="addOwner">
         Добавить
       </el-button>
+      <el-button v-waves class="filter-container__item" type="success" icon="el-icon-download" @click="download">
+        XLSX
+      </el-button>
     </div>
 
     <ShowTable :list="list" :loading="loading" :offset="offset" />
@@ -16,10 +19,11 @@
 </template>
 
 <script>
-import { fetchOwnerUserList } from '@/api/admin/owner/owner-api'
+import { fetchOwnerUserList, fetchOwnerListInXlsx } from '@/api/admin/owner/owner-api'
 import waves from '@/directive/waves' // waves directive
 import ShowTable from './components/ShowTable'
 import LoadMore from '@/components/LoadMore'
+import { saveAs } from 'file-saver'
 
 export default {
   components: {
@@ -52,6 +56,13 @@ export default {
   mounted() {
   },
   methods: {
+    download() {
+      fetchOwnerListInXlsx(this.listQuery).then(response => {
+        const blob = new Blob([response.data])
+        saveAs(blob, 'Список.xlsx')
+        this.$message('Файл успешно скачан.')
+      })
+    },
     setOffset(val) {
       this.offset = val
     },
