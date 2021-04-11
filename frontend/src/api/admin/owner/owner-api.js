@@ -48,3 +48,20 @@ export function OwnerAddUser(data) {
   })
 }
 
+export function deleteOwnerUser(id) {
+  return request({
+    url: '/api/v1/admin/owner-resource/' + id,
+    method: 'delete'
+  })
+}
+
+export function fetchOwnerListInXlsx(params) {
+  request.defaults.timeout = ''
+  return request({
+    url: '/api/v1/admin/owner/list/download/xlsx',
+    method: 'get',
+    responseType: 'blob',
+    params: params
+  })
+}
+

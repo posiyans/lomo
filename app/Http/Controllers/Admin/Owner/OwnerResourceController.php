@@ -2,25 +2,32 @@
 
 namespace App\Http\Controllers\Admin\Owner;
 
+use App\Http\Controllers\Admin\AbstractAdminController;
+
+use App\Http\Controllers\Admin\Owner\Classes\DeleteOwnerClass;
+use App\Http\Controllers\Admin\Owner\Repository\GetOwnerListRepository;
+use App\Http\Controllers\Admin\Owner\Repository\GetOwnerRepository;
+use App\Http\Controllers\Admin\Owner\Request\OwnerListRequest;
+use App\Http\Controllers\Admin\Owner\Resource\AdminOwnerListResource;
+use App\Http\Controllers\Admin\Owner\Resource\OwnreListXlsxFileResource;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\Owner\AdminOwnerResource;
-use App\Http\Resources\Admin\Owner\AdminOwnerListResource;
 use App\Models\Owner\OwnerUserModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
 
-class OwnerResourceController extends Controller
+class OwnerResourceController extends AbstractAdminController
 {
 //    protected $query;
 
-    /**
-     * проверка на суперадмин или на доступ а админ панель
+    /**z
+     * проверка на суперадмин или на доступ к персоналке
      */
     public function __construct()
     {
+        parent::__construct();
         $this->middleware('ability:superAdmin,access-to-personal');
-//        $this->query = BillingInvoice::query();
     }
 
 
@@ -29,10 +36,10 @@ class OwnerResourceController extends Controller
      *
      * @param Request $request
      */
-    public function index(Request $request)
+    public function index(OwnerListRequest $request)
     {
-
-        $owner = new GetOwnerList($request);
+        $title = $request->get('title', false);
+        $owner = new GetOwnerListRepository($title);
         return [
             'status' => $owner->status,
             'data' => AdminOwnerListResource::collection($owner->rezult),
@@ -40,23 +47,16 @@ class OwnerResourceController extends Controller
             'offset' => $owner->offset,
             'error' => $owner->error
         ];
-
-//
-//        $data = Cache::remember('allOwnerList', 600 ,function () {
-//            $data = [];
-//            $owners = OwnerUserModel::all();
-//            foreach ($owners as $owner) {
-//                $data[$owner->fullName()] = $owner;
-//            }
-//            ksort($data);
-//            return array_values($data);
-//        });
-//        $total = count($data);
-        $rez = $this->paginate($data, $request->page, $request->limit);
-//
-//        return ['status' => true, 'total' => $total, 'data' => AdminOwnerListResource::collection($rez)];
+        $rez = $this->paginate($data);
     }
 
+
+    public function ownerListXlsx(OwnerListRequest $request)
+    {
+        $title = $request->get('title', false);
+        $owners = new GetOwnerListRepository($title, true);
+        return (new OwnreListXlsxFileResource())->render($owners->rezult);
+    }
 
 
     /**
@@ -77,12 +77,14 @@ class OwnerResourceController extends Controller
      */
     public function store(Request $request)
     {
-        // todo проверить на разрешение писать
-        $owner = new CreateOwnerController($request->post('user', []));
-        if (!$owner->error) {
-            return ['status' => true, 'data' => $owner->getOwnerId()];
+        if (\Auth::user()->hasPermission('write-personal-data')) {
+            $owner = new CreateOwnerController($request->post('user', []));
+            if (!$owner->error) {
+                return ['status' => true, 'data' => $owner->getOwnerId()];
+            }
+            return ['stats' => true, 'error' => $owner->error_message];
         }
-        return ['stats' => true, 'error' => $owner->error_message];
+         return ['status' => false];
     }
 
     /**
@@ -94,7 +96,10 @@ class OwnerResourceController extends Controller
     public function show($id, Request $request)
     {
         $owner = OwnerUserModel::find($id);
-        return  ['status' =>true, 'data' =>new AdminOwnerResource($owner)];
+        if ($owner) {
+            return ['status' => true, 'data' => new AdminOwnerResource($owner)];
+        }
+        return ['status' => false];
     }
 
     /**
@@ -117,29 +122,42 @@ class OwnerResourceController extends Controller
      */
     public function update($id, Request $request)
     {
-        $owner = OwnerUserModel::find($id);
-        $fields = $request->post('fields', false);
-        if ($owner && $fields && is_array($fields)) {
-            foreach ($fields as $key=>$value) {
-                if (isset($owner->fields[$key])) {
-                    if ($owner->setValue($key, $value)) {
-                        return ['status' => true];
-                    }
+        if (\Auth::user()->hasPermission('write-personal-data')) {
+            $owner = OwnerUserModel::find($id);
+            $fields = $request->post('fields', false);
+            if ($owner && $fields && is_array($fields)) {
+                foreach ($fields as $key => $value) {
+                    if (isset($owner->fields[$key])) {
+                        if ($owner->setValue($key, $value)) {
+                            return ['status' => true];
+                        }
 
+                    }
                 }
             }
         }
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Удалить собственника
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        //
+        if (\Auth::user()->hasPermission('write-personal-data')) {
+            try {
+                $owner = (new GetOwnerRepository())->findById($id);
+               $status = (new DeleteOwnerClass())->deleteOwner($owner);
+                if ($status) {
+                    return ['status' => true];
+                }
+            } catch (\Exception $e) {
+                \Log::error($e->getMessage());
+            }
+        }
+        return ['status' => false];
     }
 
 }

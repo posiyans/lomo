@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\Admin\Owner;
+namespace App\Http\Controllers\Admin\Owner\Resource;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -21,7 +21,6 @@ class AdminOwnerListResource extends JsonResource
         $data['fullName'] = $this->fullName();
         $data['email'] = $this->getValue('email', '');
         $data['general_phone'] = $this->getValue('general_phone', '');
-
         $steads = $this->steads;
         foreach ($steads as $stead) {
             $stead['number'] =  $stead->stead->number;
