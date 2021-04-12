@@ -77,7 +77,7 @@ class OwnerUserModel extends MyModel
 
     public function nameForMyRole()
     {
-        if (\Auth::user()->permissions('access-to-personal')) {
+        if (\Auth::user()->hasPermission('access-to-personal')) {
             return $this->fullName();
         } else {
             return $this->smallName();
