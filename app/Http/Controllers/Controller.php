@@ -11,6 +11,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+    protected $paginate_limit = 15;
 
     protected function response($var= [], $code=200){
         return response($var, $code)->header('Access-Control-Allow-Origin','*')->header('Access-Control-Allow-Headers','Origin, X-Requested-With, Content-Type, Accept, S-Token, U-Token ')->header('Access-Control-Allow-Methods','GET,HEAD,OPTIONS,POST,PUT');
@@ -58,5 +59,16 @@ class Controller extends BaseController
         }
         $this->offset = ($page - 1) * $limit;
         return array_slice($array, $this->offset, $limit);
+    }
+
+    /**
+     * установить лимит для пагинации
+     * @param false $limit
+     * @return $this
+     */
+    public function setPainateLimit($limit = false)
+    {
+        $this->paginate_limit = $limit;
+        return $this;
     }
 }

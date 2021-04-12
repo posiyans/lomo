@@ -41,7 +41,7 @@ class BalanceController extends Controller
         $data = GetListController::getData($request);
         $total = count($data);
         $offset = ($request->page - 1) * $request->limit;
-        $steads = $this->paginate($data, $request->page, $request->limit);
+        $steads = $this->paginate($data, $request->limit, $request->page);
         return ['status' => true, 'total' => $total, 'offset' => $offset, 'data' => AdminBalansSteadResource::collection($steads)];
 
     }
@@ -116,7 +116,7 @@ class BalanceController extends Controller
         }
         krsort($balans);
         $rezult['total'] = count($balans);
-        $rezult['data'] = array_values($this->paginate($balans, $request->page, $request->limit));
+        $rezult['data'] = array_values($this->paginate($balans, $request->limit, $request->page));
         $rezult['status'] = true;
 
         return $rezult;

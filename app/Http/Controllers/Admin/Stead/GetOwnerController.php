@@ -34,7 +34,7 @@ class GetOwnerController extends Controller
         if ($stead) {
             $owners = $stead->owners;
         }
-        return ['status' => true, 'data' => AdminOwnerSteadResource::collection($owners)];
+       return ['status' => true, 'data' => AdminOwnerSteadResource::collection($owners)];
 
     }
 

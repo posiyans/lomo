@@ -1,27 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin\Stead;
 
+use App\Http\Controllers\Admin\AbstractAdminController;
+
+use App\Http\Controllers\Admin\Stead\Repositories\SteadListRepository;
 use App\Http\Resources\Admin\AdminSteadResource;
-use App\Http\Resources\AppealResource;
-use App\Http\Resources\ConrtollerResource;
-use App\Http\Resources\SteadResource;
-use App\Models\AppealModel;
+use App\Http\Controllers\Admin\Stead\Resources\AdminSteadListResource;
 use App\Models\Stead;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
-class AdminSteadController extends Controller
+class AdminSteadResourceController extends AbstractAdminController
 {
-
-    /**
-     * проверка на суперадмин или на доступ а админ панель
-     */
-    public function __construct()
-    {
-        $this->middleware('ability:superAdmin,access-admin-panel');
-    }
-
 
     /**
      * Display a listing of the resource.
@@ -30,12 +20,16 @@ class AdminSteadController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Stead::query();
-        if(isset($request->title) && !empty($request->title)){
-            $query->where('number', 'LIKE', '%'.$request->title.'%');
-        }
-        $steads = $query->paginate($request->limit);
-        return SteadResource::collection($steads);
+
+        $find = $request->get('title', false);
+        $steads = (new SteadListRepository())->setPainateLimit($request->limit)->findSteads($find);
+
+//        $query = Stead::query();
+//        if(isset($request->title) && !empty($request->title)){
+//            $query->where('number', 'LIKE', '%'.$request->title.'%');
+//        }
+//        $steads = $query->paginate($request->limit);
+        return AdminSteadListResource::collection($steads);
     }
 
     /**
