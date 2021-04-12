@@ -75,6 +75,15 @@ class OwnerUserModel extends MyModel
         return $str;
     }
 
+    public function nameForMyRole()
+    {
+        if (\Auth::user()->permissions('access-to-personal')) {
+            return $this->fullName();
+        } else {
+            return $this->smallName();
+        }
+    }
+
     /**
      * отношения со свойствами
      *

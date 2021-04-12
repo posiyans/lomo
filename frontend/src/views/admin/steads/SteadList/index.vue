@@ -1,11 +1,12 @@
 <template>
   <div class="app-container">
+    <div class="page-title">Участки</div>
     <div class="filter-container">
-      <el-input v-model="listQuery.title" placeholder="Найти" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.title" placeholder="Найти" style="width: 200px;" class="filter-container__item" @keyup.enter.native="handleFilter" />
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         Показать
       </el-button>
-      <el-button v-if="false" v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
+      <el-button v-if="false" v-waves :loading="downloadLoading" class="filter-container__item" type="primary" icon="el-icon-download" @click="handleDownload">
         Export
       </el-button>
     </div>
@@ -29,12 +30,19 @@
           <span>{{ row.size }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="device === 'desktop'" label="Собственник" align="center" min-width="150px">
+      <el-table-column v-if="device === 'desktop'" label="Собственник" width="350px">
         <template slot-scope="{row}">
           <div>
             <div v-for="item in row.owners" :key="item.uid">
-              {{ item.fullName }}
+              {{ item.name }}
             </div>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column v-if="device === 'desktop'" label="Баланс" align="center" width="120px">
+        <template slot-scope="{row}">
+          <div :class="{'dark-red': row.balans < 0}">
+            {{ row.balans }}
           </div>
         </template>
       </el-table-column>

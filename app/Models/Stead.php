@@ -39,23 +39,23 @@ class Stead extends MyModel
     {
         return $this->hasMany(OwnerUserSteadModel::class, 'stead_id', 'id');
     }
-    /**
-     * отношение с пользователем
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function user()
-    {
-        return $this->hasOne(User::class, 'id', 'user_id');
-    }
-
-    public function userFullName()
-    {
-        if ($this->user){
-            $this->userFullName = $this->user->fullName();
-            return $this->userFullName;
-        }
-        return '';
-    }
+//    /**
+//     * отношение с пользователем
+//     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+//     */
+//    public function user()
+//    {
+//        return $this->hasOne(User::class, 'id', 'user_id');
+//    }
+//
+//    public function userFullName()
+//    {
+//        if ($this->user){
+//            $this->userFullName = $this->user->fullName();
+//            return $this->userFullName;
+//        }
+//        return '';
+//    }
 
     /**
      * получить показания приборов по участку
@@ -82,7 +82,7 @@ class Stead extends MyModel
     /**
      * Сохрание данных об участке
      * todo передалать создать сущьность владелец
-     *
+     * @deprecated
      * @param $request
      */
     public function saveData($request){

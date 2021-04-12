@@ -15,6 +15,11 @@ class OwnerUserSteadModel extends MyModel
     {
         return $this->owner->fullName();
     }
+    public function nameForMyRole()
+    {
+        return $this->owner->nameForMyRole();
+    }
+
 
     public function owner()
     {
