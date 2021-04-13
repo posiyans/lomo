@@ -6,14 +6,13 @@
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         Показать
       </el-button>
-      <el-button v-if="false" v-waves :loading="downloadLoading" class="filter-container__item" type="primary" icon="el-icon-download" @click="handleDownload">
-        Export
+      <el-button v-waves :loading="downloadLoading" class="filter-container__item" type="primary" icon="el-icon-download" @click="handleDownload">
+        XLSX
       </el-button>
     </div>
 
     <el-table
       :key="tableKey"
-      v-loading="listLoading"
       :data="list"
       border
       fit
@@ -71,7 +70,7 @@
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+    <LoadMore :key="key" :list-query="listQuery" :func="func" @setList="setList" />
 
     <el-dialog title="Добавить примечание" :visible.sync="dialogNoteVisible" width="80%">
       <el-form :label-position="labelPosition" label-width="150px">
@@ -130,17 +129,17 @@
 </template>
 
 <script>
-import { fetchSteadList, updateStead } from '@/api/admin/stead'
+import { fetchSteadList, updateStead, fetchSteadListInXlsx } from '@/api/admin/stead'
 import waves from '@/directive/waves' // waves directive
-import { parseTime } from '@/utils'
-import Pagination from '@/components/Pagination'
 import { mapState } from 'vuex'
 import { fetchList } from '@/api/admin/setting/rate'
 import { getReceipt } from '@/api/admin/receipt'
 import { saveAs } from 'file-saver'
+import LoadMore from '@/components/LoadMore'
+
 export default {
   name: 'AdminSteadList',
-  components: { Pagination },
+  components: { LoadMore },
   directives: { waves },
   filters: {
     totalFilter(size, rate) {
@@ -175,9 +174,11 @@ export default {
       receiptType: 2,
       rate: [],
       tableKey: 0,
-      list: null,
+      list: [],
       total: 0,
+      key: 1,
       listLoading: true,
+      func: fetchSteadList,
       listQuery: {
         page: 1,
         limit: 20,
@@ -218,6 +219,9 @@ export default {
     this.getList()
   },
   methods: {
+    setList(val) {
+      this.list = val
+    },
     receive() {
       const data = {
         receipt: this.receiptType,
@@ -241,17 +245,9 @@ export default {
       this.receiptData = row
       this.dialogReceipShow = true
     },
-    getList() {
-      this.listLoading = true
-      fetchSteadList(this.listQuery).then(response => {
-        this.list = response.data.data
-        this.total = response.data.meta.total
-        this.listLoading = false
-      })
-    },
     handleFilter() {
       this.listQuery.page = 1
-      this.getList()
+      this.key++
     },
     AddNoteShow(row) {
       this.note_id = row.id
@@ -307,32 +303,12 @@ export default {
       }
     },
     handleDownload() {
-      this.downloadLoading = true
-      import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['timestamp', 'title', 'type', 'importance', 'status']
-        const filterVal = ['timestamp', 'title', 'type', 'importance', 'status']
-        const data = this.formatJson(filterVal)
-        excel.export_json_to_excel({
-          header: tHeader,
-          data,
-          filename: 'table-list'
-        })
-        this.downloadLoading = false
+      fetchSteadListInXlsx(this.listQuery).then(response => {
+        const blob = new Blob([response.data])
+        saveAs(blob, 'Список.xlsx')
+        this.$message('Файл успешно скачан.')
       })
-    },
-    formatJson(filterVal) {
-      return this.list.map(v => filterVal.map(j => {
-        if (j === 'timestamp') {
-          return parseTime(v[j])
-        } else {
-          return v[j]
-        }
-      }))
     }
-    // getSortClass: function(key) {
-    //   const sort = this.listQuery.sort
-    //   return sort === `+${key}` ? 'ascending' : 'descending'
-    // }
   }
 }
 </script>

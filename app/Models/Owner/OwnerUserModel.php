@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Cache;
 class OwnerUserModel extends MyModel
 {
     use HasFactory, SoftDeletes;
-
+    // перенести в базу
     public $fields = [
         'surname' => [
             'label' => 'Фамилия',
@@ -149,7 +149,7 @@ class OwnerUserModel extends MyModel
     }
 
     /**
-     * улить все поля
+     * удалить все поля
      *
      * @return $this
      */
