@@ -29,3 +29,13 @@ export function getOwnerForStead(id) {
     method: 'get'
   })
 }
+
+export function fetchSteadListInXlsx(params) {
+  request.defaults.timeout = ''
+  return request({
+    url: '/api/v1/admin/stead/get-file/xlsx',
+    method: 'get',
+    responseType: 'blob',
+    params: params
+  })
+}
