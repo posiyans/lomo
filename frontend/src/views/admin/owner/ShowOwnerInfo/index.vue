@@ -42,9 +42,20 @@
           <td>
             <div class="relative">
               <div class="stead-group">
-                <div v-for="stead in form.steads" :key="stead.id" class="stead-group__button" @click="openSteadInfo(stead.stead_id)">
-                  {{ stead.number }} {{ stead.proportion | propFilter }}
+                <div
+                  v-for="stead in form.steads"
+                  :key="stead.id"
+                  class="flex"
+                  style="max-width: 120px"
+                >
+                  <div class="stead-group__button" @click="openSteadInfo(stead.stead_id)">
+                    {{ stead.number }} {{ stead.proportion | propFilter }}
+                  </div>
+                  <div class="stead-group__edit" @click="editStead(stead)">
+                    <i class="el-icon-edit dark-red" />
+                  </div>
                 </div>
+
               </div>
               <div class="table-line-setting-icon">
                 <i class="el-icon-edit-outline" />
@@ -121,6 +132,9 @@ export default {
     this.getOwner()
   },
   methods: {
+    editStead(stead) {
+      console.log(stead)
+    },
     deleteOwner() {
       this.$confirm('Вы точно хотите удалить собственника?', 'Винимание!', {
         confirmButtonText: 'ДА!',
@@ -255,6 +269,29 @@ export default {
   }
   .stead-group {
     justify-content: center;
+  }
+  .stead-group__edit {
+    margin-left: 0.2em;
+    cursor: pointer;
+    border: 1px solid #357edd;
+    border-radius: 0.25rem;
+    /*background-color: #cdecff;*/
+    margin-bottom: 0.25rem;
+    min-width: 35px;
+    max-width: 40px;
+    text-align: center;
+  }
+  .stead-group__edit:hover {
+    font-size: 1.25em;
+    /*margin-left: 0.2em;*/
+    /*cursor: pointer;*/
+    /*border: 1px solid #357edd;*/
+    /*border-radius: 0.25rem;*/
+    background-color: #cdecff;
+    /*margin-bottom: 0.25rem;*/
+    /*min-width: 35px;*/
+    /*max-width: 40px;*/
+    /*text-align: center;*/
   }
   .stead-group__button {
     cursor: pointer;

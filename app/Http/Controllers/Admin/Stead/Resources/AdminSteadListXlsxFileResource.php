@@ -31,7 +31,7 @@ class AdminSteadListXlsxFileResource extends AbstaractXlsxFile
         $row = 1;
         $sheet->setCellValue('A'.$row, '№');
         $sheet->setCellValue('B'.$row, 'Участок');
-        $sheet->setCellValue('C'.$row, 'Размер');
+        $sheet->setCellValue('C'.$row, 'Размер, кв.м');
         $sheet->setCellValue('D'.$row, 'Собственник');
         $sheet->setCellValue('E'.$row, 'Баланс');
         $this->setCenter('E');
@@ -44,10 +44,20 @@ class AdminSteadListXlsxFileResource extends AbstaractXlsxFile
         $row = 2;
         foreach ($items as $item) {
             $owners = '';
+            $owner_count = 0;
             foreach ($item->owners as $owner) {
+                if (strlen($owners) > 0 ) {
+                    $owners .= ',' . "\n";
+                }
                 $owners .= $owner->owner->nameForMyRole();
+                if ($owner->proportion != 100) {
+                    $owners .= ' ('. $owner->proportion . '%)';
+                }
+                $owner_count++;
             }
-
+            if ($owner_count > 1) {
+                $this->spreadsheet->getActiveSheet()->getRowDimension($row)->setRowHeight(14 * $owner_count);
+            }
             $sheet->setCellValue('A'.$row, $row - 1);
             $sheet->setCellValue('B'.$row, $item->number);
             $sheet->setCellValue('C'.$row, $item->size);

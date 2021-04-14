@@ -70,7 +70,7 @@ class OwnerUserModel extends MyModel
             $str .= ' ' . mb_substr($this->getValue('name', ''), 0, 1). '.';
         }
         if (strlen($this->getValue('middle_name', '')) > 0) {
-            $str .= ' ' . mb_substr($this->getValue('middle_name', ''), 0, 1). '.';
+            $str .= mb_substr($this->getValue('middle_name', ''), 0, 1). '.';
         }
         return $str;
     }
