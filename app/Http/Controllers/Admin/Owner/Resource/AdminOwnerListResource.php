@@ -18,9 +18,13 @@ class AdminOwnerListResource extends JsonResource
         $data = [];
         $data['uid'] = $this->uid;
         $data['id'] = $this->id;
-        $data['fullName'] = $this->fullName();
-        $data['email'] = $this->getValue('email', '');
-        $data['general_phone'] = $this->getValue('general_phone', '');
+        $data['fullName'] = $this->nameForMyRole();
+        $data['email'] = '';
+        $data['general_phone'] = '';
+        if (\Auth::user()->hasPermission('access-to-personal')) {
+            $data['email'] = $this->getValue('email', '');
+            $data['general_phone'] = $this->getValue('general_phone', '');
+        }
         $steads = $this->steads;
         foreach ($steads as $stead) {
             $stead['number'] =  $stead->stead->number;

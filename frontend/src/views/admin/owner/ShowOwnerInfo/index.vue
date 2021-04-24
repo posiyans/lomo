@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="page-title">Собственник</div>
-    <div class="pt3">
+    <div v-if="id" class="pt3">
       <table :key="key">
         <tr>
           <th class="tl" style="width: 180px;">Поле</th>
@@ -20,7 +20,7 @@
                 <!--                <el-input v-model="form[field.name]" size="mini" :placeholder="field.label"></el-input>-->
                 <EditForm v-model="form[field.name]" :field="field" :type="field.type" :label="field.label" :mask="field.mask" @close="close" />
               </div>
-              <div v-if="!field.edit" class="table-line-setting-icon" @click="editField(field)">
+              <div v-if="editable && !field.edit" class="table-line-setting-icon" @click="editField(field)">
                 <!--                <i v-if="field.edit" class="el-icon-check dark-green" />-->
                 <!--                <i v-if="field.edit" class="el-icon-close dark-red" />-->
                 <i class="el-icon-edit-outline" />
@@ -34,7 +34,7 @@
               <div>
                 Участок
               </div>
-              <div class="table-line-setting-icon" @click="AddSteadShow">
+              <div v-if="editable" class="table-line-setting-icon" @click="AddSteadShow">
                 <i class="el-icon-circle-plus-outline dark-green" />
               </div>
             </div>
@@ -54,7 +54,7 @@
                     <div class="stead-group__button" @click="openSteadInfo(stead.stead_id)">
                       {{ stead.number }} {{ stead.proportion | propFilter }}
                     </div>
-                    <div class="stead-group__edit" @click="delStead(stead)">
+                    <div v-if="editable" class="stead-group__edit" @click="delStead(stead)">
                       <i class="el-icon-delete dark-red" />
                     </div>
                   </div>
@@ -65,7 +65,7 @@
           </td>
         </tr>
       </table>
-      <el-button type="danger" @click="deleteOwner">Удалить</el-button>
+      <el-button v-if="editable" type="danger" @click="deleteOwner">Удалить</el-button>
     </div>
     <el-dialog
       title="Добавить участок собственнику"
@@ -125,12 +125,19 @@ export default {
   computed: {
     fullname() {
       return this.form.surname + ' ' + this.form.name + ' ' + this.form.middle_name
+    },
+    editable() {
+      return this.$store.state.user.roles.indexOf('write-personal-data') !== -1
     }
   },
   created() {
-    this.id = this.$route.params && this.$route.params.id
-    this.getFields()
-    this.getOwner()
+    if (this.$store.state.user.roles.indexOf('access-to-personal') !== -1) {
+      this.id = this.$route.params && this.$route.params.id
+      this.getFields()
+      this.getOwner()
+    } else {
+      this.$message.error('У вас нет доступа у ПД')
+    }
   },
   methods: {
     delStead(stead) {

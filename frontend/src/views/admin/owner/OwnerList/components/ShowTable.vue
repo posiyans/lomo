@@ -7,7 +7,7 @@
       fit
       size="mini"
       highlight-current-row
-      style="width: 100%;"
+      :style="fullTable ? 'width: 100%;' : 'width: 500px;'"
     >
       <el-table-column v-if="!mobile" label="№" align="center" width="40">
         <template slot-scope="scope">
@@ -33,20 +33,20 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column v-if="!mobile" label="Телефон" align="center" width="150px">
+      <el-table-column v-if="!mobile && fullTable" label="Телефон" align="center" width="150px">
         <template slot-scope="{row}">
           <span lass="link-type">
             {{ row.general_phone }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="!mobile" label="Email" align="center" width="250px">
+      <el-table-column v-if="!mobile && fullTable" label="Email" align="center" width="250px">
         <template slot-scope="{row}">
           <span>
             {{ row.email }}
           </span>
         </template>
       </el-table-column>
-      <el-table-column label="Подробнее" align="center" class-name="">
+      <el-table-column v-if="fullTable" label="Подробнее" align="center" class-name="">
         <template slot-scope="{ row }">
           <div class="owner-info-icon" @click="showInfo(row)">
             <i class="el-icon-info" />
@@ -127,6 +127,9 @@ export default {
         fio += this.temp.middle_name
       }
       return fio
+    },
+    fullTable() {
+      return this.$store.state.user.roles.indexOf('access-to-personal') !== -1
     }
   },
   mounted() {
