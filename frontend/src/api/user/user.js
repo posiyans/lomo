@@ -54,12 +54,18 @@ export function passwordReset(data) {
     data: data
   })
 }
-passwordChange
 
 export function passwordChange(data) {
   return request({
     url: '/api/v1/password/reset',
     method: 'post',
     data: data
+  })
+}
+
+export function getToken() {
+  return request({
+    url: 'api/v1/sanctum/csrf-cookie',
+    method: 'get'
   })
 }
