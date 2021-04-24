@@ -55,6 +55,13 @@ export function deleteOwnerUser(id) {
   })
 }
 
+export function deleteSteadFromOwnerUser(id) {
+  return request({
+    url: '/api/v1/admin/owner/delete-stead/' + id,
+    method: 'delete'
+  })
+}
+
 export function fetchOwnerListInXlsx(params) {
   request.defaults.timeout = ''
   return request({

@@ -16,7 +16,8 @@ class AdminOwnerSteadResource extends JsonResource
     {
 //        $data = parent::toArray($request);
         $data = [];
-        $data['id'] = $this->owner->id;
+        $data['id'] = $this->id;
+        $data['owner_id'] = $this->owner->id;
         $data['owner_uid'] = $this->owner_uid;
         $data['owner_fullName'] = $this->ownerFullName();
         $data['proportion'] = $this->proportion;

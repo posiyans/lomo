@@ -9,8 +9,8 @@ use Socialite;
 use Cache;
 use App\Http\Controllers\Controller;
 
-define('VK_API_ENDPOINT', 'https://api.vk.com/method/');
-define('VK_API_VERSION', '5.103'); //Используемая версия API
+//define('VK_API_ENDPOINT', 'https://api.vk.com/method/');
+//define('VK_API_VERSION', '5.103'); //Используемая версия API
 
 class  MapController extends Controller
 {

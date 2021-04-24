@@ -1,8 +1,8 @@
 import axios from 'axios'
 import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
-import { getToken } from '@/utils/auth'
-import Cookies from "js-cookie"
+// import { getToken } from '@/utils/auth'
+// import Cookies from 'js-cookie'
 
 // create an axios instance
 const service = axios.create({
@@ -13,6 +13,7 @@ const service = axios.create({
 // request interceptor
 service.interceptors.request.use(
   config => {
+    // console.log('AXIOS')
     // do something before request is sent
     // config.headers['X-Requested-With'] = 'XMLHttpRequest'
     // config.headers['X-Token'] = 'sdfsdfsdfsdfds'
@@ -50,6 +51,7 @@ service.interceptors.response.use(
    */
   response => {
     const res = response
+    // console.log('otvet')
     // if the custom code is not 20000, it is judged as an error.
     if (res.status < 200 || res.status > 299) {
       Message({
