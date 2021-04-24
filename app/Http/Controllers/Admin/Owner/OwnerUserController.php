@@ -36,32 +36,31 @@ class OwnerUserController extends Controller
         try {
             $this->checkDubliсate($stead_id, $owner_id);
             DB::beginTransaction();
-
+            $all_proportion = 0;
             if (is_array($oldOwnerStead)) {
-                $this->setOldProportion($oldOwnerStead);
+                $all_proportion += $this->setOldProportion($oldOwnerStead);
             }
 
 
             if ($stead_id && $owner_id && $proportion) {
                 $stead = Stead::find($stead_id);
                 if ($stead) {
-                    if ($this->checkUniqUserStead($stead_id, $proportion, $oldOwnerStead)) {
-                        if (($owner = OwnerUserModel::find($owner_id))) {
-                            $userStead = new  OwnerUserSteadModel();
-                            $userStead->owner_uid = $owner->uid;
-                            $userStead->stead_id = $stead->id;
-                            $userStead->proportion = $proportion;
-                            if ($userStead->logAndSave('Добавлен участок собственнику')) {
-                                DB::commit();
-                                return ['status' => true, 'data' => $userStead];
-                            }
+                    $this->checkUniqUserStead($stead_id, $proportion, $oldOwnerStead);
+                    if (($owner = OwnerUserModel::find($owner_id))) {
+                        $userStead = new  OwnerUserSteadModel();
+                        $userStead->owner_uid = $owner->uid;
+                        $userStead->stead_id = $stead->id;
+                        $userStead->proportion = $proportion;
+                        if ($userStead->logAndSave('Добавлен участок собственнику')) {
+                            DB::commit();
+                            return ['status' => true, 'data' => $userStead];
                         }
                     }
                 }
             }
         } catch (\Exception $e) {
             DB::rollBack();
-            return ['status' => false, 'error' => $this->error, 'code'=> $this->er_code, 'data' => $this->data];
+            return ['status' => false, 'error' => $e->getMessage(), 'code'=> $this->er_code, 'data' => $this->data];
         }
     }
 
@@ -74,17 +73,20 @@ class OwnerUserController extends Controller
      * @return bool
      * @throws \Exception
      */
-    public function checkUniqUserStead($stead_id, $proportion, $old=[])
+    public function checkUniqUserStead($stead_id, $proportion, $old= [] )
     {
+
         $oldData = [];
         foreach ($old as $i) {
             $oldData[$i['id']] = $i['proportion'];
         }
         $userSteads = OwnerUserSteadModel::where('stead_id', $stead_id)->get();
+
         foreach ($userSteads as $item) {
             if (isset($oldData[$item->id])) {
                 $item->proportion = $oldData[$item->id];
                 $item->logAndSave('Смена доли владения');
+                $proportion +=  $oldData[$item->id];
             } else {
                 $proportion +=  $item->proportion;
             }
@@ -92,25 +94,28 @@ class OwnerUserController extends Controller
         if ($proportion <= 100) {
             return true;
         }
-        $this->data = $userSteads;
-        $this->error = 'Общая доля не может превышать 100%';
+//            $this->data = $userSteads;
+//            $this->error = 'Общая доля не может превышать 100%';
         $this->er_code = 100;
-        throw new \Exception();
+        throw new \Exception('Общая доля не может превышать 100%' . $proportion);
     }
 
     /**
-     * установкаа долей у других собственников
+     * установка новых долей у других собственников
      *
      * @param array $owners
      */
     public function setOldProportion(array $owners)
     {
+        $all_propotion = 0;
         foreach ($owners as $item) {
-            if ($owner = OwnerUserSteadModel::find($item['id'])) {
+            if (($owner = OwnerUserSteadModel::find($item['id']))) {
                 $owner->proportion = $item['proportion'];
+                $all_propotion += $owner->proportion;
                 $owner->logAndSave('Смена доли собстванности');
             }
         }
+        return $all_propotion;
     }
 
     /**

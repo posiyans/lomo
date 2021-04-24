@@ -3,7 +3,11 @@
 namespace App\Providers;
 
 use App\Models\Owner\OwnerUserModel;
+use App\Models\Owner\OwnerUserSteadModel;
+use App\Models\Owner\OwnerUserValueModel;
 use App\Observers\OwnerUserObserver;
+use App\Observers\OwnerUserSteadObserver;
+use App\Observers\OwnerUserValueObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -30,5 +34,7 @@ class EventServiceProvider extends ServiceProvider
     public function boot()
     {
         OwnerUserModel::observe(OwnerUserObserver::class);
+        OwnerUserSteadModel::observe(OwnerUserSteadObserver::class);
+        OwnerUserValueModel::observe(OwnerUserValueObserver::class);
     }
 }

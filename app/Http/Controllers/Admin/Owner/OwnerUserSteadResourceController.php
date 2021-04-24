@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Admin\Owner;
 use App\Http\Controllers\Admin\AbstractAdminController;
 
 use App\Http\Controllers\Admin\Owner\Classes\DeleteOwnerClass;
+use App\Http\Controllers\Admin\Owner\Classes\DeleteOwnerUserStead;
 use App\Http\Controllers\Admin\Owner\Repository\GetOwnerListRepository;
 use App\Http\Controllers\Admin\Owner\Repository\GetOwnerRepository;
+use App\Http\Controllers\Admin\Owner\Repository\OwnerUserSteadRepository;
 use App\Http\Controllers\Admin\Owner\Request\OwnerListRequest;
 use App\Http\Controllers\Admin\Owner\Resource\AdminOwnerListResource;
 use App\Http\Controllers\Admin\Owner\Resource\OwnreListXlsxFileResource;
@@ -17,7 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
 
-class OwnerResourceController extends AbstractAdminController
+class OwnerUserSteadResourceController extends AbstractAdminController
 {
 //    protected $query;
 
@@ -38,24 +40,7 @@ class OwnerResourceController extends AbstractAdminController
      */
     public function index(OwnerListRequest $request)
     {
-        $title = $request->get('title', false);
-        $owner = new GetOwnerListRepository($title);
-        return [
-            'status' => $owner->status,
-            'data' => AdminOwnerListResource::collection($owner->rezult),
-            'total' => $owner->total,
-            'offset' => $owner->offset,
-            'error' => $owner->error
-        ];
-        $rez = $this->paginate($data);
-    }
 
-
-    public function ownerListXlsx(OwnerListRequest $request)
-    {
-        $title = $request->get('title', false);
-        $owners = new GetOwnerListRepository($title, true);
-        return (new OwnreListXlsxFileResource())->render($owners->rezult);
     }
 
 
@@ -77,14 +62,6 @@ class OwnerResourceController extends AbstractAdminController
      */
     public function store(Request $request)
     {
-        if (\Auth::user()->hasPermission('write-personal-data')) {
-            $owner = new CreateOwnerController($request->post('user', []));
-            if (!$owner->error) {
-                return ['status' => true, 'data' => $owner->getOwnerId()];
-            }
-            return ['stats' => true, 'error' => $owner->error_message];
-        }
-         return ['status' => false];
     }
 
     /**
@@ -95,11 +72,7 @@ class OwnerResourceController extends AbstractAdminController
      */
     public function show($id, Request $request)
     {
-        $owner = OwnerUserModel::find($id);
-        if ($owner) {
-            return ['status' => true, 'data' => new AdminOwnerResource($owner)];
-        }
-        return ['status' => false];
+
     }
 
     /**
@@ -122,20 +95,7 @@ class OwnerResourceController extends AbstractAdminController
      */
     public function update($id, Request $request)
     {
-        if (\Auth::user()->hasPermission('write-personal-data')) {
-            $owner = OwnerUserModel::find($id);
-            $fields = $request->post('fields', false);
-            if ($owner && $fields && is_array($fields)) {
-                foreach ($fields as $key => $value) {
-                    if (isset($owner->fields[$key])) {
-                        if ($owner->setValue($key, $value)) {
-                            return ['status' => true];
-                        }
 
-                    }
-                }
-            }
-        }
     }
 
     /**
@@ -148,13 +108,14 @@ class OwnerResourceController extends AbstractAdminController
     {
         if (\Auth::user()->hasPermission('write-personal-data')) {
             try {
-                $owner = (new GetOwnerRepository())->findById($id);
-               $status = (new DeleteOwner())->deleteOwner($owner);
+                $ownerStead = (new OwnerUserSteadRepository())->findById($id);
+               $status = (new DeleteOwnerUserStead())->deleteRelations($ownerStead);
                 if ($status) {
                     return ['status' => true];
                 }
             } catch (\Exception $e) {
                 \Log::error($e->getMessage());
+                return ['status' => false, 'error' => $e->getMessage()];
             }
         }
         return ['status' => false];

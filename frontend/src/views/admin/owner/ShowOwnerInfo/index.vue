@@ -45,20 +45,21 @@
                 <div
                   v-for="stead in form.steads"
                   :key="stead.id"
-                  class="flex"
-                  style="max-width: 120px"
                 >
-                  <div class="stead-group__button" @click="openSteadInfo(stead.stead_id)">
-                    {{ stead.number }} {{ stead.proportion | propFilter }}
-                  </div>
-                  <div class="stead-group__edit" @click="editStead(stead)">
-                    <i class="el-icon-edit dark-red" />
+                  <div
+                    class="flex ba mt1 br2 pa1 inline-flex "
+                    style=""
+                  >
+
+                    <div class="stead-group__button" @click="openSteadInfo(stead.stead_id)">
+                      {{ stead.number }} {{ stead.proportion | propFilter }}
+                    </div>
+                    <div class="stead-group__edit" @click="delStead(stead)">
+                      <i class="el-icon-delete dark-red" />
+                    </div>
                   </div>
                 </div>
 
-              </div>
-              <div class="table-line-setting-icon">
-                <i class="el-icon-edit-outline" />
               </div>
             </div>
           </td>
@@ -78,7 +79,7 @@
 </template>
 
 <script>
-import { getOwnerUserInfo, getOwnerFieldList, updateOwnerUserInfo, deleteOwnerUser } from '@/api/admin/owner/owner-api'
+import { getOwnerUserInfo, getOwnerFieldList, updateOwnerUserInfo, deleteOwnerUser, deleteSteadFromOwnerUser } from '@/api/admin/owner/owner-api'
 import EditForm from './componets/EditForm'
 import AddSteadForm from './componets/AddsteadForm'
 
@@ -132,8 +133,26 @@ export default {
     this.getOwner()
   },
   methods: {
-    editStead(stead) {
-      console.log(stead)
+    delStead(stead) {
+      this.$confirm('Вы точно хотите удалить участкок у собственника?', 'Внимание', {
+        confirmButtonText: 'Да',
+        cancelButtonText: 'Нет',
+        type: 'error'
+      }).then(() => {
+        deleteSteadFromOwnerUser(stead.id)
+          .then(response => {
+            if (response.data.status) {
+              this.$message('Участок удален')
+              // this.getFields()
+              this.getOwner()
+            } else {
+              if (response.data.error) {
+                this.$message.error(response.data.error)
+              }
+            }
+          })
+      }).catch(() => {
+      })
     },
     deleteOwner() {
       this.$confirm('Вы точно хотите удалить собственника?', 'Винимание!', {
@@ -157,6 +176,8 @@ export default {
     },
     closeAddForm() {
       this.addSteadFormShow = false
+      // this.getFields()
+      this.getOwner()
     },
     openSteadInfo(id) {
       this.$router.push('/admin/bookkeping/billing_balance_stead/' + id)
@@ -200,6 +221,7 @@ export default {
       getOwnerFieldList()
         .then(response => {
           if (response.data.status) {
+            this.fields = []
             for (const i in response.data.data) {
               const item = response.data.data[i]
               item.name = i
@@ -276,7 +298,7 @@ export default {
     border: 1px solid #357edd;
     border-radius: 0.25rem;
     /*background-color: #cdecff;*/
-    margin-bottom: 0.25rem;
+    /*margin-bottom: 0.25rem;*/
     min-width: 35px;
     max-width: 40px;
     text-align: center;
@@ -298,9 +320,9 @@ export default {
     border: 1px solid #357edd;
     border-radius: 0.25rem;
     background-color: #cdecff;
-    margin-bottom: 0.25rem;
-    min-width: 65px;
-    max-width: 80px;
+    /*margin-bottom: 0.25rem;*/
+    min-width: 85px;
+    max-width: 100px;
     text-align: center;
   }
   .stead-group__button:hover {

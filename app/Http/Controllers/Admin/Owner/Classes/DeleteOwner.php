@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 
-class DeleteOwnerClass extends Controller
+class DeleteOwner extends Controller
 {
 
 
