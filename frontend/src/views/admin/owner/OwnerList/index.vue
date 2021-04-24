@@ -5,7 +5,7 @@
       <el-button v-waves class="filter-container__item" type="primary" icon="el-icon-search" @click="handleFilter">
         Показать
       </el-button>
-      <el-button v-waves class="filter-container__item" type="success" icon="el-icon-plus" @click="addOwner">
+      <el-button v-if="editable" v-waves class="filter-container__item" type="success" icon="el-icon-plus" @click="addOwner">
         Добавить
       </el-button>
       <el-button v-waves class="filter-container__item" type="success" icon="el-icon-download" @click="download">
@@ -51,6 +51,9 @@ export default {
   computed: {
     mobile() {
       return this.$store.state.app.device === 'mobile'
+    },
+    editable() {
+      return this.$store.state.user.roles.indexOf('write-personal-data') !== -1
     }
   },
   mounted() {

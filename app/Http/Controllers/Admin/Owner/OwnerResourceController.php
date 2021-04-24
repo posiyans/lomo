@@ -51,22 +51,17 @@ class OwnerResourceController extends AbstractAdminController
     }
 
 
+    /**
+     * todo вынести в отдельный клонтроллер
+     *
+     * @param OwnerListRequest $request
+     * @return \Illuminate\Http\Response
+     */
     public function ownerListXlsx(OwnerListRequest $request)
     {
         $title = $request->get('title', false);
         $owners = new GetOwnerListRepository($title, true);
         return (new OwnreListXlsxFileResource())->render($owners->rezult);
-    }
-
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -100,17 +95,6 @@ class OwnerResourceController extends AbstractAdminController
             return ['status' => true, 'data' => new AdminOwnerResource($owner)];
         }
         return ['status' => false];
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
     }
 
     /**

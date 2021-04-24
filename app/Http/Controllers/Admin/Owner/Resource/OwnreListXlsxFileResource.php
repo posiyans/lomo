@@ -33,10 +33,12 @@ class OwnreListXlsxFileResource extends AbstaractXlsxFile
         $sheet->setCellValue('B'.$row, 'ФИО');
         $sheet->setCellValue('C'.$row, 'Участок');
         $this->setCenter('C');
-        $sheet->setCellValue('D'.$row, 'Тел.');
-        $sheet->setCellValue('E'.$row, 'email');
-        $sheet->setCellValue('F'.$row, 'Членство в СНТ');
-        $sheet->setCellValue('G'.$row, 'Адрес');
+        if (\Auth::user()->hasPermission('access-to-personal')) {
+            $sheet->setCellValue('D' . $row, 'Тел.');
+            $sheet->setCellValue('E' . $row, 'email');
+            $sheet->setCellValue('F' . $row, 'Членство в СНТ');
+            $sheet->setCellValue('G' . $row, 'Адрес');
+        }
     }
 
 
@@ -63,12 +65,14 @@ class OwnreListXlsxFileResource extends AbstaractXlsxFile
             }
 
             $sheet->setCellValue('A'.$row, $row - 1);
-            $sheet->setCellValue('B'.$row, $item->fullName());
-            $sheet->setCellValue('C'.$row, $text);
-            $sheet->setCellValue('D'.$row, $item->getValue('general_phone', ''));
-            $sheet->setCellValue('E'.$row, $item->getValue('email', ''));
-            $sheet->setCellValue('F'.$row, $item->getValue('member', ''));
-            $sheet->setCellValue('G'.$row, $item->getValue('address', ''));
+            $sheet->setCellValue('B'.$row, $item->nameForMyRole());
+            $sheet->setCellValue('C' . $row, $text);
+            if (\Auth::user()->hasPermission('access-to-personal')) {
+                $sheet->setCellValue('D' . $row, $item->getValue('general_phone', ''));
+                $sheet->setCellValue('E' . $row, $item->getValue('email', ''));
+                $sheet->setCellValue('F' . $row, $item->getValue('member', ''));
+                $sheet->setCellValue('G' . $row, $item->getValue('address', ''));
+            }
             $row++;
         }
     }
