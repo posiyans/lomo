@@ -38,7 +38,8 @@ const settings = {
   apiKey: process.env.VUE_APP_YANDEX_API_MAP,
   lang: 'ru_RU',
   coordorder: 'latlong',
-  version: '2.1' }
+  version: '2.1'
+}
 
 Vue.use(YmapPlugin, settings)
 /**
@@ -76,3 +77,9 @@ new Vue({
   store,
   render: h => h(App)
 })
+// обновление csrf токена
+// перенести в отдельный фаил
+import { getToken } from '@/api/user/user'
+setInterval(function() {
+  getToken()
+}, 3600 * 1000)
