@@ -11,7 +11,7 @@ define('__ROOT__', dirname(__FILE__));
 |
 */
 
-
+Route::get('/api/v1/sanctum/csrf-cookie', 'Laravel\Sanctum\Http\Controllers\CsrfCookieController@show');
 
 Route::get('/api/v1/test', 'App\Http\Controllers\Admin\Report\PdfController@report');
 

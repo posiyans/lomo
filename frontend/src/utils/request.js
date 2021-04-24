@@ -23,7 +23,7 @@ service.interceptors.request.use(
     // please modify it according to the actual situation
     // config.headers['X-Token'] = getToken()
 
-    // console.log('X-CSRF-TOKEN')
+    // console.log(getToken())
     // console.log(Cookies.get('XSRF-TOKEN'))
     //
     // config.headers['X-CSRF-TOKEN'] = Cookies.get('XSRF-TOKEN')
