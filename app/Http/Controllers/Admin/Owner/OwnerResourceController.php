@@ -4,17 +4,15 @@ namespace App\Http\Controllers\Admin\Owner;
 
 use App\Http\Controllers\Admin\AbstractAdminController;
 
-use App\Http\Controllers\Admin\Owner\Classes\DeleteOwnerClass;
+use App\Http\Controllers\Admin\Owner\Classes\DeleteOwner;
 use App\Http\Controllers\Admin\Owner\Repository\GetOwnerListRepository;
 use App\Http\Controllers\Admin\Owner\Repository\GetOwnerRepository;
 use App\Http\Controllers\Admin\Owner\Request\OwnerListRequest;
 use App\Http\Controllers\Admin\Owner\Resource\AdminOwnerListResource;
 use App\Http\Controllers\Admin\Owner\Resource\OwnreListXlsxFileResource;
-use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\Owner\AdminOwnerResource;
 use App\Models\Owner\OwnerUserModel;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 
 
 class OwnerResourceController extends AbstractAdminController
@@ -141,7 +139,7 @@ class OwnerResourceController extends AbstractAdminController
                 \Log::error($e->getMessage());
             }
         }
-        return ['status' => false];
+        return ['status' => false, 'error' => 'Не прав на удаление'];
     }
 
 }

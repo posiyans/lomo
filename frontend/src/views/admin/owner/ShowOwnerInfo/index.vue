@@ -170,12 +170,10 @@ export default {
         deleteOwnerUser(this.id)
           .then(response => {
             if (response.data.status) {
-              this.$message('Данные успешно удалены')
+              this.$message('Собственник успешно удален')
               this.$router.push('/admin/owner/show-list')
-            } else {
-              if (response.data.data) {
-                this.$message.error('Ошибка удаления!')
-              }
+            } else if (response.data.error) {
+              this.$message.error(response.data.error)
             }
           })
       }).catch(() => {
