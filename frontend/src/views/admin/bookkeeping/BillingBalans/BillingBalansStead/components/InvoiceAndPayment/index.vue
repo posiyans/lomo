@@ -109,7 +109,7 @@
               </el-button>
             </div>
             <div v-if="row.type =='payment'">
-              <el-button type="primary" size="small" icon="el-icon-info" :plain="row.data.invoice_id" style="width: 120px;" @click="showMore(row)">
+              <el-button type="primary" size="small" icon="el-icon-info" :plain="!!row.data.invoice_id" style="width: 120px;" @click="showMore(row)">
                 Подробнее
               </el-button>
             </div>

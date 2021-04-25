@@ -3,7 +3,7 @@
     <div class="page-title">Участки</div>
     <div class="filter-container">
       <el-input v-model="listQuery.title" placeholder="Найти" style="width: 200px;" class="filter-container__item" @keyup.enter.native="handleFilter" />
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+      <el-button v-waves class="filter-container__item" type="primary" icon="el-icon-search" @click="handleFilter">
         Показать
       </el-button>
       <el-button v-waves :loading="downloadLoading" class="filter-container__item" type="primary" icon="el-icon-download" @click="handleDownload">

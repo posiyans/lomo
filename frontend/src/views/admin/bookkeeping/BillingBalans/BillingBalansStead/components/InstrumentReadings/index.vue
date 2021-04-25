@@ -46,10 +46,11 @@
       />
       <el-table-column
         label="Дата"
-        width="180"
+        width="120"
+        align="center"
       >
         <template slot-scope="{row}">
-          <span>{{ row.created_at }}</span>
+          <span>{{ row.created_at | moment('DD-MM-YYYY') }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -109,7 +110,8 @@
         </template>
       </el-table-column>
     </el-table>
-    <!--    </div>-->
+    <LoadMore v-if="id" :id="id" :key="key" :list-query="listQuery" :func="func" @setList="setList" />
+
     <div v-if="selectRows.length > 0" class="filter-container mt2">
       <el-select v-model="action" placeholder="Действие">
         <el-option
@@ -134,15 +136,18 @@ import { fetchCommunalListForStead } from '@/api/admin/bookkeping/communal'
 import { fetchReceiptTypeList, getReceiptTypeInfo } from '@/api/admin/setting/receipt'
 import AddReadingDialog from './components/AddReadingsDialog'
 import { addInvoiceForReadings, addInvoiceForGroupReadings } from '@/api/admin/bookkeping/invoice'
+import LoadMore from '@/components/LoadMore'
 
 export default {
-  components: { AddReadingDialog },
+  components: { AddReadingDialog, LoadMore },
   data() {
     return {
+      key: 1,
+      func: fetchCommunalListForStead,
       selectRows: [],
       addReadingDialogShow: false,
       list: [],
-      id: '',
+      id: '333',
       old1: 39100,
       old2: 16600,
       summa: 0,
@@ -150,6 +155,8 @@ export default {
       primaryType: '',
       typeList: [],
       listQuery: {
+        limit: 20,
+        page: 1,
         primaryType: '',
         type_id: ''
       },
@@ -163,17 +170,15 @@ export default {
           key: 1,
           label: 'Выставить отдельные счета'
         }
-        // {
-        //   key: 3,
-        //   label: 'Выставить 1 счет на все'
-        // },
       ]
 
     }
   },
-  mounted() {
+  created() {
     this.id = this.$route.params && this.$route.params.id
-    this.getList()
+  },
+  mounted() {
+    // this.getList()
     this.getTypeList()
   },
   methods: {
@@ -244,64 +249,22 @@ export default {
       this.$emit('reload')
       this.addReadingDialogShow = false
     },
-    // getSummaries(param) {
-    //   const { columns, data } = param
-    //   const sums = []
-    //   columns.forEach((column, index) => {
-    //     if (index === 0) {
-    //       sums[index] = 'Итого'
-    //       return
-    //     }
-    //     if (column.property === 'summa') {
-    //       const values = data.map(item => {
-    //         return item.summa
-    //       })
-    //       if (!values.every(value => isNaN(value))) {
-    //         sums[index] = values.reduce((prev, curr) => {
-    //           const value = Number(curr)
-    //           if (!isNaN(value)) {
-    //             return prev + curr
-    //           } else {
-    //             return prev
-    //           }
-    //         }, 0)
-    //       } else {
-    //         sums[index] = 'N/A'
-    //       }
-    //     }
-    //   })
-    //   sums[5] = sums[5].toFixed(2)
-    //   return sums
-    // },
+    setList(val) {
+      console.log(val)
+      this.list = val
+    },
     getList() {
-      fetchCommunalListForStead(this.id, this.listQuery)
-        .then(response => {
-          if (response.data.status) {
-            // this.list = []
-            // this.summa = 0
-            this.list = response.data.data
-            // response.data.data.forEach(item => {
-            //   if (item.device_id === 1) {
-            //     item.delta = item.value - this.old1
-            //     item.summa = item.delta * item.price
-            //     this.summa += item.summa
-            //     this.list.push(item)
-            //     this.old1 = +item.value
-            //   }
-            //   if (item.device_id === 2) {
-            //     item.delta = item.value - this.old2
-            //     item.summa = item.delta * item.price
-            //     this.summa += item.summa
-            //     this.list.push(item)
-            //     this.old2 = +item.value
-            //   }
-            // })
-          } else {
-            if (response.data.data) {
-              this.$message.error(response.data.data)
-            }
-          }
-        })
+      this.key++
+      // fetchCommunalListForStead(this.id, this.listQuery)
+      //   .then(response => {
+      //     if (response.data.status) {
+      //       this.list = response.data.data
+      //     } else {
+      //       if (response.data.data) {
+      //         this.$message.error(response.data.data)
+      //       }
+      //     }
+      //   })
     },
     getTypeList() {
       fetchReceiptTypeList()

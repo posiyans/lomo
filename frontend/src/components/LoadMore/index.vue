@@ -12,6 +12,10 @@ export default {
     Pagination
   },
   props: {
+    id: {
+      type: [String, Number, Boolean],
+      default: false
+    },
     listQuery: {
       type: Object,
       default: () => {}
@@ -39,10 +43,46 @@ export default {
     }
   },
   mounted() {
+    console.log(this.id)
     this.getList()
   },
   methods: {
     getList() {
+      console.log('adapter')
+      console.log(this.id)
+      if (this.id) {
+        this.getListId()
+      } else {
+        return this.getListNoId()
+      }
+    },
+    getListId() {
+      this.listLoading = true
+      console.log(this.id, this.listQuery)
+      this.func(this.id, this.listQuery)
+        .then(response => {
+          this.total = 0
+          if (response.data.total) {
+            this.total = response.data.total
+          } else if (response.data.meta && response.data.meta.total) {
+            this.total = response.data.meta.total
+          }
+          if (response.data.offset) {
+            this.offset = response.data.offset
+          }
+          // if (response.data.status) {
+          this.list = response.data.data
+          // }
+
+          this.listLoading = false
+          this.showCount = this.listQuery.page * this.listQuery.limit
+          this.$emit('setList', this.list)
+          this.$emit('setOffset', this.offset)
+        }, error => {
+          console.log(error)
+        })
+    },
+    getListNoId() {
       this.listLoading = true
       this.func(this.listQuery)
         .then(response => {
@@ -63,29 +103,51 @@ export default {
           this.showCount = this.listQuery.page * this.listQuery.limit
           this.$emit('setList', this.list)
           this.$emit('setOffset', this.offset)
+        }, error => {
+          console.log(error)
         })
     },
     add() {
       this.listQuery.page += 1
       this.listLoading = true
-      this.func(this.listQuery)
-        .then(response => {
-          this.total = 0
-          if (response.data.total) {
-            this.total = response.data.total
-          } else if (response.data.meta && response.data.meta.total) {
-            this.total = response.data.meta.total
-          }
-          // this.list = []
-          setTimeout(() => {
-            this.listLoading = false
-            response.data.data.forEach(val => {
-              this.list.push(val)
-              this.showCount++
-            })
-            this.$emit('setList', this.list)
-          }, 500)
-        })
+      if (this.id) {
+        this.func(this.id, this.listQuery)
+          .then(response => {
+            this.total = 0
+            if (response.data.total) {
+              this.total = response.data.total
+            } else if (response.data.meta && response.data.meta.total) {
+              this.total = response.data.meta.total
+            }
+            setTimeout(() => {
+              this.listLoading = false
+              response.data.data.forEach(val => {
+                this.list.push(val)
+                this.showCount++
+              })
+              this.$emit('setList', this.list)
+            }, 500)
+          })
+      } else {
+        this.func(this.listQuery)
+          .then(response => {
+            this.total = 0
+            if (response.data.total) {
+              this.total = response.data.total
+            } else if (response.data.meta && response.data.meta.total) {
+              this.total = response.data.meta.total
+            }
+            // this.list = []
+            setTimeout(() => {
+              this.listLoading = false
+              response.data.data.forEach(val => {
+                this.list.push(val)
+                this.showCount++
+              })
+              this.$emit('setList', this.list)
+            }, 500)
+          })
+      }
     }
   }
 }

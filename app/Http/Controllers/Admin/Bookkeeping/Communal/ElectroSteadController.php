@@ -23,27 +23,6 @@ class ElectroSteadController extends Controller
         $this->middleware('ability:superAdmin,access-admin-panel');
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function list($id, Request $request)
-    {
-        $stead = Stead::find($id);
-        if ($stead) {
-            $query = InstrumentReadings::where('stead_id', $id);
-            if ($request->type_id || $request->primaryType) {
-                $types_id = MeteringDevice::getDeviceIdForStead($request->primaryType, $stead->id, $request->type_id);
-                $query->whereIn('device_id', $types_id);
-            }
-            $items = $query->orderBy('created_at', 'desc')
-                ->paginate($request->limit);
-            $rez = ['status' => true];
-            $rez['data'] = AdminInstrumentReadingsResource::collection($items);
-            return $rez;
-        }
-    }
 
     public function info(Request $request)
     {
