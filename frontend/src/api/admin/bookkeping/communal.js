@@ -16,6 +16,14 @@ export function addInstrumentReadings(id, data) {
   })
 }
 
+// удалить показания
+export function deleteInstrumentReadings(id) {
+  return request({
+    url: '/api/v1/admin/billing/communal/stead/delete-reading/' + id,
+    method: 'delete'
+  })
+}
+
 // export function fetchPaymentInfo(id) {
 //   return request({
 //     url: '/api/v1/admin/billing/payment/' + id,

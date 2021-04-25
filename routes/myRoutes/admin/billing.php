@@ -1,5 +1,6 @@
 <?php
 // бухгалтерия
+use App\Http\Controllers\Admin\Bookkeeping\Billing\InstrumentReadings\DeleteReadingController;
 use App\Http\Controllers\Admin\Bookkeeping\Billing\InstrumentReadings\ReadingForSteadController;
 
 Route::get('billing/balance-info', 'App\Http\Controllers\Admin\Bookkeeping\Billing\BalanceController@info');
@@ -27,7 +28,7 @@ Route::post('billing/bank-reestr-publish', 'App\Http\Controllers\Admin\Bookkeepi
 Route::post('billing/bank-reestr-parse', 'App\Http\Controllers\Admin\Bookkeeping\Billing\BankReestrController@parseReestr');
 Route::post('billing/bank-reestr-publish', 'App\Http\Controllers\Admin\Bookkeeping\Billing\BankReestrController@publish');
 
-// Электроэнергия
+// получить показания по участку
 Route::get('billing/communal/stead/get/{stead}', [ReadingForSteadController::class, 'list'])
     ->missing(function () {
         return response()->json([
@@ -35,6 +36,16 @@ Route::get('billing/communal/stead/get/{stead}', [ReadingForSteadController::cla
             'error' => 'Обьект не найден'
         ], 200);
     });
+
+//удалить показания
+Route::delete('billing/communal/stead/delete-reading/{reading}', [DeleteReadingController::class, 'delete'])
+    ->missing(function () {
+        return response()->json([
+            'status' => false,
+            'error' => 'Обьект не найден'
+        ], 200);
+    });
+
 Route::post('billing/communal/stead/add-reading/{id}', 'App\Http\Controllers\Admin\Bookkeeping\Communal\ElectroSteadController@addInstrumentReadings');
 
 
