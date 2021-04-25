@@ -196,7 +196,6 @@ export default {
           item.edit = false
           this.form[item.name] = val.value
           this.update(item.name, this.form[item.name])
-          // updateOwnerUserInfo(this.id, { [item.name]: this.form[item.name] })
         }
       })
       this.key++

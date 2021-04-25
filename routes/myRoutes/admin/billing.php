@@ -1,5 +1,7 @@
 <?php
 // бухгалтерия
+use App\Http\Controllers\Admin\Bookkeeping\Billing\InstrumentReadings\ReadingForSteadController;
+
 Route::get('billing/balance-info', 'App\Http\Controllers\Admin\Bookkeeping\Billing\BalanceController@info');
 Route::get('billing/balance-list', 'App\Http\Controllers\Admin\Bookkeeping\Billing\BalanceController@list');
 Route::post('billing/balance-xlsx', 'App\Http\Controllers\Admin\Bookkeeping\Billing\Balance\BalanceList\GetXlsxFileController@index');
@@ -26,7 +28,13 @@ Route::post('billing/bank-reestr-parse', 'App\Http\Controllers\Admin\Bookkeeping
 Route::post('billing/bank-reestr-publish', 'App\Http\Controllers\Admin\Bookkeeping\Billing\BankReestrController@publish');
 
 // Электроэнергия
-Route::get('billing/communal/stead/get/{id}', 'App\Http\Controllers\Admin\Bookkeeping\Communal\ElectroSteadController@list');
+Route::get('billing/communal/stead/get/{stead}', [ReadingForSteadController::class, 'list'])
+    ->missing(function () {
+        return response()->json([
+            'status' => false,
+            'error' => 'Обьект не найден'
+        ], 200);
+    });
 Route::post('billing/communal/stead/add-reading/{id}', 'App\Http\Controllers\Admin\Bookkeeping\Communal\ElectroSteadController@addInstrumentReadings');
 
 
