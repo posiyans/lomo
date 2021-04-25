@@ -99,12 +99,15 @@
       </el-table-column>
       <el-table-column
         label=""
-        width="200"
+        width="220"
         align="center"
       >
         <template slot-scope="{row}">
           <div>
-            <el-button v-if="!row.invoice_id && row.summa > 0" type="primary" @click="addInvoice(row)">Выставить счет</el-button>
+            <el-button-group>
+              <el-button v-if="!row.invoice_id && row.summa > 0" icon="el-icon-circle-plus" type="primary" @click="addInvoice(row)" />
+              <el-button v-if="!row.invoice_id && row.summa > 0" icon="el-icon-delete" type="danger" @click="deleteReading(row)" />
+            </el-button-group>
           </div>
           <span v-if="row.invoice_id">Счет № {{ row.invoice_id }}</span>
         </template>
@@ -132,7 +135,7 @@
 </template>
 
 <script>
-import { fetchCommunalListForStead } from '@/api/admin/bookkeping/communal'
+import { fetchCommunalListForStead, deleteInstrumentReadings } from '@/api/admin/bookkeping/communal'
 import { fetchReceiptTypeList, getReceiptTypeInfo } from '@/api/admin/setting/receipt'
 import AddReadingDialog from './components/AddReadingsDialog'
 import { addInvoiceForReadings, addInvoiceForGroupReadings } from '@/api/admin/bookkeping/invoice'
@@ -220,6 +223,25 @@ export default {
       this.$emit('reload')
       this.getList()
       this.getTypeList()
+    },
+    deleteReading(row) {
+      this.$confirm('Удалить показания?', 'Внимание!', {
+        confirmButtonText: 'Удалить',
+        cancelButtonText: 'Отмена',
+        type: 'danger'
+      }).then(() => {
+        deleteInstrumentReadings(row.id)
+          .then(response => {
+            if (response.data.status) {
+              this.$message('Данные успешно удалены')
+              this.getList()
+            } else if (response.data.error) {
+              this.$message.error(response.data.error)
+            }
+          })
+      }).catch(() => {
+
+      })
     },
     addInvoice(row) {
       this.$confirm('Выставить счет на сумму ' + row.summa + ' руб.?', 'Внимание!', {
