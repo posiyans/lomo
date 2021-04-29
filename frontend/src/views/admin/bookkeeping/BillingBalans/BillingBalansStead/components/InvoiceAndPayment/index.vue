@@ -30,6 +30,7 @@
       <el-button type="primary" size="small" plain class="table-filter-header__item" @click="handleFilter">Показать</el-button>
       <el-button type="success" size="small" plain class="table-filter-header__item" @click="addInvoiceShow = true">Добавить счет</el-button>
       <el-button type="warning" size="small" plain class="table-filter-header__item" @click="addPaymentShow = true">Добавить платеж</el-button>
+      <el-button type="primary" size="small" plain class="table-filter-header__item" @click="getXlsx">XLSX</el-button>
     </div>
     <div class="billing-balans-stead">
       <el-table
@@ -154,7 +155,7 @@
 </template>
 
 <script>
-import { fetchBillingBalansSteadInfo } from '@/api/admin/billing'
+import { fetchBillingBalansSteadInfo, fetchBillingBalansSteadInfoFronXlsx } from '@/api/admin/billing'
 import waves from '@/directive/waves'
 import PaymentInfo from '@/components/BillingPaymetnInfo'
 import InvoiceInfo from '@/components/BillingInvoiceInfo'
@@ -163,6 +164,7 @@ import AddInvoiceForStead from '@/components/AddInvoiceForStead'
 import AddPaymentForStead from '@/components/AddPaymentForStead'
 import LoadMore from '@/components/LoadMore'
 import { fetchSteadInfo } from '@/api/admin/stead'
+import { saveAs } from 'file-saver'
 
 export default {
   components: { PaymentInfo, InvoiceInfo, AddInvoiceForStead, LoadMore, AddPaymentForStead },
@@ -231,6 +233,14 @@ export default {
     this.getSteadInfo()
   },
   methods: {
+    getXlsx() {
+      this.$message.success('качаем')
+      fetchBillingBalansSteadInfoFronXlsx(this.listQuery).then(response => {
+        const blob = new Blob([response.data])
+        saveAs(blob, 'Список.xlsx')
+        this.$message('Файл успешно скачан.')
+      })
+    },
     handleFilter() {
       this.listQuery.page = 1
       this.key++

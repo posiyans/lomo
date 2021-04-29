@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Bookkeeping\Billing;
 
 use App\Http\Controllers\Admin\Bookkeeping\Billing\Balance\BalanceList\GetListController;
+use App\Http\Controllers\Admin\Bookkeeping\Billing\Balance\Repository\BalanceForSteadRepository;
 use App\Http\Resources\Admin\Bookkeeping\AdminBalansSteadResource;
 use App\Http\Resources\Admin\Bookkeeping\AdminInvoiceResource;
 use App\Http\Resources\Admin\Bookkeeping\AdminPaymentResource;
@@ -48,81 +49,18 @@ class BalanceController extends Controller
 
     public function info(Request $request)
     {
-        $rezult = [];
-        $stead = Stead::find($request->stead_id);
-        $balans = [];
+        $stead_id = $request->get('stead_id', false);
         $type = $request->get('type', false);
-        $receipt_type = $request-> get('receiptType', false);
-        if (!$type || $type == 'invoice') {
-            $invoices = BillingInvoice::getInvocesForStead($stead->id);
-            foreach ($invoices as $invoice) {
-                $time = strtotime($invoice->created_at);
-                while (isset($balans[$time])) {
-                    $time++;
-                }
-                if (!$receipt_type || $receipt_type == $invoice->type) {
-                    $balans[$time] = ['type' => 'invoice', 'data' => new AdminInvoiceResource($invoice)];
-                }
-            }
+        $receipt_type = $request->get('receiptType', false);
+        $stead = Stead::find($stead_id);
+        if (!$stead) {
+            throw new \Exception('Участок не найден');
         }
-        if ($type == 'invoice_no_paid') {
-            $invoices = BillingInvoice::getInvocesForStead($stead->id);
-            foreach ($invoices as $invoice) {
-                $time = strtotime($invoice->created_at);
-                while (isset($balans[$time])) {
-                    $time++;
-                }
-                if ((!$receipt_type || $receipt_type == $invoice->type) && $invoice->paid == false) {
-
-                    $balans[$time] = ['type' => 'invoice', 'data' => new AdminInvoiceResource($invoice)];
-                }
-            }
-        }
-        if ($type == 'invoice_paid') {
-            $invoices = BillingInvoice::getInvocesForStead($stead->id);
-            foreach ($invoices as $invoice) {
-                $time = strtotime($invoice->created_at);
-                while (isset($balans[$time])) {
-                    $time++;
-                }
-                if ((!$receipt_type || $receipt_type == $invoice->type) && $invoice->paid == true) {
-                    $balans[$time] = ['type' => 'invoice', 'data' => new AdminInvoiceResource($invoice)];
-                }
-            }
-        }
-        if (!$type || $type == 'payment') {
-            $payments = BillingPayment::getPaymentForStead($stead->id);
-            foreach ($payments as $payment) {
-                $time = strtotime($payment->payment_date);
-                while (isset($balans[$time])) {
-                    $time++;
-                }
-                if (!$receipt_type || $receipt_type == $payment->type) {
-                    $balans[$time] = ['type' => 'payment', 'data' => new AdminPaymentResource($payment)];
-                }
-            }
-        }
-        if ($type == 'payment_without_invoice') {
-            $payments = BillingPayment::getPaymentForStead($stead->id);
-            foreach ($payments as $payment) {
-                $time = strtotime($payment->payment_date);
-                while (isset($balans[$time])) {
-                    $time++;
-                }
-                if ((!$receipt_type || $receipt_type == $payment->type) && $payment->invoice_id == null) {
-                    $balans[$time] = ['type' => 'payment', 'data' => new AdminPaymentResource($payment)];
-                }
-            }
-        }
-        krsort($balans);
-        $rezult['total'] = count($balans);
-        $rezult['data'] = array_values($this->paginate($balans, $request->limit, $request->page));
+        $items = (new BalanceForSteadRepository())->getForStead($stead_id, $type, $receipt_type);
+        $rezult['total'] = count($items);
+        $rezult['data'] = array_values($this->paginate($items, $request->limit, $request->page));
         $rezult['status'] = true;
-
         return $rezult;
-//        $query = BillingReestr::query();
-//        $article = $query->orderBy('created_at', 'desc')->paginate($request->limit);
-//        return ['status'=>true, 'data'=>$article, 'total'=>$article->total()];
     }
 
 

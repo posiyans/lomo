@@ -47,13 +47,8 @@ class Controller extends BaseController
      */
     public function paginate($array, $limit = false, $page = false)
     {
-        if (!$page) {
-            $page = request()->get('page', 1);
-        }
-        if (!$limit) {
-            $limit = request()->get('limit', 20);
-        }
-
+        $page = $page ?? request()->get('page', 1);
+        $limit = $limit  ?? request()->get('limit', 20);
         if ($page < 1 ) {
             $page = 1;
         }

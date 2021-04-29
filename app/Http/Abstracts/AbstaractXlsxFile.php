@@ -40,11 +40,13 @@ abstract class AbstaractXlsxFile extends Controller
     /**
      *установить автофильтр
      */
-    public function setAutoFilter()
+    public function setAutoFilter($sheet = false)
     {
-        $this->spreadsheet->getActiveSheet()->setAutoFilter(
-            $this->spreadsheet->getActiveSheet()
-                ->calculateWorksheetDimension()
+        if (!$sheet) {
+            $sheet = $this->spreadsheet->getActiveSheet();
+        }
+        $sheet->setAutoFilter(
+            $sheet->calculateWorksheetDimension()
         );
     }
     /**
@@ -64,9 +66,11 @@ abstract class AbstaractXlsxFile extends Controller
      *
      * @param String $item имя ячейки или диапазон 'A:G'
      */
-    public function setCenter(String $item)
+    public function setCenter(String $item, $sheet = false)
     {
-        $sheet = $this->spreadsheet->getActiveSheet();
+        if (!$sheet) {
+            $sheet = $this->spreadsheet->getActiveSheet();
+        }
         $sheet->getStyle($item)->getAlignment()->setHorizontal('center');
     }
 
@@ -75,15 +79,18 @@ abstract class AbstaractXlsxFile extends Controller
      * установить аторазмер для колонки или дипозона колонок
      * @param $item имя колонки 'A' , или масив где 1 элемент начало 2 конец ['A', 'G']
      */
-    public function setAutoSize($item)
+    public function setAutoSize($item, $sheet = false)
     {
+        if (!$sheet) {
+            $sheet = $this->spreadsheet->getActiveSheet();
+        }
         if (is_array($item)) {
             foreach (range($item[0],$item[1]) as $col) {
-                $this->spreadsheet->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+                $sheet->getColumnDimension($col)->setAutoSize(true);
             }
         }
         if (is_string($item)) {
-            $this->spreadsheet->getActiveSheet()->getColumnDimension($item)->setAutoSize(true);
+            $sheet->getColumnDimension($item)->setAutoSize(true);
         }
 
     }

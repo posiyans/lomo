@@ -276,17 +276,8 @@ export default {
       this.list = val
     },
     getList() {
+      this.listQuery.page = 1
       this.key++
-      // fetchCommunalListForStead(this.id, this.listQuery)
-      //   .then(response => {
-      //     if (response.data.status) {
-      //       this.list = response.data.data
-      //     } else {
-      //       if (response.data.data) {
-      //         this.$message.error(response.data.data)
-      //       }
-      //     }
-      //   })
     },
     getTypeList() {
       fetchReceiptTypeList()
