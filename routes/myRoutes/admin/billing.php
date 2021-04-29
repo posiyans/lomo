@@ -2,8 +2,12 @@
 // бухгалтерия
 use App\Http\Controllers\Admin\Bookkeeping\Billing\InstrumentReadings\DeleteReadingController;
 use App\Http\Controllers\Admin\Bookkeeping\Billing\InstrumentReadings\ReadingForSteadController;
-
+use App\Http\Controllers\Admin\Bookkeeping\Billing\Balance\BalanceForStead\BalanceForSteadXlsxFileController;
+// получить баланс по участку  (счета и плтежи)
 Route::get('billing/balance-info', 'App\Http\Controllers\Admin\Bookkeeping\Billing\BalanceController@info');
+// получить баланс по участку  (счета и плтежи) в xlsx
+Route::get('billing/balance-for-stead-xlsx', [BalanceForSteadXlsxFileController::class, 'index']);
+
 Route::get('billing/balance-list', 'App\Http\Controllers\Admin\Bookkeeping\Billing\BalanceController@list');
 Route::post('billing/balance-xlsx', 'App\Http\Controllers\Admin\Bookkeeping\Billing\Balance\BalanceList\GetXlsxFileController@index');
 Route::get('billing/balance-for-stead', 'App\Http\Controllers\Admin\Bookkeeping\Billing\BalanceController@allBalance');

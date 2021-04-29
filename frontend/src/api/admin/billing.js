@@ -15,30 +15,6 @@ export function DeleteReestr(id) {
   })
 }
 
-// export function updateAppel(data, id) {
-//   return request({
-//     url: '/api/v1/admin/appeal/' + id,
-//     method: 'put',
-//     data
-//   })
-// }
-//
-// export function fetchArticle(id) {
-//   return request({
-//     url: '/api/v1/article/detail',
-//     method: 'get',
-//     params: { id }
-//   })
-// }
-//
-// export function fetchPv(pv) {
-//   return request({
-//     url: '/api/v1/article/pv',
-//     method: 'get',
-//     params: { pv }
-//   })
-// }
-
 export function createBillingReestr(data) {
   return request({
     url: '/api/v1/admin/billing/reestr',
@@ -62,14 +38,6 @@ export function fetchReestr($id) {
   })
 }
 
-// export function updateArticle(data) {
-//   return request({
-//     url: '/api/v1/article/update',
-//     method: 'post',
-//     data
-//   })
-// }
-
 export function fetchBillingBalansList(query) {
   return request({
     url: '/api/v1/admin/billing/balance-list',
@@ -92,6 +60,16 @@ export function fetchBillingBalansSteadInfo(query) {
   return request({
     url: '/api/v1/admin/billing/balance-info',
     method: 'get',
+    params: query
+  })
+}
+
+export function fetchBillingBalansSteadInfoFronXlsx(query) {
+  request.defaults.timeout = ''
+  return request({
+    url: '/api/v1/admin/billing/balance-for-stead-xlsx',
+    method: 'get',
+    responseType: 'blob',
     params: query
   })
 }

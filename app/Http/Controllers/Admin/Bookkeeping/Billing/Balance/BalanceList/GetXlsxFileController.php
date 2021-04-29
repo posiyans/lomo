@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Admin\Bookkeeping\Billing\Balance\BalanceList;
 
 
+use App\Http\Controllers\Admin\AbstractAdminController;
+use App\Http\Controllers\Admin\Bookkeeping\Billing\Balance\BalanceList\Classes\BalansListXlsxFileResource;
+use App\Http\Controllers\Admin\Bookkeeping\Billing\Balance\BalanceList\Classes\XlsxFileResource;
 use App\Models\Receipt\ReceiptType;
 use App\Models\Stead;
 use Illuminate\Http\Request;
@@ -11,7 +14,7 @@ use Auth;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
-class GetXlsxFileController extends Controller
+class GetXlsxFileController extends AbstractAdminController
 {
 
 
@@ -35,8 +38,9 @@ class GetXlsxFileController extends Controller
      */
     public function index(Request $request)
     {
-        $data = GetListController::getData($request);
-        $this->generateXLSX($data);
+        $items = GetListController::getData($request);
+        (new BalansListXlsxFileResource())->render($items);
+//        $this->generateXLSX($items);
     }
 
 
