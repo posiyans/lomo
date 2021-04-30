@@ -90,7 +90,7 @@ class InvoiceAndPaymentListInSheet extends AbstaractXlsxFile
         foreach ($this->types  as $type) {
             $col++;
             if ($item['type'] == $type) {
-                $this->sheet->setCellValue($col.$row, $item['price']);
+                $this->sheet->setCellValue($col.$row, -$item['price']);
             }
         }
     }
