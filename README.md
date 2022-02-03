@@ -1,6 +1,7 @@
 # lomo
 CMS для СНТ
 
+https://sntlomo.ru
 
 # команды 
 ```
