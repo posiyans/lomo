@@ -21,6 +21,7 @@
             Черновик
           </el-button>
         </div>
+        <StatusSelect v-model="postForm.public" />
       </div>
       <div class="createPost-main-container">
         <el-row>
@@ -33,11 +34,6 @@
 
             <div class="postInfo-container">
               <el-row>
-                <el-col :xs="24" :sm="10" justify="start">
-                  <el-form-item label-width="150px" label="Время публикации:" class="postInfo-container-item">
-                    <el-date-picker v-model="displayTime" type="datetime" :picker-options="{ firstDayOfWeek: 1}" format="HH:mm dd-MM-yyyy" placeholder="Выберите дату и время" />
-                  </el-form-item>
-                </el-col>
                 <el-col :xs="24" :sm="10">
                   <el-form-item style="" label-width="70px" label="UID:">
                     <el-input v-model="postForm.uid" :rows="1" show-word-limit maxlength="50" autosize placeholder="Пожалуйста, введите содержание или оставте пустым" />
@@ -75,6 +71,7 @@ import { searchUser } from '@/api/remote-search'
 import { CommentDropdown, OnMain } from './Dropdown'
 import CategoryDropdown from './Dropdown/Category'
 import { mapState } from 'vuex'
+import StatusSelect from '@/Modules/Article/Article/components/StatusSelect'
 
 const defaultForm = {
   public: false,
@@ -92,7 +89,7 @@ const defaultForm = {
 
 export default {
   name: 'ArticleDetail',
-  components: { Tinymce, MDinput, Upload, CommentDropdown, CategoryDropdown, OnMain },
+  components: { Tinymce, MDinput, Upload, CommentDropdown, CategoryDropdown, OnMain, StatusSelect },
   props: {
     isEdit: {
       type: Boolean,

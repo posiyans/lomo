@@ -51,14 +51,8 @@ service.interceptors.response.use(
    */
   response => {
     const res = response
-    // console.log('otvet')
     // if the custom code is not 20000, it is judged as an error.
     if (res.status < 200 || res.status > 299) {
-      Message({
-        message: res.message || 'Error',
-        type: 'error',
-        duration: 5 * 1000
-      })
       if (res.status === 401) {
         // to re-login
         MessageBox.confirm('You have been logged out, you can cancel to stay on this page, or log in again', 'Confirm logout', {
@@ -100,7 +94,7 @@ service.interceptors.response.use(
       return error.response
     }
     Message({
-      message: error.message,
+      message: error.response.data,
       type: 'error',
       duration: 5 * 1000
     })

@@ -19,9 +19,9 @@ class ReceiptController extends Controller
     public function getContributionsReceipt(Request $request)
     {
         if (isset($request->stead)) {
-            return PdfController::getReceipFoStead($request->stead, 2, false);
-        }
-        return 'error';
+          return PdfController::getReceipFoStead($request->stead, 2, false);
+       }
+       return 'error';
     }
 
 

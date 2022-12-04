@@ -10,6 +10,7 @@ use App\Models\Receipt\ReceiptType;
 use App\Models\MyModel;
 use App\Models\Receipt\InstrumentReadings;
 use App\Models\User;
+use App\Modules\Stead\Models\SteadModel;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Cookie;
 
@@ -17,7 +18,7 @@ use Illuminate\Support\Facades\Cookie;
 /**
  * Модель участков
  */
-class Stead extends MyModel
+class Stead extends SteadModel
 {
     protected $fillable = ['number', 'descriptions'];
     protected $casts = [

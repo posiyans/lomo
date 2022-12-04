@@ -4,42 +4,28 @@
       v-loading="loading"
       class="card-mobile"
     >
-      <div class="article-preview-header">
-        <h2>{{ article.title }}</h2>
-        <div v-if="editor" class="article-setting-icon" @click="editArticle">
+      <div class="row items-center no-wrap justify-between relative-position">
+        <div>
+
+          <div class="q-pt-md q-px-sm text-weight-bold" style="font-size: 1.5em;">
+            {{ article.title }}
+          </div>
+          <ShowPublicTime :time="article.updated_at" class="q-ml-md" />
+        </div>
+        <div v-if="editor" class="text-primary q-pr-lg cursor-pointer" @click="editArticle">
           <i class="el-icon-s-tools" />
         </div>
       </div>
+      <hr class="text-grey-2">
       <div class="article-preview-body">
         <span v-html="article.text" />
       </div>
-      <div v-if="article.files && article.files.length > 0">
-        <div class="file-list-header">Файлы:</div>
-        <ul>
-          <li v-for="file in article.files" :key="file.id">{{ file.name }}
-            <span class="file-size">{{ file.size | sizeFilter }}</span>
-            <el-link :href="file.id | urlFilter " type="success">Скачать</el-link>
-          </li>
-        </ul>
+      <div class="q-pa-sm">
+        <div v-if="showFilesBlock" class="file-list-header">Файлы:</div>
+        <ShowArticleFiles v-if="article.uid" :article-uid="article.uid" @set-count="setFiles" />
       </div>
-
-      <div class="article-preview-footer">
-        <el-divider class="divider-footer" />
-        <el-row type="flex" class="row-bg" justify="space-between" align="center">
-          <el-col :span="14">
-            <span style="padding-left: 20px;">
-              <el-button type="primary" size="mini" @click="back">Назад</el-button>
-            </span>
-            <span style="padding-left: 20px;">
-              <el-button v-if="article.allow_comments==1" type="primary" size="mini" plain icon="el-icon-chat-dot-square">{{ article.comments_show.length }}</el-button>
-            </span>
-          </el-col>
-          <el-col :span="10"><div style="text-align: right; padding: 10px 20px 0px 0;color: #848484; height: 100%;">{{ publicTime(article.publish_time) }}</div></el-col>
-        </el-row>
-      </div>
-      <div v-if="article.allow_comments==1" class="comments-body">
-        <Comments v-model="article" />
-      </div>
+      <el-divider class="divider-footer" />
+      <CommentsBlock v-if="article && article.allow_comments" type="article" :object-uid="article.uid" />
     </el-card>
   </div>
 </template>
@@ -47,8 +33,12 @@
 <script>
 import { fetchUserArticle } from '@/api/article'
 import Comments from '@/components/Comments/index.vue'
+import ShowArticleFiles from '@/Modules/Article/Article/components/ShowArticleFiles'
+import ShowPublicTime from '@/Modules/Article/Article/components/ShowPublicTime'
+import CommentsBlock from '@/Modules/Comments/components/CommentsBlock'
+
 export default {
-  components: { Comments },
+  components: { CommentsBlock, ShowArticleFiles, ShowPublicTime },
   filters: {
     urlFilter(val) {
       return process.env.VUE_APP_BASE_API + '/api/user/storage/file/' + val
@@ -70,6 +60,7 @@ export default {
   data() {
     return {
       loading: true,
+      showFilesBlock: 0,
       article: {}
     }
   },
@@ -85,6 +76,9 @@ export default {
     this.fetchArticle()
   },
   methods: {
+    setFiles(val) {
+      this.showFilesBlock = val
+    },
     publicTime(val) {
       const time = (this.$moment() - this.$moment(val)) / 1000
       if (time > 24 * 3600 * 360) {

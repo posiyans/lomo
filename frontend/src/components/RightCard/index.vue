@@ -1,5 +1,5 @@
 <template>
-  <el-card class="right-cart">
+  <el-card class="right-cart" shadow="never">
     <div slot="header">
       <span>{{ header }} </span>
     </div>
@@ -31,6 +31,7 @@ export default {
   .right-cart {
     /*margin-top: 5px;*/
     margin-bottom: 5px;
+
   }
   .body {
     word-wrap: break-word;

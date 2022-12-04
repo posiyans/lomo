@@ -71,10 +71,11 @@ class LaratrustSeeder extends Seeder
     protected $permissions = [
         'gardening-edit' => 'Правка данных садоводства',
         'send-mail-spam' => 'Email рассылка',
-        'сreate-polls' => 'Создание голосований',
+        'create-polls' => 'Создание голосований',
         'edit-stead' => 'Правка данных об участках',
         'edit-role' => 'Редактирование ролей и прав',
         'create-article' => 'Создание статей',
+        'edit-article' => 'Редактирование статей',
         'create-comment' => 'Создание коментарии',
         'ban-comment' => 'Запрет на коментарии',
         'delete-comment' => 'Удаление коментариев',

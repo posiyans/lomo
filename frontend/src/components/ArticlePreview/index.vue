@@ -1,27 +1,25 @@
 <template>
   <div class="resume-ps-card">
     <el-card class="resume-el-card">
-      <div class="resume-article-preview-header">
-        <h2>{{ article.title }}</h2>
-        <div v-if="editor" class="article-setting-icon" @click="editArticle">
+      <div class="resume-article-preview-header row items-center no-wrap justify-between">
+        <div class="q-py-md text-weight-bold" style="font-size: 1.5em;">{{ article.title }}</div>
+        <div v-if="editor" class="q-py-md text-blue-8" @click="editArticle">
           <i class="el-icon-s-tools" />
         </div>
       </div>
       <div class="resume-article-preview-body">
         <p v-html="resume" />
       </div>
-      <div class="resume-article-preview-footer">
-        <el-row type="flex" class="row-bg" justify="space-between">
-          <el-col :span="24">
-            <span class="resume-article-preview-more">
-              <el-button type="primary" size="mini" plain @click="showArticle">Подробнее</el-button>
-            </span>
-            <span class="resume-article-preview-more">
-              <el-button v-if="article.allow_comments === 1" type="primary" size="mini" plain icon="el-icon-chat-dot-square" @click="showArticle">{{ article.comments.length }}</el-button>
-            </span>
-            <div class="resume-time-publish">{{ publicTime(article.publish_time) }}</div>
-          </el-col>
-        </el-row>
+      <div class="row items-center justify-between">
+        <div class="row items-center">
+          <div class="q-mr-sm">
+            <el-button type="primary" size="mini" plain @click="showArticle">Подробнее</el-button>
+          </div>
+          <div v-if="article.allow_comments === 1">
+            <el-button type="primary" size="mini" plain icon="el-icon-chat-dot-square" @click="showArticle">{{ article.comments.length }}</el-button>
+          </div>
+        </div>
+        <ShowPublicTime :time="article.updated_at" />
       </div>
     </el-card>
   </div>
@@ -29,7 +27,11 @@
 
 <script>
 import { fetchUserArticle } from '@/api/article'
+import ShowPublicTime from '@/Modules/Article/Article/components/ShowPublicTime'
 export default {
+  components: {
+    ShowPublicTime
+  },
   props: {
     id: {
       type: Number,
@@ -98,22 +100,10 @@ export default {
 <style scoped>
 
   .article-setting-icon{
-    position: absolute;
-    top: 5px;
-    right: 24px;
     cursor: pointer;
     color: #1890ff;
   }
-  .resume-ps-card{
-    padding: 5px;
-    padding-bottom: 0;
-  }
-  .resume-ps-card:last-child{
-    padding-bottom: 5px;
-  }
-  .resume-ps-card >>> el-card__body {
-    padding-bottom: 5px;
-  }
+
   .resume-el-card {
     padding-bottom: 0;
   }
@@ -137,9 +127,6 @@ export default {
   }
   .resume-article-preview-body p{
     text-indent: 1.5em;
-  }
-  .resume-article-preview-footer {
-
   }
   /*h2 {*/
   /*  margin-right: 20px;*/
@@ -176,8 +163,5 @@ export default {
     .resume-article-preview-more {
       padding-left: 5px;
     }
-  }
-  .resume-ps-card >>> el-card__body {
-    padding-bottom: 5px;
   }
 </style>

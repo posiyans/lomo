@@ -84,7 +84,7 @@ export default {
       form: {
         name: ''
       },
-      site_name: process.env.VUE_APP_SITE_NAME,
+      site_name: process.env.VUE_APP_SITE_NAME || 'СНТ',
       open_sidebar: false
     }
   },

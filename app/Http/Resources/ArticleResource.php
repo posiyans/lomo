@@ -20,13 +20,10 @@ class ArticleResource extends JsonResource
             'uid' => $this->uid,
             'title' => $this->title,
             'resume' => $this->show_resume(),
-//            'text' => $this->text,
             'category_id' => $this->category_id,
-            'files' => $this->files,
             'allow_comments' => $this->allow_comments,
             'public' => $this->public,
-            'publish_time' => $this->publish_time,
-            'comments' => CommentResource::collection($this->comments),
+            'updated_at' => $this->updated_at,
         ];
 
     }

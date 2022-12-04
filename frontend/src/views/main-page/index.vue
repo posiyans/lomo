@@ -1,15 +1,23 @@
 <template>
-  <div v-if="listLoading">
-    <ArticlePreview v-for="item in list" :key="item.id" :data="item" />
+  <div>
+    <UserAddNewsBtn />
+    <div v-if="listLoading">
+      <div v-for="item in list" :key="item.id" style="margin-bottom: 5px;">
+        <ArticlePreview :key="item.id" :data="item" />
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import ArticlePreview from '@/components/ArticlePreview'
 import { fetchListForCategory } from '@/api/article'
+import UserAddNewsBtn from '@/Modules/Article/Article/components/UserAddNewsBtn'
+
 export default {
   components: {
-    ArticlePreview
+    ArticlePreview,
+    UserAddNewsBtn
   },
   data() {
     return {
@@ -24,6 +32,9 @@ export default {
     }
   },
   computed: {
+    user() {
+      return this.$store.state.user
+    }
   },
   mounted() {
     this.fetchArticle()

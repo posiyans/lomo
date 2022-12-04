@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Log;
 use App\Models\Stead;
 
+use App\Modules\User\Models\UserModel;
 use App\Notifications\ResetPassword;
 use App\Notifications\VerifyEmail;
 use Illuminate\Notifications\Notifiable;
@@ -14,11 +15,8 @@ use Illuminate\Support\Facades\Mail;
 use Laratrust\Traits\LaratrustUserTrait;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable implements MustVerifyEmail
+class User extends UserModel
 {
-    use LaratrustUserTrait;
-    use Notifiable;
-    use HasApiTokens;
 
     /**
      * The attributes that are mass assignable.

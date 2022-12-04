@@ -93,7 +93,7 @@ export default {
     },
     getStead() {
       fetchSteadList().then(response => {
-        this.countStead = response.data.meta.total
+        this.countStead = response.data.data.length
       })
     },
     getVoting() {

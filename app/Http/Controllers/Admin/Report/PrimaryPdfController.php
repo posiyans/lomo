@@ -182,7 +182,7 @@ class PrimaryPdfController extends Controller
         $this->pdf->SetFont('freesans', '', 6);
         $this->pdf->Text(15, 30, 'Код для оплаты в терминалах,');
         $this->pdf->Text(10, 32, 'банкоматах и мобильных приложениях');
-        $fileName= tempnam('/tmp', 'qr_code');;
+        $fileName= tempnam(sys_get_temp_dir(), 'qr_code');
         $code = new PrimaryQrCodeModel();
         $options = [
             'name' => $this->name,

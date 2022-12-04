@@ -22,9 +22,9 @@ class CategoryController extends Controller
         $cat = false;
         if (isset($request->children) && $request->children == true){
             $cat = CategoryModel::getListChildren();
-            if (Auth::check() && Auth::user()->ability('superAdmin', 'access-admin-panel')) {
-                $cat[] = ['label' => 'Админ панель', 'basePath' => '/admin/my-dashboard'];
-            }
+//            if (Auth::check() && Auth::user()->ability('superAdmin', 'access-admin-panel')) {
+//                $cat[] = ['label' => 'Админ панель', 'basePath' => 'http://lomo.loc/admin'];
+//            }
         }
         return $cat;
 //        $query =  CategoryModel::query();
@@ -47,9 +47,9 @@ class CategoryController extends Controller
                 ['label'=>'Камеры', 'basePath'=>'/modules/camera'],
             ]
         ];
-        if (Auth::check() && Auth::user()->ability('superadmin', 'access-admin-panel')) {
-            $rez[] = ['label' => 'Админ панель', 'basePath' => '/admin/my-dashboard'];
-        }
+//        if (Auth::check() && Auth::user()->ability('superadmin', 'access-admin-panel')) {
+//            $rez[] = ['label' => 'Админ панель', 'basePath' => '/admin/my-dashboard'];
+//        }
         return $cat;
     }
 

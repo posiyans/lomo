@@ -51,7 +51,7 @@
             />
           </el-form-item>
           <el-form-item label="">
-            <div class="flex">
+            <div class="row no-wrap">
               <div>
                 <el-checkbox v-model="personal" />
               </div>
@@ -64,15 +64,11 @@
             <el-button :loading="loading" size="default" class="w-100" type="primary" :disabled="!personal" @click.native.prevent="handleRegister">Зарегистрироваться</el-button>
           </el-form-item>
         </el-form>
-        <div class="flex">
-          <div>
+        <div class="row">
+          <div class="q-mr-sm">
             или через
           </div>
-          <div class="ml2">
-            <div @click="loginVK">
-              <img src="/images/vk-banner.png" width="100px">
-            </div>
-          </div>
+          <LoginByVkBtn />
         </div>
       </div>
       <div slot="footer" class="main-header__modal_title">
@@ -84,9 +80,11 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import LoginByVkBtn from '@/Modules/User/components/LoginByVkBtn'
 export default {
   name: 'LoginModal',
   components: {
+    LoginByVkBtn
   },
   data() {
     const validateName = (rule, value, callback) => {
@@ -97,7 +95,6 @@ export default {
       }
     }
     const validateEmail = (rule, value, callback) => {
-      console.log('valid eamil')
       const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/
       if (!re.test(value)) {
         callback(new Error('Пожалуйста, введите действующий email'))
@@ -178,28 +175,6 @@ export default {
         await this.$store.dispatch('user/getInfo')
         // this.key += 1
       }
-    },
-    async loginVK() {
-      console.log('vk')
-
-      const $url = await this.$store.dispatch('user/loginVK')
-      // console.log($url)
-      // console.log(window.location.pathname)
-      // console.log(this.$route.query.page)
-      // console.log(location.href)
-      window.location = $url
-      // window.location = $url + '&redirect_uri=' + location.href
-      // this.newWin = window.open($url, "hello", "width=200,height=200");
-      // this.intervalid = setInterval(() => {
-      //   console.log('interval')
-      //   console.log(this.newWin)
-      //   if (this.newWin === null || this.newWin.closed) {
-      //     clearInterval(this.intervalid)
-      //     store.dispatch('user/getInfo')
-      //   }
-      // }, 1000);
-      // newWin.addEventListener('beforeunload', this.test)
-      // newWin.addEventListener('resultCloseParent', this.test)
     },
     handleRegister() {
       console.log('register!!!!!!!!!!!')

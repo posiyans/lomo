@@ -71,10 +71,10 @@ class PdfController extends Controller
 
     public static function fillAmountData($pdf, $ReceiptType, $steadModel)
     {
-        if(is_int($ReceiptType)){
+        if(is_int($ReceiptType) || is_string($ReceiptType)){
             $ReceiptType = ReceiptType::find($ReceiptType);
         }
-        if (is_int($steadModel)) {
+        if (is_int($steadModel) || is_string($steadModel)) {
             $steadModel = Stead::find($steadModel);
         }
         $description = '';
@@ -251,7 +251,7 @@ class PdfController extends Controller
         $pdf->SetFont('freesans', '', 6);
         $pdf->Text(15, 30, 'Код для оплаты в терминалах,');
         $pdf->Text(10, 32, 'банкоматах и мобильных приложениях');
-        $fileName= '/tmp/qr_code_'.time();
+        $fileName = tempnam(sys_get_temp_dir(), 'qr_code_');
         $code = new QrCodeModel;
         $code->fillDetailsGardient(1);
         if ($fio) {

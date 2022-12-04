@@ -1,7 +1,9 @@
 <template>
   <div>
     <div v-if="listLoading">
-      <ArticlePreview v-for="item in list" :key="item.id" :data="item" />
+      <div v-for="item in list" :key="item.id" style="margin-bottom: 5px;">
+        <ArticlePreview :key="item.id" :data="item" />
+      </div>
     </div>
     <div v-if="loadMore" style="width: 100%;"><el-button type="warning" plain style="width: 100%;" @click="add">{{ loadMore }}</el-button></div>
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="fetchArticle" />

@@ -112,21 +112,21 @@ class VotingModel extends MyModel
 
     public function calculateStatus()
     {
-        $datetime = new \DateTime();
-         if ($this->status !== 'cancel' || $this->status !== 'done') {
-            if ($this->type == 'public') {
-                if (strtotime($this->date_publish) < $datetime->format('U')) {
-                    $this->status = 'execution';
-                }
-            } else {
-                if (strtotime($this->date_start) < $datetime->format('U')) {
-                    $this->status  = 'execution';
-                }
-                if (strtotime($this->date_stop . ' 23:59:59') < $datetime->format('U')) {
-                    $this->status  = 'done';
-                }
-            }
-        }
+//        $datetime = new \DateTime();
+//         if ($this->status !== 'cancel' || $this->status !== 'done') {
+//            if ($this->type == 'public') {
+//                if (strtotime($this->date_publish) < $datetime->format('U')) {
+//                    $this->status = 'execution';
+//                }
+//            } else {
+//                if (strtotime($this->date_start) < $datetime->format('U')) {
+//                    $this->status  = 'execution';
+//                }
+//                if (strtotime($this->date_stop . ' 23:59:59') < $datetime->format('U')) {
+//                    $this->status  = 'done';
+//                }
+//            }
+//        }
     }
 
 

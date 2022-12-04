@@ -21,17 +21,16 @@ class ArticleController extends Controller
     public function index(Request $request)
     {
         $query =  ArticleModel::query();
-        $query->where('publish_time', '<', NOW());
         $query->where('public', '1');
-        $query->where('news', '1');
+//        $query->where('news', '1');
         if ($request->category_id) {
             $query->where('category_id', $request->category_id);
         }
         if ($request->sort) {
             if ($request->sort == '-time'){
-                $query->orderBy('publish_time', 'DESC');
+                $query->orderBy('created_at', 'DESC');
             } else if ($request->sort == '+time') {
-               $query->orderBy('publish_time', 'ASC') ;
+               $query->orderBy('created_at', 'ASC') ;
             } else if ($request->sort == '-id') {
                 $query->orderBy('id', 'DESC') ;
             } else {
@@ -103,11 +102,7 @@ class ArticleController extends Controller
             $model = ArticleModel::find((int)$id);
         }
         if ($model){
-            $model->files = $model->files;
-//            $model->comments = $model->comments;
-            $model->comments_show = CommentResource::collection($model->comments);
             return $model;
-
         }
 
         return json_encode(['title'=>'Статья не найдена']);

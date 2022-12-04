@@ -2,7 +2,7 @@ import { login, logout, getInfo, loginVK, userRegister } from '@/api/user/user.j
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 import store from '@/store'
-import {Message} from "element-ui";
+import { Message } from 'element-ui'
 
 const state = {
   token: getToken(),
@@ -73,14 +73,9 @@ const actions = {
     })
   },
   loginVK({ commit }) {
-    // const { email, password, remember } = userInfo
     return new Promise((resolve, reject) => {
       loginVK({}).then(response => {
         const { data } = response
-        //store.dispatch('user/getInfo')
-        // const { data } = response
-        // commit('SET_TOKEN', data.token)
-        // setToken(data.token)
         resolve(data)
       }).catch(error => {
         reject(error)
@@ -91,31 +86,30 @@ const actions = {
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
-        //   return ''
-          const { data } = response
-          if (!data) {
-            reject('Verification failed, please Login again.')
-          }
+        const { data } = response
+        if (!data) {
+          reject('Verification failed, please Login again.')
+        }
 
-          const { roles, name, avatar, introduction, allPermissions } = data
+        const { roles, name, avatar, introduction, allPermissions } = data
 
-          // roles must be a non-empty array
-          if (!allPermissions || allPermissions.length <= 0) {
-            reject('getInfo: roles must be a non-null array!')
-          }
-          if (data.message) {
-            Message({
-              message: data.message,
-              type: 'warning',
-              duration: 5 * 1000
-            })
-          }
-          commit('SET_INFO', data)
-          commit('SET_ROLES', allPermissions)
-          commit('SET_NAME', name)
-          commit('SET_AVATAR', avatar)
-          commit('SET_INTRODUCTION', introduction)
-          resolve(data)
+        // roles must be a non-empty array
+        if (!allPermissions || allPermissions.length <= 0) {
+          reject('getInfo: roles must be a non-null array!')
+        }
+        if (data.message) {
+          Message({
+            message: data.message,
+            type: 'warning',
+            duration: 5 * 1000
+          })
+        }
+        commit('SET_INFO', data)
+        commit('SET_ROLES', allPermissions)
+        commit('SET_NAME', name)
+        commit('SET_AVATAR', avatar)
+        commit('SET_INTRODUCTION', introduction)
+        resolve(data)
       })
       // }).catch(error => {
       //   reject(error)
@@ -124,7 +118,7 @@ const actions = {
   },
 
   // user logout
- logout({ commit, state, dispatch }) {
+  logout({ commit, state, dispatch }) {
     return new Promise((resolve, reject) => {
       logout(state.token).then(() => {
         commit('SET_TOKEN', '')
@@ -142,9 +136,9 @@ const actions = {
       }).catch(error => {
         reject(error)
       })
-    }).then(() =>{
+    }).then(() => {
       dispatch('getInfo')
-    }).then(() =>{
+    }).then(() => {
       store.dispatch('permission/getMenu')
     })
   },

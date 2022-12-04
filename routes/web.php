@@ -14,14 +14,14 @@ define('__ROOT__', dirname(__FILE__));
 Route::get('/api/v1/sanctum/csrf-cookie', 'Laravel\Sanctum\Http\Controllers\CsrfCookieController@show');
 
 Route::get('/api/v1/test', 'App\Http\Controllers\Admin\Report\PdfController@report');
+Route::get('/api/v1/sanctum/csrf-cookie', 'Laravel\Sanctum\Http\Controllers\CsrfCookieController@show');
 
+//Route::group(['prefix' => '/api'], function() {
+//    Route::get('vk/auth/callback', 'App\Http\Controllers\VkController@vkcalback');
+//});
+//Route::group(['prefix' => '/api/v1'], function() {
 
-Route::group(['prefix' => '/api'], function() {
-    Route::get('vk/auth/callback', 'App\Http\Controllers\VkController@vkcalback');
-});
-Route::group(['prefix' => '/api/v1'], function() {
-
-});
+//});
 
 $myRoutesForAll = [
     'yandex',

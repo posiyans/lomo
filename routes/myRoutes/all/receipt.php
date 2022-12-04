@@ -4,7 +4,7 @@
 Route::get('receipt/get-clear', 'App\Http\Controllers\All\Receipt\ReceiptClearController@index');
 Route::get('receipt/get-receipt-type-list', 'App\Http\Controllers\All\Receipt\GetReceiptTypeListController@index');
 
-Route::post('receipt/get-receipt-contributions-for-stead', 'App\Http\Controllers\All\ReceiptController@getContributionsReceipt');
+Route::get('receipt/get-receipt-contributions-for-stead', 'App\Http\Controllers\All\ReceiptController@getContributionsReceipt');
 // пустой QR code
 Route::get('receipt/get-qrcode-clear', 'App\Http\Controllers\QrCodeController@qrCodeClear');
 // получить квитанцию по переданным параметрам

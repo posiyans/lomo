@@ -34,15 +34,12 @@
             <el-button size="default" class="w-100" type="primary" @click="login">Войти</el-button>
           </el-form-item>
         </el-form>
-        <div class="flex">
-          <div>
+        <div class="row items-center">
+          <div class="q-mr-md">
             или через
           </div>
-          <div class="ml2">
-            <div @click="loginVK">
-              <img src="/images/vk-banner.png" width="100px">
-            </div>
-          </div>
+          <LoginByVkBtn />
+
         </div>
       </div>
       <div slot="footer" class="main-header__modal_title">
@@ -54,9 +51,12 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import LoginByVkBtn from '@/Modules/User/components/LoginByVkBtn'
+
 export default {
   name: 'LoginModal',
   components: {
+    LoginByVkBtn
   },
   data() {
     return {
@@ -102,23 +102,6 @@ export default {
     }
   },
   methods: {
-    async handleCommand(command) {
-      if (command === 'logout') {
-        console.log('logout')
-        await this.$store.dispatch('user/logout')
-        await this.$store.dispatch('user/getInfo')
-        // this.key += 1
-      }
-    },
-    async loginVK() {
-      // console.log('vk')
-
-      const $url = await this.$store.dispatch('user/loginVK')
-      window.location = $url
-    },
-    register() {
-      console.log('close!!!!!!!!!!!')
-    },
     resetPassword() {
       this.showLoginForm = false
       this.$router.push('/password/reset')
@@ -132,7 +115,6 @@ export default {
               this.showLoginForm = false
             })
             .catch(() => {
-              this.loading = false
             })
         }
       })

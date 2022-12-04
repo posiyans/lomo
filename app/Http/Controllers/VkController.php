@@ -3,13 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Socials\LinkedSocialAccounts;
-use App\Models\Temper\TemperModel;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Session;
-use Socialite;
 
 class VkController extends Controller
 {

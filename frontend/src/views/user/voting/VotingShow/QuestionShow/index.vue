@@ -14,7 +14,8 @@ export default {
   },
   props: {
     voting: {
-      type: Object
+      type: Object,
+      required: true
     }
   },
   data() {

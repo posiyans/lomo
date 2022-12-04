@@ -46,7 +46,7 @@ class VotingResource extends JsonResource
             'countAnswer'=>$this->userAnswer(),
             'questions'=>QuestionResource::collection($this->questions),
             'steadsCount'=> Stead::all()->count(),
-            'created_at'=>$this->updated_at,
+            'updated_at'=>$this->updated_at,
             'dateRange' => [$this->date_start, $this->date_stop]
             ];
     }

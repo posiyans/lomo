@@ -1,33 +1,18 @@
 <template>
-  <GuestForm v-if="roleGuest"/>
-  <UserForm v-else/>
+  <GuestForm v-if="roleGuest" />
 </template>
 
 <script>
 import GuestForm from './GuestForm.vue'
-import UserForm from './UserForm.vue'
 export default {
   name: 'LoginForm',
   components: {
-    GuestForm,
-    UserForm
-  },
-  data() {
-    return {
-    }
-  },
-  mounted() {
+    GuestForm
   },
   computed: {
     roleGuest() {
-      if (this.$store.getters.roles && this.$store.getters.roles.includes('user')) {
-        return false
-      }
-      return true
+      return !(this.$store.getters.roles && this.$store.getters.roles.includes('user'))
     }
-  },
-  methods: {
-
   }
 }
 </script>

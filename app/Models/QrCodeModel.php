@@ -127,10 +127,10 @@ class QrCodeModel
 
     public function fillDetailsDevice($ReceiptType, $steadModel)
     {
-        if (is_int($ReceiptType)){
+        if (is_int($ReceiptType) || is_string($ReceiptType)){
            $ReceiptType = ReceiptType::findOrFail((int)$ReceiptType);
         }
-        if (is_int($steadModel)){
+        if (is_int($steadModel) || is_string($steadModel)){
             $steadModel = Stead::findOrFail((int)$steadModel);
         }
         $cash = 0;

@@ -12,6 +12,10 @@
         :collapse-transition="false"
         mode="vertical"
       >
+        <el-menu-item index="to-site" @click="toSite">
+          <svg-icon icon-class="dashboard" />
+          Сайт
+        </el-menu-item>
         <sidebar-item v-for="route in permission_routes" :key="route.path" :item="route" :base-path="route.path" />
       </el-menu>
     </el-scrollbar>
@@ -48,6 +52,11 @@ export default {
     },
     isCollapse() {
       return !this.sidebar.opened
+    }
+  },
+  methods: {
+    toSite() {
+      window.location = '/'
     }
   }
 }

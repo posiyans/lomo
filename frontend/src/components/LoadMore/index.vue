@@ -1,6 +1,10 @@
 <template>
   <div>
-    <div v-if="loadMore" v-loading="listLoading" style="width: 100%; margin-top: 5px;"><el-button type="info" plain style="width: 100%;" @click="add">{{ loadMore }}</el-button></div>
+    <div v-if="loadMore" v-loading="listLoading" style="width: 100%; margin-top: 5px;">
+      <el-button type="info" plain style="width: 100%;" @click="add">
+        {{ loadMore }}
+      </el-button>
+    </div>
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
   </div>
 </template>
@@ -48,8 +52,6 @@ export default {
   },
   methods: {
     getList() {
-      console.log('adapter')
-      console.log(this.id)
       if (this.id) {
         this.getListId()
       } else {

@@ -2,12 +2,11 @@
 
 namespace App\Models\Storage;
 
-use App\Models\MyModel;
-use Illuminate\Database\Eloquent\Model;
+use App\Modules\File\Models\FileModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 
-class File extends MyModel
+class File extends FileModel
 {
     use SoftDeletes;
 

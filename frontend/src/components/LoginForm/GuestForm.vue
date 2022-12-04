@@ -9,24 +9,28 @@
           label-position="top"
           :rules="rules"
           size="mini"
+          @submit="login"
         >
           <el-form-item label="E-mail" prop="email">
-            <div class="reset-password" @click="resetPassword" >Забыли пароль?</div>
-            <el-input v-model="form.email"></el-input>
+            <div class="reset-password" @click="resetPassword">Забыли пароль?</div>
+            <el-input v-model="form.email" />
           </el-form-item>
           <el-form-item label="Пароль" prop="password">
-            <el-input v-model="form.password" show-password></el-input>
+            <el-input v-model="form.password" show-password />
           </el-form-item>
-          <el-form-item>
           <el-form-item label="" prop="type">
-              <el-checkbox v-model="form.remember">Запомнить меня</el-checkbox>
+            <el-checkbox v-model="form.remember">Запомнить меня</el-checkbox>
           </el-form-item>
+          <div>
             <el-button type="primary" @click="login">Войти</el-button>
-            <span>или через</span>
-          </el-form-item>
+          </div>
         </el-form>
-        <div @click="loginVK"><img src="/images/vk-banner.png" width="100px"></div>
-
+        <div class="q-mt-sm row items-center no-wrap justify-between">
+          <div>
+            или через
+          </div>
+          <LoginByVkBtn class="q-pt-sm" />
+        </div>
       </div>
     </template>
   </RightCard>
@@ -34,11 +38,13 @@
 
 <script>
 import RightCard from '@/components/RightCard'
-import store from '../../store'
+import LoginByVkBtn from '@/Modules/User/components/LoginByVkBtn'
+
 export default {
   name: 'LoginForm',
   components: {
-    RightCard
+    RightCard,
+    LoginByVkBtn
   },
   props: {
     showLoginForm: {
@@ -53,8 +59,8 @@ export default {
           { type: 'email', message: 'Должен быть валидный email', trigger: 'blur' }
         ],
         password: [
-          { required: true, message: 'Введите пароль', trigger: 'blur' },
-        ],
+          { required: true, message: 'Введите пароль', trigger: 'blur' }
+        ]
       },
       intervalid: '',
       newWin: null,
@@ -65,42 +71,14 @@ export default {
       }
     }
   },
-  mounted() {
-    // console.log(this.showLoginForm)
-  },
-  computed: {
-
-  },
   methods: {
     resetPassword() {
       this.$router.push('/password/reset')
     },
-    async loginVK() {
-      console.log('vk')
-
-      const $url = await this.$store.dispatch('user/loginVK')
-      // console.log($url)
-      // console.log(window.location.pathname)
-      // console.log(this.$route.query.page)
-      // console.log(location.href)
-      window.location = $url
-      // window.location = $url + '&redirect_uri=' + location.href
-      // this.newWin = window.open($url, "hello", "width=200,height=200");
-      // this.intervalid = setInterval(() => {
-      //   console.log('interval')
-      //   console.log(this.newWin)
-      //   if (this.newWin === null || this.newWin.closed) {
-      //     clearInterval(this.intervalid)
-      //     store.dispatch('user/getInfo')
-      //   }
-      // }, 1000);
-      // newWin.addEventListener('beforeunload', this.test)
-      // newWin.addEventListener('resultCloseParent', this.test)
-    },
     register() {
       // console.log(this.showLoginForm)
 
-      //this.$emit(true)
+      // this.$emit(true)
       this.$router.push('/')
 
       console.log('register')
@@ -180,5 +158,4 @@ export default {
   /* }*/
 
 </style>
-
 

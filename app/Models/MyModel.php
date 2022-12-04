@@ -32,6 +32,8 @@ class MyModel extends Model
 
 
     /**
+     * @deprecated
+     *
      * Файлы привязанные к модели
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
@@ -42,6 +44,8 @@ class MyModel extends Model
     }
 
     /**
+     * @deprecated
+     *
      * Комментарии привязанные к модели
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
@@ -52,6 +56,9 @@ class MyModel extends Model
     }
 
     /**
+     *
+     * @deprecated
+     *
      * прикрепить файлы к модели
      * @param $files
      */
@@ -78,6 +85,9 @@ class MyModel extends Model
     }
 
     /**
+     *
+     * @deprecated
+     *
      * открепить все файлы от модели
      *
      * @return bool

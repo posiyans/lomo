@@ -3,15 +3,18 @@
 namespace App\Models\Article;
 
 use App\Models\Storage\File;
-use App\Models\MyModel;
+use App\Modules\File\Models\FileModel;
 
-class ArticleModel extends MyModel
+class ArticleModel extends \App\Modules\Article\Models\ArticleModel
 {
     //
 
-    public function comments()
+
+    public function files()
     {
-        return $this->hasMany('App\Models\Article\CommentModel', 'article_id', 'id');
+       // return $this->hasMany('App\Modules\File\Models\FileModel', 'commentable_uid', 'uid');
+        return $this->morphMany(FileModel::class, 'commentable');
+
     }
 
 
