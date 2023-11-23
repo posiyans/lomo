@@ -15,15 +15,10 @@ class CreateSteadsTable extends Migration
     {
         Schema::create('steads', function (Blueprint $table) {
             $table->id();
-            $table->integer('gardening_id');
             $table->string('number');
-            $table->string('surname')->nullable();
-            $table->string('name')->nullable();
-            $table->string('patronymic')->nullable();
             $table->string('size')->nullable();
-            $table->string('email')->nullable();
-            $table->text('history')->nullable();
-            $table->json('discriptions')->nullable();
+            $table->json('descriptions')->nullable();
+            $table->json('options')->nullable()->comment('опции для участка');
             $table->timestamps();
         });
     }

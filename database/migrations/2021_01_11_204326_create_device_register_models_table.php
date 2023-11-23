@@ -22,7 +22,7 @@ class CreateDeviceRegisterModelsTable extends Migration
             $table->string('device_brand')->comment('модель прибора');
             $table->date('installation_date')->nullable()->comment('дата установки');
             $table->date('verification_date')->nullable()->comment('дата до следующей поверки прибора');
-            $table->string('descriptions')->nullable()->comment('коментарий');
+            $table->string('descriptions')->nullable()->comment('комментарий');
             $table->boolean('active')->default(true)->comment('запрашивать показания');
             $table->timestamps();
         });

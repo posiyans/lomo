@@ -18,7 +18,8 @@ class CreateRatesTable extends Migration
             $table->integer('device_id');
             $table->string('ratio_a');
             $table->string('ratio_b');
-            $table->string('discription')->nullable();
+            $table->string('description')->nullable();
+            $table->date('date_start')->nullable()->comment('дата начала действия тарифа');
             $table->timestamps();
         });
     }

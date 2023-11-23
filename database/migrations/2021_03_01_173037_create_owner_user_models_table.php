@@ -16,6 +16,7 @@ class CreateOwnerUserModelsTable extends Migration
         Schema::create('owner_user_models', function (Blueprint $table) {
             $table->id();
             $table->string('uid')->comment('uid');
+            $table->string('user_uid')->nullable()->comment('uid пользователя');
             $table->softDeletes();
             $table->timestamps();
         });

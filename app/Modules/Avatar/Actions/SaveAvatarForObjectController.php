@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
  * Сохранить аватар для модели
  *
  */
-class SaveAvataForObjectController extends Controller
+class SaveAvatarForObjectController extends Controller
 {
 
     public function index(Request $request)

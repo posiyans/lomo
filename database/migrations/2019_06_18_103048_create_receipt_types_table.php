@@ -16,8 +16,10 @@ class CreateReceiptTypesTable extends Migration
         Schema::create('receipt_types', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable();
-            $table->string('payment_period')->nullable();
+            $table->boolean('auto_invoice')->default(false)->comment('автоматическое выставление счета');
+            $table->json('options')->nullable()->comment('доп опции');
             $table->integer('depends')->default(0);
+            $table->integer('payment_period')->nullable()->comment('период оплаты');
             $table->timestamps();
         });
     }

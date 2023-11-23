@@ -15,11 +15,14 @@ class CreateCommentModelsTable extends Migration
     {
         Schema::create('comment_models', function (Blueprint $table) {
             $table->id();
+            $table->string('uid')->comment('uid комментария');
             $table->integer('user_id')->comment('id пользователя');
-            $table->integer('article_id')->comment('id статьи');
-            $table->integer('comment_id')->nullable()->comment('id коментария на который отвечают');
+            $table->string('commentable_type')->nullable();
+            $table->string('commentable_uid')->nullable();
             $table->text('message')->nullable()->comment('текст коментария');
             $table->softDeletes();
+            $table->integer('user_deletes_id')->nullable()->comment('id пользователя кто удалил');
+            $table->json('options')->nullable()->comment('Доп опции');
             $table->timestamps();
         });
     }

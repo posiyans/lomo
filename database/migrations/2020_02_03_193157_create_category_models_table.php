@@ -17,9 +17,9 @@ class CreateCategoryModelsTable extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->integer('parent')->nullable();
-            $table->boolean('show_menu')->default(false);
-            $table->string('menu_name')->nullable();
             $table->integer('position')->nullable();
+            $table->boolean('public')->default(false);
+            $table->string('description')->nullable();
             $table->timestamps();
         });
     }

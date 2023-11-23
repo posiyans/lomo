@@ -15,15 +15,16 @@ class CreateFilesTable extends Migration
     {
         Schema::create('files', function (Blueprint $table) {
             $table->id();
+            $table->string('uid')->comment('uid файла');
             $table->integer('user_id')->unsigned();
 //            $table->foreign('user_id')->references('id')->on('users');
             $table->string('commentable_type')->nullable();
-            $table->integer('commentable_id')->nullable();
             $table->string('commentable_uid')->nullable();
             $table->string('hash')->nullable();
             $table->text('name')->nullable();
+            $table->string('type')->comment('тип файла');
             $table->integer('size')->nullable();
-            $table->text('discription')->nullable();
+            $table->text('description')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
