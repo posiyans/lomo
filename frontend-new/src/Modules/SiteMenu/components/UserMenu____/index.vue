@@ -9,22 +9,22 @@
     active-text-color="#ffd04b"
     @select="handleSelect"
   >
-    <SidebarItem v-for="item in siteMenu.menu" :key="item.basePath" :item="item"  style="min-width: 150px;"/>
+    <SidebarItem v-for="item in siteMenu.menu" :key="item.basePath" :item="item" style="min-width: 150px;" />
     <el-menu-item v-if="admin" @click="showAdmin">Админ панель</el-menu-item>
   </el-menu>
   <div v-if="siteMenu.loading" class="q-px-md">
     <q-spinner-dots
-        color="white"
-        size="2em"
+      color="white"
+      size="2em"
     />
   </div>
 </template>
 
 <script>
 import SidebarItem from './SidebarItem.vue'
-import { defineComponent, ref, computed } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useSiteMenuStore } from 'src/Modules/SiteMenu/store/menu-store.js'
+import { useSiteMenuStore } from 'src/Modules/SiteMenu/store/useSiteMenu.js'
 import { useUserStore } from 'src/Modules/User/store/user-store'
 
 export default defineComponent({
@@ -37,7 +37,7 @@ export default defineComponent({
       default: false
     }
   },
-  setup () {
+  setup() {
     const router = useRouter()
     const siteMenu = useSiteMenuStore()
     const activeIndex = ref('/')

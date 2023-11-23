@@ -1,11 +1,12 @@
 <?php
+
 namespace App\Modules\User\Repositories;
 
 
 use App\Modules\User\Models\UserModel;
-use App\Modules\User\Models\UserUidModel;
 
-class GetUserByUidRepository {
+class GetUserByUidRepository
+{
 
     private $uid;
 
@@ -17,13 +18,13 @@ class GetUserByUidRepository {
     public function run()
     {
         if (is_integer($this->uid)) {
-            $model = UserUidModel::where('id', $this->uid)->first();
+            $model = UserModel::where('id', $this->uid)->first();
         }
         if (is_string($this->uid)) {
-            $model = UserUidModel::where('uid', $this->uid)->first();
+            $model = UserModel::where('uid', $this->uid)->first();
         }
         if ($model) {
-            return $model->user;
+            return $model;
         }
         throw new \Exception('Пользователь не найден');
     }

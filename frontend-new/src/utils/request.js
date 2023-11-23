@@ -1,6 +1,7 @@
 import axios from 'axios'
-import { getCsrfCookieToken } from 'src/Modules/User/api/auth'
+import { getCsrfCookieToken } from 'src/Modules/Auth/api/auth'
 import { Notify } from 'quasar'
+import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
 
 // create an axios instance
 const service = axios.create({
@@ -11,6 +12,8 @@ const service = axios.create({
 
 service.interceptors.request.use(
   config => {
+    config.headers.Accept = 'application/json'
+    config.headers['X-XSRF-TOKEN'] = decodeURIComponent(getCookie('XSRF-TOKEN'))
     return config
   },
   error => {
@@ -19,6 +22,17 @@ service.interceptors.request.use(
   }
 )
 
+function getCookie(name) {
+  const cookies = document.cookie.split(';')
+  for (const cookie of cookies) {
+    const [key, value] = cookie.split('=')
+    if (key.trim() === name) {
+      return value
+    }
+  }
+  return ''
+}
+
 // response interceptor
 service.interceptors.response.use(
   response => {
@@ -26,10 +40,11 @@ service.interceptors.response.use(
     return res
   },
   error => {
-    // Notify.create('Danger, Will Robinson! Danger!')
     if (error.response.status === 419) {
       getCsrfCookieToken()
         .then(res => {
+          const autUserSore = useAuthStore()
+          autUserSore.getMyInfo()
           Notify.create({
             message: 'Ваша сессия устарела.',
             caption: 'Попробуйте еще раз',

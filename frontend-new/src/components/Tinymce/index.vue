@@ -76,7 +76,6 @@ export default {
   },
   watch: {
     modelValue(val) {
-      console.log(val)
       if (!this.hasChange && this.hasInit) {
         this.$nextTick(() => window.tinymce.get(this.tinymceId).setContent(val || ''))
       }
@@ -84,7 +83,6 @@ export default {
   },
   mounted() {
     this.init()
-    console.log(this.id)
   },
   activated() {
     if (window.tinymce) {

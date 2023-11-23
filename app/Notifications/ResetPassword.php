@@ -3,16 +3,15 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Support\Facades\Lang;
+use Illuminate\Notifications\Notification;
 
 class ResetPassword extends Notification
 {
     use Queueable;
 
     public $token;
+
     /**
      * Create a new notification instance.
      *
@@ -47,14 +46,9 @@ class ResetPassword extends Notification
             ->salutation('С Уважением, Администрация сайта')
             ->subject('Сброс пароля')
             ->line('Вы получили это письмо, потому что мы получили запрос на сброс пароля для вашей учетной записи.')
-//            ->action('Сбросить пароль', url(config('app.url').route('password.reset', ['token' => $this->token, 'email' => $notifiable->getEmailForPasswordReset()], false)))
-            ->action('Сбросить пароль', config('app.url').'/#/password/change?token='.$this->token.'&email='.$notifiable->getEmailForPasswordReset())
+            ->action('Сбросить пароль', config('app.url') . '/auth/change-password?token=' . $this->token . '&email=' . $notifiable->getEmailForPasswordReset())
             ->line('Время действия ссылки для сброса пароля истечет через 60 минут.')
             ->line('Если вы не запрашивали сброс пароля, никаких дальнейших действий не требуется.');
-//        return (new MailMessage)
-//                    ->line('The introduction to the notification.')
-//                    ->action('Notification Action', url('/'))
-//                    ->line('Thank you for using our application!');
     }
 
     /**

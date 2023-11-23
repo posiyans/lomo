@@ -4,12 +4,8 @@ namespace App\Http\Controllers\All;
 
 use App\Http\Controllers\Admin\Report\PdfController;
 use App\Http\Controllers\Controller;
-use App\Models\Receipt\ReceiptType;
+use App\Modules\Stead\Repositories\GetSteadByIdRepository;
 use Illuminate\Http\Request;
-use App\Models\Stead;
-use App\Models\Receipt\InstrumentReadings;
-use App\Models\Receipt\MeteringDevice;
-use App\Models\Gardening;
 
 
 class ReceiptController extends Controller
@@ -19,9 +15,13 @@ class ReceiptController extends Controller
     public function getContributionsReceipt(Request $request)
     {
         if (isset($request->stead)) {
-          return PdfController::getReceipFoStead($request->stead, 2, false);
-       }
-       return 'error';
+            $stead = (new GetSteadByIdRepository($request->stead))->run();
+            $buffer = PdfController::getReceipFoStead($request->stead, 2, false);
+            return response()->streamDownload(function () use ($buffer) {
+                echo $buffer;
+            }, 'Квитанция_' . $stead->number . '.pdf');
+        }
+        return 'error';
     }
 
 
@@ -77,7 +77,6 @@ class ReceiptController extends Controller
 //
 //        return json_encode(['status'=> true, 'data'=>$rez, 'total'=>$steads->total()]);
 //    }
-
 
 
 }

@@ -1,90 +1,137 @@
 <template>
-  <div>
-    <div class="row items-center no-wrap relative-position rounded-borders">
-      <div class="q-px-sm">
-        <div class="text-center q-pt-sm">
-          <UserAvatar :uid="item.user.id" size="40px" />
-        </div>
-      </div>
-      <div class="col-grow">
-        <div class="row items-center">
-          <div class="text-weight-bold text-primary q-mr-sm">
-            {{item.user.name}}
-          </div>
-          <ShowTime :time="showTime" class="text-grey-8" style="font-size: 0.9em"/>
-        </div>
-        <div v-html="item.message" class="q-py-sm" />
-        <q-separator/>
-      </div>
-
-      <div class="q-px-sm absolute-bottom-right text-grey-8 row ">
-        <div v-if="edit" class="q-pr-sm">
-          ред.
-        </div>
-      </div>
-      <div v-if="deleteAccess" class="absolute-top-right text-red q-pa-sm cursor-pointer" @click="deleteItem">
-        <i class="el-icon-delete-solid" />
+  <div v-if="item" class="row no-wrap relative-position" :class="{ 'reply-block': reply, 'cursor-pointer': reply }">
+    <div v-if="fullView" class="q-px-sm">
+      <div class="text-center q-pt-sm">
+        <UserAvatarByUid :uid="item.user.uid" size="40px" />
       </div>
     </div>
-
+    <div class="col">
+      <div class="row items-center q-col-gutter-sm">
+        <div class="text-weight-bold text-primary">
+          {{ item.user.name }}
+        </div>
+        <ShowTime v-if="fullView" :time="item.updated_at" class="text-grey-8" style="font-size: 0.9em" />
+        <slot name="header"></slot>
+      </div>
+      <slot></slot>
+      <div v-html="messageTextHtml"
+           :class=" { 'q-py-sm': fullView, 'text-strike' : item.delete, 'text-grey':  item.delete, ellipsis: reply, 'reply-block__message': reply, 'message-block__message': fullView }" />
+    </div>
+    <div class="q-px-sm absolute-bottom-right text-grey-8 row ">
+      <div v-if="edit" class="q-pr-sm">
+        ред.
+      </div>
+    </div>
   </div>
+  <div v-else>
+    <div class="text-grey reply-block">
+      Сообщение удалено
+    </div>
+  </div>
+
 </template>
 
 <script>
-import UserAvatar from 'src/Modules/Avatar/components/UserAvatar/index.vue'
-import { deleteMessage } from 'src/Modules/Comments/api/comment'
+/* eslint-disable */
+import { computed, defineComponent, onMounted, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import UserAvatarByUid from 'src/Modules/Avatar/components/UserAvatarByUid/index.vue'
+import { deleteMessage } from 'src/Modules/Comments/api/commentApi.js'
 import ShowTime from 'src/components/ShowTime/index.vue'
-export default {
+import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
+import { useQuasar } from 'quasar'
+
+export default defineComponent({
   components: {
-    UserAvatar,
+    UserAvatarByUid,
     ShowTime
   },
   props: {
     item: {
       type: Object,
       required: true
+    },
+    reply: {
+      type: Boolean,
+      default: false
     }
   },
-  computed: {
-    edit () {
-      return this.item.created_at !== this.item.updated_at
-    },
-    showTime () {
-      return this.edit ? this.item.updated_at : this.item.created_at
-    },
-    // user() {
-    //   if (this.$store.getters.user.allPermissions.includes('guest')) {
-    //     return false
-    //   }
-    //   return this.$store.getters.user
-    // },
-    deleteAccess () {
-      // if (this.user) {
-      //   if (this.$store.getters.user.allPermissions.includes('delete-comment')) {
-      return true
-      //   }
-      //   return this.user.info.id === this.item.user_id
-      // }
-      // return false
+  setup(props, { emit }) {
+    const data = ref(null)
+    const router = useRouter()
+    const route = useRoute()
+    const $q = useQuasar()
+    const edit = computed(() => {
+      return props.item.created_at !== props.item.updated_at
+    })
+    const fullView = computed(() => {
+      return !props.reply
+    })
+    const messageTextHtml = computed(() => {
+      // return props.item.message.replace(/\n/g, '<br />').replace(/(http:\/\/[.\w/=&?]+)/gi, "<a href='$1' class='text-primary'>$1</a>")
+      return props.item.message.replace(/\n/g, '<br />').replace(/([-a-zA-Z0-9@:%_\+.~#?&\/\/=]{2,256}\.[a-zA-Zа-яА-ЯёЁ]{2,4}\b(\/?[-a-zA-Z0-9а-яА-ЯёЁ@:%_\+.~#?&\/\/=]*)?)/gi, "<a href='$1' class='text-primary' target='_blank'>$1</a>")
+    })
+    const authStore = useAuthStore()
+    const deleteAccess = computed(() => {
+      return authStore.user.uid === props.item.user.uid
+    })
+    const replyMessage = () => {
+      emit('reply')
     }
-  },
-  methods: {
-    deleteItem () {
-      this.$confirm('Вы точно хотите удалить комментарий?', 'Внимание!!!', {
-        confirmButtonText: 'Удалить',
-        cancelButtonText: 'Отмена',
-        type: 'warning'
-      }).then(() => {
-        deleteMessage(this.item.uid)
+    const deleteItem = () => {
+      $q.dialog({
+        title: 'Внимание',
+        message: 'Удалить комментарий?',
+        ok: {
+          label: 'Удалить',
+          color: 'negative'
+        },
+        cancel: true,
+        persistent: true
+      }).onOk(() => {
+        props.item.delete = true
+        const data = {
+          uid: props.item.uid
+        }
+        deleteMessage(data)
           .then(response => {
-            this.$emit('reload')
+            emit('reload')
           })
       })
     }
+    onMounted(() => {
+
+    })
+    return {
+      fullView,
+      replyMessage,
+      deleteItem,
+      deleteAccess,
+      data,
+      messageTextHtml,
+      edit
+    }
   }
-}
+})
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.reply-block {
+  border-left-style: solid;
+  border-left-width: 4px;
+  border-left-color: $grey-5;
+  padding-left: 5px;
+  color: $grey-8;
+
+
+  &:hover {
+    border-left-color: $grey;
+  }
+}
+
+.reply-block__message {
+  max-width: 70%;
+  height: 1.5em;
+}
 
 </style>

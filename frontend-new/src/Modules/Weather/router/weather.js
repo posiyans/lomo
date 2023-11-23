@@ -8,7 +8,7 @@ const weather =
         component: () => import('src/Modules/Weather/page/WeatherShow/index.vue'),
         hidden: true,
         meta: {
-          title: ''
+          title: 'Погода'
         }
       }
     ]

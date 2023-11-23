@@ -5,6 +5,36 @@ namespace App\Modules\Voting\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * App\Modules\Voting\Models\AnswerModel
+ *
+ * @property int $id
+ * @property int $question_id
+ * @property string $text
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Modules\Voting\Models\QuestionModel|null $question
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Voting\UserAnswerModel> $userAnswers
+ * @property-read int|null $user_answers_count
+ * @method static \Illuminate\Database\Eloquent\Builder|AnswerModel newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|AnswerModel newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|AnswerModel onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|AnswerModel query()
+ * @method static \Illuminate\Database\Eloquent\Builder|AnswerModel whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AnswerModel whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AnswerModel whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AnswerModel whereQuestionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AnswerModel whereText($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AnswerModel whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AnswerModel withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|AnswerModel withoutTrashed()
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Voting\UserAnswerModel> $userAnswers
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Voting\UserAnswerModel> $userAnswers
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Voting\UserAnswerModel> $userAnswers
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Voting\UserAnswerModel> $userAnswers
+ * @mixin \Eloquent
+ */
 class AnswerModel extends Model
 {
     use SoftDeletes;

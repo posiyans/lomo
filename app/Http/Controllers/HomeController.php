@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Stead;
-use App\Models\Temper\TemperModel;
-use Illuminate\Http\Request;
 use Socialite;
 
 class HomeController extends Controller
@@ -16,7 +14,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-       //$this->middleware('auth');
+        //$this->middleware('auth');
     }
 
     /**
@@ -71,9 +69,9 @@ class HomeController extends Controller
         $data = [];
         foreach ($steads as $item) {
             if (isset($item->descriptions['geodata'])) {
-                $js=$item->descriptions['geodata'];
+                $js = $item->descriptions['geodata'];
                 $temp = [
-                    'center' => [$js['properties']['center']['y'],$js['properties']['center']['x']],
+                    'center' => [$js['properties']['center']['y'], $js['properties']['center']['x']],
                     'size' => $item->size,
                     'number' => $item->number
                 ];
@@ -85,9 +83,9 @@ class HomeController extends Controller
                 $temp['cols'] = '#00ff00';
                 if (isset($js['geometry']['coordinates'])) {
                     $ks = $js['geometry']['coordinates'][0][0];
-                    $l=[];
+                    $l = [];
                     foreach ($ks as $k) {
-                        $l[]=[$k[1] + 0.00004500100000, $k[0] + 0.00006000100000];
+                        $l[] = [$k[1] + 0.00004500100000, $k[0] + 0.00006000100000];
                     }
                     $temp['krd'] = [$l, []];
                 }

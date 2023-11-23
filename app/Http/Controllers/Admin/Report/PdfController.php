@@ -2,19 +2,18 @@
 
 namespace App\Http\Controllers\Admin\Report;
 
-use App\Models\Gardening;
-use Illuminate\Http\Request;
-use App\Models\Stead;
-use App\Models\Receipt\ReceiptType;
-use App\Models\QrCodeModel;
 use App\Http\Controllers\Controller;
+use App\Models\Gardening;
+use App\Models\QrCodeModel;
+use App\Models\Receipt\ReceiptType;
+use App\Models\Stead;
 
 class PdfController extends Controller
 {
     //
 
 
-    public static function getReceipFoStead($stead_id, $ReceiptType, $fio= false)
+    public static function getReceipFoStead($stead_id, $ReceiptType, $fio = false)
     {
         $steads = Stead::findOrFail($stead_id);
         $pdf = new \TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
@@ -26,7 +25,7 @@ class PdfController extends Controller
         self::fillGadeningData($pdf);
         self::fillUserData($pdf, $stead_id, $fio);
         self::fillAmountData($pdf, $ReceiptType, $stead_id);
-        $pdf->Output('ticket_'.$steads->number.'.pdf', 'I');
+        return $pdf->Output('ticket_' . $steads->number . '.pdf', 'S');
     }
 
     public static function getReceipFoSteadsList($steads, $ReceiptType, $reestr = false, $fio = false)
@@ -57,21 +56,20 @@ class PdfController extends Controller
         $pdf->setPrintHeader(false);
         $pdf->setPrintFooter(false);
         $this->createRegistryPage($pdf, 2, $steads);
-        foreach ($steads as $steadModel){
+        foreach ($steads as $steadModel) {
             $pdf->AddPage();
             $this->createClearReceipt($pdf);
             $this->createQRcode($pdf, $steadModel->id);
             $this->fillGadeningData($pdf);
             //$this->fillUserData($pdf, $steadModel);
             $this->fillAmountData($pdf, $ReceiptType, $steadModel->id);
-
         }
         $pdf->Output('rr.pdf', 'I');
     }
 
     public static function fillAmountData($pdf, $ReceiptType, $steadModel)
     {
-        if(is_int($ReceiptType) || is_string($ReceiptType)){
+        if (is_int($ReceiptType) || is_string($ReceiptType)) {
             $ReceiptType = ReceiptType::find($ReceiptType);
         }
         if (is_int($steadModel) || is_string($steadModel)) {
@@ -82,11 +80,11 @@ class PdfController extends Controller
         mb_internal_encoding('UTF-8');
         foreach ($ReceiptType->MeteringDevice as $MeteringDevice) {
             $cash += $MeteringDevice->getTicket($steadModel->id);
-            $description .= $MeteringDevice->name.' '.$MeteringDevice->cash_description . ' ';
+            $description .= $MeteringDevice->name . ' ' . $MeteringDevice->cash_description . ' ';
         }
-        $text = $ReceiptType->name.' '.$description;
+        $text = $ReceiptType->name . ' ' . $description;
         $s_arr = [-0.5, 70];
-        $pdf->SetFont('freesans', '',9);
+        $pdf->SetFont('freesans', '', 9);
         foreach ($s_arr as $s) {
             $pdf->Text(88, $s + 63, mb_substr($text, 0, 60));
             $pdf->Text(55, $s + 68, mb_substr($text, 60));
@@ -95,7 +93,7 @@ class PdfController extends Controller
         }
     }
 
-    public static function fillUserData($pdf, $stead_id, $fio_print= false)
+    public static function fillUserData($pdf, $stead_id, $fio_print = false)
     {
         $steadModel = Stead::find($stead_id);
         if ($steadModel) {
@@ -127,60 +125,61 @@ class PdfController extends Controller
             }
         }
     }
+
     public static function fillGadeningData($pdf)
     {
         $gardient = Gardening::find(1);
-            $s_arr = [-0.5, 70];
-            foreach ($s_arr as $s) {
-                $pdf->SetFont('freesans', 'B', 10);
-                $skip = 120 - strlen($gardient->name) * 0.5;
-                $pdf->Text($skip, $s + 27.5, $gardient->name);
-                $pdf->SetFont('freesans', '', 7);
-                $pdf->Text(55, $s + 42.5, 'в');
-                $pdf->Text(59, $s + 42.5, $gardient->BankName);
-                $pdf->SetFont('freesans', 'B', 10);
-                //ИНН получателя платежа (12-значный)
-                $a = 99;
-                $arr = str_split($gardient->PayeeINN);
-                $len= count($arr);
-                for ($i = 1; $i <= $len; $i++) {
-                    $pdf->Text($a, $s + 34.8, $arr[$len-$i]);
-                    $a = $a - 4;
-                }
+        $s_arr = [-0.5, 70];
+        foreach ($s_arr as $s) {
+            $pdf->SetFont('freesans', 'B', 10);
+            $skip = 120 - strlen($gardient->name) * 0.5;
+            $pdf->Text($skip, $s + 27.5, $gardient->name);
+            $pdf->SetFont('freesans', '', 7);
+            $pdf->Text(55, $s + 42.5, 'в');
+            $pdf->Text(59, $s + 42.5, $gardient->BankName);
+            $pdf->SetFont('freesans', 'B', 10);
+            //ИНН получателя платежа (12-значный)
+            $a = 99;
+            $arr = str_split($gardient->PayeeINN);
+            $len = count($arr);
+            for ($i = 1; $i <= $len; $i++) {
+                $pdf->Text($a, $s + 34.8, $arr[$len - $i]);
+                $a = $a - 4;
+            }
 
 //номер счета получателя платежа (20-значный)
 
-                $a = 112;
-                $arr = str_split($gardient->PersonalAcc);
-                for ($i = 0; $i < 20; $i++) {
-                    $pdf->Text($a, $s + 34.8, $arr[$i]);
-                    $a = $a + 4;
-                }
+            $a = 112;
+            $arr = str_split($gardient->PersonalAcc);
+            for ($i = 0; $i < 20; $i++) {
+                $pdf->Text($a, $s + 34.8, $arr[$i]);
+                $a = $a + 4;
+            }
 
 //БИК (9-значный)
 
-                $a = 156;
-                $arr = str_split($gardient->BIC);
-                for ($i = 0; $i < 9; $i++) {
-                    $pdf->Text($a, $s + 41.8, $arr[$i]);
-                    $a = $a + 4;
-                }
+            $a = 156;
+            $arr = str_split($gardient->BIC);
+            for ($i = 0; $i < 9; $i++) {
+                $pdf->Text($a, $s + 41.8, $arr[$i]);
+                $a = $a + 4;
+            }
 
 //Номер кор./сч.банка получателя платежа (20-значный)
 
-                $a = 112;
-                $arr = str_split($gardient->CorrespAcc);
-                for ($i = 0; $i < 20; $i++) {
-                    $pdf->Text($a, $s + 46.7, $arr[$i]);
-                    $a = $a + 4;
-                }
+            $a = 112;
+            $arr = str_split($gardient->CorrespAcc);
+            for ($i = 0; $i < 20; $i++) {
+                $pdf->Text($a, $s + 46.7, $arr[$i]);
+                $a = $a + 4;
             }
+        }
     }
 
 
     public static function createRegistryPage($pdf, $ReceiptType, $steads, $fio_print = false)
     {
-        if(is_int($ReceiptType)){
+        if (is_int($ReceiptType)) {
             $ReceiptType = ReceiptType::findOrFail($ReceiptType);
         }
         $pdf->AddPage();
@@ -206,15 +205,15 @@ class PdfController extends Controller
         $pdf->Ln();
         $pdf->SetFillColor(224, 235, 255);
         $fill = 0;
-        foreach ($steads as $key => $value){
+        foreach ($steads as $key => $value) {
 //            $pdf->Cell(10, 6, $key, 'LR', 0, 'C', $fill);
             $pdf->Cell(20, 6, $value->number, 'LR', 0, 'C', $fill);
             $pdf->Cell(25, 6, $value->size, 'LR', 0, 'C', $fill);
             $fio = isset($value->descriptions['fio']) ? $value->descriptions['fio'] : '';
-            $fio= str_replace('8', ' ', $fio);
-            $fio= str_replace('(', ' ', $fio);
-            $fio= str_replace('?', ' ', $fio);
-            $fio= str_replace('1', ' ', $fio);
+            $fio = str_replace('8', ' ', $fio);
+            $fio = str_replace('(', ' ', $fio);
+            $fio = str_replace('?', ' ', $fio);
+            $fio = str_replace('1', ' ', $fio);
 //            $str = strpos($fio, "19");
 //            if ($str) {
 //                $fio = substr($fio, 0, $str);
@@ -222,10 +221,10 @@ class PdfController extends Controller
             $ar = explode(' ', $fio);
             $fio = $ar[0];
             if (count($ar) > 1) {
-                $fio .= ' '.$ar[1];
+                $fio .= ' ' . $ar[1];
             }
             if (count($ar) > 2) {
-                $fio .= ' '.$ar[2];
+                $fio .= ' ' . $ar[2];
             }
             if ($fio_print) {
                 $pdf->Cell(60, 6, $fio, 'LR', 0, 'C', $fill);
@@ -237,13 +236,12 @@ class PdfController extends Controller
                 }
                 $cash += $MeteringDevice->getTicket($value->id);
             }
-            $pdf->Cell(30, 6, $cash.' руб.', 'LR', 0, 'C', $fill);
+            $pdf->Cell(30, 6, $cash . ' руб.', 'LR', 0, 'C', $fill);
             $pdf->Cell(50, 6, '', 1, 0, 'C', $fill);
             $pdf->Ln();
-            $fill=!$fill;
+            $fill = !$fill;
         }
-            $pdf->Cell(90+$l, 0, '', 'T');
-
+        $pdf->Cell(90 + $l, 0, '', 'T');
     }
 
     public static function createQRcode($pdf, $stead_id, $fio = false)
@@ -283,7 +281,6 @@ class PdfController extends Controller
         $pdf->Line(9, 160, 197, 160);
         $pdf->Line(9, 90, 197, 90);
         $pdf->Line(50.7, 20, 50.7, 160);
-
 
 
 //для двух проходов: нижнего и верхнего
@@ -333,8 +330,8 @@ class PdfController extends Controller
 
             // fio и назначение
             $pdf->Line(88, $s + 62, 192, $s + 62);
-            $pdf->Line(88,$s+67,192,$s+67);
-            $pdf->Line(55,$s+72,192,$s+72);
+            $pdf->Line(88, $s + 67, 192, $s + 67);
+            $pdf->Line(55, $s + 72, 192, $s + 72);
             // сумма платежа
             $pdf->Line(80, $s + 78, 95, $s + 78);
             $pdf->Line(103, $s + 78, 110, $s + 78);
@@ -376,7 +373,7 @@ class PdfController extends Controller
             $pdf->Text(55, $s + 59, 'Ф.И.О. Плательщика');
 
             $pdf->SetFont('freesans', '', 8);
-            $pdf->Text(55, $s+64,  'Назначение платежа' );
+            $pdf->Text(55, $s + 64, 'Назначение платежа');
 
             $pdf->SetFont('freesans', '', 8);
             $pdf->Text(55, $s + 75, 'Сумма платежа');
@@ -536,7 +533,6 @@ class PdfController extends Controller
         $pdf->Line(50.7, 20, 50.7, 160);
 
 
-
 //для двух проходов: нижнего и верхнего
         $s_arr = [-0.5, 70];
         foreach ($s_arr as $s) {
@@ -584,8 +580,8 @@ class PdfController extends Controller
 
             // fio и назначение
             $pdf->Line(88, $s + 62, 192, $s + 62);
-            $pdf->Line(88,$s+67,192,$s+67);
-            $pdf->Line(55,$s+72,192,$s+72);
+            $pdf->Line(88, $s + 67, 192, $s + 67);
+            $pdf->Line(55, $s + 72, 192, $s + 72);
             // сумма платежа
             $pdf->Line(80, $s + 78, 95, $s + 78);
             $pdf->Line(103, $s + 78, 110, $s + 78);
@@ -618,7 +614,7 @@ class PdfController extends Controller
             $pdf->Text(55, $s + 47, 'Номер кор./сч.банка получателя платежа');
 
             $pdf->SetFont('freesans', 'B', 9);
-            $pdf->Text(75, $s+51,  $steadModel->number );
+            $pdf->Text(75, $s + 51, $steadModel->number);
             //$pdf->Text(155, $s+51,  $stead->number );
 
             $pdf->SetFont('freesans', '', 6);
@@ -629,7 +625,7 @@ class PdfController extends Controller
             $pdf->Text(55, $s + 59, 'Ф.И.О. Плательщика');
 
             $pdf->SetFont('freesans', '', 8);
-            $pdf->Text(55, $s+64,  'Назначение платежа' );
+            $pdf->Text(55, $s + 64, 'Назначение платежа');
 
             $pdf->SetFont('freesans', '', 8);
             $pdf->Text(55, $s + 75, 'Сумма платежа');
@@ -658,7 +654,7 @@ class PdfController extends Controller
 //Заполняем данные предприятия
 
             $pdf->SetFont('freesans', '', 10);
-            $skip = 120-strlen($gardient->name)*0.5;
+            $skip = 120 - strlen($gardient->name) * 0.5;
             $pdf->Text($skip, $s + 28, $gardient->name);
 
 // //Банк
@@ -671,8 +667,8 @@ class PdfController extends Controller
             $fio = '';
             //dump(session('surname'));
             $fio .= null !== session('surname') ? session('surname') : $steadModel->surname;
-            $fio .= null !== session('name') ? ' ' . session('name') : ' ' .$steadModel->name;
-            $fio .= null !== session('patronymic') ? ' ' . session('patronymic') : ' ' .$steadModel->patronymic;
+            $fio .= null !== session('name') ? ' ' . session('name') : ' ' . $steadModel->name;
+            $fio .= null !== session('patronymic') ? ' ' . session('patronymic') : ' ' . $steadModel->patronymic;
 
             $summa_rub = "";
 
@@ -686,9 +682,9 @@ class PdfController extends Controller
 
             $a = 99;
             $arr = str_split($gardient->PayeeINN);
-            $len= count($arr);
+            $len = count($arr);
             for ($i = 1; $i <= $len; $i++) {
-                $pdf->Text($a, $s + 34.8, $arr[$len-$i]);
+                $pdf->Text($a, $s + 34.8, $arr[$len - $i]);
                 $a = $a - 4;
             }
 
@@ -721,7 +717,7 @@ class PdfController extends Controller
 
             $pdf->SetFont('freesans', '', 10);
 
-            $pdf->Text(88, $s+58, $fio);
+            $pdf->Text(88, $s + 58, $fio);
 
             $pdf->Text(80, $s + 69, $summa_rub);
             $pdf->Text(103.5, $s + 69, $summa_kop);
@@ -730,26 +726,25 @@ class PdfController extends Controller
             mb_internal_encoding('UTF-8');
             foreach ($ReceiptType->MeteringDevice as $MeteringDevice) {
                 $cash += $MeteringDevice->getTicket($steadModel->id);
-                $description .= $MeteringDevice->name.' '.$MeteringDevice->cash_description . ' ';
+                $description .= $MeteringDevice->name . ' ' . $MeteringDevice->cash_description . ' ';
             }
-            $text = $ReceiptType->name.' '.$description;
-            $pdf->Text(88, $s+63, mb_substr($text, 0, 55));
-            $pdf->Text(60, $s+68, mb_substr($text, 55));
+            $text = $ReceiptType->name . ' ' . $description;
+            $pdf->Text(88, $s + 63, mb_substr($text, 0, 55));
+            $pdf->Text(60, $s + 68, mb_substr($text, 55));
             $pdf->Text(82, $s + 74, floor($cash));
-            $pdf->Text(103.5, $s + 74, floor(fmod($cash,1)*100));
+            $pdf->Text(103.5, $s + 74, floor(fmod($cash, 1) * 100));
         }
 
 
         $pdf->SetFont('freesans', '', 6);
         $pdf->Text(15, 30, 'Код для оплаты в терминалах,');
         $pdf->Text(10, 32, 'банкоматах и мобильных приложениях');
-        $fileName= '/tmp/qr_code_'.$steadModel->id.'_'.time();
+        $fileName = '/tmp/qr_code_' . $steadModel->id . '_' . time();
         $code->getFile($fileName);
 
         $pdf->Image($fileName, 10, 36, 40, 40, 'PNG', '', '', true, 300, '', false, false, 1, false, false, false);
 
-        $pdf->Output('Ticket_'.$steadModel->number.'.pdf', 'I');
-
+        $pdf->Output('Ticket_' . $steadModel->number . '.pdf', 'I');
     }
 
 //    public function drawPdf()
@@ -759,19 +754,21 @@ class PdfController extends Controller
 ////        self:: ddrawPdf($gardient);
 //    }
 
-    public function clearReceipt(){
+    public function clearReceipt()
+    {
         $gardient = Gardening::find(1);
         self:: ddrawPdf($gardient);
     }
 
 
-    public static function ddrawPdf(Gardening $gardient, $stead_number= '', $fio = '', $descript='', $cash = false){
+    public static function ddrawPdf(Gardening $gardient, $stead_number = '', $fio = '', $descript = '', $cash = false)
+    {
         mb_internal_encoding('UTF-8');
         $code = new QrCodeModel;
         $code->fillDetailsGardient($gardient);
         $code->fillFioUser($fio);
         $code->setDescription($descript);
-        $code->setCash((int)$cash*100);
+        $code->setCash((int)$cash * 100);
         $code->setSteadNumber($stead_number);
 //        $code->fillDetailsDevice($ReceiptType, $steadModel);
         // create new PDF document
@@ -798,7 +795,6 @@ class PdfController extends Controller
         $pdf->Line(9, 160, 197, 160);
         $pdf->Line(9, 90, 197, 90);
         $pdf->Line(50.7, 20, 50.7, 160);
-
 
 
 //для двух проходов: нижнего и верхнего
@@ -848,8 +844,8 @@ class PdfController extends Controller
 
             // fio и назначение
             $pdf->Line(88, $s + 62, 192, $s + 62);
-            $pdf->Line(88,$s+67,192,$s+67);
-            $pdf->Line(55,$s+72,192,$s+72);
+            $pdf->Line(88, $s + 67, 192, $s + 67);
+            $pdf->Line(55, $s + 72, 192, $s + 72);
             // сумма платежа
             $pdf->Line(80, $s + 78, 95, $s + 78);
             $pdf->Line(103, $s + 78, 110, $s + 78);
@@ -877,7 +873,7 @@ class PdfController extends Controller
             $pdf->Text(55, $s + 47, 'Номер кор./сч.банка получателя платежа');
 
             $pdf->SetFont('freesans', 'B', 9);
-            $pdf->Text(75, $s+51,  $stead_number );  // todo номер участка
+            $pdf->Text(75, $s + 51, $stead_number);  // todo номер участка
 
             $pdf->SetFont('freesans', '', 6);
             $pdf->Text(70, $s + 55, '(номер участка)');
@@ -887,7 +883,7 @@ class PdfController extends Controller
             $pdf->Text(55, $s + 59, 'Ф.И.О. Плательщика');
 
             $pdf->SetFont('freesans', '', 8);
-            $pdf->Text(55, $s+64,  'Назначение платежа' );
+            $pdf->Text(55, $s + 64, 'Назначение платежа');
 
             $pdf->SetFont('freesans', '', 8);
             $pdf->Text(55, $s + 75, 'Сумма платежа');
@@ -896,7 +892,7 @@ class PdfController extends Controller
 
             $pdf->Text(138, $s + 75, '"');
             $pdf->Text(147, $s + 75, '"');
-            $year = substr(date("Y"), 0 ,3);
+            $year = substr(date("Y"), 0, 3);
             $pdf->Text(180, $s + 75, $year);
             $pdf->Text(189, $s + 75, 'г.');
 
@@ -910,7 +906,7 @@ class PdfController extends Controller
 //Заполняем данные предприятия
 
             $pdf->SetFont('freesans', '', 10);
-            $skip = 120-strlen($gardient->name)*0.5;
+            $skip = 120 - strlen($gardient->name) * 0.5;
             $pdf->Text($skip, $s + 28, $gardient->name); // название садоводства
 
 // //Банк
@@ -925,9 +921,9 @@ class PdfController extends Controller
 
             $a = 99;
             $arr = str_split($gardient->PayeeINN);
-            $len= count($arr);
+            $len = count($arr);
             for ($i = 1; $i <= $len; $i++) {
-                $pdf->Text($a, $s + 34.8, $arr[$len-$i]);
+                $pdf->Text($a, $s + 34.8, $arr[$len - $i]);
                 $a = $a - 4;
             }
 
@@ -960,10 +956,10 @@ class PdfController extends Controller
 
             $pdf->SetFont('freesans', '', 10);
 
-            $pdf->Text(88, $s+58, $fio);
+            $pdf->Text(88, $s + 58, $fio);
             mb_internal_encoding('UTF-8');
-            $pdf->Text(88, $s+63, mb_substr($descript, 0, 50));  // todo назначение платежа
-            $pdf->Text(60, $s+68, mb_substr($descript, 50, 65));
+            $pdf->Text(88, $s + 63, mb_substr($descript, 0, 50));  // todo назначение платежа
+            $pdf->Text(60, $s + 68, mb_substr($descript, 50, 65));
             if ($cash) {
                 $pdf->Text(82, $s + 74, floor($cash)); // todo сумма платежа
                 $pdf->Text(103.5, $s + 74, floor(fmod($cash, 1) * 100));
@@ -974,7 +970,7 @@ class PdfController extends Controller
         $pdf->SetFont('freesans', '', 6);
         $pdf->Text(15, 30, 'Код для оплаты в терминалах,');
         $pdf->Text(10, 32, 'банкоматах и мобильных приложениях');
-        $fileName= '/tmp/qr_code_clear';
+        $fileName = '/tmp/qr_code_clear';
         $code->getFile($fileName);
 
         $pdf->Image($fileName, 10, 36, 40, 40, 'PNG', '', '', true, 300, '', false, false, 1, false, false, false);
@@ -1003,7 +999,7 @@ class PdfController extends Controller
 //        $pdf->Cell(40, 6, 'Сумма', 1, 0, 'C', 0);
         $pdf->Ln();
         $fill = 1;
-        foreach ($steads as $key => $value){
+        foreach ($steads as $key => $value) {
 //            $pdf->Cell(10, 6, $key, 'LR', 0, 'C', $fill);
             $pdf->Cell(20, 6, $value->number, 'LR', 0, 'C', $fill);
             $pdf->Cell(30, 6, $value->size, 'LR', 0, 'C', $fill);
@@ -1015,10 +1011,10 @@ class PdfController extends Controller
             $ar = explode(' ', $fio);
             $fio = $ar[0];
             if (count($ar) > 1) {
-             $fio .= ' '.$ar[1];
+                $fio .= ' ' . $ar[1];
             }
             if (count($ar) > 2) {
-                $fio .= ' '.$ar[2];
+                $fio .= ' ' . $ar[2];
             }
             $pdf->Cell(60, 6, $fio, 'LR', 0, 'C', $fill);
             $sum = 11.02 * $value->size + 1458;
@@ -1028,13 +1024,11 @@ class PdfController extends Controller
             }
 //            $pdf->Cell(40, 6, $cash.' руб.', 'LR', 0, 'C', $fill);
             $pdf->Ln();
-            $fill=!$fill;
+            $fill = !$fill;
         }
 
 
-
-
-        foreach ($steads as $key => $steadModel){
+        foreach ($steads as $key => $steadModel) {
             $code = new QrCodeModel;
             $code->fillDetailsGardient($gardient);
             $code->fillDetailsUserInStead($steadModel);
@@ -1064,7 +1058,6 @@ class PdfController extends Controller
             $pdf->Line(9, 160, 197, 160);
             $pdf->Line(9, 90, 197, 90);
             $pdf->Line(50.7, 20, 50.7, 160);
-
 
 
 //для двух проходов: нижнего и верхнего
@@ -1114,8 +1107,8 @@ class PdfController extends Controller
 
                 // fio и назначение
                 $pdf->Line(88, $s + 62, 192, $s + 62);
-                $pdf->Line(88,$s+67,192,$s+67);
-                $pdf->Line(55,$s+72,192,$s+72);
+                $pdf->Line(88, $s + 67, 192, $s + 67);
+                $pdf->Line(55, $s + 72, 192, $s + 72);
                 // сумма платежа
                 $pdf->Line(80, $s + 78, 95, $s + 78);
                 $pdf->Line(103, $s + 78, 110, $s + 78);
@@ -1148,7 +1141,7 @@ class PdfController extends Controller
                 $pdf->Text(55, $s + 47, 'Номер кор./сч.банка получателя платежа');
 
                 $pdf->SetFont('freesans', 'B', 9);
-                $pdf->Text(75, $s+51,  $steadModel->number );
+                $pdf->Text(75, $s + 51, $steadModel->number);
                 //$pdf->Text(155, $s+51,  $stead->number );
 
                 $pdf->SetFont('freesans', '', 6);
@@ -1159,7 +1152,7 @@ class PdfController extends Controller
                 $pdf->Text(55, $s + 59, 'Ф.И.О. Плательщика');
 
                 $pdf->SetFont('freesans', '', 8);
-                $pdf->Text(55, $s+64,  'Назначение платежа' );
+                $pdf->Text(55, $s + 64, 'Назначение платежа');
 
                 $pdf->SetFont('freesans', '', 8);
                 $pdf->Text(55, $s + 75, 'Сумма платежа');
@@ -1188,7 +1181,7 @@ class PdfController extends Controller
 //Заполняем данные предприятия
 
                 $pdf->SetFont('freesans', '', 10);
-                $skip = 120-strlen($gardient->name)*0.5;
+                $skip = 120 - strlen($gardient->name) * 0.5;
                 $pdf->Text($skip, $s + 28, $gardient->name);
 
 // //Банк
@@ -1206,10 +1199,10 @@ class PdfController extends Controller
                 $ar = explode(' ', $fio);
                 $fio = $ar[0];
                 if (count($ar) > 1) {
-                    $fio .= ' '.$ar[1];
+                    $fio .= ' ' . $ar[1];
                 }
                 if (count($ar) > 2) {
-                    $fio .= ' '.$ar[2];
+                    $fio .= ' ' . $ar[2];
                 }
                 $summa_rub = "";
 
@@ -1223,9 +1216,9 @@ class PdfController extends Controller
 
                 $a = 99;
                 $arr = str_split($gardient->PayeeINN);
-                $len= count($arr);
+                $len = count($arr);
                 for ($i = 1; $i <= $len; $i++) {
-                    $pdf->Text($a, $s + 34.8, $arr[$len-$i]);
+                    $pdf->Text($a, $s + 34.8, $arr[$len - $i]);
                     $a = $a - 4;
                 }
 
@@ -1258,7 +1251,7 @@ class PdfController extends Controller
 
                 $pdf->SetFont('freesans', '', 10);
 
-                $pdf->Text(88, $s+58, $fio);
+                $pdf->Text(88, $s + 58, $fio);
 
                 $pdf->Text(80, $s + 69, $summa_rub);
                 $pdf->Text(103.5, $s + 69, $summa_kop);
@@ -1267,28 +1260,26 @@ class PdfController extends Controller
                 mb_internal_encoding('UTF-8');
                 foreach ($ReceiptType->MeteringDevice as $MeteringDevice) {
                     $cash += $MeteringDevice->getTicket($steadModel->id);
-                    $description .= $MeteringDevice->name.' '.$MeteringDevice->cash_description . ' ';
+                    $description .= $MeteringDevice->name . ' ' . $MeteringDevice->cash_description . ' ';
                 }
-                $text = $ReceiptType->name.' '.$description;
-                $pdf->Text(88, $s+63, mb_substr($text, 0, 55));
-                $pdf->Text(60, $s+68, mb_substr($text, 55));
+                $text = $ReceiptType->name . ' ' . $description;
+                $pdf->Text(88, $s + 63, mb_substr($text, 0, 55));
+                $pdf->Text(60, $s + 68, mb_substr($text, 55));
                 $pdf->Text(82, $s + 74, floor($cash));
-                $pdf->Text(103.5, $s + 74, floor(fmod($cash,1)*100));
+                $pdf->Text(103.5, $s + 74, floor(fmod($cash, 1) * 100));
             }
 
 
             $pdf->SetFont('freesans', '', 6);
             $pdf->Text(15, 30, 'Код для оплаты в терминалах,');
             $pdf->Text(10, 32, 'банкоматах и мобильных приложениях');
-            $fileName= '/tmp/qr_code_'.$steadModel->id.'_'.time();
+            $fileName = '/tmp/qr_code_' . $steadModel->id . '_' . time();
             $code->getFile($fileName);
 
             $pdf->Image($fileName, 10, 36, 40, 40, 'PNG', '', '', true, 300, '', false, false, 1, false, false, false);
-
         }
 
         $pdf->Output('rr.pdf', 'I');
-
 //        return $steads;
 
     }

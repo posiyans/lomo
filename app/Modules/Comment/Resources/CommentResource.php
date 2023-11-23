@@ -22,13 +22,17 @@ class CommentResource extends JsonResource
             'message' => $this->message,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'options' => $this->options,
             'user' => [
-                'id' => $this->user_id,
+                'uid' => $user->uid,
                 'name' => $user->last_name . ' ' . $user->name,
+            ],
+            'parentObject' => [
+                'type' => 'записи',
+                'url' => '/article/show/' . $this->parentModel->slug, // todo переделать чтоб работало в зависимости от родительской модели,
             ],
 
         ];
         return $data;
-
     }
 }

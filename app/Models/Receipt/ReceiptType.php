@@ -8,6 +8,46 @@ use App\Models\MyModel;
  * Классификация квитанций
  *
  */
+/**
+ * App\Models\Receipt\ReceiptType
+ *
+ * @property int $id
+ * @property string|null $name
+ * @property bool $auto_invoice автоматическое выставление счета
+ * @property array|null $options опции для участка
+ * @property int $depends
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int|null $payment_period период оплаты
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Receipt\MeteringDevice> $MeteringDevice
+ * @property-read int|null $metering_device_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\File\Models\FileModel> $files
+ * @property-read int|null $files_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @property-read int|null $log_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Message\MessageModel> $message
+ * @property-read int|null $message_count
+ * @method static \Illuminate\Database\Eloquent\Builder|ReceiptType newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ReceiptType newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ReceiptType query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ReceiptType whereAutoInvoice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ReceiptType whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ReceiptType whereDepends($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ReceiptType whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ReceiptType whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ReceiptType whereOptions($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ReceiptType wherePaymentPeriod($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ReceiptType whereUpdatedAt($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Receipt\MeteringDevice> $MeteringDevice
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Receipt\MeteringDevice> $MeteringDevice
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Receipt\MeteringDevice> $MeteringDevice
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Receipt\MeteringDevice> $MeteringDevice
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @mixin \Eloquent
+ */
 class ReceiptType extends MyModel
 {
     //типы квитанций

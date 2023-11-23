@@ -1,8 +1,6 @@
 <?php
 
-//Route::resource('user/category', 'User\CategoryController')->only(['index']);
-//Route::resource('user/article', 'User\ArticleController')->only(['index', 'show']);
-//Route::resource('user/comment', 'User\CommentController')->only(['index']);
+
 Route::resource('user/voting', 'App\Http\Controllers\User\Voting\UserVotingController')->only(['index', 'show']);
 Route::post('vote', 'App\Http\Controllers\User\Voting\UserVotingController@addAnswer');
 Route::post('user/voting/sms/send', 'App\Http\Controllers\User\Voting\UserVotingSmsController@send');

@@ -1,18 +1,18 @@
 <template>
   <div>
-    <el-select
-      :value="value"
-      :placeholder="placeholder"
+    <q-select
+      :model-value="+modelValue"
+      :options="status"
+      map-options
+      emit-value
+      :label="label"
+      :dense="dense"
+      :outlined="outlined"
       :clearable="clearable"
-      @input="setValue"
-    >
-      <el-option
-        v-for="item in status"
-        :key="item.id"
-        :label="item.label"
-        :value="item.id"
-      />
-    </el-select>
+      option-value="id"
+      option-label="label"
+      @update:model-value="setValue"
+    />
   </div>
 </template>
 
@@ -21,13 +21,21 @@ import { getStatusList } from 'src/Modules/Article/Article/api/article'
 
 export default {
   props: {
-    value: {
+    modelValue: {
       type: [Number, String],
-      required: true
+      default: ''
     },
-    placeholder: {
+    label: {
       type: String,
       default: undefined
+    },
+    outlined: {
+      type: Boolean,
+      default: false
+    },
+    dense: {
+      type: Boolean,
+      default: false
     },
     clearable: {
       type: Boolean,
@@ -35,22 +43,23 @@ export default {
     }
 
   },
-  data () {
+  data() {
     return {
       status: []
     }
   },
-  created () {
+  created() {
     this.getData()
   },
   methods: {
-    getData () {
+    getData() {
       getStatusList()
         .then(res => {
           this.status = res.data
         })
     },
-    setValue (val) {
+    setValue(val) {
+      this.$emit('update:model-value', val)
       this.$emit('input', val)
     }
   }

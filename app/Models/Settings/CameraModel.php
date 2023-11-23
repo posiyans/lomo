@@ -2,7 +2,7 @@
 
 namespace App\Models\Settings;
 
-use App\Models\Options\GlobalOptionModel;
+use App\Modules\Setting\Models\GlobalOptionModel;
 use Illuminate\Support\Facades\Cache;
 
 class CameraModel
@@ -23,7 +23,7 @@ class CameraModel
         $this->ttl = (int)$option['value']['ttl'] ?? 3600;
         $this->access = $option['value']['access'] ?? 'all';
         $this->cache_name = static::$cache_prefix . $this->id;
-       // $this->img = $this->updateCache();
+        // $this->img = $this->updateCache();
     }
 
     public static function getListForUser()
@@ -58,12 +58,12 @@ class CameraModel
     {
         $optionName = 'siteCameraSetting';
         if ($this->id) {
-          $item = GlobalOptionModel::where('id', $this->id)->where('name', $optionName)->first();
-          if ($item) {
-              $item->value = $this;
-              Cache::tags('Camera')->forget($this->cache_name);
-              return $item->save();
-          }
+            $item = GlobalOptionModel::where('id', $this->id)->where('name', $optionName)->first();
+            if ($item) {
+                $item->value = $this;
+                Cache::tags('Camera')->forget($this->cache_name);
+                return $item->save();
+            }
         }
 
         return false;
@@ -71,7 +71,7 @@ class CameraModel
 
     public static function getImagePath($id)
     {
-        $cache_name =  static::$cache_prefix.$id;
+        $cache_name = static::$cache_prefix . $id;
         return Cache::get($cache_name, false);
     }
 
@@ -97,7 +97,7 @@ class CameraModel
     public function updateCache($force = false)
     {
         if ($force) {
-          Cache::tags('Camera')->forget($this->cache_name);
+            Cache::tags('Camera')->forget($this->cache_name);
         }
         $cache = $this->getCache();
         if ($cache) {
@@ -107,8 +107,6 @@ class CameraModel
             $file = $this->rtspToJpeg();
             return $file;
         });
-
-
     }
 
 
@@ -122,7 +120,7 @@ class CameraModel
 
     /**
      * получить jpg из rtsp потока
-     * @param int $count макс кол-во неудачных попыток
+     * @param  int  $count  макс кол-во неудачных попыток
      * @return bool
      */
     public function rtspToJpeg($count = 2)
@@ -137,12 +135,12 @@ class CameraModel
             mkdir($folder, 0777, true);
         }
         $file = $folder . '/' . date('Y-m-d_H:i:s') . '.jpg';
-        $ffmpeg = env('FFMPEG_BIN',false);
+        $ffmpeg = env('FFMPEG_BIN', false);
         if ($ffmpeg) {
 //            echo $ffmpeg . " -rtsp_transport tcp  -y -i " . $this->url . " -f image2 -vframes 1 " . $file;
             //echo PHP_EOL;
             shell_exec($ffmpeg . " -rtsp_transport tcp  -y -i " . $this->url . " -f image2 -vframes 1 " . $file);
-            $size = env('CAMERA_IMG_MIN_FILE_SIZE',10000);
+            $size = env('CAMERA_IMG_MIN_FILE_SIZE', 10000);
 //            echo file_exists($file);
 //            echo filesize($file);
             if (!file_exists($file) || filesize($file) < $size) {

@@ -17,6 +17,75 @@ use Illuminate\Support\Facades\Cookie;
 
 /**
  * Модель участков
+ *
+ * @property int $id
+ * @property int $gardening_id
+ * @property string $number
+ * @property int|null $user_id
+ * @property string|null $surname
+ * @property string|null $name
+ * @property string|null $patronymic
+ * @property string|null $size
+ * @property string|null $email
+ * @property string|null $history
+ * @property array|null $descriptions
+ * @property array|null $options опции для участка
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, BillingInvoice> $Invoices
+ * @property-read int|null $invoices_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, OwnerUserSteadModel> $Owners
+ * @property-read int|null $owners_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, BillingPayment> $Payment
+ * @property-read int|null $payment_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\File\Models\FileModel> $files
+ * @property-read int|null $files_count
+ * @property-read \App\Models\Gardening|null $gardient
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, InstrumentReadings> $indications
+ * @property-read int|null $indications_count
+ * @property-read BillingPayment|null $lastPayment
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @property-read int|null $log_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Message\MessageModel> $message
+ * @property-read int|null $message_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Stead newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Stead newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Stead query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Stead whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Stead whereDescriptions($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Stead whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Stead whereGardeningId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Stead whereHistory($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Stead whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Stead whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Stead whereNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Stead whereOptions($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Stead wherePatronymic($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Stead whereSize($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Stead whereSurname($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Stead whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Stead whereUserId($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, BillingInvoice> $Invoices
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, OwnerUserSteadModel> $Owners
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, BillingPayment> $Payment
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, InstrumentReadings> $indications
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, BillingInvoice> $Invoices
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, OwnerUserSteadModel> $Owners
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, BillingPayment> $Payment
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, InstrumentReadings> $indications
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, BillingInvoice> $Invoices
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, OwnerUserSteadModel> $Owners
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, BillingPayment> $Payment
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, InstrumentReadings> $indications
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, BillingInvoice> $Invoices
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, OwnerUserSteadModel> $Owners
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, BillingPayment> $Payment
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, InstrumentReadings> $indications
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @mixin \Eloquent
  */
 class Stead extends SteadModel
 {

@@ -4,6 +4,49 @@ namespace App\Models\Receipt;
 
 use App\Models\MyModel;
 
+/**
+ * App\Models\Receipt\DeviceRegisterModel
+ *
+ * @property int $id
+ * @property int $type_id тип прибора
+ * @property int $stead_id к какому участку отностся
+ * @property int $initial_data начальные показания
+ * @property string $serial_number серийный номер прибора
+ * @property string $device_brand модель прибора
+ * @property string|null $installation_date дата установки
+ * @property string|null $verification_date дата до следующей поверки прибора
+ * @property string|null $descriptions коментарий
+ * @property bool $active запрашивать показания
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Receipt\MeteringDevice|null $MeteringDevice
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\File\Models\FileModel> $files
+ * @property-read int|null $files_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @property-read int|null $log_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Message\MessageModel> $message
+ * @property-read int|null $message_count
+ * @method static \Illuminate\Database\Eloquent\Builder|DeviceRegisterModel newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|DeviceRegisterModel newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|DeviceRegisterModel query()
+ * @method static \Illuminate\Database\Eloquent\Builder|DeviceRegisterModel whereActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DeviceRegisterModel whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DeviceRegisterModel whereDescriptions($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DeviceRegisterModel whereDeviceBrand($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DeviceRegisterModel whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DeviceRegisterModel whereInitialData($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DeviceRegisterModel whereInstallationDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DeviceRegisterModel whereSerialNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DeviceRegisterModel whereSteadId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DeviceRegisterModel whereTypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DeviceRegisterModel whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DeviceRegisterModel whereVerificationDate($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @mixin \Eloquent
+ */
 class DeviceRegisterModel extends MyModel
 {
     protected $table = 'device_register';

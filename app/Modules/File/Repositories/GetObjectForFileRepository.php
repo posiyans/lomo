@@ -1,9 +1,14 @@
 <?php
+
 namespace App\Modules\File\Repositories;
 
 use App\Modules\File\Models\FileModel;
 
-class GetObjectForFileRepository {
+/**
+ * Получить модель родителя файла
+ */
+class GetObjectForFileRepository
+{
 
     private $file;
 

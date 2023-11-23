@@ -1,25 +1,30 @@
 <template>
   <div>
-    <div v-for="item in list" :key="item.id" class="q-mb-sm" >
+    <div class="page-title">
+      <CategoryShow v-model="listQuery.category_id" />
+    </div>
+    <div v-for="item in list" :key="item.id" class="q-mb-sm">
       <ArticlePreview :article="item" />
     </div>
-    <LoadMorePagination :key="key" v-model:list-query="listQuery" :func="fetchListForCategory" @setList="setList" />
+    <LoadMore :key="key" v-model:list-query="listQuery" :func="fetchListForCategory" change-url @setList="setList" />
   </div>
 </template>
 
 <script>
 import ArticlePreview from 'src/Modules/Article/Article/components/ArticlePreview/index.vue'
 import { fetchListForCategory } from 'src/Modules/Article/Article/api/article.js'
-import { defineComponent, ref, watch, onBeforeMount } from 'vue'
+import { defineComponent, onBeforeMount, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import LoadMorePagination from 'components/LoadMorePagination/index.vue'
+import LoadMore from 'components/LoadMore/index.vue'
+import CategoryShow from 'src/Modules/Article/Category/components/CategoryShow/index.vue'
 
 export default defineComponent({
   components: {
+    CategoryShow,
     ArticlePreview,
-    LoadMorePagination
+    LoadMore
   },
-  setup () {
+  setup() {
     const route = useRoute()
     const list = ref([])
     const key = ref(1)
@@ -29,23 +34,25 @@ export default defineComponent({
       limit: 20,
       sort: '-time'
     })
-
     const setList = (val) => {
       list.value = val
     }
     const getData = () => {
       list.value = []
-      listQuery.value.category_id = route.params.uid
+      listQuery.value.category_id = route.params.id
     }
     onBeforeMount(() => {
-      listQuery.value.category_id = route.params.uid
+      listQuery.value.category_id = route.params.id
       // key.value++
     })
 
     watch(
-      () => route.params.uid,
+      () => route.params.id,
       () => {
-        listQuery.value.category_id = route.params.uid
+        listQuery.value.category_id = route.params.id
+        listQuery.value.page = 1
+        listQuery.value.limit = 20
+        listQuery.value.sort = '-time'
         key.value++
         getData()
       }

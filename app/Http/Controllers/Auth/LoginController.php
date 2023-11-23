@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\VkController;
+use App\Modules\Log\Models\Log;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class LoginController extends Controller
 {
@@ -47,8 +49,8 @@ class LoginController extends Controller
      */
     public function showLoginForm()
     {
-        $vk_url =VkController::getUrl();
-        return view('auth.login', ['vk_url'=>$vk_url]);
+        $vk_url = VkController::getUrl();
+        return view('auth.login', ['vk_url' => $vk_url]);
     }
 
 //    public function apiLogin(Request $request)
@@ -90,10 +92,21 @@ class LoginController extends Controller
         $this->guard()->logout();
         $request->session()->invalidate();
 //        Auth::logout();
-        return json_encode(['roles'=>['guest']]);
+        $user = Auth::user();
+        $tokenId = Str::before(request()->bearerToken(), '|');
+        if ($tokenId) {
+            $user->tokens()->where('id', $tokenId)->delete();
+        }
+        $log = new Log();
+        $log->type = 'ok';
+        $log->description = 'logout';
+        $user->log()->save($log);
+
+        return json_encode(['roles' => ['guest']]);
     }
 
-    public function test() {
+    public function test()
+    {
         return 'test';
     }
 }

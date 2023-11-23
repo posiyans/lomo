@@ -1,7 +1,7 @@
 <?php
+
 namespace App\Modules\Comment\Classes;
 
-use App\Modules\Article\Models\ArticleModel;
 use App\Modules\Comment\Models\CommentModel;
 use Illuminate\Support\Facades\Auth;
 use Ramsey\Uuid\Uuid;
@@ -12,7 +12,7 @@ class CreateCommentClass
 
     public function __construct($model)
     {
-        $this->comment = New CommentModel();
+        $this->comment = new CommentModel();
         $this->comment->commentable_type = get_class($model);
         $this->comment->commentable_uid = $model->uid;
         $this->comment->user_id = Auth::id() ?? null;
@@ -25,13 +25,20 @@ class CreateCommentClass
         return $this;
     }
 
+    public function options($array)
+    {
+        $this->comment->options = $array;
+        return $this;
+    }
+
     public function uid($uid)
     {
         $this->comment->uid = $uid;
         return $this;
     }
 
-    public function run() {
+    public function run()
+    {
         if ($this->comment->logAndSave('Создание комментария')) {
             return $this->comment;
         }

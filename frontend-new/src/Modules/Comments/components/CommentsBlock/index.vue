@@ -1,17 +1,18 @@
 <template>
   <div>
-    <MessageBlock :type="type" :object-uid="objectUid" :reload="key" />
-    <div v-if="ban" class="red no-send " align="middle">
-      Вам запрещено оставлять комментарии.
-    </div>
-    <SendCommentBlock :type="type" :object-uid="objectUid" @reload="reload" />
+    <MessageBlock :message-block="messageBlock" class="q-pa-md comments-block" />
+    <SendCommentBlock :message-block="messageBlock" class="bg-grey-3" />
   </div>
 </template>
 
 <script>
+
+import { defineComponent, onMounted } from 'vue'
 import SendCommentBlock from 'src/Modules/Comments/components/SendCommentBlock/index.vue'
 import MessageBlock from 'src/Modules/Comments/components/MessageBlock/index.vue'
-export default {
+import { useMessageBlock } from 'src/Modules/Comments/hooks/useMessageBlock'
+
+export default defineComponent({
   components: {
     SendCommentBlock,
     MessageBlock
@@ -26,27 +27,24 @@ export default {
       required: true
     }
   },
-  data () {
+  setup(props) {
+    const messageBlock = useMessageBlock(props.type, props.objectUid)
+
+    onMounted(() => {
+
+    })
     return {
-      key: 1
-    }
-  },
-  computed: {
-    ban () {
-      // if (this.$store.getters.user.allPermissions.includes('ban-comment')) {
-      //   return true
-      // }
-      return false
-    }
-  },
-  methods: {
-    reload () {
-      this.key++
+      messageBlock
     }
   }
-}
+})
+
 </script>
 
 <style scoped>
-
+.comments-block {
+  /*  max-height: 450px;*/
+  /*  overflow: hidden;*/
+  /*  overflow-y: auto;*/
+}
 </style>

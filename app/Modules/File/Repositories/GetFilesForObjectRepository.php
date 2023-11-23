@@ -1,9 +1,11 @@
 <?php
+
 namespace App\Modules\File\Repositories;
 
 use App\Modules\File\Models\FileModel;
 
-class GetFilesForObjectRepository {
+class GetFilesForObjectRepository
+{
 
     private $query;
 
@@ -13,9 +15,9 @@ class GetFilesForObjectRepository {
             ->where('commentable_uid', $model->uid);
     }
 
-    public function description($text)
+    public function description($description)
     {
-        $this->query->where('description', $text);
+        $this->query->where('description', $description);
         return $this;
     }
 

@@ -15,6 +15,7 @@
 
 <script>
 import { defineComponent } from 'vue'
+import { getCommentsStatusList } from 'src/Modules/Comments/api/commentApi.js'
 
 export default defineComponent({
   props: {
@@ -31,16 +32,7 @@ export default defineComponent({
     const setValue = (val) => {
       emit('update:modelValue', val)
     }
-    const options = [
-      {
-        value: 0,
-        label: 'отключены'
-      },
-      {
-        value: 1,
-        label: 'разрешены всем'
-      }
-    ]
+    const options = getCommentsStatusList()
     return {
       setValue,
       options

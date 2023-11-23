@@ -6,6 +6,48 @@ use App\Http\Controllers\Admin\Bookkeeping\Billing\PaymentController;
 use App\Models\MyModel;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\Notification\Sms\Sms
+ *
+ * @property int $id
+ * @property int|null $user_id кому отправленно
+ * @property int|null $sender_id кто отправлял
+ * @property string $phone номер телефона
+ * @property string $text текст смс
+ * @property string $type тип смс
+ * @property string|null $gateway шлюз отправки
+ * @property string|null $price цена смс
+ * @property string|null $sms_id идентификатор смс на шлюзе
+ * @property string|null $status статус смс
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\File\Models\FileModel> $files
+ * @property-read int|null $files_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @property-read int|null $log_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Message\MessageModel> $message
+ * @property-read int|null $message_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Sms newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Sms newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Sms query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Sms whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Sms whereGateway($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Sms whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Sms wherePhone($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Sms wherePrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Sms whereSenderId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Sms whereSmsId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Sms whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Sms whereText($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Sms whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Sms whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Sms whereUserId($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @mixin \Eloquent
+ */
 class Sms extends MyModel
 {
     //

@@ -1,20 +1,28 @@
 <?php
+
 namespace App\Modules\Article\Repositories;
 
 use App\Modules\Article\Models\ArticleModel;
 
-class GetArticleByUidRepository {
+class GetArticleByUidRepository
+{
 
-    private $uid;
+    private $query;
 
     public function __construct($uid)
     {
-        $this->uid = $uid;
+        $this->query = ArticleModel::where('uid', $uid);
+    }
+
+    public function public()
+    {
+        $this->query->where('public', 1);
+        return $this;
     }
 
     public function run()
     {
-        $model = ArticleModel::where('uid', $this->uid)->first();
+        $model = $this->query->first();
         if ($model) {
             return $model;
         }

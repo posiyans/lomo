@@ -1,28 +1,43 @@
 <?php
+
 namespace App\Modules\File\Classes;
 
 class GetPathForHashClass
 {
-    public $hash;
+    private $hash;
 
     public function __construct($hash)
     {
         $this->hash = $hash;
     }
 
-    public function run()
+
+    /**
+     * Вернуть только папку до файла
+     *
+     * @return string
+     */
+    public function onlyFolder()
     {
         $folder = (new GetDirectoryPathClass())->run();
         $path = $folder . '/' . $this->getSmallHash();
-        if (!file_exists($path)) {
-            mkdir($path, 0777, true);
-        }
-        return $path . '/' . $this->hash;
+        return $path;
+    }
+
+    /**
+     * вернуть полный путь до файла
+     *
+     * @return string
+     */
+    public function run()
+    {
+        return $this->onlyFolder() . '/' . $this->hash;
     }
 
     private function getSmallHash()
     {
-        return substr($this->hash, 0,2);
+        return substr($this->hash, 0, 2);
     }
+
 
 }

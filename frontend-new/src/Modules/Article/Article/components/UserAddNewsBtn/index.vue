@@ -1,41 +1,49 @@
 <template>
   <div>
-    <q-btn @click="toAddNews">Предложить запись</q-btn>
-<!--    <div v-if="showForm" class="q-mb-lg">-->
-<!--      <UserOfferNews />-->
-<!--    </div>-->
+    <div v-if="showForm" class="q-mb-lg relative-position">
+      <UserOfferNews
+        @success="showForm = false"
+      />
+      <div class="absolute-top-right q-ma-md">
+        <q-btn icon="close" flat color="primary" @click="showForm = false" />
+      </div>
+    </div>
+    <q-btn v-else color="primary" @click="toAddNews">Предложить запись</q-btn>
   </div>
 </template>
 
 <script>
-// import UserOfferNews from 'src/Modules/Article/Article/page/UserOfferNews'
-export default {
+import { defineComponent, ref } from 'vue'
+import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
+import { useQuasar } from 'quasar'
+import UserOfferNews from 'src/Modules/Article/Article/components/UserOfferNews/index.vue'
+
+export default defineComponent({
   components: {
-    // UserOfferNews
+    UserOfferNews
   },
-  data () {
-    return {
-      showForm: false
-    }
-  },
-  computed: {
-    user () {
-      return this.$store.state.user
-    }
-  },
-  methods: {
-    toAddNews () {
-      if (this.user && this.user.info.consent_to_email) {
-        this.showForm = !this.showForm
+  props: {},
+  setup() {
+    const showForm = ref(null)
+    const $q = useQuasar()
+    const authStore = useAuthStore()
+    const toAddNews = () => {
+      if (authStore.user.email_verified_at) {
+        showForm.value = true
       } else {
-        this.$alert('Предлагать новости могут только зарегистрированные пользователи с подтвежденным адресом электронной почты!', 'Ошибка', {
-          confirmButtonText: 'OK'
+        $q.dialog({
+          title: 'Ошибка',
+          message: 'Предлагать новости могут только зарегистрированные пользователи с подтвержденным адресом электронной почты.'
         })
       }
-      // this.$router.push('/article/add-news')
+    }
+    return {
+      authStore,
+      showForm,
+      toAddNews
     }
   }
-}
+})
 </script>
 
 <style scoped>

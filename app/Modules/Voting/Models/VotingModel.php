@@ -9,6 +9,62 @@ use App\Models\Stead;
 use App\Models\MyModel;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * App\Modules\Voting\Models\VotingModel
+ *
+ * @property int $id
+ * @property string $title
+ * @property string|null $description
+ * @property string $date_publish
+ * @property string|null $date_start время начала
+ * @property string|null $date_stop время скончания
+ * @property string $type
+ * @property int $comments
+ * @property string $status
+ * @property array|null $answer
+ * @property string|null $result
+ * @property string|null $uid
+ * @property int $public
+ * @property string|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\File\Models\FileModel> $files
+ * @property-read int|null $files_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @property-read int|null $log_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Message\MessageModel> $message
+ * @property-read int|null $message_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Voting\QuestionModel> $questions
+ * @property-read int|null $questions_count
+ * @method static \Illuminate\Database\Eloquent\Builder|VotingModel newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|VotingModel newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|VotingModel query()
+ * @method static \Illuminate\Database\Eloquent\Builder|VotingModel whereAnswer($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VotingModel whereComments($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VotingModel whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VotingModel whereDatePublish($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VotingModel whereDateStart($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VotingModel whereDateStop($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VotingModel whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VotingModel whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VotingModel whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VotingModel wherePublic($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VotingModel whereResult($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VotingModel whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VotingModel whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VotingModel whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VotingModel whereUid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|VotingModel whereUpdatedAt($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Voting\QuestionModel> $questions
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Voting\QuestionModel> $questions
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Voting\QuestionModel> $questions
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Voting\QuestionModel> $questions
+ * @mixin \Eloquent
+ */
 class VotingModel extends MyModel
 {
     /**

@@ -2,69 +2,102 @@
 
 namespace App\Modules\Article\Models;
 
-use App\Models\Storage\File;
 use App\Models\MyModel;
+use App\Modules\Article\Factories\ArticleModelFactory;
+use App\Modules\Comment\Models\CommentModel;
+use App\Modules\File\Models\FileModel;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * App\Modules\Article\Models\ArticleModel
+ *
+ * @property int $id
+ * @property string|null $title
+ * @property string|null $uid
+ * @property string|null $resume
+ * @property string|null $text
+ * @property int|null $category_id
+ * @property int $public
+ * @property int $news
+ * @property int $allow_comments
+ * @property string $publish_time
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int $user_id id автора статьи
+ * @property string|null $slug url статьи
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\File\Models\FileModel> $files
+ * @property-read int|null $files_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @property-read int|null $log_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Message\MessageModel> $message
+ * @property-read int|null $message_count
+ * @property-read \App\Modules\User\Models\UserModel|null $user
+ * @method static \Illuminate\Database\Eloquent\Builder|ArticleModel newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ArticleModel newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ArticleModel query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ArticleModel whereAllowComments($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ArticleModel whereCategoryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ArticleModel whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ArticleModel whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ArticleModel whereNews($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ArticleModel wherePublic($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ArticleModel wherePublishTime($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ArticleModel whereResume($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ArticleModel whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ArticleModel whereText($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ArticleModel whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ArticleModel whereUid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ArticleModel whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ArticleModel whereUserId($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, CommentModel> $comments
+ * @property-read int|null $comments_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, FileModel> $files
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @method static \App\Modules\Article\Factories\ArticleModelFactory factory(...$parameters)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, CommentModel> $comments
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, FileModel> $files
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, CommentModel> $comments
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, FileModel> $files
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, CommentModel> $comments
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, FileModel> $files
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @mixin \Eloquent
+ */
 class ArticleModel extends MyModel
 {
-    protected $fillable = ['title', 'text', 'resume', 'category_id', 'uid'];
+    use HasFactory;
+
+    protected $fillable = ['title', 'text', 'resume', 'category_id', 'uid', 'news', 'public', 'allow_comments', 'slug'];
 
     protected $hidden = ['publish_time'];
-    //
 
-//    public function comments()
-//    {
-//        return $this->hasMany('App\Models\Article\CommentModel', 'article_id', 'id');
-//    }
-//
-//
-//    public function show_resume(){
-//        if ($this->resume){
-//            return $this->resume;
-//        }
-//        $text = explode('</p>', $this->text);
-//        return $text[0].'</p>';
-//    }
-//    /**
-//     * прикрепить файлы к модели
-//     *
-//     * @param $files
-//     */
-//    public function attachedFiles($files)
-//    {
-//        if (is_array($files)) {
-//            if ($this->deattachedAllFiles()) {
-//                foreach ($files as $file) {
-//                    $f = false;
-////                    if (isset($file['response']['files']['id'])) {
-////                        $f = File::find($file['response']['files']['id']);
-////                    } else
-//                    if (isset($file['id'])){
-//                        $f = File::find($file['id']);
-//                    }
-//                    if ($f) {
-//                        $f->commentable_type = get_class($this);
-//                        $f->commentable_id = $this->id;
-//                        $f->save();
-//                    }
-//                }
-//            }
-//        }
-//    }
-//
-//
-//    /**
-//     * открепить все файлы от статьи
-//     *
-//     * @return bool
-//     */
-//    public function deattachedAllFiles()
-//    {
-//        $files = $this->files;
-//        foreach ($files as $file) {
-//            $file->commentable_id = null;
-//            $file->save();
-//        }
-//        return true;
-//    }
+    protected $casts = [
+//        'allow_comments' => 'boolean',
+    ];
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): Factory
+    {
+        return ArticleModelFactory::new();
+    }
+
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo('App\Modules\User\Models\UserModel');
+    }
+
+    public function comments()
+    {
+        return $this->morphMany(CommentModel::class, 'commentable', null, 'commentable_uid', 'uid');
+    }
+
+    public function files()
+    {
+        return $this->morphMany(FileModel::class, 'commentable', null, 'commentable_uid', 'uid');
+    }
 }

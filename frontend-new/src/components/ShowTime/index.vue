@@ -6,8 +6,7 @@ import { date } from 'quasar'
 
 export default {
   props: {
-    time: {
-    },
+    time: {},
     format: {
       type: String,
       default: 'DD-MM-YYYY HH:mm'
@@ -17,30 +16,23 @@ export default {
       default: 'div'
     }
   },
-  data () {
-    return {
-    }
+  data() {
+    return {}
   },
   computed: {
-    int_time () {
+    int_time() {
       return parseInt(+this.time, 10)
     },
-    sql_time () {
-      if (!this.int_time && typeof this.time === 'string' && this.time.length > 16 && this.time[4] === '-' && this.time[7] === '-' && this.time[10] === 'T' && this.time[13] === ':' && this.time[16] === ':') {
-        return true
-      }
-      return false
+    sql_time() {
+      return !this.int_time && typeof this.time === 'string' && this.time.length > 16 && this.time[4] === '-' && this.time[7] === '-' && (this.time[10] === 'T' || this.time[10] === ' ') && this.time[13] === ':' && this.time[16] === ':'
     },
-    date_format () {
-      if (this.time[4] === '-' && this.time[7] === '-' && this.time.length === 10) {
-        return true
-      }
-      return false
+    date_format() {
+      return this.time[4] === '-' && this.time[7] === '-' && this.time.length === 10
     },
-    time_show () {
+    time_show() {
       if (this.time) {
         if (this.sql_time) {
-          const tmp = date.extractDate(this.time.replace(/T/g, ' ').substring(0, 16), 'YYYY-MM-DD HH:mm')
+          const tmp = date.extractDate(this.time.replace(/T/g, ' ').substring(0, 19), 'YYYY-MM-DD HH:mm:ss')
           return date.formatDate(tmp, this.format)
         } else if (this.date_format) {
           const tmp = date.extractDate(this.time.replace(/T/g, ' ').substring(0, 10), 'YYYY-MM-DD')

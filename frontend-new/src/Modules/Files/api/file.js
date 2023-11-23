@@ -1,8 +1,12 @@
 import request from 'src/utils/request'
 
-export function userUploadFile (data) {
+export function getUploadFileUrl() {
+  return '/api/v2/file/upload'
+}
+
+export async function userUploadFile(data) {
   return request.post(
-    '/api/v2/file/user-upload',
+    getUploadFileUrl(),
     data,
     {
       headers: {
@@ -10,4 +14,12 @@ export function userUploadFile (data) {
       }
     }
   )
+}
+
+export function deleteFileApi(params) {
+  return request({
+    url: '/api/v2/file/delete',
+    method: 'delete',
+    params
+  })
 }

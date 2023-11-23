@@ -1,42 +1,50 @@
 <?php
+
 namespace App\Modules\File\Classes;
 
 use App\Modules\File\Models\FileModel;
 use App\Modules\File\Repositories\GetObjectForFileRepository;
+use App\Modules\User\Models\UserModel;
 use Illuminate\Support\Facades\Auth;
-use Ramsey\Uuid\Nonstandard\Uuid;
 
 class CheckAccessToFileClass
 {
     private $file;
+    private $user;
 
     public function __construct(FileModel $file)
     {
         $this->file = $file;
+        $this->user = Auth::user() ? Auth::user() : null;
+    }
+
+    public function forUser(UserModel $user): CheckAccessToFileClass
+    {
+        $this->user = $user;
+        return $this;
     }
 
     public function run()
 
     {
-        $model = (new GetObjectForFileRepository($this->file))->run();
-        $class  = get_class($model);
+        $class = $this->file->commentable_type;
         switch ($class) {
             case 'App\Modules\Article\Models\ArticleModel':
-                return $this->article($model);
+                return $this->article();
         }
         throw new \Exception('Ошибка определения прав на файл');
     }
 
-    private function article($model)
+    private function article(): bool
     {
+        if ($this->user && $this->file->user_id == $this->user->id) {
+            return true;
+        }
+        if ($this->user && $this->user->ability('superAdmin', 'article-edit')) {
+            return true;
+        }
+        $model = (new GetObjectForFileRepository($this->file))->run();
         if ($model->public == 1) {
-            return true;
-        }
-        $user = Auth::user();
-        if ($user && $user->ability('superAdmin', 'edit-article')) {
-            return true;
-        }
-        if ($user && $this->file->user_id == $user->id) {
             return true;
         }
         return false;

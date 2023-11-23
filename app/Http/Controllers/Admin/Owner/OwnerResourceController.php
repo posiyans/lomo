@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin\Owner;
 
 use App\Http\Controllers\Admin\AbstractAdminController;
-
 use App\Http\Controllers\Admin\Owner\Classes\DeleteOwner;
 use App\Http\Controllers\Admin\Owner\Repository\GetOwnerListRepository;
 use App\Http\Controllers\Admin\Owner\Repository\GetOwnerRepository;
@@ -32,7 +31,7 @@ class OwnerResourceController extends AbstractAdminController
     /**
      * получить список собственников
      *
-     * @param Request $request
+     * @param  Request  $request
      */
     public function index(OwnerListRequest $request)
     {
@@ -41,18 +40,20 @@ class OwnerResourceController extends AbstractAdminController
         return [
             'status' => $owner->status,
             'data' => AdminOwnerListResource::collection($owner->rezult),
-            'total' => $owner->total,
-            'offset' => $owner->offset,
+            'meta' => [
+                'total' => $owner->total,
+                'offset' => $owner->offset,
+            ],
             'error' => $owner->error
         ];
-        $rez = $this->paginate($data);
+//        $rez = $this->paginate($data);
     }
 
 
     /**
      * todo вынести в отдельный клонтроллер
      *
-     * @param OwnerListRequest $request
+     * @param  OwnerListRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function ownerListXlsx(OwnerListRequest $request)
@@ -77,7 +78,7 @@ class OwnerResourceController extends AbstractAdminController
             }
             return ['stats' => true, 'error' => $owner->error_message];
         }
-         return ['status' => false];
+        return ['status' => false];
     }
 
     /**
@@ -113,7 +114,6 @@ class OwnerResourceController extends AbstractAdminController
                         if ($owner->setValue($key, $value)) {
                             return ['status' => true];
                         }
-
                     }
                 }
             }
@@ -131,7 +131,7 @@ class OwnerResourceController extends AbstractAdminController
         if (\Auth::user()->hasPermission('write-personal-data')) {
             try {
                 $owner = (new GetOwnerRepository())->findById($id);
-               $status = (new DeleteOwner())->deleteOwner($owner);
+                $status = (new DeleteOwner())->deleteOwner($owner);
                 if ($status) {
                     return ['status' => true];
                 }

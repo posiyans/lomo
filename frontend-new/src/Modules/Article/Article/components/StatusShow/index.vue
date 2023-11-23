@@ -3,59 +3,48 @@
 </template>
 
 <script>
-import { getStatusList } from 'src/Modules/Article/Article/api/article'
+import { computed, defineComponent, onMounted } from 'vue'
+import { useArticleStatusStore } from 'src/Modules/Article/Article/stores/useArticleStatusStore'
 
-export default {
+export default defineComponent({
+  components: {},
   props: {
-    value: {
+    modelValue: {
       type: [Number, String],
-      required: true
+      default: null
     },
     color: {
       type: Boolean,
       default: false
     }
   },
-  data () {
+  setup(props) {
+    const articleStatusStore = useArticleStatusStore()
+    onMounted(() => {
+      articleStatusStore.getData()
+    })
+    const item = computed(() => {
+      return articleStatusStore.statusList.find(item => item.id === props.modelValue)
+    })
+    const title = computed(() => {
+      if (item.value) {
+        return item.value.label
+      }
+      return ''
+    })
+    const style = computed(() => {
+      if (props.color && item.value) {
+        return 'color: ' + item.value.color + ';'
+      }
+      return ''
+    })
+
     return {
-      status: []
-    }
-  },
-  computed: {
-    item () {
-      if (this.value) {
-        return this.status.find(item => item.id === this.value)
-      }
-      return ''
-    },
-    title () {
-      if (this.item) {
-        return this.item.label
-      }
-      return ''
-    },
-    style () {
-      if (this.item) {
-        return 'color: ' + this.item.color + ';'
-      }
-      return ''
-    }
-  },
-  created () {
-    this.getData()
-  },
-  methods: {
-    getData () {
-      getStatusList()
-        .then(res => {
-          this.status = res.data
-        })
-    },
-    setValue (val) {
-      this.$emit('input', val)
+      title,
+      style
     }
   }
-}
+})
 </script>
 
 <style scoped>

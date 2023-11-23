@@ -5,6 +5,40 @@ use App\Models\MyModel;
 
 /**
  * Модель для показаний
+ *
+ * @property int $id
+ * @property int $stead_id
+ * @property int $device_id
+ * @property string|null $instrument_serial
+ * @property string $value
+ * @property int|null $payment_id
+ * @property int|null $invoice_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Receipt\DeviceRegisterModel|null $deviceRegister
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\File\Models\FileModel> $files
+ * @property-read int|null $files_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @property-read int|null $log_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Message\MessageModel> $message
+ * @property-read int|null $message_count
+ * @method static \Illuminate\Database\Eloquent\Builder|InstrumentReadings newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|InstrumentReadings newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|InstrumentReadings query()
+ * @method static \Illuminate\Database\Eloquent\Builder|InstrumentReadings whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InstrumentReadings whereDeviceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InstrumentReadings whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InstrumentReadings whereInstrumentSerial($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InstrumentReadings whereInvoiceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InstrumentReadings wherePaymentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InstrumentReadings whereSteadId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InstrumentReadings whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InstrumentReadings whereValue($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @mixin \Eloquent
  */
 class InstrumentReadings extends MyModel
 {

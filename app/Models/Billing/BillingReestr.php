@@ -10,6 +10,51 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
 
 
+/**
+ * App\Models\Billing\BillingReestr
+ *
+ * @property int $id
+ * @property string $title
+ * @property int $type
+ * @property array $options параметры счета
+ * @property int $user_id
+ * @property array $history
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\File\Models\FileModel> $files
+ * @property-read int|null $files_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Billing\BillingInvoice> $invoices
+ * @property-read int|null $invoices_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @property-read int|null $log_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Message\MessageModel> $message
+ * @property-read int|null $message_count
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingReestr newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingReestr newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingReestr onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingReestr query()
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingReestr whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingReestr whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingReestr whereHistory($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingReestr whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingReestr whereOptions($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingReestr whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingReestr whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingReestr whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingReestr whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingReestr withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingReestr withoutTrashed()
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Billing\BillingInvoice> $invoices
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Billing\BillingInvoice> $invoices
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Billing\BillingInvoice> $invoices
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Billing\BillingInvoice> $invoices
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @mixin \Eloquent
+ */
 class BillingReestr extends MyModel
 {
     use SoftDeletes;

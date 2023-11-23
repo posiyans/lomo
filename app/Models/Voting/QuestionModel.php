@@ -6,6 +6,46 @@ use App\Models\MyModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Auth;
 
+/**
+ * App\Models\Voting\QuestionModel
+ *
+ * @property int $id
+ * @property int $voting_id
+ * @property string $text
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Voting\AnswerModel> $answers
+ * @property-read int|null $answers_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\File\Models\FileModel> $files
+ * @property-read int|null $files_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @property-read int|null $log_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Message\MessageModel> $message
+ * @property-read int|null $message_count
+ * @property-read \App\Models\Voting\VotingModel|null $voting
+ * @method static \Illuminate\Database\Eloquent\Builder|QuestionModel newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|QuestionModel newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|QuestionModel onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|QuestionModel query()
+ * @method static \Illuminate\Database\Eloquent\Builder|QuestionModel whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|QuestionModel whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|QuestionModel whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|QuestionModel whereText($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|QuestionModel whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|QuestionModel whereVotingId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|QuestionModel withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|QuestionModel withoutTrashed()
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Voting\AnswerModel> $answers
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Voting\AnswerModel> $answers
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Voting\AnswerModel> $answers
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Voting\AnswerModel> $answers
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @mixin \Eloquent
+ */
 class QuestionModel extends MyModel
 {
     use SoftDeletes;

@@ -19,13 +19,13 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['http://localhost:3000', 'http://lomo.loc:3000', 'http://lomo.loc:9527', ],
+    'allowed_origins' => ['http://localhost:3000', 'https://lomo.loc:3000', 'http://lomo.loc:3000', 'http://lomo.loc:9527',],
 
     'allowed_origins_patterns' => [],
 
     'allowed_headers' => ['*'],
 
-    'exposed_headers' => [],
+    'exposed_headers' => ['Content-Disposition'],
 
     'max_age' => 0,
 

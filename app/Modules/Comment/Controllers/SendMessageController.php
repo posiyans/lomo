@@ -2,28 +2,11 @@
 
 namespace App\Modules\Comment\Controllers;
 
-use App\Http\Resources\AppealResource;
-use App\Http\Resources\ArticleResource;
-use App\Http\Resources\ConrtollerResource;
-use App\Models\AppealModel;
-use App\Models\Article\ArticleModel;
-use App\Models\Article\CategoryModel;
-use App\Modules\Avatar\Repositories\GetAvatarForUserRepository;
+use App\Http\Controllers\Controller;
+use App\Modules\BanUser\Actions\CheckUserBanAction;
 use App\Modules\Comment\Classes\CreateCommentClass;
 use App\Modules\Comment\Repositories\GetObjectByTypeAndUid;
-use App\Modules\File\Classes\CheckAccessToFileClass;
-use App\Modules\File\Classes\GetPathForHashClass;
-use App\Modules\File\Classes\SaveFileForObjectClass;
-use App\Modules\File\Classes\TempDirectoryPathClass;
-use App\Modules\File\Repositories\GetFileByUidRepository;
-use App\Modules\File\Repositories\GetObjectByType;
-use App\Modules\File\Repositories\GetObjectForFileRepository;
-use App\Modules\File\Resources\FileResource;
-use App\Modules\User\Repositories\GetUserByUidRepository;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File;
 
 /**
  * получить фаил
@@ -43,12 +26,24 @@ class SendMessageController extends Controller
 
     public function index(Request $request)
     {
-        $type = $request->get('type');
-        $uid = $request->get('uid');
-        $message = $request->get('message');
-        $model = (new GetObjectByTypeAndUid($type, $uid))->run();
-        $comment = (new CreateCommentClass($model))->message($message)->run();
-        return $comment;
+        try {
+            $type = $request->get('type');
+            $uid = $request->get('uid');
+            (new CheckUserBanAction($request->user()))
+                ->type($request->type)
+                ->typeUid($request->uid)
+                ->run();
+            $message = $request->get('message', null);
+            $reply = $request->get('reply');
+            $model = (new GetObjectByTypeAndUid($type, $uid))->run();
+            $opt = [
+                'reply' => $reply
+            ];
+            $comment = (new CreateCommentClass($model))->message($message)->options($opt)->run();
+            return $comment;
+        } catch (\Exception $e) {
+            return response(['errors' => $e->getMessage()], 450);
+        }
     }
 
 

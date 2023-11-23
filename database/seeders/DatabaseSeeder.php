@@ -2,11 +2,10 @@
 
 namespace Database\Seeders;
 
-use Database\Seeders\LaratrustSeeder;
-use Illuminate\Database\Seeder;
 use App\Models\MeteringDevice;
-use App\Models\ReceiptType;
 use App\Models\Rate;
+use App\Models\ReceiptType;
+use Illuminate\Database\Seeder;
 
 
 class DatabaseSeeder extends Seeder
@@ -19,6 +18,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(LaratrustSeeder::class);
+        $this->call([
+            LaratrustSeeder::class
+        ]);
     }
 }

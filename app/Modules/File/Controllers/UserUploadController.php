@@ -2,20 +2,12 @@
 
 namespace App\Modules\File\Controllers;
 
-use App\Http\Resources\AppealResource;
-use App\Http\Resources\ArticleResource;
-use App\Http\Resources\ConrtollerResource;
-use App\Models\AppealModel;
-use App\Models\Article\ArticleModel;
-use App\Models\Article\CategoryModel;
+use App\Http\Controllers\Controller;
 use App\Modules\File\Classes\SaveFileForObjectClass;
 use App\Modules\File\Classes\TempDirectoryPathClass;
-use App\Modules\File\Repositories\GetObjectByType;
+use App\Modules\File\Repositories\GetModelNameByType;
 use App\Modules\File\Resources\FileResource;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File;
 
 /**
  * получить список категорий статей
@@ -43,15 +35,17 @@ class UserUploadController extends Controller
         }
         $inputFile = $request->file;
         $this->saveChunk($file_path, $inputFile);
-        if ($type ==  'done') {
+        if ($type == 'done') {
 //            return [$request->model, $request->model_uid];
-            $model = (new GetObjectByType($request->model, $request->model_uid))->run();
+            $class = (new GetModelNameByType($request->model))->run();
 //            return $model;
+            $model = new $class();
+            $model->uid = $request->model_uid;
             $file = (new SaveFileForObjectClass($model))->file($file_path)->name($request->name)->size($request->size)->type($request->type)->uid($request->uid)->run();
             $this->deleteTempFile($file_path);
             return new FileResource($file);
         }
-            return 'ok';
+        return 'ok';
     }
 
     private function saveChunk($file_path, $file_chunk)

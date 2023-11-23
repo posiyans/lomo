@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Http\Resources\AppealResource;
-use App\Http\Resources\ConrtollerResource;
+use App\Http\Controllers\Controller;
 use App\Models\AppealModel;
 use App\Models\Article\CategoryModel;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
@@ -20,11 +18,11 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         $cat = false;
-        if (isset($request->children) && $request->children == true){
+        if (isset($request->children) && $request->children == true) {
             $cat = CategoryModel::getListChildren();
-//            if (Auth::check() && Auth::user()->ability('superAdmin', 'access-admin-panel')) {
-//                $cat[] = ['label' => 'Админ панель', 'basePath' => 'http://lomo.loc/admin'];
-//            }
+            if (Auth::check() && Auth::user()->ability('superAdmin', 'access-admin-panel')) {
+                $cat[] = ['label' => 'Админ панель', 'basePath' => '/admin'];
+            }
         }
         return $cat;
 //        $query =  CategoryModel::query();
@@ -33,23 +31,24 @@ class CategoryController extends Controller
 //        return $appeal;
 
 
-
-
         $rez = [];
-        $rez[] = ['label'=>'Главная', 'basePath'=>'/index'];
-        if ($cat){
-            $rez[] = ['label'=>'Статьи', 'basePath'=>'/article/list', 'children'=>$cat];
+        $rez[] = ['label' => 'Главная', 'basePath' => '/index'];
+        if ($cat) {
+            $rez[] = ['label' => 'Статьи', 'basePath' => '/article/list', 'children' => $cat];
         }
-        $rez[] = ['label' => 'Информация', 'basePath' => '/', 'children'=> [
-                ['label'=>'Тарифы', 'basePath'=>'/modules/rates'],
-                ['label'=>'Квитанции', 'basePath'=>'/modules/receipt'],
-                ['label'=>'Погода', 'basePath'=>'/modules/weather'],
-                ['label'=>'Камеры', 'basePath'=>'/modules/camera'],
+        $rez[] = [
+            'label' => 'Информация',
+            'basePath' => '/',
+            'children' => [
+                ['label' => 'Тарифы', 'basePath' => '/modules/rates'],
+                ['label' => 'Квитанции', 'basePath' => '/modules/receipt'],
+                ['label' => 'Погода', 'basePath' => '/modules/weather'],
+                ['label' => 'Камеры', 'basePath' => '/modules/camera'],
             ]
         ];
-//        if (Auth::check() && Auth::user()->ability('superadmin', 'access-admin-panel')) {
-//            $rez[] = ['label' => 'Админ панель', 'basePath' => '/admin/my-dashboard'];
-//        }
+        if (Auth::check() && Auth::user()->ability('superadmin', 'access-admin-panel')) {
+            $rez[] = ['label' => 'Админ панель', 'basePath' => '/admin/my-dashboard'];
+        }
         return $cat;
     }
 
@@ -60,7 +59,6 @@ class CategoryController extends Controller
      */
     public function create()
     {
-
     }
 
     /**
@@ -71,7 +69,7 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        if (isset($request->title) && !empty($request->title)){
+        if (isset($request->title) && !empty($request->title)) {
             $title = $request->title;
             $category = new CategoryModel();
             $category->name = $title;
@@ -82,7 +80,6 @@ class CategoryController extends Controller
     }
 
 
-
     /**
      * Display the specified resource.
      *
@@ -91,9 +88,7 @@ class CategoryController extends Controller
      */
     public function show(AppealModel $apppel)
     {
-
         return $apppel;
-
     }
 
     /**

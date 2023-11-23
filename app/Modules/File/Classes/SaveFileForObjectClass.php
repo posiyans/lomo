@@ -1,8 +1,11 @@
 <?php
+
 namespace App\Modules\File\Classes;
 
 use App\Modules\File\Models\FileModel;
-use Ramsey\Uuid\Nonstandard\Uuid;
+use App\Modules\User\Models\UserModel;
+use Illuminate\Http\File;
+use Illuminate\Support\Facades\Storage;
 
 class SaveFileForObjectClass
 {
@@ -13,8 +16,7 @@ class SaveFileForObjectClass
         $this->file_model = new FileModel();
         $this->file_model->commentable_type = get_class($object);
         $this->file_model->commentable_uid = $object->uid;
-        $this->file_model->commentable_id = $object->id;
-        $this->file_model->uid = Uuid::uuid4();
+        // $this->file_model->commentable_id = $object->id;
     }
 
     public function name($name)
@@ -46,22 +48,30 @@ class SaveFileForObjectClass
         $this->file_model->description = $text;
         return $this;
     }
-    public function file($file_path): SaveFileForObjectClass
+
+    public function file($file_path)
     {
         $hash = (new GetHashForPathClass($file_path))->run();
         $this->file_model->hash = $hash;
-        $new_path = (new GetPathForHashClass($hash))->run();
-        if (!file_exists($new_path)) {
-            rename($file_path, $new_path);
-        }
+        $path = (new GetPathForHashClass($hash))->onlyFolder();
+        Storage::putFileAs($path, new File($file_path), $this->file_model->hash);
+        return $this;
+    }
+
+    /*
+     * кто загрузил файл
+     */
+    public function uploadUser(UserModel $user)
+    {
+        $this->file_model->user_id = $user->id;
         return $this;
     }
 
     public function run()
     {
-       if ($this->file_model->logAndSave('Загружен файл')) {
-           return $this->file_model;
-       }
+        if ($this->file_model->logAndSave('Загружен файл')) {
+            return $this->file_model;
+        }
         throw new \Exception('Ошибка загрузки файла');
     }
 }

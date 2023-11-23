@@ -8,7 +8,7 @@ const camera =
         component: () => import('src/Modules/Camera/page/Show/index.vue'),
         hidden: true,
         meta: {
-          title: ''
+          title: 'Просмотр камер'
         }
       }
     ]

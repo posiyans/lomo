@@ -2,8 +2,6 @@
 
 namespace App\Modules\Voting\Resources;
 
-use App\Modules\Stead\Repositories\GetSteadRepository;
-use App\Modules\Voting\Repositories\GetAllAnswersForQuestionRepository;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class QuestionAndAnswersResource extends JsonResource
@@ -19,6 +17,5 @@ class QuestionAndAnswersResource extends JsonResource
         $data = parent::toArray($request);
         $data['answers'] = $request->request->answers;
         return $data;
-
     }
 }

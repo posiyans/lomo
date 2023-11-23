@@ -1,7 +1,9 @@
 <?php
+
 namespace App\Modules\Article\Repositories;
 
-class GetStatusArticleRepository {
+class GetStatusArticleRepository
+{
 
     private $status = [
         [
@@ -21,7 +23,7 @@ class GetStatusArticleRepository {
         ],
         [
             'id' => 3,
-            'label' => 'на дороботке',
+            'label' => 'на доработке',
             'color' => '#cecece'
         ],
         [

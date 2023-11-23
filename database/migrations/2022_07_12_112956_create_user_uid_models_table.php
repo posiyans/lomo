@@ -13,18 +13,13 @@ class CreateUserUidModelsTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_uid_models', function (Blueprint $table) {
-            $table->id();
-            $table->integer('user_id')->comment('id пользователя');
+        Schema::table('users', function (Blueprint $table) {
             $table->string('uid')->comment('uid пользователя');
-            $table->timestamps();
         });
         $users = \App\Modules\User\Models\UserModel::all();
         foreach ($users as $user) {
-            $user_uid = new \App\Modules\User\Models\UserUidModel();
-            $user_uid->user_id = $user->id;
-            $user_uid->uid = \Ramsey\Uuid\Uuid::uuid4();
-            $user_uid->save();
+            $user->uid = \Ramsey\Uuid\Uuid::uuid4();
+            $user->save();
         }
     }
 
@@ -35,6 +30,8 @@ class CreateUserUidModelsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_uid_models');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('uid');
+        });
     }
 }

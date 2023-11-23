@@ -12,7 +12,8 @@
 */
 
 
-Route::group(['prefix' => '/api/v2/stead'], function() {
+Route::group(['prefix' => '/api/v2/stead'], function () {
     Route::get('/list', [\App\Modules\Stead\Controllers\GetSteadListController::class, 'index']);
     Route::get('/info', [\App\Modules\Stead\Controllers\GetSteadInfoController::class, 'index']);
+    Route::get('/get-list-for-owner', \App\Modules\Stead\Controllers\GetListOfOwnerSteadController::class);
 });

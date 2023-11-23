@@ -8,7 +8,7 @@ const yandex =
         component: () => import('src/Modules/Yandex/page/YandexSchedule/index.vue'),
         hidden: true,
         meta: {
-          title: ''
+          title: 'Яндекс расписание'
         }
       }
     ]

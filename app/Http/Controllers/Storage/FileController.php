@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\Storage;
 
+use App\Http\Controllers\Controller;
 use App\Models\Storage\File;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 
+/**
+ * @deprecated
+ */
 class FileController extends Controller
 {
     /**
@@ -52,40 +55,43 @@ class FileController extends Controller
             if (isset($request->model)) {
                 if ($request->model == 'article') {
                     $file->commentable_type = 'App\Models\Article\ArticleModel';
-                } else if ($request->model == 'user') {
-                    $file->commentable_type = 'App\Models\User';
+                } else {
+                    if ($request->model == 'user') {
+                        $file->commentable_type = 'App\Models\User';
 //                    $file->commentable_id = $request->uid;
 
-                }else if ($request->model == 'voting') {
-                    $file->commentable_type = 'App\Models\Voting\VotingModel';
+                    } else {
+                        if ($request->model == 'voting') {
+                            $file->commentable_type = 'App\Models\Voting\VotingModel';
 //                    $file->commentable_id = $request->uid;
 
+                        }
+                    }
                 }
             }
             if ($request->model == 'avatar') {
                 $file->description = 'avatar';
                 if ($request->uid) {
-                  $file->description .= '_'.$request->uid;
+                    $file->description .= '_' . $request->uid;
                 }
             }
-            if ($file->save()){
+            if ($file->save()) {
 //                if ($request->model == 'user') {
 //                    $user = Auth::user();
 //                    $user->avatar = '/api/user/storage/file/'. $file->id;
 //                    $user->save();
 //                }
-                $data= [
-                    "files"=> [
-                        "file"=> '/api/user/storage/file/'. $file->id,
-                        'id'=>$file->id,
+                $data = [
+                    "files" => [
+                        "file" => '/api/user/storage/file/' . $file->id,
+                        'id' => $file->id,
                     ]
                 ];
-                return $this->response($data);
+                return response($data);
             }
-            return $this->response('error');
+            return response('error');
         }
-        return $this->response('no file');
-
+        return response('no file');
     }
 
     /**
@@ -96,7 +102,7 @@ class FileController extends Controller
      */
     public function show($id, Request $request)
     {
-        $user=Auth::user();
+        $user = Auth::user();
         $file = File::find($id);
         if ($file) {
             $path = '../storage/app/file/file/' . substr($file->hash, 0, 2) . '/' . $file->hash;
@@ -104,7 +110,7 @@ class FileController extends Controller
                 return response()->download($path, $file->name);
             }
         }
-            return $this->response(['error'=>$path], 404);
+        return response(['error' => $path], 404);
     }
 
     /**

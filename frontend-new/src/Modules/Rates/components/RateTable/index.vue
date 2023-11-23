@@ -1,18 +1,22 @@
 <template>
   <div>
     <q-table
-        :loading="loading"
-        :rows="list"
-        :columns="columns"
-        row-key="name"
-        wrap-cells
-        separator="cell"
-        hide-bottom
-        :pagination="{ rowsPerPage: 0 }"
+      :loading="loading"
+      :rows="list"
+      :columns="columns"
+      row-key="name"
+      wrap-cells
+      separator="cell"
+      hide-bottom
+      :pagination="{ rowsPerPage: 0 }"
     >
-      <template v-slot:body-cell-date="props">
+      <template v-slot:body-cell-rate="props">
         <q-td :props="props">
-          <ShowTime :time="props.row.rate.date_start" format="DD-MM-YYYY" />
+          {{ props.row.rate.description }}
+          <div v-if="props.row.rate.date_start">
+            c
+            <ShowTime :time="props.row.rate.date_start" format="DD-MM-YYYY" />
+          </div>
         </q-td>
       </template>
     </q-table>
@@ -37,31 +41,24 @@ const columns = [
     align: 'center',
     field: row => row.rate.description,
     format: val => `${val}`
-  },
-  {
-    name: 'date',
-    required: true,
-    label: 'Дата начала действия',
-    align: 'center',
-    field: row => row.rate.date_start,
-    format: val => `${val}`
   }
 
 ]
 import { fetchList } from 'src/Modules/Rates/api/rates.js'
 import { onBeforeMount, ref } from 'vue'
 import ShowTime from 'src/components/ShowTime/index.vue'
+
 export default {
   components: {
     ShowTime
   },
   props: {
     type: {
-      type: String,
+      type: [String, Number],
       default: '1'
     }
   },
-  setup (props) {
+  setup(props) {
     const list = ref([])
     const loading = ref(true)
     const listQuery = ref({
@@ -69,12 +66,13 @@ export default {
     })
     const getList = () => {
       loading.value = true
-      fetchList(listQuery.value).then(response => {
-        if (response.data.status) {
-          list.value = response.data.data
-        }
-        loading.value = false
-      })
+      fetchList(listQuery.value)
+        .then(response => {
+          if (response.data.status) {
+            list.value = response.data.data
+          }
+          loading.value = false
+        })
     }
     onBeforeMount(() => {
       getList()

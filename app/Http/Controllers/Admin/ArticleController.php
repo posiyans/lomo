@@ -2,15 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Resources\AppealResource;
-use App\Http\Resources\ArticleResource;
-use App\Http\Resources\ConrtollerResource;
-use App\Models\AppealModel;
-use App\Models\Article\ArticleModel;
-use App\Models\Article\CategoryModel;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Modules\Article\Models\ArticleModel;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class ArticleController extends Controller
 {
@@ -24,33 +20,6 @@ class ArticleController extends Controller
         $this->middleware('ability:superAdmin,access-admin-panel');
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Request $request)
-    {
-
-        $query =  ArticleModel::query();
-        if ($request->category){
-            $query->where('category_id', $request->category);
-        }
-        if (isset($request->status)){
-            $query->where('public', (int)$request->status);
-        }
-        if ($request->find){
-            $find= explode(' ', mb_strtolower($request->find));
-            foreach ($find as $item) {
-                if (!empty(trim($item))) {
-                    $query->whereRaw('lower(concat_ws(" ",title,resume, text)) like ?', '%' . $item . '%');
-                }
-            }
-        }
-        $article = $query->orderBy('id', 'desc')->paginate($request->limit);
-        return ArticleResource::collection($article);
-//        return $article;
-    }
 
     /**
      * Show the form for creating a new resource.
@@ -59,7 +28,6 @@ class ArticleController extends Controller
      */
     public function create()
     {
-
     }
 
     /**
@@ -83,19 +51,18 @@ class ArticleController extends Controller
                 $article->public = $request->public;
                 $article->allow_comments = $request->allow_comments;
                 $article->news = $request->news;
-                $article->publish_time = $request->display_time;
+                $article->slug = Str::slug($title);
+                $article->publish_time = date('Y-m-d H:i:s');
                 if ($article->save()) {
                     if (isset($request->files) && is_array($request->files)) {
                         $article->attachedFiles($request->attached_files);
                     }
-
                 }
                 return $article;
             }
         }
         return false;
     }
-
 
 
     /**
@@ -111,7 +78,7 @@ class ArticleController extends Controller
             $model->files = $model->files;
             return $model;
         }
-        if (is_string($id)){
+        if (is_string($id)) {
             return ['yps'];
         }
     }
@@ -137,21 +104,23 @@ class ArticleController extends Controller
     public function update(Request $request, $id)
     {
         $user = Auth::user();
-        if ($user->ability('superAdmin', 'сreate-article')) {
+        if ($user->ability('superAdmin', 'article-edit')) {
             $article = ArticleModel::find($id);
             if ($article && $request->id == $id) {
-                $article->title = $request->title;
-                $article->resume = $request->resume;
-                $article->text = $request->text;
-                $article->category_id = $request->category_id;
-                $article->public = $request->public;
-                $article->news = $request->news;
-                $article->allow_comments = $request->allow_comments;
-                $article->publish_time = $request->display_time;
+                $article->fill($request->all());
+//                $article->title = $request->title;
+//                $article->resume = $request->resume;
+//                $article->text = $request->text;
+//                $article->category_id = $request->category_id;
+//                $article->public = $request->public;
+//                $article->news = $request->news;
+//                $article->allow_comments = $request->allow_comments;
+//                $article->publish_time = $request->display_time;
+                $article->slug = Str::slug($article->title);
                 if ($article->logAndSave('Изменение содержания')) {
-                    if (is_array($request->input('files'))) {
-                        $article->attachedFiles($request->input('files'));
-                    }
+//                    if (is_array($request->input('files'))) {
+//                        $article->attachedFiles($request->input('files'));
+//                    }
                 }
                 $article = ArticleModel::find($id);
                 $article->files;

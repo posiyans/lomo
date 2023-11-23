@@ -5,60 +5,40 @@
 </template>
 
 <script>
-import { fetchCategoryList } from 'src/Modules/Article/Category/api/category.js'
+import { computed, defineComponent, onMounted } from 'vue'
+import { userCategoryStore } from 'src/Modules/Article/Category/stores/useCategoryStore'
 
-export default {
+export default defineComponent({
+  components: {},
   props: {
-    value: {
-      type: Number,
+    modelValue: {
+      type: [Number, String],
       default: null
-    },
-    /**
-     * какие категории показзать
-     */
-    type: {
-      type: String,
-      default: ''
     }
   },
-  data () {
-    return {
-      options: []
-    }
-  },
-  computed: {
-    item () {
-      return this.options.find(item => item.id === this.value)
-    },
-    title () {
-      if (this.item) {
-        return this.item.label
+  setup(props) {
+    const categoryStore = userCategoryStore()
+    onMounted(() => {
+      categoryStore.getData()
+    })
+    const item = computed(() => {
+      return categoryStore.categoryList.find(item => item.id === +props.modelValue)
+    })
+    const title = computed(() => {
+      if (item.value) {
+        return item.value.name
       }
       return ''
-    },
-    category: {
-      get () {
-        return this.value
-      },
-      set (val) {
-        // this.value = val
-        this.$emit('input', val)
-      }
-    }
-  },
-  mounted () {
-    this.getCategory()
-  },
-  methods: {
-    setValue (val) {
-      this.$emit('input', val)
-    },
-    getCategory () {
-      fetchCategoryList()
-        .then(response => {
-          this.options = response.data
-        })
+    })
+
+    return {
+      categoryStore,
+      title
     }
   }
-}
+})
 </script>
+
+<style scoped>
+
+</style>

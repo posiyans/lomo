@@ -1,6 +1,6 @@
 import { asyncRoutes, constantRoutes } from '@/router'
 import { getMenu } from '@/api/menu.js'
-import { getInfo } from '@/api/user/user.js'
+
 /**
  * Use meta.role to determine if the current user has permission
  * @param roles
@@ -24,14 +24,13 @@ export function filterAsyncRoutes(routes, roles) {
 
   routes.forEach(route => {
     const tmp = { ...route }
-   if (hasPermission(roles, tmp)) {
+    if (hasPermission(roles, tmp)) {
       if (tmp.children) {
         tmp.children = filterAsyncRoutes(tmp.children, roles)
       }
       res.push(tmp)
-   }
+    }
   })
-
   return res
 }
 

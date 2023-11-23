@@ -1,8 +1,6 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
 class FixArticleModelInFileTable extends Migration
 {
@@ -21,7 +19,7 @@ class FixArticleModelInFileTable extends Migration
 
         foreach ($files as $file) {
             if (!$file->uid) {
-                $s= "UPDATE `files` set  `uid` = '" . \Ramsey\Uuid\Uuid::uuid4() . "' where `id` = " . $file->id . ";";
+                $s = "UPDATE `files` set  `uid` = '" . Str::uuid() . "' where `id` = " . $file->id . ";";
                 echo $s;
                 echo PHP_EOL;
                 \Illuminate\Support\Facades\DB::statement($s);
@@ -41,7 +39,8 @@ class FixArticleModelInFileTable extends Migration
      */
     public function down()
     {
-        \Illuminate\Support\Facades\DB::statement("UPDATE `files` set `commentable_type` = 'App\\Models\\Article\\ArticleModel' where commentable_type IN ('App\\Modules\\Article\\Models\\ArticleModel')");
-
+        \Illuminate\Support\Facades\DB::statement(
+            "UPDATE `files` set `commentable_type` = 'App\\Models\\Article\\ArticleModel' where commentable_type IN ('App\\Modules\\Article\\Models\\ArticleModel')"
+        );
     }
 }

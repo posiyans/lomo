@@ -1,14 +1,14 @@
 /* eslint-disable */
-import { authUser, asyncUser } from 'src/Modules/User/router/auth'
-import { article, asyncArticle } from 'src/Modules/Article/router/article'
+import { authUser } from 'src/Modules/Auth/router/auth'
+import { article } from 'src/Modules/Article/router/article'
 import rates from 'src/Modules/Rates/router/rates'
 import receipt from 'src/Modules/Receipt/router/receipt.js'
 import yandex from 'src/Modules/Yandex/router/yandex.js'
 import camera from 'src/Modules/Camera/router/camera.js'
 import weather from 'src/Modules/Weather/router/weather.js'
-import voting from 'src/Modules/Voting/router/voting.js'
-
-import { asyncAdmin } from 'src/Modules/Admin/router/admin.js'
+import { voting } from 'src/Modules/Voting/router/votingRouter.js'
+import adminRoutes from './adminRoutes.js'
+import { personalAreaRouter } from 'src/Modules/PersonalArea/router/personalAreaRouter'
 
 const routes = [
   {
@@ -22,6 +22,7 @@ const routes = [
           { path: '', component: () => import('src/pages/MainPage/index.vue') }
         ]
       },
+      personalAreaRouter,
       authUser,
       article,
       rates,
@@ -33,8 +34,15 @@ const routes = [
     ]
   },
   {
+    path: '/admin',
+    component: () => import ('layouts/AdminLayout/index.vue'),
+    children: adminRoutes
+
+  },
+  {
     path: '/:catchAll(.*)*',
-    component: () => import('pages/ErrorNotFound.vue')
+    // component: () => import('pages/ErrorNotFound.vue')
+    component: () => import('src/pages/Errors/404.vue')
   }
 ]
 
@@ -48,7 +56,6 @@ export const asyncRoutes = [
         path: '',
         component: () => import('src/pages/AdminNew/index.vue')
       },
-      asyncArticle
       // asyncUser,
       // asyncAdmin,
     ]

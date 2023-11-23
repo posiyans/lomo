@@ -14,6 +14,65 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * App\Models\Billing\BillingPayment
+ *
+ * @property int $id
+ * @property int|null $stead_id id участка
+ * @property string|null $description
+ * @property int|null $type тип платежа
+ * @property float $price
+ * @property string|null $transaction
+ * @property string $payment_date
+ * @property int|null $reestr_id
+ * @property int $payment_type
+ * @property array $raw_data
+ * @property int|null $invoice_id
+ * @property int|null $user_id
+ * @property bool $error есть ли неточности в строке
+ * @property array $history
+ * @property string|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\File\Models\FileModel> $files
+ * @property-read int|null $files_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, InstrumentReadings> $instrumentReadings
+ * @property-read int|null $instrument_readings_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Log> $log
+ * @property-read int|null $log_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Message\MessageModel> $message
+ * @property-read int|null $message_count
+ * @property-read Stead|null $stead
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingPayment newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingPayment newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingPayment query()
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingPayment whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingPayment whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingPayment whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingPayment whereError($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingPayment whereHistory($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingPayment whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingPayment whereInvoiceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingPayment wherePaymentDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingPayment wherePaymentType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingPayment wherePrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingPayment whereRawData($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingPayment whereReestrId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingPayment whereSteadId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingPayment whereTransaction($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingPayment whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingPayment whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingPayment whereUserId($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, InstrumentReadings> $instrumentReadings
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Log> $log
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, InstrumentReadings> $instrumentReadings
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Log> $log
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, InstrumentReadings> $instrumentReadings
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Log> $log
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, InstrumentReadings> $instrumentReadings
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Log> $log
+ * @mixin \Eloquent
+ */
 class BillingPayment extends MyModel
 {
     //

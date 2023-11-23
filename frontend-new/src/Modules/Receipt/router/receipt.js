@@ -7,7 +7,10 @@ const receipt =
         path: 'receipt',
         component: () => import('src/Modules/Receipt/pages/ReceiptForm/index.vue'),
         name: 'modulesReceipt',
-        hidden: true
+        hidden: true,
+        meta: {
+          title: 'Реквизиты для оплаты '
+        }
       }
     ]
   }

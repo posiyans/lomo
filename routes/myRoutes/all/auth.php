@@ -1,10 +1,8 @@
 <?php
 
 
-
-
 //маршруты авторизации и регистрации
-Route::post('/register', 'App\Http\Controllers\Auth\RegisterController@register');
+//Route::post('/register', 'App\Http\Controllers\Auth\RegisterController@register');
 Route::post('password/email', 'App\Http\Controllers\Auth\ForgotPasswordController@sendResetLinkEmail');
 Route::post('password/reset', 'App\Http\Controllers\Auth\ResetPasswordController@reset');
 Route::post('login', 'App\Http\Controllers\Auth\LoginController@login');

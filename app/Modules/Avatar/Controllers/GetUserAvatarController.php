@@ -2,26 +2,13 @@
 
 namespace App\Modules\Avatar\Controllers;
 
-use App\Http\Resources\AppealResource;
-use App\Http\Resources\ArticleResource;
-use App\Http\Resources\ConrtollerResource;
-use App\Models\AppealModel;
-use App\Models\Article\ArticleModel;
-use App\Models\Article\CategoryModel;
+use App\Http\Controllers\Controller;
+use App\Modules\Avatar\Classes\GravatarClass;
 use App\Modules\Avatar\Repositories\GetAvatarForUserRepository;
-use App\Modules\File\Classes\CheckAccessToFileClass;
 use App\Modules\File\Classes\GetPathForHashClass;
-use App\Modules\File\Classes\SaveFileForObjectClass;
-use App\Modules\File\Classes\TempDirectoryPathClass;
-use App\Modules\File\Repositories\GetFileByUidRepository;
-use App\Modules\File\Repositories\GetObjectByType;
-use App\Modules\File\Repositories\GetObjectForFileRepository;
-use App\Modules\File\Resources\FileResource;
 use App\Modules\User\Repositories\GetUserByUidRepository;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * получить фаил
@@ -46,8 +33,17 @@ class GetUserAvatarController extends Controller
             $user = (new GetUserByUidRepository($uid))->run();
             $avatar = (new GetAvatarForUserRepository($user))->run();
             $path = (new GetPathForHashClass($avatar->hash))->run();
-            return response()->download($path, $avatar->name);
+            return Storage::download($path, $avatar->name);
         } catch (\Exception $e) {
+            if ($user) {
+                $label = mb_strtolower(trim(mb_substr($user->name, 0, 2)));
+                $generator = new GravatarClass();
+                $avatar = $generator->string($label)->toPng();
+                return response($avatar, 200, [
+                    'Content-Type' => 'image/png',
+                    'Content-Disposition' => 'attachment; filename="avatar.png"',
+                ]);
+            }
             return response()->download(__DIR__ . '/img.png', 'avatar.png');
         }
     }

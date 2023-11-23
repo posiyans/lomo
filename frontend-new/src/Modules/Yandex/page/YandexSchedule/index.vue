@@ -1,10 +1,13 @@
 <template>
   <div>
-    <div class="text-h6">Расписание электричек</div>
-    <q-separator />
-    <div class="q-pt-md">
-      <YandexSchedule />
+    <div class="page-title">
+      Расписание электричек
     </div>
+    <q-card>
+      <q-card-section>
+        <YandexSchedule />
+      </q-card-section>
+    </q-card>
   </div>
 </template>
 

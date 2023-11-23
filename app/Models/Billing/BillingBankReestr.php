@@ -5,6 +5,34 @@ namespace App\Models\Billing;
 use App\Models\Stead;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\Billing\BillingBankReestr
+ *
+ * @property int $id
+ * @property array $data
+ * @property int $user_id
+ * @property string $file_hash
+ * @property string|null $file_name
+ * @property int|null $file_size
+ * @property int $file_publish
+ * @property string|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingBankReestr newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingBankReestr newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingBankReestr query()
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingBankReestr whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingBankReestr whereData($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingBankReestr whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingBankReestr whereFileHash($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingBankReestr whereFileName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingBankReestr whereFilePublish($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingBankReestr whereFileSize($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingBankReestr whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingBankReestr whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingBankReestr whereUserId($value)
+ * @mixin \Eloquent
+ */
 class BillingBankReestr extends Model
 {
     protected $casts = [

@@ -1,11 +1,15 @@
 <template>
-  <div class="app-container">
-    <div class="text-h6">Камеры</div>
-    <q-separator />
-
-    <div v-for="item in list" :key="item.id" class="row justify-center">
-      <ShowCamera :item="item" />
+  <div class="q-pa-sm">
+    <div class="page-title">
+      Камеры
     </div>
+    <q-card>
+      <q-card-section>
+        <div v-for="item in list" :key="item.id" class="q-my-auto">
+          <ShowCamera :item="item" show-name />
+        </div>
+      </q-card-section>
+    </q-card>
   </div>
 </template>
 
@@ -17,16 +21,16 @@ export default {
   components: {
     ShowCamera
   },
-  data () {
+  data() {
     return {
       list: []
     }
   },
-  mounted () {
+  mounted() {
     this.getList()
   },
   methods: {
-    getList () {
+    getList() {
       getCameraList()
         .then(response => {
           if (response.data.status) {

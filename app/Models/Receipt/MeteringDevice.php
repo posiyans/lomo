@@ -9,6 +9,39 @@ use App\Models\MyModel;
 /*
  * Модель приборов учета
  */
+/**
+ * App\Models\Receipt\MeteringDevice
+ *
+ * @property int $id
+ * @property string $type_id
+ * @property string|null $name
+ * @property string|null $description
+ * @property bool|null $enable
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\File\Models\FileModel> $files
+ * @property-read int|null $files_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @property-read int|null $log_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Message\MessageModel> $message
+ * @property-read int|null $message_count
+ * @property-read \App\Models\Receipt\ReceiptType|null $receiptType
+ * @method static \Illuminate\Database\Eloquent\Builder|MeteringDevice newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|MeteringDevice newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|MeteringDevice query()
+ * @method static \Illuminate\Database\Eloquent\Builder|MeteringDevice whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MeteringDevice whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MeteringDevice whereEnable($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MeteringDevice whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MeteringDevice whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MeteringDevice whereTypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MeteringDevice whereUpdatedAt($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @mixin \Eloquent
+ */
 class MeteringDevice extends MyModel
 {
     //

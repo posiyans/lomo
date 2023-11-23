@@ -2,7 +2,7 @@
 
 namespace App\Modules\Voting\Resources;
 
-use App\Modules\Stead\Repositories\GetSteadRepository;
+use App\Modules\Stead\Repositories\SteadRepository;
 use App\Modules\Voting\Repositories\GetAllAnswersForQuestionRepository;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -17,7 +17,7 @@ class QuestionResultInfoResource extends JsonResource
     public function toArray($request)
     {
         $all_answer = count((new GetAllAnswersForQuestionRepository($this->resource))->run());
-        $count_stead = count((new GetSteadRepository())->run());
+        $count_stead = count((new SteadRepository())->run());
         return [
             'id' => $this->id,
             'title' => $this->text,
@@ -26,6 +26,5 @@ class QuestionResultInfoResource extends JsonResource
             'procent' => round(100 * $all_answer / $count_stead, 2),
             'answers' => AnswerResultInfoResource::collection($this->answers),
         ];
-
     }
 }

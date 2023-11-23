@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div v-for="item in list" :key="item.id" class="q-mb-sm" >
+    <div v-for="item in list" :key="item.id" class="q-mb-sm">
       <ArticlePreview :article="item" />
     </div>
-    <LoadMorePagination :key="key" v-model:list-query="listQuery" :func="fetchListForCategory" @setList="setList" />
+    <LoadMore :key="key" v-model:list-query="listQuery" :func="fetchListForCategory" @setList="setList" />
   </div>
 </template>
 
@@ -12,14 +12,14 @@ import ArticlePreview from 'src/Modules/Article/Article/components/ArticlePrevie
 import { fetchListForCategory } from 'src/Modules/Article/Article/api/article.js'
 import { defineComponent, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import LoadMorePagination from 'components/LoadMorePagination/index.vue'
+import LoadMore from 'components/LoadMore/index.vue'
 
 export default defineComponent({
   components: {
     ArticlePreview,
-    LoadMorePagination
+    LoadMore
   },
-  setup () {
+  setup() {
     const route = useRoute()
     const list = ref([])
     const key = ref(1)

@@ -1,13 +1,13 @@
 <template>
   <div>
-    <div v-if="userStore.loading" class="q-mr-md">
+    <div v-if="authStore.loading" class="q-mr-md">
       <q-spinner-dots
-          color="primary"
-          size="2em"
+        color="primary"
+        size="2em"
       />
     </div>
     <div v-else>
-      <div v-if="userStore.is_guest" class="row items-center q-col-gutter-sm">
+      <div v-if="authStore.is_guest" class="row items-center q-col-gutter-sm">
         <LoginBtn />
         <RegisterBtn />
       </div>
@@ -15,19 +15,18 @@
         <q-btn-dropdown flat no-caps>
           <template v-slot:label>
             <div class="row items-center no-wrap">
-              <UserAvatar :uid="userStore.user.uid" size="40px" class="q-mr-xs"/>
-              <div class="text-center">
-                {{userStore.user.name}}
+              <UserAvatarByUid :uid="authStore.user.uid" size="32px" class="q-mr-xs" />
+              <div class="text-center ellipsis" style="max-width: 80px;">
+                {{ authStore.user.name }}
               </div>
             </div>
           </template>
           <q-list>
-            <q-item clickable v-close-popup to="/user/profile">
+            <q-item clickable v-close-popup to="/personal-area/profile">
               <q-item-section>
                 <q-item-label>Профиль</q-item-label>
               </q-item-section>
             </q-item>
-
             <q-item v-if="admin" clickable v-close-popup to="/admin">
               <q-item-section>
                 <q-item-label>Админ панель</q-item-label>
@@ -42,27 +41,27 @@
 </template>
 
 <script>
-import { defineComponent, computed } from 'vue'
-import LoginBtn from 'src/Modules/User/components/LoginBtn/index.vue'
-import RegisterBtn from 'src/Modules/User/components/RegisterBtn/index.vue'
-import { useUserStore } from 'src/Modules/User/store/user-store.js'
-import LogoutBtn from 'src/Modules/User/components/LogoutBtn/index.vue'
-import UserAvatar from 'src/Modules/Avatar/components/UserAvatar/index.vue'
+import { computed, defineComponent } from 'vue'
+import LoginBtn from 'src/Modules/Auth/components/LoginBtn/index.vue'
+import UserAvatarByUid from 'src/Modules/Avatar/components/UserAvatarByUid/index.vue'
+import RegisterBtn from 'src/Modules/Auth/components/RegisterBtn/index.vue'
+import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore.js'
+import LogoutBtn from 'src/Modules/Auth/components/LogoutBtn/index.vue'
 
 export default defineComponent({
   components: {
     LoginBtn,
     RegisterBtn,
     LogoutBtn,
-    UserAvatar
+    UserAvatarByUid
   },
-  setup () {
-    const userStore = useUserStore()
+  setup() {
+    const authStore = useAuthStore()
     const admin = computed(() => {
-      return userStore.permissions.includes('access-admin-panel')
+      return authStore.permissions.includes('access-admin-panel')
     })
     return {
-      userStore,
+      authStore,
       admin
     }
   }

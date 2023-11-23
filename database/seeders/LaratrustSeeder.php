@@ -2,13 +2,14 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Support\Facades\Schema;
+use App\Models\Laratrust\Permission;
+use App\Models\Laratrust\Role;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
-use App\Models\Laratrust\Role;
-use App\Models\Laratrust\Permission;
-use App\Models\User;
+use Illuminate\Support\Facades\Schema;
+use Laratrust\Models\LaratrustPermission;
+use Laratrust\Models\LaratrustRole;
 
 class LaratrustSeeder extends Seeder
 {
@@ -20,14 +21,16 @@ class LaratrustSeeder extends Seeder
     public function run()
     {
         echo 'Roles seed!!!' . "\n";
-        foreach ($this->roles as $key=>$roleName) {
+        $this->truncateLaratrustTables();
+
+        foreach ($this->roles as $key => $roleName) {
             $role = Role::where('name', $key)->first();
             if ($role) {
                 echo 'Role ' . $roleName . " существует\n";
             } else {
                 echo 'No role ' . $roleName . "\n";
                 $admin = new Role();
-                $admin->name         = $key;
+                $admin->name = $key;
                 $admin->display_name = $roleName;
                 $admin->save();
             }
@@ -45,49 +48,83 @@ class LaratrustSeeder extends Seeder
             }
         }
         $user = User::find(1);
-        if ($user && $role){
-            //$user->syncRolesWithoutDetaching(['superAdmin', 'admin']);
-            //$user->attachRole($role);
-//            $user->attachRole('admin');
+        if ($user) {
+            $user->attachRole('superAdmin');
         }
-        DB::update("update role_user set user_type = ? where user_type = ?", ['App\Models\User', 'App\User']);
     }
 
 
     protected $roles = [
         'superAdmin' => 'СуперАдмин',
-        'admin' => 'Администратор',
-        'president' => 'Председатель',
-        'curator' => 'Член правления',
-        'moderator' => 'Модератор',
-        'proprietor' => 'Собственник',
-        'gardening' => 'Член садоводства',
-        'user' => 'Подтвержденный пользователь',
-        'bookkeeper'=> 'Бухгалтер'
+//        'admin' => 'Администратор',
+//        'president' => 'Председатель',
+//        'curator' => 'Член правления',
+//        'moderator' => 'Модератор',
+//        'proprietor' => 'Собственник',
+//        'gardening' => 'Член садоводства',
+//        'user' => 'Подтвержденный пользователь',
+//        'bookkeeper' => 'Бухгалтер'
 
 
     ];
 
     protected $permissions = [
-        'gardening-edit' => 'Правка данных садоводства',
         'send-mail-spam' => 'Email рассылка',
-        'create-polls' => 'Создание голосований',
-        'edit-stead' => 'Правка данных об участках',
-        'edit-role' => 'Редактирование ролей и прав',
-        'create-article' => 'Создание статей',
-        'edit-article' => 'Редактирование статей',
-        'create-comment' => 'Создание коментарии',
-        'ban-comment' => 'Запрет на коментарии',
-        'delete-comment' => 'Удаление коментариев',
+
+        'owner-show' => 'Просмотр собственников',
+        'owner-edit' => 'Редактирование собстввенников',
+
+        'stead-show' => 'Просмотр данных об участках',
+        'stead-edit' => 'Редактирование данных об участках',
+
+        'voting-show' => 'Просмотр данных голоосований',
+        'voting-edit' => 'Редактирование голосований',
+
+        'article-edit' => 'Редактирование статей',
+        'article-show' => 'Просмотр полного списка статей',
+
+
+        'role-show' => 'Просмотр ролей и прав',
+        'role-edit' => 'Редактирование ролей и прав',
+
+        'site-menu-edit' => 'Редактирование меню сайта',
+
+        'user-ban-show' => 'Просмотр банов польльзователей',
+        'user-ban-edit' => 'Ставить и снимать бан с польльзователей',
+
+        'comment-edit' => 'Редактирование комментарии',
+        'comment-ban' => 'Запрет на комментарии',
+        'comment-delete' => 'Удаление коментариев',
         'access-admin-panel' => 'Доступ в админ панель',
-        'show-appels' => 'Просмотр обращений',
-        'edit-appels' => 'Обработка обращений',
-        'edit-users' => 'Редактирование пользователей',
-        'show-users' => 'Просмотр пользователей',
-        'edit-rate' => 'Правка тарифов',
-        'edit-menu' => 'Редактирование меню',
-        'reestr-edit' => 'Редактирование начислений',
-        'access-to-personal' => 'Доступ к персональным данным',
-        'write-personal-data' => 'Изменение персональных данных'
+
+        'appeal-show' => 'Просмотр обращений',
+        'appeal-edit' => 'Обработка обращений',
+
+        'user-edit' => 'Редактирование пользователей',
+        'user-show' => 'Просмотр пользователей',
+
+        'settings-gardening' => 'Редактирование данных садоводства',
+        'settings-rate' => 'Редактирование тарифов',
+        'settings-camera' => 'Настройка камер',
+
+        'bookkeeping-show' => 'Доступ для бухгалтерию',
+        'profit-show' => 'Просмотр начислений',
+        'profit-edit' => 'Редактирование начислений',
+        'payment-show' => 'Просмотр платежей',
+        'payment-edit' => 'Редактирование платежей',
+
+//        'access-to-personal' => 'Доступ к персональным данным',
+//        'write-personal-data' => 'Изменение персональных данных'
     ];
+
+    private function truncateLaratrustTables()
+    {
+        Schema::disableForeignKeyConstraints();
+        DB::table('permission_role')->truncate();
+        DB::table('permission_user')->truncate();
+        DB::table('role_user')->truncate();
+        LaratrustRole::truncate();
+        LaratrustPermission::truncate();
+        Schema::enableForeignKeyConstraints();
+    }
 }

@@ -11,6 +11,67 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * App\Models\Billing\BillingInvoice
+ *
+ * @property int $id
+ * @property string $title
+ * @property int $stead_id
+ * @property int $type
+ * @property int|null $reestr_id
+ * @property float $price
+ * @property int|null $payment_id
+ * @property bool $paid оплачен счет?
+ * @property int|null $user_id
+ * @property string|null $description подробное описание
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read ReceiptType|null $ReceiptType
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\File\Models\FileModel> $files
+ * @property-read int|null $files_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @property-read int|null $log_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Message\MessageModel> $message
+ * @property-read int|null $message_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, InstrumentReadings> $metersData
+ * @property-read int|null $meters_data_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Billing\BillingPayment> $payments
+ * @property-read int|null $payments_count
+ * @property-read Stead|null $stead
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingInvoice newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingInvoice newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingInvoice onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingInvoice query()
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingInvoice whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingInvoice whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingInvoice whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingInvoice whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingInvoice wherePaid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingInvoice wherePaymentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingInvoice wherePrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingInvoice whereReestrId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingInvoice whereSteadId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingInvoice whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingInvoice whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingInvoice whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingInvoice whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingInvoice withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingInvoice withoutTrashed()
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, InstrumentReadings> $metersData
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Billing\BillingPayment> $payments
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, InstrumentReadings> $metersData
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Billing\BillingPayment> $payments
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, InstrumentReadings> $metersData
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Billing\BillingPayment> $payments
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, InstrumentReadings> $metersData
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Billing\BillingPayment> $payments
+ * @mixin \Eloquent
+ */
 class BillingInvoice extends MyModel
 {
 

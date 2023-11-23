@@ -1,30 +1,31 @@
 <template>
   <div class="pagination-container">
-    <div class="flex q-gutter-md">
-      <div class="self-center">
+    <div class="row q-gutter-sm items-center no-wrap">
+      <div>
         Всего {{ total }}
       </div>
-      <div class="self-center page-size-block">
+      <div class="page-size-block">
         <q-select
-            dense
-            v-model="pageSize"
-            :options="pageSizes"
-            :display-value="`${limit ? limit + ' на странице' : ''}`"
-            @input="handleSizeChange"
+          dense
+          :model-value="limit"
+          :options="pageSizes"
+          :display-value="`${limit ? limit + ' на странице' : ''}`"
+          @update:model-value="handleSizeChange"
         >
         </q-select>
       </div>
-      <div class="self-center">
+      <div>
         <q-pagination
-            v-model="currentPage"
-            :max="maxPage"
-            :max-pages="6"
-            glossy
-            dense
-            direction-links
-            icon-prev="fast_rewind"
-            icon-next="fast_forward"
-            @update:model-value="handleCurrentChange"
+          :model-value="+page"
+          :max="max"
+          :max-pages="maxPage"
+          glossy
+          dense
+          :input="mobile"
+          direction-links
+          icon-prev="fast_rewind"
+          icon-next="fast_forward"
+          @update:model-value="handleCurrentChange"
         />
       </div>
     </div>
@@ -32,77 +33,66 @@
 </template>
 
 <script>
-import { scrollTo } from 'src/utils/scroll-to'
+import { computed, defineComponent, ref } from 'vue'
+import { useQuasar } from 'quasar'
 
-export default {
-  name: 'Pagination',
+export default defineComponent({
+  components: {},
   props: {
     total: {
       required: true,
-      type: Number
+      type: [Number, String]
     },
     page: {
-      type: Number,
+      type: [Number, String],
       default: 1
     },
     limit: {
-      type: Number,
+      type: [Number, String],
       default: 20
     },
     pageSizes: {
       type: Array,
-      default () {
+      default() {
         return [5, 10, 20, 30, 50]
       }
-    },
-    autoScroll: {
-      type: Boolean,
-      default: true
     }
   },
-  computed: {
-    maxPage () {
-      return Math.ceil(this.total / this.limit)
-    },
-    currentPage: {
-      get () {
-        return this.page
-      },
-      set (val) {
-        this.$emit('update:page', val)
-      }
-    },
-    pageSize: {
-      get () {
-        return this.limit
-      },
-      set (val) {
-        this.$emit('update:limit', val)
-      }
+  setup(props, { emit }) {
+    const $q = useQuasar()
+    const mobile = computed(() => {
+      return $q.screen.width < 800
+    })
+    const maxPage = computed(() => {
+      return Math.floor(($q.screen.width - 150) / 90)
+    })
+    const max = computed(() => {
+      return Math.ceil(props.total / props.limit)
+    })
+    const data = ref(false)
+    const handleSizeChange = (val) => {
+      emit('update:limit', val)
     }
-  },
-  methods: {
-    handleSizeChange (val) {
-      this.$emit('pagination')
-      if (this.autoScroll) {
-        scrollTo(0, 800)
-      }
-    },
-    handleCurrentChange (val) {
-      this.$emit('pagination')
-      if (this.autoScroll) {
-        scrollTo(0, 800)
-      }
+    const handleCurrentChange = (val) => {
+      emit('update:page', val)
+    }
+    return {
+      data,
+      handleSizeChange,
+      handleCurrentChange,
+      max,
+      maxPage,
+      mobile
     }
   }
-}
+})
 </script>
 
 <style scoped lang="scss">
 .pagination-container {
-  background: #fff;
-  padding: 32px 0;
+  padding: 24px 0;
 }
+
 .page-size-block {
   @media all and (max-width: 500px) {
     display: none;

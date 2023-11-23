@@ -7,7 +7,10 @@ const rates =
         path: 'rates',
         component: () => import('src/Modules/Rates/pages/List/index.vue'),
         name: 'modulesRates',
-        hidden: true
+        hidden: true,
+        meta: {
+          title: 'Тарифы'
+        }
       }
     ]
   }

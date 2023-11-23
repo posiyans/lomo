@@ -1,7 +1,20 @@
-//body {
-//  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
-//}
+body {
+  font-family: Trebuchet MS, Helvetica, DejaVu Sans, Lucida Grande, Lucida Sans Unicode, Lucida Sans, sans-serif;
+  font-style: normal;
+  font-variant: normal;
+  //font-size: 16px;
+}
 
+.page-title {
+  color: $primary;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 2rem;
+  letter-spacing: normal;
+  padding: 16px 16px;
+}
+
+//
 .w-100 {
   width: 100%;
 }
@@ -9,21 +22,156 @@
 .text-small-90 {
   font-size: .9em;
 }
+
 .text-small-85 {
   font-size: .85em;
 }
+
 .text-small-80 {
   font-size: .8em;
 }
+
 .text-small-75 {
   font-size: .75em;
 }
+
 .text-big-10 {
   font-size: 1.1em;
 }
+
 .text-big-20 {
   font-size: 1.2em;
 }
+
 .text-big-30 {
   font-size: 1.3em;
+}
+
+.text-big-40 {
+  font-size: 1.4em;
+}
+
+.text-big-50 {
+  font-size: 1.5em;
+}
+
+.text-big-60 {
+  font-size: 1.6em;
+}
+
+.text-big-70 {
+  font-size: 1.7em;
+}
+
+.text-big-80 {
+  font-size: 1.8em;
+}
+
+.text-big-90 {
+  font-size: 1.9em;
+}
+
+.text-big-100 {
+  font-size: 2em;
+}
+
+.link-type,
+.link-type:focus {
+  color: #337ab7;
+  cursor: pointer;
+
+  &:hover {
+    color: rgb(32, 160, 255);
+  }
+}
+
+a, a:focus, a:hover {
+  cursor: pointer;
+  color: inherit;
+  text-decoration: none;
+}
+
+.filter-item {
+  min-width: 220px;
+}
+
+.o-100 {
+  opacity: 1;
+}
+
+.o-90 {
+  opacity: .9;
+}
+
+.o-80 {
+  opacity: .8;
+}
+
+.o-70 {
+  opacity: .7;
+}
+
+.o-60 {
+  opacity: .6;
+}
+
+.o-50 {
+  opacity: .5;
+}
+
+.o-40 {
+  opacity: .4;
+}
+
+.o-30 {
+  opacity: .3;
+}
+
+.o-20 {
+  opacity: .2;
+}
+
+.o-10 {
+  opacity: .1;
+}
+
+.o-05 {
+  opacity: .05;
+}
+
+.o-025 {
+  opacity: .025;
+}
+
+.o-0 {
+  opacity: 0;
+}
+
+.br-03 {
+  border-radius: 3px;
+}
+
+.br-05 {
+  border-radius: 5px;
+}
+
+
+.br-10 {
+  border-radius: 10px;
+}
+
+.br-11 {
+  border-radius: 11px;
+}
+
+.br-12 {
+  border-radius: 12px;
+}
+
+.br-15 {
+  border-radius: 15px;
+}
+
+.br-20 {
+  border-radius: 20px;
 }

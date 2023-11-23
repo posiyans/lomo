@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Modules\Comment\Repositories;
 
 use App\Modules\Article\Models\ArticleModel;
@@ -17,6 +18,8 @@ class GetObjectByTypeAndUid
             $class = $this->objectArray[$type];
             $this->test = $this->objectArray[$type];
             $this->object = $class::where('uid', $uid)->first();
+        } else {
+            throw new \Exception('Неподдерживаемый тип');
         }
     }
 

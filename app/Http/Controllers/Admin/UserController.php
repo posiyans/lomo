@@ -2,17 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Resources\AppealResource;
-use App\Http\Resources\ConrtollerResource;
-use App\Http\Resources\SteadResource;
-use App\Http\Resources\UserResource;
-use App\Models\AppealModel;
-use App\Models\Stead;
-use App\Models\Laratrust\Permission;
-use App\Models\Laratrust\Role;
-use App\Models\User;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
+use App\Models\User;
+use App\Modules\User\Repositories\GetUserByUidRepository;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
@@ -23,7 +17,7 @@ class UserController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('ability:superAdmin,show-users');
+        $this->middleware('ability:superAdmin,user-show,user-edit');
     }
 
 
@@ -35,22 +29,16 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-        if ($user->ability('superAdmin', 'show-users')) {
+        if ($user->ability('superAdmin', ['user-show', 'user-edit'])) {
+            $find = strtolower($request->get('find', false));
             $query = User::query();
+            if ($find) {
+                $query->whereRaw("(lower(concat_ws('',name,last_name,middle_name)) like '%" . $find . "%')");
+            }
             $models = $query->paginate($request->limit);
             return UserResource::collection($models);
         }
         return [];
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -73,25 +61,12 @@ class UserController extends Controller
     public function show($id)
     {
         $user = Auth::user();
-        if ($user->ability('superAdmin', 'show-users')) {
-            if ($model = User::find($id)){
+        if ($user->ability('superAdmin', ['user-show', 'user-edit'])) {
+            if ($model = (new GetUserByUidRepository($id))->run()) {
                 return new UserResource($model);
             }
-
         }
         return false;
-
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
     }
 
     /**
@@ -104,20 +79,21 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $user = Auth::user();
-        if ($user->ability('superAdmin', 'edit-users')){
+        if ($user->ability('superAdmin', 'edit-users')) {
             $userModel = User::find($id);
-            $data = $request->user;
-            if ($userModel && $data && $data['id'] == $id){
+            $data = $request->all();
+            if ($userModel && $data && $data['id'] == $id) {
                 unset($data['password']);
                 $userModel->fill($data);
                 $userModel->save();
-                if (isset($data['steads'])){
-                    $userModel->syncSteads($data['steads']);
-                }
-                if (isset($data['roles']['roles'])){
+//                if (isset($data['steads'])) {
+//                    $userModel->syncSteads($data['steads']);
+//                }
+                // todo убрать это отсюда!
+                if (isset($data['roles']['roles'])) {
                     $userModel->syncRoles($data['roles']['roles']);
                 }
-                if (isset($data['roles']['permissions'])){
+                if (isset($data['roles']['permissions'])) {
                     $userModel->syncPermissions($data['roles']['permissions']);
                 }
                 return $userModel;
@@ -137,17 +113,11 @@ class UserController extends Controller
         //
     }
 
-    public function roleList(){
-        $roles = Role::all();
-        $permissions = Permission::all();
-        return ['roles'=>$roles, 'permissions'=>$permissions];
-    }
-
 
     public function sendVerifyMailToken($id)
     {
-        if ($user = User::find($id)){
-            if (!$user->email_verified_at){
+        if ($user = User::find($id)) {
+            if (!$user->email_verified_at) {
                 $user->email_verified_at = null;
                 $user->save();
                 $user->sendEmailVerificationNotification();

@@ -14,15 +14,12 @@ class FileResource extends JsonResource
      */
     public function toArray($request)
     {
-
         return [
-            'id' => $this->id,
             'uid' => $this->uid,
             'name' => $this->name,
             'size' => $this->size,
-            'url' => '/api/v2/file/get?uid=' , $this->uid
-
+            'type' => $this->type,
+            'url' => '/api/v2/file/get?uid=' . $this->uid
         ];
-
     }
 }

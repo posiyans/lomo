@@ -2,14 +2,14 @@
 
 namespace App\Console\Commands\Migrate;
 
-use App\Models\Stead;
-use App\Models\Voting\AnswerModel;
-use App\Models\Voting\UserAnswerModel;
-use App\Models\Voting\VotingModel;
 use App\Modules\File\Classes\SaveFileForObjectClass;
 use App\Modules\User\Models\UserModel;
 use Illuminate\Console\Command;
 
+/**
+ * @deprecated
+ * todo перепроверить работае или нет
+ */
 class AvatarMigrate extends Command
 {
     /**
@@ -70,7 +70,7 @@ class AvatarMigrate extends Command
         try {
             copy($url, $tempImage);
             return $tempImage;
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             return false;
         }
 //        $contents = Http::get($url)->body();
