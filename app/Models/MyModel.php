@@ -16,10 +16,6 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|MyModel newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|MyModel newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|MyModel query()
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
  * @mixin \Eloquent
  */
 class MyModel extends Model
@@ -36,20 +32,20 @@ class MyModel extends Model
     }
 
 
-    public function logAndSave($description = null, $stead = null, array $options = [])
+    public function logAndSave($description = null, array $options = [])
     {
         $original_model = $this->getOriginal();
         if ($this->save($options)) {
-            Log::addLog($this, $original_model, $description, $stead);
+            Log::addLog($this, $original_model, $description);
             return true;
         }
         return false;
     }
 
-    public function logAndDelete($description = null, $stead = null)
+    public function logAndDelete($description = null,)
     {
         $original_model = $this->getOriginal();
-        Log::deleteModel($this, $description, $stead);
+        Log::deleteModel($this, $description);
         if ($this->delete()) {
             return true;
         }

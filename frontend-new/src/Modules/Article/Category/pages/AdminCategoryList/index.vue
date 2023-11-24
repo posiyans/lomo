@@ -1,7 +1,10 @@
 <template>
   <div class="q-pa-sm">
-    <div class="text-h6 q-pa-md">
-      Разделы статей
+    <div class="text-h6 q-pa-sm row items-center q-col-gutter-md">
+      <div>
+        Разделы статей
+      </div>
+      <AddCategoryBtn />
     </div>
     <q-list bordered class="rounded-borders" style="">
       <template v-for="(item, index) in list" :key="item.id">
@@ -47,10 +50,12 @@ import { defineComponent, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { fetchCategoryList } from 'src/Modules/Article/Category/api/category'
 import CategorySettingDialogBtn from 'src/Modules/Article/Category/components/CategorySettingDialog/ShowBtn.vue'
+import AddCategoryBtn from 'src/Modules/Article/Category/components/AddCategoryBtn/index.vue'
 
 export default defineComponent({
   components: {
-    CategorySettingDialogBtn
+    CategorySettingDialogBtn,
+    AddCategoryBtn
   },
   props: {},
   setup(props, { emit }) {

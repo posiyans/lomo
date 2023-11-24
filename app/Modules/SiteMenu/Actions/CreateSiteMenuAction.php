@@ -16,15 +16,26 @@ class CreateSiteMenuAction
         $this->model->label = $label;
     }
 
-    public function parent(SiteMenuModel $parent)
+    public function parent($parent)
     {
-        $this->model->parent = $parent->id;
+        if ($parent instanceof SiteMenuModel) {
+            $this->model->parent = $parent->id;
+        } else {
+            $this->model->parent = null;
+        }
+
         return $this;
     }
 
     public function path($path)
     {
         $this->model->path = $path;
+        return $this;
+    }
+
+    public function sort($sort)
+    {
+        $this->model->sort = $sort;
         return $this;
     }
 

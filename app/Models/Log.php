@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Auth;
  *
  * @property int $id
  * @property int|null $user_id
- * @property int|null $stead_id
  * @property int|null $commentable_id
  * @property string|null $commentable_type
  * @property string|null $type
@@ -35,16 +34,11 @@ use Illuminate\Support\Facades\Auth;
  * @method static \Illuminate\Database\Eloquent\Builder|Log whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Log whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Log whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Log whereSteadId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Log whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Log whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Log whereUserAgent($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Log whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Log whereValue($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Log> $log
  * @mixin \Eloquent
  */
 class Log extends MyModel
@@ -133,10 +127,9 @@ class Log extends MyModel
      * @param $model_new  -- модель после сохранния
      * @param $model_old  -- массив оригинальных атрибутов полученных перед сохранением через getOriginal();
      * @param  null  $description  -- описание
-     * @param  null  $stead_id  -- id участка к которому как-то относится данное действие
      * @return bool
      */
-    public static function addLog($model_new, $model_old, $description = null, $stead_id = null)
+    public static function addLog($model_new, $model_old, $description = null)
     {
         $attributes = $model_new->getAttributes();
         if (isset($attributes['updated_at'])) {
@@ -169,7 +162,6 @@ class Log extends MyModel
             $log->commentable_type = get_class($model_new);
             $log->type = 'ok';
             $log->description = $description;
-            $log->stead_id = $stead_id;
             $log->value = $diff;
             if ($log->save()) {
                 return $log;
@@ -185,10 +177,9 @@ class Log extends MyModel
      * @param $model_new  -- модель после сохранния
      * @param $model_old  -- массив оригинальных атрибутов полученных перед сохранением через getOriginal();
      * @param  null  $description  -- описание
-     * @param  null  $stead_id  -- id участка к которому как-то относится данное действие
      * @return bool
      */
-    public static function deleteModel($model, $description = null, $stead_id = null)
+    public static function deleteModel($model, $description = null)
     {
         $attributes = $model->getAttributes();
         $diff = [];
@@ -204,7 +195,6 @@ class Log extends MyModel
         $log->commentable_type = get_class($model);
         $log->type = 'ok';
         $log->description = $description;
-        $log->stead_id = $stead_id;
         $log->value = $model->toArray();
 //        $log->value = $diff;
         if ($log->save()) {

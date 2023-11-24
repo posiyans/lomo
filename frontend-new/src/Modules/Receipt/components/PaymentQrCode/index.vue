@@ -63,7 +63,7 @@ export default defineComponent({
       return null
     })
     const urlQRcode = computed(() => {
-      return process.env.BASE_API + '/api/v1/receipt/get-qrcode-clear'
+      return process.env.BASE_API + '/api/v2/receipt/qrcode'
     })
     onMounted(() => {
 

@@ -42,7 +42,7 @@
 
 <script>
 import { computed, defineComponent, onBeforeMount, ref } from 'vue'
-import { getGardeninngInfo } from 'src/Modules/Gardening/api/gardening'
+import { getGardeningInfo } from 'src/Modules/Gardening/api/gardening'
 import ReceiptDialog from 'src/Modules/Receipt/components/ReceiptDialog/Btn.vue'
 import PaymentQrCode from 'src/Modules/Receipt/components/PaymentQrCode/index.vue'
 
@@ -55,13 +55,13 @@ export default defineComponent({
     const gardening = ref({})
     const dialogVisible = ref(false)
     const getData = () => {
-      getGardeninngInfo()
+      getGardeningInfo()
         .then(res => {
           gardening.value = res.data
         })
     }
     const url = computed(() => {
-      return process.env.BASE_API + '/api/v1/receipt/get-clear'
+      return process.env.BASE_API + '/api/v2/receipt/get-clear'
     })
     const toUrl = () => {
       window.open(url.value)

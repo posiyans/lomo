@@ -1,7 +1,6 @@
 <?php
 // пустая квитанция
 //Route::get('receipt/get-receipt-clear', 'PdfController@clearReceipt');
-Route::get('receipt/get-clear', 'App\Http\Controllers\All\Receipt\ReceiptClearController@index');
 Route::get('receipt/get-receipt-type-list', 'App\Http\Controllers\All\Receipt\GetReceiptTypeListController@index');
 
 Route::get('receipt/get-receipt-contributions-for-stead', 'App\Http\Controllers\All\ReceiptController@getContributionsReceipt');

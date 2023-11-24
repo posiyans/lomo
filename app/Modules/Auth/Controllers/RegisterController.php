@@ -3,6 +3,7 @@
 namespace App\Modules\Auth\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Laratrust\Role;
 use App\Modules\User\Models\UserModel;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -84,23 +85,29 @@ class RegisterController extends Controller
      */
     public function register(Request $request)
     {
-        //todo удалить после тестирования!!!!
-        $old = UserModel::where('email', 'posiyans@yandex.ru')->first();
-        if ($old) {
-            $old->email = 'posiyans' . Str::random() . '@yandex.ru';
-            $old->save();
-        }
         $this->validator($request->all())->validate();
 
         event(new Registered($user = $this->create($request->all())));
 
         $this->guard()->login($user);
         Session::put('user_uid', $user->uid);
+        $this->fistUser($user);
         return response($user);
     }
 
     protected function guard()
     {
         return Auth::guard();
+    }
+
+
+    protected function fistUser(UserModel $user)
+    {
+        if($user->id == 1) {
+            $role = Role::where('name', 'superAdmin')->first();
+            if ($role) {
+                $user->syncRolesWithoutDetaching([$role->id]);
+            }
+        }
     }
 }

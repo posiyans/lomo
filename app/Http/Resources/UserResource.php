@@ -9,7 +9,7 @@ class UserResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return array
      */
     public function toArray($request)
@@ -32,11 +32,7 @@ class UserResource extends JsonResource
             'email_verified_at' => $this->email_verified_at ? true : false,
             'phone' => $this->phone,
             'adres' => $this->adres,
-            'avatar' => $this->avatar,
-            'steads' => $this->steads ? $this->steads : [],
             'created_at' => $this->created_at,
-            'consent_to_email' => $this->consent_to_email,
-            'consent_personal' => $this->consent_personal,
             'last_connect' => $this->last_connect,
             'roles' => ['roles' => $roles, 'permissions' => $permissions],
 

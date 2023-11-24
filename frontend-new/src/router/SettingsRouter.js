@@ -22,7 +22,7 @@ export const adminSettingsRouter = {
       component: () => import('src/Modules/Gardening/pages/GardeningSetting/index.vue'),
       meta: {
         icon: 'info',
-        title: 'Настройки',
+        title: 'Реквизиты',
         roles: ['settings-gardening']
       }
     },

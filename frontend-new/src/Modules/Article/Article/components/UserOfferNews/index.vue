@@ -4,7 +4,7 @@
       <div style="min-height: 100%">
         <div class="row items-center q-col-gutter-md">
           <div class="text-weight-bold" style="font-size: 1.5rem;">
-            Предложить запись
+            Предложить новость
           </div>
           <div class="filter-item">
             <ArticleCategorySelect v-model="article.category_id" label="В раздел" outlined dense only-public set-default />

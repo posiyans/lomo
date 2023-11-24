@@ -53,7 +53,7 @@ module.exports = configure(function (ctx) {
       env: {
         SITE_NAME: 'ЛОМО',
         BASE_API: ctx.dev
-          ? 'http://lomo.loc'
+          ? 'http://localhost'
           : ''
       },
       // target: {
@@ -97,7 +97,7 @@ module.exports = configure(function (ctx) {
       server: {
         type: 'http'
       },
-      host: 'lomo.loc',
+      host: 'localhost',
       port: 3000,
       open: true // opens browser window automatically
     },
