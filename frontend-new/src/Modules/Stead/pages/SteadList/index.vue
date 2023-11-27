@@ -1,22 +1,12 @@
 <template>
   <div class="q-pa-md">
-    <div class="page-title">Участки</div>
     <div class="row items-center q-col-gutter-md q-pb-sm">
+      <FilterBlock v-model="listQuery" />
       <div>
-        <el-input v-model="listQuery.title" placeholder="Найти" style="width: 200px;" class="filter-container__item" @keyup.enter="handleFilter" />
-
+        <q-btn :loading="downloadLoading" color="primary" label="XLSX" @click="handleDownload" />
       </div>
       <div>
-
-        <el-button class="filter-container__item" type="primary" @click="handleFilter">
-          Показать
-        </el-button>
-      </div>
-      <div>
-
-        <el-button :loading="downloadLoading" class="filter-container__item" type="primary" @click="handleDownload">
-          XLSX
-        </el-button>
+        <AddStead />
       </div>
     </div>
 
@@ -138,17 +128,24 @@
 </template>
 
 <script>
-import { fetchSteadList, fetchSteadListInXlsx, updateStead } from 'src/Modules/Stead/api/steadAdminApi.js'
+import { fetchSteadListInXlsx, updateStead } from 'src/Modules/Stead/api/steadAdminApi.js'
 // import { fetchSteadList, updateStead } from 'src/Modules/Stead/api/steadAdminApi.js'
 import { fetchList } from 'src/Modules/Rates/api/rates.js'
 import { getReceipt } from 'src/Modules/Receipt/api/receiptAdminApi.js'
 // import { saveAs } from 'file-saver'
 import LoadMore from 'src/components/LoadMore/index.vue'
 import { exportFile } from 'quasar'
+import FilterBlock from './components/FilterBlock/index.vue'
+import { getSteadsList } from 'src/Modules/Stead/api/stead'
+import AddStead from 'src/Modules/Stead/components/AddStead/index.vue'
 
 export default {
   name: 'AdminSteadList',
-  components: { LoadMore },
+  components: {
+    LoadMore,
+    FilterBlock,
+    AddStead
+  },
   data() {
     return {
       options: [
@@ -162,11 +159,12 @@ export default {
       total: 0,
       key: 1,
       listLoading: true,
-      func: fetchSteadList,
+      func: getSteadsList,
       listQuery: {
         page: 1,
         limit: 20,
-        title: undefined
+        title: undefined,
+        find: ''
       },
       temp: {
         user: {},

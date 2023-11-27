@@ -4,7 +4,7 @@
       <div>
         Разделы статей
       </div>
-      <AddCategoryBtn />
+      <AddCategoryBtn @success="getData" />
     </div>
     <q-list bordered class="rounded-borders" style="">
       <template v-for="(item, index) in list" :key="item.id">

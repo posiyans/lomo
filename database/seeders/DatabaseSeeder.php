@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             LaratrustSeeder::class,
+            CategorySeeder::class,
             SiteMenuSeeder::class,
 
         ]);

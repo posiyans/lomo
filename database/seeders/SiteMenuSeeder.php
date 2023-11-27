@@ -2,16 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Laratrust\Permission;
-use App\Models\Laratrust\Role;
-use App\Models\User;
-use App\Modules\Comment\Repositories\CommentRepository;
 use App\Modules\SiteMenu\Actions\CreateSiteMenuAction;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
-use Laratrust\Models\LaratrustPermission;
-use Laratrust\Models\LaratrustRole;
 
 class SiteMenuSeeder extends Seeder
 {
@@ -23,16 +15,21 @@ class SiteMenuSeeder extends Seeder
     public function run()
     {
         echo 'SiteMenuSeeder ' . "\n";
-        $menu= [
+        $menu = [
             [
-              'label' => 'Главная',
-              'path' => '/',
-              'sort' => 1,
+                'label' => 'Главная',
+                'path' => '/',
+                'sort' => 1,
+            ],
+            [
+                'label' => 'Новости',
+                'path' => '/article/list/1',
+                'sort' => 2,
             ],
             [
                 'label' => 'Информация',
                 'path' => '',
-                'sort' => 2,
+                'sort' => 3,
                 'children' => [
                     [
                         'label' => 'Тарифы',
@@ -70,15 +67,13 @@ class SiteMenuSeeder extends Seeder
 
     protected function createMenu($item, $parent = null)
     {
-
-       $menu = (new CreateSiteMenuAction($item['label']))->path($item['path'])->sort($item['sort'])->parent($parent)->run();
-       if (isset($item['children']) && is_array($item['children'])) {
-           foreach ($item['children'] as $child) {
-               $this->createMenu($child, $menu);
-           }
-       }
+        $menu = (new CreateSiteMenuAction($item['label']))->path($item['path'])->sort($item['sort'])->parent($parent)->run();
+        if (isset($item['children']) && is_array($item['children'])) {
+            foreach ($item['children'] as $child) {
+                $this->createMenu($child, $menu);
+            }
+        }
     }
-
 
 
 }

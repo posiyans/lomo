@@ -21,5 +21,6 @@ Route::group(['middleware' => ['auth:sanctum'], 'prefix' => 'v2/article/admin'],
 
 Route::group(['middleware' => ['auth:sanctum'], 'prefix' => 'v2/category'], function () {
     Route::post('update/{category}', \App\Modules\Article\Controllers\Category\UpdateCategoryController::class);
+    Route::post('create', \App\Modules\Article\Controllers\Category\CreateCategoryController::class);
     Route::get('get-list', \App\Modules\Article\Controllers\Category\GetListCategoryController::class);
 });

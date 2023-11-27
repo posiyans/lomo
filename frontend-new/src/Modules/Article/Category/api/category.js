@@ -10,7 +10,7 @@ export function fetchCategoryList(params) {
 
 export function createCategory(data) {
   return request({
-    url: '/api/v1/admin/category',
+    url: '/api/v2/category/create',
     method: 'post',
     data
   })

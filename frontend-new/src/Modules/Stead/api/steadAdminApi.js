@@ -1,12 +1,12 @@
 import request from 'src/utils/request'
 
-export function fetchSteadList(params) {
-  return request({
-    url: '/api/v1/admin/stead',
-    method: 'get',
-    params
-  })
-}
+// export function fetchSteadList(params) {
+//   return request({
+//     url: '/api/v1/admin/stead',
+//     method: 'get',
+//     params
+//   })
+// }
 
 export function fetchSteadInfo(id) {
   return request({
