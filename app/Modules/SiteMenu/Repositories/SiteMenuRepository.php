@@ -20,10 +20,12 @@ class SiteMenuRepository
 
     public function menu($parent = null)
     {
-        $query = SiteMenuModel::query()->where('parent', $parent);
+        $query = SiteMenuModel::query()->where('parent', $parent ? $parent->id : null);
         $menu = $query->orderBy('sort', 'asc')->get();
         foreach ($menu as $item) {
-            $child = $this->menu($item->id);
+            $item->parent_sort = $parent ? $parent->sort : null;
+            $child = $this->menu($item);
+
             if (count($child) > 0) {
                 $item->children = $child;
             }

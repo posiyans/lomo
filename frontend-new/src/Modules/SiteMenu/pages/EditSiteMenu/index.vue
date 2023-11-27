@@ -3,7 +3,6 @@
     <div>
       <q-btn color="primary" label="Добавить меню" @click="showAdd=true" />
     </div>
-    <FindRoutePath />
     <q-dialog v-model="showAdd">
       <q-card>
         <q-card-section class="row items-center q-pb-none">
@@ -26,21 +25,9 @@
         :key="key"
       >
         <template v-slot:default-header="prop">
-          <div class="row items-center">
-            <q-icon :name="prop.node.icon || 'menu'" color="primary" size="28px" class="q-mr-sm" />
-            <div>
-              <div class="text-primary">{{ prop.node.label }}</div>
-              <div class="text-grey text-small-80">
-                {{ prop.node.path }}
-              </div>
-            </div>
-            <div>
-              <EditSiteMenuForm v-model="prop.node" @success="siteMenuStore.getData()" :key="prop.node.id" />
-            </div>
-          </div>
+          <ItemMenu :item="prop.node" @success="siteMenuStore.getData()" />
         </template>
       </q-tree>
-      <el-button type="primary">Сохранить</el-button>
     </div>
   </div>
 </template>
@@ -52,12 +39,14 @@ import AddSiteMenuForm from 'src/Modules/SiteMenu/components/AddSiteMenuForm/ind
 import { useSiteMenuStore } from 'src/Modules/SiteMenu/store/useSiteMenuStore'
 import EditSiteMenuForm from 'src/Modules/SiteMenu/components/EditSiteMenuForm/Btn.vue'
 import FindRoutePath from 'src/Modules/SiteMenu/components/FindRoutePath/index.vue'
+import ItemMenu from './components/ItemMenu/index.vue'
 
 export default defineComponent({
   components: {
     AddSiteMenuForm,
     EditSiteMenuForm,
-    FindRoutePath
+    FindRoutePath,
+    ItemMenu
   },
   props: {},
   setup(props, { emit }) {
@@ -66,8 +55,9 @@ export default defineComponent({
     const showMenu = computed(() => {
       return [
         {
-          name: 'Меню сайта',
+          label: 'Меню сайта',
           id: 'root',
+          readonly: true,
           children: siteMenuStore.menu.filter(item => {
             return !item.readOnly
           })

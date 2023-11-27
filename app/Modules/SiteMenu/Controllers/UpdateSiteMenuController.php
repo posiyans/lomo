@@ -3,6 +3,7 @@
 namespace App\Modules\SiteMenu\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Modules\SiteMenu\Actions\ChangeSortSiteMenuAction;
 use App\Modules\SiteMenu\Models\SiteMenuModel;
 use App\Modules\SiteMenu\Repositories\SiteMenuRepository;
 use Illuminate\Http\Request;
@@ -26,6 +27,10 @@ class UpdateSiteMenuController extends Controller
         if ($parent) {
             $paren_model = (new SiteMenuRepository())->byId($parent);
             $menu->parent = $paren_model->id;
+        }
+        $sort = $request->sort;
+        if (!empty($sort)) {
+            (new ChangeSortSiteMenuAction($menu))->sort($sort)->run();
         }
         $menu->logAndSave('Изменение меню');
         return $menu;

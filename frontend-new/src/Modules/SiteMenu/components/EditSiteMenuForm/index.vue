@@ -6,6 +6,12 @@
     <div>
       <MenuSiteSelect v-model="menu.parent" outlined :optionDisable="[menu.id]" />
     </div>
+    <div class="row items-center">
+      <div v-if="parentSort" class="q-mr-md">
+        {{ parentSort }}
+      </div>
+      <InputNumber v-model="menu.sort" outlined label="Порядок" />
+    </div>
     <div>
       <q-input v-model="menu.path" outlined label="Адрес страницы">
         <template v-slot:append>
@@ -22,15 +28,17 @@
 
 <script>
 /* eslint-disable */
-import { defineComponent, onMounted, ref } from 'vue'
+import { computed, defineComponent, onMounted, ref } from 'vue'
 import MenuSiteSelect from 'src/Modules/SiteMenu/components/MenuSiteSelect/index.vue'
 import { deleteSiteMenu, updateSiteMenu } from 'src/Modules/SiteMenu/api/menu'
 import FindRoutePath from 'src/Modules/SiteMenu/components/FindRoutePath/index.vue'
+import InputNumber from 'components/Input/InputNumber/index.vue'
 
 export default defineComponent({
   components: {
     MenuSiteSelect,
-    FindRoutePath
+    FindRoutePath,
+    InputNumber
   },
   props: {
     modelValue: {
@@ -41,6 +49,12 @@ export default defineComponent({
   setup(props, { emit }) {
     const dialogVisible = ref(false)
     const menu = ref({})
+    const parentSort = computed(() => {
+      if (props.modelValue.parent_sort) {
+        return props.modelValue.parent_sort + '.'
+      }
+      return ''
+    })
     const deleteItem = () => {
       deleteSiteMenu(props.modelValue.id)
         .then(() => {
@@ -66,6 +80,7 @@ export default defineComponent({
     return {
       menu,
       setData,
+      parentSort,
       dialogVisible,
       saveData,
       deleteItem
