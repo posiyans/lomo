@@ -8,6 +8,14 @@ export function getSteadsList(params) {
   })
 }
 
+export function addStead(data) {
+  return request({
+    url: '/api/v2/stead/create',
+    method: 'post',
+    data
+  })
+}
+
 export function getSteadInfo(params) {
   return request({
     url: '/api/v2/stead/info',

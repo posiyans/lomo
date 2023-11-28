@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['http://localhost:3000', 'https://lomo.loc:3000', 'http://lomo.loc:3000', 'http://lomo.loc:9527',],
+    'allowed_origins' => ['http://localhost:8099', 'https://lomo.loc:3000'],
 
     'allowed_origins_patterns' => [],
 

@@ -46,9 +46,6 @@ class RouteServiceProvider extends ServiceProvider
             Route::middleware('web')
                 ->namespace($this->namespace)
                 ->group(base_path('routes/web.php'));
-//            Route::middleware('web')
-//                ->namespace($this->namespace)
-//                ->group(base_path('app/Modules/Article/routes/web.php'));
             Route::middleware('api')
                 ->prefix('api')
                 ->group(base_path('app/Modules/File/routes/apiFileRoutes.php'));
@@ -97,9 +94,9 @@ class RouteServiceProvider extends ServiceProvider
             Route::middleware('web')
                 ->prefix('api/v2/social')
                 ->group(base_path('app/Modules/Social/routes/webSocialRoutes.php'));
-            Route::middleware('web')
-                ->namespace($this->namespace)
-                ->group(base_path('app/Modules/Stead/routes/web.php'));
+            Route::middleware('api')
+                ->prefix('api')
+                ->group(base_path('app/Modules/Stead/routes/apiSteadRoutes.php'));
             Route::middleware('web')
                 ->namespace($this->namespace)
                 ->group(base_path('app/Modules/Voting/routes/web.php'));

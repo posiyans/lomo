@@ -131,7 +131,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <LoadMore :key="key" :list-query="listQuery" :func="func" @setList="setList" />
+      <LoadMore :key="key" v-model:listQuery="listQuery" :func="func" @setList="setList" />
       <PaymentInfo v-if="showPaymentInfo" :id="itemSelected.id" @close="closePaymentInfo" />
       <InvoiceInfo v-if="showInvoiceInfo" :id="itemSelected.id" @close="closeInvoiceInfo" />
       <el-dialog

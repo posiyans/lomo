@@ -23,10 +23,10 @@
 
 <script>
 import { fetchAppelList } from 'src/Modules/Appeal/api/appeal-admin-api.js'
-import { fetchSteadList } from 'src/Modules/Stead/api/steadAdminApi.js'
 import { fetchList } from 'src/Modules/Users/api/user-admin-api.js'
 import { fetchAdminArticleList } from 'src/Modules/Article/Article/api/articleAdminApi.js'
 import CardBlock from './components/CardBlock/index.vue'
+import { getSteadsList } from 'src/Modules/Stead/api/stead'
 
 export default {
   components: {
@@ -66,7 +66,7 @@ export default {
         })
     },
     getStead() {
-      fetchSteadList()
+      getSteadsList()
         .then(response => {
           this.countStead = response.data.data.length
         })

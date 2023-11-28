@@ -113,7 +113,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <LoadMore v-if="id" :id="id" :key="key" :list-query="listQuery" :func="func" @setList="setList" />
+    <LoadMore v-if="id" :id="id" :key="key" v-model:listQuery="listQuery" :func="func" @setList="setList" />
 
     <div v-if="selectRows.length > 0" class="filter-container mt2">
       <el-select v-model="action" placeholder="Действие">

@@ -53,7 +53,7 @@ module.exports = configure(function (ctx) {
       env: {
         SITE_NAME: 'ЛОМО',
         BASE_API: ctx.dev
-          ? 'http://lomo.loc'
+          ? 'http://localhost'
           : ''
       },
       // target: {
@@ -97,8 +97,8 @@ module.exports = configure(function (ctx) {
       server: {
         type: 'http'
       },
-      host: 'lomo.loc',
-      port: 3000,
+      host: 'localhost',
+      port: 8099,
       open: true // opens browser window automatically
     },
 
@@ -138,10 +138,11 @@ module.exports = configure(function (ctx) {
       // manualStoreHydration: true,
       // manualPostHydrationTrigger: true,
 
-      prodPort: 3000, // The default port that the production server should use
+      prodPort: 8099, // The default port that the production server should use
       // (gets superseded if process.env.PORT is specified at runtime)
 
-      maxAge: 1000 * 60 * 60 * 24 * 30,
+      // maxAge: 1000 * 60 * 60 * 24 * 30,
+      maxAge: 1000,
       // Tell browser when a file from the server should expire from cache (in ms)
 
       chainWebpackWebserver(chain) {
@@ -236,7 +237,7 @@ module.exports = configure(function (ctx) {
       builder: {
         // https://www.electron.build/configuration/configuration
 
-        appId: 'frontend-neww'
+        appId: 'frontend-new'
       },
 
       // "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain

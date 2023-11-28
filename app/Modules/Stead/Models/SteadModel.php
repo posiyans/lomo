@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Modules\Stead\Models;
 
 use App\Models\MyModel;
@@ -44,10 +45,6 @@ use App\Models\MyModel;
  * @method static \Illuminate\Database\Eloquent\Builder|SteadModel whereSurname($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SteadModel whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SteadModel whereUserId($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
  * @mixin \Eloquent
  */
 class SteadModel extends MyModel
@@ -60,7 +57,6 @@ class SteadModel extends MyModel
     ];
 
     protected $table = 'steads';
-
 
 
 }

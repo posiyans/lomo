@@ -22,6 +22,8 @@ class DatabaseSeeder extends Seeder
             LaratrustSeeder::class,
             CategorySeeder::class,
             SiteMenuSeeder::class,
+            OwnerUserFieldSeeder::class,
+
 
         ]);
     }

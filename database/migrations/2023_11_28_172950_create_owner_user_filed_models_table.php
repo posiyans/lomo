@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSteadsTable extends Migration
+class CreateOwnerUserFiledModelsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreateSteadsTable extends Migration
      */
     public function up()
     {
-        Schema::create('steads', function (Blueprint $table) {
+        Schema::create('owner_user_filed_models', function (Blueprint $table) {
             $table->id();
-            $table->string('number')->unique();
-            $table->string('size')->nullable();
-//            $table->json('descriptions')->nullable();
-            $table->json('options')->nullable()->comment('опции для участка');
+            $table->string('name')->unique();
+            $table->string('label');
+            $table->string('type');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -30,6 +30,6 @@ class CreateSteadsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('steads');
+        Schema::dropIfExists('owner_user_filed_models');
     }
 }

@@ -42,10 +42,6 @@ use Illuminate\Support\Facades\Auth;
  * @method static \Illuminate\Database\Eloquent\Builder|Log whereUserAgent($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Log whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Log whereValue($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
  * @mixin \Eloquent
  */
 class Log extends MyModel
@@ -131,10 +127,10 @@ class Log extends MyModel
     /**
      * добавьть лог с разницей состояния моделей
      *
-     * @param $model_new  -- модель после сохранния
-     * @param $model_old  -- массив оригинальных атрибутов полученных перед сохранением через getOriginal();
-     * @param  null  $description  -- описание
-     * @param  null  $stead_id  -- id участка к которому как-то относится данное действие
+     * @param $model_new -- модель после сохранния
+     * @param $model_old -- массив оригинальных атрибутов полученных перед сохранением через getOriginal();
+     * @param null $description -- описание
+     * @param null $stead_id -- id участка к которому как-то относится данное действие
      * @return bool
      */
     public static function addLog($model_new, $model_old, $description = null, $stead_id = null)

@@ -1,18 +1,20 @@
 <template>
-  <div>
-    <q-input
-      :model-value="modelValue.find"
-      outlined
-      dense
-      label="Найти участок"
-      @update:model-value="setValue($event, 'find')" />
+  <div class="row items-center q-col-gutter-sm">
+    <div>
+      <q-input
+        :model-value="modelValue.find"
+        label="Поиск"
+        outlined
+        dense
+        @update:model-value="setValue($event, 'find')"
+      />
+    </div>
   </div>
 </template>
 
 <script>
 /* eslint-disable */
-import { defineComponent, onMounted, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { defineComponent, ref } from 'vue'
 
 export default defineComponent({
   components: {},
@@ -23,18 +25,13 @@ export default defineComponent({
     }
   },
   setup(props, { emit }) {
-    const data = ref(null)
-    const router = useRouter()
-    const route = useRoute()
+    const data = ref(false)
     const setValue = (val, field) => {
       const tmp = Object.assign({}, props.modelValue)
       tmp[field] = val
       tmp.page = 1
       emit('update:model-value', tmp)
     }
-    onMounted(() => {
-
-    })
     return {
       data,
       setValue
@@ -43,6 +40,6 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
+<style scoped lang='scss'>
 
 </style>
