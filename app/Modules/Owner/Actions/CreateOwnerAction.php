@@ -1,24 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Owner;
+namespace App\Modules\Owner\Actions;
 
-use App\Http\Controllers\Admin\Report\PdfController;
-use App\Http\Controllers\Admin\Report\PrimaryPdfController;
-use App\Http\Controllers\Controller;
-use App\Http\Resources\Admin\Owner\AdminOwnerResource;
-use App\Models\Billing\BillingInvoice;
 use App\Models\Owner\OwnerUserModel;
-use App\Models\Receipt\ReceiptType;
-use Illuminate\Http\Request;
-use App\Models\Stead;
-use App\Models\Receipt\InstrumentReadings;
-use App\Models\Receipt\MeteringDevice;
-use App\Models\Gardening;
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
 
 
-class CreateOwnerController
+class CreateOwnerAction
 {
     protected $owner;
     protected $data;
@@ -38,7 +27,7 @@ class CreateOwnerController
             if ($this->owner->logAndSave('Добавили собственника')) {
                 $this->addValues();
                 if (!$this->error) {
-                   DB::commit();
+                    DB::commit();
                 }
             }
             DB::rollBack();
@@ -60,7 +49,6 @@ class CreateOwnerController
                 }
             }
         }
-
     }
 
 }

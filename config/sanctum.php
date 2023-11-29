@@ -17,7 +17,7 @@ return [
         ',',
         env(
             'SANCTUM_STATEFUL_DOMAINS',
-            'localhost,localhost:8099,127.0.0.1,127.0.0.1:8000,::1,lomo.loc:3000,' . parse_url(env('APP_URL'), PHP_URL_HOST)
+            'localhost,localhost:8099,127.0.0.1,127.0.0.1:8000,::1,lomo.loc:8099,' . parse_url(env('APP_URL'), PHP_URL_HOST)
         )
     ),
 

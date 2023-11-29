@@ -18,6 +18,7 @@ class CreateOwnerUserFiledModelsTable extends Migration
             $table->string('name')->unique();
             $table->string('label');
             $table->string('type');
+            $table->json('options');
             $table->softDeletes();
             $table->timestamps();
         });

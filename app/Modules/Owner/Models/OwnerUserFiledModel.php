@@ -10,4 +10,8 @@ class OwnerUserFiledModel extends Model
 {
     use HasFactory;
     use SoftDeletes;
+
+    protected $casts = [
+        'options' => 'array'
+    ];
 }

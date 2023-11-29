@@ -19,6 +19,11 @@ class OwnerUserFieldSeeder extends Seeder
             'surname' => [
                 'label' => 'Фамилия',
                 'type' => 'string',
+                'options' => [
+                    'rules' => [
+                        'required'
+                    ]
+                ]
             ],
             'name' => [
                 'label' => 'Имя',
@@ -32,20 +37,25 @@ class OwnerUserFieldSeeder extends Seeder
                 'label' => 'Дата рождения',
                 'type' => 'date'
             ],
-            'phones' => [
-                'label' => 'Доп. номера',
-                'type' => 'string',
-            ],
             'general_phone' => [
                 'label' => 'Номер телефона',
                 'type' => 'phone'
             ],
+            'phones' => [
+                'label' => 'Доп. номера',
+                'type' => 'string',
+            ],
             'email' => [
                 'label' => 'Электронная почта для получения уведомлений',
-                'type' => 'email',
+                'type' => 'string',
+                'options' => [
+                    'rules' => [
+                        'isEmail'
+                    ]
+                ]
             ],
             'address' => [
-                'label' => 'Aдрес места жительства',
+                'label' => 'Адрес места жительства',
                 'type' => 'string',
             ],
             'address_notifications' => [
@@ -53,8 +63,13 @@ class OwnerUserFieldSeeder extends Seeder
                 'type' => 'string',
             ],
             'member' => [
-                'label' => 'Членство в СНТ',
+                'label' => 'Является собственик членом СНТ',
                 'type' => 'boolean',
+                'options' => [
+                    'rules' => [
+                        'required'
+                    ]
+                ]
             ]
 
         ];
@@ -70,6 +85,7 @@ class OwnerUserFieldSeeder extends Seeder
         $model->name = $name;
         $model->label = $item['label'];
         $model->type = $item['type'];
+        $model->options = $item['options'] ?? [];
         $model->save();
     }
 

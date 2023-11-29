@@ -1,8 +1,16 @@
 import request from 'src/utils/request'
 
+// получить список возможных полей для собственника
+export function getOwnerFieldList() {
+  return request({
+    url: '/api/v2/owner/get-field-list',
+    method: 'get'
+  })
+}
+
 export function addOwnerUser(data) {
   return request({
-    url: '/api/v1/admin/owner-resource',
+    url: '/api/v2/owner/create',
     method: 'post',
     data
   })
@@ -19,14 +27,6 @@ export function fetchOwnerUserList(params) {
 export function getOwnerUserInfo(id) {
   return request({
     url: '/api/v1/admin/owner-resource/' + id,
-    method: 'get'
-  })
-}
-
-// получить список возможных полей для собственника
-export function getOwnerFieldList() {
-  return request({
-    url: '/api/v1/admin/owner/fields-list',
     method: 'get'
   })
 }
