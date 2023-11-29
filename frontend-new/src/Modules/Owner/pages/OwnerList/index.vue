@@ -33,7 +33,7 @@ export default defineComponent({
   },
   props: {},
   setup(props, { emit }) {
-    const list = ref(false)
+    const list = ref([])
     const func = fetchOwnerUserList
     const listQuery = ref(
       {

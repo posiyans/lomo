@@ -42,53 +42,6 @@ class OwnerUserModel extends MyModel
 {
     use HasFactory, SoftDeletes;
 
-    // перенести в базу
-    public $fields = [
-        'surname' => [
-            'label' => 'Фамилия',
-            'type' => 'String',
-        ],
-        'name' => [
-            'label' => 'Имя',
-            'type' => 'String',
-        ],
-        'middle_name' => [
-            'label' => 'Отчетство',
-            'type' => 'String',
-        ],
-        'date_birth' => [
-            'label' => 'Дата рождения',
-            'type' => 'Date',
-        ],
-        'phones' => [
-            'label' => 'Доп. номера',
-            'type' => 'String',
-        ],
-        'general_phone' => [
-            'label' => 'Номер телефона',
-            'type' => 'Mask',
-            'mask' => '+7(###)###-##-##'
-        ],
-        'email' => [
-            'label' => 'Электронная почта для получения уведомлений',
-            'type' => 'String',
-        ],
-        'address' => [
-            'label' => 'Aдрес места жительства',
-            'type' => 'String',
-        ],
-        'address_notifications' => [
-            'label' => 'Почтовый адрес для получения уведомлений',
-            'type' => 'String',
-        ],
-        'member' => [
-            'label' => 'Членство в СНТ',
-            'type' => 'Boolean',
-        ]
-
-    ];
-
-
     public function fullName()
     {
         return $this->getValue('surname', '') . ' ' . $this->getValue('name', '') . ' ' . $this->getValue('middle_name', '');
@@ -108,7 +61,7 @@ class OwnerUserModel extends MyModel
 
     public function nameForMyRole()
     {
-        if (\Auth::user()->hasPermission('owner-show')) {
+        if (\Auth::user()->ability('superAdmin', 'owner-show')) {
             return $this->fullName();
         } else {
             return $this->smallName();
@@ -150,6 +103,7 @@ class OwnerUserModel extends MyModel
 
     /**
      * Установить занчения поля
+     *
      * @param $property String имя
      * @param $value String значение
      * @return bool
@@ -158,10 +112,10 @@ class OwnerUserModel extends MyModel
     {
         $model = OwnerUserValueModel::firstOrCreate(['uid' => $this->uid, 'property' => $property]);
         $model->value = $value;
-        if ($model->logAndSave()) {
-            return true;
+        if ($model->logAndSave('Измение поля')) {
+            return $model;
         }
-        return false;
+        throw new \Exception('Ошибка добавления поля');
     }
 
     /**

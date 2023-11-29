@@ -1,13 +1,13 @@
 <template>
   <div>
     <slot v-bind:item="name">
-      {{name}}
+      {{ name }}
     </slot>
   </div>
 </template>
 
 <script>
-import { defineComponent, computed, onBeforeMount, watch } from 'vue'
+import { computed, defineComponent, onBeforeMount, watch } from 'vue'
 import { getSteadInfo } from 'src/Modules/Stead/api/stead'
 import { steads } from 'src/Modules/Stead/hooks/stead_info'
 
@@ -19,10 +19,10 @@ export default defineComponent({
     },
     format: {
       type: String,
-      default: 'n'
+      default: 'n' // n - номер, s - размер
     }
   },
-  setup (props) {
+  setup(props) {
     const stead = computed(() => {
       return steads.value[props.steadId] ?? {}
     })
@@ -56,7 +56,6 @@ export default defineComponent({
           getData()
         }
       }
-
     )
     return {
       stead,

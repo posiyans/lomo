@@ -3,20 +3,11 @@
 namespace App\Http\Controllers\Admin\Owner;
 
 use App\Http\Controllers\Admin\AbstractAdminController;
-
 use App\Http\Controllers\Admin\Owner\Classes\DeleteOwnerClass;
 use App\Http\Controllers\Admin\Owner\Classes\DeleteOwnerUserStead;
-use App\Http\Controllers\Admin\Owner\Repository\GetOwnerListRepository;
-use App\Http\Controllers\Admin\Owner\Repository\GetOwnerRepository;
 use App\Http\Controllers\Admin\Owner\Repository\OwnerUserSteadRepository;
 use App\Http\Controllers\Admin\Owner\Request\OwnerListRequest;
-use App\Http\Controllers\Admin\Owner\Resource\AdminOwnerListResource;
-use App\Http\Controllers\Admin\Owner\Resource\OwnreListXlsxFileResource;
-use App\Http\Controllers\Controller;
-use App\Http\Resources\Admin\Owner\AdminOwnerResource;
-use App\Models\Owner\OwnerUserModel;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 
 
 class OwnerUserSteadResourceController extends AbstractAdminController
@@ -40,7 +31,6 @@ class OwnerUserSteadResourceController extends AbstractAdminController
      */
     public function index(OwnerListRequest $request)
     {
-
     }
 
 
@@ -57,7 +47,7 @@ class OwnerUserSteadResourceController extends AbstractAdminController
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -67,18 +57,17 @@ class OwnerUserSteadResourceController extends AbstractAdminController
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id, Request $request)
     {
-
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -89,19 +78,18 @@ class OwnerUserSteadResourceController extends AbstractAdminController
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update($id, Request $request)
     {
-
     }
 
     /**
      * Удалить собственника
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -109,7 +97,7 @@ class OwnerUserSteadResourceController extends AbstractAdminController
         if (\Auth::user()->hasPermission('write-personal-data')) {
             try {
                 $ownerStead = (new OwnerUserSteadRepository())->findById($id);
-               $status = (new DeleteOwnerUserStead())->deleteRelations($ownerStead);
+                $status = (new DeleteOwnerUserStead())->deleteRelations($ownerStead);
                 if ($status) {
                     return ['status' => true];
                 }

@@ -18,7 +18,7 @@ export function addOwnerUser(data) {
 
 export function fetchOwnerUserList(params) {
   return request({
-    url: '/api/v1/admin/owner-resource',
+    url: '/api/v2/owner/get-list',
     method: 'get',
     params
   })

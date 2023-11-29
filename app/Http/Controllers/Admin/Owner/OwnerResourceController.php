@@ -7,10 +7,10 @@ use App\Http\Controllers\Admin\Owner\Classes\DeleteOwner;
 use App\Http\Controllers\Admin\Owner\Repository\GetOwnerListRepository;
 use App\Http\Controllers\Admin\Owner\Repository\GetOwnerRepository;
 use App\Http\Controllers\Admin\Owner\Request\OwnerListRequest;
-use App\Http\Controllers\Admin\Owner\Resource\AdminOwnerListResource;
 use App\Http\Controllers\Admin\Owner\Resource\OwnreListXlsxFileResource;
 use App\Http\Resources\Admin\Owner\AdminOwnerResource;
 use App\Models\Owner\OwnerUserModel;
+use App\Modules\Owner\Resources\OwnerUserResource;
 use Illuminate\Http\Request;
 
 
@@ -31,7 +31,7 @@ class OwnerResourceController extends AbstractAdminController
     /**
      * получить список собственников
      *
-     * @param  Request  $request
+     * @param Request $request
      */
     public function index(OwnerListRequest $request)
     {
@@ -39,7 +39,7 @@ class OwnerResourceController extends AbstractAdminController
         $owner = new GetOwnerListRepository($title);
         return [
             'status' => $owner->status,
-            'data' => AdminOwnerListResource::collection($owner->rezult),
+            'data' => OwnerUserResource::collection($owner->rezult),
             'meta' => [
                 'total' => $owner->total,
                 'offset' => $owner->offset,
@@ -53,7 +53,7 @@ class OwnerResourceController extends AbstractAdminController
     /**
      * todo вынести в отдельный клонтроллер
      *
-     * @param  OwnerListRequest  $request
+     * @param OwnerListRequest $request
      * @return \Illuminate\Http\Response
      */
     public function ownerListXlsx(OwnerListRequest $request)
@@ -66,7 +66,7 @@ class OwnerResourceController extends AbstractAdminController
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -84,7 +84,7 @@ class OwnerResourceController extends AbstractAdminController
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id, Request $request)
@@ -99,8 +99,8 @@ class OwnerResourceController extends AbstractAdminController
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update($id, Request $request)
@@ -123,7 +123,7 @@ class OwnerResourceController extends AbstractAdminController
     /**
      * Удалить собственника
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

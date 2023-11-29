@@ -1,180 +1,141 @@
 <template>
   <div>
-    <el-table
-      v-loading="loading"
-      :data="list"
-      border
-      fit
-      size="mini"
-      highlight-current-row
-      :style="fullTable ? 'width: 100%;' : 'width: 500px;'"
+    <q-table
+      flat
+      bordered
+      :rows="list"
+      :columns="filterColumns"
+      hide-bottom
+      :pagination="{ rowsPerPage: 0 }"
+      wrap-cells
+      separator="cell"
+      row-key="id"
     >
-      <el-table-column v-if="!mobile" label="№" align="center" width="40">
-        <template #default="scope">
-          <span>{{ scope.$index + offset + 1 }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="ФИО" min-width="100px">
-        <template #default="{row}">
-          <span>
-            {{ row.fullName }}
-          </span>
-        </template>
-      </el-table-column>
-      <el-table-column label="Участок" align="center" width="100px">
-        <template #default="{row}">
-          <div class="stead-group">
-            <div v-for="stead in row.steads" :Key="stead.id" class="stead-group__button" @click="pushToStead(stead.stead_id)">
-              {{ stead.number }} {{ propFilter(stead.proportion) }}
-            </div>
+      <template v-slot:body-cell-number="props">
+        <q-td :props="props" auto-width>
+          <div>
+            {{ props.row.id }}
           </div>
-          <span>
-            {{ row.s }}
-          </span>
-        </template>
-      </el-table-column>
-      <el-table-column v-if="!mobile && fullTable" label="Телефон" align="center" width="150px">
-        <template #default="{row}">
-          <span lass="link-type">
-            {{ row.general_phone }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column v-if="!mobile && fullTable" label="Email" align="center" width="250px">
-        <template #default="{row}">
-          <span>
-            {{ row.email }}
-          </span>
-        </template>
-      </el-table-column>
-      <el-table-column v-if="fullTable" label="Подробнее" align="center" class-name="">
-        <template #default="{ row }">
-          <div class="owner-info-icon" @click="showInfo(row)">
-            <q-icon name="info" />
+        </q-td>
+      </template>
+      <template v-slot:body-cell-fio="props">
+        <q-td :props="props">
+          <div class="">
+            {{ props.row.fullName }}
           </div>
-        </template>
-      </el-table-column>
-    </el-table>
+        </q-td>
+      </template>
+      <template v-slot:body-cell-stead="props">
+        <q-td :props="props">
+          <div v-for="item in props.row.steads" :key="item.stead_id" class="cursor-pointer" @click="pushToStead(item.stead_id)">
+            <q-chip outline square color="primary" text-color="white">
+              {{ item.number }} {{ propFilter(item.proportion) }}
+            </q-chip>
+          </div>
+        </q-td>
+      </template>
+      <template v-slot:body-cell-actions="props">
+        <q-td :props="props">
+          <div class="cursor-pointer" @click="showInfo(props.row.uid)">
+            <q-icon name="info" size="24px" color="primary" />
+          </div>
+        </q-td>
+      </template>
+    </q-table>
   </div>
 </template>
 
 <script>
+/* eslint-disable */
+import { computed, defineComponent } from 'vue'
+import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
+import { useRouter } from 'vue-router'
 
-export default {
-  name: 'OwnerUserList',
+export default defineComponent({
+  components: {},
   props: {
-    offset: {
-      type: Number,
-      default: 0
-    },
-    loading: {
-      type: Boolean,
-      default: false
-    },
     list: {
       type: Array,
       default: () => ([])
     }
   },
-  data() {
-    return {
-      // steadsList: [],
-      tableKey: 0,
-      // list: null,
-      total: 0,
-      listLoading: true,
-      listQuery: {
-        page: 1,
-        limit: 20,
-        title: undefined,
-        type: undefined
+  setup(props, { emit }) {
+    const $router = useRouter()
+    const columns = [
+      {
+        name: 'number',
+        align: 'center',
+        label: 'id',
       },
-      temp: {},
-      dialogFormVisible: false
+      {
+        name: 'fio',
+        align: 'center',
+        label: 'ФИО',
+      },
+      {
+        name: 'stead',
+        align: 'center',
+        label: 'Участок',
+      },
+      {
+        name: 'phone',
+        align: 'center',
+        field: 'general_phone',
+        label: 'Телефон',
+        hide: true
+      },
+      {
+        name: 'email',
+        align: 'center',
+        label: 'email',
+        field: 'email',
+        hide: true
+      },
+      {
+        name: 'actions',
+        align: 'center',
+        label: 'Поробнее'
+      }
+    ]
+    const authStore = useAuthStore()
+    const admin = computed(() => {
+      return authStore.permissions.includes('owner-show') || authStore.permissions.includes('owner-edit')
+    })
+    const filterColumns = computed(() => {
+      return columns.filter(column => {
+        if (column.hide) {
+          if (admin.value) {
+            return true
+          } else {
+            return false
+          }
+        } else {
+          return true
+        }
+      })
+    })
+    const pushToStead = (id) => {
+      $router.push('/admin/bookkeping/billing_balance_stead/' + id)
     }
-  },
-  computed: {
-    mobile() {
-      return this.$q.platform.is.mobile
-    },
-    editFio() {
-      let fio = ''
-      if (this.temp.last_name) {
-        fio = this.temp.last_name + ' '
-      }
-      if (this.temp.name) {
-        fio += this.temp.name + ' '
-      }
-      if (this.temp.middle_name) {
-        fio += this.temp.middle_name
-      }
-      return fio
-    },
-    fullTable() {
-      // return this.$store.state.user.roles.indexOf('access-to-personal') !== -1
-      return true
+    const showInfo = (uid) => {
+      $router.push('/admin/owner/show-info/' + uid)
     }
-  },
-  mounted() {
-    // this.getList()
-    // this.fetchSteads()
-  },
-  methods: {
-    propFilter(val) {
+    const propFilter = (val) => {
       if (val < 100) {
         return '(' + val + '%)'
       }
       return ''
-    },
-    pushToStead(id) {
-      this.$router.push('/admin/bookkeping/billing_balance_stead/' + id)
-    },
-    showInfo(row) {
-      console.log('/admin/owner/show-info/' + row.id)
-      this.$router.push('/admin/owner/show-info/' + row.id)
-    },
-    close() {
-      this.dialogFormVisible = false
-      this.getList()
+    }
+    return {
+      filterColumns,
+      propFilter,
+      pushToStead,
+      showInfo
     }
   }
-}
+})
 </script>
 
 <style scoped>
-.owner-info-icon {
-  font-size: 1.75em;
-  color: #1890ff;
-  cursor: pointer;
-}
 
-.owner-info-icon:hover {
-  font-size: 2em;
-  color: #0051a9;
-}
-
-.stead-group {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.stead-group__button {
-  cursor: pointer;
-  border: 1px solid #357edd;
-  border-radius: 0.25rem;
-  background-color: #cdecff;
-  margin-bottom: 0.25rem;
-  min-width: 65px;
-
-}
-
-.stead-group__button:hover {
-  background-color: #97d2ff;
-  font-weight: 600;
-
-}
-
-.stead-group__button:last-child {
-  margin-bottom: 0;
-}
 </style>

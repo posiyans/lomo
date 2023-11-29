@@ -19,6 +19,16 @@ class OwnerFieldRepository
         return $this->query->orderBy('id')->get();
     }
 
+    public function keys()
+    {
+        $result = [];
+        foreach ($this->all() as $item) {
+            $result[] = $item->name;
+        }
+        return $result;
+    }
+
+
     public function allToArray()
     {
         $result = [];
@@ -30,7 +40,6 @@ class OwnerFieldRepository
                 'rules' => $item->options['rules'] ?? [],
             ];
         }
-
         return $result;
     }
 

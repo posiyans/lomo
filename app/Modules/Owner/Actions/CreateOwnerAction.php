@@ -2,11 +2,13 @@
 
 namespace App\Modules\Owner\Actions;
 
-use App\Models\Owner\OwnerUserModel;
-use Illuminate\Support\Facades\DB;
-use Ramsey\Uuid\Uuid;
+use App\Modules\Owner\Models\OwnerUserModel;
+use App\Modules\Owner\Repositories\OwnerFieldRepository;
+use Illuminate\Support\Str;
 
-
+/**
+ * Создать собственника
+ */
 class CreateOwnerAction
 {
     protected $owner;
@@ -14,41 +16,36 @@ class CreateOwnerAction
     public $error = false;
     public $error_message = '';
 
-    /**
-     * проверка на суперадмин или на доступ а админ панель
-     */
     public function __construct($data = [])
     {
-        if (count($data) > 0) {
-            DB::beginTransaction();
-            $this->data = $data;
+        $this->data = $data;
+    }
+
+    /**
+     * @return OwnerUserModel|void
+     * @throws \Exception
+     */
+    public function run()
+    {
+        if (count($this->data) > 0) {
             $this->owner = new OwnerUserModel();
-            $this->owner->uid = Uuid::uuid4()->toString();
-            if ($this->owner->logAndSave('Добавили собственника')) {
-                $this->addValues();
-                if (!$this->error) {
-                    DB::commit();
-                }
+            $this->owner->uid = Str::uuid();
+            if (!$this->owner->logAndSave('Добавление собственника')) {
+                return throw new \Exception('Ошибка добавления собственника');
             }
-            DB::rollBack();
+            $this->addValues();
+            return $this->owner;
         }
     }
 
-    public function getOwnerId()
+    private function addValues()
     {
-        return $this->owner->id;
-    }
-
-    public function addValues()
-    {
-        foreach (array_keys($this->owner->fields) as $field) {
+        foreach ((new OwnerFieldRepository())->keys() as $field) {
             if (isset($this->data[$field])) {
-                if (!$this->owner->setValue($field, $this->data[$field])) {
-                    $this->error = true;
-                    $this->error_message = 'Ошибка добавления поля';
-                }
+                $this->owner->setValue($field, $this->data[$field]);
             }
         }
     }
+
 
 }

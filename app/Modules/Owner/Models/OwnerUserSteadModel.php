@@ -3,11 +3,13 @@
 namespace App\Modules\Owner\Models;
 
 use App\Models\MyModel;
-use App\Models\Stead;
+use App\Modules\Stead\Models\SteadModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
+ * отношения участка и собственника
+ *
  * App\Models\Owner\OwnerUserSteadModel
  *
  * @property int $id
@@ -44,16 +46,7 @@ class OwnerUserSteadModel extends MyModel
 {
     use HasFactory, SoftDeletes;
 
-    public function ownerFullName()
-    {
-        return $this->owner->fullName();
-    }
-
-    public function nameForMyRole()
-    {
-        return $this->owner->nameForMyRole();
-    }
-
+    protected $fillable = ['stead_id', 'owner_uid'];
 
     public function owner()
     {
@@ -62,6 +55,8 @@ class OwnerUserSteadModel extends MyModel
 
     public function stead()
     {
-        return $this->hasOne(Stead::class, 'id', 'stead_id');
+        return $this->hasOne(SteadModel::class, 'id', 'stead_id');
     }
+
+
 }

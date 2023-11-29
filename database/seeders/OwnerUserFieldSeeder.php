@@ -20,6 +20,7 @@ class OwnerUserFieldSeeder extends Seeder
                 'label' => 'Фамилия',
                 'type' => 'string',
                 'options' => [
+                    'readonly' => true,
                     'rules' => [
                         'required'
                     ]
@@ -28,27 +29,43 @@ class OwnerUserFieldSeeder extends Seeder
             'name' => [
                 'label' => 'Имя',
                 'type' => 'string',
+                'options' => [
+                    'readonly' => true,
+                ]
             ],
             'middle_name' => [
                 'label' => 'Отчетство',
                 'type' => 'string',
+                'options' => [
+                    'readonly' => true,
+                ]
             ],
             'date_birth' => [
                 'label' => 'Дата рождения',
-                'type' => 'date'
+                'type' => 'date',
+                'options' => [
+                    'readonly' => true,
+                ]
             ],
             'general_phone' => [
                 'label' => 'Номер телефона',
-                'type' => 'phone'
+                'type' => 'phone',
+                'options' => [
+                    'readonly' => true,
+                ]
             ],
             'phones' => [
                 'label' => 'Доп. номера',
                 'type' => 'string',
+                'options' => [
+                    'readonly' => true,
+                ]
             ],
             'email' => [
                 'label' => 'Электронная почта для получения уведомлений',
                 'type' => 'string',
                 'options' => [
+                    'readonly' => true,
                     'rules' => [
                         'isEmail'
                     ]
@@ -57,18 +74,26 @@ class OwnerUserFieldSeeder extends Seeder
             'address' => [
                 'label' => 'Адрес места жительства',
                 'type' => 'string',
+                'options' => [
+                    'readonly' => true,
+                ]
             ],
             'address_notifications' => [
                 'label' => 'Почтовый адрес для получения уведомлений',
                 'type' => 'string',
+                'options' => [
+                    'readonly' => true,
+                ]
             ],
             'member' => [
                 'label' => 'Является собственик членом СНТ',
                 'type' => 'boolean',
                 'options' => [
+                    'readonly' => true,
                     'rules' => [
                         'required'
-                    ]
+                    ],
+
                 ]
             ]
 
