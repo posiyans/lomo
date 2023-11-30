@@ -27,10 +27,12 @@
       </template>
       <template v-slot:body-cell-stead="props">
         <q-td :props="props">
-          <div v-for="item in props.row.steads" :key="item.stead_id" class="cursor-pointer" @click="pushToStead(item.stead_id)">
-            <q-chip outline square color="primary" text-color="white">
-              {{ item.number }} {{ propFilter(item.proportion) }}
-            </q-chip>
+          <div class="row justify-center">
+            <div v-for="item in props.row.steads" :key="item.stead_id" class="cursor-pointer" @click="pushToStead(item.stead_id)">
+              <q-chip outline square color="primary" text-color="white">
+                {{ item.number }} {{ propFilter(item.proportion) }}
+              </q-chip>
+            </div>
           </div>
         </q-td>
       </template>
@@ -94,7 +96,7 @@ export default defineComponent({
       {
         name: 'actions',
         align: 'center',
-        label: 'Поробнее'
+        label: ''
       }
     ]
     const authStore = useAuthStore()

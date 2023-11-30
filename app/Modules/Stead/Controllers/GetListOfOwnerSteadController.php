@@ -9,6 +9,9 @@ use App\Modules\Stead\Validators\GetListOfOwnerSteadValidator;
 use App\Modules\User\Repositories\GetUserByUidRepository;
 
 /**
+ *
+ * @deprecated поменять пользователя на собственника!!!!
+ * todo поменять пользователя на собственника!!!!
  * Получить список участков для собственника
  */
 class GetListOfOwnerSteadController extends Controller

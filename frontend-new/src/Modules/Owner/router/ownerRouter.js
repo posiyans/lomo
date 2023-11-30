@@ -30,6 +30,17 @@ export const adminOwner =
           title: 'Добавить собственника',
           roles: ['owner-edit']
         }
+      },
+      {
+        path: 'show-info/:uid',
+        name: 'OwnerInfo',
+        component: () => import('src/Modules/Owner/pages/OwnerInfo/index.vue'),
+        hidden: true,
+        meta: {
+          icon: 'groups',
+          title: 'Собственник',
+          roles: ['owner-show', 'owner-edit']
+        }
       }
     ]
   }

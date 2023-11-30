@@ -20,7 +20,7 @@
 import { computed, defineComponent, ref } from 'vue'
 import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
 import { exportFile, Notify } from 'quasar'
-import { fetchOwnerListInXlsx, fetchOwnerUserList } from 'src/Modules/Owner/api/owner-admin-api.js'
+import { fetchOwnerListInXlsx, fetchOwnerUserList } from 'src/Modules/Owner/api/ownerUserApi.js'
 import ShowTable from './components/ShowTable'
 import LoadMore from 'src/components/LoadMore/index.vue'
 import FilterBlock from './components/FilterBlock/index.vue'

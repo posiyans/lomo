@@ -41,12 +41,12 @@
 <script>
 /* eslint-disable */
 import { defineComponent, onMounted, ref } from 'vue'
-import { addOwnerUser, getOwnerFieldList } from 'src/Modules/Owner/api/owner-admin-api'
+import { addOwnerUser, getOwnerFieldList } from 'src/Modules/Owner/api/ownerUserApi'
 import { errorMessage } from 'src/utils/message'
 import { useRouter } from 'vue-router'
 import InputDate from 'src/components/Input/InputDate/index.vue'
 import InputPhone from 'src/components/Input/InputPhone/index.vue'
-import ComponentField from './components/ComponentFiled/index.vue'
+import ComponentField from 'src/Modules/Owner/components/ComponentFiled/index.vue'
 import SelectStead from 'src/Modules/Stead/components/SelectStead/index.vue'
 import SelectSteadDialog from 'src/Modules/Stead/components/SelectSteadDialog/index.vue'
 import SteadInfo from 'src/Modules/Stead/components/SteadInfo/index.vue'

@@ -1,8 +1,9 @@
 <template>
   <component
     :is="componentName"
-    :model-value="modelValue[item.name]"
-    outlined
+    :model-value="modelValue"
+    :outlined="outlined"
+    :dense="dense"
     :label="item.label"
     :rules="rules"
     :style="styleName"
@@ -27,8 +28,15 @@ export default defineComponent({
   },
   props: {
     modelValue: {
-      type: Object,
       required: true
+    },
+    dense: {
+      type: Boolean,
+      default: false
+    },
+    outlined: {
+      type: Boolean,
+      default: false
     },
     item: {
       type: Object,
@@ -68,9 +76,9 @@ export default defineComponent({
       }
     })
     const setValue = (val) => {
-      const tmp = Object.assign({}, props.modelValue)
-      tmp[props.item.name] = val
-      emit('update:model-value', tmp)
+      // const tmp = Object.assign({}, props.modelValue)
+      // tmp[props.item.name] = val
+      emit('update:model-value', val)
     }
     onMounted(() => {
 

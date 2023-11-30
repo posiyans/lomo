@@ -33,8 +33,8 @@ class CreateOwnerUserController extends Controller
             return response(['data' => $owner]);
         } catch (\Exception $e) {
             DB::rollBack();
+            return response(['errors' => $e->getMessage()], 450);
         }
-        return response(['errors' => $e->getMessage()], 450);
     }
 
 }

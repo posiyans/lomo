@@ -6,11 +6,11 @@
       :options="[
         {
          label: 'Нет',
-         value:  false
+         value:  '0'
         },
         {
            label: 'Да',
-           value:  true
+           value:  '1'
         }
      ]"
       map-options

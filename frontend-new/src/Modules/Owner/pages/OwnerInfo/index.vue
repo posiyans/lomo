@@ -1,0 +1,115 @@
+<template>
+  <div class="q-pa-md">
+    <div class="page-title">
+      {{ fullName }}
+    </div>
+    <div>
+      <table>
+        <tr v-for="item in fieldList" :key="item.name">
+          <td>
+            <div class="ellipsis">
+              {{ item.label }}
+            </div>
+          </td>
+          <td style="min-width: 300px;">
+            <FieldValueBlock v-model="owner[item.name]" :owner-uid="ownerUid" :field="item" :editable="editable" @success="getUserData" />
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="row">
+              <div>Участок</div>
+              <q-space />
+              <div v-if="editable">
+                <AddSteadToOwner :owner-uid="ownerUid" @success="getUserData" />
+              </div>
+            </div>
+          </td>
+          <td>
+            <div v-for="stead in steads" :key="stead.id">
+              <q-chip outline color="primary" text-color="white">
+                уч. {{ stead.number }} {{ propFilter(stead.proportion) }}
+              </q-chip>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</template>
+
+<script>
+/* eslint-disable */
+import { computed, defineComponent, onMounted, ref } from 'vue'
+import { useRoute } from 'vue-router'
+import { useOwnerUserField } from 'src/Modules/Owner/hooks/useOwnerUserField'
+import { useOwnerUser } from 'src/Modules/Owner/hooks/useOwnerUser'
+import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
+import OwnerUserFieldValueEdit from 'src/Modules/Owner/components/OwnerUserFieldValueEdit/index.vue'
+import FieldValueBlock from './components/FieldValueBlock/index.vue'
+import AddSteadToOwner from 'src/Modules/Owner/pages/AddSteadToOwner/index.vue'
+
+export default defineComponent({
+  components: {
+    OwnerUserFieldValueEdit,
+    FieldValueBlock,
+    AddSteadToOwner
+  },
+  props: {},
+  setup(props, { emit }) {
+    const data = ref(false)
+    const edit = ref(false)
+    const $route = useRoute()
+    const { fieldList, getListField } = useOwnerUserField()
+    const { getInfo, owner, steads } = useOwnerUser()
+    const ownerUid = ref($route.params.uid)
+    const authStore = useAuthStore()
+    const editable = computed(() => {
+      return authStore.permissions.includes('owner-edit')
+    })
+    const fullName = computed(() => {
+      if (owner.value.surname) {
+        return owner?.value?.surname + ' ' + owner?.value?.name + ' ' + owner?.value?.middle_name
+      }
+      return ''
+    })
+    const getUserData = () => {
+      getInfo(ownerUid.value)
+    }
+    onMounted(() => {
+      getListField()
+      getUserData()
+    })
+    const propFilter = (val) => {
+      if (val < 100) {
+        return '(' + val + '%)'
+      }
+      return ''
+    }
+    return {
+      data,
+      ownerUid,
+      fullName,
+      propFilter,
+      getUserData,
+      owner,
+      fieldList,
+      steads,
+      edit,
+      editable
+    }
+  }
+})
+</script>
+
+<style scoped lang='scss'>
+table {
+  border-collapse: collapse;
+}
+
+td, th {
+  border: 1px solid #000000;
+  padding: 3px 10px;
+  line-height: 1.5em;
+}
+</style>

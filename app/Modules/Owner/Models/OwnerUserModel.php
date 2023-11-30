@@ -42,6 +42,9 @@ class OwnerUserModel extends MyModel
 {
     use HasFactory, SoftDeletes;
 
+    protected $primaryKey = 'uid';
+    protected $keyType = 'string';
+
     public function fullName()
     {
         return $this->getValue('surname', '') . ' ' . $this->getValue('name', '') . ' ' . $this->getValue('middle_name', '');
@@ -84,12 +87,12 @@ class OwnerUserModel extends MyModel
      * @param $name
      * @return false
      */
-    public function getValue($name, $default = false)
+    public function getValue($property, $default = false)
     {
-        $cacheName = 'ownerUser_' . $this->uid . '_Field_' . $name;
+        $cacheName = $this->getCacheName($property);
 
-        $data = Cache::tags(['owner_user', 'owner_user_fields'])->remember($cacheName, 6000, function () use ($name) {
-            $model = OwnerUserValueModel::where('property', $name)->where('uid', $this->uid)->first();
+        $data = Cache::tags(['owner_user_field_value'])->remember($cacheName, 6000, function () use ($property) {
+            $model = OwnerUserValueModel::where('property', $property)->where('uid', $this->uid)->first();
             if ($model) {
                 return $model->value;
             }
@@ -113,6 +116,8 @@ class OwnerUserModel extends MyModel
         $model = OwnerUserValueModel::firstOrCreate(['uid' => $this->uid, 'property' => $property]);
         $model->value = $value;
         if ($model->logAndSave('Измение поля')) {
+            $cacheName = $this->getCacheName($property);
+            Cache::tags(['owner_user_field_value'])->forget($cacheName);
             return $model;
         }
         throw new \Exception('Ошибка добавления поля');
@@ -133,6 +138,7 @@ class OwnerUserModel extends MyModel
         return $this;
     }
 
+
     /**
      * удалить все поля
      *
@@ -149,5 +155,11 @@ class OwnerUserModel extends MyModel
     public function steads()
     {
         return $this->hasMany(OwnerUserSteadModel::class, 'owner_uid', 'uid');
+    }
+
+
+    private function getCacheName($name)
+    {
+        return 'ownerUser_' . $this->uid . '_Field_' . $name;
     }
 }

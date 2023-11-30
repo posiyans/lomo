@@ -24,13 +24,13 @@ class OwnerUserResource extends JsonResource
             $data['email'] = $this->getValue('email', '');
             $data['general_phone'] = $this->getValue('general_phone', '');
         }
-        $data['steads'] = $this->steads->map(function ($item) {
+        $data['steads'] = $this->steads->sortBy('stead.number', SORT_NATURAL)->map(function ($item) {
             return [
                 'stead_id' => $item->stead_id,
                 'number' => $item->stead->number,
                 'proportion' => $item->proportion,
             ];
-        });
+        })->values();
         return $data;
     }
 }

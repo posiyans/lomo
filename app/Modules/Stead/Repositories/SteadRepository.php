@@ -37,6 +37,11 @@ class SteadRepository
         return $this;
     }
 
+    public function byId($id)
+    {
+        return $this->query->where('id', $id)->firstOrFail();
+    }
+
     public function paginate()
     {
         return $this->query->paginate();

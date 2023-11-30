@@ -24,25 +24,25 @@ export function fetchOwnerUserList(params) {
   })
 }
 
-export function getOwnerUserInfo(id) {
+export function getOwnerUserInfo(uid) {
   return request({
-    url: '/api/v1/admin/owner-resource/' + id,
+    url: '/api/v2/owner/get/' + uid,
     method: 'get'
   })
 }
 
-export function updateOwnerUserInfo(id, data) {
+export function updateOwnerUserFiled(uid, data) {
   return request({
-    url: '/api/v1/admin/owner-resource/' + id,
-    method: 'put',
+    url: '/api/v2/owner/update/' + uid,
+    method: 'post',
     data
   })
 }
 
 // добавить участок собственнику
-export function OwnerAddUser(data) {
+export function addSteadToOwnerUser(data) {
   return request({
-    url: '/api/v1/admin/owner/owner-add-stead',
+    url: '/api/v2/owner/add-stead',
     method: 'post',
     data
   })

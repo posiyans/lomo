@@ -14,6 +14,12 @@ class OwnerUserRepository
         $this->query = OwnerUserModel::query();
     }
 
+
+    public function byUid($uid)
+    {
+        return $this->query->where('uid', $uid)->firstOrFail();
+    }
+
     public function paginate($limit)
     {
         return $this->query->paginate($limit);
