@@ -5,8 +5,11 @@ namespace App\Console\Commands\Migrate;
 use App\Console\Commands\Migrate\Items\ArticleMigrate;
 use App\Console\Commands\Migrate\Items\GardeningMigrate;
 use App\Console\Commands\Migrate\Items\GlobalOptionsMigrate;
+use App\Console\Commands\Migrate\Items\LogMigrate;
+use App\Console\Commands\Migrate\Items\OwnerMigrate;
 use App\Console\Commands\Migrate\Items\SiteMenuMigrate;
 use App\Console\Commands\Migrate\Items\SocialMigrate;
+use App\Console\Commands\Migrate\Items\SteadMigrate;
 use App\Console\Commands\Migrate\Items\UserMigrate;
 use Illuminate\Console\Command;
 
@@ -48,13 +51,15 @@ class MasterMigrate extends Command
     public function handle()
     {
         echo 'Конвертируем' . PHP_EOL;
+        SteadMigrate::run();
+        LogMigrate::run();
         UserMigrate::run();
         ArticleMigrate::run();
         SiteMenuMigrate::run();
         GardeningMigrate::run();
         GlobalOptionsMigrate::run();
         SocialMigrate::run();
-//        LogMigrate::run();
+        OwnerMigrate::run();
 
 //        $users = DB::connection('mysql_old')->table('users')->get();
 //        dump($users);

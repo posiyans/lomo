@@ -13,11 +13,10 @@ class CreateSteadsTable extends Migration
      */
     public function up()
     {
-        Schema::create('steads', function (Blueprint $table) {
+        Schema::create('stead_models', function (Blueprint $table) {
             $table->id();
-            $table->string('number')->unique();
-            $table->string('size')->nullable();
-//            $table->json('descriptions')->nullable();
+            $table->string('number')->unique()->comment('Номер участка');
+            $table->string('size')->nullable()->comment('Размер участка');
             $table->json('options')->nullable()->comment('опции для участка');
             $table->timestamps();
         });

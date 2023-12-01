@@ -20,4 +20,14 @@ class SetGlobalOption
         $item->logAndSave('Изменение значения');
         return $value;
     }
+
+    public static function addOneValue($name, $value)
+    {
+        $item = new GlobalOptionModel();
+        $item->name = $name;
+        $item->type = 'array';
+        $item->value = $value;
+        $item->logAndSave('Изменение значения');
+        return $value;
+    }
 }

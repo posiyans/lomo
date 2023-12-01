@@ -3,12 +3,6 @@
 namespace App\Console\Commands\Invoice;
 
 use App\Http\Controllers\Admin\Bookkeeping\Billing\Invoice\MatchPaymentsAndInvoiceController;
-use App\Models\Billing\BillingInvoice;
-use App\Models\Billing\BillingPayment;
-use App\Models\Stead;
-use App\Models\Voting\AnswerModel;
-use App\Models\Voting\UserAnswerModel;
-use App\Models\Voting\VotingModel;
 use Illuminate\Console\Command;
 
 class ActionMatchPaymentsAndInvoice extends Command
@@ -44,7 +38,7 @@ class ActionMatchPaymentsAndInvoice extends Command
      */
     public function handle()
     {
-        echo 'Сопоставить платежи и счета'. PHP_EOL;
+        echo 'Сопоставить платежи и счета' . PHP_EOL;
         MatchPaymentsAndInvoiceController::FindAndMatch();
     }
 }

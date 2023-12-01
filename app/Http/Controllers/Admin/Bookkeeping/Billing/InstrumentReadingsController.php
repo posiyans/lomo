@@ -2,21 +2,14 @@
 
 namespace App\Http\Controllers\Admin\Bookkeeping\Billing;
 
-use App\Http\Resources\Admin\Bookkeeping\AdminInvoiceResource;
-use App\Http\Resources\Admin\Bookkeeping\AdminPaymentResource;
-use App\Models\Billing\BillingInvoice;
-use App\Models\Billing\BillingPayment;
-use App\Models\Billing\BillingReestr;
-use App\Models\Laratrust\Permission;
-use App\Models\Laratrust\Role;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Admin\Bookkeeping\AdminInvoiceResource;
+use App\Modules\Billing\Models\BillingInvoice;
 use Auth;
+use Illuminate\Http\Request;
 
 class InstrumentReadingsController extends Controller
 {
-
-
 
 
     /**
@@ -35,7 +28,7 @@ class InstrumentReadingsController extends Controller
     public function index(Request $request)
     {
         return 'index';
-//        $query = BillingReestr::query();
+//        $query = BillingReestrModel::query();
 //        if ($request->find) {
 //            $query->where('title', 'like', "%$request->find%");
 //        }
@@ -59,7 +52,7 @@ class InstrumentReadingsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -70,19 +63,19 @@ class InstrumentReadingsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        $data= BillingInvoice::find($id);
+        $data = BillingInvoice::find($id);
         return new AdminInvoiceResource($data);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -93,19 +86,18 @@ class InstrumentReadingsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

@@ -3,18 +3,16 @@
 namespace App\Http\Controllers\Admin\Bookkeeping\Billing\Payment\PaymentList;
 
 
-use App\Models\Receipt\ReceiptType;
-use App\Models\Stead;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Auth;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
 class PaymentListXlsxFileController extends Controller
 {
 
     protected $spreadsheet;
+
     /**
      * Добавить счета  группк показаний
      *
@@ -29,7 +27,7 @@ class PaymentListXlsxFileController extends Controller
             $xlsx->spreadsheet->getActiveSheet()
                 ->calculateWorksheetDimension()
         );
-        foreach (range('B','G') as $col) {
+        foreach (range('B', 'G') as $col) {
             $xlsx->spreadsheet->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
         }
         $xlsx->returnXLSX();
@@ -39,7 +37,7 @@ class PaymentListXlsxFileController extends Controller
     public function createXLSX()
     {
         $this->spreadsheet = new Spreadsheet();
-        $this->spreadsheet ->getProperties()->setCreator('Maarten Balliauw')
+        $this->spreadsheet->getProperties()->setCreator('Maarten Balliauw')
             ->setLastModifiedBy('posiyans')
             ->setTitle('https://github.com/posiyans/lomo')
             ->setSubject('https://github.com/posiyans/lomo')
@@ -52,39 +50,39 @@ class PaymentListXlsxFileController extends Controller
     {
         $sheet = $this->spreadsheet->getActiveSheet()->setTitle('Все платежи');
         $row = 1;
-        $sheet->setCellValue('A'.$row, '№');
-        $sheet->setCellValue('B'.$row, 'Время');
-        $sheet->setCellValue('C'.$row, 'Сумма');
-        $sheet->setCellValue('D'.$row, 'Участок');
-        $sheet->setCellValue('E'.$row, 'Тип');
-        $sheet->setCellValue('F'.$row, 'ФИО');
-        $sheet->setCellValue('G'.$row, 'Назначение');
+        $sheet->setCellValue('A' . $row, '№');
+        $sheet->setCellValue('B' . $row, 'Время');
+        $sheet->setCellValue('C' . $row, 'Сумма');
+        $sheet->setCellValue('D' . $row, 'Участок');
+        $sheet->setCellValue('E' . $row, 'Тип');
+        $sheet->setCellValue('F' . $row, 'ФИО');
+        $sheet->setCellValue('G' . $row, 'Назначение');
         $row = 2;
         foreach ($payments as $item) {
-            $sheet->setCellValue('A'.$row, $item->id);
-            $sheet->setCellValue('B'.$row, $item->payment_date);
-            $sheet->setCellValue('C'.$row, $item->price);
+            $sheet->setCellValue('A' . $row, $item->id);
+            $sheet->setCellValue('B' . $row, $item->payment_date);
+            $sheet->setCellValue('C' . $row, $item->price);
             $type = $item->getType ? $item->getType->name : '';
             $stead = $item->stead ? $item->stead->number : '';
             if (!$stead) {
-                $this->cellColor('D'.$row);
+                $this->cellColor('D' . $row);
             }
             if (!$type) {
-                $this->cellColor('E'.$row);
+                $this->cellColor('E' . $row);
             }
-            $sheet->setCellValue('D'.$row, $stead);
-            $sheet->setCellValue('E'.$row, $type);
-            $sheet->setCellValue('F'.$row, $item->raw_data[3]);
-            $sheet->setCellValue('G'.$row, $item->raw_data[4]);
+            $sheet->setCellValue('D' . $row, $stead);
+            $sheet->setCellValue('E' . $row, $type);
+            $sheet->setCellValue('F' . $row, $item->raw_data[3]);
+            $sheet->setCellValue('G' . $row, $item->raw_data[4]);
             $row++;
         }
     }
 
-    public function cellColor($cells,$color = 'F28A8C'){
+    public function cellColor($cells, $color = 'F28A8C')
+    {
         $this->spreadsheet->getActiveSheet()->getStyle($cells)->getFill()
             ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
-                    ->getStartColor()->setARGB($color);
-
+            ->getStartColor()->setARGB($color);
     }
 
     public function returnXLSX()
@@ -95,14 +93,14 @@ class PaymentListXlsxFileController extends Controller
 //        $sheet->setCellValue('B'.$row, 'Размер');
 //        $sheet->setCellValue('C'.$row, 'Баланс');
 //        $col = 'D';
-//        $types = ReceiptType::all();
+//        $types = ReceiptTypeModels::all();
 //
 //        foreach ($types  as $type) {
 //            $sheet->setCellValue($col.$row, $type->name);
 //            $col++;
 //        }
 //        $row = 2;
-//        $types = ReceiptType::getReceiptTypeIds();
+//        $types = ReceiptTypeModels::getReceiptTypeIds();
 //        foreach ($data as $item) {
 //
 //            $sheet->setCellValue('A'.$row, $item->number);

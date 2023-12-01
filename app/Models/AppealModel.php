@@ -3,9 +3,6 @@
 namespace App\Models;
 
 use App\Models\Message\MessageModel;
-use App\Models\MyModel;
-use App\Models\User;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 
@@ -45,10 +42,6 @@ use Illuminate\Support\Facades\Auth;
  * @method static \Illuminate\Database\Eloquent\Builder|AppealModel whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|AppealModel withTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|AppealModel withoutTrashed()
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
  * @mixin \Eloquent
  */
 class AppealModel extends MyModel
@@ -78,12 +71,13 @@ class AppealModel extends MyModel
     }
 
 
-    public function addMessage($text, $user_id){
+    public function addMessage($text, $user_id)
+    {
         // todo почему не работает??????
         // $message = MessageModel::create(compact('text', 'user_id'));
         $message = new MessageModel();
-        $message->text  = $text;
-        $message->user_id  = $user_id;
+        $message->text = $text;
+        $message->user_id = $user_id;
         $this->message()->save($message);
     }
 }

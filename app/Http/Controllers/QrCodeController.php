@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Gardening;
-use Illuminate\Http\Request;
 use App\Models\QrCodeModel;
 use App\Models\Stead;
-use App\Models\Receipt\ReceiptType;
+use App\Modules\Receipt\Models\ReceiptTypeModels;
 
 class QrCodeController extends Controller
 {
@@ -16,7 +15,7 @@ class QrCodeController extends Controller
     {
         $steadModel = Stead::find(session('stead_id'));
         $gardient = $steadModel->gardient;
-        $ReceiptType = ReceiptType::findOrFail((int)$id);
+        $ReceiptType = ReceiptTypeModels::findOrFail((int)$id);
         $code = new QrCodeModel;
         $code->fillDetailsGardient($gardient);
         $code->fillDetailsUser($steadModel);
@@ -24,14 +23,13 @@ class QrCodeController extends Controller
         return $code->getPng();
     }
 
-    public function qrCodeClear(){
+    public function qrCodeClear()
+    {
         $gardient = Gardening::find(1);
         $code = new QrCodeModel;
         $code->fillDetailsGardient($gardient);
         return $code->getPng();
     }
-
-
 
 
 }

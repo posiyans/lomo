@@ -114,6 +114,9 @@ class LaratrustSeeder extends Seeder
         'payment-show' => 'Просмотр платежей',
         'payment-edit' => 'Редактирование платежей',
 
+
+        'camera-edit' => 'Редактирование списка камер',
+
 //        'access-to-personal' => 'Доступ к персональным данным',
 //        'write-personal-data' => 'Изменение персональных данных'
     ];

@@ -60,12 +60,12 @@ class ReceiptController extends Controller
 //            $query->where('id', '<=', $stead_max );
 //        }
 //        $steads =$query->paginate($request->limit);
-//        $ReceiptType = ReceiptType::find(2);
+//        $ReceiptTypeModels = ReceiptTypeModels::find(2);
 //        $rez = [];
 //        foreach ($steads as $stead) {
 //            $temp = [];
 //            $cash = 0;
-//            foreach ($ReceiptType->MeteringDevice as $MeteringDevice) {
+//            foreach ($ReceiptTypeModels->MeteringDevice as $MeteringDevice) {
 //                $temp[$MeteringDevice->name] = round($MeteringDevice->getTicket($stead->id), 2);
 //                $cash += $MeteringDevice->getTicket($stead->id);
 ////                $discription .= $MeteringDevice->name.' '.$MeteringDevice->cash_description . ' ';

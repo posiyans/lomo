@@ -4,19 +4,12 @@ namespace App\Http\Controllers\Admin\Bookkeeping\Billing;
 
 use App\Http\Controllers\Admin\Bookkeeping\Billing\Balance\BalanceList\GetListController;
 use App\Http\Controllers\Admin\Bookkeeping\Billing\Balance\Repository\BalanceForSteadRepository;
-use App\Http\Resources\Admin\Bookkeeping\AdminBalansSteadResource;
-use App\Http\Resources\Admin\Bookkeeping\AdminInvoiceResource;
-use App\Http\Resources\Admin\Bookkeeping\AdminPaymentResource;
-use App\Models\Billing\BillingInvoice;
-use App\Models\Billing\BillingPayment;
-use App\Models\Billing\BillingReestr;
-use App\Models\Receipt\ReceiptType;
-use App\Models\Stead;
-use App\Models\Laratrust\Permission;
-use App\Models\Laratrust\Role;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Admin\Bookkeeping\AdminBalansSteadResource;
+use App\Models\Stead;
+use App\Modules\Receipt\Models\ReceiptTypeModels;
 use Auth;
+use Illuminate\Http\Request;
 
 class BalanceController extends Controller
 {
@@ -44,7 +37,6 @@ class BalanceController extends Controller
         $offset = ($request->page - 1) * $request->limit;
         $steads = $this->paginate($data, $request->limit, $request->page);
         return ['status' => true, 'total' => $total, 'offset' => $offset, 'data' => AdminBalansSteadResource::collection($steads)];
-
     }
 
     public function info(Request $request)
@@ -66,14 +58,14 @@ class BalanceController extends Controller
 
     public function allBalance(Request $request)
     {
-       $stead = Stead::find($request->id);
-        $types = ReceiptType::all();
+        $stead = Stead::find($request->id);
+        $types = ReceiptTypeModels::all();
         $result = ['balans_all' => round($stead->getBalans(), 2)];
         $temp_balans = [];
         foreach ($types as $type) {
             $temp_balans[] = ['name' => $type->name, 'price' => round($stead->getBalans($type->id), 2)];
         }
         $result['balans'] = $temp_balans;
-       return ['status' => true, 'data' => $result];
+        return ['status' => true, 'data' => $result];
     }
 }

@@ -1,21 +1,22 @@
 <?php
 
-namespace App\Models\Billing;
+namespace App\Modules\Billing\Models;
 
-use App\Models\Receipt\DeviceRegisterModel;
-use App\Models\Receipt\InstrumentReadings;
 use App\Models\Log;
-use App\Models\Receipt\MeteringDevice;
-use App\Models\Receipt\ReceiptType;
-use App\Models\Stead;
 use App\Models\MyModel;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Stead;
+use App\Modules\Log\Models\LogModel;
+use App\Modules\Receipt\Models\DeviceRegisterModel;
+use App\Modules\Receipt\Models\InstrumentReadingModel;
+use App\Modules\Receipt\Models\MeteringDevice;
+use App\Modules\Receipt\Models\ReceiptTypeModels;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
+
+use function App\Models\Billing\mb_strtolower;
 
 /**
- * App\Models\Billing\BillingPayment
+ * App\Modules\Billing\Models\BillingPaymentModel
  *
  * @property int $id
  * @property int|null $stead_id id участка
@@ -36,44 +37,36 @@ use Illuminate\Support\Facades\DB;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\File\Models\FileModel> $files
  * @property-read int|null $files_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, InstrumentReadings> $instrumentReadings
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\Receipt\Models\InstrumentReadingModel> $instrumentReadings
  * @property-read int|null $instrument_readings_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Log> $log
  * @property-read int|null $log_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Message\MessageModel> $message
  * @property-read int|null $message_count
  * @property-read Stead|null $stead
- * @method static \Illuminate\Database\Eloquent\Builder|BillingPayment newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|BillingPayment newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|BillingPayment query()
- * @method static \Illuminate\Database\Eloquent\Builder|BillingPayment whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|BillingPayment whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|BillingPayment whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|BillingPayment whereError($value)
- * @method static \Illuminate\Database\Eloquent\Builder|BillingPayment whereHistory($value)
- * @method static \Illuminate\Database\Eloquent\Builder|BillingPayment whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|BillingPayment whereInvoiceId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|BillingPayment wherePaymentDate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|BillingPayment wherePaymentType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|BillingPayment wherePrice($value)
- * @method static \Illuminate\Database\Eloquent\Builder|BillingPayment whereRawData($value)
- * @method static \Illuminate\Database\Eloquent\Builder|BillingPayment whereReestrId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|BillingPayment whereSteadId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|BillingPayment whereTransaction($value)
- * @method static \Illuminate\Database\Eloquent\Builder|BillingPayment whereType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|BillingPayment whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|BillingPayment whereUserId($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, InstrumentReadings> $instrumentReadings
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, InstrumentReadings> $instrumentReadings
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, InstrumentReadings> $instrumentReadings
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, InstrumentReadings> $instrumentReadings
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Log> $log
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingPaymentModel newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingPaymentModel newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingPaymentModel query()
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingPaymentModel whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingPaymentModel whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingPaymentModel whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingPaymentModel whereError($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingPaymentModel whereHistory($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingPaymentModel whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingPaymentModel whereInvoiceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingPaymentModel wherePaymentDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingPaymentModel wherePaymentType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingPaymentModel wherePrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingPaymentModel whereRawData($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingPaymentModel whereReestrId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingPaymentModel whereSteadId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingPaymentModel whereTransaction($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingPaymentModel whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingPaymentModel whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingPaymentModel whereUserId($value)
  * @mixin \Eloquent
  */
-class BillingPayment extends MyModel
+class BillingPaymentModel extends MyModel
 {
     //
     protected $casts = [
@@ -93,17 +86,16 @@ class BillingPayment extends MyModel
     public function save(array $options = [])
     {
         $original_model = $this->getOriginal();
-        Log::addLog($this, $original_model, 'Изменение', $this->stead_id);
+        LogModel::addLog($this, $original_model, 'Изменение', $this->stead_id);
         $this->history = '';
         Cache::tags('payment')->flush();
         return parent::save($options);
     }
 
 
-
     public function instrumentReadings()
     {
-      return $this->hasMany(InstrumentReadings::class, 'payment_id', 'id');
+        return $this->hasMany(InstrumentReadingModel::class, 'payment_id', 'id');
     }
 
     /**
@@ -118,7 +110,7 @@ class BillingPayment extends MyModel
 
     public function getType()
     {
-      return $this->hasOne(ReceiptType::class, 'id', 'type');
+        return $this->hasOne(ReceiptTypeModels::class, 'id', 'type');
     }
 
     public function getDeviceReestrForPayment()
@@ -174,8 +166,8 @@ class BillingPayment extends MyModel
                     return $payment;
                 }
             } else {
-               $payment->dubl = true;
-               return $payment;
+                $payment->dubl = true;
+                return $payment;
             }
         } catch (\Exception $e) {
             return false;
@@ -187,14 +179,14 @@ class BillingPayment extends MyModel
     /**
      * разнести платежку по счетам садоводов
      *
-     * @deprecated
      * @param BillingBankReestr $reestr
      * @return bool
+     * @deprecated
      */
     public static function createPlaymentOLd(array $item)
     {
         try {
-            $date = date_create_from_format('d-m-Y H-i-s', $item[0]. ' ' .$item[1]);
+            $date = date_create_from_format('d-m-Y H-i-s', $item[0] . ' ' . $item[1]);
             $payment_data = date_format($date, 'Y-m-d H:i:s');
             $payment = new self;
             $payment->price = (float)str_replace(',', '.', $item[8]);
@@ -271,17 +263,16 @@ class BillingPayment extends MyModel
      */
     public function checkNoDublicate()
     {
-        $find = BillingPayment::query()
+        $find = BillingPaymentModel::query()
             ->where('payment_date', $this->payment_date)
             ->where('price', $this->price)
 //            ->where('transaction', $this->transaction)
             ->first();
-        if ($find){
+        if ($find) {
             return false;
         } else {
             return true;
         }
-
     }
 
     /**
@@ -293,11 +284,11 @@ class BillingPayment extends MyModel
      */
     public static function getPaymentForStead($stead_id, $type = false)
     {
-        $query = BillingPayment::query()->where('stead_id', $stead_id);
+        $query = BillingPaymentModel::query()->where('stead_id', $stead_id);
         if ($type) {
             $query->where('type', $type);
         }
-        $invoices  = $query->orderBy('created_at')->get();
+        $invoices = $query->orderBy('created_at')->get();
         return $invoices;
     }
 
@@ -312,9 +303,9 @@ class BillingPayment extends MyModel
         $status = true;
         if ($data) {
             foreach ($data as $item) {
-                $meter = InstrumentReadings::firstOrNew([
+                $meter = InstrumentReadingModel::firstOrNew([
                     'value' => (int)$item['value'],
-                    'device_id' =>  $item['device']
+                    'device_id' => $item['device']
                 ]);
                 $meter->payment_id = $this->id;
                 $meter->stead_id = $this->stead_id;
@@ -338,12 +329,12 @@ class BillingPayment extends MyModel
      */
     public function deleteMeterReading()
     {
-       $items = InstrumentReadings::query()->where(['payment_id' => $this->id])->get();
-       if ($items) {
-           foreach ($items as $item) {
-               $item->delete();
-           }
-       }
+        $items = InstrumentReadingModel::query()->where(['payment_id' => $this->id])->get();
+        if ($items) {
+            foreach ($items as $item) {
+                $item->delete();
+            }
+        }
     }
 
 
@@ -423,7 +414,7 @@ class BillingPayment extends MyModel
     {
         $data = $this->raw_data;
         $str = mb_strtolower($data[$col]);
-        $typeList = ReceiptType::all();
+        $typeList = ReceiptTypeModels::all();
         $type = false;
         foreach ($typeList as $item) {
             $options = $item->options;
@@ -434,7 +425,6 @@ class BillingPayment extends MyModel
                         $type = $item->id;
                     }
                 }
-
             }
         }
         if ($type) {

@@ -33,13 +33,7 @@ export default {
     getList() {
       getCameraList()
         .then(response => {
-          if (response.data.status) {
-            this.list = response.data.data
-          } else {
-            if (response.data.data) {
-              this.$message.error(response.data.data)
-            }
-          }
+          this.list = response.data.data
         })
     }
 

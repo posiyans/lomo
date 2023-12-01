@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Modules\Log\Models\LogModel;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -36,7 +37,7 @@ class MyModel extends Model
     {
         $original_model = $this->getOriginal();
         if ($this->save($options)) {
-            Log::addLog($this, $original_model, $description);
+            LogModel::addLog($this, $original_model, $description);
             return true;
         }
         return false;
@@ -45,7 +46,7 @@ class MyModel extends Model
     public function logAndDelete($description = null,)
     {
         $original_model = $this->getOriginal();
-        Log::deleteModel($this, $description);
+        LogModel::deleteModel($this, $description);
         if ($this->delete()) {
             return true;
         }

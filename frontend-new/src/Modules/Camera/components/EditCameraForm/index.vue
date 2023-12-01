@@ -20,16 +20,16 @@
         hint="rtsp://user:password@10.10.10.10:1234/ip01/1"
         :rules="[required]"
       />
-      <q-input
+      <InputNumber
         outlined
         v-model="data.ttl"
         label="TTL"
-        type="number"
         lazy-rules
+        dense
         hint="Время обновления картинки, сек"
         :rules="[required]"
+        style="max-width: 250px;"
       />
-
       <div>
         <q-btn :label="buttonTitle" type="submit" color="primary" />
       </div>
@@ -41,16 +41,20 @@
 /* eslint-disable */
 import { computed, defineComponent, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { addCamera, updateCamera } from 'src/Modules/Camera/api/camera-admin-api'
+import { addCamera, updateCamera } from 'src/Modules/Camera/api/camera.js'
 import { required } from 'src/utils/validators'
+import InputNumber from 'components/Input/InputNumber/index.vue'
 
 export default defineComponent({
-  components: {},
+  components: {
+    InputNumber
+  },
   props: {
     camera: {
       type: Object,
       default: () => {
         return {
+          access: 'all',
           name: '',
           url: '',
           ttl: 2190
@@ -75,7 +79,6 @@ export default defineComponent({
       return 'Добавить'
     })
     const saveData = () => {
-      console.log('dddd')
       let func = addCamera
       if (edit.value) {
         func = updateCamera

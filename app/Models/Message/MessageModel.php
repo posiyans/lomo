@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 /**
  * App\Models\Message\MessageModel
  *
- * @deprecated 
+ * @deprecated
  * @property int $id
  * @property int $user_id
  * @property string|null $channel_name
@@ -42,10 +42,6 @@ use Illuminate\Support\Facades\Auth;
  * @method static \Illuminate\Database\Eloquent\Builder|MessageModel whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MessageModel withTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|MessageModel withoutTrashed()
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
  * @mixin \Eloquent
  */
 class MessageModel extends MyModel

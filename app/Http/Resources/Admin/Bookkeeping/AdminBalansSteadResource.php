@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources\Admin\Bookkeeping;
 
-use App\Models\Receipt\ReceiptType;
+use App\Modules\Receipt\Models\ReceiptTypeModels;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class AdminBalansSteadResource extends JsonResource
@@ -10,18 +10,18 @@ class AdminBalansSteadResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return array
      */
     public function toArray($request)
     {
-        $types = ReceiptType::getReceiptTypeIds();
+        $types = ReceiptTypeModels::getReceiptTypeIds();
         $temp_balans = [];
-        foreach ($types  as $type) {
-            $temp_balans['d'.$type] = round($this->getBalans($type), 2);
+        foreach ($types as $type) {
+            $temp_balans['d' . $type] = round($this->getBalans($type), 2);
         }
         return [
-            'id'=>$this->id,
+            'id' => $this->id,
             'number' => $this->number,
             'size' => $this->size,
             'balans_all' => round($this->getBalans(), 2),
@@ -29,6 +29,5 @@ class AdminBalansSteadResource extends JsonResource
             'last_payment' => $this->lastPayment,
 
         ];
-
     }
 }

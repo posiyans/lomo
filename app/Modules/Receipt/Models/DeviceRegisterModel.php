@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Models\Receipt;
+namespace App\Modules\Receipt\Models;
 
 use App\Models\MyModel;
+use App\Models\Receipt\id;
 
 /**
- * App\Models\Receipt\DeviceRegisterModel
+ * App\Modules\Receipt\Models\DeviceRegisterModel
  *
  * @property int $id
  * @property int $type_id тип прибора
@@ -19,7 +20,7 @@ use App\Models\MyModel;
  * @property bool $active запрашивать показания
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Receipt\MeteringDevice|null $MeteringDevice
+ * @property-read \App\Modules\Receipt\Models\MeteringDevice|null $MeteringDevice
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\File\Models\FileModel> $files
  * @property-read int|null $files_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
@@ -41,10 +42,6 @@ use App\Models\MyModel;
  * @method static \Illuminate\Database\Eloquent\Builder|DeviceRegisterModel whereTypeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DeviceRegisterModel whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DeviceRegisterModel whereVerificationDate($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
  * @mixin \Eloquent
  */
 class DeviceRegisterModel extends MyModel
@@ -69,7 +66,7 @@ class DeviceRegisterModel extends MyModel
         'initial_data' => 0,
         'serial_number' => 'auto_create',
         'device_brand' => 'auto_create',
-        'installation_date'=> null,
+        'installation_date' => null,
         'verification_date' => null,
         'descriptions' => ''
     ];
@@ -81,13 +78,12 @@ class DeviceRegisterModel extends MyModel
 
     public function getTypeName()
     {
-
         return [$this->MeteringDevice->receiptType->name, $this->MeteringDevice->name];
     }
 
     public function getReadings()
     {
-        return $this->hasMany(InstrumentReadings::class, 'device_id', 'id')->orderBy('created_at', 'desc');
+        return $this->hasMany(InstrumentReadingModel::class, 'device_id', 'id')->orderBy('created_at', 'desc');
     }
 
     /**
@@ -97,7 +93,7 @@ class DeviceRegisterModel extends MyModel
      */
     public function getLastReading()
     {
-        return  InstrumentReadings::where('device_id', $this->id)->orderBy('created_at', 'desc')->first();
+        return InstrumentReadingModel::where('device_id', $this->id)->orderBy('created_at', 'desc')->first();
     }
 
     /**
@@ -120,7 +116,7 @@ class DeviceRegisterModel extends MyModel
      */
     public function getLastInvoiceReading()
     {
-        return  InstrumentReadings::where('device_id', $this->id)->whereNotNull('invoice_id')->orderBy('created_at', 'desc')-> first();
+        return InstrumentReadingModel::where('device_id', $this->id)->whereNotNull('invoice_id')->orderBy('created_at', 'desc')->first();
     }
 
 
@@ -131,7 +127,7 @@ class DeviceRegisterModel extends MyModel
      */
     public function addReading($value)
     {
-        $reading = new InstrumentReadings();
+        $reading = new InstrumentReadingModel();
         $reading->stead_id = $this->stead_id;
         $reading->device_id = $this->id;
         $reading->value = $value;
@@ -146,12 +142,12 @@ class DeviceRegisterModel extends MyModel
      * добавить прибор
      *
      * @param $stead id - участка
-     * @param $type  - тип прибора
+     * @param $type - тип прибора
      * @param array $options массив с остальными необязательными параметрами
      * [
      *      initial_data - начальные показания
-     *      serial_number - integer	серийный номер прибора
-     *      device_brand - text	модель прибора
+     *      serial_number - integer    серийный номер прибора
+     *      device_brand - text    модель прибора
      *      installation_date - date дата установки
      *      verification_date - date дата до следующей поверки прибора
      *      descriptions - text коментарий
@@ -165,12 +161,10 @@ class DeviceRegisterModel extends MyModel
         $device->fill($options);
         $device->stead_id = $stead;
         $device->type_id = $type;
-        if ($device->logAndSave('Добавлен прибор', $device->stead_id ))
-        {
+        if ($device->logAndSave('Добавлен прибор', $device->stead_id)) {
             return $device;
         }
         return false;
-
     }
 
 

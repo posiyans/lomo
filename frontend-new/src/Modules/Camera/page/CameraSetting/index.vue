@@ -28,7 +28,7 @@
           </div>
         </td>
         <td class="">
-          <ShowCamera :item="item" />
+          <ShowCamera :key="key" :item="item" />
         </td>
       </tr>
     </table>
@@ -36,9 +36,10 @@
 </template>
 
 <script>
-import { fetchCameraList, refreshCamera } from 'src/Modules/Camera/api/camera-admin-api.js'
+
 import ShowCamera from 'src/Modules/Camera/components/ShowCamera/index.vue'
 import AddCamera from 'src/Modules/Camera/components/AddCamera/index.vue'
+import { getCameraList, refreshCamera } from 'src/Modules/Camera/api/camera'
 
 export default {
   components: { ShowCamera, AddCamera },
@@ -58,19 +59,14 @@ export default {
     refresh(id) {
       refreshCamera(id)
         .then(response => {
-          if (response.data.status) {
-            this.getList()
-          } else {
-            if (response.data.data) {
-              this.$message.error(response.data.data)
-            }
-          }
+          this.getList()
         })
     },
     getList() {
-      fetchCameraList()
+      getCameraList({ full: true })
         .then(response => {
           this.list = response.data.data
+          this.key++
         })
     }
   }

@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Receipt\ReceiptType;
+use App\Modules\Receipt\Models\ReceiptTypeModels;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
@@ -112,7 +112,7 @@ class QrCodeModel
     /**
      * установить сумму платежа в копейках
      *
-     * @param  int  $cash
+     * @param int $cash
      */
     public function setCash(int $cash)
     {
@@ -124,7 +124,7 @@ class QrCodeModel
     public function fillDetailsDevice($ReceiptType, $steadModel)
     {
         if (is_int($ReceiptType) || is_string($ReceiptType)) {
-            $ReceiptType = ReceiptType::findOrFail((int)$ReceiptType);
+            $ReceiptType = ReceiptTypeModels::findOrFail((int)$ReceiptType);
         }
         if (is_int($steadModel) || is_string($steadModel)) {
             $steadModel = Stead::findOrFail((int)$steadModel);
@@ -136,7 +136,7 @@ class QrCodeModel
             $description .= $MeteringDevice->name . ' ' . $MeteringDevice->cash_description . ' ';
         }
 //        полное назначение не проходит в банк клиенте
-//        $this->out .= '|Purpose=' . $ReceiptType->name . ' ' . $discription;
+//        $this->out .= '|Purpose=' . $ReceiptTypeModels->name . ' ' . $discription;
         $this->out .= '|Purpose=' . $ReceiptType->name . ' участок ' . $steadModel->number;
         $this->out .= '|PersAcc=' . $steadModel->number;
         if ($cash > 0) {

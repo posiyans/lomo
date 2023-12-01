@@ -1,18 +1,20 @@
 <?php
 
-namespace App\Models\Billing;
+namespace App\Modules\Billing\Models;
 
-use App\Models\Receipt\InstrumentReadings;
-use App\Models\Receipt\ReceiptType;
-use App\Models\Stead;
+use App\Models\Billing\сумма;
+use App\Models\Billing\счет;
+use App\Models\Billing\тип;
+use App\Models\Billing\участок;
 use App\Models\MyModel;
+use App\Models\Stead;
+use App\Modules\Receipt\Models\InstrumentReadingModel;
+use App\Modules\Receipt\Models\ReceiptTypeModels;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 
 /**
- * App\Models\Billing\BillingInvoice
+ * App\Modules\Billing\Models\BillingInvoice
  *
  * @property int $id
  * @property string $title
@@ -27,16 +29,16 @@ use Illuminate\Support\Facades\DB;
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read ReceiptType|null $ReceiptType
+ * @property-read \App\Modules\Receipt\Models\ReceiptTypeModels|null $ReceiptTypeModels
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\File\Models\FileModel> $files
  * @property-read int|null $files_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
  * @property-read int|null $log_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Message\MessageModel> $message
  * @property-read int|null $message_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, InstrumentReadings> $metersData
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\Receipt\Models\InstrumentReadingModel> $metersData
  * @property-read int|null $meters_data_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Billing\BillingPayment> $payments
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\Billing\Models\BillingPaymentModel> $payments
  * @property-read int|null $payments_count
  * @property-read Stead|null $stead
  * @method static \Illuminate\Database\Eloquent\Builder|BillingInvoice newModelQuery()
@@ -58,21 +60,9 @@ use Illuminate\Support\Facades\DB;
  * @method static \Illuminate\Database\Eloquent\Builder|BillingInvoice whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|BillingInvoice withTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|BillingInvoice withoutTrashed()
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, InstrumentReadings> $metersData
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Billing\BillingPayment> $payments
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, InstrumentReadings> $metersData
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Billing\BillingPayment> $payments
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, InstrumentReadings> $metersData
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Billing\BillingPayment> $payments
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, InstrumentReadings> $metersData
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Billing\BillingPayment> $payments
  * @mixin \Eloquent
  */
-class BillingInvoice extends MyModel
+class BillingInvoiceModel extends MyModel
 {
 
     use SoftDeletes;
@@ -83,7 +73,6 @@ class BillingInvoice extends MyModel
         'paid' => 'boolean',
         'price' => 'float',
     ];
-
 
 
     /**
@@ -100,9 +89,8 @@ class BillingInvoice extends MyModel
 
     public function payments()
     {
-        return $this->hasMany(BillingPayment::class, 'invoice_id', 'id');
+        return $this->hasMany(BillingPaymentModel::class, 'invoice_id', 'id');
     }
-
 
 
     /**
@@ -112,12 +100,12 @@ class BillingInvoice extends MyModel
      */
     public function metersData()
     {
-        return $this->hasMany(InstrumentReadings::class, 'invoice_id', 'id');
+        return $this->hasMany(InstrumentReadingModel::class, 'invoice_id', 'id');
     }
 
     public function ReceiptType()
     {
-        return $this->hasOne(ReceiptType::class, 'id', 'type');
+        return $this->hasOne(ReceiptTypeModels::class, 'id', 'type');
     }
 
     /**
@@ -163,7 +151,7 @@ class BillingInvoice extends MyModel
         $invoce->reestr_id = $reestr_id;
         $invoce->price = $price;
         $invoce->type = 2;
-        if ($invoce->save()){
+        if ($invoce->save()) {
             return $invoce;
         }
         return false;
@@ -210,7 +198,7 @@ class BillingInvoice extends MyModel
         if ($type) {
             $query->where('type', $type);
         }
-        $invoices  = $query->orderBy('created_at')->get();
+        $invoices = $query->orderBy('created_at')->get();
         return $invoices;
     }
 
@@ -218,10 +206,10 @@ class BillingInvoice extends MyModel
     /**
      * установить что платеж от этого счета
      *
-     * @param BillingPayment $payment
+     * @param BillingPaymentModel $payment
      * @return bool
      */
-    public function match(BillingPayment $payment)
+    public function match(BillingPaymentModel $payment)
     {
         $payment->invoice_id = $this->id;
         if ($payment->logAndSave('Сопоставили платеж')) {

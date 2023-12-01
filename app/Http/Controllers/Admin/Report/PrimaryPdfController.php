@@ -2,13 +2,9 @@
 
 namespace App\Http\Controllers\Admin\Report;
 
+use App\Http\Controllers\Controller;
 use App\Models\Gardening;
 use App\Models\PrimaryQrCodeModel;
-use Illuminate\Http\Request;
-use App\Models\Stead;
-use App\Models\Receipt\ReceiptType;
-use App\Models\QrCodeModel;
-use App\Http\Controllers\Controller;
 
 class PrimaryPdfController extends Controller
 {
@@ -33,7 +29,7 @@ class PrimaryPdfController extends Controller
     }
 
     /**
-     *  @param array $options
+     * @param array $options
      *  'name' - наименование получателя
      *  'inn' - инн получателя
      *  'personal_acc' - номер счета получателя
@@ -48,7 +44,7 @@ class PrimaryPdfController extends Controller
      *  'purpose' - назначение платежа
      *  'sum' - сумма платежа
      */
-    public function addPage(Array $options)
+    public function addPage(array $options)
     {
         $this->page[] = $options;
     }
@@ -73,7 +69,6 @@ class PrimaryPdfController extends Controller
         $this->bic = isset($options['bic']) ? $options['bic'] : '';
         $this->bank_name = isset($options['bank_name']) ? $options['bank_name'] : '';
         $this->cor_acc = isset($options['cor_acc']) ? $options['cor_acc'] : '';
-
     }
 
     /**
@@ -81,7 +76,7 @@ class PrimaryPdfController extends Controller
      */
     public function qrCodeDisable()
     {
-        $this->qr_code= false;
+        $this->qr_code = false;
     }
 
     /**
@@ -124,7 +119,7 @@ class PrimaryPdfController extends Controller
         if ($cash) {
             $kop = round(fmod($cash, 1) * 100);
             if ($kop < 10) {
-                $kop = '0'.$kop;
+                $kop = '0' . $kop;
             }
         }
         $s_arr = [-0.5, 70];
@@ -134,11 +129,11 @@ class PrimaryPdfController extends Controller
             $this->pdf->SetFont('freesans', 'B', 10);
             $this->pdf->Text(75, $s + 51, $stead);
 
-            $this->pdf->SetFont('freesans', '',9);
+            $this->pdf->SetFont('freesans', '', 9);
             if (strlen($purpose) > 100) {
                 $t1 = substr($purpose, 0, strrpos(substr($purpose, 0, 110), ' '));
             } else {
-               $t1 = $purpose;
+                $t1 = $purpose;
             }
             $this->pdf->Text(88, $s + 63, $t1);
             $this->pdf->Text(55, $s + 68, mb_substr($purpose, strlen($t1)));
@@ -159,13 +154,13 @@ class PrimaryPdfController extends Controller
     public function addDescription($desc)
     {
         if ($desc) {
-            $this->pdf->SetFont('freesans', '',12);
+            $this->pdf->SetFont('freesans', '', 12);
             $lines = explode('@', $desc);
             $y = 170;
-            $c= 1;
+            $c = 1;
             foreach ($lines as $line) {
                 if ($c == count($lines)) {
-                    $this->pdf->SetFont('freesans', 'b',14);
+                    $this->pdf->SetFont('freesans', 'b', 14);
                     $y += 2;
                 }
                 $this->pdf->Text(20, $y, $line);
@@ -173,7 +168,6 @@ class PrimaryPdfController extends Controller
                 $c++;
             }
         }
-
     }
 
 
@@ -182,7 +176,7 @@ class PrimaryPdfController extends Controller
         $this->pdf->SetFont('freesans', '', 6);
         $this->pdf->Text(15, 30, 'Код для оплаты в терминалах,');
         $this->pdf->Text(10, 32, 'банкоматах и мобильных приложениях');
-        $fileName= tempnam(sys_get_temp_dir(), 'qr_code');
+        $fileName = tempnam(sys_get_temp_dir(), 'qr_code');
         $code = new PrimaryQrCodeModel();
         $options = [
             'name' => $this->name,
@@ -193,7 +187,7 @@ class PrimaryPdfController extends Controller
             'cor_acc' => $this->cor_acc,
         ];
         $code->setDetailsGardient($options);
-        $code-> setDetailsUser($data);
+        $code->setDetailsUser($data);
         $purpose = isset($data['purpose']) ? $data['purpose'] : false;
         $stead = isset($data['stead_num']) ? $data['stead_num'] : false;
         $cash = isset($data['sum']) ? $data['sum'] : 0;
@@ -218,9 +212,9 @@ class PrimaryPdfController extends Controller
             //ИНН получателя платежа (12-значный)
             $a = 99;
             $arr = str_split($this->inn);
-            $len= count($arr);
+            $len = count($arr);
             for ($i = 1; $i <= $len; $i++) {
-                $this->pdf->Text($a, $s + 34.8, $arr[$len-$i]);
+                $this->pdf->Text($a, $s + 34.8, $arr[$len - $i]);
                 $a = $a - 4;
             }
 
@@ -321,8 +315,8 @@ class PrimaryPdfController extends Controller
 
             // fio и назначение
             $this->pdf->Line(88, $s + 62, 192, $s + 62);
-            $this->pdf->Line(88,$s+67,192,$s+67);
-            $this->pdf->Line(55,$s+72,192,$s+72);
+            $this->pdf->Line(88, $s + 67, 192, $s + 67);
+            $this->pdf->Line(55, $s + 72, 192, $s + 72);
             // сумма платежа
             $this->pdf->Line(80, $s + 78, 95, $s + 78);
             $this->pdf->Line(103, $s + 78, 110, $s + 78);
@@ -347,7 +341,7 @@ class PrimaryPdfController extends Controller
             $this->pdf->SetFont('freesans', '', 8);
             $this->pdf->Text(55, $s + 59, 'Ф.И.О. Плательщика');
             $this->pdf->SetFont('freesans', '', 8);
-            $this->pdf->Text(55, $s+64,  'Назначение платежа' );
+            $this->pdf->Text(55, $s + 64, 'Назначение платежа');
             $this->pdf->SetFont('freesans', '', 8);
             $this->pdf->Text(55, $s + 75, 'Сумма платежа');
             $this->pdf->Text(96, $s + 75, 'руб.');

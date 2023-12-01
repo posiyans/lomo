@@ -2,15 +2,11 @@
 
 namespace App\Http\Controllers\All\InstrumentReading;
 
-use App\Http\Controllers\Admin\Report\PdfController;
-use App\Http\Controllers\Admin\Report\PrimaryPdfController;
 use App\Http\Controllers\Controller;
-use App\Models\Receipt\ReceiptType;
-use Illuminate\Http\Request;
-use App\Models\Stead;
-use App\Models\Receipt\InstrumentReadings;
-use App\Models\Receipt\MeteringDevice;
 use App\Models\Gardening;
+use App\Models\Stead;
+use App\Modules\Receipt\Models\ReceiptTypeModels;
+use Illuminate\Http\Request;
 
 
 class GetDeviceForSteadController extends Controller
@@ -30,7 +26,7 @@ class GetDeviceForSteadController extends Controller
         $type = $request->post('type', false);
         if ($stead_id && $type) {
             $stead = Stead::find($stead_id);
-            $receipt_type = ReceiptType::find($type);
+            $receipt_type = ReceiptTypeModels::find($type);
             if ($stead && $receipt_type) {
                 $devices = $stead->getMeteringDevice($receipt_type);
                 $rez = [];
@@ -38,7 +34,7 @@ class GetDeviceForSteadController extends Controller
                     foreach ($devices as $device) {
                         $last = $device->getLastReading();
                         $rez[] = [
-                            'id' => 'dev_'. $stead_id .'_'. $device->id,
+                            'id' => 'dev_' . $stead_id . '_' . $device->id,
                             'type' => $device->MeteringDevice->id,
                             'name' => $device->MeteringDevice->name,
                             'description' => $device->MeteringDevice->description,
@@ -50,9 +46,9 @@ class GetDeviceForSteadController extends Controller
                     $devices = $receipt_type->MeteringDevice;
                     foreach ($devices as $device) {
                         $rez[] = [
-                            'id'=>'new_' . $stead_id .'_'. $device->id,
+                            'id' => 'new_' . $stead_id . '_' . $device->id,
                             'type' => $device->id,
-                            'name'=>$device->name,
+                            'name' => $device->name,
                             'description' => $device->description,
                             'last' => 0 // todo подумать!!!
                         ];

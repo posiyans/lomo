@@ -37,6 +37,7 @@ export default defineComponent({
       type: Object,
       default: () => {
         return {
+          access: 'all',
           name: '',
           url: '',
           ttl: 2190

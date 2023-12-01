@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers\Admin\Bookkeeping\MeteringDevices;
 
-use App\Http\Resources\Admin\Bookkeeping\AdminDeviceRegisterResource;
-use App\Models\Receipt\DeviceRegisterModel;
-use App\Models\Stead;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Admin\Bookkeeping\AdminDeviceRegisterResource;
+use App\Models\Stead;
+use App\Modules\Receipt\Models\DeviceRegisterModel;
 use Auth;
+use Illuminate\Http\Request;
 
 class DeviceRegisterController extends Controller
 {
-
 
 
     /**
@@ -34,7 +33,7 @@ class DeviceRegisterController extends Controller
             $query->where('stead_id', $request->stead_id);
         }
         $devices = $query->paginate($request->limit);
-        $data = ['status' =>  true];
+        $data = ['status' => true];
         $data['data'] = AdminDeviceRegisterResource::collection($devices);
         return $data;
 //        return ['status'=> true, 'data'=>$device, 'total'=>$device->total()];
@@ -47,13 +46,12 @@ class DeviceRegisterController extends Controller
      */
     public function create()
     {
-
     }
 
     /**
      * Добавит прибор для участка
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -75,7 +73,7 @@ class DeviceRegisterController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -86,7 +84,7 @@ class DeviceRegisterController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -97,8 +95,8 @@ class DeviceRegisterController extends Controller
     /**
      * Обновить прибор
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -116,7 +114,7 @@ class DeviceRegisterController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

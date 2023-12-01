@@ -2,9 +2,7 @@
 
 namespace App\Models\Notification\Sms;
 
-use App\Http\Controllers\Admin\Bookkeeping\Billing\PaymentController;
 use App\Models\MyModel;
-use Illuminate\Database\Eloquent\Model;
 
 /**
  * App\Models\Notification\Sms\Sms
@@ -42,10 +40,6 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Sms whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Sms whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Sms whereUserId($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
  * @mixin \Eloquent
  */
 class Sms extends MyModel
@@ -72,7 +66,7 @@ class Sms extends MyModel
                 $model->status = $sms->getStatus();
                 $model->sms_id = $sms->getSmsId();
                 $model->price = $sms->getPrice();
-                if ($model->logAndSave('Отправка СМС на '. $phone . ' код: ' . $code) && $model->status == 'OK') {
+                if ($model->logAndSave('Отправка СМС на ' . $phone . ' код: ' . $code) && $model->status == 'OK') {
                     return true;
                 }
             }
@@ -82,10 +76,10 @@ class Sms extends MyModel
 
     public static function getGateway(string $name)
     {
-        $className = __DIR__.'/SmsGateway/'.$name.'/SmsController.php';
+        $className = __DIR__ . '/SmsGateway/' . $name . '/SmsController.php';
         if (file_exists($className)) {
             require_once($className);
-            $class = '\\'.$name.'\SmsController';
+            $class = '\\' . $name . '\SmsController';
             return $class;
         } else {
             return false;
@@ -96,7 +90,7 @@ class Sms extends MyModel
     public static function validCode($phone, $code)
     {
         $valid = self::where('phone', $phone)->where('text', $code)->where('type', 'code')->first();
-        if($valid) {
+        if ($valid) {
             $valid->type = 'old_code';
             $valid->save();
             return true;

@@ -2,19 +2,12 @@
 
 namespace App\Http\Controllers\Admin\Bookkeeping\Billing\RegisterOfCharges;
 
-use App\Http\Resources\Admin\Bookkeeping\AdminInvoiceResource;
-use App\Http\Resources\Admin\Bookkeeping\AdminPaymentResource;
-use App\Models\Billing\BillingInvoice;
-use App\Models\Billing\BillingPayment;
-use App\Models\Billing\BillingReestr;
-use App\Models\Receipt\InstrumentReadings;
-use App\Models\Receipt\MeteringDevice;
-use App\Models\Receipt\ReceiptType;
-use App\Models\Stead;
-use App\Models\Laratrust\Permission;
-use App\Models\Laratrust\Role;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Stead;
+use App\Modules\Billing\Models\BillingInvoice;
+use App\Modules\Billing\Models\BillingReestrModel;
+use App\Modules\Receipt\Models\MeteringDevice;
+use App\Modules\Receipt\Models\ReceiptTypeModels;
 use Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -42,20 +35,22 @@ class AddRegisterOfChargesController extends Controller
     public static function addRegister($type, $receipt, $date = false, $title = false)
     {
         if ($type && is_array($receipt)) {
-            $receiptModel = ReceiptType::find($type);
+            $receiptModel = ReceiptTypeModels::find($type);
             if ($receiptModel) {
                 $rates = MeteringDevice::whereIn('id', $receipt)->where('type_id', $receiptModel->id)->get();
-                $reestr = new BillingReestr();
+                $reestr = new BillingReestrModel();
                 $reestr->title = $title;
                 $reestr->type = $type;
                 $reestr->options = $rates;
                 DB::beginTransaction();
                 if ($reestr->logAndSave('Добавлено начисление')) {
-                     $result = false;
+                    $result = false;
                     if ($receiptModel->depends == 1) {
                         $result = (new self)->setInvoiceForStead($title, $rates, $type, $reestr->id);
-                    } else if ($receiptModel->depends == 2) {
-                        $result = (new self)->setInvoiceForDevice($title, $rates, $type, $reestr->id);
+                    } else {
+                        if ($receiptModel->depends == 2) {
+                            $result = (new self)->setInvoiceForDevice($title, $rates, $type, $reestr->id);
+                        }
                     }
                     $reestr->options = $rates;
                     if ($result && $reestr->save()) {
@@ -79,23 +74,23 @@ class AddRegisterOfChargesController extends Controller
      * @param $reestr_id
      * @return bool
      */
-    public  function setInvoiceForStead($title, $devices, $type, $reestr_id)
+    public function setInvoiceForStead($title, $devices, $type, $reestr_id)
     {
         $steads = Stead::all();
         $s = [];
         $status = true;
         foreach ($steads as $stead) {
-            $description  = '';
+            $description = '';
             $price = 0;
             foreach ($devices as $device) {
                 $device->rateNow();
                 $price += $device->rate['ratio_a'] * ($stead->size / 100);
                 $price += $device->rate['ratio_b'];
                 if ($device->rate['ratio_a'] > 0 || $device->rate['ratio_b'] > 0) {
-                    $description.=$device->name .': ';
+                    $description .= $device->name . ': ';
                     if ($device->rate['ratio_a'] > 0) {
-                       $description .= ($stead->size / 100) .' * '. $device->rate['description'];
-                       $description .= ' = ' . $device->rate['ratio_a'] * ($stead->size / 100) . ' руб';
+                        $description .= ($stead->size / 100) . ' * ' . $device->rate['description'];
+                        $description .= ' = ' . $device->rate['ratio_a'] * ($stead->size / 100) . ' руб';
                     }
                     if ($device->rate['ratio_b'] > 0) {
                         $description .= $device->rate['description'];
@@ -103,7 +98,7 @@ class AddRegisterOfChargesController extends Controller
                     $description .= ';@';
                 }
             }
-            $description .= 'Итого: '. $price . ' руб.';
+            $description .= 'Итого: ' . $price . ' руб.';
             if (!BillingInvoice::createInvoiceForStead($stead->id, $price, $title, $type, $date = false, $reestr_id, $description)) {
                 $status = false;
             }
@@ -147,7 +142,7 @@ class AddRegisterOfChargesController extends Controller
                 }
             }
         }
-            return $status;
+        return $status;
     }
 
 
@@ -171,7 +166,7 @@ class AddRegisterOfChargesController extends Controller
                 $description .= $t[1] . ' ' . $delta . '(' . $last_readings->value . '-' . $old . ') * ' . $price . ' руб@';
             }
             $last_readings = $last_readings->getPreviousReadingsModel();;
-            if (get_class($last_readings) == 'App\\Models\\Receipt\\DeviceRegisterModel') {
+            if (get_class($last_readings) == 'App\\Modules\\Receipt\\Models\\DeviceRegisterModel') {
                 $last_readings->invoice_id = 1;
             }
         }

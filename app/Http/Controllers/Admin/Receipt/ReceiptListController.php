@@ -2,21 +2,17 @@
 
 namespace App\Http\Controllers\Admin\Receipt;
 
-use App\Http\Controllers\Admin\Report\PdfController;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\Bookkeeping\AdminInvoiceResource;
-use App\Models\Billing\BillingInvoice;
-use App\Models\Receipt\ReceiptType;
-use Illuminate\Http\Request;
-use App\Models\Stead;
-use App\Models\Receipt\InstrumentReadings;
-use App\Models\Receipt\MeteringDevice;
 use App\Models\Gardening;
+use App\Modules\Billing\Models\BillingInvoice;
+use Illuminate\Http\Request;
 
 
 class ReceiptListController extends Controller
 {
     protected $query;
+
     /**
      * проверка на суперадмин или на доступ а админ панель
      */
@@ -37,7 +33,6 @@ class ReceiptListController extends Controller
         $this->typeFilter($type);
         $data = $this->query->paginate($request->limit);
         return AdminInvoiceResource::collection($data);
-
     }
 
     /**
@@ -123,10 +118,10 @@ class ReceiptListController extends Controller
 //            $query->where('id', '<=', $stead_max );
 //        }
 //        $steads =$query->paginate($request->limit);
-//        $ReceiptType = ReceiptType::find(2);
+//        $ReceiptTypeModels = ReceiptTypeModels::find(2);
 ////        $discription = '';
 ////        $cash = 0;
-////        foreach ($ReceiptType->MeteringDevice as $MeteringDevice) {
+////        foreach ($ReceiptTypeModels->MeteringDevice as $MeteringDevice) {
 ////            $cash += $MeteringDevice->getTicket($steadModel->id);
 ////            $discription .= $MeteringDevice->name.' '.$MeteringDevice->cash_description . ' ';
 ////        }
@@ -134,7 +129,7 @@ class ReceiptListController extends Controller
 //        foreach ($steads as $stead) {
 //            $temp = [];
 //            $cash = 0;
-//            foreach ($ReceiptType->MeteringDevice as $MeteringDevice) {
+//            foreach ($ReceiptTypeModels->MeteringDevice as $MeteringDevice) {
 //                $temp[$MeteringDevice->name] = round($MeteringDevice->getTicket($stead->id), 2);
 //                $cash += $MeteringDevice->getTicket($stead->id);
 ////                $discription .= $MeteringDevice->name.' '.$MeteringDevice->cash_description . ' ';
@@ -156,37 +151,37 @@ class ReceiptListController extends Controller
 //        $steadModel = false;
 //        $receipt = (int)$request->receipt;
 //        if ($request->isMethod('get')) {
-//            $ReceiptType = ReceiptType::all();
-//            return view('receipt/index', ['stead' => $steadModel, 'receipts' => $ReceiptType]);
+//            $ReceiptTypeModels = ReceiptTypeModels::all();
+//            return view('receipt/index', ['stead' => $steadModel, 'receipts' => $ReceiptTypeModels]);
 //        }
 //        if ($request->isMethod('post')) {
 //
 //            if (isset($request->stead) and isset($request->receipt)) {
 //                $stead = $request->stead;
-//                $ReceiptType = ReceiptType::findOrFail((int)$request->receipt);
+//                $ReceiptTypeModels = ReceiptTypeModels::findOrFail((int)$request->receipt);
 //                $steadModel = Stead::where(['number' => $stead])->first();
-//                if ($ReceiptType) {
-//                    if ($ReceiptType->depends == 0) {
+//                if ($ReceiptTypeModels) {
+//                    if ($ReceiptTypeModels->depends == 0) {
 //
-//                    } elseif ($ReceiptType->depends == 1) {
-//                        $devices = MeteringDevice::where('enable', 1)->where('type_id', $ReceiptType->id)->get();
+//                    } elseif ($ReceiptTypeModels->depends == 1) {
+//                        $devices = MeteringDevice::where('enable', 1)->where('type_id', $ReceiptTypeModels->id)->get();
 //                        foreach ($devices as $device) {
 //                            $device->rateNow();
 //                        }
-//                        return view('receipt/device1', ['stead' => $steadModel, 'devices' => $devices, 'receipt' => $ReceiptType]);
-//                    } elseif ($ReceiptType->depends == 2) {
-//                        $devices = MeteringDevice::where('enable', 1)->where('type_id', $ReceiptType->id)->get();
+//                        return view('receipt/device1', ['stead' => $steadModel, 'devices' => $devices, 'receipt' => $ReceiptTypeModels]);
+//                    } elseif ($ReceiptTypeModels->depends == 2) {
+//                        $devices = MeteringDevice::where('enable', 1)->where('type_id', $ReceiptTypeModels->id)->get();
 //                        foreach ($devices as $device) {
 //                            $device->rateNow();
 //                            $device->getLastIndication($steadModel->id);
 //                        }
-//                        return view('receipt/device1', ['stead' => $steadModel, 'devices' => $devices, 'receipt' => $ReceiptType]);
+//                        return view('receipt/device1', ['stead' => $steadModel, 'devices' => $devices, 'receipt' => $ReceiptTypeModels]);
 //                    }
 //                }
 //            }
 //        }
-//        $ReceiptType = ReceiptType::all();
-//        return view('receipt/index', ['stead' => $steadModel, 'receipts' => $ReceiptType]);
+//        $ReceiptTypeModels = ReceiptTypeModels::all();
+//        return view('receipt/index', ['stead' => $steadModel, 'receipts' => $ReceiptTypeModels]);
 //    }
 //
 //    public function ticket($id, Request $request)
@@ -197,10 +192,10 @@ class ReceiptListController extends Controller
 //        if ($request->save == "on") {
 //            $steadModel->saveData($request);
 //        }
-//        $ReceiptType = ReceiptType::findOrFail((int)$id);
-//        $ReceiptType->saveInstrumentReadings($steadModel, $request);
-//        $cash = $ReceiptType->getCash($steadModel->id);
-//        return view('receipt/ticket', ['stead' => $steadModel, 'receipt' => 1, 'devices' => $ReceiptType, 'cash' => $cash]);
+//        $ReceiptTypeModels = ReceiptTypeModels::findOrFail((int)$id);
+//        $ReceiptTypeModels->saveInstrumentReadings($steadModel, $request);
+//        $cash = $ReceiptTypeModels->getCash($steadModel->id);
+//        return view('receipt/ticket', ['stead' => $steadModel, 'receipt' => 1, 'devices' => $ReceiptTypeModels, 'cash' => $cash]);
 //    }
 //
 

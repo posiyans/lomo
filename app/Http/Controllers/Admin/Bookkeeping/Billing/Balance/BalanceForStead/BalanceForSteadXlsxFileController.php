@@ -3,22 +3,17 @@
 namespace App\Http\Controllers\Admin\Bookkeeping\Billing\Balance\BalanceForStead;
 
 
-use App\Http\Controllers\Admin\Bookkeeping\Billing\Balance\Repository\BalanceForSteadRepository;
 use App\Http\Controllers\Admin\AbstractAdminController;
 use App\Http\Controllers\Admin\Bookkeeping\Billing\Balance\BalanceForStead\Classes\XlsxFileResource;
-
-use App\Models\Receipt\ReceiptType;
+use App\Http\Controllers\Admin\Bookkeeping\Billing\Balance\Repository\BalanceForSteadRepository;
 use App\Models\Stead;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Auth;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\IOFactory;
+use Illuminate\Http\Request;
 
 class BalanceForSteadXlsxFileController extends AbstractAdminController
 {
 
-     /**
+    /**
      * Добавить счета  группк показаний
      *
      * @return \Illuminate\Http\Response

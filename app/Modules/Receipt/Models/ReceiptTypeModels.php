@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Receipt;
+namespace App\Modules\Receipt\Models;
 
 use App\Models\MyModel;
 
@@ -8,8 +8,9 @@ use App\Models\MyModel;
  * Классификация квитанций
  *
  */
+
 /**
- * App\Models\Receipt\ReceiptType
+ * App\Modules\Receipt\Models\ReceiptTypeModels
  *
  * @property int $id
  * @property string|null $name
@@ -19,7 +20,7 @@ use App\Models\MyModel;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int|null $payment_period период оплаты
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Receipt\MeteringDevice> $MeteringDevice
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\Receipt\Models\MeteringDevice> $MeteringDevice
  * @property-read int|null $metering_device_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\File\Models\FileModel> $files
  * @property-read int|null $files_count
@@ -27,28 +28,20 @@ use App\Models\MyModel;
  * @property-read int|null $log_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Message\MessageModel> $message
  * @property-read int|null $message_count
- * @method static \Illuminate\Database\Eloquent\Builder|ReceiptType newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|ReceiptType newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|ReceiptType query()
- * @method static \Illuminate\Database\Eloquent\Builder|ReceiptType whereAutoInvoice($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ReceiptType whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ReceiptType whereDepends($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ReceiptType whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ReceiptType whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ReceiptType whereOptions($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ReceiptType wherePaymentPeriod($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ReceiptType whereUpdatedAt($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Receipt\MeteringDevice> $MeteringDevice
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Receipt\MeteringDevice> $MeteringDevice
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Receipt\MeteringDevice> $MeteringDevice
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Receipt\MeteringDevice> $MeteringDevice
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @method static \Illuminate\Database\Eloquent\Builder|ReceiptTypeModels newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ReceiptTypeModels newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ReceiptTypeModels query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ReceiptTypeModels whereAutoInvoice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ReceiptTypeModels whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ReceiptTypeModels whereDepends($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ReceiptTypeModels whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ReceiptTypeModels whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ReceiptTypeModels whereOptions($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ReceiptTypeModels wherePaymentPeriod($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ReceiptTypeModels whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-class ReceiptType extends MyModel
+class ReceiptTypeModels extends MyModel
 {
     //типы квитанций
     //depends рассчитывать
@@ -75,13 +68,14 @@ class ReceiptType extends MyModel
     }
 
 
-    public function saveInstrumentReadings($stead, $request){
-        if ($this->depends == 2){
+    public function saveInstrumentReadings($stead, $request)
+    {
+        if ($this->depends == 2) {
             foreach ($this->MeteringDevice as $MeteringDevice) {
                 if (isset($request->device[$MeteringDevice->id])) {
                     $val = (float)str_replace(',', '.', $request->device[$MeteringDevice->id]);
                     if ($val > 0) {
-                        $indication = new InstrumentReadings;
+                        $indication = new InstrumentReadingModel;
                         $indication->stead_id = $stead->id;
                         $indication->device_id = $MeteringDevice->id;
                         $indication->value = $val;
@@ -94,7 +88,8 @@ class ReceiptType extends MyModel
         return false;
     }
 
-    public function getCash($stead_id){
+    public function getCash($stead_id)
+    {
         $cash = 0;
         foreach ($this->MeteringDevice as $MeteringDevice) {
             $MeteringDevice->rateNow();

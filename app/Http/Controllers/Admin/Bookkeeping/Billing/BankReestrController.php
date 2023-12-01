@@ -2,18 +2,12 @@
 
 namespace App\Http\Controllers\Admin\Bookkeeping\Billing;
 
-use App\Http\Resources\Admin\Bookkeeping\AdminBalansSteadResource;
-use App\Http\Resources\Admin\Bookkeeping\AdminPaymentResource;
-use App\Models\Billing\BillingBankReestr;
-use App\Models\Billing\BillingInvoice;
-use App\Models\Billing\BillingPayment;
-use App\Models\Billing\BillingReestr;
-use App\Models\Stead;
-use App\Models\Laratrust\Permission;
-use App\Models\Laratrust\Role;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Admin\Bookkeeping\AdminPaymentResource;
+use App\Modules\Billing\Models\BillingBankReestr;
+use App\Modules\Billing\Models\BillingPaymentModel;
 use Auth;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 
@@ -30,7 +24,6 @@ class BankReestrController extends Controller
     {
         $this->middleware('ability:superAdmin,access-admin-panel');
     }
-
 
 
     /**
@@ -52,8 +45,9 @@ class BankReestrController extends Controller
 //        }
 //        $reestrs['status'] = true;
 //        return $reestrs;
-        return ['status'=>true, 'data'=>$reestrs, 'total'=>$reestrs->total()];
+        return ['status' => true, 'data' => $reestrs, 'total' => $reestrs->total()];
     }
+
 //
     public function info(Request $request)
     {
@@ -63,12 +57,12 @@ class BankReestrController extends Controller
 //        $rezult['invoices'] = BillingInvoice::getInvocesForStead($stead->id);
 //        $reestr->data['legend'] = [0,1,5,6,7,8];
         $data = $reestr->data;
-        $data['legend'] = [0,1,5,6,7,8];
+        $data['legend'] = [0, 1, 5, 6, 7, 8];
         $reestr->data = $data;
 //        $reestr->parseType();
 //        $reestr->parseStead();
-        return ['status'=>true, 'data'=>$reestr];
-//        $query = BillingReestr::query();
+        return ['status' => true, 'data' => $reestr];
+//        $query = BillingReestrModel::query();
 //        $article = $query->orderBy('created_at', 'desc')->paginate($request->limit);
 //        return ['status'=>true, 'data'=>$article, 'total'=>$article->total()];
     }
@@ -79,7 +73,7 @@ class BankReestrController extends Controller
         if ($request->data && is_array($request->data)) {
             $data = [];
             foreach ($request->data as $item) {
-                $playment = BillingPayment::createPlayment($item);
+                $playment = BillingPaymentModel::createPlayment($item);
                 if ($playment) {
                     $data[] = new AdminPaymentResource($playment);
                 }
@@ -87,14 +81,13 @@ class BankReestrController extends Controller
             return json_encode(['status' => true, 'data' => $data]);
         }
         if ($request->item && is_array($request->item)) {
-            $playment = BillingPayment::createPlayment($request->item);
-                if ($playment) {
-                    return json_encode(['status' => true, 'data' => new AdminPaymentResource($playment)]);
-                }
+            $playment = BillingPaymentModel::createPlayment($request->item);
+            if ($playment) {
+                return json_encode(['status' => true, 'data' => new AdminPaymentResource($playment)]);
+            }
         }
-        return json_encode(['status' => false, 'data'=>'Фаил не загружен']);
+        return json_encode(['status' => false, 'data' => 'Фаил не загружен']);
     }
-
 
 
     public function uploadReestrOld(Request $request)
@@ -119,22 +112,22 @@ class BankReestrController extends Controller
                 }
                 return json_encode(['status' => false, 'data' => 'Ошибка при сохранении файла']);
             }
-            return json_encode(['status' => false, 'data'=>'Фаил имеет неверный формат']);
+            return json_encode(['status' => false, 'data' => 'Фаил имеет неверный формат']);
         }
-        return json_encode(['status' => false, 'data'=>'Фаил не загружен']);
+        return json_encode(['status' => false, 'data' => 'Фаил не загружен']);
     }
 
     public function parseReestr(Request $request)
     {
-        if ($request->reestr_id){
+        if ($request->reestr_id) {
             $reestr = BillingBankReestr::find($request->reestr_id);
-            if($reestr) {
+            if ($reestr) {
 //                $reestr->parseData();
                 $reestr->parseType();
                 $reestr->parseStead();
                 $reestr->findDublicate();
-                if ($request->action && $request->action == 'save'){
-                  $reestr->save();
+                if ($request->action && $request->action == 'save') {
+                    $reestr->save();
                 }
                 return $reestr;
             }
@@ -144,24 +137,24 @@ class BankReestrController extends Controller
 
     public function update(Request $request)
     {
-        if ($request->reestr && $request->reestr['data']){
-            $data=$request->reestr['data'];
+        if ($request->reestr && $request->reestr['data']) {
+            $data = $request->reestr['data'];
             $id = $request->reestr['id'];
-            $reestr = BillingBankReestr::find($id);
+            $reestr = \App\Modules\Billing\Models\BillingBankReestr::find($id);
             if ($request && $reestr->created_at == $request->reestr['created_at']) {
                 $reestr->data = $data;
                 if ($reestr->save()) {
-                    return json_encode(['status'=>true, 'data'=>$reestr]);
+                    return json_encode(['status' => true, 'data' => $reestr]);
                 }
             }
-            return json_encode(['status'=>false]);
+            return json_encode(['status' => false]);
         }
     }
 
     public function publish(Request $request)
     {
-        if ($request->reestr && $request->reestr['data']){
-            $data=$request->reestr['data'];
+        if ($request->reestr && $request->reestr['data']) {
+            $data = $request->reestr['data'];
             $id = $request->reestr['id'];
             $reestr = BillingBankReestr::find($id);
             if ($reestr->created_at && $reestr->created_at == $request->reestr['created_at']) {
@@ -169,18 +162,18 @@ class BankReestrController extends Controller
                 if ($reestr->save()) {
                     //todo пока некуда разносить
                     DB::beginTransaction();
-                    $rez = BillingPayment::smashTheReestr($reestr);
-                    if ($rez){
+                    $rez = \App\Modules\Billing\Models\BillingPaymentModel::smashTheReestr($reestr);
+                    if ($rez) {
                         $reestr->file_publish = true;
                         if ($reestr->save()) {
                             DB::commit();
-                            return json_encode(['status'=>true, 'data'=>$reestr]);
+                            return json_encode(['status' => true, 'data' => $reestr]);
                         }
                     }
                     DB::rollBack();
                 }
             }
-            return json_encode(['status'=>false]);
+            return json_encode(['status' => false]);
         }
     }
 }

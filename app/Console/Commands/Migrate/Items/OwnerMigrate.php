@@ -2,11 +2,9 @@
 
 namespace App\Console\Commands\Migrate\Items;
 
-use App\Models\Laratrust\Role;
 use App\Models\Owner\OwnerUserModel;
-use App\Modules\File\Classes\SaveFileForObjectClass;
-use App\Modules\Owner\Models\OwnerUserValueModel;
-use Http;
+use App\Modules\Owner\Models\OwnerUserSteadModel;
+use App\Modules\Owner\Models\OwnerUserValueModel as OwnerUserValueModelOriginal;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -35,47 +33,44 @@ class OwnerMigrate
     public static function run()
     {
         echo 'Конвертируем owner' . PHP_EOL;
-        $users = DB::connection('mysql_old')->table('owner_user_models')->get();
-//        $fields = (new OwnerFieldRepository())->keys();
+        $users = DB::connection('mysql_old')->table('owner_user_models')->where('deleted_at', null)->get();
         foreach ($users as $item) {
             $newItem = new OwnerUserModel();
             $newItem->uid = $item->uid;
             $newItem->save();
         }
         $values = DB::connection('mysql_old')->table('owner_user_value_models')->get();
-//        $fields = (new OwnerFieldRepository())->keys();
-        foreach ($users as $item) {
+        foreach ($values as $item) {
             $newItem = new OwnerUserValueModel();
+            $newItem->id = $item->id;
             $newItem->uid = $item->uid;
-            $newItem->uid = $item->uid;
+            $newItem->property = $item->property;
+            $newItem->value = $item->value;
+            $newItem->deleted_at = $item->deleted_at;
+            $newItem->created_at = $item->created_at;
+            $newItem->updated_at = $item->updated_at;
+            $newItem->save();
+        }
+        $steads = DB::connection('mysql_old')->table('owner_user_stead_models')->get();
+        foreach ($steads as $item) {
+            $newItem = new OwnerUserSteadModel();
+            $newItem->id = $item->id;
+            $newItem->owner_uid = $item->owner_uid;
+            $newItem->stead_id = $item->stead_id;
+            $newItem->proportion = $item->proportion;
+            $newItem->deleted_at = $item->deleted_at;
+            $newItem->created_at = $item->created_at;
+            $newItem->updated_at = $item->updated_at;
             $newItem->save();
         }
 //        dump($users);
     }
 
-    private static function setRole($user, $roleName)
-    {
-        $role = Role::where('name', $roleName)->first();
-        $user->syncRolesWithoutDetaching([$role->id]);
-    }
 
-    private static function saveAvatar($user, $avatar_url)
-    {
-        try {
-            $response = Http::get($avatar_url);
-            $tmpfname = tempnam(sys_get_temp_dir(), "user_avatar");
-            $handle = fopen($tmpfname, "w");
-            fwrite($handle, $response->body());
-            fclose($handle);
-            (new SaveFileForObjectClass($user))
-                ->name('user_avatar_' . $user->id)
-                ->size(filesize($tmpfname))
-                ->description('avatar')
-                ->type('image/jpeg')
-                ->file($tmpfname)
-                ->uploadUser($user)
-                ->run();
-        } catch (\Exception $e) {
-        }
-    }
+}
+
+class OwnerUserValueModel extends OwnerUserValueModelOriginal
+{
+    protected $casts = [];
+    public $timestamps = false;
 }

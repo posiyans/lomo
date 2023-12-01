@@ -3,13 +3,10 @@
 namespace App\Http\Abstracts;
 
 
-use App\Models\Receipt\ReceiptType;
-use App\Models\Stead;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Auth;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
 abstract class AbstaractXlsxFile extends Controller
 {
@@ -28,7 +25,7 @@ abstract class AbstaractXlsxFile extends Controller
     public function createXLSX()
     {
         $this->spreadsheet = new Spreadsheet();
-        $this->spreadsheet ->getProperties()->setCreator('snt site')
+        $this->spreadsheet->getProperties()->setCreator('snt site')
             ->setLastModifiedBy('posiyans')
             ->setTitle('https://github.com/posiyans/lomo')
             ->setSubject('https://github.com/posiyans/lomo')
@@ -49,16 +46,17 @@ abstract class AbstaractXlsxFile extends Controller
             $sheet->calculateWorksheetDimension()
         );
     }
+
     /**
      * установить цвет для ячейки
      * @param $cells ячейка
      * @param string $color цвет
      */
-    public function cellColor($cells, $color = 'F28A8C'){
+    public function cellColor($cells, $color = 'F28A8C')
+    {
         $this->spreadsheet->getActiveSheet()->getStyle($cells)->getFill()
             ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
-                    ->getStartColor()->setARGB($color);
-
+            ->getStartColor()->setARGB($color);
     }
 
     /**
@@ -66,7 +64,7 @@ abstract class AbstaractXlsxFile extends Controller
      *
      * @param String $item имя ячейки или диапазон 'A:G'
      */
-    public function setCenter(String $item, $sheet = false)
+    public function setCenter(string $item, $sheet = false)
     {
         if (!$sheet) {
             $sheet = $this->spreadsheet->getActiveSheet();
@@ -85,14 +83,13 @@ abstract class AbstaractXlsxFile extends Controller
             $sheet = $this->spreadsheet->getActiveSheet();
         }
         if (is_array($item)) {
-            foreach (range($item[0],$item[1]) as $col) {
+            foreach (range($item[0], $item[1]) as $col) {
                 $sheet->getColumnDimension($col)->setAutoSize(true);
             }
         }
         if (is_string($item)) {
             $sheet->getColumnDimension($item)->setAutoSize(true);
         }
-
     }
 
     /**

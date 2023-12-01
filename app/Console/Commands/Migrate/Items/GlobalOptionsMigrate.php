@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands\Migrate\Items;
 
-use App\Modules\Setting\Models\GlobalOptionModel;
+use App\Modules\Setting\Models\GlobalOptionModel as GlobalOptionModelOriginal;
 use Illuminate\Support\Facades\DB;
 
 class GlobalOptionsMigrate
@@ -22,4 +22,10 @@ class GlobalOptionsMigrate
         }
     }
 
+
+}
+
+class GlobalOptionModel extends GlobalOptionModelOriginal
+{
+    protected $casts = [];
 }

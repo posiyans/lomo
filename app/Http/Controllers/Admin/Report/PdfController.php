@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Admin\Report;
 use App\Http\Controllers\Controller;
 use App\Models\Gardening;
 use App\Models\QrCodeModel;
-use App\Models\Receipt\ReceiptType;
 use App\Models\Stead;
+use App\Modules\Receipt\Models\ReceiptTypeModels;
 
 class PdfController extends Controller
 {
@@ -70,7 +70,7 @@ class PdfController extends Controller
     public static function fillAmountData($pdf, $ReceiptType, $steadModel)
     {
         if (is_int($ReceiptType) || is_string($ReceiptType)) {
-            $ReceiptType = ReceiptType::find($ReceiptType);
+            $ReceiptType = ReceiptTypeModels::find($ReceiptType);
         }
         if (is_int($steadModel) || is_string($steadModel)) {
             $steadModel = Stead::find($steadModel);
@@ -180,7 +180,7 @@ class PdfController extends Controller
     public static function createRegistryPage($pdf, $ReceiptType, $steads, $fio_print = false)
     {
         if (is_int($ReceiptType)) {
-            $ReceiptType = ReceiptType::findOrFail($ReceiptType);
+            $ReceiptType = ReceiptTypeModels::findOrFail($ReceiptType);
         }
         $pdf->AddPage();
         $pdf->setFontStretching(105);
@@ -257,7 +257,7 @@ class PdfController extends Controller
         }
         $code->fillDetailsDevice(2, $stead_id);
         $code->getFile($fileName);
-//        $this->createQrcode($gardient, $steadModel, $ReceiptType, $fileName);
+//        $this->createQrcode($gardient, $steadModel, $ReceiptTypeModels, $fileName);
         $pdf->Image($fileName, 10, 36, 40, 40, 'PNG', '', '', true, 300, '', false, false, 1, false, false, false);
     }
 
@@ -464,11 +464,11 @@ class PdfController extends Controller
 //            $discription = '';
 //            $cash = 0;
 //            mb_internal_encoding('UTF-8');
-//            foreach ($ReceiptType->MeteringDevice as $MeteringDevice) {
+//            foreach ($ReceiptTypeModels->MeteringDevice as $MeteringDevice) {
 //                $cash += $MeteringDevice->getTicket($steadModel->id);
 //                $discription .= $MeteringDevice->name.' '.$MeteringDevice->cash_description . ' ';
 //            }
-//            $text = $ReceiptType->name.' '.$discription;
+//            $text = $ReceiptTypeModels->name.' '.$discription;
 //            $pdf->Text(88, $s+63, mb_substr($text, 0, 55));
 //            $pdf->Text(60, $s+68, mb_substr($text, 55));
 //            $pdf->Text(82, $s + 74, floor($cash));
@@ -481,12 +481,12 @@ class PdfController extends Controller
 //        $pdf->Text(10, 32, 'банкоматах и мобильных приложениях');
     }
 
-//    public function createQrcode($gardient, $steadModel, $ReceiptType, $fileName)
+//    public function createQrcode($gardient, $steadModel, $ReceiptTypeModels, $fileName)
 //    {
 //       $code = new QrCodeModel;
 //       $code->fillDetailsGardient($gardient);
 //       $code->fillDetailsUserInStead($steadModel);
-//       $code->fillDetailsDevice($ReceiptType, $steadModel);
+//       $code->fillDetailsDevice($ReceiptTypeModels, $steadModel);
 //       $code->getFile($fileName);
 //    }
 
@@ -496,7 +496,7 @@ class PdfController extends Controller
         mb_internal_encoding('UTF-8');
         $steadModel = Stead::find((int)$stead);
         $gardient = $steadModel->gardient;
-        $ReceiptType = ReceiptType::findOrFail((int)$id);
+        $ReceiptType = ReceiptTypeModels::findOrFail((int)$id);
         $code = new QrCodeModel;
         $code->fillDetailsGardient($gardient);
         $code->fillDetailsUser($steadModel);
@@ -770,7 +770,7 @@ class PdfController extends Controller
         $code->setDescription($descript);
         $code->setCash((int)$cash * 100);
         $code->setSteadNumber($stead_number);
-//        $code->fillDetailsDevice($ReceiptType, $steadModel);
+//        $code->fillDetailsDevice($ReceiptTypeModels, $steadModel);
         // create new PDF document
         $pdf = new \TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
         $pdf->setPrintHeader(false);
@@ -987,7 +987,7 @@ class PdfController extends Controller
         $pdf->setPrintFooter(false);
         $steadModel = Stead::find(1);
         $gardient = $steadModel->gardient;
-        $ReceiptType = ReceiptType::findOrFail(2);
+        $ReceiptType = ReceiptTypeModels::findOrFail(2);
         $pdf->AddPage();
         $pdf->setFontStretching(105);
         $pdf->SetFont('freesans', '', 9);

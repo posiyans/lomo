@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Admin\Setting;
 
-use App\Models\Receipt\MeteringDevice;
-use App\Models\Receipt\Rate;
-use App\Models\Receipt\ReceiptType;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Modules\Receipt\Models\MeteringDevice;
+use App\Modules\Receipt\Models\RateModel;
+use App\Modules\Receipt\Models\ReceiptTypeModels;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AdminRateController extends Controller
@@ -29,10 +29,9 @@ class AdminRateController extends Controller
     {
         $models = MeteringDevice::where('type_id', $request->type)->get();
         foreach ($models as $model) {
-             $model->rateNow();
+            $model->rateNow();
         }
-        return ['status' => true, 'data'=>$models];
-
+        return ['status' => true, 'data' => $models];
         //
     }
 
@@ -49,7 +48,7 @@ class AdminRateController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -57,7 +56,7 @@ class AdminRateController extends Controller
         $user = Auth::user();
         if ($user->ability('superAdmin', 'edit-rate')) {
             if ($request->type_id) {
-                $type = ReceiptType::find($request->type_id);
+                $type = ReceiptTypeModels::find($request->type_id);
                 if ($type) {
                     $rate = new MeteringDevice();
                     $rate->type_id = $type->id;
@@ -66,7 +65,7 @@ class AdminRateController extends Controller
                     $rate->description = $request->description;
                     $rate->logAndSave('Добавление');
                     if ($request->rate) {
-                        $r = new Rate();
+                        $r = new RateModel();
                         $r->device_id = $rate->id;
                         $r->ratio_a = $request->rate['ratio_a'] ?? 0;
                         $r->ratio_b = $request->rate['ratio_b'] ?? 0;
@@ -82,7 +81,7 @@ class AdminRateController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -93,7 +92,7 @@ class AdminRateController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -104,8 +103,8 @@ class AdminRateController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -120,7 +119,7 @@ class AdminRateController extends Controller
                 $rate->description = $request->description;
                 $rate->logAndSave('Изменение');
                 if ($request->rate) {
-                    $r = new Rate();
+                    $r = new RateModel();
                     $r->device_id = $rate->id;
                     $r->ratio_a = $request->rate['ratio_a'];
                     $r->ratio_b = $request->rate['ratio_b'];
@@ -135,7 +134,7 @@ class AdminRateController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

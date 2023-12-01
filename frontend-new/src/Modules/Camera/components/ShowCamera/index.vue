@@ -35,7 +35,7 @@ export default {
   },
   computed: {
     cameraUrlFilter() {
-      return process.env.BASE_API + '/api/v1/all/camera/get-image/' + this.item.id + '?s=' + this.time + '.jpg'
+      return process.env.BASE_API + '/api/v2/camera/get-image/' + this.item.id + '?s=' + this.time + '.jpg'
     }
   }
 

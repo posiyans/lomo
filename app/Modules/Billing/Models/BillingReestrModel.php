@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Models\Billing;
+namespace App\Modules\Billing\Models;
 
-use App\Models\Stead;
 use App\Models\MyModel;
+use App\Models\Stead;
 use DB;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 
 
 /**
- * App\Models\Billing\BillingReestr
+ * App\Modules\Billing\Models\BillingReestrModel
  *
  * @property int $id
  * @property string $title
@@ -24,38 +24,30 @@ use Illuminate\Support\Facades\Cache;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\File\Models\FileModel> $files
  * @property-read int|null $files_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Billing\BillingInvoice> $invoices
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\Billing\Models\BillingInvoice> $invoices
  * @property-read int|null $invoices_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
  * @property-read int|null $log_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Message\MessageModel> $message
  * @property-read int|null $message_count
- * @method static \Illuminate\Database\Eloquent\Builder|BillingReestr newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|BillingReestr newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|BillingReestr onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|BillingReestr query()
- * @method static \Illuminate\Database\Eloquent\Builder|BillingReestr whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|BillingReestr whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|BillingReestr whereHistory($value)
- * @method static \Illuminate\Database\Eloquent\Builder|BillingReestr whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|BillingReestr whereOptions($value)
- * @method static \Illuminate\Database\Eloquent\Builder|BillingReestr whereTitle($value)
- * @method static \Illuminate\Database\Eloquent\Builder|BillingReestr whereType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|BillingReestr whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|BillingReestr whereUserId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|BillingReestr withTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|BillingReestr withoutTrashed()
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Billing\BillingInvoice> $invoices
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Billing\BillingInvoice> $invoices
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Billing\BillingInvoice> $invoices
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Billing\BillingInvoice> $invoices
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingReestrModel newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingReestrModel newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingReestrModel onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingReestrModel query()
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingReestrModel whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingReestrModel whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingReestrModel whereHistory($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingReestrModel whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingReestrModel whereOptions($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingReestrModel whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingReestrModel whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingReestrModel whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingReestrModel whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingReestrModel withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|BillingReestrModel withoutTrashed()
  * @mixin \Eloquent
  */
-class BillingReestr extends MyModel
+class BillingReestrModel extends MyModel
 {
     use SoftDeletes;
 
@@ -105,17 +97,16 @@ class BillingReestr extends MyModel
      * @param $title
      * @param $ratio_a
      * @param $ratio_b
-     * @return BillingReestr|bool
+     * @return BillingReestrModel|bool
      */
     public static function createСontributions($user_id, $title, $ratio_a, $ratio_b)
     {
-
-        $reestr = new BillingReestr();
-        $reestr->user_id  = $user_id;
-        $reestr->title  = $title;
-        $reestr->ratio_a  = $ratio_a;
-        $reestr->ratio_b  = $ratio_b;
-        $reestr->type  = 2;
+        $reestr = new BillingReestrModel();
+        $reestr->user_id = $user_id;
+        $reestr->title = $title;
+        $reestr->ratio_a = $ratio_a;
+        $reestr->ratio_b = $ratio_b;
+        $reestr->type = 2;
         DB::beginTransaction();
         if ($reestr->save()) {
             $reestr->cretePayment();
@@ -132,16 +123,15 @@ class BillingReestr extends MyModel
      * @param $title
      * @param $ratio_a
      * @param $ratio_b
-     * @return BillingReestr|bool
+     * @return BillingReestrModel|bool
      */
     public function updateСontributions($user_id, $title, $ratio_a, $ratio_b)
     {
-
-        $this->user_id  = $user_id;
-        $this->title  = $title;
-        $this->ratio_a  = $ratio_a;
-        $this->ratio_b  = $ratio_b;
-        $this->type  = 2;
+        $this->user_id = $user_id;
+        $this->title = $title;
+        $this->ratio_a = $ratio_a;
+        $this->ratio_b = $ratio_b;
+        $this->type = 2;
         DB::beginTransaction();
         if ($this->save()) {
             if ($this->updatePayment()) {
@@ -175,7 +165,7 @@ class BillingReestr extends MyModel
         foreach ($this->invoices as $invoice) {
             $price = $this->ratio_a * $invoice->stead->size * 0.01 + $this->ratio_b;
             $invoice->price = $price;
-            if (!$invoice->save()){
+            if (!$invoice->save()) {
                 $status = false;
                 DB::rollBack();
             }

@@ -2,16 +2,10 @@
 
 namespace App\Http\Controllers\Admin\Bookkeeping\Billing;
 
-use App\Http\Resources\Admin\Bookkeeping\AdminInvoiceResource;
-use App\Http\Resources\Admin\Bookkeeping\AdminPaymentResource;
-use App\Models\Billing\BillingInvoice;
-use App\Models\Billing\BillingPayment;
-use App\Models\Billing\BillingReestr;
-use App\Models\Laratrust\Permission;
-use App\Models\Laratrust\Role;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Admin\Bookkeeping\AdminInvoiceResource;
 use Auth;
+use Illuminate\Http\Request;
 
 class InvoiceController extends Controller
 {
@@ -33,7 +27,7 @@ class InvoiceController extends Controller
     public function index(Request $request)
     {
         return 'index';
-//        $query = BillingReestr::query();
+//        $query = BillingReestrModel::query();
 //        if ($request->find) {
 //            $query->where('title', 'like', "%$request->find%");
 //        }
@@ -57,21 +51,20 @@ class InvoiceController extends Controller
     /**
      * Добавить счет
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         if ($request->price && is_numeric($request->price) && $request->stead['id']) {
-            $invoice = new BillingInvoice();
+            $invoice = new \App\Modules\Billing\Models\BillingInvoice();
             $invoice->fill($request->all());
             $invoice->price = $request->price;
-            $invoice->stead_id  = $request->stead['id'];
+            $invoice->stead_id = $request->stead['id'];
             $invoice->user_id = Auth::user()->id;
             if ($invoice->logAndSave('Добавлен счет')) {
                 return ['status' => true, 'data' => $invoice];
             }
-
         }
         return ['status' => false];
     }
@@ -79,20 +72,20 @@ class InvoiceController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        $data= BillingInvoice::find($id);
-        $rez =  new AdminInvoiceResource($data);
+        $data = \App\Modules\Billing\Models\BillingInvoice::find($id);
+        $rez = new AdminInvoiceResource($data);
         return ['data' => $rez, 'status' => true];
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -103,26 +96,26 @@ class InvoiceController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        $invoice = BillingInvoice::find($id);
+        $invoice = \App\Modules\Billing\Models\BillingInvoice::find($id);
         if ($invoice->id == $request->id) {
             $invoice->description = $request->has('description') ? $request->description : $invoice->description;
         }
         if ($invoice->save()) {
-            return json_encode(['status'=>true, 'data'=> new AdminInvoiceResource($invoice)]);
+            return json_encode(['status' => true, 'data' => new AdminInvoiceResource($invoice)]);
         }
-        return json_encode(['status'=>false]);
+        return json_encode(['status' => false]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

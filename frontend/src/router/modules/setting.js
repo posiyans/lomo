@@ -20,7 +20,8 @@ const settingRouter = {
         title: 'Меню сайта',
         icon: 'documentation',
         affix: true,
-        roles: ['gardening-edit'] }
+        roles: ['gardening-edit']
+      }
     },
     {
       path: 'gardening',
@@ -30,12 +31,13 @@ const settingRouter = {
         title: 'Настройки',
         icon: 'documentation',
         affix: true,
-        roles: ['gardening-edit'] }
+        roles: ['gardening-edit']
+      }
     },
     {
       path: 'rate',
       component: () => import('@/views/admin/settings/Rates/index'),
-      name: 'Rate',
+      name: 'RateModel',
       meta: {
         title: 'Тарифы',
         icon: 'documentation',

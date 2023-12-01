@@ -5,12 +5,9 @@ namespace App\Http\Controllers\Admin\Bookkeeping\Billing;
 use App\Http\Controllers\Admin\Bookkeeping\Billing\RegisterOfCharges\AddOneTimeRegisterOfChargesController;
 use App\Http\Controllers\Admin\Bookkeeping\Billing\RegisterOfCharges\AddRegisterOfChargesController;
 use App\Http\Controllers\Admin\Bookkeeping\Billing\RegisterOfCharges\DeleteRegisterOfChargesController;
-use App\Models\Billing\BillingReestr;
-use App\Models\Laratrust\Permission;
-use App\Models\Laratrust\Role;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Auth;
+use Illuminate\Http\Request;
 
 class ReestrController extends Controller
 {
@@ -32,7 +29,7 @@ class ReestrController extends Controller
     public function index(Request $request)
     {
 //        return 'index';
-        $query = BillingReestr::query();
+        $query = \App\Modules\Billing\Models\BillingReestrModel::query();
         if ($request->find) {
             $query->where('title', 'like', "%$request->find%");
         }
@@ -40,7 +37,7 @@ class ReestrController extends Controller
             $query->where('type', $request->type);
         }
         $article = $query->orderBy('created_at', 'desc')->paginate($request->limit);
-        return ['status'=>true, 'data'=>$article, 'total'=>$article->total()];
+        return ['status' => true, 'data' => $article, 'total' => $article->total()];
     }
 
     /**
@@ -56,7 +53,7 @@ class ReestrController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -82,19 +79,19 @@ class ReestrController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        $reestr = BillingReestr::find($id);
-        return json_encode(['status'=>true, 'data'=>$reestr]);
+        $reestr = \App\Modules\Billing\Models\BillingReestrModel::find($id);
+        return json_encode(['status' => true, 'data' => $reestr]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -105,8 +102,8 @@ class ReestrController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -116,7 +113,7 @@ class ReestrController extends Controller
 //            $ratio_b = (isset($request->ratio_b) && !empty($request->ratio_b)) ? $request->ratio_b : false;
 //            if ($ratio_a || $ratio_b) {
 //                $user_id = Auth::user()->id;
-//                $reestr = BillingReestr::find($id);
+//                $reestr = BillingReestrModel::find($id);
 //                if ($reestr) {
 //                    $rez = $reestr->updateСontributions($user_id, $request->title, $ratio_a,  $ratio_b);
 //                    if ($rez) {
@@ -132,7 +129,7 @@ class ReestrController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

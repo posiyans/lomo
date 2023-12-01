@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Receipt\ReceiptType;
-use Illuminate\Http\Request;
-use App\Models\Stead;
-use App\Models\Receipt\InstrumentReadings;
-use App\Models\Receipt\MeteringDevice;
 use App\Models\Gardening;
+use App\Models\Stead;
+use App\Modules\Receipt\Models\MeteringDevice;
+use App\Modules\Receipt\Models\ReceiptTypeModels;
+use Illuminate\Http\Request;
 
 
 class ReceiptController extends Controller
@@ -20,18 +19,16 @@ class ReceiptController extends Controller
         $steadModel = false;
         $receipt = (int)$request->receipt;
         if ($request->isMethod('get')) {
-            $ReceiptType = ReceiptType::all();
+            $ReceiptType = ReceiptTypeModels::all();
             return view('receipt/index', ['stead' => $steadModel, 'receipts' => $ReceiptType]);
         }
         if ($request->isMethod('post')) {
-
             if (isset($request->stead) and isset($request->receipt)) {
                 $stead = $request->stead;
-                $ReceiptType = ReceiptType::findOrFail((int)$request->receipt);
+                $ReceiptType = ReceiptTypeModels::findOrFail((int)$request->receipt);
                 $steadModel = Stead::where(['number' => $stead])->first();
                 if ($ReceiptType) {
                     if ($ReceiptType->depends == 0) {
-
                     } elseif ($ReceiptType->depends == 1) {
                         $devices = MeteringDevice::where('enable', 1)->where('type_id', $ReceiptType->id)->get();
                         foreach ($devices as $device) {
@@ -49,7 +46,7 @@ class ReceiptController extends Controller
                 }
             }
         }
-        $ReceiptType = ReceiptType::all();
+        $ReceiptType = ReceiptTypeModels::all();
         return view('receipt/index', ['stead' => $steadModel, 'receipts' => $ReceiptType]);
     }
 
@@ -61,12 +58,11 @@ class ReceiptController extends Controller
 //        if ($request->save == "on") {
 //            $steadModel->saveData($request);
 //        }
-//        $ReceiptType = ReceiptType::findOrFail((int)$id);
-//        $ReceiptType->saveInstrumentReadings($steadModel, $request);
-//        $cash = $ReceiptType->getCash($steadModel->id);
-//        return view('receipt/ticket', ['stead' => $steadModel, 'receipt' => 1, 'devices' => $ReceiptType, 'cash' => $cash]);
+//        $ReceiptTypeModels = ReceiptTypeModels::findOrFail((int)$id);
+//        $ReceiptTypeModels->saveInstrumentReadings($steadModel, $request);
+//        $cash = $ReceiptTypeModels->getCash($steadModel->id);
+//        return view('receipt/ticket', ['stead' => $steadModel, 'receipt' => 1, 'devices' => $ReceiptTypeModels, 'cash' => $cash]);
 //    }
-
 
 
 }

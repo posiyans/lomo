@@ -25,4 +25,20 @@ class GetGlobalOption
         }
         throw new \Exception('Значение не найдено');
     }
+
+    public static function getAll($name)
+    {
+        return GlobalOptionModel::where('name', $name)->get();
+    }
+
+
+    public static function findOneByValueField($name, $field, $val)
+    {
+        $item = GlobalOptionModel::where('name', $name)->whereJsonContains('value->' . $field, $val)->first();
+        if ($item) {
+            return $item;
+        }
+        throw new \Exception('Значение не найдено');
+    }
+
 }

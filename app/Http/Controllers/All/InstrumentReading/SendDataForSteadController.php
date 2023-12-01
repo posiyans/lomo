@@ -2,16 +2,12 @@
 
 namespace App\Http\Controllers\All\InstrumentReading;
 
-use App\Http\Controllers\Admin\Report\PdfController;
-use App\Http\Controllers\Admin\Report\PrimaryPdfController;
 use App\Http\Controllers\Controller;
-use App\Models\Receipt\DeviceRegisterModel;
-use App\Models\Receipt\ReceiptType;
-use Illuminate\Http\Request;
-use App\Models\Stead;
-use App\Models\Receipt\InstrumentReadings;
-use App\Models\Receipt\MeteringDevice;
 use App\Models\Gardening;
+use App\Models\Stead;
+use App\Modules\Receipt\Models\DeviceRegisterModel;
+use App\Modules\Receipt\Models\ReceiptTypeModels;
+use Illuminate\Http\Request;
 
 
 class SendDataForSteadController extends Controller
@@ -29,7 +25,7 @@ class SendDataForSteadController extends Controller
         $values = $request->post('value', []);
         if ($stead_id && $type) {
             $stead = Stead::find($stead_id);
-            $receipt_type = ReceiptType::find($type);
+            $receipt_type = ReceiptTypeModels::find($type);
             if ($stead && $receipt_type) {
                 $devices = $stead->getMeteringDevice($receipt_type);
                 if (count($devices) == 0) {
@@ -39,7 +35,7 @@ class SendDataForSteadController extends Controller
                         if (count($a) == 3 && $a[0] == 'new' && $a[1] == $stead_id && $receipt_type->checkForType((int)$a[2])) {
                             $dev = DeviceRegisterModel::addDevice($stead_id, $a[2]);
                             if ($dev) {
-                                $values['dev_'.$stead_id.'_'.$dev->id] = $value;
+                                $values['dev_' . $stead_id . '_' . $dev->id] = $value;
                             }
                         }
                     }
@@ -50,14 +46,13 @@ class SendDataForSteadController extends Controller
                     $this->setDataForDevice($device, $values);
                 }
                 if ($this->errors) {
-                    return ['status' => false, 'error_message'=> $this->errors, 'devices' => $this->items];
-                }else {
-                    return ['status' => true, 'data'=>$this->reading];
+                    return ['status' => false, 'error_message' => $this->errors, 'devices' => $this->items];
+                } else {
+                    return ['status' => true, 'data' => $this->reading];
                 }
             }
         }
     }
-
 
 
     public function setDataForDevice($device, $values)
@@ -65,7 +60,7 @@ class SendDataForSteadController extends Controller
         $val = $this->findValueForDevice($device, $values);
         if ($val) {
             $temp = [
-                'id' => 'dev_'. $device->stead_id .'_'. $device->id,
+                'id' => 'dev_' . $device->stead_id . '_' . $device->id,
                 'type' => $device->MeteringDevice->id,
                 'name' => $device->MeteringDevice->name,
                 'description' => $device->MeteringDevice->description,
@@ -101,7 +96,7 @@ class SendDataForSteadController extends Controller
 
     public function findValueForDevice($device, $values)
     {
-        $key_name = 'dev_'. $device->stead_id. '_' . $device->id;
+        $key_name = 'dev_' . $device->stead_id . '_' . $device->id;
         if (isset($values[$key_name])) {
             return (int)$values[$key_name];
         }

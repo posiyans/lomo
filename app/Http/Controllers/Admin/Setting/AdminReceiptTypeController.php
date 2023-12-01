@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers\Admin\Setting;
 
-use App\Http\Resources\Admin\Setting\AdminReceiptTypesResource;
-use App\Models\Receipt\MeteringDevice;
-use App\Models\Receipt\Rate;
-use App\Models\Receipt\ReceiptType;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\Admin\Setting\AdminReceiptTypesResource;
+use App\Modules\Receipt\Models\ReceiptTypeModels;
+use Illuminate\Http\Request;
 
 class AdminReceiptTypeController extends Controller
 {
@@ -28,7 +25,7 @@ class AdminReceiptTypeController extends Controller
      */
     public function index(Request $request)
     {
-        $items = ReceiptType::all();
+        $items = ReceiptTypeModels::all();
 //        $data = A;
         return ['status' => true, 'data' => AdminReceiptTypesResource::collection($items)];
     }
@@ -46,14 +43,13 @@ class AdminReceiptTypeController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         if ($request->name) {
-
-            $item = new ReceiptType();
+            $item = new ReceiptTypeModels();
             $item->name = $request->name;
             if ($item->logAndSave('Создание')) {
                 return ['status' => true, 'data' => $item];
@@ -66,23 +62,23 @@ class AdminReceiptTypeController extends Controller
      * todo не то что должно быть !!!
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-       $type = ReceiptType::find($id);
-       if ($type) {
-           $items = $type->MeteringDevice;
-           return ['status' => true, 'data' => $items];
-       }
-       return ['status' => false];
+        $type = ReceiptTypeModels::find($id);
+        if ($type) {
+            $items = $type->MeteringDevice;
+            return ['status' => true, 'data' => $items];
+        }
+        return ['status' => false];
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -93,26 +89,26 @@ class AdminReceiptTypeController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-      $item = ReceiptType::find($id);
-      if ($item) {
-          $item->fill($request->all());
-          if ($item->logAndSave('Изменение')) {
-              return ['status' => true, 'data' => $item];
-          }
-      }
+        $item = ReceiptTypeModels::find($id);
+        if ($item) {
+            $item->fill($request->all());
+            if ($item->logAndSave('Изменение')) {
+                return ['status' => true, 'data' => $item];
+            }
+        }
         return ['status' => false, 'data' => 'Упс'];
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

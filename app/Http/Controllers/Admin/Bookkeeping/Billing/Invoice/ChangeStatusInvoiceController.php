@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Admin\Bookkeeping\Billing\Invoice;
 
-use App\Models\Billing\BillingInvoice;
-use App\Models\Billing\BillingPayment;
 use App\Http\Controllers\Controller;
+use App\Modules\Billing\Models\BillingInvoice;
+use App\Modules\Billing\Models\BillingPaymentModel;
 use Auth;
 use Illuminate\Http\Request;
 
@@ -25,7 +25,7 @@ class ChangeStatusInvoiceController extends Controller
         $payment_id = $request->post('payment_id', false);
         if ($invoice_id && $payment_id) {
             $invoice = BillingInvoice::find($invoice_id);
-            $payment = BillingPayment::find($payment_id);
+            $payment = BillingPaymentModel::find($payment_id);
             if ($payment && $payment->invoice_id == null && $invoice) {
                 if ($invoice->match($payment)) {
                     return ['status' => true];
@@ -41,8 +41,8 @@ class ChangeStatusInvoiceController extends Controller
         $payment_id = $request->post('payment_id', false);
         if ($invoice_id && $payment_id) {
             $invoice = BillingInvoice::find($invoice_id);
-            $payment = BillingPayment::find($payment_id);
-            if ($payment && $invoice && $payment->invoice_id == $invoice->id ) {
+            $payment = BillingPaymentModel::find($payment_id);
+            if ($payment && $invoice && $payment->invoice_id == $invoice->id) {
                 $payment->invoice_id = null;
                 if ($payment->logAndSave('Удалили платеж из счета')) {
                     return ['status' => true];

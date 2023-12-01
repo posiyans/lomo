@@ -1,18 +1,15 @@
 <?php
+
 namespace App\Models;
 
-use App\Models\Billing\BillingInvoice;
-use App\Models\Billing\BillingPayment;
 use App\Models\Owner\OwnerUserSteadModel;
-use App\Models\Receipt\DeviceRegisterModel;
-use App\Models\Receipt\MeteringDevice;
-use App\Models\Receipt\ReceiptType;
-use App\Models\MyModel;
-use App\Models\Receipt\InstrumentReadings;
-use App\Models\User;
+use App\Modules\Billing\Models\BillingInvoice;
+use App\Modules\Billing\Models\BillingPaymentModel;
+use App\Modules\Receipt\Models\DeviceRegisterModel;
+use App\Modules\Receipt\Models\InstrumentReadingModel;
+use App\Modules\Receipt\Models\ReceiptTypeModels;
 use App\Modules\Stead\Models\SteadModel;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Cookie;
 
 
 /**
@@ -36,14 +33,14 @@ use Illuminate\Support\Facades\Cookie;
  * @property-read int|null $invoices_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, OwnerUserSteadModel> $Owners
  * @property-read int|null $owners_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, BillingPayment> $Payment
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\Billing\Models\BillingPaymentModel> $Payment
  * @property-read int|null $payment_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\File\Models\FileModel> $files
  * @property-read int|null $files_count
  * @property-read \App\Models\Gardening|null $gardient
- * @property-read \Illuminate\Database\Eloquent\Collection<int, InstrumentReadings> $indications
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, InstrumentReadingModel> $indications
  * @property-read int|null $indications_count
- * @property-read BillingPayment|null $lastPayment
+ * @property-read BillingPaymentModel|null $lastPayment
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
  * @property-read int|null $log_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Message\MessageModel> $message
@@ -67,23 +64,23 @@ use Illuminate\Support\Facades\Cookie;
  * @method static \Illuminate\Database\Eloquent\Builder|Stead whereUserId($value)
  * @property-read \Illuminate\Database\Eloquent\Collection<int, BillingInvoice> $Invoices
  * @property-read \Illuminate\Database\Eloquent\Collection<int, OwnerUserSteadModel> $Owners
- * @property-read \Illuminate\Database\Eloquent\Collection<int, BillingPayment> $Payment
- * @property-read \Illuminate\Database\Eloquent\Collection<int, InstrumentReadings> $indications
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, BillingPaymentModel> $Payment
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, InstrumentReadingModel> $indications
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\Billing\Models\BillingInvoice> $Invoices
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, OwnerUserSteadModel> $Owners
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, BillingPaymentModel> $Payment
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, InstrumentReadingModel> $indications
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
  * @property-read \Illuminate\Database\Eloquent\Collection<int, BillingInvoice> $Invoices
  * @property-read \Illuminate\Database\Eloquent\Collection<int, OwnerUserSteadModel> $Owners
- * @property-read \Illuminate\Database\Eloquent\Collection<int, BillingPayment> $Payment
- * @property-read \Illuminate\Database\Eloquent\Collection<int, InstrumentReadings> $indications
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, BillingPaymentModel> $Payment
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, InstrumentReadingModel> $indications
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
  * @property-read \Illuminate\Database\Eloquent\Collection<int, BillingInvoice> $Invoices
  * @property-read \Illuminate\Database\Eloquent\Collection<int, OwnerUserSteadModel> $Owners
- * @property-read \Illuminate\Database\Eloquent\Collection<int, BillingPayment> $Payment
- * @property-read \Illuminate\Database\Eloquent\Collection<int, InstrumentReadings> $indications
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, BillingInvoice> $Invoices
- * @property-read \Illuminate\Database\Eloquent\Collection<int, OwnerUserSteadModel> $Owners
- * @property-read \Illuminate\Database\Eloquent\Collection<int, BillingPayment> $Payment
- * @property-read \Illuminate\Database\Eloquent\Collection<int, InstrumentReadings> $indications
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, BillingPaymentModel> $Payment
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, InstrumentReadingModel> $indications
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
  * @mixin \Eloquent
  */
@@ -97,7 +94,6 @@ class Stead extends SteadModel
     //
 
     public $userFullName = '';
-
 
 
     /**
@@ -135,7 +131,7 @@ class Stead extends SteadModel
      */
     public function indications()
     {
-        return $this->hasMany(InstrumentReadings::class, 'steads_id', 'id');
+        return $this->hasMany(InstrumentReadingModel::class, 'steads_id', 'id');
     }
 
     /**
@@ -152,15 +148,16 @@ class Stead extends SteadModel
     /**
      * Сохрание данных об участке
      * todo передалать создать сущьность владелец
-     * @deprecated
      * @param $request
+     * @deprecated
      */
-    public function saveData($request){
-        $this->surname  = isset($request->surname)  ? $request->surname : $this->surname ;
-        $this->name = isset($request->name) ? $request->name: $this->name;
-        $this->patronymic = isset($request->patronymic) ? $request->patronymic: $this->patronymic;
-        $this->size = isset($request->size) ? $request->size: $this->size;
-        $this->email = isset($request->email) ? $request->email: $this->email;
+    public function saveData($request)
+    {
+        $this->surname = isset($request->surname) ? $request->surname : $this->surname;
+        $this->name = isset($request->name) ? $request->name : $this->name;
+        $this->patronymic = isset($request->patronymic) ? $request->patronymic : $this->patronymic;
+        $this->size = isset($request->size) ? $request->size : $this->size;
+        $this->email = isset($request->email) ? $request->email : $this->email;
         $this->save();
     }
 
@@ -182,17 +179,18 @@ class Stead extends SteadModel
      * @param $note -- примечание
      * @return bool
      */
-    public static function addNote($id, $note){
+    public static function addNote($id, $note)
+    {
         $stead = Stead::find($id);
-        if ($stead){
+        if ($stead) {
             $descriptions = $stead->descriptions;
-            if (isset($descriptions['note'])){
-                $descriptions['note'] .= "\n".$note;
+            if (isset($descriptions['note'])) {
+                $descriptions['note'] .= "\n" . $note;
             } else {
                 $descriptions['note'] = $note;
             }
             $stead->descriptions = $descriptions;
-            if ($stead->logAndSave('Изменение в описании', $stead->id)){
+            if ($stead->logAndSave('Изменение в описании', $stead->id)) {
                 return $stead;
             }
         }
@@ -207,11 +205,11 @@ class Stead extends SteadModel
      */
     public function updateStead($model)
     {
-        $this->number =  $model['number'];
-        $this->size =  $model['size'];
-        $this->descriptions =  $model['descriptions'];
-        $this->options =  $model['options'];
-        if ($this->logAndSave('Изменение данных об участке', $this->id)){
+        $this->number = $model['number'];
+        $this->size = $model['size'];
+        $this->descriptions = $model['descriptions'];
+        $this->options = $model['options'];
+        if ($this->logAndSave('Изменение данных об участке', $this->id)) {
             return $this;
         }
         return false;
@@ -246,7 +244,7 @@ class Stead extends SteadModel
      */
     public function Payment()
     {
-        return $this->hasMany(BillingPayment::class, 'stead_id', 'id');
+        return $this->hasMany(BillingPaymentModel::class, 'stead_id', 'id');
     }
 
     /**
@@ -257,7 +255,7 @@ class Stead extends SteadModel
      */
     public function PaymentForReceipt($type)
     {
-        return BillingPayment::where('stead_id', $this->id)->where('type', $type)->get();
+        return BillingPaymentModel::where('stead_id', $this->id)->where('type', $type)->get();
     }
 
     /**
@@ -267,18 +265,18 @@ class Stead extends SteadModel
      */
     public function lastPayment()
     {
-        return $this->hasOne(BillingPayment::class, 'stead_id', 'id')->orderBy('payment_date', 'DESC');
+        return $this->hasOne(BillingPaymentModel::class, 'stead_id', 'id')->orderBy('payment_date', 'DESC');
     }
 
 
 //    public function PaymentContributions()
 //    {
-//        return $this->hasMany(BillingPayment::class, 'stead_id', 'id')->where('type', 2);
+//        return $this->hasMany(BillingPaymentModel::class, 'stead_id', 'id')->where('type', 2);
 //    }
 //
 //    public function PaymentCommunal()
 //    {
-//        return $this->hasMany(BillingPayment::class, 'stead_id', 'id')->where('type', 1);
+//        return $this->hasMany(BillingPaymentModel::class, 'stead_id', 'id')->where('type', 1);
 //    }
 
 
@@ -291,7 +289,7 @@ class Stead extends SteadModel
     public function getBalans($type = false)
     {
         $keyName = 'balans_stead-' . $this->id . '_type-' . $type;
-        return  Cache::tags(['balans', 'invoice', 'payment'])->remember($keyName, 6000 ,function () use ($type) {
+        return Cache::tags(['balans', 'invoice', 'payment'])->remember($keyName, 6000, function () use ($type) {
             $balans = 0;
             if (!$type) {
                 foreach ($this->invoices as $invoice) {
@@ -324,8 +322,7 @@ class Stead extends SteadModel
     {
         $device = new DeviceRegisterModel();
         $device->fill($options);
-        if ($device->logAndSave('Добавлен прибор', $this->id))
-        {
+        if ($device->logAndSave('Добавлен прибор', $this->id)) {
             return $device;
         }
         return false;
@@ -335,10 +332,10 @@ class Stead extends SteadModel
     /**
      * получить массив приброров опрделенного типа по участку
      *
-     * @param ReceiptType $receipt_type тип взносов
+     * @param \App\Modules\Receipt\Models\ReceiptTypeModels $receipt_type тип взносов
      * @return mixed
      */
-    public function getMeteringDevice(ReceiptType $receipt_type)
+    public function getMeteringDevice(ReceiptTypeModels $receipt_type)
     {
         if ($receipt_type->depends == 2) {
             $metering_device = $receipt_type->MeteringDevice;

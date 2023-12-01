@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin\Bookkeeping\Billing\Balance\Classes;
 
 
 use App\Http\Abstracts\AbstaractXlsxFile;
-use App\Models\Receipt\ReceiptType;
+use App\Modules\Receipt\Models\ReceiptTypeModels;
 
 
 class InvoiceAndPaymentListInSheet extends AbstaractXlsxFile
@@ -14,7 +14,6 @@ class InvoiceAndPaymentListInSheet extends AbstaractXlsxFile
     protected $types_name;
     protected $sheet;
     protected $max_col = 'A';
-
 
 
     public function createSheet($sheet, $items)
@@ -31,15 +30,15 @@ class InvoiceAndPaymentListInSheet extends AbstaractXlsxFile
     public function createHeader()
     {
         $row = 1;
-        $this->sheet->setCellValue('A'.$row, '№');
-        $this->sheet->setCellValue('B'.$row, 'Тип');
-        $this->sheet->setCellValue('C'.$row, 'Дата');
-        $this->sheet->setCellValue('D'.$row, 'Назначение');
-        $types = ReceiptType::all();
+        $this->sheet->setCellValue('A' . $row, '№');
+        $this->sheet->setCellValue('B' . $row, 'Тип');
+        $this->sheet->setCellValue('C' . $row, 'Дата');
+        $this->sheet->setCellValue('D' . $row, 'Назначение');
+        $types = ReceiptTypeModels::all();
         $col = 'D';
-        foreach ($types  as $type) {
+        foreach ($types as $type) {
             $col++;
-            $this->sheet->setCellValue($col.$row, $type->name);
+            $this->sheet->setCellValue($col . $row, $type->name);
         }
         $this->max_col = $col;
     }
@@ -48,7 +47,7 @@ class InvoiceAndPaymentListInSheet extends AbstaractXlsxFile
     private function fillLine($items)
     {
         $row = 2;
-        $this->types = ReceiptType::getReceiptTypeIds();
+        $this->types = ReceiptTypeModels::getReceiptTypeIds();
         foreach ($items as $item) {
             $this->fillRow($row, $item);
             $row++;
@@ -72,10 +71,10 @@ class InvoiceAndPaymentListInSheet extends AbstaractXlsxFile
         $this->sheet->setCellValue('C' . $row, date('d-m-Y', strtotime($item['payment_date'])));
         $this->sheet->setCellValue('D' . $row, $item['raw_data'][4]);
         $col = 'D';
-        foreach ($this->types  as $type) {
+        foreach ($this->types as $type) {
             $col++;
             if ($item['type'] == $type) {
-                $this->sheet->setCellValue($col.$row, $item['price']);
+                $this->sheet->setCellValue($col . $row, $item['price']);
             }
         }
     }
@@ -87,10 +86,10 @@ class InvoiceAndPaymentListInSheet extends AbstaractXlsxFile
         $this->sheet->setCellValue('C' . $row, date('d-m-Y', strtotime($item['created_at'])));
         $this->sheet->setCellValue('D' . $row, $item['title']);
         $col = 'D';
-        foreach ($this->types  as $type) {
+        foreach ($this->types as $type) {
             $col++;
             if ($item['type'] == $type) {
-                $this->sheet->setCellValue($col.$row, -$item['price']);
+                $this->sheet->setCellValue($col . $row, -$item['price']);
             }
         }
     }

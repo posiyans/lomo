@@ -2,19 +2,10 @@
 
 namespace App\Http\Controllers\Admin\Bookkeeping\Billing\RegisterOfCharges;
 
-use App\Http\Resources\Admin\Bookkeeping\AdminInvoiceResource;
-use App\Http\Resources\Admin\Bookkeeping\AdminPaymentResource;
-use App\Models\Billing\BillingInvoice;
-use App\Models\Billing\BillingPayment;
-use App\Models\Billing\BillingReestr;
-use App\Models\Receipt\InstrumentReadings;
-use App\Models\Receipt\MeteringDevice;
-use App\Models\Receipt\ReceiptType;
-use App\Models\Stead;
-use App\Models\Laratrust\Permission;
-use App\Models\Laratrust\Role;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Stead;
+use App\Modules\Billing\Models\BillingInvoice;
+use App\Modules\Billing\Models\BillingReestrModel;
 use Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -33,24 +24,27 @@ class AddOneTimeRegisterOfChargesController extends Controller
      */
     public static function addRegister($title, $type, $ratio_a, $ratio_b)
     {
-
-        $reestr = new BillingReestr();
+        $reestr = new BillingReestrModel();
         $reestr->title = $title;
         $reestr->type = 0;
         $options = [];
         if ($ratio_a > 0) {
-            $options[] = ['name' => 'Взнос', 'rate' => [
-                'ratio_a' => $ratio_a,
-                'ratio_b' => 0,
-                'description' => $ratio_a . ' руб с сотки'
+            $options[] = [
+                'name' => 'Взнос',
+                'rate' => [
+                    'ratio_a' => $ratio_a,
+                    'ratio_b' => 0,
+                    'description' => $ratio_a . ' руб с сотки'
                 ]
             ];
         }
         if ($ratio_b > 0) {
-            $options[] = ['name' => 'Взнос', 'rate' => [
-                'ratio_a' => 0,
-                'ratio_b' => $ratio_b,
-                'description' => $ratio_b . ' руб с участка'
+            $options[] = [
+                'name' => 'Взнос',
+                'rate' => [
+                    'ratio_a' => 0,
+                    'ratio_b' => $ratio_b,
+                    'description' => $ratio_b . ' руб с участка'
                 ]
             ];
         }
@@ -72,21 +66,21 @@ class AddOneTimeRegisterOfChargesController extends Controller
         $steads = Stead::all();
         $status = true;
         foreach ($steads as $stead) {
-            $description  = $title. ': ';
+            $description = $title . ': ';
             $price = 0;
             $price += $ratio_a * ($stead->size / 100);
             $price += $ratio_b;
             if ($ratio_a > 0 || $ratio_b > 0) {
                 if ($ratio_a > 0) {
-                   $description .= ($stead->size / 100) .' * '. $ratio_a . ' руб с сотки';
-                   $description .= ' = ' . $ratio_a * ($stead->size / 100) . ' руб';
+                    $description .= ($stead->size / 100) . ' * ' . $ratio_a . ' руб с сотки';
+                    $description .= ' = ' . $ratio_a * ($stead->size / 100) . ' руб';
                 }
                 if ($ratio_b > 0) {
-                    $description .= $ratio_b .' руб с участка';
+                    $description .= $ratio_b . ' руб с участка';
                 }
                 $description .= ';@';
             }
-            $description .= 'Итого: '. $price . ' руб.';
+            $description .= 'Итого: ' . $price . ' руб.';
             if (!BillingInvoice::createInvoiceForStead($stead->id, $price, $title, $type, $date = false, $reestr_id, $description)) {
                 $status = false;
             }

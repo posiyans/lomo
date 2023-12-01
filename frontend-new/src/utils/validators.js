@@ -1,5 +1,5 @@
 const required = function (val) {
-  if (val === true || val === false) {
+  if (val === true || val === false || Number.isInteger(val)) {
     return true
   }
   return ((val && val.length > 0) || 'Поле должно быть заполнено')

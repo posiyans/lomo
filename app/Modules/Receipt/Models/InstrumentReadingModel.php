@@ -1,5 +1,6 @@
 <?php
-namespace App\Models\Receipt;
+
+namespace App\Modules\Receipt\Models;
 
 use App\Models\MyModel;
 
@@ -15,32 +16,28 @@ use App\Models\MyModel;
  * @property int|null $invoice_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Receipt\DeviceRegisterModel|null $deviceRegister
+ * @property-read \App\Modules\Receipt\Models\DeviceRegisterModel|null $deviceRegister
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\File\Models\FileModel> $files
  * @property-read int|null $files_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
  * @property-read int|null $log_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Message\MessageModel> $message
  * @property-read int|null $message_count
- * @method static \Illuminate\Database\Eloquent\Builder|InstrumentReadings newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|InstrumentReadings newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|InstrumentReadings query()
- * @method static \Illuminate\Database\Eloquent\Builder|InstrumentReadings whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|InstrumentReadings whereDeviceId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|InstrumentReadings whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|InstrumentReadings whereInstrumentSerial($value)
- * @method static \Illuminate\Database\Eloquent\Builder|InstrumentReadings whereInvoiceId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|InstrumentReadings wherePaymentId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|InstrumentReadings whereSteadId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|InstrumentReadings whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|InstrumentReadings whereValue($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
+ * @method static \Illuminate\Database\Eloquent\Builder|InstrumentReadingModel newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|InstrumentReadingModel newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|InstrumentReadingModel query()
+ * @method static \Illuminate\Database\Eloquent\Builder|InstrumentReadingModel whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InstrumentReadingModel whereDeviceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InstrumentReadingModel whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InstrumentReadingModel whereInstrumentSerial($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InstrumentReadingModel whereInvoiceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InstrumentReadingModel wherePaymentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InstrumentReadingModel whereSteadId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InstrumentReadingModel whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|InstrumentReadingModel whereValue($value)
  * @mixin \Eloquent
  */
-class InstrumentReadings extends MyModel
+class InstrumentReadingModel extends MyModel
 {
     //
     /**
@@ -49,7 +46,9 @@ class InstrumentReadings extends MyModel
      * @var array
      */
     protected $fillable = [
-        'stead_id', 'payment_id', 'device_id'
+        'stead_id',
+        'payment_id',
+        'device_id'
     ];
 
     public function deviceRegister()
@@ -76,7 +75,7 @@ class InstrumentReadings extends MyModel
 
     public function getPrice()
     {
-        $price = Rate::query()
+        $price = RateModel::query()
             ->where('device_id', $this->deviceRegister->type_id)
             ->where('created_at', '<', $this->created_at)
             ->orderBy('created_at', 'desc')
@@ -104,7 +103,6 @@ class InstrumentReadings extends MyModel
         $item = DeviceRegisterModel::find($this->device_id);
         return $item;
     }
-
 
 
     /**

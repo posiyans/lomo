@@ -1,12 +1,14 @@
 <?php
 
-namespace App\Models\Billing;
+namespace App\Modules\Billing\Models;
 
 use App\Models\Stead;
 use Illuminate\Database\Eloquent\Model;
 
+use function App\Models\Billing\mb_strtolower;
+
 /**
- * App\Models\Billing\BillingBankReestr
+ * App\Modules\Billing\Models\BillingBankReestr
  *
  * @property int $id
  * @property array $data
@@ -57,7 +59,6 @@ class BillingBankReestr extends Model
     ];
 
 
-
     public function parseData(array $raw = [])
     {
         $rez = [];
@@ -67,12 +68,12 @@ class BillingBankReestr extends Model
         foreach ($raw as $data) {
             $num = count($data);
             $temp = [];
-            for ($c=0; $c < $num; $c++) {
-                $temp['val'.$c] = $data[$c];
+            for ($c = 0; $c < $num; $c++) {
+                $temp['val' . $c] = $data[$c];
             }
             $rez[] = $temp;
         }
-        $r = ['data'=>$rez, 'legend'=>[0,1,5,6,7,8], 'raw' => $raw];
+        $r = ['data' => $rez, 'legend' => [0, 1, 5, 6, 7, 8], 'raw' => $raw];
         $this->data = $r;
         return $this;
     }
@@ -109,15 +110,25 @@ class BillingBankReestr extends Model
     public function parseType($col = 7)
     {
         $d = $this->data;
-        $datas= $d['data'];
-        $type_1 = ['энер', 'свет',  'эл', 'эн.' ,'ээ','квт', 'счетчик', 'показан'];
-        $type_2 = ['взнос', 'членск', 'целев', 'мусор' , 'земля', 'налог', 'ежегодный', 'чл.вз.', 'отходы
-        '];
+        $datas = $d['data'];
+        $type_1 = ['энер', 'свет', 'эл', 'эн.', 'ээ', 'квт', 'счетчик', 'показан'];
+        $type_2 = [
+            'взнос',
+            'членск',
+            'целев',
+            'мусор',
+            'земля',
+            'налог',
+            'ежегодный',
+            'чл.вз.',
+            'отходы
+        '
+        ];
         $ok = [];
         $error = [];
         foreach ($datas as $data) {
             $type = false;
-            $str = mb_strtolower($data['val'.$col]);
+            $str = mb_strtolower($data['val' . $col]);
             foreach ($type_2 as $item) {
                 if (stristr($str, $item) && !$type) {
                     $type = 2;
@@ -138,7 +149,7 @@ class BillingBankReestr extends Model
             }
         }
         $d['data'] = array_merge($error, $ok);
-        $this->data  = $d;
+        $this->data = $d;
         return $this;
     }
 
@@ -150,11 +161,11 @@ class BillingBankReestr extends Model
         $ok = [];
         $error = [];
         foreach ($datas as $data) {
-            $str = mb_strtolower($data['val'.$col]);
+            $str = mb_strtolower($data['val' . $col]);
 //            echo $str;
 //            $stead = Stead::query()->where('number', $str)->first();
             $stead = false;
-            if (!$stead){
+            if (!$stead) {
                 $str = str_replace('-', '/', $str);
                 $str = str_replace('-', '/', $str);
                 $str = str_replace(',', '/', $str);
@@ -162,11 +173,11 @@ class BillingBankReestr extends Model
                 $str = str_replace('№', '', $str);
                 $str = str_replace(' ', '', $str);
 //                $stead = Stead::query()->where('number', $str)->first();
-                if(!$stead) {
-                   $stead = Stead::query()->where('number', 'like', "%{$str}%")->first();
+                if (!$stead) {
+                    $stead = Stead::query()->where('number', 'like', "%{$str}%")->first();
                 }
-                if(!$stead) {
-                    $str = str_replace('Л сч 502 10линия', '502', $data['val'.$col]);
+                if (!$stead) {
+                    $str = str_replace('Л сч 502 10линия', '502', $data['val' . $col]);
                     $str = str_replace('Л сч502 10линия', '502', $str);
                     $str = str_replace('288, 289', '288', $str);
                     $str = str_replace('526/525', '525/526', $str);
@@ -175,7 +186,7 @@ class BillingBankReestr extends Model
             }
             if ($stead) {
                 $data['stead'] = ['id' => $stead->id, 'number' => $stead->number];
-                if ($stead->number == mb_strtolower($data['val'.$col])) {
+                if ($stead->number == mb_strtolower($data['val' . $col])) {
                     $ok[] = $data;
                 } else {
                     $data['error'] = true;
@@ -186,43 +197,42 @@ class BillingBankReestr extends Model
                 $data['error'] = true;
                 $error[] = $data;
             }
-
         }
         $d['data'] = array_merge($error, $ok);
-        $this->data  = $d;
+        $this->data = $d;
         return $this;
     }
 
     public function findDublicate()
     {
         $d = $this->data;
-        $datas= &$d['data'];
+        $datas = &$d['data'];
         foreach ($datas as &$item) {
             $temp_date = explode('-', $item['val0']);
             $temp_time = explode('-', $item['val1']);
             $payment_data = $temp_date[2] . '-' . $temp_date[1] . '-' . $temp_date[0] . ' ' . $temp_time[0] . ':' . $temp_time[1] . ':' . $temp_time[2];
-            $find = BillingPayment::query()
+            $find = BillingPaymentModel::query()
                 ->where('payment_date', $payment_data)
-                ->where('price', (float)str_replace(',', '.',$item['val8']))
+                ->where('price', (float)str_replace(',', '.', $item['val8']))
                 ->where('transaction', $item['val4'])
                 ->first();
 //            if ($find){
-                $item['dubl'] = $find;
+            $item['dubl'] = $find;
 //            }
         }
-        $this->data  = $d;
+        $this->data = $d;
         return $this;
     }
 
     public static function checkFile($file)
     {
-        if (($handle = fopen($file, "r")) !== FALSE) {
+        if (($handle = fopen($file, "r")) !== false) {
             $rez = [];
-            while (($data = fgetcsv($handle, 0, ";")) !== FALSE) {
+            while (($data = fgetcsv($handle, 0, ";")) !== false) {
                 $rez[] = count($data);
             }
             return $rez;
-            if (count($rez) *12 - 6 == array_sum($rez)) {
+            if (count($rez) * 12 - 6 == array_sum($rez)) {
                 return true;
             }
         }

@@ -1,16 +1,17 @@
 <?php
 
-namespace App\Models\Receipt;
+namespace App\Modules\Receipt\Models;
 
 
-use App\Models\Stead;
 use App\Models\MyModel;
+use App\Models\Stead;
 
 /*
  * Модель приборов учета
  */
+
 /**
- * App\Models\Receipt\MeteringDevice
+ * App\Modules\Receipt\Models\MeteringDevice
  *
  * @property int $id
  * @property string $type_id
@@ -25,7 +26,7 @@ use App\Models\MyModel;
  * @property-read int|null $log_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Message\MessageModel> $message
  * @property-read int|null $message_count
- * @property-read \App\Models\Receipt\ReceiptType|null $receiptType
+ * @property-read \App\Modules\Receipt\Models\ReceiptTypeModels|null $receiptType
  * @method static \Illuminate\Database\Eloquent\Builder|MeteringDevice newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|MeteringDevice newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|MeteringDevice query()
@@ -36,10 +37,6 @@ use App\Models\MyModel;
  * @method static \Illuminate\Database\Eloquent\Builder|MeteringDevice whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MeteringDevice whereTypeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MeteringDevice whereUpdatedAt($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
  * @mixin \Eloquent
  */
 class MeteringDevice extends MyModel
@@ -49,24 +46,26 @@ class MeteringDevice extends MyModel
     protected $casts = [
         'enable' => 'boolean',
     ];
+
     public function receiptType()
     {
-        return $this->hasOne(ReceiptType::class, 'id', 'type_id');
+        return $this->hasOne(ReceiptTypeModels::class, 'id', 'type_id');
     }
+
     /**
      *получить последний тарифф
      */
     public function rateNow()
     {
-        $rate = Rate::Where('device_id', $this->id)->orderBy('created_at', 'desc')->first();
+        $rate = RateModel::Where('device_id', $this->id)->orderBy('created_at', 'desc')->first();
         if ($rate) {
-            $this->rate =  $rate;
+            $this->rate = $rate;
         } else {
-            $this->rate =  [
+            $this->rate = [
                 'ratio_a' => 0,
                 'ratio_b' => 0,
                 'description' => ''
-                ];
+            ];
         }
         return $this->rate;
     }
@@ -74,12 +73,13 @@ class MeteringDevice extends MyModel
     /**
      * получить n-ое показание прибора
      *
-     * @deprecated
      * @param $n
      * @return int
+     * @deprecated
      */
-    public function getIndication($stead_id, $n) {
-        $indications = InstrumentReadings::where('device_id', $this->id)->where('stead_id', $stead_id)->orderBy('created_at', 'desc')->skip($n)->take(1)->get();
+    public function getIndication($stead_id, $n)
+    {
+        $indications = InstrumentReadingModel::where('device_id', $this->id)->where('stead_id', $stead_id)->orderBy('created_at', 'desc')->skip($n)->take(1)->get();
         return isset($indications[0]) ? $indications[0] : false;
     }
 
@@ -87,10 +87,11 @@ class MeteringDevice extends MyModel
      * получить последние показание прибора
      * и занести его в атрибут LastIndication
      *
-     * @deprecated
      * @return int|mixed
+     * @deprecated
      */
-    public function getLastIndication($stead_id) {
+    public function getLastIndication($stead_id)
+    {
         $this->LastIndication = $this->getIndication($stead_id, 0);
         return $this->LastIndication;
     }
@@ -107,11 +108,12 @@ class MeteringDevice extends MyModel
      * @param int $n
      * @return float|int|mixed
      */
-    public function getTicket($stead_id, $n=0){
+    public function getTicket($stead_id, $n = 0)
+    {
         $receiptType = $this->receiptType;
         $description = '';
         $this->rateNow();
-        if ($receiptType->depends == 1){
+        if ($receiptType->depends == 1) {
             $stead = Stead::find($stead_id);
             if ($stead) {
                 $size = $stead->size;
@@ -124,7 +126,7 @@ class MeteringDevice extends MyModel
         if ($receiptType->depends == 2) {
             $temp = $this->getIndication($stead_id, $n);
             $this->ValueNew = $temp ? $temp->value : 0;
-            $temp = $this->getIndication($stead_id,$n + 1);
+            $temp = $this->getIndication($stead_id, $n + 1);
             $this->ValueOld = $temp ? $temp->value : 0;
             $this->rateNow();
             $this->cash = ($this->ValueNew - $this->ValueOld) * $this->rate->ratio_a + $this->ratio_b;
@@ -132,19 +134,18 @@ class MeteringDevice extends MyModel
                 $description .= '(' . $this->ValueNew . ' - ' . $this->ValueOld . ') * ' . $this->rate->ratio_a;
             }
         }
-        if ($this->rate->ratio_b > 0){
-            if ($description != ''){
-                $description.= ' + ';
+        if ($this->rate->ratio_b > 0) {
+            if ($description != '') {
+                $description .= ' + ';
             }
-            $description.= $this->rate->ratio_b;
+            $description .= $this->rate->ratio_b;
         }
         if ($description != '') {
-            $this->cash_description = $description.' = '.$this->cash;
-        }else{
+            $this->cash_description = $description . ' = ' . $this->cash;
+        } else {
             $this->cash_description = false;
         }
         return $this->cash;
-
     }
 
     public static function getDeviceIdForStead($type, $stead_id, $subtype = false)

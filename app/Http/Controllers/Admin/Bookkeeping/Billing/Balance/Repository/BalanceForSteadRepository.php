@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Admin\Bookkeeping\Billing\Balance\Repository;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\Bookkeeping\AdminInvoiceResource;
 use App\Http\Resources\Admin\Bookkeeping\AdminPaymentResource;
-use App\Models\Billing\BillingInvoice;
-use App\Models\Billing\BillingPayment;
+use App\Modules\Billing\Models\BillingInvoice;
+use App\Modules\Billing\Models\BillingPaymentModel;
 
 
 class BalanceForSteadRepository extends Controller
@@ -39,7 +39,7 @@ class BalanceForSteadRepository extends Controller
     private function getPayment($stead_id, $type, $receipt_type)
     {
         if ((!$type || $type == 'payment') || $type == 'payment_without_invoice') {
-            $payments = BillingPayment::getPaymentForStead($stead_id);
+            $payments = BillingPaymentModel::getPaymentForStead($stead_id);
             foreach ($payments as $payment) {
                 $time = strtotime($payment->payment_date);
                 while (isset($balans[$time])) {
@@ -47,7 +47,7 @@ class BalanceForSteadRepository extends Controller
                 }
                 if ((!$receipt_type || $receipt_type == $payment->type) ||
                     ((!$receipt_type || $receipt_type == $payment->type) && $payment->invoice_id == null)
-                ){
+                ) {
                     $this->balans[$time] = ['type' => 'payment', 'data' => new AdminPaymentResource($payment)];
                 }
             }
@@ -66,7 +66,7 @@ class BalanceForSteadRepository extends Controller
                 if ((!$receipt_type || $receipt_type == $invoice->type) ||
                     ((!$receipt_type || $receipt_type == $invoice->type) && $invoice->paid == false) ||
                     ((!$receipt_type || $receipt_type == $invoice->type) && $invoice->paid == true)
-                ){
+                ) {
                     $this->balans[$time] = ['type' => 'invoice', 'data' => new AdminInvoiceResource($invoice)];
                 }
             }

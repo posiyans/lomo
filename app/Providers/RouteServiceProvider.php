@@ -103,6 +103,9 @@ class RouteServiceProvider extends ServiceProvider
             Route::middleware('web')
                 ->namespace($this->namespace)
                 ->group(base_path('app/Modules/Voting/routes/web.php'));
+            Route::middleware('api')
+                ->prefix('api')
+                ->group(base_path('app/Modules/Camera/routes/apiCameraRouter.php'));
         });
     }
 
