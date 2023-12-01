@@ -3,7 +3,7 @@
 namespace App\Modules\Auth\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Modules\Log\Models\Log;
+use App\Modules\Log\Models\LogModel;
 use App\Modules\User\Repositories\GetPermissionsForUserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -37,7 +37,7 @@ class LoginController extends Controller
             Session::put('user_uid', Auth::user()->uid);
             return response(['status' => 'done', 'user' => Auth::user(), 'permissions' => $permissions]);
         }
-        $log = new Log();
+        $log = new LogModel();
         $log->description = 'bad login or password';
         $log->value = $credentials;
         $log->type = 'alert';

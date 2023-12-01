@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateArticleModelsTable extends Migration
 {
@@ -15,17 +15,17 @@ class CreateArticleModelsTable extends Migration
     {
         Schema::create('article_models', function (Blueprint $table) {
             $table->id();
-            $table->string('title')->nullable();
-            $table->string('uid')->nullable();
-            $table->integer('user_id')->default(1)->comment('id автора статьи');
-            $table->string('resume')->nullable();
-            $table->text('text')->nullable();
-            $table->integer('category_id')->nullable();
-            $table->integer('public')->default(1);
+            $table->string('title')->nullable()->comment('заголовок');
+            $table->string('uid')->nullable()->comment('uid');
+            $table->integer('user_id')->nullable()->comment('id автора статьи');
+            $table->string('resume')->nullable()->comment('краткий текст');
+            $table->mediumText('text')->nullable()->comment('текст статьи');
+            $table->integer('category_id')->nullable()->comment('id раздела');
+            $table->integer('public')->default(1)->comment('статус статьи');
             $table->boolean('news')->default(true);
-            $table->boolean('allow_comments')->default(true);
-            $table->dateTime('publish_time');
+            $table->boolean('allow_comments')->default(true)->comment('возможность комментировать');
             $table->string('slug')->nullable()->unique()->comment('url статьи');
+            $table->softDeletes();
             $table->timestamps();
         });
         $articles = \App\Modules\Article\Models\ArticleModel::all();

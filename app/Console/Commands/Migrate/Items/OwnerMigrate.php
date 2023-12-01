@@ -1,0 +1,81 @@
+<?php
+
+namespace App\Console\Commands\Migrate\Items;
+
+use App\Models\Laratrust\Role;
+use App\Models\Owner\OwnerUserModel;
+use App\Modules\File\Classes\SaveFileForObjectClass;
+use App\Modules\Owner\Models\OwnerUserValueModel;
+use Http;
+use Illuminate\Support\Facades\DB;
+
+/**
+ * конвертация поользователей
+ *
+ */
+class OwnerMigrate
+{
+    private static $fields = [
+        'id' => 'id',
+        'name' => 'name',
+        'email_verified_at' => 'email_verified_at',
+        'password' => 'password',
+        'remember_token' => 'remember_token',
+        'created_at' => 'created_at',
+        'updated_at' => 'updated_at',
+        'last_name' => 'last_name',
+        'middle_name' => 'middle_name',
+        'adres' => 'adres',
+        'phone' => 'phone',
+        'last_connect' => 'last_connect',
+//        '' => '',
+    ];
+
+
+    public static function run()
+    {
+        echo 'Конвертируем owner' . PHP_EOL;
+        $users = DB::connection('mysql_old')->table('owner_user_models')->get();
+//        $fields = (new OwnerFieldRepository())->keys();
+        foreach ($users as $item) {
+            $newItem = new OwnerUserModel();
+            $newItem->uid = $item->uid;
+            $newItem->save();
+        }
+        $values = DB::connection('mysql_old')->table('owner_user_value_models')->get();
+//        $fields = (new OwnerFieldRepository())->keys();
+        foreach ($users as $item) {
+            $newItem = new OwnerUserValueModel();
+            $newItem->uid = $item->uid;
+            $newItem->uid = $item->uid;
+            $newItem->save();
+        }
+//        dump($users);
+    }
+
+    private static function setRole($user, $roleName)
+    {
+        $role = Role::where('name', $roleName)->first();
+        $user->syncRolesWithoutDetaching([$role->id]);
+    }
+
+    private static function saveAvatar($user, $avatar_url)
+    {
+        try {
+            $response = Http::get($avatar_url);
+            $tmpfname = tempnam(sys_get_temp_dir(), "user_avatar");
+            $handle = fopen($tmpfname, "w");
+            fwrite($handle, $response->body());
+            fclose($handle);
+            (new SaveFileForObjectClass($user))
+                ->name('user_avatar_' . $user->id)
+                ->size(filesize($tmpfname))
+                ->description('avatar')
+                ->type('image/jpeg')
+                ->file($tmpfname)
+                ->uploadUser($user)
+                ->run();
+        } catch (\Exception $e) {
+        }
+    }
+}

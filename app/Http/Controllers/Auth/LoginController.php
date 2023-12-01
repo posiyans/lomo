@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\VkController;
-use App\Modules\Log\Models\Log;
+use App\Modules\Log\Models\LogModel;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -97,7 +97,7 @@ class LoginController extends Controller
         if ($tokenId) {
             $user->tokens()->where('id', $tokenId)->delete();
         }
-        $log = new Log();
+        $log = new LogModel();
         $log->type = 'ok';
         $log->description = 'logout';
         $user->log()->save($log);

@@ -392,7 +392,7 @@ export const asyncRoutes = [
         path: 'log',
         component: 'views/error-log/index',
         name: 'ErrorLog',
-        meta: { title: 'Error Log', icon: 'bug' }
+        meta: { title: 'Error LogModel', icon: 'bug' }
       }
     ]
   },

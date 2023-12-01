@@ -48,7 +48,7 @@ class Log extends MyModel
     ];
 
     /**
-     * Log constructor.
+     * LogModel constructor.
      */
     public function __construct()
     {
@@ -77,7 +77,7 @@ class Log extends MyModel
 //     * @param bool $description описание
 //     */
 //    public static function saveDiff($objNew, $objOld, $description=false){
-//            $log = new Log();
+//            $log = new LogModel();
 //            if ($diff = $log->diff($objNew, $objOld)) {
 //                $log->type = 'ok';
 //                if ($description) {

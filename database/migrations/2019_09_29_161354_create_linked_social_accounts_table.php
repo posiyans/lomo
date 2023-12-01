@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateLinkedSocialAccountsTable extends Migration
 {
@@ -16,7 +16,6 @@ class CreateLinkedSocialAccountsTable extends Migration
         Schema::create('linked_social_accounts', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id');
-            $table->string('email')->nullable();
             $table->string('provider_name')->nullable();
             $table->string('provider_id')->unique()->nullable();
             $table->timestamps();
