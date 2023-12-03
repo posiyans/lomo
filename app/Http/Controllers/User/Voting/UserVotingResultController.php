@@ -2,18 +2,10 @@
 
 namespace App\Http\Controllers\User\Voting;
 
-use App\Http\Resources\AppealResource;
-use App\Http\Resources\ConrtollerResource;
-use App\Http\Resources\VotingResource;
-use App\Models\AppealModel;
-use App\Models\Voting\AnswerModel;
+use App\Http\Controllers\Controller;
 use App\Models\Voting\QuestionModel;
 use App\Models\Voting\UserAnswerModel;
-use App\Models\Voting\VotingModel;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Laratrust\Laratrust;
 
 class UserVotingResultController extends Controller
 {
@@ -46,9 +38,7 @@ class UserVotingResultController extends Controller
                         $data[$userAnswer->stead_id] = $userAnswer->answer_id;
                     }
                     return ['status' => true, 'data' => $data];
-
                 }
-
             }
         }
         return ['status' => false];

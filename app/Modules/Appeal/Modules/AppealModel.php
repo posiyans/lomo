@@ -1,13 +1,15 @@
 <?php
 
-namespace App\Models;
+namespace App\Modules\Appeal\Modules;
 
 use App\Models\Message\MessageModel;
+use App\Models\MyModel;
+use App\Models\UserModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 
 /**
- * App\Models\AppealModel
+ * App\Modules\Appeal\Modules\AppealModel
  *
  * @property int $id
  * @property int $user_id
@@ -25,7 +27,7 @@ use Illuminate\Support\Facades\Auth;
  * @property-read int|null $log_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, MessageModel> $message
  * @property-read int|null $message_count
- * @property-read User|null $user
+ * @property-read UserModel|null $user
  * @method static \Illuminate\Database\Eloquent\Builder|AppealModel newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|AppealModel newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|AppealModel onlyTrashed()
@@ -48,8 +50,7 @@ class AppealModel extends MyModel
 {
     use SoftDeletes;
 
-    protected $table = 'appeals';
-    protected $fillable = ['status', 'text'];
+    protected $fillable = ['title', 'text', 'appeal_type_id'];
 
     public function __construct(array $attributes = [])
     {
@@ -67,17 +68,16 @@ class AppealModel extends MyModel
      */
     public function user()
     {
-        return $this->hasOne(User::class, 'id', 'user_id');
+        return $this->hasOne(UserModel::class, 'id', 'user_id');
     }
 
-
-    public function addMessage($text, $user_id)
+    /**
+     * отношение с типом
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function type()
     {
-        // todo почему не работает??????
-        // $message = MessageModel::create(compact('text', 'user_id'));
-        $message = new MessageModel();
-        $message->text = $text;
-        $message->user_id = $user_id;
-        $this->message()->save($message);
+        return $this->hasOne(AppealTypeModel::class, 'id', 'appeal_type_id');
     }
+
 }

@@ -31,8 +31,6 @@ class SiteMenuMigrate
             $newItem->sort = $item->position;
             $path = $item->menu_name;
             if ($path) {
-//                $path = str_replace('/modules/rates', '/modules/rates', $path);
-//                $path = str_replace('/modules/receipt', '/modules/receipt', $path);
                 $path = str_replace('/modules/camera', '/camera/show', $path);
                 $path = str_replace('/modules/weather', '/weather/show', $path);
                 $path = str_replace('/modules/schedule', '/yandex/schedule', $path);

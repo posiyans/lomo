@@ -51,17 +51,13 @@ use Ramsey\Uuid\Uuid;
  * @method static \Illuminate\Database\Eloquent\Builder|FileModel whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|FileModel withTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|FileModel withoutTrashed()
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
  * @mixin \Eloquent
  */
 class FileModel extends MyModel
 {
     use SoftDeletes;
 
-    protected $table = 'files';
+//    protected $table = 'files';
 
 
     public function commentable()

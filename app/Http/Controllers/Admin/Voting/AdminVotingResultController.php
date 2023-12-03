@@ -2,16 +2,11 @@
 
 namespace App\Http\Controllers\Admin\Voting;
 
+use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\Voting\AdminVotingResultResource;
-use App\Http\Resources\AppealResource;
-use App\Http\Resources\ConrtollerResource;
-use App\Http\Resources\VotingResource;
-use App\Models\AppealModel;
 use App\Models\Voting\UserAnswerModel;
 use App\Models\Voting\VotingModel;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 
 class AdminVotingResultController extends Controller
 {

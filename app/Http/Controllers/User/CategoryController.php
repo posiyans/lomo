@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Models\AppealModel;
 use App\Models\Article\CategoryModel;
+use App\Modules\Appeal\Modules\AppealModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 

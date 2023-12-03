@@ -11,7 +11,7 @@ class SocialMigrate
 
     public static function run()
     {
-        echo 'Конвертируем настройки' . PHP_EOL;
+        echo 'Конвертируем соц сети' . PHP_EOL;
         $soc = DB::connection('mysql_old')->table('linked_social_accounts')->get();
         foreach ($soc as $item) {
             $newItem = new LinkedSocialAccounts();

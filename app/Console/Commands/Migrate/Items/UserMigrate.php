@@ -4,9 +4,10 @@ namespace App\Console\Commands\Migrate\Items;
 
 use App\Models\Laratrust\Role;
 use App\Modules\File\Classes\SaveFileForObjectClass;
-use App\Modules\User\Models\UserModel;
 use Http;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Laratrust\Traits\LaratrustUserTrait;
 use Str;
 
 /**
@@ -58,6 +59,12 @@ class UserMigrate
     {
         $role = Role::where('name', $roleName)->first();
         $user->syncRolesWithoutDetaching([$role->id]);
+        DB::connection()->table('role_user')
+            ->where('role_id', 1)
+            ->where('user_id', 1)
+            ->update(['user_type' => \App\Modules\User\Models\UserModel::class]);
+//        $admin->user_type = \App\Modules\User\Models\UserModel::class;
+//        $admin->save();
     }
 
     private static function saveAvatar($user, $avatar_url)
@@ -79,4 +86,11 @@ class UserMigrate
         } catch (\Exception $e) {
         }
     }
+}
+
+class UserModel extends Model
+{
+    use LaratrustUserTrait;
+
+    public $timestamps = false;
 }

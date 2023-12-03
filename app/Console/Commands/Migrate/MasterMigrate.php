@@ -2,10 +2,11 @@
 
 namespace App\Console\Commands\Migrate;
 
+use App\Console\Commands\Migrate\Items\AppealMigrate;
 use App\Console\Commands\Migrate\Items\ArticleMigrate;
+use App\Console\Commands\Migrate\Items\FileMigrate;
 use App\Console\Commands\Migrate\Items\GardeningMigrate;
 use App\Console\Commands\Migrate\Items\GlobalOptionsMigrate;
-use App\Console\Commands\Migrate\Items\LogMigrate;
 use App\Console\Commands\Migrate\Items\OwnerMigrate;
 use App\Console\Commands\Migrate\Items\SiteMenuMigrate;
 use App\Console\Commands\Migrate\Items\SocialMigrate;
@@ -51,8 +52,10 @@ class MasterMigrate extends Command
     public function handle()
     {
         echo 'Конвертируем' . PHP_EOL;
+//        LogMigrate::run();
+        AppealMigrate::run();
+        FileMigrate::run();
         SteadMigrate::run();
-        LogMigrate::run();
         UserMigrate::run();
         ArticleMigrate::run();
         SiteMenuMigrate::run();

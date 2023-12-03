@@ -2,16 +2,10 @@
 
 namespace App\Http\Controllers\Admin\Voting;
 
+use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\Voting\AdminVotingQuestionResource;
-use App\Http\Resources\AppealResource;
-use App\Http\Resources\ConrtollerResource;
-use App\Http\Resources\VotingResource;
-use App\Models\AppealModel;
 use App\Models\Voting\VotingModel;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Laratrust\Laratrust;
 
 class VotingQuestionController extends Controller
 {
@@ -54,13 +48,12 @@ class VotingQuestionController extends Controller
      */
     public function store(Request $request)
     {
-
     }
 
     /**
      * Получить админом вопросы по голосованию
      *
-     * @param  int  $id голосования
+     * @param  int  $id  голосования
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -68,7 +61,7 @@ class VotingQuestionController extends Controller
         if (is_numeric($id)) {
             $voting = VotingModel::find($id);
             if ($voting) {
-                $questions  = $voting->questions;
+                $questions = $voting->questions;
                 return AdminVotingQuestionResource::collection($questions);
             }
         }

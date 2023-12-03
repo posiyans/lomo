@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Modules\Article\Classes;
 
 use App\Modules\Article\Models\ArticleModel;
@@ -10,12 +11,10 @@ class CreateArticleClass
 
     public function __construct(array $opt = [])
     {
-        $this->article = New ArticleModel();
+        $this->article = new ArticleModel();
         $this->article->fill($opt);
         $this->article->user_id = Auth::id() ?? 1;
         $this->article->public = 0;
-        $this->article->publish_time = date('Y-m-d H:i:s');
-
     }
 
     public function status(int $status)
@@ -24,8 +23,9 @@ class CreateArticleClass
         return $this;
     }
 
-    public function run() {
-        if ($this->article->logAndSave('Создание новости')) {
+    public function run()
+    {
+        if ($this->article->logAndSave('Создание статьи')) {
             return $this->article;
         }
         throw new \Exception($this->article->errors);

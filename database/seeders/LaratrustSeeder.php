@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Laratrust\Permission;
 use App\Models\Laratrust\Role;
-use App\Models\User;
+use App\Models\UserModel;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -47,7 +47,7 @@ class LaratrustSeeder extends Seeder
                 $admin->save();
             }
         }
-        $user = User::find(1);
+        $user = UserModel::find(1);
         if ($user) {
             $user->attachRole('superAdmin');
         }

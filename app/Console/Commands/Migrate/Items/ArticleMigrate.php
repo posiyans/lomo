@@ -18,7 +18,6 @@ class ArticleMigrate
         'uid' => 'uid',
         'title' => 'title',
         'resume' => 'resume',
-        'text' => 'text',
         'category_id' => 'category_id',
         'public' => 'public',
         'created_at' => 'created_at',
@@ -39,13 +38,27 @@ class ArticleMigrate
             $newItem->position = $item->position;
             $newItem->save();
         }
+        $files = \App\Modules\File\Models\FileModel::all();
+        $rep = [];
+        foreach ($files as $file) {
+            $rep[$file->id] = $file->uid;
+        }
         $articles = DB::connection('mysql_old')->table('article_models')->get();
         foreach ($articles as $item) {
             $newItem = new ArticleModel();
             foreach (self::$fields as $key => $value) {
                 $newItem->$key = $item->$value;
             }
+            $text = $item->text;
+            foreach ($rep as $k => $v) {
+                $f = '/api/user/storage/file/' . $k . '"';
+                $r = '/api/v2/file/get?uid=' . $v . '"';
+                $text = str_replace($f, $r, $text);
+            }
+            $newItem->text = $text;
             $newItem->slug = substr(Str::slug($newItem->title), 0, 240);
+
+
             try {
                 $newItem->save();
             } catch (\Exception $e) {

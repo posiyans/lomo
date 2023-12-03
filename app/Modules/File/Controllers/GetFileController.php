@@ -34,6 +34,7 @@ class GetFileController extends Controller
             }
 
             if ($access) {
+//                dd($file->hash);
                 $path = (new GetPathForHashClass($file->hash))->run();
                 return Storage::download($path, $file->name);
             }

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
-use App\Models\User;
 use App\Modules\User\Models\UserModel;
 use App\Modules\User\Repositories\GetUserByUidRepository;
 use Illuminate\Http\Request;
@@ -45,7 +44,7 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -56,7 +55,7 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param int $id
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -73,15 +72,15 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
         $user = Auth::user();
         if ($user->ability('superAdmin', 'edit-users')) {
-            $userModel = User::find($id);
+            $userModel = UserModel::find($id);
             $data = $request->all();
             if ($userModel && $data && $data['id'] == $id) {
                 unset($data['password']);
@@ -106,7 +105,7 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -117,7 +116,7 @@ class UserController extends Controller
 
     public function sendVerifyMailToken($id)
     {
-        if ($user = User::find($id)) {
+        if ($user = UserModel::find($id)) {
             if (!$user->email_verified_at) {
                 $user->email_verified_at = null;
                 $user->save();

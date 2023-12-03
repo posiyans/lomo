@@ -21,7 +21,7 @@ use App\Modules\User\Models\UserModel;
  * @property-read int|null $log_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Message\MessageModel> $message
  * @property-read int|null $message_count
- * @property-read \App\Models\User|null $user
+ * @property-read \App\Models\UserModel|null $user
  * @method static \Illuminate\Database\Eloquent\Builder|LinkedSocialAccounts newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|LinkedSocialAccounts newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|LinkedSocialAccounts query()

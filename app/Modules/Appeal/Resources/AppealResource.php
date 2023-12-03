@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Modules\Appeal\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -14,19 +14,25 @@ class AppealResource extends JsonResource
      */
     public function toArray($request)
     {
-        if ($this->user) {
-            $user = ['fullName' => $this->user->fullName(),'fName' => $this->user->fName()];
-        } else {
-            $user = ['fullName' => '-','fName' => '-'];
-        }
+        $user = [
+            'fullName' => $this->user->fullName(),
+            'uid' => $this->user->uid,
+            'owner' =>
+                [
+                    'uid' => $this->user->owner ? $this->user->owner->uid : false
+                ],
+        ];
         return [
             'id' => $this->id,
             'user' => $user,
-            'message' => $this->message,
             'title' => $this->title,
             'text' => $this->text,
             'created_at' => $this->created_at,
-            'type' => $this->type,
+            'type' =>
+                [
+                    'id' => $this->type->id,
+                    'label' => $this->type->label
+                ],
             'status' => $this->status,
 
         ];

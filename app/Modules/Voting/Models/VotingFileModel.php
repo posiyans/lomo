@@ -3,7 +3,6 @@
 namespace App\Modules\Voting\Models;
 
 use App\Models\MyModel;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Ramsey\Uuid\Uuid;
@@ -49,10 +48,6 @@ use Ramsey\Uuid\Uuid;
  * @method static \Illuminate\Database\Eloquent\Builder|VotingFileModel whereVotingId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|VotingFileModel withTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|VotingFileModel withoutTrashed()
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
  * @mixin \Eloquent
  */
 class VotingFileModel extends MyModel

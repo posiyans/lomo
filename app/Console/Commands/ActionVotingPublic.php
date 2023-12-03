@@ -2,11 +2,10 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Stead;
+use App\Models\UserModel;
 use App\Models\Voting\AnswerModel;
 use App\Models\Voting\UserAnswerModel;
 use App\Models\Voting\VotingModel;
-use App\Models\User;
 use Illuminate\Console\Command;
 
 class ActionVotingPublic extends Command
@@ -43,8 +42,8 @@ class ActionVotingPublic extends Command
     public function handle()
     {
         $id = $this->argument('voting');
-        $users = User::all();
-        $i= 0;
+        $users = UserModel::all();
+        $i = 0;
         $j = 0;
         $voting = VotingModel::find($id);
         $questions = $voting->questions;
@@ -55,7 +54,7 @@ class ActionVotingPublic extends Command
                     $i++;
                     foreach ($questions as $question) {
                         $answer = AnswerModel::where('question_id', $question->id)->inRandomOrder()->first();
-                        echo $answer->id  . " -->> ответ \n";
+                        echo $answer->id . " -->> ответ \n";
                         $rez = new UserAnswerModel();
                         $rez->question_id = $question->id;
                         $rez->answer_id = $answer->id;
@@ -69,6 +68,6 @@ class ActionVotingPublic extends Command
                 $j++;
             }
         }
-        echo (int)(100*$i/$j). " % проголосовали \n";
+        echo (int)(100 * $i / $j) . " % проголосовали \n";
     }
 }

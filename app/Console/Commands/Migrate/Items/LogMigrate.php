@@ -47,7 +47,7 @@ class LogMigrate
             $class = $item->commentable_type;
             $class = str_replace('App\Models\Stead', SteadModel::class, $class);
             $class = str_replace('App\User', UserModel::class, $class);
-            $class = str_replace('App\Models\User', UserModel::class, $class);
+            $class = str_replace('App\Models\UserModel', UserModel::class, $class);
             $class = str_replace('App\Models\Owner\OwnerUserModel', OwnerUserModel::class, $class);
             $class = str_replace('App\Models\Owner\OwnerUserSteadModel', OwnerUserSteadModel::class, $class);
             $class = str_replace('App\Models\Owner\OwnerUserValueModel', OwnerUserValueModel::class, $class);

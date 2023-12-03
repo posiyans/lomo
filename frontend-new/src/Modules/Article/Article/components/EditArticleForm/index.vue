@@ -7,7 +7,7 @@
       color="info"
       size="3px"
     />
-    <div class="row items-center bg-grey-2 q-col-gutter-sm q-pb-sm q-px-sm">
+    <div class="row items-center bg-grey-2 q-col-gutter-sm q-pa-sm">
       <div class="filter-item">
         <q-checkbox
           v-model="articleStore.article.news"
@@ -38,15 +38,11 @@
         <q-btn no-caps no-wrap color="primary" :label="btnLabel" @click="saveArticle" />
       </div>
       <q-space />
-      <div>
-        <UserAvatarByUid :uid="articleStore.article?.user?.uid" />
-      </div>
-      <div>
-        <router-link :to="`/admin/user/show/${articleStore.article?.user?.uid}`">
+      <div class="row items-center bg-white br4">
+        <router-link :to="`/admin/user/show/${articleStore.article?.user?.uid}`" class="user-link">
+          <UserAvatarByUid :uid="articleStore.article?.user?.uid" size="24px" />
           {{ articleStore.article?.user?.name }}
         </router-link>
-      </div>
-      <div>
         <AddBanUserBtn :user-uid="articleStore.article?.user?.uid" type="article" object-uid="all">
           <q-btn icon="delete" flat round color="negative" />
         </AddBanUserBtn>
@@ -173,6 +169,10 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+.user-link {
+  &:hover {
+    opacity: .8;
+  }
+}
 </style>

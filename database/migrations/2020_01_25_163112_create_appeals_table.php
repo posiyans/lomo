@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateAppealsTable extends Migration
 {
@@ -13,15 +13,22 @@ class CreateAppealsTable extends Migration
      */
     public function up()
     {
-        Schema::create('appeals', function (Blueprint $table) {
+        Schema::create('appeal_type_models', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id')->unsigned();
+            $table->string('label')->nullable()->comment('тип обращения');
+            $table->softDeletes();
+            $table->timestamps();
+        });
+        Schema::create('appeal_models', function (Blueprint $table) {
+            $table->id();
+            $table->integer('user_id')->unsigned()->comment('Автор обращения');
             //$table->foreign('user_id')->references('id')->on('users');
-            $table->string('title');
-            $table->text('text')->nullable();
-            $table->string('type')->default('info');
-            $table->string('status')->default('open');
-            $table->dateTime('date_close')->nullable();
+            $table->string('title')->comment('Заголовок обращения');
+            $table->mediumText('text')->nullable()->comment('Текст обращения');
+            $table->integer('appeal_type_id')->nullable()->comment('тип обращения');
+            $table->string('status')->default('open')->comment('Статус обращения');
+            $table->integer('close_user_id')->nullable()->comment('Кто закрыл обращение');
+            $table->dateTime('date_close')->nullable()->comment('Время закрытия обращения');
             $table->softDeletes();
             $table->timestamps();
         });

@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Resources\AppealResource;
-use App\Http\Resources\ConrtollerResource;
-use App\Models\AppealModel;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Modules\Appeal\Modules\AppealModel;
+use App\Modules\Appeal\Resources\AppealResource;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AppealController extends Controller
@@ -17,7 +16,7 @@ class AppealController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('ability:superAdmin,show-appels|edit-appels');
+        $this->middleware('ability:superAdmin,appeal-show|appeal-edit');
     }
 
     /**
@@ -27,9 +26,8 @@ class AppealController extends Controller
      */
     public function index(Request $request)
     {
-
         $query = AppealModel::query();
-        if ($request->status && $request->status !='all'){
+        if ($request->status && $request->status != 'all') {
             $query->where('status', $request->status);
         }
         $appeal = $query->paginate($request->limit);
@@ -65,9 +63,7 @@ class AppealController extends Controller
      */
     public function show(AppealModel $apppel)
     {
-
         return $apppel;
-
     }
 
     /**
@@ -91,23 +87,21 @@ class AppealController extends Controller
     public function update(Request $request, $id)
     {
         $user = Auth::user();
-        if ($user->ability('superAdmin', 'edit-appels')){
+        if ($user->ability('superAdmin', 'edit-appels')) {
             $model = AppealModel::find($id);
             $data = $request->post('appeal');
-            if ($data){
-                if(isset($data['new_message']) && !empty($data['new_message'])) {
+            if ($data) {
+                if (isset($data['new_message']) && !empty($data['new_message'])) {
                     $model->addMessage($data['new_message'], $user->id);
                 }
                 $model->fill($data);
-                if ($model->save()){
+                if ($model->save()) {
                     // todo залогировать!!!
                     return json_encode($model);
                 }
             }
-
         }
         return false;
-
     }
 
     /**

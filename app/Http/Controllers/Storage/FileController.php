@@ -57,7 +57,7 @@ class FileController extends Controller
                     $file->commentable_type = 'App\Models\Article\ArticleModel';
                 } else {
                     if ($request->model == 'user') {
-                        $file->commentable_type = 'App\Models\User';
+                        $file->commentable_type = 'App\Models\UserModel';
 //                    $file->commentable_id = $request->uid;
 
                     } else {

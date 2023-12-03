@@ -26,7 +26,7 @@ use Auth;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Message\MessageModel> $message
  * @property-read int|null $message_count
  * @property-read \App\Models\Stead|null $stead
- * @property-read \App\Models\User|null $user
+ * @property-read \App\Models\UserModel|null $user
  * @method static \Illuminate\Database\Eloquent\Builder|UserAnswerModel newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UserAnswerModel newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UserAnswerModel query()
@@ -51,7 +51,7 @@ class UserAnswerModel extends MyModel
 {
 
     protected $table = 'user_answer_models';
-    protected $fillable= ['question_id', 'stead_id', 'user_id'];
+    protected $fillable = ['question_id', 'stead_id', 'user_id'];
 
     public function __construct(array $attributes = [])
     {
@@ -62,11 +62,13 @@ class UserAnswerModel extends MyModel
     }
 
     //
-    public function user() {
-        return $this->hasOne('App\Models\User', 'id', 'user_id');
+    public function user()
+    {
+        return $this->hasOne('App\Models\UserModel', 'id', 'user_id');
     }
 
-    public function stead() {
+    public function stead()
+    {
         return $this->hasOne('App\Models\Stead', 'id', 'stead_id');
     }
 

@@ -2,16 +2,12 @@
 
 namespace App\Http\Controllers\User\Voting;
 
-use App\Http\Resources\AppealResource;
-use App\Http\Resources\ConrtollerResource;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\VotingResource;
-use App\Models\AppealModel;
 use App\Models\Voting\AnswerModel;
 use App\Models\Voting\VotingModel;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Laratrust\Laratrust;
 
 class UserVotingController extends Controller
 {
@@ -32,21 +28,20 @@ class UserVotingController extends Controller
     public function index(Request $request)
     {
         $query = VotingModel::where('public', 1);
-        if (isset($request->type)){
-            $query->where('type',  $request->type);
+        if (isset($request->type)) {
+            $query->where('type', $request->type);
         }
-        if (isset($request->status)){
+        if (isset($request->status)) {
             //todo не совсем так нужно рефакторить!!!!
             if (is_array($request->status)) {
-                $status =  $request->status;
+                $status = $request->status;
             } elseif (is_string($request->type)) {
                 $status = [$request->status];
             } else {
                 $status = false;
             }
             if ($status) {
-                $query->whereIn('status',  $status);
-
+                $query->whereIn('status', $status);
             }
         }
         $query->orderBy('id', 'desc');
@@ -77,7 +72,7 @@ class UserVotingController extends Controller
             $voting = new VotingModel();
             $voting->fill($data);
             $voting->coments = 0;
-            if ($voting->type == 'public'){
+            if ($voting->type == 'public') {
                 $voting->date_start = '0000-01-01 00:00:00';
                 $voting->date_stop = '9999-01-01 00:00:00';
             }
@@ -107,7 +102,7 @@ class UserVotingController extends Controller
             $voting = VotingModel::where('id', $id)->where('public', 1)->first();
             if ($voting) {
                 $user = Auth::user();
-                if ($user){
+                if ($user) {
                     $user_id = $user->id;
                 } else {
                     $user_id = false;
@@ -146,7 +141,7 @@ class UserVotingController extends Controller
                 if ($voting && $id == $voting->id) {
                     $voting->fill($data);
                     $voting->coments = 0;
-                    if ($voting->type == 'public'){
+                    if ($voting->type == 'public') {
                         $voting->date_start = '0000-01-01';
                         $voting->date_stop = '9999-01-01';
                     }
@@ -163,7 +158,7 @@ class UserVotingController extends Controller
                 }
             }
         }
-        return ['status'=>false];
+        return ['status' => false];
     }
 
     /**
@@ -174,7 +169,6 @@ class UserVotingController extends Controller
      */
     public function destroy($id)
     {
-
     }
 
 
@@ -183,15 +177,13 @@ class UserVotingController extends Controller
      */
     public function addAnswer(Request $request)
     {
-        if (!Auth::guest() && $request->answer_id)
-        {
+        if (!Auth::guest() && $request->answer_id) {
             $user = Auth::user();
-            if ($data = AnswerModel::userVoting($user->id, (int)$request->answer_id)){
-                return json_encode(['status'=>true, 'data'=> $data]);
+            if ($data = AnswerModel::userVoting($user->id, (int)$request->answer_id)) {
+                return json_encode(['status' => true, 'data' => $data]);
             }
-            return json_encode(['status'=>false, 'data'=>  'На данный вопрос уже был получен ответ']);
+            return json_encode(['status' => false, 'data' => 'На данный вопрос уже был получен ответ']);
         }
-        return json_encode(['status'=>false, 'data'=>  'Вы не авторизованы']);
-
+        return json_encode(['status' => false, 'data' => 'Вы не авторизованы']);
     }
 }

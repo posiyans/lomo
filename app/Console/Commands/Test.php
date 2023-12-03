@@ -2,12 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Laratrust\Permission;
-use App\Models\Laratrust\Role;
-use App\Models\Owner\OwnerUserModel;
-use App\Models\User;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Cache;
 
 class Test extends Command
 {

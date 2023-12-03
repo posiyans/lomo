@@ -3,7 +3,7 @@
 namespace App\Models\Message;
 
 use App\Models\MyModel;
-use App\Models\User;
+use App\Models\UserModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 
@@ -72,7 +72,7 @@ class MessageModel extends MyModel
     public function user()
     {
         if ($this->user_id) {
-            return $this->hasOne(User::class, 'id', 'user_id');
+            return $this->hasOne(UserModel::class, 'id', 'user_id');
         } else {
             return false;
         }

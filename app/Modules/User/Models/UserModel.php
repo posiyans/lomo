@@ -3,6 +3,7 @@
 namespace App\Modules\User\Models;
 
 use App\Modules\BanUser\Models\BanUserModel;
+use App\Modules\Owner\Models\OwnerUserModel;
 use App\Notifications\ResetPassword;
 use App\Notifications\VerifyEmail;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -69,22 +70,6 @@ use Laravel\Sanctum\HasApiTokens;
  * @method static \Illuminate\Database\Eloquent\Builder|UserModel whereSteadsId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserModel whereUid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserModel whereUpdatedAt($value)
- * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Laratrust\Permission> $permissions
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Laratrust\Role> $roles
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
- * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Laratrust\Permission> $permissions
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Laratrust\Role> $roles
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
- * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Laratrust\Permission> $permissions
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Laratrust\Role> $roles
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
- * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Laratrust\Permission> $permissions
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Laratrust\Role> $roles
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
  * @mixin \Eloquent
  */
 class UserModel extends Authenticatable implements MustVerifyEmail
@@ -94,7 +79,6 @@ class UserModel extends Authenticatable implements MustVerifyEmail
     use HasApiTokens;
     use HasFactory;
 
-    protected $table = 'users';
     public static $no_email_prefix = 'no_email_';
 
     /**
@@ -132,13 +116,22 @@ class UserModel extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         'consent_to_email' => 'boolean',
         'consent_personal' => 'boolean',
-        'steads_id' => 'array'
     ];
 
 
     public function ban()
     {
         return $this->hasOne(BanUserModel::class);
+    }
+
+    /**
+     * пользователь собствеенник
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function owner()
+    {
+        return $this->hasOne(OwnerUserModel::class, 'user_uid', 'uid');
     }
 
     /**
@@ -171,7 +164,7 @@ class UserModel extends Authenticatable implements MustVerifyEmail
     public function setEmailAttribute($value)
     {
         $this->email_verified_at = null;
-        $this->attributes['email'] = trim($value);
+        $this->attributes['email'] = strtolower(trim($value));
     }
 
     public function getEmailAttribute()

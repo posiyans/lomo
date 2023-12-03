@@ -1,5 +1,11 @@
 <template>
   <div class="q-pa-md">
+    <div class="page-title">
+      {{ activeUserStore.user.last_name }}
+      {{ activeUserStore.user.name }}
+      {{ activeUserStore.user.middle_name }}
+      {{ data }}
+    </div>
     <div>
       <q-tabs
         v-model="data"
@@ -14,6 +20,7 @@
         <q-tab name="roles" label="Роли" />
         <q-tab name="ban" label="Бан" />
         <q-tab name="comments" label="Комментарии" />
+        <q-tab name="appeal" label="Обращения" />
         <q-tab name="actions" label="Действия" />
       </q-tabs>
       <q-separator />
@@ -34,7 +41,9 @@
         <q-tab-panel name="comments">
           <CommentsList v-if="activeUserStore.user.uid" :user-uid="activeUserStore.user.uid" />
         </q-tab-panel>
-
+        <q-tab-panel name="appeal">
+          <AppealList :user-uid="activeUserStore.user.uid" />
+        </q-tab-panel>
         <q-tab-panel name="actions">
           <div v-if="!activeUserStore.user.email_verified_at">
             Повторное потверждение почты
@@ -60,6 +69,7 @@ import { useActiveUserStore } from 'src/Modules/Users/stores/useActiveUserStore'
 import { sendVerifyMailToken } from 'src/Modules/Users/api/user-admin-api'
 import BanUserInfo from 'src/Modules/BanUsers/components/BanUserInfo/index.vue'
 import CommentsList from 'src/Modules/Comments/components/CommentsList/index.vue'
+import AppealList from 'src/Modules/Appeal/pages/AppealList/index.vue'
 
 export default defineComponent({
   components: {
@@ -67,14 +77,15 @@ export default defineComponent({
     ActiveUserRolesAndPermissions,
     ActiveUserPermissions,
     BanUserInfo,
+    AppealList,
     CommentsList
   },
   props: {},
 
   setup() {
-    const data = ref('pers')
-    const router = useRouter()
     const route = useRoute()
+    const data = ref(route.query?.tab || 'pers')
+    const router = useRouter()
     const activeUserStore = useActiveUserStore()
     onMounted(() => {
 

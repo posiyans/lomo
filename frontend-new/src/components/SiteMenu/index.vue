@@ -1,5 +1,5 @@
 <template>
-  <ItemMenu v-for="route in modelValue" :key="route.path" :item="route" :first="first" :icon="icon" />
+  <ItemMenu v-for="route in modelValue" :key="route.id" :item="route" :first="first" :icon="icon" />
 </template>
 
 <script>

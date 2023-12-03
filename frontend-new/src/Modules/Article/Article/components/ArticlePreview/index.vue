@@ -12,7 +12,7 @@
         <q-separator />
       </q-card-section>
       <q-card-section>
-        <div v-html="article.resume" class="" />
+        <div v-html="article.resume" class="overflow-hidden article-preview" style="" />
       </q-card-section>
       <q-card-actions>
         <div class="row items-center q-col-gutter-md">
@@ -73,5 +73,14 @@ export default defineComponent({
 </script>
 
 <style scoped>
+
+</style>
+<style lang="scss">
+.article-preview {
+  & img {
+    max-height: 100px;
+    width: auto;
+  }
+}
 
 </style>

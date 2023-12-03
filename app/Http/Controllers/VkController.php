@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\UserModel;
 use App\Modules\Social\Models\LinkedSocialAccounts;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -85,7 +85,7 @@ class VkController extends Controller
                 // соцюзер не найден
                 if (Auth::guest()) {
                     if (isset($token['email'])) {
-                        $user = User::where('email', $token['email'])->first();
+                        $user = UserModel::where('email', $token['email'])->first();
                         if (!$user) {
                             $user = $this->createUser($token);
                         }
@@ -140,7 +140,7 @@ class VkController extends Controller
         );
         $response = json_decode(file_get_contents('https://api.vk.com/method/users.get' . '?' . urldecode(http_build_query($params))), true);
         $userInfo = $response['response'][0];
-        $user = new User();
+        $user = new UserModel();
         $user->name = $userInfo['first_name'];
         $user->email = $token['email'];
         $user->email_verified_at = \Carbon\Carbon::now();

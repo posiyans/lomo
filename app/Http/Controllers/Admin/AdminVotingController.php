@@ -2,15 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Resources\AppealResource;
-use App\Http\Resources\ConrtollerResource;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\VotingResource;
-use App\Models\AppealModel;
 use App\Models\Voting\VotingModel;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Laratrust\Laratrust;
 
 class AdminVotingController extends Controller
 {
@@ -121,7 +117,7 @@ class AdminVotingController extends Controller
                 $voting = VotingModel::find($id);
                 if ($voting && $id == $voting->id) {
                     $voting->fill($data);
-                    if ($voting->type == 'public'){
+                    if ($voting->type == 'public') {
                         $voting->date_start = '0000-01-01 00:00:00';
                         $voting->date_stop = '9999-01-01 00:00:00';
                     }
@@ -137,7 +133,7 @@ class AdminVotingController extends Controller
                 }
             }
         }
-        return ['status'=>false];
+        return ['status' => false];
     }
 
     /**

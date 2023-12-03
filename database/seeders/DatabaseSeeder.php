@@ -2,9 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\MeteringDevice;
-use App\Models\Rate;
-use App\Models\ReceiptType;
 use Illuminate\Database\Seeder;
 
 
@@ -20,6 +17,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             LaratrustSeeder::class,
+            AppealTypeSeeder::class,
 //            CategorySeeder::class,
 //            SiteMenuSeeder::class,
             OwnerUserFieldSeeder::class,

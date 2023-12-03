@@ -9,6 +9,7 @@ import weather from 'src/Modules/Weather/router/weather.js'
 import { voting } from 'src/Modules/Voting/router/votingRouter.js'
 import adminRoutes from './adminRoutes.js'
 import { personalAreaRouter } from 'src/Modules/PersonalArea/router/personalAreaRouter'
+import { appeal } from 'src/Modules/Appeal/router/appealRouter'
 
 const routes = [
   {
@@ -30,7 +31,8 @@ const routes = [
       yandex,
       camera,
       weather,
-      voting
+      voting,
+      appeal
     ]
   },
   {

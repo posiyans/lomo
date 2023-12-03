@@ -106,6 +106,9 @@ class RouteServiceProvider extends ServiceProvider
             Route::middleware('api')
                 ->prefix('api')
                 ->group(base_path('app/Modules/Camera/routes/apiCameraRouter.php'));
+            Route::middleware('api')
+                ->prefix('api')
+                ->group(base_path('app/Modules/Appeal/routes/apiAppealRoutes.php'));
         });
     }
 
