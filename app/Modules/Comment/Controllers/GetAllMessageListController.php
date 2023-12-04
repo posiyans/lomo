@@ -9,7 +9,7 @@ use App\Modules\User\Repositories\GetUserByUidRepository;
 use Illuminate\Http\Request;
 
 /**
- * получить все комментарии в системе
+ * получить все комментарии к статьям
  *
  */
 class GetAllMessageListController extends Controller
@@ -32,6 +32,8 @@ class GetAllMessageListController extends Controller
                 $user = (new GetUserByUidRepository($user_uid))->run();
                 $query->forUser($user);
             }
+            $query->byType('article');
+
             $comments = $query->paginate($limit);
             return CommentResource::collection($comments);
         } catch (\Exception $e) {

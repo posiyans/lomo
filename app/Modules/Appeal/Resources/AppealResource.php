@@ -9,7 +9,7 @@ class AppealResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return array
      */
     public function toArray($request)
@@ -24,9 +24,9 @@ class AppealResource extends JsonResource
         ];
         return [
             'id' => $this->id,
+            'uid' => $this->uid,
             'user' => $user,
             'title' => $this->title,
-            'text' => $this->text,
             'created_at' => $this->created_at,
             'type' =>
                 [

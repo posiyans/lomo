@@ -29,6 +29,7 @@ class GetMessageController extends Controller
         $type = $request->get('type');
         $uid = $request->get('uid');
         $model = (new GetObjectByTypeAndUid($type, $uid))->run();
+        // todo проверить права доступа на данную модель
         $comments = (new GetCommentsForObject($model))->run();
         $result = CommentResource::collection($comments);
         return $result;

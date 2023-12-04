@@ -21,6 +21,7 @@ class CreateAppealsTable extends Migration
         });
         Schema::create('appeal_models', function (Blueprint $table) {
             $table->id();
+            $table->string('uid');
             $table->integer('user_id')->unsigned()->comment('Автор обращения');
             //$table->foreign('user_id')->references('id')->on('users');
             $table->string('title')->comment('Заголовок обращения');

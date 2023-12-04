@@ -15,6 +15,15 @@ class CommentRepository
         $this->query = CommentModel::query();
     }
 
+    public function byType($type)
+    {
+        if ($type) {
+            $this->query->where('commentable_type', (new GetClassNameByType($type))->run());
+        }
+        return $this;
+    }
+
+
     public function byUid($uid)
     {
         $this->query->where('uid', $uid);

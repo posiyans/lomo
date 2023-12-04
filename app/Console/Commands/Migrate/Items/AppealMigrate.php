@@ -4,6 +4,7 @@ namespace App\Console\Commands\Migrate\Items;
 
 use App\Modules\Appeal\Modules\AppealModel as AppealModelOriginal;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class AppealMigrate
 {
@@ -30,6 +31,7 @@ class AppealMigrate
                 $newItem->$key = $item->$key;
             }
             $newItem->appeal_type_id = 1;
+            $newItem->uid = Str::uuid();
             $newItem->save();
         }
     }

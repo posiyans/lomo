@@ -23,7 +23,7 @@ class BanUserTypeRepository
         'article' => [
             'className' => ArticleModel::class,
             'label' => 'бан на добавление статей'
-        ],
+        ]
     ];
 
 
@@ -34,7 +34,7 @@ class BanUserTypeRepository
 
     public static function getTypeClass($type)
     {
-        return self::$type[$type] ? self::$type[$type]['className'] : null;
+        return isset(self::$type[$type]) ? self::$type[$type]['className'] : null;
     }
 
     public static function getKeyForClass($className)

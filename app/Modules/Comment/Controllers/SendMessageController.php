@@ -36,6 +36,7 @@ class SendMessageController extends Controller
             $message = $request->get('message', null);
             $reply = $request->get('reply');
             $model = (new GetObjectByTypeAndUid($type, $uid))->run();
+            // todo проверить права доступа на данную модель
             $opt = [
                 'reply' => $reply
             ];

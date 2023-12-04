@@ -1,6 +1,6 @@
 <template>
   <div>
-    <MessageBlock :message-block="messageBlock" class="q-pa-md comments-block" />
+    <MessageBlock :message-block="messageBlock" :no-ban="noBan" :no-delete="noDelete" class="comments-block" />
     <SendCommentBlock :message-block="messageBlock" class="bg-grey-3" />
   </div>
 </template>
@@ -18,6 +18,14 @@ export default defineComponent({
     MessageBlock
   },
   props: {
+    noBan: {
+      type: Boolean,
+      default: false
+    },
+    noDelete: {
+      type: Boolean,
+      default: false
+    },
     type: {
       type: String,
       default: 'article'

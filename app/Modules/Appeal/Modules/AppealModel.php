@@ -7,6 +7,7 @@ use App\Models\MyModel;
 use App\Models\UserModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 /**
  * App\Modules\Appeal\Modules\AppealModel
@@ -60,6 +61,7 @@ class AppealModel extends MyModel
         } else {
             $this->user_id = 0;
         }
+        $this->uid = Str::uuid();
     }
 
     /**

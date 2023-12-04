@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-for="item in list.showMessage.value" :key="item.id" class="q-mb-sm q-px-lg relative-position">
+    <div v-for="item in list.showMessage.value" :key="item.id" class="q-mb-sm relative-position">
       <ItemBlock
         :ref="val => refBlock[item.uid] = val"
         :item="item"
@@ -68,7 +68,15 @@ export default defineComponent({
     messageBlock: {
       type: Object,
       required: true
-    }
+    },
+    noBan: {
+      type: Boolean,
+      default: false
+    },
+    noDelete: {
+      type: Boolean,
+      default: false
+    },
   },
   setup(props, { emit }) {
     const list = toRefs(props.messageBlock)
@@ -76,10 +84,13 @@ export default defineComponent({
     const $q = useQuasar()
     const authStore = useAuthStore()
     const showBanBtn = computed(() => {
-      return authStore.permissions.includes('comment-ban')
+      return !props.noBan && authStore.permissions.includes('comment-ban')
     })
     const deleteAccess = computed(() => {
       return (item) => {
+        if (props.noDelete) {
+          return false
+        }
         if (authStore.user.uid === item.user.uid) {
           return true
         }

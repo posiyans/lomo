@@ -30,6 +30,7 @@ class DeleteMessageController extends Controller
             $user = Auth::user();
             $uid = $request->get('uid');
             $model = (new CommentRepository())->byUid($uid)->one();
+            // todo проверить права доступа на данную модель и на возможность удалять сообщения
             if ($model->user_id === $user->id || $user->ability('superAdmin', 'comment-delete')) {
                 (new DeleteCommentClass($model))->run();
                 return true;

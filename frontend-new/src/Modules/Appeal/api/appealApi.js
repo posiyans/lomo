@@ -18,7 +18,7 @@ export function createAppeal(data) {
 
 export function getAppeal(id) {
   return request({
-    url: '/api/v2/appeal/get/{id}',
+    url: '/api/v2/appeal/get/' + id,
     method: 'get'
   })
 }
