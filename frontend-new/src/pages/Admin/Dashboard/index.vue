@@ -13,7 +13,9 @@
                  @click="$router.push('/admin/user/list')"
 
       />
-      <CardBlock label="Обращенией" :count-label="countAppealOpen + '(' + countAppeal + ')'" color="cyan" icon="message" class="bg-white card-panel" />
+      <CardBlock label="Обращенией" :count-label="countAppealOpen + '(' + countAppeal + ')'" color="cyan" icon="message" class="bg-white card-panel"
+                 @click="$router.push('/admin/appeal/list')"
+      />
       <CardBlock label="Участков" :count-label="countStead" icon="dashboard" class="bg-white card-panel"
                  @click="$router.push('/admin/stead/list')"
       />

@@ -32,7 +32,7 @@ class GetAllMessageListController extends Controller
                 $user = (new GetUserByUidRepository($user_uid))->run();
                 $query->forUser($user);
             }
-            $query->byType('article');
+//            $query->byType('article');
 
             $comments = $query->paginate($limit);
             return CommentResource::collection($comments);

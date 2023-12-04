@@ -1,15 +1,18 @@
 <template>
   <div v-if="!loading" class="q-pa-sm">
     <q-card>
-      <q-card-section class="q-pb-none">
+      <q-card-section class="q-pb-sm">
         <div class="row items-center">
           <div class="row items-center q-col-gutter-sm">
             <div>
               <div class="text-primary">
                 {{ appeal.title }}
               </div>
-              <div class="text-small-75">
-                {{ appeal.user.fullName }}
+              <div class="text-small-75 row q-col-gutter-sm">
+                <ShowTime :time="appeal.created_at" class="o-80" />
+                <div>
+                  {{ appeal.user.fullName }}
+                </div>
               </div>
             </div>
             <q-chip class="text-teal">
@@ -17,9 +20,10 @@
             </q-chip>
           </div>
           <q-space />
-          <q-chip>
-            <AppealStatusLabelById :status="appeal.status" add-color />
-          </q-chip>
+          <div>
+            <q-btn v-if="appeal.status === 'open'" rounded label="Закрыть" color="negative" @click="closeAppealAction" />
+            <q-btn v-if="appeal.status === 'close'" label="Закрыто" color="secondary" disable />
+          </div>
         </div>
       </q-card-section>
       <q-separator />
@@ -31,13 +35,8 @@
         </div>
       </q-card-section>
       <q-separator />
-      <q-card-section>
-        <CommentBlock
-          type="appeal"
-          :object-uid="appeal.uid"
-          no-delete
-          no-ban
-        />
+      <q-card-section class="bg-grey-1">
+        <ChatBlock :appeal="appeal" />
       </q-card-section>
     </q-card>
   </div>
@@ -47,16 +46,19 @@
 /* eslint-disable */
 import { defineComponent, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { getAppeal } from 'src/Modules/Appeal/api/appealApi'
-import CommentBlock from 'src/Modules/Comments/components/CommentsBlock/index.vue'
+import { closeAppeal, getAppeal } from 'src/Modules/Appeal/api/appealApi.js'
 import AppealStatusLabelById from 'src/Modules/Appeal/components/AppealStatusLabelById/index.vue'
 import AppealTypeNameById from 'src/Modules/Appeal/components/AppealTypeNameById/index.vue'
+import { useQuasar } from 'quasar'
+import ShowTime from 'components/ShowTime/index.vue'
+import ChatBlock from './components/ChatBlock/index.vue'
 
 export default defineComponent({
   components: {
-    CommentBlock,
     AppealStatusLabelById,
-    AppealTypeNameById
+    AppealTypeNameById,
+    ShowTime,
+    ChatBlock
   },
   props: {},
   setup(props, { emit }) {
@@ -64,6 +66,7 @@ export default defineComponent({
     const loading = ref(true)
     const router = useRouter()
     const route = useRoute()
+    const $q = useQuasar()
     const getData = () => {
       getAppeal(route.params.id)
         .then(res => {
@@ -71,12 +74,37 @@ export default defineComponent({
           loading.value = false
         })
     }
+    const closeAppealAction = () => {
+      $q.dialog({
+        title: 'Подтвердите',
+        message: 'Закрыть данное обращение?',
+        cancel: {
+          label: 'Отмена',
+          color: 'negative',
+          flat: true
+        },
+        ok: {
+          label: 'Закрыть'
+        },
+        persistent: true
+      }).onOk(() => {
+        closeAppeal(appeal.value.id)
+          .then(res => {
+            getData()
+          })
+      }).onOk(() => {
+        // console.log('>>>> second OK catcher')
+      }).onCancel(() => {
+        // console.log('>>>> Cancel')
+      })
+    }
     onMounted(() => {
       console.log(route.params.id)
       getData()
     })
     return {
       appeal,
+      closeAppealAction,
       loading
     }
   }

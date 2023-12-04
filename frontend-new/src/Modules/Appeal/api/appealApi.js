@@ -22,3 +22,11 @@ export function getAppeal(id) {
     method: 'get'
   })
 }
+
+export function closeAppeal(id, data) {
+  return request({
+    url: '/api/v2/appeal/close/' + id,
+    method: 'post',
+    data
+  })
+}

@@ -22,6 +22,7 @@ class GetAppealListController extends Controller
             ->type($request->type)
             ->find($request->find)
             ->status($request->status)
+            ->sortBy()
             ->paginate($request->limit);
         return AppealResource::collection($appeals);
     }

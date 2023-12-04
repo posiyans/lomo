@@ -15,7 +15,7 @@
         </div>
       </ItemBlock>
       <q-separator style="margin-left: 55px;" />
-      <div v-if="!authStore.is_guest && !list.ban.value.status" class="absolute-top-right row q-pr-lg">
+      <div v-if="!noRepeat && !authStore.is_guest && !list.ban.value.status" class="absolute-top-right row q-pr-lg">
         <div class="cursor-pointer message-btn message-btn_reply q-px-xs" @click="messageBlock.replyMessage(item)">
           <q-icon name="reply">
             <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
@@ -74,6 +74,10 @@ export default defineComponent({
       default: false
     },
     noDelete: {
+      type: Boolean,
+      default: false
+    },
+    noRepeat: {
       type: Boolean,
       default: false
     },

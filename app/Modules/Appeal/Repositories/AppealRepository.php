@@ -49,6 +49,11 @@ class AppealRepository
         return $this;
     }
 
+    public function sortBy($column = 'id', $direction = 'desc')
+    {
+        $this->query->orderBy($column, $direction);
+        return $this;
+    }
 
     public function paginate($limit)
     {
