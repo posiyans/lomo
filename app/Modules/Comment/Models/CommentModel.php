@@ -41,14 +41,6 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @method static \Illuminate\Database\Eloquent\Builder|CommentModel whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CommentModel whereUserDeletesId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CommentModel whereUserId($value)
- * @property string|null $message текст коментария
- * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $commentable
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @method static \App\Modules\Comment\Factories\CommentModelFactory factory(...$parameters)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $parentModel
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
  * @mixin \Eloquent
  */
 class CommentModel extends MyModel
@@ -70,6 +62,14 @@ class CommentModel extends MyModel
     public function commentable(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo('App\Modules\User\Models\UserModel');
     }
 
     public function parentModel(): MorphTo

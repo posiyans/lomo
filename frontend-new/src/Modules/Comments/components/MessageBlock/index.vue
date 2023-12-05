@@ -15,7 +15,7 @@
         </div>
       </ItemBlock>
       <q-separator style="margin-left: 55px;" />
-      <div v-if="!noRepeat && !authStore.is_guest && !list.ban.value.status" class="absolute-top-right row q-pr-lg">
+      <div v-if="item.actions.write && !list.ban.value.status" class="absolute-top-right row q-pr-lg">
         <div class="cursor-pointer message-btn message-btn_reply q-px-xs" @click="messageBlock.replyMessage(item)">
           <q-icon name="reply">
             <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
@@ -23,14 +23,14 @@
             </q-tooltip>
           </q-icon>
         </div>
-        <div v-if="deleteAccess(item)" class="cursor-pointer message-btn message-btn_delete  q-px-xs" @click="deleteItem(item)">
+        <div v-if="item.actions.delete" class="cursor-pointer message-btn message-btn_delete  q-px-xs" @click="deleteItem(item)">
           <q-icon name="close">
             <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
               <strong>Удалить</strong>
             </q-tooltip>
           </q-icon>
         </div>
-        <AddBanUserBtn v-if="showBanBtn" :user-uid="item.user.uid" :type="messageBlock.objectType" :object-uid="messageBlock.objectUid">
+        <AddBanUserBtn v-if="item.actions.ban" :user-uid="item.user.uid" :type="messageBlock.objectType" :object-uid="messageBlock.objectUid">
           <div class="cursor-pointer message-btn message-btn_delete  q-px-xs">
             <q-icon name="block">
               <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">

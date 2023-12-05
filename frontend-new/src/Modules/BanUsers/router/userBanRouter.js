@@ -37,6 +37,7 @@ export const adminUserBan =
         path: 'list',
         name: 'adminUserBanList',
         component: () => import('src/Modules/BanUsers/pages/BanUserList/index.vue'),
+        hidden: true,
         meta: {
           icon: 'list_alt',
           title: 'Черный список',

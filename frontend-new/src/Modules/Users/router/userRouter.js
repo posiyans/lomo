@@ -12,6 +12,7 @@ export const adminUser =
         path: 'list',
         name: 'adminUserList',
         component: () => import('src/Modules/Users/pages/AdminUserList/index.vue'),
+        hidden: true,
         meta: {
           icon: 'people',
           title: 'Список',

@@ -1,6 +1,6 @@
 /* eslint-disable */
 <template>
-  <q-item v-if="show" clickable v-ripple :active="active" :to="url" @click="actionShow">
+  <q-item clickable v-ripple :active="active" :to="url" @click="actionShow">
     <q-item-section avatar>
       <q-icon :name="iconName" />
     </q-item-section>
@@ -11,7 +11,7 @@
       <q-icon color="grey" name="keyboard_arrow_down" :class="{ 'rotate-180': showSubmenu,'rotate-0': !showSubmenu}" />
     </q-item-section>
   </q-item>
-  <q-separator v-if="show" />
+  <q-separator />
   <q-slide-transition>
     <div v-if="showSubmenu" class="bg-blue-grey-3">
       <div v-for="child in item.children" :key="child.path" class="q-pl-sm">
@@ -50,22 +50,6 @@ export default defineComponent({
     const active = computed(() => {
       return findActive(props.item)
     })
-    const show = computed(() => {
-      if (!props.item.hidden && props.item.meta && props.item.meta.title) {
-        if (props.item.meta.roles) {
-          let access = false
-          authStore.permissions.forEach(item => {
-            if (props.item.meta.roles.includes(item)) {
-              access = true
-            }
-          })
-          return access
-        }
-        return true
-      } else {
-        return false
-      }
-    })
     const findActive = (val) => {
       if (val.children) {
         return val.children.find(item => {
@@ -88,7 +72,6 @@ export default defineComponent({
     }
     return {
       actionShow,
-      show,
       iconName,
       showSubmenu,
       active,

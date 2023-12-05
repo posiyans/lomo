@@ -8,23 +8,23 @@
       <div v-for="item in commentsList.list.value" :key="item.id" class="relative-position">
         <ItemBlock :item="item">
           <template v-slot:header>
-            <div>
+            <div class="text-small-80">
               <router-link :to="item.parentObject.url" class="text-primary">
-                для {{ item.parentObject.type }}
+                для {{ item.parentObject.label }}
               </router-link>
             </div>
           </template>
         </ItemBlock>
         <q-separator />
         <div class="absolute-top-right row q-pr-lg">
-          <div class="cursor-pointer message-btn message-btn_delete  q-px-xs" @click="deleteItem(item)">
+          <div v-if="item.actions.delete" class="cursor-pointer message-btn message-btn_delete  q-px-xs" @click="deleteItem(item)">
             <q-icon name="close">
               <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
                 <strong>Удалить</strong>
               </q-tooltip>
             </q-icon>
           </div>
-          <AddBanUserBtn :user-uid="item.user.uid" :type="item.parentObject.type" :object-uid="item.parentObject.uid">
+          <AddBanUserBtn v-if="item.actions.ban" :user-uid="item.user.uid" :type="item.parentObject.type" :object-uid="item.parentObject.uid">
             <div class="cursor-pointer message-btn message-btn_delete  q-px-xs">
               <q-icon name="block">
                 <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
@@ -41,8 +41,7 @@
 
 <script>
 /* eslint-disable */
-import { defineComponent, onMounted, ref, toRefs } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { defineComponent, ref, toRefs } from 'vue'
 import ItemBlock from 'src/Modules/Comments/components/MessageBlock/components/ItemBlock/index.vue'
 import { deleteMessage } from 'src/Modules/Comments/api/commentApi'
 import { useQuasar } from 'quasar'
@@ -61,8 +60,6 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const data = ref(null)
-    const router = useRouter()
-    const route = useRoute()
     const $q = useQuasar()
     const list = toRefs(props.commentsList.list.value)
     const columns = ref(
@@ -111,10 +108,6 @@ export default defineComponent({
           })
       })
     }
-
-    onMounted(() => {
-
-    })
     return {
       data,
       columns,

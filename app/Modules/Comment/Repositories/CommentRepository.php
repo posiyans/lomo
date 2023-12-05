@@ -15,10 +15,13 @@ class CommentRepository
         $this->query = CommentModel::query();
     }
 
+    /**
+     * @throws \Exception
+     */
     public function byType($type)
     {
         if ($type) {
-            $this->query->where('commentable_type', (new GetClassNameByType($type))->run());
+            $this->query->where('commentable_type', CommentTypeRepository::getClassName($type));
         }
         return $this;
     }

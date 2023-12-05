@@ -2,8 +2,7 @@
 
 namespace App\Modules\Comment\Resources;
 
-use App\Modules\Comment\Repositories\GetDataForObject;
-use App\Modules\User\Repositories\GetUserByUidRepository;
+use Auth;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class CommentResource extends JsonResource
@@ -11,12 +10,12 @@ class CommentResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return array
      */
     public function toArray($request)
     {
-        $user = (new GetUserByUidRepository($this->user_id))->run();
+        $user = Auth::user();
         $data = [
             'id' => $this->id,
             'uid' => $this->uid,
@@ -25,13 +24,15 @@ class CommentResource extends JsonResource
             'updated_at' => $this->updated_at,
             'options' => $this->options,
             'user' => [
-                'uid' => $user->uid,
-                'name' => $user->last_name . ' ' . $user->name,
+                'uid' => $this->user ? $this->user->uid : '',
+                'name' => $this->user ? $this->user->last_name . ' ' . $this->user->name : 'Bot',
             ],
-            'parentObject' => [
-                'type' => (new GetDataForObject($this->parentModel))->label(),
-                'url' => (new GetDataForObject($this->parentModel))->url(), // todo переделать чтоб работало в зависимости от родительской модели,
-            ],
+            'parentObject' => $this->parentModel->descriptionForComment(),
+            'actions' => [
+                'delete' => $user ? $this->parentModel->commentEdit($user) : false,
+                'ban' => $user ? $this->parentModel->commentUserBan($user) : false,
+                'write' => $user ? $this->parentModel->commentWrite($user) : false,
+            ]
 
         ];
         return $data;

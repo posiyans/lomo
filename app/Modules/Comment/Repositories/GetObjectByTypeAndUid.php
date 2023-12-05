@@ -13,7 +13,7 @@ class GetObjectByTypeAndUid
 
     public function __construct($type, $uid)
     {
-        $class = (new GetClassNameByType($type))->run();
+        $class = CommentTypeRepository::getClassName($type);
         $this->object = $class::where('uid', $uid)->first();
     }
 

@@ -20,8 +20,8 @@
       </template>
       <template v-slot:body-cell-date="props">
         <q-td :props="props" auto-width>
-          <div class="">
-            <ShowTime :time="props.row.created_at" />
+          <div class="text-no-wrap">
+            <ShowTime :time="props.row.created_at" format="DD-MM-YYYY" />
           </div>
         </q-td>
       </template>
@@ -56,10 +56,8 @@
         </q-td>
       </template>
       <template v-slot:body-cell-actions="props">
-        <q-td :props="props">
-          <div class="cursor-pointer" @click="showInfo(props.row)">
-            <q-icon name="info" size="24px" color="primary" />
-          </div>
+        <q-td :props="props" auto-width>
+          <q-btn label="Смотреть" flat color="primary" @click="showInfo(props.row)" />
         </q-td>
       </template>
     </q-table>
@@ -124,12 +122,12 @@ export default defineComponent({
         name: 'status',
         align: 'center',
         label: 'Статус',
-      }
-      // {
-      //   name: 'actions',
-      //   align: 'center',
-      //   label: ''
-      // },
+      },
+      {
+        name: 'actions',
+        align: 'center',
+        label: ''
+      },
 
     ]
     const authStore = useAuthStore()

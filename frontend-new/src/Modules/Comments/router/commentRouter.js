@@ -12,6 +12,7 @@ export const adminComment =
         path: 'list',
         name: 'adminCommentList',
         component: () => import('src/Modules/Comments/pages/AdminCommentList/index.vue'),
+        hidden: true,
         meta: {
           icon: 'article',
           title: 'Все комментарии',

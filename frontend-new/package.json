@@ -1,8 +1,8 @@
 {
   "name": "cnt",
   "version": "0.0.1",
-  "description": "Cnt crm",
-  "productName": "Cnt crm",
+  "description": "CRM for Snt",
+  "productName": "CRM for Snt",
   "author": "posiyans <posiyans@gmail.com>",
   "private": true,
   "scripts": {

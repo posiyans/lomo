@@ -1,6 +1,8 @@
 <?php
+
 namespace App\Modules\Comment\Repositories;
 
+use App\Modules\Comment\Interfaces\CommentedObjectInterface;
 use App\Modules\Comment\Models\CommentModel;
 
 class GetCommentsForObject
@@ -8,7 +10,7 @@ class GetCommentsForObject
 
     private $query;
 
-    public function __construct($model)
+    public function __construct(CommentedObjectInterface $model)
     {
         $this->query = CommentModel::query();
         $this->query->where('commentable_type', get_class($model));

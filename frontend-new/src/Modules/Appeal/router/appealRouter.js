@@ -11,6 +11,7 @@ export const adminAppeal =
         path: 'list',
         name: 'adminAppealsList',
         component: () => import('src/Modules/Appeal/pages/AppealList/index.vue'),
+        hidden: true,
         meta: {
           title: 'Обращения',
           roles: ['appeal-show', 'appeal-edit']

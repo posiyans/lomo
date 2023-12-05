@@ -4,7 +4,7 @@ namespace App\Modules\Article\Models;
 
 use App\Models\MyModel;
 use App\Modules\Article\Factories\ArticleModelFactory;
-use App\Modules\Comment\Models\CommentModel;
+use App\Modules\Comment\Interfaces\CommentedObjectInterface;
 use App\Modules\File\Models\FileModel;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -50,23 +50,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @method static \Illuminate\Database\Eloquent\Builder|ArticleModel whereUid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ArticleModel whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ArticleModel whereUserId($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, CommentModel> $comments
- * @property-read int|null $comments_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, FileModel> $files
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @method static \App\Modules\Article\Factories\ArticleModelFactory factory(...$parameters)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, CommentModel> $comments
- * @property-read \Illuminate\Database\Eloquent\Collection<int, FileModel> $files
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, CommentModel> $comments
- * @property-read \Illuminate\Database\Eloquent\Collection<int, FileModel> $files
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, CommentModel> $comments
- * @property-read \Illuminate\Database\Eloquent\Collection<int, FileModel> $files
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
  * @mixin \Eloquent
  */
-class ArticleModel extends MyModel
+class ArticleModel extends MyModel implements CommentedObjectInterface
 {
     use HasFactory;
 
@@ -91,13 +77,43 @@ class ArticleModel extends MyModel
         return $this->belongsTo('App\Modules\User\Models\UserModel');
     }
 
-    public function comments()
-    {
-        return $this->morphMany(CommentModel::class, 'commentable', null, 'commentable_uid', 'uid');
-    }
-
     public function files()
     {
         return $this->morphMany(FileModel::class, 'commentable', null, 'commentable_uid', 'uid');
+    }
+
+
+    public function descriptionForComment(): array
+    {
+        return [
+            'label' => 'записи ' . $this->title,
+            'url' => '/article/show/' . $this->slug,
+        ];
+    }
+
+    public function commentRead($user)
+    {
+        if ($user && $user->ability('superAdmin', ['article->edit', 'article->show', 'comment-edit', 'comment-ban', 'comment-delete'])) {
+            return true;
+        }
+        return $this->public == 1;
+    }
+
+    public function commentWrite($user): bool
+    {
+        if ($user->ability('superAdmin', ['article->edit', 'article->show', 'comment-edit', 'comment-ban', 'comment-delete'])) {
+            return true;
+        }
+        return $this->public == 1 && $user->email_verified_at;
+    }
+
+    public function commentEdit($user)
+    {
+        return $user->ability('superAdmin', ['article->edit', 'comment-edit', 'comment-ban', 'comment-delete']);
+    }
+
+    public function commentUserBan($user)
+    {
+        return $user->ability('superAdmin', ['comment-ban']);
     }
 }

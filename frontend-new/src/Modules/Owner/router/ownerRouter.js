@@ -14,6 +14,7 @@ export const adminOwner =
         path: 'list',
         name: 'adminOwnerList',
         component: () => import('src/Modules/Owner/pages/OwnerList/index.vue'),
+        hidden: true,
         meta: {
           icon: 'groups',
           title: 'Собственники',

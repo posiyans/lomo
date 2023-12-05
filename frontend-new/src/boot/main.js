@@ -24,6 +24,7 @@ export default boot(async ({ router }) => {
       } else {
         next('/')
       }
+      return true
     } else {
       if (to.meta?.roles && to.meta.roles.length > 0) {
         if (authStore.permissions.filter(x => to.meta.roles.includes(x)).length > 0) {
@@ -31,6 +32,7 @@ export default boot(async ({ router }) => {
         } else {
           next('/')
         }
+        return true
       }
       next()
     }

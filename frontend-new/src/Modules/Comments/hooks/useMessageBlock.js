@@ -101,24 +101,13 @@ export function useMessageBlock(type, uid) {
         })
         .catch(er => {
           getStatusBan()
-          console.log('error')
-          console.log(er)
           $q.notify(
             {
-              message: 'Не удалось добавить',
+              message: er.response.data.errors,
               type: 'negative',
               position: 'top-right'
             }
           )
-          if (er.response.data.errors) {
-            $q.notify(
-              {
-                message: er.response.data.errors,
-                type: 'negative',
-                position: 'top-right'
-              }
-            )
-          }
         })
         .finally(() => {
           uploadMessage.value = false

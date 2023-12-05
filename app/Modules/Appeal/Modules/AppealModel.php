@@ -5,6 +5,7 @@ namespace App\Modules\Appeal\Modules;
 use App\Models\Message\MessageModel;
 use App\Models\MyModel;
 use App\Models\UserModel;
+use App\Modules\Comment\Interfaces\CommentedObjectInterface;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -47,7 +48,7 @@ use Illuminate\Support\Str;
  * @method static \Illuminate\Database\Eloquent\Builder|AppealModel withoutTrashed()
  * @mixin \Eloquent
  */
-class AppealModel extends MyModel
+class AppealModel extends MyModel implements CommentedObjectInterface
 {
     use SoftDeletes;
 
@@ -82,4 +83,40 @@ class AppealModel extends MyModel
         return $this->hasOne(AppealTypeModel::class, 'id', 'appeal_type_id');
     }
 
+    public function descriptionForComment(): array
+    {
+        return [
+            'label' => 'обращениz ' . $this->title,
+            'url' => '/appeal/show/' . $this->id,
+        ];
+    }
+
+    public function commentRead($user)
+    {
+        if (!$user) {
+            return false;
+        }
+        if ($this->user_id === $user->id) {
+            return true;
+        }
+        if ($user->ability('superAdmin', ['appeal->edit', 'appeal-show'])) {
+            return true;
+        }
+        return false;
+    }
+
+    public function commentWrite(\App\Modules\User\Models\UserModel $user)
+    {
+        return $this->commentRead($user);
+    }
+
+    public function commentEdit(\App\Modules\User\Models\UserModel $user)
+    {
+        return false;
+    }
+
+    public function commentUserBan(\App\Modules\User\Models\UserModel $user)
+    {
+        return false;
+    }
 }
