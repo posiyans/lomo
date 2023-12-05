@@ -4,7 +4,7 @@ namespace App\Modules\Appeal\Controlles;
 
 use App\Http\Controllers\Controller;
 use App\Modules\Appeal\Modules\AppealModel;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 
 /**
  *
@@ -14,13 +14,11 @@ use Auth;
 class CloseAppealController extends Controller
 {
 
-    public function __construct()
-    {
-        $this->middleware('ability:superAdmin,appeal-edit');
-    }
-
     public function __invoke(AppealModel $appeal)
     {
+        if (!$appeal->commentWrite(Auth::user())) {
+            return response(['errors' => 'Ошибка доступа'], 405);
+        }
         $appeal->status = 'close';
         $appeal->date_close = now();
         $appeal->close_user_id = Auth::id();

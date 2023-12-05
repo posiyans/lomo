@@ -4,17 +4,10 @@ namespace App\Modules\Appeal\Validators;
 
 use App\Modules\User\Repositories\GetUserByUidRepository;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
 
 
 class CreateAppealValidator extends FormRequest
 {
-
-    public function authorize()
-    {
-        return Auth::user();
-    }
-
 
     /**
      * Get the validation rules that apply to the request.

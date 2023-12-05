@@ -34,7 +34,10 @@ class AppealResource extends JsonResource
                     'label' => $this->type->label
                 ],
             'status' => $this->status,
-
+            'close' => [
+                'date' => $this->date_close,
+                'user' => $this->close_user ? $this->close_user->fullName() : ''
+            ]
         ];
     }
 }

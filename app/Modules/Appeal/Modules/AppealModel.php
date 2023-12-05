@@ -4,8 +4,8 @@ namespace App\Modules\Appeal\Modules;
 
 use App\Models\Message\MessageModel;
 use App\Models\MyModel;
-use App\Models\UserModel;
 use App\Modules\Comment\Interfaces\CommentedObjectInterface;
+use App\Modules\User\Models\UserModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -66,12 +66,24 @@ class AppealModel extends MyModel implements CommentedObjectInterface
     }
 
     /**
-     * отношение с пользователем
+     * модель пользователя создавшего обращения
+     *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function user()
     {
         return $this->hasOne(UserModel::class, 'id', 'user_id');
+    }
+
+
+    /**
+     * модель пользователя закрывшего обращения
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function close_user()
+    {
+        return $this->hasOne(UserModel::class, 'id', 'close_user_id');
     }
 
     /**
@@ -107,7 +119,16 @@ class AppealModel extends MyModel implements CommentedObjectInterface
 
     public function commentWrite(\App\Modules\User\Models\UserModel $user)
     {
-        return $this->commentRead($user);
+        if (!$user) {
+            return false;
+        }
+        if ($this->user_id === $user->id) {
+            return true;
+        }
+        if ($user->ability('superAdmin', ['appeal->edit'])) {
+            return true;
+        }
+        return false;
     }
 
     public function commentEdit(\App\Modules\User\Models\UserModel $user)

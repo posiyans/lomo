@@ -15,11 +15,6 @@ use Illuminate\Http\Request;
 class GetAppealTypeController extends Controller
 {
 
-    public function __construct()
-    {
-//        $this->middleware('ability:superAdmin,appeal-show|appeal-edit');
-    }
-
     public function __invoke(Request $request)
     {
         $appeals = (new AppealTypeRepository())->all();

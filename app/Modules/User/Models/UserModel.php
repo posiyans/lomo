@@ -176,4 +176,14 @@ class UserModel extends Authenticatable implements MustVerifyEmail
         return $this->attributes['email'];
     }
 
+    public function fullName()
+    {
+        return $this->last_name . ' ' . $this->name . ' ' . $this->middle_name;
+    }
+
+    public function smallName()
+    {
+        return $this->last_name . ' ' . $this->name;
+    }
+
 }

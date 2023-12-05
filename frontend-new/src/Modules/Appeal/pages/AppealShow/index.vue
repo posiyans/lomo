@@ -9,9 +9,21 @@
                 {{ appeal.title }}
               </div>
               <div class="text-small-75 row q-col-gutter-sm">
+                <div>
+                  Создал
+                </div>
                 <ShowTime :time="appeal.created_at" class="o-80" />
                 <div>
                   {{ appeal.user.fullName }}
+                </div>
+              </div>
+              <div v-if="appeal.status === 'close'" class="text-small-75 row q-col-gutter-sm text-teal">
+                <div>
+                  Закрыл
+                </div>
+                <ShowTime :time="appeal.close.date" class="o-80" />
+                <div>
+                  {{ appeal.close.user }}
                 </div>
               </div>
             </div>
