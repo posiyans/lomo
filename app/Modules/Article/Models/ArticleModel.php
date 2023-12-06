@@ -4,7 +4,7 @@ namespace App\Modules\Article\Models;
 
 use App\Models\MyModel;
 use App\Modules\Article\Factories\ArticleModelFactory;
-use App\Modules\Comment\Interfaces\CommentedObjectInterface;
+use App\Modules\Comment\Interfaces\CommentedInterface;
 use App\Modules\File\Models\FileModel;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -52,11 +52,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @method static \Illuminate\Database\Eloquent\Builder|ArticleModel whereUserId($value)
  * @mixin \Eloquent
  */
-class ArticleModel extends MyModel implements CommentedObjectInterface
+class ArticleModel extends MyModel implements CommentedInterface
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'text', 'resume', 'category_id', 'uid', 'news', 'public', 'allow_comments', 'slug'];
+    protected $fillable = ['title', 'text', 'resume', 'category_id', 'uid', 'status', 'allow_comments', 'slug'];
 
     protected $hidden = ['publish_time'];
 
@@ -74,7 +74,7 @@ class ArticleModel extends MyModel implements CommentedObjectInterface
 
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo('App\Modules\User\Models\UserModel');
+        return $this->belongsTo('App\Modules\User\Models\UserModel', 'user_id', 'id');
     }
 
     public function files()
@@ -82,38 +82,12 @@ class ArticleModel extends MyModel implements CommentedObjectInterface
         return $this->morphMany(FileModel::class, 'commentable', null, 'commentable_uid', 'uid');
     }
 
-
-    public function descriptionForComment(): array
+    /**
+     * @return string|null
+     */
+    public static function uid()
     {
-        return [
-            'label' => 'записи ' . $this->title,
-            'url' => '/article/show/' . $this->slug,
-        ];
+        return 'uid';
     }
 
-    public function commentRead($user)
-    {
-        if ($user && $user->ability('superAdmin', ['article->edit', 'article->show', 'comment-edit', 'comment-ban', 'comment-delete'])) {
-            return true;
-        }
-        return $this->public == 1;
-    }
-
-    public function commentWrite($user): bool
-    {
-        if ($user->ability('superAdmin', ['article->edit', 'article->show', 'comment-edit', 'comment-ban', 'comment-delete'])) {
-            return true;
-        }
-        return $this->public == 1 && $user->email_verified_at;
-    }
-
-    public function commentEdit($user)
-    {
-        return $user->ability('superAdmin', ['article->edit', 'comment-edit', 'comment-ban', 'comment-delete']);
-    }
-
-    public function commentUserBan($user)
-    {
-        return $user->ability('superAdmin', ['comment-ban']);
-    }
 }

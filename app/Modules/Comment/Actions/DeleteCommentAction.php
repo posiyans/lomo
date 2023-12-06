@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Modules\Comment\Classes;
+namespace App\Modules\Comment\Actions;
 
 use App\Modules\Comment\Models\CommentModel;
 use Illuminate\Support\Facades\Auth;
 
-class DeleteCommentClass
+class DeleteCommentAction
 {
     private $model;
 

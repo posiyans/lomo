@@ -35,6 +35,11 @@ export function getCommentsStatusList() {
       value: 1,
       label: 'разрешены всем',
       color: 'secondary'
+    },
+    {
+      value: 2,
+      label: 'только собственникам',
+      color: 'secondary'
     }
   ]
 }

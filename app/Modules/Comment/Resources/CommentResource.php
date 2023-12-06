@@ -2,6 +2,7 @@
 
 namespace App\Modules\Comment\Resources;
 
+use App\Modules\Comment\Repositories\CommentTypeRepository;
 use Auth;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -16,6 +17,8 @@ class CommentResource extends JsonResource
     public function toArray($request)
     {
         $user = Auth::user();
+        $parentModel = $this->parentModel;
+        $commentedModel = CommentTypeRepository::getCommentedRoleObject($parentModel);
         $data = [
             'id' => $this->id,
             'uid' => $this->uid,
@@ -27,11 +30,12 @@ class CommentResource extends JsonResource
                 'uid' => $this->user ? $this->user->uid : '',
                 'name' => $this->user ? $this->user->last_name . ' ' . $this->user->name : 'Bot',
             ],
-            'parentObject' => $this->parentModel->descriptionForComment(),
+            'parentObject' => $commentedModel->descriptionForComment(),
             'actions' => [
-                'delete' => $user ? $this->parentModel->commentEdit($user) : false,
-                'ban' => $user ? $this->parentModel->commentUserBan($user) : false,
-                'write' => $user ? $this->parentModel->commentWrite($user) : false,
+                'edit' => $user ? $commentedModel->commentEdit($user) : false,
+                'delete' => $user ? $commentedModel->commentDelete($user) : false,
+                'ban' => $user ? $commentedModel->commentUserBan($user) : false,
+                'write' => $user ? $commentedModel->commentWrite($user) : false,
             ]
 
         ];

@@ -2,10 +2,10 @@
 
 namespace App\Modules\Article\Repositories;
 
-class GetStatusArticleRepository
+class StatusArticleRepository
 {
 
-    private $status = [
+    private static $status = [
         [
             'id' => 0,
             'label' => 'черновик',
@@ -27,19 +27,27 @@ class GetStatusArticleRepository
             'color' => '#cecece'
         ],
         [
+            'id' => 4,
+            'label' => 'опубликовано только для собственников',
+            'color' => '#00cece'
+        ],
+        [
             'id' => 9,
             'label' => 'отказано',
             'color' => '#ff0000'
         ],
     ];
 
-    public function __construct()
+    public static function getStatus()
     {
+        return self::$status;
     }
 
-    public function run()
+    public static function getStatusKeys()
     {
-        return $this->status;
+        return array_map(function ($item) {
+            return $item['id'];
+        }, self::$status);
     }
 
 

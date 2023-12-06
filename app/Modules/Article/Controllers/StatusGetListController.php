@@ -3,7 +3,7 @@
 namespace App\Modules\Article\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Modules\Article\Repositories\GetStatusArticleRepository;
+use App\Modules\Article\Repositories\StatusArticleRepository;
 use Illuminate\Http\Request;
 
 /**
@@ -24,6 +24,6 @@ class StatusGetListController extends Controller
 
     public function index(Request $request): array
     {
-        return (new GetStatusArticleRepository())->run();
+        return StatusArticleRepository::getStatus();
     }
 }

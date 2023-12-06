@@ -1,7 +1,7 @@
 <template>
   <div>
     <q-select
-      :model-value="+modelValue"
+      :model-value="modelValue"
       :options="status"
       map-options
       emit-value

@@ -1,9 +1,9 @@
 <template>
   <div>
-    <ArticleShow v-if="article" :article="article" />
     <div v-if="errors" class="page-title text-center q-pa-lg">
       Данная страница не найдена
     </div>
+    <ArticleShow v-if="!errors && article" :article="article" />
   </div>
 </template>
 
@@ -29,12 +29,15 @@ export default defineComponent({
           errors.value = null
           article.value = response.data.data
           const tmp = []
-          response.data.data.files.forEach(item => {
-            const file = useFile()
-            file.init(item)
-            tmp.push(file)
-          })
+          if (response.data.data.files) {
+            response.data.data.files.forEach(item => {
+              const file = useFile()
+              file.init(item)
+              tmp.push(file)
+            })
+          }
           article.value.files = tmp
+          errors.value = false
         })
         .catch(er => {
           errors.value = true

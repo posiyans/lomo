@@ -3,10 +3,11 @@
 namespace App\Modules\Comment\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Modules\Comment\Classes\DeleteCommentClass;
+use App\Modules\Comment\Actions\DeleteCommentAction;
 use App\Modules\Comment\Repositories\CommentRepository;
-use Auth;
+use App\Modules\Comment\Repositories\CommentTypeRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Удалить коментарий
@@ -30,9 +31,8 @@ class DeleteMessageController extends Controller
             $user = Auth::user();
             $uid = $request->get('uid');
             $model = (new CommentRepository())->byUid($uid)->one();
-            // todo проверить права доступа на данную модель и на возможность удалять сообщения
-            if ($model->user_id === $user->id || $user->ability('superAdmin', 'comment-delete')) {
-                (new DeleteCommentClass($model))->run();
+            if (CommentTypeRepository::getCommentedRoleObject($model)->commentDelete($user)) {
+                (new DeleteCommentAction($model))->run();
                 return true;
             }
             return response(['errors' => 'Ошибка доступа'], 403);

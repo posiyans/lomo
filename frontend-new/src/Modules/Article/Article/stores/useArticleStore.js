@@ -44,7 +44,6 @@ export const useArticleStore = defineStore('articleStore', {
           updateArticle(this.id, this.article)
             .then(res => {
               resolve()
-              console.log('ok')
             })
             .catch(err => {
               reject(err)
@@ -55,7 +54,6 @@ export const useArticleStore = defineStore('articleStore', {
               resolve(res.data)
             })
             .catch(err => {
-              console.log(err)
               reject(err)
             })
         }

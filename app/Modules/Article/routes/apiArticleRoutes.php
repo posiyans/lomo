@@ -14,6 +14,7 @@ Route::group(['prefix' => 'v2/article'], function () {
 });
 
 Route::group(['middleware' => ['auth:sanctum'], 'prefix' => 'v2/article/admin'], function () {
+    Route::post('create', \App\Modules\Article\Controllers\Article\CreateArticleController::class);
     Route::get('get-list', [\App\Modules\Article\Controllers\Article\AdminGetArticleListController::class, 'index']);
     Route::get('get/{id}', [\App\Modules\Article\Controllers\Article\AdminGetArticleController::class, 'index']);
     Route::put('update/{id}', [\App\Modules\Article\Controllers\Article\UpdateArticleController::class, 'index']);

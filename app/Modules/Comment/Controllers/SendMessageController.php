@@ -4,7 +4,7 @@ namespace App\Modules\Comment\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Modules\BanUser\Actions\CheckUserBanAction;
-use App\Modules\Comment\Classes\CreateCommentClass;
+use App\Modules\Comment\Actions\CreateCommentAction;
 use App\Modules\Comment\Repositories\GetObjectByTypeAndUid;
 use Illuminate\Http\Request;
 
@@ -40,7 +40,7 @@ class SendMessageController extends Controller
             $opt = [
                 'reply' => $reply
             ];
-            $comment = (new CreateCommentClass($model))->message($message)->options($opt)->run();
+            $comment = (new CreateCommentAction($model))->message($message)->options($opt)->run();
             return $comment;
         } catch (\Exception $e) {
             return response(['errors' => $e->getMessage()], 450);

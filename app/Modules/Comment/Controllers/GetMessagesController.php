@@ -3,6 +3,7 @@
 namespace App\Modules\Comment\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Modules\Comment\Repositories\CommentTypeRepository;
 use App\Modules\Comment\Repositories\GetCommentsForObject;
 use App\Modules\Comment\Repositories\GetObjectByTypeAndUid;
 use App\Modules\Comment\Resources\CommentResource;
@@ -22,10 +23,17 @@ class GetMessagesController extends Controller
         try {
             $model = (new GetObjectByTypeAndUid($request->type, $request->uid))->run();
             $user = Auth::user();
-            if (!$model->commentRead($user)) {
+            if (!CommentTypeRepository::getCommentedRoleObject($model)->commentRead($user)) {
                 throw new \Exception('Ошибка доступа');
             }
             $comments = (new GetCommentsForObject($model))->run();
+            if ($request->count) {
+                return [
+                    'data' => [
+                        'count' => count($comments),
+                    ]
+                ];
+            }
             $result = CommentResource::collection($comments);
             return $result;
         } catch (\Exception $e) {

@@ -9,23 +9,16 @@
     />
     <div class="row items-center bg-grey-2 q-col-gutter-sm q-pa-sm">
       <div class="filter-item">
-        <q-checkbox
-          v-model="articleStore.article.news"
-          label="Показывать в списке"
-          :true-value="1"
-          :false-value="0"
-        />
-      </div>
-      <div class="filter-item">
         <ArticleCategorySelect
           v-model="articleStore.article.category_id"
           outlined
+          set-default
           dense
         />
       </div>
       <div class="filter-item">
         <StatusSelect
-          v-model="articleStore.article.public"
+          v-model="articleStore.article.status"
           label="Статус"
           outlined
           dense
@@ -35,10 +28,10 @@
         <SelectCommentEnable v-model="articleStore.article.allow_comments" />
       </div>
       <div>
-        <q-btn no-caps no-wrap color="primary" :label="btnLabel" @click="saveArticle" />
+        <q-btn no-caps no-wrap color="primary" :loading="savingData" :label="btnLabel" @click="saveArticle" />
       </div>
       <q-space />
-      <div class="row items-center bg-white br4">
+      <div v-if="articleStore.article?.user" class="row items-center bg-white br4">
         <router-link :to="`/admin/user/show/${articleStore.article?.user?.uid}`" class="user-link">
           <UserAvatarByUid :uid="articleStore.article?.user?.uid" size="24px" />
           {{ articleStore.article?.user?.name }}
@@ -97,6 +90,7 @@ import AddFileBtn from 'src/Modules/Files/components/AddFileBtn/index.vue'
 import FilesListShow from 'src/Modules/Files/components/FilesListShow/index.vue'
 import UserAvatarByUid from 'src/Modules/Avatar/components/UserAvatarByUid/index.vue'
 import AddBanUserBtn from 'src/Modules/BanUsers/components/AddBanUserBtn/index.vue'
+import { errorMessage } from 'src/utils/message'
 
 export default defineComponent({
   components: {
@@ -109,18 +103,14 @@ export default defineComponent({
     UserAvatarByUid,
     StatusSelect
   },
-  props: {
-    modelValue: {
-      type: Object,
-      required: true
-    }
-  },
+  props: {},
   setup() {
     const bar = ref(null)
     const showMoreSetting = ref(false)
     const $q = useQuasar()
     const articleStore = useArticleStore()
     const router = useRouter()
+    const savingData = ref(false)
     const editArticle = computed(() => {
       return !!articleStore.id
     })
@@ -134,10 +124,11 @@ export default defineComponent({
       })
     }
     const saveArticle = () => {
+      savingData.value = true
       const barRef = bar.value
       barRef.start()
       articleStore.saveArticle()
-        .then((data) => {
+        .then(res => {
           if (editArticle.value) {
             $q.notify('Статья успешно сохранена')
             articleStore.getData()
@@ -146,15 +137,15 @@ export default defineComponent({
               })
           } else {
             $q.notify('Статья успешно добавлена')
-            router.push('/admin/article/edit/' + data.id)
-            barRef.stop()
+            router.push('/admin/article/edit/' + res.data.id)
           }
         })
         .catch(er => {
-          $q.notify({
-            message: 'Ошибка сохранения статьи',
-            color: 'negative'
-          })
+          errorMessage(er.response.data.errors)
+        })
+        .finally(() => {
+          barRef.stop()
+          savingData.value = false
         })
     }
     return {
@@ -162,6 +153,7 @@ export default defineComponent({
       bar,
       addFile,
       articleStore,
+      savingData,
       btnLabel,
       saveArticle,
     }

@@ -27,7 +27,7 @@ class AdminGetArticleListController extends Controller
             $query->where('category_id', $request->category);
         }
         if (isset($request->status)) {
-            $query->where('public', (int)$request->status);
+            $query->where('status', (int)$request->status);
         }
         if ($request->find) {
             $find = explode(' ', mb_strtolower($request->find));

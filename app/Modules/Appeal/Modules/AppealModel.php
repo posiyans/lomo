@@ -4,7 +4,7 @@ namespace App\Modules\Appeal\Modules;
 
 use App\Models\Message\MessageModel;
 use App\Models\MyModel;
-use App\Modules\Comment\Interfaces\CommentedObjectInterface;
+use App\Modules\Comment\Interfaces\CommentedInterface;
 use App\Modules\User\Models\UserModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
@@ -48,7 +48,7 @@ use Illuminate\Support\Str;
  * @method static \Illuminate\Database\Eloquent\Builder|AppealModel withoutTrashed()
  * @mixin \Eloquent
  */
-class AppealModel extends MyModel implements CommentedObjectInterface
+class AppealModel extends MyModel implements CommentedInterface
 {
     use SoftDeletes;
 
@@ -95,19 +95,17 @@ class AppealModel extends MyModel implements CommentedObjectInterface
         return $this->hasOne(AppealTypeModel::class, 'id', 'appeal_type_id');
     }
 
-    public function descriptionForComment(): array
+    /**
+     * @return string|null
+     */
+    public static function uid()
     {
-        return [
-            'label' => 'обращениz ' . $this->title,
-            'url' => '/appeal/show/' . $this->id,
-        ];
+        return 'uid';
     }
 
-    public function commentRead($user)
+
+    public function accessRead(UserModel $user): bool
     {
-        if (!$user) {
-            return false;
-        }
         if ($this->user_id === $user->id) {
             return true;
         }
@@ -117,11 +115,8 @@ class AppealModel extends MyModel implements CommentedObjectInterface
         return false;
     }
 
-    public function commentWrite(\App\Modules\User\Models\UserModel $user)
+    public function commentWrite(UserModel $user): bool
     {
-        if (!$user) {
-            return false;
-        }
         if ($this->user_id === $user->id) {
             return true;
         }
@@ -131,13 +126,4 @@ class AppealModel extends MyModel implements CommentedObjectInterface
         return false;
     }
 
-    public function commentEdit(\App\Modules\User\Models\UserModel $user)
-    {
-        return false;
-    }
-
-    public function commentUserBan(\App\Modules\User\Models\UserModel $user)
-    {
-        return false;
-    }
 }

@@ -1,25 +1,25 @@
 <?php
 
-namespace App\Modules\Article\Classes;
+namespace App\Modules\Article\Actions;
 
 use App\Modules\Article\Models\ArticleModel;
 use Illuminate\Support\Facades\Auth;
 
-class CreateArticleClass
+class CreateArticleAction
 {
     private $article;
 
     public function __construct(array $opt = [])
     {
         $this->article = new ArticleModel();
+        $this->article->status = 0;
+        $this->article->user_id = Auth::id() ?? 0;
         $this->article->fill($opt);
-        $this->article->user_id = Auth::id() ?? 1;
-        $this->article->public = 0;
     }
 
     public function status(int $status)
     {
-        $this->article->public = $status;
+        $this->article->status = $status;
         return $this;
     }
 

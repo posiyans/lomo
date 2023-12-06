@@ -2,6 +2,8 @@
 
 namespace App\Modules\File\Classes;
 
+use App\Modules\Article\Models\ArticleModel;
+use App\Modules\File\AccessClass\ArticleModelAccessClass;
 use App\Modules\File\Models\FileModel;
 use App\Modules\File\Repositories\GetObjectForFileRepository;
 use App\Modules\User\Models\UserModel;
@@ -11,6 +13,10 @@ class CheckAccessToFileClass
 {
     private $file;
     private $user;
+    private $classMap = [
+        ArticleModel::class => ArticleModelAccessClass::class,
+    ];
+
 
     public function __construct(FileModel $file)
     {
@@ -28,10 +34,10 @@ class CheckAccessToFileClass
 
     {
         $class = $this->file->commentable_type;
-        switch ($class) {
-            case 'App\Modules\Article\Models\ArticleModel':
-                return $this->article();
+        if (isset($this->classMap[$class])) {
+            return (new $this->classMap[$class]([$this->file, $this->user]))->read();
         }
+
         throw new \Exception('Ошибка определения прав на файл');
     }
 

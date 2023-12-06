@@ -15,7 +15,7 @@ class GetMyInfoController extends MyController
         $user = Auth::user();
         $data = [
             'user' => $user->toArray(),
-            'permissions' => array_merge(['user', 'owner'], (new GetPermissionsForUserRepository($user))->toArray()),
+            'permissions' => array_merge(['user'], (new GetPermissionsForUserRepository($user))->toArray()),
         ];
         return response($data);
     }

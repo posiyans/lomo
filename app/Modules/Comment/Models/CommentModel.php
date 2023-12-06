@@ -69,7 +69,7 @@ class CommentModel extends MyModel
      */
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo('App\Modules\User\Models\UserModel');
+        return $this->belongsTo('App\Modules\User\Models\UserModel', 'user_id', 'id');
     }
 
     public function parentModel(): MorphTo

@@ -21,9 +21,8 @@ class CreateArticleModelsTable extends Migration
             $table->string('resume')->nullable()->comment('краткий текст');
             $table->mediumText('text')->nullable()->comment('текст статьи');
             $table->integer('category_id')->nullable()->comment('id раздела');
-            $table->integer('public')->default(1)->comment('статус статьи');
-            $table->boolean('news')->default(true);
-            $table->boolean('allow_comments')->default(true)->comment('возможность комментировать');
+            $table->integer('status')->default(1)->comment('статус статьи');
+            $table->integer('allow_comments')->comment('возможность комментировать');
             $table->string('slug')->nullable()->unique()->comment('url статьи');
             $table->softDeletes();
             $table->timestamps();

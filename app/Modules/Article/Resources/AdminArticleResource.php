@@ -11,7 +11,7 @@ class AdminArticleResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return array
      */
     public function toArray($request)
@@ -23,8 +23,7 @@ class AdminArticleResource extends JsonResource
             'title' => $this->title,
             'text' => $this->text,
             'category_id' => $this->category_id,
-            'public' => $this->public,
-            'news' => $this->news,
+            'status' => $this->status,
             'allow_comments' => $this->allow_comments,
             'user' => (new AdminUserResource($this->user)),
             'slug' => $this->slug,

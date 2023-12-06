@@ -4,7 +4,8 @@ namespace App\Modules\Comment\Repositories;
 
 use App\Modules\Appeal\Modules\AppealModel;
 use App\Modules\Article\Models\ArticleModel;
-use App\Modules\Comment\Interfaces\CommentedObjectInterface;
+use App\Modules\Comment\Classes\AppealComments;
+use App\Modules\Comment\Classes\ArticleComments;
 
 
 /**
@@ -13,8 +14,14 @@ use App\Modules\Comment\Interfaces\CommentedObjectInterface;
 class CommentTypeRepository
 {
     private static $objectArray = [
-        'article' => ArticleModel::class,
-        'appeal' => AppealModel::class,
+        'article' => [
+            'className' => ArticleModel::class,
+            'mapClass' => ArticleComments::class,
+        ],
+        'appeal' => [
+            'className' => AppealModel::class,
+            'mapClass' => AppealComments::class,
+        ]
     ];
 
     public static function getKeys()
@@ -24,12 +31,32 @@ class CommentTypeRepository
 
     public static function getClassName($type)
     {
-        if (!isset(self::$objectArray[$type])) {
+        if (!isset(self::$objectArray[$type]['className'])) {
             throw new \Exception('Неподдерживаемый тип');
         }
-        if (!is_subclass_of(self::$objectArray[$type], CommentedObjectInterface::class)) {
-            throw new \Exception('Класс должен осуществлять CommentedObjectInterface');
-        }
-        return self::$objectArray[$type];
+        return self::$objectArray[$type]['className'];
     }
+
+    public static function getCommentedRoleClass($object)
+    {
+        $mapClass = '';
+        $class = get_class($object);
+        foreach (self::$objectArray as $item) {
+            if ($item['className'] == $class) {
+                $mapClass = $item['mapClass'];
+            }
+        }
+        if ($mapClass) {
+            return $mapClass;
+        }
+        throw new \Exception('Неподдерживаемый тип');
+    }
+
+
+    public static function getCommentedRoleObject($object)
+    {
+        $class = self::getCommentedRoleClass($object);
+        return new $class($object);
+    }
+
 }

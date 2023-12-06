@@ -21,6 +21,9 @@ class GetMessagesValidator extends FormRequest
                 'string',
                 'required'
             ],
+            'count' => [
+                'boolean'
+            ]
         ];
     }
 

@@ -16,8 +16,11 @@ class GetArtileListForCategoryController extends Controller
 
     public function __invoke(Request $request)
     {
+        // todo переделать на репозиторий
         $query = ArticleModel::query();
-        $query->where('public', '1');
+        $query->where(function ($query) {
+            $query->where('status', 1)->orWhere('status', 4);
+        });
         if ($request->category_id) {
             $query->where('category_id', $request->category_id);
         }

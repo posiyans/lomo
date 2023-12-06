@@ -4,9 +4,10 @@ namespace App\Modules\Comment\Interfaces;
 
 use App\Modules\User\Models\UserModel;
 
+/**
+ */
 interface CommentedObjectInterface
 {
-
 
     /**
      * описание что комментируется
@@ -40,6 +41,14 @@ interface CommentedObjectInterface
      */
     public function commentEdit(UserModel $user);
 
+
+    /**
+     * возможность удалять комментариии обьекта пользователем
+     * @param $user UserModel
+     * @return mixed
+     */
+    public function commentDelete(UserModel $user);
+
     /**
      * возможность оправлять пользователей в бан
      *
@@ -48,11 +57,5 @@ interface CommentedObjectInterface
      */
     public function commentUserBan(UserModel $user);
 
-    /**
-     * получить модель автора комментария
-     *
-     * @return UserModel|null
-     */
-    public function user();
 
 }

@@ -22,7 +22,9 @@ class ArticleRepository
 
     public function public()
     {
-        $this->query->where('public', 1);
+        $this->query->where(function ($query) {
+            $query->where('status', 1)->orWhere('status', 4);
+        });
         return $this;
     }
 

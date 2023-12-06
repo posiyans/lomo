@@ -1,10 +1,10 @@
 <template>
   <div class="q-pa-md">
     <div class="page-title">
+      <UserAvatarImg :uid="activeUserStore.user.uid" style="width: 48px;" />
       {{ activeUserStore.user.last_name }}
       {{ activeUserStore.user.name }}
       {{ activeUserStore.user.middle_name }}
-      {{ data }}
     </div>
     <div>
       <q-tabs
@@ -70,9 +70,13 @@ import { sendVerifyMailToken } from 'src/Modules/Users/api/user-admin-api'
 import BanUserInfo from 'src/Modules/BanUsers/components/BanUserInfo/index.vue'
 import CommentsList from 'src/Modules/Comments/components/CommentsList/index.vue'
 import AppealList from 'src/Modules/Appeal/pages/AppealList/index.vue'
+import UserAvatarByUid from 'src/Modules/Avatar/components/UserAvatarByUid/index.vue'
+import UserAvatarImg from 'src/Modules/Avatar/components/UserAvatarImg/index.vue'
 
 export default defineComponent({
   components: {
+    UserAvatarImg,
+    UserAvatarByUid,
     ActiveUserData,
     ActiveUserRolesAndPermissions,
     ActiveUserPermissions,

@@ -10,7 +10,7 @@ class ArticleResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return array
      */
     public function toArray($request)
@@ -22,7 +22,7 @@ class ArticleResource extends JsonResource
             'resume' => (new GetResumeForArticleRepository($this->resource))->run(),
             'category_id' => $this->category_id,
             'allow_comments' => $this->allow_comments,
-            'public' => $this->public,
+            'status' => $this->status,
             'updated_at' => $this->updated_at,
             'slug' => $this->slug,
         ];
