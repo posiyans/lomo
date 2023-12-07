@@ -24,7 +24,7 @@
               @click="showArticle"
             />
           </div>
-          <div v-if="article.allow_comments === 1" @click="showArticle">
+          <div v-if="article.allow_comments > 0 " @click="showArticle">
             <CountMessageBlock type="article" :uid="article.uid" />
           </div>
         </div>

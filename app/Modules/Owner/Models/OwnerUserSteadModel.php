@@ -47,6 +47,7 @@ class OwnerUserSteadModel extends MyModel
     use HasFactory, SoftDeletes;
 
     protected $fillable = ['stead_id', 'owner_uid'];
+    protected $table = 'owner_user_model_stead_model';
 
     public function owner()
     {

@@ -12,7 +12,7 @@ class SteadRepository
 
     public function __construct()
     {
-        $this->query = SteadModel::query()->orderBy('id');
+        $this->query = SteadModel::query()->orderBy('number');
     }
 
     public function forUser(UserModel $user)
@@ -42,9 +42,9 @@ class SteadRepository
         return $this->query->where('id', $id)->firstOrFail();
     }
 
-    public function paginate()
+    public function paginate($limit)
     {
-        return $this->query->paginate();
+        return $this->query->paginate($limit);
     }
 
     public function run()
@@ -52,5 +52,9 @@ class SteadRepository
         return $this->query->get();
     }
 
+    public function ids()
+    {
+        return $this->query->pluck('id');
+    }
 
 }

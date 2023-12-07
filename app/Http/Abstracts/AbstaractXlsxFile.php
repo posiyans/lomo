@@ -97,11 +97,9 @@ abstract class AbstaractXlsxFile extends Controller
      *
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
-    public function output()
+    public function output($fileName)
     {
-        header('Content-Type:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         $writer = IOFactory::createWriter($this->spreadsheet, 'Xlsx');
-        $writer->save('php://output');
-        exit;
+        $writer->save($fileName);
     }
 }

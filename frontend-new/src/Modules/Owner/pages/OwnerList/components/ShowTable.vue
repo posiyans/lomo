@@ -14,7 +14,7 @@
       <template v-slot:body-cell-number="props">
         <q-td :props="props" auto-width>
           <div>
-            {{ props.row.id }}
+            {{ index(props.rowIndex) }}
           </div>
         </q-td>
       </template>
@@ -59,7 +59,8 @@ export default defineComponent({
     list: {
       type: Array,
       default: () => ([])
-    }
+    },
+    listQuery: { type: Object }
   },
   setup(props, { emit }) {
     const $router = useRouter()
@@ -67,7 +68,7 @@ export default defineComponent({
       {
         name: 'number',
         align: 'center',
-        label: 'id',
+        label: '№',
       },
       {
         name: 'fio',
@@ -103,6 +104,11 @@ export default defineComponent({
     const admin = computed(() => {
       return authStore.permissions.includes('owner-show') || authStore.permissions.includes('owner-edit')
     })
+    const index = computed(() => {
+      return (val) => {
+        return (props.listQuery.page - 1) * props.listQuery.limit + 1 + val
+      }
+    })
     const filterColumns = computed(() => {
       return columns.filter(column => {
         if (column.hide) {
@@ -130,6 +136,7 @@ export default defineComponent({
     }
     return {
       filterColumns,
+      index,
       propFilter,
       pushToStead,
       showInfo

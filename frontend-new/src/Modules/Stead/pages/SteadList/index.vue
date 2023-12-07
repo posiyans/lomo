@@ -17,13 +17,14 @@
 <script>
 /* eslint-disable */
 import { defineComponent, ref } from 'vue'
-import { fetchSteadListInXlsx } from 'src/Modules/Stead/api/steadAdminApi.js'
+
 import LoadMore from 'src/components/LoadMore/index.vue'
 import FilterBlock from './components/FilterBlock/index.vue'
-import { getSteadsList } from 'src/Modules/Stead/api/stead'
+import { fetchSteadListInXlsx, getSteadsList } from 'src/Modules/Stead/api/stead'
 import AddStead from 'src/Modules/Stead/components/AddStead/index.vue'
 import TableBlock from './components/TableBlock/index.vue'
-import { exportFile, Notify } from 'quasar'
+import { exportFile } from 'quasar'
+import { errorMessage } from 'src/utils/message'
 
 export default defineComponent({
   components: {
@@ -45,15 +46,30 @@ export default defineComponent({
       key.value++
     }
     const handleDownload = () => {
-      Notify.success('Упс.')
-      fetchSteadListInXlsx(this.listQuery).then(response => {
-        exportFile('Список.xlsx', new Blob([response.data]))
-        Notify.success('Файл успешно скачан.')
-      })
+      downloadLoading.value = true
+      fetchSteadListInXlsx(listQuery.value)
+        .then(response => {
+          let fileName = response.headers['content-disposition'].split('filename=')[1].split(';')[0]
+          try {
+            fileName = decodeURIComponent(response.headers['content-disposition'].split("filename*=utf-8''")[1].split(';')[0])
+          } catch (e) {
+          }
+          const status = exportFile(fileName, response.data)
+          if (status !== true) {
+            errorMessage('Ошибка получения файла')
+          }
+        })
+        .catch(() => {
+          errorMessage('Файл не найден')
+        })
+        .finally(() => {
+          downloadLoading.value = false
+        })
     }
     const listQuery = ref({
       page: 1,
       limit: 20,
+      admin: 1,
       find: ''
     })
     return {

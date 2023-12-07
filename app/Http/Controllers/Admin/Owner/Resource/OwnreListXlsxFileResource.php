@@ -4,24 +4,27 @@ namespace App\Http\Controllers\Admin\Owner\Resource;
 
 
 use App\Http\Abstracts\AbstaractXlsxFile;
+use Illuminate\Support\Facades\Auth;
 
 
 class OwnreListXlsxFileResource extends AbstaractXlsxFile
 {
 
     protected $spreadsheet;
+
     /**
      * Добавить счета  группк показаний
      *
      * @return \Illuminate\Http\Response
      */
-    public function render($owners)
+    public function render($owners, $fileName)
     {
         $this->createHeader();
         $this->fillLine($owners);
         $this->setAutoSize(['B', 'G']);
         $this->setAutoFilter();
-        return $this->output();
+        $this->output($fileName);
+        // todo добавитьв фаил кто и когда выгрузил
     }
 
 
@@ -29,11 +32,12 @@ class OwnreListXlsxFileResource extends AbstaractXlsxFile
     {
         $sheet = $this->spreadsheet->getActiveSheet()->setTitle('Собственники');
         $row = 1;
-        $sheet->setCellValue('A'.$row, '№');
-        $sheet->setCellValue('B'.$row, 'ФИО');
-        $sheet->setCellValue('C'.$row, 'Участок');
+        $sheet->setCellValue('A' . $row, '№');
+        $sheet->setCellValue('B' . $row, 'ФИО');
+        $sheet->setCellValue('C' . $row, 'Участок');
         $this->setCenter('C');
-        if (\Auth::user()->hasPermission('access-to-personal')) {
+        if (Auth::user()->ability('superAdmin', ['owner-show', 'owner-edit'])) {
+            // todo переделать на получение полей из базы
             $sheet->setCellValue('D' . $row, 'Тел.');
             $sheet->setCellValue('E' . $row, 'email');
             $sheet->setCellValue('F' . $row, 'Членство в СНТ');
@@ -51,12 +55,12 @@ class OwnreListXlsxFileResource extends AbstaractXlsxFile
             $text = '';
             $stead_count = 0;
             foreach ($steads as $stead) {
-                if (strlen($text) > 0 ) {
-                   $text .= ',' . "\n";
+                if (strlen($text) > 0) {
+                    $text .= ',' . "\n";
                 }
-                $text .=  $stead->stead->number;
+                $text .= $stead->stead->number;
                 if ($stead->proportion != 100) {
-                    $text .= '('.$stead->proportion .'%) ';
+                    $text .= '(' . $stead->proportion . '%) ';
                 }
                 $stead_count++;
             }
@@ -64,10 +68,11 @@ class OwnreListXlsxFileResource extends AbstaractXlsxFile
                 $this->spreadsheet->getActiveSheet()->getRowDimension($row)->setRowHeight(14 * $stead_count);
             }
 
-            $sheet->setCellValue('A'.$row, $row - 1);
-            $sheet->setCellValue('B'.$row, $item->nameForMyRole());
+            $sheet->setCellValue('A' . $row, $row - 1);
+            $sheet->setCellValue('B' . $row, $item->nameForMyRole());
             $sheet->setCellValue('C' . $row, $text);
-            if (\Auth::user()->hasPermission('access-to-personal')) {
+            if (Auth::user()->ability('superAdmin', ['owner-show', 'owner-edit'])) {
+                // todo переделать на получение полей из базы
                 $sheet->setCellValue('D' . $row, $item->getValue('general_phone', ''));
                 $sheet->setCellValue('E' . $row, $item->getValue('email', ''));
                 $sheet->setCellValue('F' . $row, $item->getValue('member', ''));
@@ -76,7 +81,6 @@ class OwnreListXlsxFileResource extends AbstaractXlsxFile
             $row++;
         }
     }
-
 
 
 }

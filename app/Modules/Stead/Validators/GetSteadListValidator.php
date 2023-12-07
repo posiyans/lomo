@@ -31,6 +31,9 @@ class GetSteadListValidator extends FormRequest
             'id' => [
 //                'exists:App\Modules\Stead\Models\SteadModel,id',
                 'numeric'
+            ],
+            'admin' => [
+                'boolean'
             ]
         ];
     }

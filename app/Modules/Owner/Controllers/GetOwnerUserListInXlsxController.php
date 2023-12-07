@@ -2,12 +2,15 @@
 
 namespace App\Modules\Owner\Controllers;
 
+use App\Http\Controllers\Admin\Owner\Resource\OwnreListXlsxFileResource;
 use App\Http\Controllers\Controller;
 use App\Modules\Owner\Repositories\OwnerUserRepository;
-use App\Modules\Owner\Resources\OwnerUserAndSteadsResource;
 use Illuminate\Http\Request;
 
-class GetOwnerUserListController extends Controller
+/**
+ * получение списка собственников в xlsx
+ */
+class GetOwnerUserListInXlsxController extends Controller
 {
 
     public function __construct()
@@ -17,15 +20,14 @@ class GetOwnerUserListController extends Controller
 
     public function __invoke(Request $request)
     {
-        $page = $request->page ?? 1;
-        $limit = $request->limit ?? 20;
         $find = $request->find;
-
         $owners = (new OwnerUserRepository())
             ->find($find)
-            ->paginate($limit);
+            ->run();
 
-        return OwnerUserAndSteadsResource::collection($owners);
+        $tmpfname = tempnam("/tmp", "owners");
+        (new OwnreListXlsxFileResource())->render($owners, $tmpfname);
+        return response()->download($tmpfname, 'Список' . date("Y-m-d_H-i-s") . '.xlsx');
     }
 
 }

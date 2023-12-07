@@ -13,11 +13,11 @@ class CreateOwnerUserSteadModelsTable extends Migration
      */
     public function up()
     {
-        Schema::create('owner_user_stead_models', function (Blueprint $table) {
+        Schema::create('owner_user_model_stead_model', function (Blueprint $table) {
             $table->id();
             $table->string('owner_uid')->comment('uid собственника');
             $table->integer('stead_id')->comment('id участка');
-            $table->integer('proportion')->default('100')->comment('Доля собственности'); ;
+            $table->integer('proportion')->default('100')->comment('Доля собственности');;
             $table->softDeletes();
             $table->timestamps();
         });

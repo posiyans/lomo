@@ -33,7 +33,7 @@ export function getOwnerForStead(id) {
 export function fetchSteadListInXlsx(params) {
   request.defaults.timeout = 60000
   return request({
-    url: '/api/v1/admin/stead/get-file/xlsx',
+    url: '/api/v2/stead/list-xlsx',
     method: 'get',
     responseType: 'blob',
     params

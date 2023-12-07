@@ -3,6 +3,7 @@
 namespace App\Modules\Stead\Models;
 
 use App\Models\MyModel;
+use App\Modules\Owner\Models\OwnerUserModel;
 
 
 /**
@@ -50,12 +51,24 @@ use App\Models\MyModel;
 class SteadModel extends MyModel
 {
 
-//    protected $fillable = ['number', 'descriptions'];
+    protected $fillable = ['number', 'size'];
+
     protected $casts = [
         'options' => 'array',
     ];
 
-//    protected $table = 'stead_models';
+    public function owners()
+    {
+        return $this->belongsToMany(
+            OwnerUserModel::class,
+            'owner_user_model_stead_model',
+            'stead_id',
+            'owner_uid',
+            'id',
+            'uid'
+        )
+            ->withPivot('proportion');
+    }
 
 
 }

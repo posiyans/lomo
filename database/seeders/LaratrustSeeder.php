@@ -72,7 +72,7 @@ class LaratrustSeeder extends Seeder
     protected $permissions = [
         'send-mail-spam' => 'Email рассылка',
 
-        'owner' => 'Собственник', // ?? или добавлять динамически
+//        'owner' => 'Собственник', // ?? или добавлять динамически
         'owner-show' => 'Просмотр собственников',
         'owner-edit' => 'Редактирование собстввенников',
 

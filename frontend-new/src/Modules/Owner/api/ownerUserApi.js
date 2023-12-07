@@ -65,7 +65,7 @@ export function deleteSteadFromOwnerUser(id) {
 export function fetchOwnerListInXlsx(params) {
   request.defaults.timeout = 60000
   return request({
-    url: '/api/v1/admin/owner/list/download/xlsx',
+    url: '/api/v2/owner/get-list-xlsx',
     method: 'get',
     responseType: 'blob',
     params

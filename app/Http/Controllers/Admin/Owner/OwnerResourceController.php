@@ -10,7 +10,7 @@ use App\Http\Controllers\Admin\Owner\Request\OwnerListRequest;
 use App\Http\Controllers\Admin\Owner\Resource\OwnreListXlsxFileResource;
 use App\Http\Resources\Admin\Owner\AdminOwnerResource;
 use App\Models\Owner\OwnerUserModel;
-use App\Modules\Owner\Resources\OwnerUserResource;
+use App\Modules\Owner\Resources\OwnerUserAndSteadsResource;
 use Illuminate\Http\Request;
 
 
@@ -39,7 +39,7 @@ class OwnerResourceController extends AbstractAdminController
         $owner = new GetOwnerListRepository($title);
         return [
             'status' => $owner->status,
-            'data' => OwnerUserResource::collection($owner->rezult),
+            'data' => OwnerUserAndSteadsResource::collection($owner->rezult),
             'meta' => [
                 'total' => $owner->total,
                 'offset' => $owner->offset,
@@ -60,7 +60,7 @@ class OwnerResourceController extends AbstractAdminController
     {
         $title = $request->get('title', false);
         $owners = new GetOwnerListRepository($title, true);
-        return (new OwnreListXlsxFileResource())->render($owners->rezult);
+        return response((new OwnreListXlsxFileResource())->render($owners->rezult));
     }
 
     /**

@@ -10,18 +10,19 @@ class AdminSteadListXlsxFileResource extends AbstaractXlsxFile
 {
 
     protected $spreadsheet;
+
     /**
      * Список участков XLSX формате
      *
      * @return \Illuminate\Http\Response
      */
-    public function render($steads)
+    public function render($steads, $fileNamme)
     {
         $this->createHeader();
         $this->fillLine($steads);
         $this->setAutoSize(['C', 'E']);
         $this->setAutoFilter();
-        return $this->output();
+        $this->output($fileNamme);
     }
 
 
@@ -29,11 +30,11 @@ class AdminSteadListXlsxFileResource extends AbstaractXlsxFile
     {
         $sheet = $this->spreadsheet->getActiveSheet()->setTitle('Участки');
         $row = 1;
-        $sheet->setCellValue('A'.$row, '№');
-        $sheet->setCellValue('B'.$row, 'Участок');
-        $sheet->setCellValue('C'.$row, 'Размер, кв.м');
-        $sheet->setCellValue('D'.$row, 'Собственник');
-        $sheet->setCellValue('E'.$row, 'Баланс');
+        $sheet->setCellValue('A' . $row, '№');
+        $sheet->setCellValue('B' . $row, 'Участок');
+        $sheet->setCellValue('C' . $row, 'Размер, кв.м');
+        $sheet->setCellValue('D' . $row, 'Собственник');
+        $sheet->setCellValue('E' . $row, 'Баланс');
         $this->setCenter('E');
     }
 
@@ -46,31 +47,30 @@ class AdminSteadListXlsxFileResource extends AbstaractXlsxFile
             $owners = '';
             $owner_count = 0;
             foreach ($item->owners as $owner) {
-                if (strlen($owners) > 0 ) {
+                if (strlen($owners) > 0) {
                     $owners .= ',' . "\n";
                 }
-                $owners .= $owner->owner->nameForMyRole();
-                if ($owner->proportion != 100) {
-                    $owners .= ' ('. $owner->proportion . '%)';
+                $owners .= $owner->nameForMyRole();
+                if ($owner->pivot->proportion != 100) {
+                    $owners .= ' (' . $owner->pivot->proportion . '%)';
                 }
                 $owner_count++;
             }
             if ($owner_count > 1) {
                 $this->spreadsheet->getActiveSheet()->getRowDimension($row)->setRowHeight(14 * $owner_count);
             }
-            $sheet->setCellValue('A'.$row, $row - 1);
-            $sheet->setCellValue('B'.$row, $item->number);
-            $sheet->setCellValue('C'.$row, $item->size);
-            $sheet->setCellValue('D'.$row, $owners);
-            $balans = round($item->getBalans(), 2);
-            $sheet->setCellValue('E'.$row, $balans);
-            if ($balans < -1) {
-               // $this->cellColor('E'.$row);
-            }
+            $sheet->setCellValue('A' . $row, $row - 1);
+            $sheet->setCellValue('B' . $row, $item->number);
+            $sheet->setCellValue('C' . $row, $item->size);
+            $sheet->setCellValue('D' . $row, $owners);
+//            $balans = round($item->getBalans(), 2);
+//            $sheet->setCellValue('E' . $row, $balans);
+//            if ($balans < -1) {
+//                // $this->cellColor('E'.$row);
+//            }
             $row++;
         }
     }
-
 
 
 }

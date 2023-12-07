@@ -15,8 +15,10 @@
 Route::group(['prefix' => 'v2/stead'], function () {
     Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('create', \App\Modules\Stead\Controllers\CreateSteadController::class);
+        Route::get('/list-xlsx', \App\Modules\Stead\Controllers\GetSteadListInXlsxController::class);
     });
     Route::get('/list', [\App\Modules\Stead\Controllers\GetSteadListController::class, 'index']);
+
     Route::get('/info', [\App\Modules\Stead\Controllers\GetSteadInfoController::class, 'index']);
     Route::get('/get-list-for-owner', \App\Modules\Stead\Controllers\GetListOfOwnerSteadController::class);
 });

@@ -24,6 +24,13 @@
           </div>
         </q-td>
       </template>
+      <template v-slot:body-cell-owner="props">
+        <q-td :props="props">
+          <div v-for="owner in props.row.owners" :key="owner.uid">
+            <OwnerUserNameAndProportionBlock :owner="owner" class="justify-center" />
+          </div>
+        </q-td>
+      </template>
       <template v-slot:body-cell-actions="props">
         <q-td :props="props">
           <div class="q-gutter-sm">
@@ -39,9 +46,12 @@
 <script>
 /* eslint-disable */
 import { defineComponent, ref } from 'vue'
+import OwnerUserNameAndProportionBlock from 'src/Modules/Owner/components/OwnerUserNameAndProportionBlock/index.vue'
 
 export default defineComponent({
-  components: {},
+  components: {
+    OwnerUserNameAndProportionBlock
+  },
   props: {
     list: {
       type: Array,
