@@ -17,6 +17,7 @@ class CreateOwnerUserModelsTable extends Migration
             $table->id();
             $table->string('uid')->comment('uid');
             $table->string('user_uid')->nullable()->comment('uid пользователя');
+            $table->integer('sort')->nullable()->comment('сортировка списка');
             $table->softDeletes();
             $table->timestamps();
         });

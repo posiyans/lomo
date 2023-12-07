@@ -37,7 +37,7 @@ class OwnerUserRepository
 
     public function paginate($limit)
     {
-        return $this->query->paginate($limit);
+        return $this->query->orderBy('sort')->paginate($limit);
     }
 
 }

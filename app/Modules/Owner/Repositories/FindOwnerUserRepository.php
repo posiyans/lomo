@@ -37,7 +37,7 @@ class FindOwnerUserRepository
      */
     public function getAllOwner()
     {
-        $this->allOwner = Cache::tags('owner_user')->remember('allOwnerList', 6000, function () {
+`        $this->allOwner = Cache::tags('owner_user')->remember('allOwnerList', 6000, function () {
             $data = [];
             $owners = OwnerUserModel::all();
             foreach ($owners as $owner) {
@@ -45,7 +45,7 @@ class FindOwnerUserRepository
             }
             ksort($data);
             return $data;
-        });
+        });`
     }
 
     /**
