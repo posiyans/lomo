@@ -27,7 +27,7 @@ class CheckSortOwnerUserAction
                 $item->save();
             }
         }
-        Cache::tags('owner_user')->remember('ownerSort', 6000, function () {
+        Cache::tags('owner_user')->remember('ownerSort', 36000, function () {
             return __METHOD__;
         });
     }
