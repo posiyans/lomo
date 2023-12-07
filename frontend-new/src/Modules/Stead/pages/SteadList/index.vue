@@ -10,7 +10,7 @@
       </div>
     </div>
     <TableBlock :list="list" />
-    <LoadMore :key="key" v-model:listQuery="listQuery" :func="func" @setList="setList" />
+    <LoadMore :key="key" v-model:listQuery="listQuery" change-url :func="func" @setList="setList" />
   </div>
 </template>
 

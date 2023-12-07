@@ -12,7 +12,7 @@ class SteadRepository
 
     public function __construct()
     {
-        $this->query = SteadModel::query()->orderBy('number');
+        $this->query = SteadModel::query()->orderBy('id');
     }
 
     public function forUser(UserModel $user)

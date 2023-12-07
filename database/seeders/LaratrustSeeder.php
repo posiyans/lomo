@@ -94,7 +94,7 @@ class LaratrustSeeder extends Seeder
         'user-ban-show' => 'Просмотр банов польльзователей',
         'user-ban-edit' => 'Ставить и снимать бан с польльзователей',
 
-        'comment-edit' => 'Редактирование комментарии',
+//        'comment-edit' => 'Редактирование комментарии',
         'comment-ban' => 'Запрет на комментарии',
         'comment-delete' => 'Удаление коментариев',
         'access-admin-panel' => 'Доступ в админ панель',

@@ -15,7 +15,7 @@ class ArticleComments extends AbstractComments
 
     public function commentRead($user): bool
     {
-        if ($user && $user->ability('superAdmin', ['article->edit', 'article->show', 'comment-edit', 'comment-ban', 'comment-delete'])) {
+        if ($user && $user->ability('superAdmin', ['article->edit', 'article->show', 'comment-ban', 'comment-delete'])) {
             return true;
         }
         return $this->object->status == 1;
@@ -26,7 +26,7 @@ class ArticleComments extends AbstractComments
         if ($this->object->allow_comments == 0) {
             return false;
         }
-        if ($user->ability('superAdmin', ['article->edit', 'article->show', 'comment-edit', 'comment-ban', 'comment-delete'])) {
+        if ($user->ability('superAdmin', ['article->edit', 'article->show', 'comment-ban', 'comment-delete'])) {
             return true;
         }
         if ($this->object->allow_comments == 2) {
@@ -37,7 +37,7 @@ class ArticleComments extends AbstractComments
 
     public function commentEdit($user): bool
     {
-        return $user->ability('superAdmin', ['article->edit', 'comment-edit', 'comment-ban', 'comment-delete']);
+        return $user->ability('superAdmin', ['article->edit', 'comment-ban', 'comment-delete']);
     }
 
     public function commentUserBan($user): bool

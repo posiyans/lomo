@@ -13,7 +13,9 @@
       <template v-slot:body-cell-number="props">
         <q-td :props="props" auto-width>
           <div class="my-table-details">
-            {{ props.row.number }}
+            <q-chip outline square color="primary" text-color="white">
+              {{ props.row.number }}
+            </q-chip>
           </div>
         </q-td>
       </template>
