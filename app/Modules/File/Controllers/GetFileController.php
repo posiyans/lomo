@@ -8,6 +8,7 @@ use App\Modules\File\Classes\GetPathForHashClass;
 use App\Modules\File\Repositories\GetFileByUidRepository;
 use App\Modules\User\Repositories\GetUserByUidRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -21,7 +22,8 @@ class GetFileController extends Controller
     public function index(Request $request)
     {
         try {
-            $user_uid = $request->session()->get('user_uid');
+//            $user_uid = $request->session()->get('user_uid');
+            $user_uid = Auth::user() ? Auth::user()->uid : false;
             $uid = $request->uid;
             $file = (new GetFileByUidRepository($uid))->run();
             $access = (new CheckAccessToFileClass($file))->run();

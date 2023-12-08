@@ -2,61 +2,89 @@
 
 namespace App\Modules\Article\Notifications;
 
+use App\Modules\Article\Models\ArticleModel;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use NotificationChannels\Telegram\TelegramMessage;
 
-use function config;
-
-class NewArticleUnderModeration extends Notification
+class NewArticleUnderModeration extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    public $token;
+    public $article;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($token)
+    public function __construct(ArticleModel $article)
     {
-        $this->token = $token;
+        $this->article = $article;
     }
 
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
      * @return array
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['telegram'];
     }
 
     /**
      * Get the mail representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
     public function toMail($notifiable)
     {
+        $text = 'Новая статья на модерацию ';
+//        $text .= $this->article->user_id;
+//        $text .= json_encode($this->article->user->attributesToArray());
+//        $text .= $this->article->user->fullName();
+//        $text .= $this->article->title;
         return (new MailMessage)
-            ->greeting("Сброс пароля")
+            ->subject('Новая статья')
             ->salutation('С Уважением, Администрация сайта')
-            ->subject('Сброс пароля')
-            ->line('Вы получили это письмо, потому что мы получили запрос на сброс пароля для вашей учетной записи.')
-            ->action('Сбросить пароль', config('app.url') . '/auth/change-password?token=' . $this->token . '&email=' . $notifiable->getEmailForPasswordReset())
-            ->line('Время действия ссылки для сброса пароля истечет через 60 минут.')
-            ->line('Если вы не запрашивали сброс пароля, никаких дальнейших действий не требуется.');
+            ->line('На сайте добавлена новая статься и она ожидает модерации')
+//            ->action('Сбросить пароль', config('app.url') . '/auth/change-password?token=' . $this->token . '&email=' . $notifiable->getEmailForPasswordReset())
+//            ->line('Время действия ссылки для сброса пароля истечет через 60 минут.')
+            ->line($text);
     }
+
+
+    public function toTelegram($notifiable)
+    {
+        $text = 'Новая статья на модерацию ';
+        $text .= $this->article->title;
+        $url = 'https://localhost/admin/article/edit/1';
+        return TelegramMessage::create()
+            // Optional recipient user id.
+            ->to(env('TELEGRAM_BOT_CHAT_ID'))
+            // Markdown supported.
+            ->content($text)
+//            ->content($this->article->title)
+//            ->content($this->article->text)
+
+            // (Optional) Blade template for the content.
+            // ->view('notification', ['url' => $url])
+
+            // (Optional) Inline Buttons
+            ->button('Смотреть', 'https://localhost/admin/article/edit/1');
+//            ->button('View Invoice', 'https://ya.ru/');
+    }
+
 
     /**
      * Get the array representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
      * @return array
      */
     public function toArray($notifiable)

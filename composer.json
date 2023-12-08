@@ -9,11 +9,14 @@
   "license": "MIT",
   "require": {
     "php": "^7.3|^8.0",
+    "ext-json": "*",
+    "ext-simplexml": "*",
     "endroid/qr-code": "^4.0",
     "fideloper/proxy": "^4.4",
     "fruitcake/laravel-cors": "^2.0",
     "guzzlehttp/guzzle": "^7.0.1",
     "intervention/image": "^2.7",
+    "laravel-notification-channels/telegram": "^2.1",
     "laravel/framework": "^8.12",
     "laravel/sanctum": "^2.10",
     "laravel/tinker": "^2.5",
@@ -22,9 +25,7 @@
     "predis/predis": "^1.1",
     "ramsey/uuid": "^4.1",
     "santigarcor/laratrust": "^6.3",
-    "tecnickcom/tcpdf": "^6.3",
-    "ext-json": "*",
-    "ext-simplexml": "*"
+    "tecnickcom/tcpdf": "^6.3"
   },
   "require-dev": {
     "barryvdh/laravel-ide-helper": "^2.13",

@@ -33,5 +33,8 @@ return [
         'client_id' => env('VKONTAKTE_KEY'),
         'client_secret' => env('VKONTAKTE_SECRET'),
     ],
+    'telegram-bot-api' => [
+        'token' => env('TELEGRAM_BOT_TOKEN', 'YOUR BOT TOKEN HERE')
+    ],
 
 ];

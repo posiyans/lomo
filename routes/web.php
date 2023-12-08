@@ -17,7 +17,7 @@ Route::get('/', function (\Illuminate\Http\Request $request) {
     $user_uid = $request->session()->get('user_uid');
     return response(['user_uid' => $user_uid, 'auth' => Auth::user()]);
 })->name('home');
-Route::get('/api/v1/test', 'App\Http\Controllers\Admin\Report\PdfController@report');
+Route::get('/api/v1/test', App\Http\Controllers\Admin\Report\PdfController::class);
 
 $myRoutesForAll = [
     'weather',

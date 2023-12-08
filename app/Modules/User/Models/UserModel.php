@@ -2,10 +2,10 @@
 
 namespace App\Modules\User\Models;
 
+use App\Modules\Auth\Notifications\VerifyEmail;
 use App\Modules\BanUser\Models\BanUserModel;
 use App\Modules\Owner\Models\OwnerUserModel;
 use App\Notifications\ResetPassword;
-use App\Notifications\VerifyEmail;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -132,6 +132,16 @@ class UserModel extends Authenticatable implements MustVerifyEmail
     public function owner()
     {
         return $this->hasOne(OwnerUserModel::class, 'user_uid', 'uid');
+    }
+
+
+    public function routeNotificationForMail($notification)
+    {
+        // Вернуть только адрес электронной почты ...
+//        return $this->email_address;
+
+        // Вернуть адрес электронной почты и имя ...
+        return [$this->email => $this->fullName()];
     }
 
     /**

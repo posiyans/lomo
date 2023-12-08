@@ -2,16 +2,16 @@
 
 namespace App\Providers;
 
-use App\Models\Owner\OwnerUserModel;
-use App\Models\Owner\OwnerUserSteadModel;
-use App\Models\Owner\OwnerUserValueModel;
 use App\Modules\Auth\Events\PasswordReset;
 use App\Modules\Auth\Listeners\ChangePasswordNotification;
+use App\Modules\Auth\Listeners\SendEmailVerificationNotification;
+use App\Modules\Owner\Models\OwnerUserModel;
+use App\Modules\Owner\Models\OwnerUserSteadModel;
+use App\Modules\Owner\Models\OwnerUserValueModel;
 use App\Observers\OwnerUserObserver;
 use App\Observers\OwnerUserSteadObserver;
 use App\Observers\OwnerUserValueObserver;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
@@ -25,6 +25,9 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+//        MessageSending::class => [
+//            SendMail::class,
+//        ],
         PasswordReset::class => [
             ChangePasswordNotification::class,
         ],

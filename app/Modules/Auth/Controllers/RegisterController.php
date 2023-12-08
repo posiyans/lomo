@@ -10,7 +10,6 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
@@ -40,15 +39,22 @@ class RegisterController extends Controller
     /**
      * Get a validator for an incoming registration request.
      *
-     * @param  array  $data
+     * @param array $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data)
     {
-        return Validator::make($data,
+        return Validator::make(
+            $data,
             [
                 'name' => ['required', 'string', 'max:255'],
-                'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+                'email' => [
+                    'required',
+                    'string',
+                    'email',
+                    'max:255',
+                    'unique:App\Modules\User\Models\UserModel'
+                ],
                 'password' => ['required', 'string', 'min:8', 'confirmed'],
             ],
             [
@@ -64,7 +70,7 @@ class RegisterController extends Controller
     /**
      * Create a new user instance after a valid registration.
      *
-     * @param  array  $data
+     * @param array $data
      * @return UserModel
      */
     protected function create(array $data): UserModel
@@ -80,7 +86,7 @@ class RegisterController extends Controller
     /**
      * Handle a registration request for the application.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function register(Request $request)
@@ -90,7 +96,7 @@ class RegisterController extends Controller
         event(new Registered($user = $this->create($request->all())));
 
         $this->guard()->login($user);
-        Session::put('user_uid', $user->uid);
+//        Session::put('user_uid', $user->uid);
         $this->fistUser($user);
         return response($user);
     }
@@ -103,7 +109,7 @@ class RegisterController extends Controller
 
     protected function fistUser(UserModel $user)
     {
-        if($user->id == 1) {
+        if ($user->id == 1) {
             $role = Role::where('name', 'superAdmin')->first();
             if ($role) {
                 $user->syncRolesWithoutDetaching([$role->id]);

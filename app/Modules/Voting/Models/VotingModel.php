@@ -2,12 +2,7 @@
 
 namespace App\Modules\Voting\Models;
 
-use App\Http\Controllers\Controller;
-use App\Http\Resources\QuestionResource;
-use App\Http\Resources\User\Voting\QuestionUserResource;
-use App\Models\Stead;
 use App\Models\MyModel;
-use Illuminate\Support\Facades\DB;
 
 /**
  * App\Modules\Voting\Models\VotingModel
@@ -55,14 +50,6 @@ use Illuminate\Support\Facades\DB;
  * @method static \Illuminate\Database\Eloquent\Builder|VotingModel whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|VotingModel whereUid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|VotingModel whereUpdatedAt($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Voting\QuestionModel> $questions
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Voting\QuestionModel> $questions
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Voting\QuestionModel> $questions
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Voting\QuestionModel> $questions
  * @mixin \Eloquent
  */
 class VotingModel extends MyModel
@@ -334,7 +321,6 @@ class VotingModel extends MyModel
 //        return false;
 //
 //    }
-
 
 
 }

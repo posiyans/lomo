@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use App\Modules\Auth\Notifications\VerifyEmail;
 use App\Modules\User\Models\UserModel as UserModelNew;
 use App\Notifications\ResetPassword;
-use App\Notifications\VerifyEmail;
 
 /**
  * @deprecated
@@ -160,9 +160,9 @@ class UserModel extends UserModelNew
     /**
      * сохранить изменения и добавть логи
      *
-     * @param  null  $description
-     * @param  null  $stead
-     * @param  array  $options
+     * @param null $description
+     * @param null $stead
+     * @param array $options
      * @return bool
      */
     public function logAndSave($description = null, $stead = null, array $options = [])
