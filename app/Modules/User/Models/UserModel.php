@@ -92,9 +92,9 @@ class UserModel extends Authenticatable implements MustVerifyEmail
         'password',
         'last_name',
         'middle_name',
-        'phone',
+//        'phone',
         'uid',
-        'adres',
+//        'adres',
     ];
 
     /**
@@ -114,8 +114,7 @@ class UserModel extends Authenticatable implements MustVerifyEmail
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'consent_to_email' => 'boolean',
-        'consent_personal' => 'boolean',
+        'options' => 'array',
     ];
 
 

@@ -2,7 +2,7 @@
 
 namespace App\Observers;
 
-use App\Models\Owner\OwnerUserSteadModel;
+use App\Modules\Owner\Models\OwnerUserSteadModel;
 use Illuminate\Support\Facades\Cache;
 
 class OwnerUserSteadObserver
@@ -10,7 +10,7 @@ class OwnerUserSteadObserver
     /**
      * Handle the OwnerUserSteadModel "created" event.
      *
-     * @param  \App\Models\Owner\OwnerUserSteadModel  $ownerUserSteadModel
+     * @param  \App\Modules\Owner\Models\OwnerUserSteadMode  $ownerUserSteadModel
      * @return void
      */
     public function created(OwnerUserSteadModel $ownerUserSteadModel)
@@ -21,7 +21,7 @@ class OwnerUserSteadObserver
     /**
      * Handle the OwnerUserSteadModel "updated" event.
      *
-     * @param  \App\Models\Owner\OwnerUserSteadModel  $ownerUserSteadModel
+     * @param  \App\Modules\Owner\Models\OwnerUserSteadMode  $ownerUserSteadModel
      * @return void
      */
     public function updated(OwnerUserSteadModel $ownerUserSteadModel)
@@ -32,7 +32,7 @@ class OwnerUserSteadObserver
     /**
      * Handle the OwnerUserSteadModel "deleted" event.
      *
-     * @param  \App\Models\Owner\OwnerUserSteadModel  $ownerUserSteadModel
+     * @param  \App\Modules\Owner\Models\OwnerUserSteadMode  $ownerUserSteadModel
      * @return void
      */
     public function deleted(OwnerUserSteadModel $ownerUserSteadModel)
@@ -43,7 +43,7 @@ class OwnerUserSteadObserver
     /**
      * Handle the OwnerUserSteadModel "restored" event.
      *
-     * @param  \App\Models\Owner\OwnerUserSteadModel  $ownerUserSteadModel
+     * @param  \App\Modules\Owner\Models\OwnerUserSteadMode  $ownerUserSteadModel
      * @return void
      */
     public function restored(OwnerUserSteadModel $ownerUserSteadModel)
@@ -54,7 +54,7 @@ class OwnerUserSteadObserver
     /**
      * Handle the OwnerUserSteadModel "force deleted" event.
      *
-     * @param  \App\Models\Owner\OwnerUserSteadModel  $ownerUserSteadModel
+     * @param  \App\Modules\Owner\Models\OwnerUserSteadMode  $ownerUserSteadModel
      * @return void
      */
     public function forceDeleted(OwnerUserSteadModel $ownerUserSteadModel)

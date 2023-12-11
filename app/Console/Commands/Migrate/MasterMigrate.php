@@ -13,6 +13,7 @@ use App\Console\Commands\Migrate\Items\SocialMigrate;
 use App\Console\Commands\Migrate\Items\SteadMigrate;
 use App\Console\Commands\Migrate\Items\UserMigrate;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * конвертация страй базы
@@ -63,7 +64,7 @@ class MasterMigrate extends Command
         GlobalOptionsMigrate::run();
         SocialMigrate::run();
         OwnerMigrate::run();
-
+        Cache::flush();
 //        $users = DB::connection('mysql_old')->table('users')->get();
 //        dump($users);
     }

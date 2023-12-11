@@ -2,7 +2,7 @@
 
 namespace App\Observers;
 
-use App\Models\Owner\OwnerUserValueModel;
+use App\Modules\Owner\Models\OwnerUserValueModel;
 use Illuminate\Support\Facades\Cache;
 
 class OwnerUserValueObserver
@@ -10,7 +10,7 @@ class OwnerUserValueObserver
     /**
      * Handle the OwnerUserValueModel "created" event.
      *
-     * @param  \App\Models\Owner\OwnerUserValueModel  $ownerUserValueModel
+     * @param  \App\Modules\Owner\Models\OwnerUserValueModel  $ownerUserValueModel
      * @return void
      */
     public function created(OwnerUserValueModel $ownerUserValueModel)
@@ -21,7 +21,7 @@ class OwnerUserValueObserver
     /**
      * Handle the OwnerUserValueModel "updated" event.
      *
-     * @param  \App\Models\Owner\OwnerUserValueModel  $ownerUserValueModel
+     * @param  \App\Modules\Owner\Models\OwnerUserValueModel  $ownerUserValueModel
      * @return void
      */
     public function updated(OwnerUserValueModel $ownerUserValueModel)
@@ -32,7 +32,7 @@ class OwnerUserValueObserver
     /**
      * Handle the OwnerUserValueModel "deleted" event.
      *
-     * @param  \App\Models\Owner\OwnerUserValueModel  $ownerUserValueModel
+     * @param  \App\Modules\Owner\Models\OwnerUserValueModel  $ownerUserValueModel
      * @return void
      */
     public function deleted(OwnerUserValueModel $ownerUserValueModel)

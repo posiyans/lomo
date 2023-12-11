@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUsersTable extends Migration
+class  CreateUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -24,6 +24,7 @@ class CreateUsersTable extends Migration
             $table->string('middle_name')->nullable();
             $table->string('adres')->nullable();
             $table->string('phone')->nullable();
+            $table->json('options')->nullable();
             $table->dateTime('last_connect')->nullable();
             $table->rememberToken();
             $table->timestamps();

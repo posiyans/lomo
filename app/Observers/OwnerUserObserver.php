@@ -2,7 +2,7 @@
 
 namespace App\Observers;
 
-use App\Models\Owner\OwnerUserModel;
+use App\Modules\Owner\Models\OwnerUserModel;
 use Illuminate\Support\Facades\Cache;
 
 class OwnerUserObserver
@@ -10,7 +10,7 @@ class OwnerUserObserver
     /**
      * Handle the OwnerUserModel "created" event.
      *
-     * @param  \App\Models\Owner\OwnerUserModel  $ownerUserModel
+     * @param  \App\Modules\Owner\Models\OwnerUserModel  $ownerUserModel
      * @return void
      */
     public function created(OwnerUserModel $ownerUserModel)
@@ -21,7 +21,7 @@ class OwnerUserObserver
     /**
      * Handle the OwnerUserModel "updated" event.
      *
-     * @param  \App\Models\Owner\OwnerUserModel  $ownerUserModel
+     * @param  \App\Modules\Owner\Models\OwnerUserMode  $ownerUserModel
      * @return void
      */
     public function updated(OwnerUserModel $ownerUserModel)
@@ -32,7 +32,7 @@ class OwnerUserObserver
     /**
      * Handle the OwnerUserModel "deleted" event.
      *
-     * @param  \App\Models\Owner\OwnerUserModel  $ownerUserModel
+     * @param  \App\Modules\Owner\Models\OwnerUserMode  $ownerUserModel
      * @return void
      */
     public function deleted(OwnerUserModel $ownerUserModel)
@@ -43,7 +43,7 @@ class OwnerUserObserver
     /**
      * Handle the OwnerUserModel "restored" event.
      *
-     * @param  \App\Models\Owner\OwnerUserModel  $ownerUserModel
+     * @param  \App\Modules\Owner\Models\OwnerUserMode  $ownerUserModel
      * @return void
      */
     public function restored(OwnerUserModel $ownerUserModel)
@@ -54,7 +54,7 @@ class OwnerUserObserver
     /**
      * Handle the OwnerUserModel "force deleted" event.
      *
-     * @param  \App\Models\Owner\OwnerUserModel  $ownerUserModel
+     * @param  \App\Modules\Owner\Models\OwnerUserMode  $ownerUserModel
      * @return void
      */
     public function forceDeleted(OwnerUserModel $ownerUserModel)

@@ -44,6 +44,10 @@ class UserMigrate
             }
             $newItem->email = strtolower($item->email);
             $newItem->uid = Str::uuid();
+            $options = [
+                'adres' => $item->adres,
+                'phone' => $item->phone,
+            ];
             $newItem->save();
             if ($item->avatar) {
 //                self::saveAvatar($newItem, $item->avatar);
