@@ -14,8 +14,9 @@ class PdfController extends Controller
     public function __invoke()
     {
         $user = UserModel::find(1);
-        $article = ArticleModel::find(24);
+        $article = ArticleModel::find(1);
         Notification::send($user, new NewArticleUnderModeration($article));
+        dd($user);
     }
 
 }

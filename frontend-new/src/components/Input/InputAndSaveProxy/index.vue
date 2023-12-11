@@ -109,7 +109,8 @@ export default defineComponent({
     const updateData = () => {
       loading.value = true
       const data = Object.assign({}, props.fields)
-      data[props.name] = newValue.value
+      data.field = props.name
+      data.value = newValue.value
       props.func(data)
         .then(response => {
           emit('update:model-value', newValue.value)

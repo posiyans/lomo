@@ -2,6 +2,7 @@
 
 Route::group(['middleware' => ['auth:sanctum'], 'prefix' => 'v2/user'], function () {
     Route::get('/info', \App\Modules\User\Controllers\GetUserInfoController::class);
+    Route::get('/list', \App\Modules\User\Controllers\GetUserListController::class);
     Route::post('/update', \App\Modules\User\Controllers\UpdateUserInfoController::class);
 });
 

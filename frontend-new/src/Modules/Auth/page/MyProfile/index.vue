@@ -84,6 +84,19 @@
                   </InputAndSaveProxy>
                 </div>
               </div>
+              <div>
+                <div class="col">
+                  <InputAndSaveProxy
+                    v-model="authStore.user.telegram"
+                    label="Телеграм ID"
+                    name="telegram"
+                    :func="func"
+                    outlined
+                    @update:model-value="reloadMyData"
+                  />
+                </div>
+                <div class="col"></div>
+              </div>
             </div>
           </div>
         </div>

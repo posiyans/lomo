@@ -20,8 +20,12 @@ class UserAddArticleController extends Controller
     {
         $data = $request->validated();
         $article = (new CreateArticleAction($data))->status(2)->run();
-        $user = UserModel::find(70);
-        Notification::send($user, new NewArticleUnderModeration($article));
+        // todo перенести в отдельный класс и настроить подписку
+        $users = UserModel::whereRoleIs(['superAdmin', 'article-edit'])->get();
+        foreach ($users as $user) {
+            // Уведомляем о необходимости промадерировать статью
+            Notification::send($user, new NewArticleUnderModeration($article));
+        }
         return $article;
     }
 }

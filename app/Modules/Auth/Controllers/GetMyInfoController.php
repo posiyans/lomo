@@ -4,6 +4,7 @@ namespace App\Modules\Auth\Controllers;
 
 use App\Http\Controllers\MyController;
 use App\Modules\User\Repositories\GetPermissionsForUserRepository;
+use App\Modules\User\Resources\UserInfoResource;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -14,7 +15,7 @@ class GetMyInfoController extends MyController
     {
         $user = Auth::user();
         $data = [
-            'user' => $user->toArray(),
+            'user' => new UserInfoResource($user),
             'permissions' => array_merge(['user'], (new GetPermissionsForUserRepository($user))->toArray()),
         ];
         return response($data);

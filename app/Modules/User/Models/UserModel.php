@@ -185,7 +185,7 @@ class UserModel extends Authenticatable implements MustVerifyEmail
         return $this->attributes['email'];
     }
 
-    public function fullName()
+    public function fullName(): string
     {
         return $this->last_name . ' ' . $this->name . ' ' . $this->middle_name;
     }
@@ -195,4 +195,9 @@ class UserModel extends Authenticatable implements MustVerifyEmail
         return $this->last_name . ' ' . $this->name;
     }
 
+
+    public function routeNotificationForTelegram()
+    {
+        return $this->options['telegram'];
+    }
 }

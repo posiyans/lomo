@@ -21,6 +21,20 @@ class UserRepository
         return $this;
     }
 
+
+    public function find($find)
+    {
+        if ($find) {
+            $this->query->where(function ($query) use ($find) {
+                $query->where('name', 'like', '%' . $find . '%')
+                    ->orWhere('middle_name', 'like', '%' . $find . '%')
+                    ->orWhere('last_name', 'like', '%' . $find . '%')
+                    ->orWhere('email', 'like', '%' . $find . '%');
+            });
+        }
+        return $this;
+    }
+
     /**
      * @return UserModel|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|object
      * @throws \Exception
@@ -32,6 +46,12 @@ class UserRepository
             return $model;
         }
         throw new \Exception('Пользователь не найден');
+    }
+
+
+    public function paginate($limit)
+    {
+        return $this->query->paginate($limit);
     }
 
 

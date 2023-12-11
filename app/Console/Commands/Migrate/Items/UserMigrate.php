@@ -26,8 +26,6 @@ class UserMigrate
         'updated_at' => 'updated_at',
         'last_name' => 'last_name',
         'middle_name' => 'middle_name',
-        'adres' => 'adres',
-        'phone' => 'phone',
         'last_connect' => 'last_connect',
 //        '' => '',
     ];
@@ -48,6 +46,7 @@ class UserMigrate
                 'adres' => $item->adres,
                 'phone' => $item->phone,
             ];
+            $newItem->options = $options;
             $newItem->save();
             if ($item->avatar) {
 //                self::saveAvatar($newItem, $item->avatar);
@@ -95,6 +94,10 @@ class UserMigrate
 class UserModel extends Model
 {
     use LaratrustUserTrait;
+
+    protected $casts = [
+        'options' => 'array',
+    ];
 
     public $timestamps = false;
 }

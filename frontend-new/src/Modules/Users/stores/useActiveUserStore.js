@@ -4,6 +4,7 @@ import { fetchRoleForUser } from 'src/Modules/Users/api/role-admin-api'
 
 export const useActiveUserStore = defineStore('activeUser', {
   state: () => ({
+    key: 1,
     user: {},
     roles: [],
     permissions: ['guest'],
@@ -46,6 +47,7 @@ export const useActiveUserStore = defineStore('activeUser', {
       fetchUserInfo(data)
         .then(response => {
           this.user = response.data.data
+          this.key++
         })
     },
     getUserRole() {

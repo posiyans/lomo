@@ -33,7 +33,7 @@ class NewArticleUnderModeration extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['telegram'];
+        return ['mail', 'telegram'];
     }
 
     /**
@@ -44,40 +44,40 @@ class NewArticleUnderModeration extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-        $text = 'Новая статья на модерацию ';
-//        $text .= $this->article->user_id;
-//        $text .= json_encode($this->article->user->attributesToArray());
-//        $text .= $this->article->user->fullName();
-//        $text .= $this->article->title;
+        $text = '';
+        $user = $this->article->user;
+        if ($user) {
+            $text .= $this->article->user->last_name . ' ' . $this->article->user->name . '<br>';
+        }
+        $text .= $this->article->title . "\n";
+        $url = env('APP_URL') . '/admin/article/edit/' . $this->article->id;
         return (new MailMessage)
             ->subject('Новая статья')
+            ->greeting("Новая статья на модерацию")
             ->salutation('С Уважением, Администрация сайта')
+            ->action('Смотреть', $url)
             ->line('На сайте добавлена новая статься и она ожидает модерации')
-//            ->action('Сбросить пароль', config('app.url') . '/auth/change-password?token=' . $this->token . '&email=' . $notifiable->getEmailForPasswordReset())
-//            ->line('Время действия ссылки для сброса пароля истечет через 60 минут.')
             ->line($text);
     }
 
 
     public function toTelegram($notifiable)
     {
-        $text = 'Новая статья на модерацию ';
-        $text .= $this->article->title;
-        $url = 'https://localhost/admin/article/edit/1';
-        return TelegramMessage::create()
-            // Optional recipient user id.
-            ->to(env('TELEGRAM_BOT_CHAT_ID'))
-            // Markdown supported.
-            ->content($text)
-//            ->content($this->article->title)
-//            ->content($this->article->text)
-
-            // (Optional) Blade template for the content.
-            // ->view('notification', ['url' => $url])
-
-            // (Optional) Inline Buttons
-            ->button('Смотреть', 'https://localhost/admin/article/edit/1');
-//            ->button('View Invoice', 'https://ya.ru/');
+        $text = '***Новая статья на модерацию***' . "\n";
+        $text .= $this->article->title . "\n";
+        $user = $this->article->user;
+        if ($user) {
+            $text .= $this->article->user->last_name . ' ' . $this->article->user->name;
+        }
+        $url = env('APP_URL') . '/admin/article/edit/' . $this->article->id;
+        if (isset($notifiable->options['telegram']) && !empty($notifiable->options['telegram'])) {
+            return TelegramMessage::create()
+                // Optional recipient user id.
+//                ->to($notifiable->options['telegram'])
+                ->to($notifiable)
+                ->content($text)
+                ->button('Смотреть', $url);
+        }
     }
 
 

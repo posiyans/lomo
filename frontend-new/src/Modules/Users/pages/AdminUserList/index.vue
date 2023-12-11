@@ -1,13 +1,6 @@
 <template>
   <div class="q-pa-md">
-    <div class="row items-center q-col-gutter-xs q-mb-xs">
-      <div>
-        <q-input v-model="listQuery.find" placeholder="Поиск" clearable outlined dense @keyup.enter="handleFilter" @clear="handleFilter" />
-      </div>
-      <div>
-        <q-btn color="primary" label="Показать" @click="handleFilter" />
-      </div>
-    </div>
+    <FilterBlock v-model="listQuery" />
     <el-table
       :data="list"
       border
@@ -40,7 +33,7 @@
       <el-table-column v-if="!mobile" label="Телефон" align="center" width="150px">
         <template #default="{row}">
           <span class="link-type">
-            {{ row.phone }}</span>
+            {{ row.options.phone }}</span>
         </template>
       </el-table-column>
       <el-table-column v-if="!mobile" label="Email" align="center" width="250px">
@@ -75,11 +68,13 @@ import ShowTime from 'src/components/ShowTime/index.vue'
 import LoadMore from 'src/components/LoadMore/index.vue'
 import UserAvatarByUid from 'src/Modules/Avatar/components/UserAvatarByUid/index.vue'
 import { useQuasar } from 'quasar'
+import FilterBlock from './components/FiltersBlock/index.vue'
 
 export default defineComponent({
   name: 'AdminUserList',
   components: {
     LoadMore,
+    FilterBlock,
     ShowTime,
     UserAvatarByUid
   },

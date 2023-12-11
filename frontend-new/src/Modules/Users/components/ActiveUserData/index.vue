@@ -1,10 +1,11 @@
 <template>
-  <div>
+  <div :key="activeUserStore.key">
     <div class="q-gutter-sm">
       <div class="row items-center">
         <InputAndSaveProxy
           :model-value="activeUserStore.user.email"
           :func="func"
+          :fields="{user_uid: activeUserStore.user.uid}"
           class="col-grow"
           :readonly="readOnly"
           @success="setValue($event, 'email')"
@@ -28,6 +29,7 @@
       <InputAndSaveProxy
         :model-value="activeUserStore.user.last_name"
         :func="func"
+        :fields="{user_uid: activeUserStore.user.uid}"
         label="Фамилия"
         name="last_name"
         :readonly="readOnly"
@@ -37,6 +39,7 @@
       <InputAndSaveProxy
         :model-value="activeUserStore.user.name"
         :func="func"
+        :fields="{user_uid: activeUserStore.user.uid}"
         label="Имя"
         name="name"
         :readonly="readOnly"
@@ -46,6 +49,7 @@
       <InputAndSaveProxy
         :model-value="activeUserStore.user.middle_name"
         :func="func"
+        :fields="{user_uid: activeUserStore.user.uid}"
         label="Отчество"
         name="middle_name"
         :readonly="readOnly"
@@ -53,24 +57,26 @@
         @success="setValue($event, 'middle_name')"
       />
       <InputAndSaveProxy
-        :model-value="activeUserStore.user.phone"
+        :model-value="activeUserStore.user?.options?.phone"
         :func="func"
+        :fields="{user_uid: activeUserStore.user.uid}"
         name="phone"
-        @success="setValue($event, 'phone')"
+        @success="setValue($event, 'options.phone')"
       >
         <template #default="{ modelValue, setValue }">
           <InputPhone outlined :model-value="modelValue" :readonly="readOnly" label="Телефон" @update:model-value="setValue" />
         </template>
       </InputAndSaveProxy>
       <InputAndSaveProxy
-        :model-value="activeUserStore.user.adres"
+        :model-value="activeUserStore.user?.options?.adres"
         :func="func"
+        :fields="{user_uid: activeUserStore.user.uid}"
         label="Адрес регистрации/почтовый адрес"
         name="adres"
         :readonly="readOnly"
         outlined
         autogrow
-        @success="setValue($event, 'adres')"
+        @success="setValue($event, 'options.adres')"
       />
     </div>
   </div>
@@ -108,6 +114,8 @@ export default defineComponent({
     })
     const setValue = (val, name) => {
       activeUserStore.user[name] = val
+      activeUserStore.getUserInfo()
+      // activeUserStore.key++
     }
     return {
       key,

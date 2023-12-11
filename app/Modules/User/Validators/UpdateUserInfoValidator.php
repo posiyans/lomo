@@ -2,9 +2,11 @@
 
 namespace App\Modules\User\Validators;
 
+use App\Modules\User\Repositories\UserFieldRepository;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 
 class UpdateUserInfoValidator extends FormRequest
@@ -41,13 +43,13 @@ class UpdateUserInfoValidator extends FormRequest
                 'exists:App\Modules\User\Models\UserModel,uid',
                 'required'
             ],
-            'last_name' => 'string|max:255',
-            'name' => 'string|max:255',
-            'middle_name' => 'string|max:255',
-            'phone' => 'string|max:255',
-            'email' => [
-                'email:rfc,dns',
-                'unique:App\Modules\User\Models\UserModel',
+            'field' => [
+                'required',
+                Rule::in(UserFieldRepository::getKeys())
+            ],
+            'value' => [
+                'required',
+                UserFieldRepository::getRules($this->field)
             ]
         ];
     }
