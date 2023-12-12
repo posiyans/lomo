@@ -88,10 +88,10 @@ class LogModel extends MyModel
     /**
      * добавьть лог с разницей состояния моделей
      *
-     * @param $model_new  -- модель после сохранния
-     * @param $model_old  -- массив оригинальных атрибутов полученных перед сохранением через getOriginal();
-     * @param  null  $description  -- описание
-     * @param  null  $stead_id  -- id участка к которому как-то относится данное действие
+     * @param $model_new -- модель после сохранния
+     * @param $model_old -- массив оригинальных атрибутов полученных перед сохранением через getOriginal();
+     * @param null $description -- описание
+     * @param null $stead_id -- id участка к которому как-то относится данное действие
      * @return bool
      */
     public static function addLog($model_new, $model_old, $description = null, $stead_id = null)
@@ -135,4 +135,37 @@ class LogModel extends MyModel
         }
         return false;
     }
+
+
+    /**
+     * добавьть лог с разницей состояния моделей
+     *
+     * @param $model_new -- модель после сохранния
+     * @param $model_old -- массив оригинальных атрибутов полученных перед сохранением через getOriginal();
+     * @param null $description -- описание
+     * @return bool
+     */
+    public static function deleteModel($model, $description = null)
+    {
+        $attributes = $model->getAttributes();
+        $diff = [];
+        foreach (array_keys($attributes) as $attribute) {
+            $diff[] = [
+                $attribute => [
+                    'old' => isset($model[$attribute]) ? $model[$attribute] : ''
+                ]
+            ];
+        }
+        $log = new self();
+        $log->commentable_id = $model->id;
+        $log->commentable_type = get_class($model);
+        $log->type = 'ok';
+        $log->description = $description;
+        $log->value = $model->toArray();
+        if ($log->save()) {
+            return $log;
+        }
+        return false;
+    }
+
 }

@@ -33,7 +33,7 @@ class NewArticleUnderModeration extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['mail', 'telegram'];
+        return ['telegram', 'mail'];
     }
 
     /**
@@ -47,7 +47,7 @@ class NewArticleUnderModeration extends Notification implements ShouldQueue
         $text = '';
         $user = $this->article->user;
         if ($user) {
-            $text .= $this->article->user->last_name . ' ' . $this->article->user->name . '<br>';
+            $text .= $this->article->user->last_name . ' ' . $this->article->user->name;
         }
         $text .= $this->article->title . "\n";
         $url = env('APP_URL') . '/admin/article/edit/' . $this->article->id;
@@ -69,12 +69,15 @@ class NewArticleUnderModeration extends Notification implements ShouldQueue
         if ($user) {
             $text .= $this->article->user->last_name . ' ' . $this->article->user->name;
         }
-        $url = env('APP_URL') . '/admin/article/edit/' . $this->article->id;
+        if (env('APP_ENV') == 'local') {
+            $url = 'http://127.0.0.1:8099/' . '/admin/article/edit/' . $this->article->id;
+        } else {
+            $url = env('APP_URL') . '/admin/article/edit/' . $this->article->id;
+        }
         if (isset($notifiable->options['telegram']) && !empty($notifiable->options['telegram'])) {
             return TelegramMessage::create()
                 // Optional recipient user id.
-//                ->to($notifiable->options['telegram'])
-                ->to($notifiable)
+                ->chunk()
                 ->content($text)
                 ->button('Смотреть', $url);
         }

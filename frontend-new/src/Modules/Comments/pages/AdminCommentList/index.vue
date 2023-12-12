@@ -1,13 +1,13 @@
 <template>
   <div>
-    <CommentsTable v-if="commentsList" :comments-list="commentsList" />
+    <CommentsTable v-if="commentsList" :comments-list="commentsList" @reload="reload" />
     <LoadMore :key="key" v-model:list-query="commentsList.listQuery.value" :func="func" @setList="setList" />
   </div>
 </template>
 
 <script>
 /* eslint-disable */
-import { defineComponent, onMounted, ref } from 'vue'
+import { defineComponent, ref } from 'vue'
 import { useCommentsList } from 'src/Modules/Comments/hooks/useCommentsList'
 import { getAllMessage } from 'src/Modules/Comments/api/commentApi'
 import LoadMore from 'src/components/LoadMore/index.vue'
@@ -26,13 +26,14 @@ export default defineComponent({
     const setList = (val) => {
       commentsList.list.value = val
     }
-    onMounted(() => {
-
-    })
+    const reload = () => {
+      key.value++
+    }
     return {
       key,
       func,
       setList,
+      reload,
       commentsList
     }
   }

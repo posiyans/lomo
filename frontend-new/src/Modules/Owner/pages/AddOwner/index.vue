@@ -49,7 +49,7 @@ import InputPhone from 'src/components/Input/InputPhone/index.vue'
 import ComponentField from 'src/Modules/Owner/components/ComponentFiled/index.vue'
 import SelectStead from 'src/Modules/Stead/components/SelectStead/index.vue'
 import SelectSteadDialog from 'src/Modules/Stead/components/SelectSteadDialog/index.vue'
-import SteadInfo from 'src/Modules/Stead/components/SteadInfo/index.vue'
+import SteadInfo from 'src/Modules/Stead/components/ShowSteadInfo/index.vue'
 import { useQuasar } from 'quasar'
 
 export default defineComponent({

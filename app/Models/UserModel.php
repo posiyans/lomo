@@ -69,7 +69,7 @@ class UserModel extends UserModelNew
         return $this->hasMany('App\Models\Stead', 'user_id', 'id');
     }
 
-    public function fullName()
+    public function fullName(): string
     {
         return $this->last_name . ' ' . $this->name . ' ' . $this->middle_name;
     }

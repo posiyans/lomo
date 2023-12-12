@@ -12,7 +12,7 @@ class CreateArticleAction
     public function __construct(array $opt = [])
     {
         $this->article = new ArticleModel();
-        $this->article->status = 0;
+        $this->article->status = 1;
         $this->article->allow_comments = 1;
         $this->article->user_id = Auth::id() ?? 0;
         $this->article->fill($opt);

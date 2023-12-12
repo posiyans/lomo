@@ -5,11 +5,9 @@ namespace App\Modules\Comment\Controllers;
 use App\Http\Controllers\Controller;
 use App\Modules\BanUser\Actions\CheckUserBanAction;
 use App\Modules\Comment\Actions\CreateCommentAction;
-use App\Modules\Comment\Notifications\AdminNewCommentsNotification;
+use App\Modules\Comment\Actions\SendNewMessageNotificationAction;
 use App\Modules\Comment\Repositories\GetObjectByTypeAndUid;
-use App\Modules\User\Models\UserModel;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Notification;
 
 /**
  * получить фаил
@@ -44,11 +42,7 @@ class SendMessageController extends Controller
                 'reply' => $reply
             ];
             $comment = (new CreateCommentAction($model))->message($message)->options($opt)->run();
-            $users = UserModel::whereRoleIs(['superAdmin'])->get();
-            foreach ($users as $user) {
-                // Уведомляем о новом комментрии
-                Notification::send($user, new AdminNewCommentsNotification($comment));
-            }
+            (new SendNewMessageNotificationAction($comment))->run();
             return $comment;
         } catch (\Exception $e) {
             return response(['errors' => $e->getMessage()], 450);

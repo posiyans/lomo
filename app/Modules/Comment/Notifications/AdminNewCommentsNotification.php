@@ -47,13 +47,17 @@ class AdminNewCommentsNotification extends Notification implements ShouldQueue
                 $text .= $user->last_name . ' ' . $user->name . "\n";;
             }
             $text .= 'для ' . $commentedModel->descriptionForComment()['label'] . "\n";
-            $text .= $this->comment->message . "\n";
-//            $url = env('APP_URL') . $commentedModel->descriptionForComment()['url'];
+            $text .= str_replace('*', ' ', $this->comment->message) . "\n";
+            if (env('APP_ENV') == 'local') {
+                $url = 'http://127.0.0.1:8099/' . $commentedModel->descriptionForComment()['url'];
+            } else {
+                $url = env('APP_URL') . $commentedModel->descriptionForComment()['url'];
+            }
             return TelegramMessage::create()
                 // Optional recipient user id.
-                ->to($notifiable->options['telegram'])
-                ->content($text);
-//                ->button('Смотреть', $url);
+                ->chunk()
+                ->content($text)
+                ->button('Смотреть', $url);
         } else {
             throw new \Exception('Нt указан телеграм id');
         }

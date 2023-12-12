@@ -20,6 +20,8 @@ class CheckUserBanAction
     public function __construct(UserModel $user)
     {
         $this->user = $user;
+        $this->uid = '';
+        $this->type = '';
     }
 
     public function type($type)
@@ -55,7 +57,7 @@ class CheckUserBanAction
                 ->noBan();
             return true;
         } catch (\Exception $e) {
-            throw new \Exception('Комментарии отключены');
+            throw new \Exception('Данное дейтвие невозможно');
         }
     }
 

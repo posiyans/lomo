@@ -1,7 +1,7 @@
 <template>
   <div>
     <q-select
-      :model-value="modelValue"
+      :model-value="filterValue"
       :options="status"
       map-options
       emit-value
@@ -17,9 +17,12 @@
 </template>
 
 <script>
+/* eslint-disable */
+import { computed, defineComponent, onMounted, ref } from 'vue'
 import { getStatusList } from 'src/Modules/Article/Article/api/article'
 
-export default {
+export default defineComponent({
+  components: {},
   props: {
     modelValue: {
       type: [Number, String],
@@ -41,31 +44,37 @@ export default {
       type: Boolean,
       default: false
     }
-
   },
-  data() {
-    return {
-      status: []
-    }
-  },
-  created() {
-    this.getData()
-  },
-  methods: {
-    getData() {
+  setup(props, { emit }) {
+    const status = ref([])
+    const getData = () => {
       getStatusList()
         .then(res => {
-          this.status = res.data
+          status.value = res.data
         })
-    },
-    setValue(val) {
-      this.$emit('update:model-value', val)
-      this.$emit('input', val)
+    }
+    const filterValue = computed(() => {
+      if (props.modelValue || props.modelValue === '0' || props.modelValue === 0) {
+        return +props.modelValue
+      }
+      return ''
+    })
+    const setValue = (val) => {
+      emit('update:model-value', val)
+    }
+    onMounted(() => {
+      getData()
+    })
+    return {
+      status,
+      filterValue,
+      getData,
+      setValue
     }
   }
-}
+})
 </script>
 
-<style scoped>
+<style scoped lang='scss'>
 
 </style>

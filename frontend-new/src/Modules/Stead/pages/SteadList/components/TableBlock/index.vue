@@ -36,7 +36,7 @@
       <template v-slot:body-cell-actions="props">
         <q-td :props="props">
           <div class="q-gutter-sm">
-            <q-btn label="Инфо" color="primary" :to="`/admin/bookkeping/billing_balance_stead/${props.row.id}`" />
+            <q-btn label="Инфо" color="primary" :to="`/admin/stead/info/${props.row.id}`" />
             <q-btn label="Квит." color="primary" />
           </div>
         </q-td>

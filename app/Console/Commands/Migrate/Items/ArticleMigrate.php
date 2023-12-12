@@ -19,10 +19,8 @@ class ArticleMigrate
         'title' => 'title',
         'resume' => 'resume',
         'category_id' => 'category_id',
-        'status' => 'public',
         'created_at' => 'created_at',
         'updated_at' => 'updated_at',
-//        '' => '',
     ];
 
 
@@ -57,6 +55,7 @@ class ArticleMigrate
             }
             $newItem->text = $text;
             $newItem->allow_comments = 1;
+            $newItem->status = $item->public + 1;
             $newItem->slug = substr(Str::slug($newItem->title), 0, 240);
 
 

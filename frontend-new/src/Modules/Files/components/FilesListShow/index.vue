@@ -22,7 +22,7 @@
           <FileSize :size="file.model.size" class="q-px-sm text-grey-7" />
         </td>
         <td>
-          <div v-if="file.model.uid">
+          <div v-if="file.model.uid && file.model.url">
             <DownloadFileBtn :url-file="file.model.url" />
           </div>
         </td>
@@ -33,6 +33,9 @@
               @click="deleteFile(file)">
               <DeleteIcon />
             </div>
+          </div>
+          <div v-if="file.upload.error" class="text-red">
+            Ошибка {{ file.upload.errorsMessage }}
           </div>
         </td>
       </tr>

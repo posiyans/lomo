@@ -41,3 +41,11 @@ export function fetchSteadListInXlsx(params) {
     params
   })
 }
+
+export function updateSteadField(id, data) {
+  return request({
+    url: '/api/v2/stead/update/' + id,
+    method: 'post',
+    data
+  })
+}

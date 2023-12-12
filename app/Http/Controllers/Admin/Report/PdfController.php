@@ -15,6 +15,7 @@ class PdfController extends Controller
     {
         $user = UserModel::find(1);
         $article = ArticleModel::find(1);
+        Notification::deliverVia('telegram');
         Notification::send($user, new NewArticleUnderModeration($article));
         dd($user);
     }

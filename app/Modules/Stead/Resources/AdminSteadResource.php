@@ -23,12 +23,12 @@ class AdminSteadResource extends JsonResource
             $tmp['proportion'] = $owner->pivot->proportion;
             $data[] = $tmp;
         }
-
-        return [
+        $rez = [
             'id' => $this->id,
             'number' => $this->number,
             'size' => $this->size,
             'owners' => $data,
         ];
+        return array_merge($rez, $this->options);
     }
 }

@@ -2,9 +2,12 @@
 
 namespace App\Modules\Comment\Actions;
 
+use App\Modules\Comment\Classes\ObsceneCensorRus;
 use App\Modules\Comment\Interfaces\CommentedInterface;
 use App\Modules\Comment\Models\CommentModel;
+use App\Modules\User\Repositories\GetUserByUidRepository;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Ramsey\Uuid\Uuid;
 
 class CreateCommentAction
@@ -23,6 +26,13 @@ class CreateCommentAction
 
     public function message($text)
     {
+        if (!ObsceneCensorRus::isAllowed($text)) {
+            Log::error($text);
+            $user = (new GetUserByUidRepository($this->comment->user_id))->run();
+            (new SendCensorNotificationAction($user, $text))->run();
+        }
+        ObsceneCensorRus::filterText($text);
+//        $text = str_replace('*', '', $text);
         $this->comment->message = $text;
         return $this;
     }

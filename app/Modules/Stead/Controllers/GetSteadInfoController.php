@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Article\ArticleModel;
 use App\Models\Article\CategoryModel;
 use App\Modules\Stead\Repositories\GetSteadByIdRepository;
+use App\Modules\Stead\Resources\AdminSteadResource;
 use App\Modules\Stead\Resources\SteadResource;
 use Illuminate\Http\Request;
 
@@ -26,6 +27,10 @@ class GetSteadInfoController extends Controller
     {
         $id = $request->get('id');
         $stead = (new GetSteadByIdRepository($id))->run();
+        $user = \Auth::user();
+        if ($request->full && $user && $user->ability('superAdmin', ['stead-show', 'stead-edit'])) {
+            return new AdminSteadResource($stead);
+        }
         return new SteadResource($stead);
     }
 

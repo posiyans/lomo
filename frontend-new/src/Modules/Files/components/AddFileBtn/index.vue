@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { defineComponent, onMounted, ref } from 'vue'
+import { defineComponent, ref } from 'vue'
 import { useFile } from 'src/Modules/Files/hooks/useFile.js'
 import { useQuasar } from 'quasar'
 import { fileSize } from 'src/utils/filters.js'
@@ -71,9 +71,6 @@ export default defineComponent({
       }
       emit('add-files', tmp)
     }
-    onMounted(() => {
-
-    })
     return {
       showDialog,
       change,

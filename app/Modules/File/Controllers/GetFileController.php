@@ -26,19 +26,18 @@ class GetFileController extends Controller
             $user_uid = Auth::user() ? Auth::user()->uid : false;
             $uid = $request->uid;
             $file = (new GetFileByUidRepository($uid))->run();
-            $access = (new CheckAccessToFileClass($file))->run();
             try {
-                if (!$access && $user_uid) {
+                if ($user_uid) {
                     $user = (new GetUserByUidRepository($user_uid))->run();
-                    $access = (new CheckAccessToFileClass($file))->forUser($user)->run();
                 }
             } catch (\Exception $e) {
+                $user = null;
             }
+            (new CheckAccessToFileClass())->file($file)->forUser($user)->read();
 
-            if ($access) {
-                $path = (new GetPathForHashClass($file->hash))->run();
-                return Storage::download($path, $file->name);
-            }
+            $path = (new GetPathForHashClass($file->hash))->run();
+            return Storage::download($path, $file->name);
+            
             return response(['errors' => 'Ошибка доступа'], 403);
         } catch (\Exception $e) {
             return response(['errors' => $e->getMessage()], 451);

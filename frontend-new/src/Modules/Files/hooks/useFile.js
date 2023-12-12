@@ -40,6 +40,7 @@ export function useFile() {
     {
       success: false,
       error: false,
+      errorsMessage: null,
       process: 0
     }
   )
@@ -105,6 +106,7 @@ export function useFile() {
         .catch(er => {
           upload.error = true
           upload.success = false
+          upload.errorsMessage = er.response.data.errors
         })
     }
   }

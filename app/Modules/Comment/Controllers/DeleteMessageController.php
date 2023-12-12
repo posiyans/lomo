@@ -31,9 +31,9 @@ class DeleteMessageController extends Controller
             $user = Auth::user();
             $uid = $request->get('uid');
             $model = (new CommentRepository())->byUid($uid)->one();
-            if (CommentTypeRepository::getCommentedRoleObject($model)->commentDelete($user)) {
+            if (CommentTypeRepository::getCommentedRoleObject($model->parentModel)->commentDelete($user)) {
                 (new DeleteCommentAction($model))->run();
-                return true;
+                return ['status' => true];
             }
             return response(['errors' => 'Ошибка доступа'], 403);
         } catch (\Exception $e) {

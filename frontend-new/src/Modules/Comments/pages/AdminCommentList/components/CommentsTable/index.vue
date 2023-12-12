@@ -103,8 +103,7 @@ export default defineComponent({
             })
           })
           .finally(() => {
-            props.commentsList.listQuery.value.key++
-
+            emit('reload')
           })
       })
     }

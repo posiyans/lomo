@@ -45,7 +45,7 @@
 /* eslint-disable */
 import { defineComponent, ref } from 'vue'
 import SelectStead from 'src/Modules/Stead/components/SelectStead/index.vue'
-import SteadInfo from 'src/Modules/Stead/components/SteadInfo/index.vue'
+import SteadInfo from 'src/Modules/Stead/components/ShowSteadInfo/index.vue'
 
 export default defineComponent({
   components: {

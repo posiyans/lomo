@@ -7,27 +7,27 @@ class StatusArticleRepository
 
     private static $status = [
         [
-            'id' => 0,
+            'id' => 1,
             'label' => 'черновик',
             'color' => '#cecece'
         ],
         [
-            'id' => 1,
+            'id' => 2,
             'label' => 'опубликовано',
             'color' => '#005500'
         ],
         [
-            'id' => 2,
+            'id' => 3,
             'label' => 'на модерации',
             'color' => '#0000ff'
         ],
         [
-            'id' => 3,
+            'id' => 4,
             'label' => 'на доработке',
             'color' => '#cecece'
         ],
         [
-            'id' => 4,
+            'id' => 5,
             'label' => 'опубликовано только для собственников',
             'color' => '#00cece'
         ],

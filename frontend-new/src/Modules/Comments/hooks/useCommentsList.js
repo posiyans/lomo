@@ -5,7 +5,6 @@ export function useCommentsList() {
 
   const listQuery = ref(
     {
-      key: 1,
       limit: 20,
       page: 1,
       user_uid: null,

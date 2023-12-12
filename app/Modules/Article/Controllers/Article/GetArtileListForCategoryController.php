@@ -19,7 +19,7 @@ class GetArtileListForCategoryController extends Controller
         // todo переделать на репозиторий
         $query = ArticleModel::query();
         $query->where(function ($query) {
-            $query->where('status', 1)->orWhere('status', 4);
+            $query->where('status', 2)->orWhere('status', 5);
         });
         if ($request->category_id) {
             $query->where('category_id', $request->category_id);

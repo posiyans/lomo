@@ -52,6 +52,8 @@
             autogrow
             dense
             outlined
+            :maxlength="4000"
+            :counter='message.newMessage.value.message.length > 3000'
             bg-color="white"
             :placeholder="placeholderInput"
           >

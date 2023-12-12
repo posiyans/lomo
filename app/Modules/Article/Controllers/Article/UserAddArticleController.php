@@ -19,9 +19,9 @@ class UserAddArticleController extends Controller
     public function __invoke(UserAddArticleValidator $request)
     {
         $data = $request->validated();
-        $article = (new CreateArticleAction($data))->status(2)->run();
+        $article = (new CreateArticleAction($data))->status(3)->run();
         // todo перенести в отдельный класс и настроить подписку
-        $users = UserModel::whereRoleIs(['superAdmin', 'article-edit'])->get();
+        $users = UserModel::whereRoleIs(['superAdmin'])->get();
         foreach ($users as $user) {
             // Уведомляем о необходимости промадерировать статью
             Notification::send($user, new NewArticleUnderModeration($article));

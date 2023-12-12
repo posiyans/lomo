@@ -5,8 +5,6 @@ namespace App\Modules\File\Classes;
 use App\Modules\Article\Models\ArticleModel;
 use App\Modules\File\AccessClass\ArticleModelAccessClass;
 use App\Modules\File\Models\FileModel;
-use App\Modules\File\Repositories\GetObjectForFileRepository;
-use App\Modules\User\Models\UserModel;
 use Illuminate\Support\Facades\Auth;
 
 class CheckAccessToFileClass
@@ -18,41 +16,39 @@ class CheckAccessToFileClass
     ];
 
 
-    public function __construct(FileModel $file)
+    public function __construct()
     {
-        $this->file = $file;
         $this->user = Auth::user() ? Auth::user() : null;
     }
 
-    public function forUser(UserModel $user): CheckAccessToFileClass
+    public function file(FileModel $file): CheckAccessToFileClass
+    {
+        $this->file = $file;
+        return $this;
+    }
+
+    public function forUser($user): CheckAccessToFileClass
     {
         $this->user = $user;
         return $this;
     }
 
-    public function run()
-
+    public function read()
     {
         $class = $this->file->commentable_type;
         if (isset($this->classMap[$class])) {
             return (new $this->classMap[$class]([$this->file, $this->user]))->read();
         }
-
         throw new \Exception('Ошибка определения прав на файл');
     }
 
-    private function article(): bool
+
+    public function write($class)
     {
-        if ($this->user && $this->file->user_id == $this->user->id) {
-            return true;
+        if (isset($this->classMap[$class])) {
+            return (new $this->classMap[$class]([null, $this->user]))->write();
         }
-        if ($this->user && $this->user->ability('superAdmin', 'article-edit')) {
-            return true;
-        }
-        $model = (new GetObjectForFileRepository($this->file))->run();
-        if ($model->public == 1) {
-            return true;
-        }
-        return false;
+        throw new \Exception('Ошибка определения прав на файл');
     }
+
 }

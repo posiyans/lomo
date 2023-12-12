@@ -2,6 +2,7 @@
 
 namespace App\Modules\File\AccessClass;
 
+use App\Modules\BanUser\Actions\CheckUserBanAction;
 use App\Modules\File\Repositories\GetObjectForFileRepository;
 
 /**
@@ -22,11 +23,11 @@ class ArticleModelAccessClass extends FileAccessAbstract
     public function read()
     {
         $model = (new GetObjectForFileRepository($this->file))->run();
-        if ($model->public == 1) {
+        if ($model->public == 2) {
             return true;
         }
         if (!$this->user) {
-            return false;
+            throw new \Exception('Ошибка доступа');
         }
         if ($this->file->user_id == $this->user->id) {
             return true;
@@ -34,14 +35,22 @@ class ArticleModelAccessClass extends FileAccessAbstract
         if ($this->user->ability('superAdmin', 'article-edit', 'article-show')) {
             return true;
         }
-        if ($model->public == 4 && $this->user->hasRole('owners')) {
+        if ($model->public == 5 && $this->user->hasRole('owners')) {
             return true;
         }
-        return false;
+        throw new \Exception('Ошибка доступа');
     }
 
     public function write()
     {
-        return false;
+        (new CheckUserBanAction($this->user))
+            ->type('article')
+            ->run();
     }
+
+    public function delete()
+    {
+        throw new \Exception('Ошибка доступа');
+    }
+
 }
