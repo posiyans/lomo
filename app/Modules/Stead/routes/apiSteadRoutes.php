@@ -16,6 +16,7 @@ Route::group(['prefix' => 'v2/stead'], function () {
     Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('create', \App\Modules\Stead\Controllers\CreateSteadController::class);
         Route::post('update/{stead}', \App\Modules\Stead\Controllers\UpdateSteadInfoController::class);
+        Route::post('update-proportion', \App\Modules\Stead\Controllers\UpdateSteadOwnerProportionController::class);
         Route::get('/list-xlsx', \App\Modules\Stead\Controllers\GetSteadListInXlsxController::class);
     });
     Route::get('/list', [\App\Modules\Stead\Controllers\GetSteadListController::class, 'index']);

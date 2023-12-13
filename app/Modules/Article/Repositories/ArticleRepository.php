@@ -23,7 +23,7 @@ class ArticleRepository
     public function public()
     {
         $this->query->where(function ($query) {
-            $query->where('status', 1)->orWhere('status', 4);
+            $query->where('status', 2)->orWhere('status', 5);
         });
         return $this;
     }

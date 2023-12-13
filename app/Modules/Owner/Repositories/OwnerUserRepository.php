@@ -25,6 +25,11 @@ class OwnerUserRepository
     }
 
 
+    /**
+     * @param $uid
+     * @return OwnerUserModel
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     */
     public function byUid($uid)
     {
         return $this->query->where('uid', $uid)->firstOrFail();

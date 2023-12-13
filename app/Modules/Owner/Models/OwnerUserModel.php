@@ -3,8 +3,10 @@
 namespace App\Modules\Owner\Models;
 
 use App\Models\MyModel;
+use App\Modules\Stead\Models\SteadModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 
 /**
@@ -64,10 +66,14 @@ class OwnerUserModel extends MyModel
 
     public function nameForMyRole()
     {
-        if (\Auth::user()->ability('superAdmin', 'owner-show')) {
-            return $this->fullName();
+        if (Auth::user()) {
+            if (Auth::user()->ability('superAdmin', 'owner-show')) {
+                return $this->fullName();
+            } else {
+                return $this->smallName();
+            }
         } else {
-            return $this->smallName();
+            return '';
         }
     }
 
@@ -152,9 +158,22 @@ class OwnerUserModel extends MyModel
         return $this;
     }
 
+//    public function steads()
+//    {
+//        return $this->hasMany(OwnerUserSteadModel::class, 'owner_uid', 'uid');
+//    }
+
     public function steads()
     {
-        return $this->hasMany(OwnerUserSteadModel::class, 'owner_uid', 'uid');
+        return $this->belongsToMany(
+            SteadModel::class,
+            'owner_user_model_stead_model',
+            'owner_uid',
+            'stead_id',
+            'uid',
+            'id'
+        )
+            ->withPivot('proportion');
     }
 
 

@@ -37,6 +37,11 @@ class SteadRepository
         return $this;
     }
 
+    /**
+     * @param $id
+     * @return SteadModel
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     */
     public function byId($id)
     {
         return $this->query->where('id', $id)->firstOrFail();

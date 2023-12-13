@@ -1,5 +1,5 @@
 <template>
-  <div class="row">
+  <div class="row items-center">
     <div class="col-grow">
       <slot :model-value="newValue" :setValue="setValue">
         <q-input
@@ -27,7 +27,6 @@
       <div class="absolute-bottom">
         <q-linear-progress v-if="loading" size="xs" indeterminate />
       </div>
-
     </div>
   </div>
 </template>

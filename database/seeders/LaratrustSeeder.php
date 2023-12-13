@@ -71,6 +71,8 @@ class LaratrustSeeder extends Seeder
 
     protected $permissions = [
         'send-mail-spam' => 'Email рассылка',
+        'access-admin-panel' => 'Доступ в админ панель',
+
 
 //        'owner' => 'Собственник', // ?? или добавлять динамически
         'owner-show' => 'Просмотр собственников',
@@ -97,7 +99,6 @@ class LaratrustSeeder extends Seeder
 //        'comment-edit' => 'Редактирование комментарии',
         'comment-ban' => 'Запрет на комментарии',
         'comment-delete' => 'Удаление коментариев',
-        'access-admin-panel' => 'Доступ в админ панель',
 
         'appeal-show' => 'Просмотр обращений',
         'appeal-edit' => 'Обработка обращений',

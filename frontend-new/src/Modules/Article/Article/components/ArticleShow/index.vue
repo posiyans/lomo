@@ -8,7 +8,7 @@
         <ShowTime :time="article.updated_at" class="text-grey-8 text-small-80" />
       </div>
       <q-space />
-      <div v-if="article.status !== 1">
+      <div v-if="article.status !== 2">
         <q-btn outline color="negative">
           <StatusShow :model-value="article.status" />
         </q-btn>
@@ -59,7 +59,7 @@ export default defineComponent({
       if (authStore.permissions.includes('owner')) {
         return true
       }
-      if (props.article.status === 1) {
+      if (props.article.status === 2) {
         return true
       }
       return false

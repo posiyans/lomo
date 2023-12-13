@@ -26,9 +26,9 @@ class OwnerUserAndSteadsResource extends JsonResource
         }
         $data['steads'] = $this->steads->sortBy('stead.number', SORT_NATURAL)->map(function ($item) {
             return [
-                'stead_id' => $item->stead_id,
-                'number' => $item->stead->number,
-                'proportion' => $item->proportion,
+                'stead_id' => $item->id,
+                'number' => $item->number,
+                'proportion' => $item->pivot->proportion,
             ];
         })->values();
         return $data;

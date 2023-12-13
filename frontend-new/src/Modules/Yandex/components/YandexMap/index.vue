@@ -5,27 +5,6 @@
       :zoom="16"
       style="width: 100%; height: 600px;"
     >
-      <!--      <ymap-marker-->
-      <!--        marker-id="123"-->
-      <!--        :coords="coords"-->
-      <!--        marker-type="Polygon"-->
-      <!--        hint-content="участок 421"-->
-      <!--	      :marker-fill="{color: '#00ff00'}"-->
-      <!--        :marker-stroke="{color: '#ff0000', width: 1}"-->
-      <!--        :balloon="{header: 'участок 421', body: '612 кв.м', footer: 'footer2'}"-->
-      <!--      />-->
-      <!--      <ymap-marker-->
-      <!--        marker-id="124"-->
-      <!--        :coords="center"-->
-      <!--        :icon="markerIcon"-->
-      <!--  />-->
-      <!--      <ymap-marker-->
-      <!--        v-for="i in list"-->
-      <!--        :key="i.center"-->
-      <!--        :marker-id="i.address"-->
-      <!--        :coords="i.center"-->
-      <!--        :icon="showmarker(i)"-->
-      <!--      />-->
       <ymap-marker
         v-for="i in list"
         :key="i.center"

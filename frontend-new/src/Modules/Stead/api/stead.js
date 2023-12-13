@@ -49,3 +49,11 @@ export function updateSteadField(id, data) {
     data
   })
 }
+
+export function updateSteadOwnerProportion(data) {
+  return request({
+    url: '/api/v2/stead/update-proportion/',
+    method: 'post',
+    data
+  })
+}

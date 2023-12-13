@@ -26,7 +26,7 @@
             </div>
           </td>
           <td>
-            <div v-for="stead in steads" :key="stead.id">
+            <div v-for="stead in steads" :key="stead.stead_id" @click="toStead(stead.stead_id)" class="cursor-pointer">
               <q-chip outline color="primary" text-color="white">
                 уч. {{ stead.number }} {{ propFilter(stead.proportion) }}
               </q-chip>
@@ -41,7 +41,7 @@
 <script>
 /* eslint-disable */
 import { computed, defineComponent, onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useOwnerUserField } from 'src/Modules/Owner/hooks/useOwnerUserField'
 import { useOwnerUser } from 'src/Modules/Owner/hooks/useOwnerUser'
 import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
@@ -59,10 +59,11 @@ export default defineComponent({
   setup(props, { emit }) {
     const data = ref(false)
     const edit = ref(false)
-    const $route = useRoute()
+    const route = useRoute()
+    const router = useRouter()
     const { fieldList, getListField } = useOwnerUserField()
     const { getInfo, owner, steads } = useOwnerUser()
-    const ownerUid = ref($route.params.uid)
+    const ownerUid = ref(route.params.uid)
     const authStore = useAuthStore()
     const editable = computed(() => {
       return authStore.permissions.includes('owner-edit')
@@ -86,12 +87,16 @@ export default defineComponent({
       }
       return ''
     }
+    const toStead = (id) => {
+      router.push('/admin/stead/info/' + id)
+    }
     return {
       data,
       ownerUid,
       fullName,
       propFilter,
       getUserData,
+      toStead,
       owner,
       fieldList,
       steads,

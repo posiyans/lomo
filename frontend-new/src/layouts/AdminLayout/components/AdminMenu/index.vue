@@ -46,6 +46,7 @@ export default defineComponent({
       if (item.meta?.roles) {
         authStore.permissions.forEach(role => {
           if (item.meta?.roles?.includes(role)) {
+            console.log(item.meta.title)
             access = true
           }
         })
@@ -63,7 +64,7 @@ export default defineComponent({
         }
         return item
       }
-      return item
+      return false
     }
     return {
       filteredMenu

@@ -21,6 +21,7 @@ class AdminSteadResource extends JsonResource
             $tmp = new OwnerUserResource($owner);
             $tmp = $tmp->resolve();
             $tmp['proportion'] = $owner->pivot->proportion;
+            $tmp['stead_id'] = $this->id;
             $data[] = $tmp;
         }
         $rez = [

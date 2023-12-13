@@ -18,7 +18,7 @@ class ArticleComments extends AbstractComments
         if ($user && $user->ability('superAdmin', ['article->edit', 'article->show', 'comment-ban', 'comment-delete'])) {
             return true;
         }
-        return $this->object->status == 1;
+        return $this->object->status == 2;
     }
 
     public function commentWrite($user): bool
@@ -29,10 +29,10 @@ class ArticleComments extends AbstractComments
         if ($user->ability('superAdmin', ['article->edit', 'article->show', 'comment-ban', 'comment-delete'])) {
             return true;
         }
-        if ($this->object->allow_comments == 2) {
+        if ($this->object->allow_comments == 3) {
             return !!$user->owner;
         }
-        return $this->object->status == 1 && $user->email_verified_at;
+        return $this->object->status == 2 && $user->email_verified_at;
     }
 
     public function commentEdit($user): bool

@@ -8,13 +8,16 @@
       :breakpoint="0"
     >
       <q-tab name="stead" label="Участок" />
-      <q-tab name="ban" label="Владелец" />
+      <q-tab name="owner" label="Владелец" />
       <q-tab name="appeal" label="Приборы учета" />
     </q-tabs>
     <q-separator color="teal" />
     <q-tab-panels v-model="tab" animated>
       <q-tab-panel name="stead">
-        <SteadInfoCard :stead-id="steadId" />
+        <SteadInfoCard :stead-id="steadId" :edit="editAccess" />
+      </q-tab-panel>
+      <q-tab-panel name="owner">
+        <SteadOwnersCard :stead-id="steadId" :edit="editAccess" />
       </q-tab-panel>
     </q-tab-panels>
 
@@ -23,12 +26,15 @@
 
 <script>
 /* eslint-disable */
-import { defineComponent, ref } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
 import SteadInfoCard from 'src/Modules/Stead/components/SteadInfoCard/index.vue'
+import SteadOwnersCard from 'src/Modules/Stead/components/SteadOwnersCard/index.vue'
+import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
 
 export default defineComponent({
   components: {
-    SteadInfoCard
+    SteadInfoCard,
+    SteadOwnersCard
   },
   props: {
     steadId: {
@@ -37,9 +43,14 @@ export default defineComponent({
     }
   },
   setup(props, { emit }) {
+    const authStore = useAuthStore()
     const tab = ref('stead')
+    const editAccess = computed(() => {
+      return authStore.permissions.includes('stead-edit')
+    })
     return {
-      tab
+      tab,
+      editAccess
     }
   }
 })

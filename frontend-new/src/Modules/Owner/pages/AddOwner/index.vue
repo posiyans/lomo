@@ -28,7 +28,7 @@
         </div>
 
         <div v-for="item in fieldList" :key="item.name">
-          <ComponentField v-model="form" :item="item" />
+          <ComponentField v-model="form[item.name]" :item="item" />
         </div>
         <div>
           <q-btn color="primary" label="Добавить" type="submit" />
@@ -106,7 +106,7 @@ export default defineComponent({
       } else {
         addOwnerUser({ owner: form.value, steads: steadList.value })
           .then(response => {
-            // $router.push('/admin/owner/show-info/' + response.data.data)
+            $router.push('/admin/owner/show-info/' + response.data.data.uid)
           })
           .catch(er => {
             // console.log(er.respone)

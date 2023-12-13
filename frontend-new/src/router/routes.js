@@ -38,6 +38,9 @@ const routes = [
   {
     path: '/admin',
     component: () => import ('layouts/AdminLayout/index.vue'),
+    meta: {
+      roles: ['access-admin-panel']
+    },
     children: adminRoutes
 
   },
@@ -47,6 +50,7 @@ const routes = [
     component: () => import('src/pages/Errors/404.vue')
   }
 ]
+
 
 export const asyncRoutes = [
   {

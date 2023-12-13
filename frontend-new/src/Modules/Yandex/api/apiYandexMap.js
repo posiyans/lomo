@@ -1,4 +1,4 @@
-import request from '@/utils/request'
+import request from 'src/utils/request'
 
 export function getYandexMap(query) {
   return request({

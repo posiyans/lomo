@@ -55,7 +55,7 @@ export default {
       return '+#(###)###-##-########'
     },
     phone() {
-      if (this.modelValue) {
+      if (this.modelValue && this.modelValue.replace) {
         return this.modelValue.replace(/[^\d]/g, '')
       }
       return ''

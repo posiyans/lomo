@@ -2,8 +2,10 @@
 
 namespace App\Modules\Stead\Validators;
 
+use App\Modules\Stead\Repositories\SteadFiledRepository;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 
 class UpdateSteadInfoValidator extends FormRequest
@@ -30,14 +32,10 @@ class UpdateSteadInfoValidator extends FormRequest
         return [
             'field' => [
                 'required',
-                'string'
+                'string',
+                Rule::in(SteadFiledRepository::getKeys())
             ],
-            'value' => [
-                'numeric',
-                'nullable',
-                'required',
-                'string'
-            ]
+            'value' => SteadFiledRepository::getRule($this->field)
         ];
     }
 

@@ -28,11 +28,16 @@ class CreateOwnerAction
     public function run()
     {
         if (count($this->data) > 0) {
-            $this->owner = new OwnerUserModel();
-            $this->owner->uid = Str::uuid();
-            if (!$this->owner->logAndSave('Добавление собственника')) {
+            $uid = Str::uuid();
+            $owner = new OwnerUserModel();
+            $owner->uid = $uid;
+            if (!$owner->logAndSave('Добавление собственника')) {
                 return throw new \Exception('Ошибка добавления собственника');
             }
+            $id = $owner->uid;
+            $owner->uid = $uid;
+            $owner->id = $id;
+            $this->owner = $owner;
             $this->addValues();
             return $this->owner;
         }

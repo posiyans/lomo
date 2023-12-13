@@ -18,7 +18,8 @@ const adminRoutes =
       name: 'AdminDashboard',
       meta: {
         title: 'Главная',
-        icon: 'dashboard'
+        icon: 'dashboard',
+        roles: ['access-admin-panel']
       }
     },
     adminArticle,

@@ -19,12 +19,12 @@ class GetOwnerUserInfoController extends Controller
         $ownerData = new OwnerUserAllFieldResource($owner);
         $steads = $owner->steads->sortBy('stead.number', SORT_NATURAL)->map(function ($item) {
             return [
-                'stead_id' => $item->stead_id,
-                'number' => $item->stead->number,
-                'proportion' => $item->proportion,
+                'stead_id' => $item->id,
+                'number' => $item->number,
+                'proportion' => $item->pivot->proportion,
             ];
         })->values();
-        return ['owner' => $ownerData, 'steads' => $steads];
+        return ['owner' => $ownerData, 'steads' => $steads, $owner->steads];
     }
 
 }

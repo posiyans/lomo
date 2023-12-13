@@ -2,13 +2,19 @@
 
 namespace App\Modules\User\Models;
 
+use App\Models\MyModel;
 use App\Modules\Auth\Notifications\VerifyEmail;
 use App\Modules\BanUser\Models\BanUserModel;
 use App\Modules\Owner\Models\OwnerUserModel;
 use App\Notifications\ResetPassword;
+use Illuminate\Auth\Authenticatable;
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\Notifiable;
 use Laratrust\Traits\LaratrustUserTrait;
 use Laravel\Sanctum\HasApiTokens;
@@ -72,12 +78,16 @@ use Laravel\Sanctum\HasApiTokens;
  * @method static \Illuminate\Database\Eloquent\Builder|UserModel whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-class UserModel extends Authenticatable implements MustVerifyEmail
+class UserModel extends MyModel implements MustVerifyEmail,
+                                           AuthenticatableContract,
+                                           AuthorizableContract,
+                                           CanResetPasswordContract
 {
     use LaratrustUserTrait;
     use Notifiable;
     use HasApiTokens;
     use HasFactory;
+    use Authenticatable, Authorizable, CanResetPassword, \Illuminate\Auth\MustVerifyEmail;
 
     public static $no_email_prefix = 'no_email_';
 

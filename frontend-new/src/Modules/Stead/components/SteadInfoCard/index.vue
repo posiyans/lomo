@@ -1,30 +1,15 @@
 <template>
   <div>
     <table v-if="stead">
-
-      <tr>
-        <td>
-          id
-        </td>
-        <td>
-          {{ stead.id }}
-        </td>
-        <td />
-      </tr>
       <TrTableBlock
         v-for="item in columns"
         :key="item.field"
         v-model="stead"
-        :readonly="item.readonly"
-        :label="item.label"
-        :field="item.field"
+        :field="item"
+        :edit="edit"
         @reload="getData"
       />
     </table>
-    <pre>
-    {{ stead }}
-
-    </pre>
   </div>
 </template>
 
@@ -42,23 +27,34 @@ export default defineComponent({
     steadId: {
       type: [Number, String],
       required: true
+    },
+    edit: {
+      type: Boolean,
+      default: false
     }
   },
   setup(props, { emit }) {
     const columns = [
       {
-        label: 'Номер',
-        field: 'number',
+        label: 'id',
+        name: 'id',
+        type: 'number',
+        readonly: true
+      },
+      {
+        label: 'Номер участка',
+        name: 'number',
         type: 'number'
       },
       {
         label: 'Размер',
-        field: 'size',
-        type: 'number'
+        name: 'size',
+        type: 'number',
+        units: 'm<sup>2</sup>'
       },
       {
         label: 'Кадастровый номер',
-        field: 'kadastr',
+        name: 'kadastr',
         type: 'string'
       },
     ]
@@ -90,13 +86,5 @@ export default defineComponent({
 <style scoped lang='scss'>
 table {
   border-collapse: collapse;
-  margin: 25px;
-}
-
-td, th {
-  border: 1px solid #606266;
-  padding: 5px 10px;
-  text-align: center;
-  color: #000000;
 }
 </style>

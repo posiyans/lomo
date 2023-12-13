@@ -29,7 +29,7 @@ class UpdateUserInfoController extends Controller
             } else {
                 $user->$field = $request->value;
             }
-            $user->save();
+            $user->logAndSave('Изменение данных профиля');
 //                $user->fill($request->validated())->save();
             return new AdminUserAllInfoResource($user);
         } catch (\Exception $e) {
