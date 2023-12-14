@@ -8,6 +8,15 @@ export const adminSettingsRouter = {
   redirect: { name: 'EditSiteMenu' },
   children: [
     {
+      path: 'global',
+      component: () => import('src/Modules/Settings/pages/PrimarySettings/index.vue'),
+      meta: {
+        icon: 'menu',
+        title: 'Общие настройки',
+        roles: ['access-admin-panel']
+      }
+    },
+    {
       path: 'menu',
       name: 'EditSiteMenu',
       component: () => import('src/Modules/SiteMenu/pages/EditSiteMenu/index.vue'),

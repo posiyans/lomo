@@ -60,3 +60,19 @@ export function updateArticle(id, data) {
     data
   })
 }
+
+export function getAllowPublicationArticle(params) {
+  return request({
+    url: '/api/v2/article/setting/allow-publication',
+    method: 'get',
+    params
+  })
+}
+
+export function changeAllowPublicationArticle(data) {
+  return request({
+    url: '/api/v2/article/setting/allow-publication/update',
+    method: 'post',
+    data
+  })
+}

@@ -1,6 +1,9 @@
 <template>
-  <div class="">
-    <UserAddNewsBtn class="q-pa-sm" />
+  <div>
+    <div>
+      <UserAddNewsBtn class="q-pa-sm" />
+    </div>
+
     <AllArticleList />
   </div>
 </template>

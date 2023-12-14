@@ -1,5 +1,10 @@
 <template>
-  <div class="q-pa-md">
+  <div class="q-pa-md relative-position">
+    <div class="absolute-top-right">
+      <q-fab text-color="black" flat icon="more_horiz" direction="left">
+        <DeleteOwnerBtn />
+      </q-fab>
+    </div>
     <div class="page-title">
       {{ fullName }}
     </div>
@@ -7,7 +12,7 @@
       <table>
         <tr v-for="item in fieldList" :key="item.name">
           <td>
-            <div class="ellipsis">
+            <div class="ellipsis text-grey-8">
               {{ item.label }}
             </div>
           </td>
@@ -17,7 +22,7 @@
         </tr>
         <tr>
           <td>
-            <div class="row">
+            <div class="row text-grey-8">
               <div>Участок</div>
               <q-space />
               <div v-if="editable">
@@ -47,12 +52,14 @@ import { useOwnerUser } from 'src/Modules/Owner/hooks/useOwnerUser'
 import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
 import OwnerUserFieldValueEdit from 'src/Modules/Owner/components/OwnerUserFieldValueEdit/index.vue'
 import FieldValueBlock from './components/FieldValueBlock/index.vue'
-import AddSteadToOwner from 'src/Modules/Owner/pages/AddSteadToOwner/index.vue'
+import AddSteadToOwner from 'src/Modules/Owner/components/AddSteadToOwner/index.vue'
+import DeleteOwnerBtn from 'src/Modules/Owner/components/DeleteOwnerBtn/index.vue'
 
 export default defineComponent({
   components: {
     OwnerUserFieldValueEdit,
     FieldValueBlock,
+    DeleteOwnerBtn,
     AddSteadToOwner
   },
   props: {},

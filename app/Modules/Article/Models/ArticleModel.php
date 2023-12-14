@@ -90,4 +90,10 @@ class ArticleModel extends MyModel implements CommentedInterface
         return 'uid';
     }
 
+
+    public static function getAllowPublicationArticleSettingName()
+    {
+        return 'AllowPublicationArticle';
+    }
+
 }

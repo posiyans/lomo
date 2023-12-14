@@ -1,40 +1,31 @@
 <template>
   <div class="bg-grey-2 q-pa-lg">
     <div class="row items-center q-gutter-md justify-center">
-      <CardBlock
-        label="Комментарии"
-        :count-label="countComments"
-        icon="question_answer"
-        color="purple"
-        class="bg-white card-panel"
-        @click="$router.push('/admin/comment/list')"
-      />
-      <CardBlock
-        label="На модерации"
-        :count-label="countArticle"
-        icon="article"
-        color="teal"
-        class="bg-white card-panel"
-        @click="$router.push('/admin/article/list?status=2')"
-      />
-      <CardBlock label="Обращенией" :count-label="countAppealOpen + '(' + countAppeal + ')'" color="cyan" icon="message" class="bg-white card-panel"
-                 @click="$router.push('/admin/appeal/list')"
-      />
-      <CardBlock label="Пользователей" :count-label="countUser" color="blue" icon="people_alt" class="bg-white card-panel"
-                 @click="$router.push('/admin/user/list')"
-
-      />
-      <CardBlock label="Участков" :count-label="countStead" icon="dashboard" class="bg-white card-panel"
-                 @click="$router.push('/admin/stead/list')"
-      />
-      <CardBlock label="Собственники" :count-label="countOwner" icon="dashboard" color="deep-orange" class="bg-white card-panel"
-                 @click="$router.push('/admin/owner/list')"
-      />
+      <transition-group
+        appear
+        enter-active-class="animated fadeInDown"
+        leave-active-class="animated fadeOut"
+      >
+        <template v-for="item in cards">
+          <CardBlock
+            v-if="item.show"
+            :key="item.label"
+            :label="item.label"
+            :count-label="item.value"
+            :icon="item.icon"
+            :color="item.color"
+            class="bg-white card-panel"
+            @click="router.push(item.clickAction)"
+          />
+        </template>
+      </transition-group>
     </div>
   </div>
 </template>
 
 <script>
+/* eslint-disable */
+import { defineComponent, onMounted, ref } from 'vue'
 import { fetchAppelList } from 'src/Modules/Appeal/api/appeal-admin-api.js'
 import { fetchList } from 'src/Modules/Users/api/user-admin-api.js'
 import { fetchAdminArticleList } from 'src/Modules/Article/Article/api/articleAdminApi.js'
@@ -42,82 +33,115 @@ import CardBlock from './components/CardBlock/index.vue'
 import { getSteadsList } from 'src/Modules/Stead/api/stead'
 import { getAllMessage } from 'src/Modules/Comments/api/commentApi'
 import { fetchOwnerUserList } from 'src/Modules/Owner/api/ownerUserApi'
+import { useRouter } from 'vue-router'
 
-export default {
+
+export default defineComponent({
   components: {
     CardBlock
   },
-  data() {
+  props: {},
+  setup(props, { emit }) {
+    const router = useRouter()
+    const cards = ref([
+      {
+        getData: () => {
+          return getAllMessage({ page: 1, limit: 1 })
+        },
+        label: 'Комментарии',
+        value: null,
+        icon: 'question_answer',
+        color: 'purple',
+        clickAction: '/admin/comment/list',
+        show: false
+      },
+      {
+        getData: () => {
+          const data = {
+            page: 1,
+            limit: 1,
+            status: 3
+          }
+          return fetchAdminArticleList(data)
+        },
+        label: 'На модерации',
+        value: null,
+        icon: 'article',
+        color: 'teal',
+        clickAction: '/admin/article/list?status=3',
+        show: false
+      },
+      {
+        getData: () => {
+          const data = {
+            status: 'open'
+          }
+          return fetchAppelList(data)
+        },
+        label: 'Обращенией',
+        value: null,
+        icon: 'message',
+        color: 'cyan',
+        clickAction: '/admin/appeal/list',
+        show: false
+      },
+      {
+        getData: () => {
+          return fetchList()
+        },
+        label: 'Пользователей',
+        value: null,
+        icon: 'people_alt',
+        color: 'blue',
+        clickAction: '/admin/user/list',
+        show: false
+      },
+      {
+        getData: () => {
+          const data = {
+            page: 1,
+            limit: 1
+          }
+          return getSteadsList(data)
+        },
+        label: 'Участков',
+        value: null,
+        icon: 'dashboard',
+        color: 'teal',
+        clickAction: '/admin/stead/list',
+        show: false
+      },
+      {
+        getData: () => {
+          const data = {
+            page: 1,
+            limit: 1
+          }
+          return fetchOwnerUserList(data)
+        },
+        label: 'Собственники',
+        value: null,
+        icon: 'dashboard',
+        color: 'deep-orange',
+        clickAction: '/admin/owner/list',
+        show: false
+      },
+    ])
+    onMounted(() => {
+      cards.value.forEach(item => {
+        item.getData()
+          .then(res => {
+            item.value = res.data.meta.total || 0
+            item.show = true
+          })
+      })
+    })
     return {
-      countArticle: null,
-      countUser: null,
-      countAppeal: 0,
-      countAppealOpen: 0,
-      countStead: 0,
-      countComments: 0,
-      countOwner: 0
-    }
-  },
-  mounted() {
-    this.getArticle()
-    this.getUser()
-    this.getAppels()
-    this.getStead()
-    this.getComments()
-    this.getOwners()
-  },
-  methods: {
-    getArticle() {
-      const data = {
-        page: 1,
-        limit: 1,
-        status: 3
-      }
-      fetchAdminArticleList(data)
-        .then(res => {
-          this.countArticle = res.data.meta.total
-        })
-    },
-    getUser() {
-      fetchList()
-        .then(response => {
-          this.countUser = response.data.meta.total
-        })
-    },
-    getStead() {
-      getSteadsList()
-        .then(response => {
-          this.countStead = response.data.data.length
-        })
-    },
-    getComments() {
-      getAllMessage({ page: 1, limit: 1 })
-        .then(response => {
-          this.countComments = response.data.meta.total
-        })
-    },
-    getOwners() {
-      fetchOwnerUserList({ page: 1, limit: 1 })
-        .then(response => {
-          this.countOwner = response.data.meta.total
-        })
-    },
-    getAppels() {
-      fetchAppelList().then(response => {
-        this.countAppeal = response.data.meta.total
-      })
-      const data = {
-        status: 'open'
-      }
-      fetchAppelList(data).then(response => {
-        this.countAppealOpen = response.data.meta.total
-      })
-    },
-    handleSetLineChartData(type) {
-      this.$emit('handleSetLineChartData', type)
+      cards,
+      router
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="showBtn">
     <div v-if="showForm" class="q-mb-lg relative-position">
       <UserOfferNews
         @success="showForm = false"
@@ -13,10 +13,11 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
+import { defineComponent, onMounted, ref } from 'vue'
 import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
 import { useQuasar } from 'quasar'
 import UserOfferNews from 'src/Modules/Article/Article/components/UserOfferNews/index.vue'
+import { getAllowPublicationArticle } from 'src/Modules/Article/Article/api/article'
 
 export default defineComponent({
   components: {
@@ -25,6 +26,7 @@ export default defineComponent({
   props: {},
   setup() {
     const showForm = ref(null)
+    const showBtn = ref(false)
     const $q = useQuasar()
     const authStore = useAuthStore()
     const toAddNews = () => {
@@ -37,9 +39,17 @@ export default defineComponent({
         })
       }
     }
+    onMounted(() => {
+      getAllowPublicationArticle()
+        .then(res => {
+          showBtn.value = true
+        })
+    })
+
     return {
       authStore,
       showForm,
+      showBtn,
       toAddNews
     }
   }
