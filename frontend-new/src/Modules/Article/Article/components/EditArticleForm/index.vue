@@ -1,4 +1,3 @@
-/* eslint-disable */
 <template>
   <div>
     <q-ajax-bar
@@ -81,7 +80,6 @@
 </template>
 
 <script>
-/* eslint-disable */
 import { computed, defineComponent, ref } from 'vue'
 import { useQuasar } from 'quasar'
 import ArticleCategorySelect from 'src/Modules/Article/Category/components/ArticleCategorySelect/index.vue'
@@ -109,7 +107,6 @@ export default defineComponent({
   },
   props: {},
   setup() {
-    const addFileDialogVisible = ref(false)
     const bar = ref(null)
     const showMoreSetting = ref(false)
     const $q = useQuasar()
@@ -153,34 +150,15 @@ export default defineComponent({
           savingData.value = false
         })
     }
-    const closeDialog = () => {
-      addFileDialogVisible.value = false
-    }
-    const addImage = (files) => {
-      let val = articleStore.article.text
-      let path = ''
-      if (process.env.DEV) {
-        path = process.env.BASE_API
-      }
-      files.forEach(item => {
-        const a = `<img src="${path}${item.model.url}" width="300" >`
-        val = val + a
-      })
-      articleStore.article.text = val
-      addFileDialogVisible.value = false
-      // emit('update:model-value', val)
-    }
+
     return {
       showMoreSetting,
-      closeDialog,
-      addImage,
-      addFileDialogVisible,
       bar,
       addFile,
       articleStore,
       savingData,
       btnLabel,
-      saveArticle,
+      saveArticle
     }
   }
 })
