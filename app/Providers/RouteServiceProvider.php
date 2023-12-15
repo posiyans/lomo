@@ -94,8 +94,8 @@ class RouteServiceProvider extends ServiceProvider
                 ->prefix('api/v2/social')
                 ->group(base_path('app/Modules/Social/routes/apiSocialRoutes.php'));
             Route::middleware('api')
-                ->prefix('api/v1/yandex')
-                ->group(base_path('app/Modules/Yandex/routes/apiYandexRoutes.php'));
+                ->prefix('api')
+                ->group(base_path('app/Modules/Yandex/routes/api.php'));
             Route::middleware('web')
                 ->prefix('api/v2/social')
                 ->group(base_path('app/Modules/Social/routes/webSocialRoutes.php'));

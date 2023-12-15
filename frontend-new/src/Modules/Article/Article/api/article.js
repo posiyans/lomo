@@ -45,22 +45,6 @@ export function fetchArticle(id) {
   })
 }
 
-export function createArticle(data) {
-  return request({
-    url: '/api/v1/admin/article',
-    method: 'post',
-    data
-  })
-}
-
-export function updateArticle(id, data) {
-  return request({
-    url: '/api/v1/admin/article/' + id,
-    method: 'put',
-    data
-  })
-}
-
 export function getAllowPublicationArticle(params) {
   return request({
     url: '/api/v2/article/setting/allow-publication',

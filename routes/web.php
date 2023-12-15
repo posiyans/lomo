@@ -12,7 +12,6 @@ define('__ROOT__', dirname(__FILE__));
 |
 */
 
-Auth::routes();
 Route::get('/', function (\Illuminate\Http\Request $request) {
     $user_uid = $request->session()->get('user_uid');
     return response(['user_uid' => $user_uid, 'auth' => Auth::user()]);
@@ -57,6 +56,3 @@ Route::group(['prefix' => '/api/v1'], function () use ($myRoutesForAll, $myRoute
         }
     });
 });
-
-
-Route::resource('/api/user/storage/file', 'App\Http\Controllers\Storage\FileController');
