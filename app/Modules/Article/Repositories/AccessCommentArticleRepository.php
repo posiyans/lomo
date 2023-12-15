@@ -7,17 +7,17 @@ class AccessCommentArticleRepository
 
     private static $access = [
         [
-            'id' => 0,
+            'id' => 1,
             'label' => 'отключены',
             'roles' => []
         ],
         [
-            'id' => 1,
+            'id' => 2,
             'label' => 'разрешены всем',
             'roles' => ['user']
         ],
         [
-            'id' => 2,
+            'id' => 3,
             'label' => 'только собственники',
             'roles' => ['owner']
         ],

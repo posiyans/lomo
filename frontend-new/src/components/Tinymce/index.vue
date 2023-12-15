@@ -1,6 +1,16 @@
 <template>
   <div :class="{fullscreen:fullscreen}" class="tinymce-container" :style="{width:containerWidth}">
     <textarea :id="tinymceId" class="tinymce-textarea" />
+    <div class="absolute-top-right q-pa-xs">
+      <q-btn label="Загрузить" icon="image" dense size="sm" color="primary" @click="addFileDialogVisible = true" />
+    </div>
+    <AddImageDialog
+      v-if="addFileDialogVisible && parentUid"
+      @success="imageSuccessCBK"
+      :parent-uid="parentUid"
+      :parent-type="parentType"
+      @hide="closeDialog"
+    />
   </div>
 </template>
 
@@ -13,14 +23,16 @@
 import plugins from './plugins'
 import toolbar from './toolbar'
 import load from './dynamicLoadScript'
-
+import AddImageDialog from 'src/Modules/Files/components/AddImageDialog/index.vue'
 // why use this cdn, detail see https://github.com/PanJiaChen/tinymce-all-in-one
 // const tinymceCDN = 'https://cdn.jsdelivr.net/npm/tinymce-all-in-one@4.9.3/tinymce.min.js'
 const tinymceCDN = '/js/tinymce-all-in-one/tinymce.min.js'
 
 export default {
   name: 'Tinymce',
-  components: {},
+  components: {
+    AddImageDialog
+  },
   props: {
     id: {
       type: String,
@@ -52,11 +64,20 @@ export default {
       type: [Number, String],
       required: false,
       default: 'auto'
+    },
+    parentUid: {
+      type: String,
+      default: ''
+    },
+    parentType: {
+      type: String,
+      default: 'article'
     }
   },
   data() {
     return {
       hasChange: false,
+      addFileDialogVisible: false,
       hasInit: false,
       tinymceId: this.id,
       fullscreen: false,
@@ -160,10 +181,18 @@ export default {
     getContent() {
       window.tinymce.get(this.tinymceId).getContent()
     },
+    closeDialog() {
+      this.addFileDialogVisible = false
+    },
     imageSuccessCBK(arr) {
       const _this = this
+      let path = ''
+      if (process.env.DEV) {
+        path = process.env.BASE_API
+      }
       arr.forEach(v => {
-        window.tinymce.get(_this.tinymceId).insertContent(`<img class="wscnph" src="${v.url}" >`)
+        console.log(v)
+        window.tinymce.get(_this.tinymceId).insertContent(`<img class="artic-img" src="${path}${v.model.url}" >`)
       })
     }
   }

@@ -81,7 +81,7 @@ const defaultForm = {
   display_time: +new Date(),
   id: undefined,
   category_id: null,
-  allow_comments: 0,
+  allow_comments: 1,
   uid: ''
 }
 

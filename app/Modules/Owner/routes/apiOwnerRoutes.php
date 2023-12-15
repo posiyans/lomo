@@ -10,6 +10,7 @@ Route::group(['prefix' => 'v2/owner'], function () {
         Route::get('get-list', \App\Modules\Owner\Controllers\GetOwnerUserListController::class);
         Route::get('get-list-xlsx', \App\Modules\Owner\Controllers\GetOwnerUserListInXlsxController::class);
         Route::get('get/{owner}', \App\Modules\Owner\Controllers\GetOwnerUserInfoController::class);
+        Route::delete('delete/{owner}', \App\Modules\Owner\Controllers\DeleteOwnerUserController::class);
         Route::post('update/{owner}', \App\Modules\Owner\Controllers\UpdateOwnerUserFieldController::class);
         Route::post('add-stead', \App\Modules\Owner\Controllers\AddSteadToOwnerUserController::class);
     });

@@ -42,10 +42,10 @@ export default defineComponent({
     const authStore = useAuthStore()
     const messageBlock = useMessageBlock('article', props.article.uid)
     const showChat = computed(() => {
-      if (props.article.allow_comments === 0) {
+      if (props.article.allow_comments === 1) {
         return false
       }
-      if (props.article.allow_comments === 2) {
+      if (props.article.allow_comments === 3) {
         return authStore.permissions.includes('owner')
       }
       return true

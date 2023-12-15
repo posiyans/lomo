@@ -23,16 +23,21 @@ class ArticleComments extends AbstractComments
 
     public function commentWrite($user): bool
     {
-        if ($this->object->allow_comments == 0) {
-            return false;
+        if (in_array($this->object->status, [2, 4])) {
+            if ($this->object->allow_comments == 1) {
+                return false;
+            }
+            if ($user->ability('superAdmin', ['article->edit', 'article->show', 'comment-ban', 'comment-delete'])) {
+                return true;
+            }
+            if ($this->object->allow_comments == 2) {
+                return !!$user->email_verified_at;
+            }
+            if ($this->object->allow_comments == 3) {
+                return !!$user->owner;
+            }
         }
-        if ($user->ability('superAdmin', ['article->edit', 'article->show', 'comment-ban', 'comment-delete'])) {
-            return true;
-        }
-        if ($this->object->allow_comments == 3) {
-            return !!$user->owner;
-        }
-        return $this->object->status == 2 && $user->email_verified_at;
+        return false;
     }
 
     public function commentEdit($user): bool

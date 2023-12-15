@@ -2,8 +2,7 @@
 
 namespace App\Modules\Article\Validators\Article;
 
-use App\Modules\Article\Models\ArticleModel;
-use App\Modules\BanUser\Repositories\BanUserRepository;
+use App\Modules\Article\Actions\AllowPublicationArticleAction;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
@@ -21,14 +20,8 @@ class UserAddArticleValidator extends FormRequest
     {
         try {
             $user = Auth::user();
-            if ($user && $user->email_verified_at) {
-                (new BanUserRepository())->forUser($user)->forClass(ArticleModel::class)->noBan();
-                if ($user->ability('superAdmin', ['article-edit'])) {
-                    return true;
-                }
-                return true;
-            }
-            return false;
+            (new AllowPublicationArticleAction())->run($user);
+            return true;
         } catch (\Exception $e) {
             return false;
         }

@@ -9,8 +9,24 @@
       </q-card-section>
 
       <q-card-section>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum repellendus sit voluptate voluptas eveniet porro. Rerum blanditiis perferendis totam, ea at omnis vel numquam exercitationem aut,
-        natus minima, porro labore.
+        <div class="q-pa-lg">
+          Удалить собственника ивсе его данные из системы?
+        </div>
+        <div class="text-right q-pt-lg">
+          <q-btn color="negative" icon="delete" label="Удалить">
+            <q-popup-proxy>
+              <q-banner>
+                <template v-slot:avatar>
+                  <q-icon name="info" color="primary" />
+                </template>
+                Я подтверждаю свое действие
+                <template v-slot:action>
+                  <q-btn flat color="negative" label="Удалить" @click="deleteOwner" />
+                </template>
+              </q-banner>
+            </q-popup-proxy>
+          </q-btn>
+        </div>
       </q-card-section>
     </q-card>
   </q-dialog>
@@ -20,14 +36,28 @@
 <script>
 /* eslint-disable */
 import { defineComponent, ref } from 'vue'
+import { deleteOwnerUser } from 'src/Modules/Owner/api/ownerUserApi'
 
 export default defineComponent({
   components: {},
-  props: {},
+  props: {
+    ownerUid: {
+      type: String,
+      required: true
+    }
+  },
   setup(props, { emit }) {
     const dialogVisible = ref(false)
+    const deleteOwner = () => {
+      deleteOwnerUser(props.ownerUid)
+        .then(() => {
+          dialogVisible.value = false
+          emit('success')
+        })
+    }
     return {
-      dialogVisible
+      dialogVisible,
+      deleteOwner
     }
   }
 })

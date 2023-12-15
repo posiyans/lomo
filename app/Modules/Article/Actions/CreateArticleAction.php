@@ -4,6 +4,7 @@ namespace App\Modules\Article\Actions;
 
 use App\Modules\Article\Models\ArticleModel;
 use Illuminate\Support\Facades\Auth;
+use Str;
 
 class CreateArticleAction
 {
@@ -26,6 +27,7 @@ class CreateArticleAction
 
     public function run()
     {
+        $this->article->slug = substr(Str::slug($this->article->title), 0, 240);
         if ($this->article->logAndSave('Создание статьи')) {
             return $this->article;
         }

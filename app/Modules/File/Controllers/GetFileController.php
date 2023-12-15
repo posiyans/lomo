@@ -18,9 +18,14 @@ use Illuminate\Support\Facades\Storage;
 class GetFileController extends Controller
 {
 
+//    public function __construct()
+//    {
+//        $this->middleware('auth:sanctum');
+//    }
 
     public function index(Request $request)
     {
+//        dd(Auth::user());
         try {
 //            $user_uid = $request->session()->get('user_uid');
             $user_uid = Auth::user() ? Auth::user()->uid : false;
@@ -33,11 +38,14 @@ class GetFileController extends Controller
             } catch (\Exception $e) {
                 $user = null;
             }
-            (new CheckAccessToFileClass())->file($file)->forUser($user)->read();
+            // автор файла имеет доступ всегда
+            if (!$user || $user->id != $file->user_id) {
+                (new CheckAccessToFileClass())->file($file)->forUser($user)->read();
+            }
 
             $path = (new GetPathForHashClass($file->hash))->run();
             return Storage::download($path, $file->name);
-            
+
             return response(['errors' => 'Ошибка доступа'], 403);
         } catch (\Exception $e) {
             return response(['errors' => $e->getMessage()], 451);

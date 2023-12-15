@@ -48,13 +48,6 @@ export function addSteadToOwnerUser(data) {
   })
 }
 
-export function deleteOwnerUser(id) {
-  return request({
-    url: '/api/v1/admin/owner-resource/' + id,
-    method: 'delete'
-  })
-}
-
 export function deleteSteadFromOwnerUser(id) {
   return request({
     url: '/api/v1/admin/owner/delete-stead/' + id,
@@ -69,5 +62,12 @@ export function fetchOwnerListInXlsx(params) {
     method: 'get',
     responseType: 'blob',
     params
+  })
+}
+
+export function deleteOwnerUser(uid) {
+  return request({
+    url: '/api/v2/owner/delete/' + uid,
+    method: 'delete'
   })
 }

@@ -30,12 +30,12 @@ export default defineComponent({
       } else {
         articleStore.init(null)
         articleStore.article = {
-          status: 0,
+          status: 1,
           title: '',
           text: '',
           resume: '',
           category_id: '',
-          allow_comments: 0,
+          allow_comments: 1,
           uid: uid()
         }
       }

@@ -58,7 +58,7 @@ class ArticleModel extends MyModel implements CommentedInterface
 
     protected $fillable = ['title', 'text', 'resume', 'category_id', 'uid', 'status', 'allow_comments', 'slug'];
 
-    protected $hidden = ['publish_time'];
+    protected $hidden = [];
 
     protected $casts = [
 //        'allow_comments' => 'boolean',

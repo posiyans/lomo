@@ -54,7 +54,7 @@ export default defineComponent({
         })
     }
     const filterValue = computed(() => {
-      if (props.modelValue || props.modelValue === '0' || props.modelValue === 0) {
+      if (props.modelValue) {
         return +props.modelValue
       }
       return ''

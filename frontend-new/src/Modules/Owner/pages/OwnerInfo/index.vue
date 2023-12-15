@@ -2,7 +2,7 @@
   <div class="q-pa-md relative-position">
     <div class="absolute-top-right">
       <q-fab text-color="black" flat icon="more_horiz" direction="left">
-        <DeleteOwnerBtn />
+        <DeleteOwnerBtn :owner-uid="ownerUid" @success="toOwnerList" />
       </q-fab>
     </div>
     <div class="page-title">
@@ -94,6 +94,9 @@ export default defineComponent({
       }
       return ''
     }
+    const toOwnerList = () => {
+      router.push('/admin/owner/list')
+    }
     const toStead = (id) => {
       router.push('/admin/stead/info/' + id)
     }
@@ -101,6 +104,7 @@ export default defineComponent({
       data,
       ownerUid,
       fullName,
+      toOwnerList,
       propFilter,
       getUserData,
       toStead,

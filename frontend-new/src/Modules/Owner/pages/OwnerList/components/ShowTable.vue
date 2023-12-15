@@ -123,7 +123,7 @@ export default defineComponent({
       })
     })
     const pushToStead = (id) => {
-      $router.push('/admin/bookkeping/billing_balance_stead/' + id)
+      $router.push('/admin/stead/info/' + id)
     }
     const showInfo = (uid) => {
       $router.push('/admin/owner/show-info/' + uid)

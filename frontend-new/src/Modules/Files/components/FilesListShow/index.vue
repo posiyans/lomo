@@ -22,12 +22,17 @@
           <FileSize :size="file.model.size" class="q-px-sm text-grey-7" />
         </td>
         <td>
-          <div v-if="file.model.uid && file.model.url">
-            <DownloadFileBtn :url-file="file.model.url" />
+          <div class="row items-center q-col-gutter-sm">
+            <div v-if="file.model.uid && file.model.url">
+              <DownloadFileBtn :url-file="file.model.url" />
+            </div>
+            <div v-if="getUrl" class="cursor-pointer text-secondary" @click="emitUrl(file.model.url)">
+              Скопировать ссылку
+            </div>
           </div>
         </td>
         <td v-if="edit">
-          <div v-if="file.upload?.success" class="text-secondary q-px-md">
+          <div v-if="file.upload?.success" class="text-secondary q-px-md row items-center">
             <div
               class="text-red q-px-md"
               @click="deleteFile(file)">
@@ -47,6 +52,8 @@
 import FileSize from 'src/Modules/Files/components/FileSize/index.vue'
 import DeleteIcon from 'src/Modules/Files/components/FilesListShow/DeleteIcon.vue'
 import DownloadFileBtn from 'src/Modules/Files/components/DownloadFileBtn/index.vue'
+import { copyToClipboard } from 'quasar'
+import { successMessage } from 'src/utils/message'
 
 export default {
   components: {
@@ -62,6 +69,10 @@ export default {
     edit: {
       type: Boolean,
       default: false
+    },
+    getUrl: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -75,6 +86,12 @@ export default {
     }
   },
   methods: {
+    emitUrl(url) {
+      copyToClipboard(url)
+        .then(() => {
+          successMessage('Ссылка скопирована')
+        })
+    },
     deleteFile(file) {
       if (this.edit) {
         this.$q.dialog({

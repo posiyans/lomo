@@ -1,6 +1,6 @@
 /* eslint-disable */
 <template>
-  <div class="q-pa-md">
+  <div>
     <q-ajax-bar
       ref="bar"
       position="top"
@@ -66,12 +66,16 @@
     <div class="q-py-sm">
       <q-input v-model="articleStore.article.resume" :maxlength="100" no-caps label="Резюме" />
     </div>
-    <div>
-      <Tinymce v-model="articleStore.article.text" :height="300" />
+    <div class="relative-position">
+      <Tinymce
+        :key="articleStore.key"
+        v-model="articleStore.article.text"
+        :parent-uid="articleStore.article.uid"
+        :height="300" />
     </div>
     <div class="q-pa-md">
       <AddFileBtn @add-files="addFile" multiple parent-type="article" :parent-uid="articleStore.article.uid" />
-      <FilesListShow v-model="articleStore.files" edit />
+      <FilesListShow v-model="articleStore.files" edit get-url />
     </div>
   </div>
 </template>
@@ -105,6 +109,7 @@ export default defineComponent({
   },
   props: {},
   setup() {
+    const addFileDialogVisible = ref(false)
     const bar = ref(null)
     const showMoreSetting = ref(false)
     const $q = useQuasar()
@@ -148,8 +153,28 @@ export default defineComponent({
           savingData.value = false
         })
     }
+    const closeDialog = () => {
+      addFileDialogVisible.value = false
+    }
+    const addImage = (files) => {
+      let val = articleStore.article.text
+      let path = ''
+      if (process.env.DEV) {
+        path = process.env.BASE_API
+      }
+      files.forEach(item => {
+        const a = `<img src="${path}${item.model.url}" width="300" >`
+        val = val + a
+      })
+      articleStore.article.text = val
+      addFileDialogVisible.value = false
+      // emit('update:model-value', val)
+    }
     return {
       showMoreSetting,
+      closeDialog,
+      addImage,
+      addFileDialogVisible,
       bar,
       addFile,
       articleStore,

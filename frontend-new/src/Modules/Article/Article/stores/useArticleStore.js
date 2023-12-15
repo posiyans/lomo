@@ -1,11 +1,15 @@
 import { defineStore } from 'pinia'
 import { createArticle, fetchArticle, updateArticle } from 'src/Modules/Article/Article/api/articleAdminApi'
 import { useFile } from 'src/Modules/Files/hooks/useFile'
+import { uid } from 'quasar'
 
 export const useArticleStore = defineStore('articleStore', {
   state: () => ({
     id: null,
-    article: {},
+    key: 1,
+    article: {
+      uid: uid()
+    },
     files: [],
     load: false,
     loading: false
