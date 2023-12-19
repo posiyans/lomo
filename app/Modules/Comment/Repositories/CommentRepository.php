@@ -33,6 +33,16 @@ class CommentRepository
         return $this;
     }
 
+    public function find($find)
+    {
+        if ($find) {
+            $this->query->where(function ($query) use ($find) {
+                $query->where('message', 'like', '%' . $find . '%');
+            });
+        }
+        return $this;
+    }
+
     public function one()
     {
         $model = $this->query->first();

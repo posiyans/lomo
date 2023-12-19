@@ -27,17 +27,17 @@ export function deleteMessage(params) {
 export function getCommentsStatusList() {
   return [
     {
-      value: 0,
+      value: 1,
       label: 'отключены',
       color: 'negative'
     },
     {
-      value: 1,
+      value: 2,
       label: 'разрешены всем',
       color: 'secondary'
     },
     {
-      value: 2,
+      value: 3,
       label: 'только собственникам',
       color: 'secondary'
     }

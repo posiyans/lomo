@@ -1,5 +1,6 @@
 <template>
   <div>
+    {{ list.length }}
     <el-table v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
       <el-table-column align="center" label="ID" width="80">
         <template #default="{ row }">
@@ -85,7 +86,6 @@ export default {
   },
   data() {
     return {
-
       total: 0,
       key: 1,
       fetchAdminArticleList,

@@ -1,11 +1,11 @@
 <template>
-  <div class="q-pa-md">
+  <div>
     <transition-group
       appear
       enter-active-class="animated fadeIn"
       leave-active-class="animated fadeOut"
     >
-      <div v-for="item in commentsList.list.value" :key="item.id" class="relative-position">
+      <div v-for="item in list" :key="item.id" class="relative-position">
         <ItemBlock :item="item">
           <template v-slot:header>
             <div class="text-small-80">
@@ -41,7 +41,7 @@
 
 <script>
 /* eslint-disable */
-import { defineComponent, ref, toRefs } from 'vue'
+import { defineComponent, ref } from 'vue'
 import ItemBlock from 'src/Modules/Comments/components/MessageBlock/components/ItemBlock/index.vue'
 import { deleteMessage } from 'src/Modules/Comments/api/commentApi'
 import { useQuasar } from 'quasar'
@@ -53,15 +53,14 @@ export default defineComponent({
     AddBanUserBtn
   },
   props: {
-    commentsList: {
-      type: Object,
+    list: {
+      type: Array,
       required: true
     }
   },
   setup(props, { emit }) {
     const data = ref(null)
     const $q = useQuasar()
-    const list = toRefs(props.commentsList.list.value)
     const columns = ref(
       [
         {
@@ -110,8 +109,7 @@ export default defineComponent({
     return {
       data,
       columns,
-      deleteItem,
-      list
+      deleteItem
     }
   }
 })

@@ -2,6 +2,7 @@
 
 namespace App\Modules\File\Repositories;
 
+use App\Modules\Appeal\Modules\AppealModel;
 use App\Modules\Article\Models\ArticleModel;
 
 /***
@@ -11,7 +12,8 @@ use App\Modules\Article\Models\ArticleModel;
 class GetModelNameByType
 {
     private $objectArray = [
-        'article' => ArticleModel::class
+        'article' => ArticleModel::class,
+        'appeal' => AppealModel::class
     ];
     private $type;
 

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="loading" class="q-pa-lg text-center">
+    <div v-if="loading" class="text-center">
       <q-spinner-facebook
         color="primary"
         size="4em"

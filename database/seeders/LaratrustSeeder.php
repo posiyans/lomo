@@ -56,7 +56,7 @@ class LaratrustSeeder extends Seeder
 
     protected $roles = [
         'superAdmin' => 'СуперАдмин',
-        'owners' => 'Собственники',
+        'owner' => 'Собственник',
 //        'admin' => 'Администратор',
 //        'president' => 'Председатель',
 //        'curator' => 'Член правления',

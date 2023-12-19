@@ -26,7 +26,6 @@
 <script>
 /* eslint-disable */
 import { defineComponent, onMounted, ref } from 'vue'
-import { fetchAppelList } from 'src/Modules/Appeal/api/appeal-admin-api.js'
 import { fetchList } from 'src/Modules/Users/api/user-admin-api.js'
 import { fetchAdminArticleList } from 'src/Modules/Article/Article/api/articleAdminApi.js'
 import CardBlock from './components/CardBlock/index.vue'
@@ -34,6 +33,7 @@ import { getSteadsList } from 'src/Modules/Stead/api/stead'
 import { getAllMessage } from 'src/Modules/Comments/api/commentApi'
 import { fetchOwnerUserList } from 'src/Modules/Owner/api/ownerUserApi'
 import { useRouter } from 'vue-router'
+import { fetchAppealList } from 'src/Modules/Appeal/api/appealApi'
 
 
 export default defineComponent({
@@ -74,9 +74,11 @@ export default defineComponent({
       {
         getData: () => {
           const data = {
-            status: 'open'
+            status: 'open',
+            page: 1,
+            limit: 1
           }
-          return fetchAppelList(data)
+          return fetchAppealList(data)
         },
         label: 'Обращенией',
         value: null,

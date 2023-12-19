@@ -5,10 +5,10 @@ namespace App\Modules\Appeal\Modules;
 use App\Models\Message\MessageModel;
 use App\Models\MyModel;
 use App\Modules\Comment\Interfaces\CommentedInterface;
+use App\Modules\File\Models\FileModel;
 use App\Modules\User\Models\UserModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 
 /**
  * App\Modules\Appeal\Modules\AppealModel
@@ -52,7 +52,8 @@ class AppealModel extends MyModel implements CommentedInterface
 {
     use SoftDeletes;
 
-    protected $fillable = ['title', 'text', 'appeal_type_id'];
+    protected $fillable = ['title', 'text', 'appeal_type_id', 'uid'];
+
 
     public function __construct(array $attributes = [])
     {
@@ -62,7 +63,7 @@ class AppealModel extends MyModel implements CommentedInterface
         } else {
             $this->user_id = 0;
         }
-        $this->uid = Str::uuid();
+//        $this->uid = Str::uuid();
     }
 
     /**
@@ -75,6 +76,15 @@ class AppealModel extends MyModel implements CommentedInterface
         return $this->hasOne(UserModel::class, 'id', 'user_id');
     }
 
+    /**
+     * прикрепленные файлы
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function files()
+    {
+        return $this->morphMany(FileModel::class, 'commentable', null, 'commentable_uid', 'uid');
+    }
 
     /**
      * модель пользователя закрывшего обращения

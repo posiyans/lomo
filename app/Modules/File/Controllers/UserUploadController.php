@@ -23,7 +23,9 @@ class UserUploadController extends Controller
         try {
             $type = $request->get('action', false);
             $class = (new GetModelNameByType($request->model))->run();
-            (new CheckAccessToFileClass())->forUser(Auth::user())->write($class);
+            $model = new $class();
+            $model->uid = $request->model_uid;
+            (new CheckAccessToFileClass())->forUser(Auth::user())->write($model);
             $tmpDir = (new TempDirectoryPathClass())->get();
             $file_path = $tmpDir . '/' . $request->uid;
             if ($request->chunk === 0) {
@@ -32,8 +34,8 @@ class UserUploadController extends Controller
             $inputFile = $request->file;
             $this->saveChunk($file_path, $inputFile);
             if ($type == 'done') {
-                $model = new $class();
-                $model->uid = $request->model_uid;
+//                $model = new $class();
+//                $model->uid = $request->model_uid;
                 $file = (new SaveFileForObjectClass($model))
                     ->file($file_path)
                     ->name($request->name)

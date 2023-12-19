@@ -7,6 +7,7 @@ export function useCommentsList() {
     {
       limit: 20,
       page: 1,
+      find: '',
       user_uid: null,
       sortBy: 'updated_at',
       descending: false

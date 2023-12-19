@@ -20,6 +20,6 @@ class GetAppealController extends Controller
         if (!$appeal->accessRead(Auth::user())) {
             return response(['errors' => 'Ошибка доступа'], 405);
         }
-        return ['appeal' => new AppealFullResource($appeal)];
+        return ['data' => new AppealFullResource($appeal)];
     }
 }

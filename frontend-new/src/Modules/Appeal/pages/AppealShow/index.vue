@@ -45,6 +45,10 @@
             {{ appeal.text }}
           </div>
         </div>
+        <div v-if="appeal.files && appeal.files?.length > 0" class="q-pa-md">
+          <div v-if="appeal.files?.length > 0" class="text-weight-bold">Файлы:</div>
+          <FilesListShow :model-value="appeal.files" />
+        </div>
       </q-card-section>
       <q-separator />
       <q-card-section class="bg-grey-1">
@@ -64,17 +68,22 @@ import AppealTypeNameById from 'src/Modules/Appeal/components/AppealTypeNameById
 import { useQuasar } from 'quasar'
 import ShowTime from 'components/ShowTime/index.vue'
 import ChatBlock from './components/ChatBlock/index.vue'
+import FilesListShow from 'src/Modules/Files/components/FilesListShow/index.vue'
+import { useFile } from 'src/Modules/Files/hooks/useFile'
 
 export default defineComponent({
   components: {
     AppealStatusLabelById,
     AppealTypeNameById,
     ShowTime,
+    FilesListShow,
     ChatBlock
   },
   props: {},
   setup(props, { emit }) {
-    const appeal = ref({})
+    const appeal = ref({
+      files: []
+    })
     const loading = ref(true)
     const router = useRouter()
     const route = useRoute()
@@ -82,7 +91,16 @@ export default defineComponent({
     const getData = () => {
       getAppeal(route.params.id)
         .then(res => {
-          appeal.value = res.data.appeal
+          appeal.value = res.data.data
+          const tmp = []
+          if (res.data.data.files) {
+            res.data.data.files.forEach(item => {
+              const file = useFile()
+              file.init(item)
+              tmp.push(file)
+            })
+          }
+          appeal.value.files = tmp
           loading.value = false
         })
     }

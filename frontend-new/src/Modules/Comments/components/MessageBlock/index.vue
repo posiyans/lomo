@@ -52,7 +52,7 @@
 
 <script>
 /* eslint-disable */
-import { computed, defineComponent, onMounted, ref, toRefs, watch } from 'vue'
+import { computed, defineComponent, onMounted, ref, watch } from 'vue'
 import { deleteMessage } from 'src/Modules/Comments/api/commentApi.js'
 import ItemBlock from './components/ItemBlock/index.vue'
 import { useQuasar } from 'quasar'
@@ -83,7 +83,8 @@ export default defineComponent({
     },
   },
   setup(props, { emit }) {
-    const list = toRefs(props.messageBlock)
+    // const list = toRefs(props.messageBlock)
+    const list = props.messageBlock
     const refBlock = ref({})
     const $q = useQuasar()
     const authStore = useAuthStore()

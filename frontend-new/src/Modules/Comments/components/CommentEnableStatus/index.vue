@@ -1,5 +1,5 @@
 <template>
-  <div :class="className">
+  <div v-if="status" :class="className">
     {{ status.label }}
   </div>
 </template>
@@ -7,7 +7,6 @@
 <script>
 /* eslint-disable */
 import { computed, defineComponent, onMounted, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
 import { getCommentsStatusList } from 'src/Modules/Comments/api/commentApi'
 
 export default defineComponent({
@@ -24,8 +23,6 @@ export default defineComponent({
   },
   setup(props) {
     const data = ref(null)
-    const router = useRouter()
-    const route = useRoute()
     const options = getCommentsStatusList()
     const item = computed(() => {
       return options.filter(item => {
@@ -39,7 +36,7 @@ export default defineComponent({
       return {}
     })
     const className = computed(() => {
-      if (props.color && status.value.color) {
+      if (props.color && status.value?.color) {
         return 'text-' + status.value.color
       }
       return ''

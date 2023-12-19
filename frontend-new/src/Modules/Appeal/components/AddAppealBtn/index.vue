@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <q-btn icon="add" outline color="primary" label="Создать" @click="dialogVisible = true" />
+      <q-btn icon="add" outline color="primary" label="Создать" @click="openDialogAction" />
     </div>
     <q-dialog
       v-model="dialogVisible"
@@ -38,6 +38,10 @@
                 label="Текст обращения"
               />
             </div>
+            <div class="q-pa-md">
+              <AddFileBtn @add-files="addFile" multiple parent-type="appeal" :parent-uid="data.uid" />
+              <FilesListShow v-model="data.files" edit />
+            </div>
           </div>
         </q-card-section>
         <q-card-section>
@@ -57,10 +61,15 @@ import { useRoute, useRouter } from 'vue-router'
 import AppealTypeSelect from 'src/Modules/Appeal/components/AppealTypeSelect/index.vue'
 import { createAppeal } from 'src/Modules/Appeal/api/appealApi'
 import { errorMessage } from 'src/utils/message'
+import AddFileBtn from 'src/Modules/Files/components/AddFileBtn/index.vue'
+import FilesListShow from 'src/Modules/Files/components/FilesListShow/index.vue'
+import { uid } from 'quasar'
 
 export default defineComponent({
   components: {
-    AppealTypeSelect
+    AppealTypeSelect,
+    FilesListShow,
+    AddFileBtn
   },
   props: {
     userUid: {
@@ -70,8 +79,10 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const data = ref({
+      uid: uid(),
       title: '',
       text: '',
+      files: [],
       appeal_type_id: 1
     })
     const dialogVisible = ref(null)
@@ -80,6 +91,9 @@ export default defineComponent({
     const saveData = () => {
       createAppeal(data.value)
         .then(res => {
+          data.value.files.forEach(item => {
+            item.sendFileToServer()
+          })
           dialogVisible.value = false
           emit('success')
         })
@@ -87,11 +101,27 @@ export default defineComponent({
           errorMessage(er.response.data.errors)
         })
     }
+    const addFile = (ar) => {
+      ar.forEach(val => {
+        data.value.files.push(val)
+        // val.sendFileToServer()
+      })
+    }
+    const openDialogAction = () => {
+      data.value.uid = uid();
+      data.value.title = '';
+      data.value.text = '';
+      data.value.files = [];
+      data.value.appeal_type_id = 1;
+      dialogVisible.value = true
+    }
     onMounted(() => {
 
     })
     return {
+      openDialogAction,
       data,
+      addFile,
       saveData,
       dialogVisible
     }

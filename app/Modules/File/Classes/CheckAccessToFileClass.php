@@ -2,7 +2,9 @@
 
 namespace App\Modules\File\Classes;
 
+use App\Modules\Appeal\Modules\AppealModel;
 use App\Modules\Article\Models\ArticleModel;
+use App\Modules\File\AccessClass\AppealModelAccessClass;
 use App\Modules\File\AccessClass\ArticleModelAccessClass;
 use App\Modules\File\Models\FileModel;
 use Illuminate\Support\Facades\Auth;
@@ -13,6 +15,7 @@ class CheckAccessToFileClass
     private $user;
     private $classMap = [
         ArticleModel::class => ArticleModelAccessClass::class,
+        AppealModel::class => AppealModelAccessClass::class,
     ];
 
 
@@ -43,10 +46,11 @@ class CheckAccessToFileClass
     }
 
 
-    public function write($class)
+    public function write($object)
     {
+        $class = get_class($object);
         if (isset($this->classMap[$class])) {
-            return (new $this->classMap[$class]([null, $this->user]))->write();
+            return (new $this->classMap[$class]([$object, $this->user]))->write();
         }
         throw new \Exception('Ошибка определения прав на файл');
     }

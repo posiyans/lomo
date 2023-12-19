@@ -5,7 +5,7 @@
         <div class="text-weight-bold">
           Роли
         </div>
-        <ActiveUserRoles />
+        <ActiveUserRoles class="q-pa-sm" />
       </div>
       <div>
         <div class="text-weight-bold">

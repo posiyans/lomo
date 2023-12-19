@@ -72,14 +72,14 @@
         </div>
       </div>
       <div class="">
-        <q-btn flat icon="send" :loading="message.uploadMessage" :color="message.newMessage.value.message.length > 0 ? 'primary' : 'grey-6'" @click="messageBlock.sendComment" />
+        <q-btn flat icon="send" :loading="message.uploadMessage.value" :color="message.newMessage.value.message.length > 0 ? 'primary' : 'grey-6'" @click="messageBlock.sendComment" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { computed, defineComponent, onMounted, ref, toRefs } from 'vue'
+import { computed, defineComponent, onMounted, ref } from 'vue'
 import UserAvatarByUid from 'src/Modules/Avatar/components/UserAvatarByUid/index.vue'
 import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
 
@@ -98,7 +98,8 @@ export default defineComponent({
     }
   },
   setup(props, { emit }) {
-    const message = toRefs(props.messageBlock)
+    const message = props.messageBlock
+    // const message = toRefs(props.messageBlock)
     const fileRef = ref(null)
 
     const authStore = useAuthStore()

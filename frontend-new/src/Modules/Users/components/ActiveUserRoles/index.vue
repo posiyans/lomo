@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div v-for="item in roleAndPermissionStore.roles" :key="item.name">
+  <div class="q-gutter-sm">
+    <div v-for="(item, index) in roleAndPermissionStore.roles" :key="item.name" class="">
       <div class="row items-center q-col-gutter-xs">
         <div v-if="item.load" style="min-height: 3.2em; min-width: 3.2em;">
           <q-spinner-tail
@@ -8,17 +8,18 @@
             size="2em"
           />
         </div>
-        <div v-else style="min-height: 3.2em;min-width: 3.2em;">
+        <div v-else>
+          {{ ++index }}.
+        </div>
+        <div v-if="false" style="min-height: 3.2em;min-width: 3.2em;">
           <q-checkbox
+            disable
             :model-value="activeUserStore.rolesArray.includes(item.name)"
             @update:model-value="changeRole($event, item)"
           />
         </div>
         <div>
           {{ item.display_name }}
-        </div>
-        <div class="text-grey q-ml-sm">
-          {{ item.name }}
         </div>
       </div>
     </div>

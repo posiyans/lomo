@@ -21,6 +21,10 @@ class CreateAppealValidator extends FormRequest
                 'nullable',
                 'exists:App\Modules\User\Models\UserModel,uid',
             ],
+            'uid' => [
+                'required',
+                'unique:App\Modules\Appeal\Modules\AppealModel,uid',
+            ],
             'title' => [
                 'required',
                 'string',

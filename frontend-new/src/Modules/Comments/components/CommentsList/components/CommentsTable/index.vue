@@ -41,7 +41,7 @@
 
 <script>
 /* eslint-disable */
-import { defineComponent, onMounted, ref, toRefs } from 'vue'
+import { defineComponent, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import ItemBlock from 'src/Modules/Comments/components/MessageBlock/components/ItemBlock/index.vue'
 import { deleteMessage } from 'src/Modules/Comments/api/commentApi'
@@ -65,6 +65,7 @@ export default defineComponent({
     const route = useRoute()
     const $q = useQuasar()
     const list = toRefs(props.commentsList.list.value)
+    // const list = props.commentsList.list.value
     const columns = ref(
       [
         {

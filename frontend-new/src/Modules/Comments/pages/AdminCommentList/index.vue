@@ -1,7 +1,12 @@
 <template>
-  <div>
-    <CommentsTable v-if="commentsList" :comments-list="commentsList" @reload="reload" />
-    <LoadMore :key="key" v-model:list-query="commentsList.listQuery.value" :func="func" @setList="setList" />
+  <div class="q-pa-md">
+    <q-card>
+      <q-card-section>
+        <FilterBlock v-model="listQuery" />
+        <CommentsTable :list="list" @reload="reload" />
+        <LoadMore :key="key" v-model:list-query="listQuery" :func="func" @setList="setList" />
+      </q-card-section>
+    </q-card>
   </div>
 </template>
 
@@ -12,29 +17,32 @@ import { useCommentsList } from 'src/Modules/Comments/hooks/useCommentsList'
 import { getAllMessage } from 'src/Modules/Comments/api/commentApi'
 import LoadMore from 'src/components/LoadMore/index.vue'
 import CommentsTable from './components/CommentsTable/index.vue'
+import FilterBlock from './components/FilterBlock/index.vue'
 
 export default defineComponent({
   components: {
     LoadMore,
+    FilterBlock,
     CommentsTable
   },
   props: {},
   setup(props, { emit }) {
     const key = ref(1)
     const func = getAllMessage
-    const commentsList = useCommentsList()
+    const { list, listQuery } = useCommentsList()
     const setList = (val) => {
-      commentsList.list.value = val
+      list.value = val
     }
     const reload = () => {
       key.value++
     }
     return {
+      list,
       key,
       func,
+      listQuery,
       setList,
-      reload,
-      commentsList
+      reload
     }
   }
 })
