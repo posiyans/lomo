@@ -39,14 +39,13 @@ class GetFileController extends Controller
                 $user = null;
             }
             // автор файла имеет доступ всегда
-            if (!$user || $user->id != $file->user_id) {
-                (new CheckAccessToFileClass())->file($file)->forUser($user)->read();
-            }
+//            if (!$user || $user->id != $file->user_id) {
+            (new CheckAccessToFileClass())->file($file)->forUser($user)->read();
+//            }
 
             $path = (new GetPathForHashClass($file->hash))->run();
             return Storage::download($path, $file->name);
-
-            return response(['errors' => 'Ошибка доступа'], 403);
+//            return response(['errors' => 'Ошибка доступа'], 403);
         } catch (\Exception $e) {
             return response(['errors' => $e->getMessage()], 451);
         }

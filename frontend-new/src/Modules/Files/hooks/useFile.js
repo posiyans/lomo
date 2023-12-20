@@ -113,6 +113,7 @@ export function useFile() {
 
   return {
     init,
+    parent,
     addFile,
     model,
     upload,

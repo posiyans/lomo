@@ -8,7 +8,7 @@ use App\Modules\File\Repositories\GetObjectForFileRepository;
  * Проверить на право на фаил
  *
  */
-class AppealModelAccessClass extends FileAccessAbstract
+class CommentModelAccessClass extends FileAccessAbstract
 {
     private $file;
     private $user;
@@ -22,18 +22,15 @@ class AppealModelAccessClass extends FileAccessAbstract
     public function read()
     {
         $model = (new GetObjectForFileRepository($this->file))->run();
-        if (!$this->user) {
-            throw new \Exception('Ошибка доступа');
-        }
         if ($model->user_id == $this->user->id) {
             return true;
         }
         if ($this->file->user_id == $this->user->id) {
             return true;
         }
-        if ($this->user->ability('superAdmin', 'appeal-edit', 'appeal-show')) {
-            return true;
-        }
+//        if ($this->user->ability('superAdmin', 'appeal-edit', 'appeal-show')) {
+//            return true;
+//        }
         throw new \Exception('Ошибка доступа');
     }
 
@@ -41,12 +38,9 @@ class AppealModelAccessClass extends FileAccessAbstract
     {
         $model = get_class($this->file)::where('uid', $this->file->uid)->first();
         if (!$this->user) {
-            throw new \Exception('Ошибка доступа');
+            throw new \Exception('Ошибка доступа1');
         }
         if ($model->user_id == $this->user->id) {
-            return true;
-        }
-        if ($this->user->ability('superAdmin', 'appeal-edit', 'appeal-show')) {
             return true;
         }
         throw new \Exception('Ошибка доступа');

@@ -10,7 +10,7 @@
                 <q-icon name="text_snippet" />
               </div>
               <div>
-                {{ file.model.name }}
+                {{ file.model?.name || file.name }}
               </div>
             </div>
             <div v-if="file.upload && !file.upload.success && file.upload.process > 0 && file.upload.process < 1" class="absolute-bottom full-width">
@@ -19,11 +19,11 @@
           </div>
         </td>
         <td>
-          <FileSize :size="file.model.size" class="q-px-sm text-grey-7" />
+          <FileSize :size="file.model?.size || file.size" class="q-px-sm text-grey-7" />
         </td>
         <td>
           <div class="row items-center q-col-gutter-sm">
-            <div v-if="file.model.uid && file.model.url">
+            <div v-if="file.model?.uid && file.model.url">
               <DownloadFileBtn :url-file="file.model.url" />
             </div>
             <div v-if="getUrl" class="cursor-pointer text-secondary" @click="emitUrl(file.model.url)">

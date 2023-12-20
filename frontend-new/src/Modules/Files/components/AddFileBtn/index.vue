@@ -1,13 +1,17 @@
 <template>
   <div>
     <input
-      ref="btnRef"
+      ref="btnRefd"
       type="file"
       class="hidden"
       :multiple="multiple"
       @change="change"
     />
-    <q-btn color="primary" :disabled="disabled" no-caps :label="label" @click="showDialog" />
+    <div @click.stop="showDialog">
+      <slot>
+        <q-btn color="primary" :disabled="disabled" no-caps :label="label" />
+      </slot>
+    </div>
   </div>
 </template>
 
@@ -46,16 +50,18 @@ export default defineComponent({
     }
   },
   setup(props, { emit }) {
-    const btnRef = ref(null)
+    const btnRefd = ref(null)
     const $q = useQuasar()
     const showDialog = () => {
-      btnRef.value.click()
+      console.log('klick')
+      console.log(btnRefd.value)
+      btnRefd.value.click()
     }
     const change = () => {
-      console.log(btnRef.value.files)
+      console.log(btnRefd.value.files)
       const tmp = []
-      if (btnRef.value.files) {
-        [...btnRef.value.files].forEach(item => {
+      if (btnRefd.value.files) {
+        [...btnRefd.value.files].forEach(item => {
           if (item.size > props.maxSize) {
             $q.dialog({
               title: 'Ошибка',
@@ -74,7 +80,7 @@ export default defineComponent({
     return {
       showDialog,
       change,
-      btnRef
+      btnRefd
     }
   }
 })

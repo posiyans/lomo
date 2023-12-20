@@ -4,8 +4,10 @@ namespace App\Modules\File\Classes;
 
 use App\Modules\Appeal\Modules\AppealModel;
 use App\Modules\Article\Models\ArticleModel;
+use App\Modules\Comment\Models\CommentModel;
 use App\Modules\File\AccessClass\AppealModelAccessClass;
 use App\Modules\File\AccessClass\ArticleModelAccessClass;
+use App\Modules\File\AccessClass\CommentModelAccessClass;
 use App\Modules\File\Models\FileModel;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,6 +18,7 @@ class CheckAccessToFileClass
     private $classMap = [
         ArticleModel::class => ArticleModelAccessClass::class,
         AppealModel::class => AppealModelAccessClass::class,
+        CommentModel::class => CommentModelAccessClass::class,
     ];
 
 

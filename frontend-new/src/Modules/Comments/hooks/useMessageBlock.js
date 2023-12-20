@@ -3,9 +3,9 @@ import { checkMyBan } from 'src/Modules/BanUsers/api/apiBanUser'
 import { getMessage, sendMessage } from 'src/Modules/Comments/api/commentApi'
 import { useQuasar } from 'quasar'
 
-export function useMessageBlock(type, uid) {
+export function useMessageBlock(type, prentUid) {
   const objectType = type
-  const objectUid = uid
+  const objectUid = prentUid
   const $q = useQuasar()
 
   const key = ref(1)
@@ -85,6 +85,7 @@ export function useMessageBlock(type, uid) {
     newMessage.value.reply = null
   }
   const uploadMessage = ref(false)
+
   const sendComment = () => {
     if (newMessage.value.message) {
       uploadMessage.value = true
@@ -95,7 +96,15 @@ export function useMessageBlock(type, uid) {
         reply: newMessage.value.reply?.uid || ''
       }
       sendMessage(data)
-        .then(response => {
+        .then(async response => {
+          if (newMessage.value.file) {
+            console.log(response.data.uid)
+            newMessage.value.file.parent.uid = response.data.uid
+            console.log(newMessage.value.file)
+            console.log(newMessage.value.file.parent.uid)
+            await newMessage.value.file.sendFileToServer()
+          }
+          newMessage.value.file = null
           newMessage.value.message = ''
           newMessage.value.reply = null
         })

@@ -22,13 +22,15 @@
         ред.
       </div>
     </div>
+
   </div>
+
   <div v-else>
     <div class="text-grey reply-block">
       Сообщение удалено
     </div>
   </div>
-
+  <FilesListShow :model-value="item.files" />
 </template>
 
 <script>
@@ -40,10 +42,12 @@ import { deleteMessage } from 'src/Modules/Comments/api/commentApi.js'
 import ShowTime from 'src/components/ShowTime/index.vue'
 import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
 import { useQuasar } from 'quasar'
+import FilesListShow from 'src/Modules/Files/components/FilesListShow/index.vue'
 
 export default defineComponent({
   components: {
     UserAvatarByUid,
+    FilesListShow,
     ShowTime
   },
   props: {

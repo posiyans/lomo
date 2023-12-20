@@ -6,7 +6,7 @@ use App\Modules\BanUser\Actions\CheckUserBanAction;
 use App\Modules\File\Repositories\GetObjectForFileRepository;
 
 /**
- * Проверить на право удалить фаил
+ * Проверить на право на фаил
  *
  */
 class ArticleModelAccessClass extends FileAccessAbstract

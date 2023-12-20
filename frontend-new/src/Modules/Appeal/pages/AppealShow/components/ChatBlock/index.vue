@@ -4,7 +4,12 @@
       {{ totalMessageLabel }}
     </div>
     <MessageBlock :message-block="messageBlock" no-ban no-delete no-repeat class="comments-block" />
-    <SendCommentBlock v-if="appealOpen" :message-block="messageBlock" class="bg-grey-3" />
+    <SendCommentBlock
+      v-if="appealOpen"
+      :message-block="messageBlock"
+      file
+      class="bg-grey-3"
+      ikk />
   </div>
 </template>
 

@@ -17,14 +17,6 @@
       </router-link>
     </div>
     <div v-else class="row items-center q-py-sm no-wrap">
-      <div class="hidden">
-        <input
-          ref="fileRef"
-          type="file"
-          class="hidden"
-          @change="change"
-        >
-      </div>
       <div class="q-pa-md">
         <UserAvatarByUid :uid="authStore.user.uid" size="30px" />
       </div>
@@ -57,10 +49,11 @@
             bg-color="white"
             :placeholder="placeholderInput"
           >
-            <template v-slot:append>
-              <q-icon v-if="file" flat name="attach_file" class="cursor-pointer" @click.stop="attacheFile" />
-            </template>
+            <AddFileBtn v-if="file" parent-type="comment" parent-uid="no-uid" @add-files="change">
+              <q-icon flat name="attach_file" size="sm" class="cursor-pointer q-pt-xs text-grey-8" />
+            </AddFileBtn>
           </q-input>
+          {{ message.newMessage.value }}
         </div>
         <div v-if="inputHint" class="row items-center q-pa-sm q-col-gutter-md">
           <div class="text-grey-7">
@@ -79,13 +72,15 @@
 </template>
 
 <script>
-import { computed, defineComponent, onMounted, ref } from 'vue'
+import { computed, defineComponent, onMounted } from 'vue'
 import UserAvatarByUid from 'src/Modules/Avatar/components/UserAvatarByUid/index.vue'
 import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
+import AddFileBtn from 'src/Modules/Files/components/AddFileBtn/index.vue'
 
 export default defineComponent({
   components: {
-    UserAvatarByUid
+    UserAvatarByUid,
+    AddFileBtn
   },
   props: {
     file: {
@@ -100,7 +95,6 @@ export default defineComponent({
   setup(props, { emit }) {
     const message = props.messageBlock
     // const message = toRefs(props.messageBlock)
-    const fileRef = ref(null)
 
     const authStore = useAuthStore()
 
@@ -112,32 +106,28 @@ export default defineComponent({
     })
     const inputHint = computed(() => {
       if (message.newMessage.value.file) {
-        return message.newMessage.value.file.name
+        return message.newMessage.value.file.model.name
       }
       return ''
     })
     const deleteFile = () => {
       message.newMessage.value.file = null
     }
-    const change = () => {
-      if (fileRef.value.files[0]) {
-        message.newMessage.value.file = fileRef.value.files[0]
+    const change = (files) => {
+      if (files[0]) {
+        message.newMessage.value.file = files[0]
       }
     }
-    const attacheFile = () => {
-      fileRef.value.click()
-    }
+
     onMounted(() => {
       if (!authStore.user.email_verified_at) {
         authStore.getMyInfo(true)
       }
     })
     return {
-      fileRef,
       inputHint,
       placeholderInput,
       deleteFile,
-      attacheFile,
       authStore,
       change,
       message

@@ -4,6 +4,7 @@ namespace App\Modules\Comment\Models;
 
 use App\Models\MyModel;
 use App\Modules\Comment\Factories\CommentModelFactory;
+use App\Modules\File\Models\FileModel;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -62,6 +63,11 @@ class CommentModel extends MyModel
     public function commentable(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    public function files()
+    {
+        return $this->morphMany(FileModel::class, 'commentable', null, 'commentable_uid', 'uid');
     }
 
     /**
