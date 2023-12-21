@@ -59,16 +59,20 @@ export function useFile() {
   }
   const deleteFile = () => {
     return new Promise((resolve, reject) => {
-      const data = {
-        uid: model.uid
+      if (model.url === null) {
+        resolve()
+      } else {
+        const data = {
+          uid: model.uid
+        }
+        deleteFileApi(data)
+          .then(res => {
+            resolve()
+          })
+          .catch(() => {
+            reject()
+          })
       }
-      deleteFileApi(data)
-        .then(res => {
-          resolve()
-        })
-        .catch(() => {
-          reject()
-        })
     })
   }
   const sendData = (data) => {
@@ -88,6 +92,8 @@ export function useFile() {
         formData.append('model_uid', parent.uid)
       } else {
         formData.append('action', 'chunk')
+        formData.append('model', parent.type)
+        formData.append('model_uid', parent.uid)
       }
       formData.append('chunk', data.chunk)
       formData.append('uid', model.uid)

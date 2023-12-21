@@ -47,7 +47,7 @@
         </div>
         <div v-if="appeal.files && appeal.files?.length > 0" class="q-pa-md">
           <div v-if="appeal.files?.length > 0" class="text-weight-bold">Файлы:</div>
-          <FilesListShow :model-value="appeal.files" />
+          <FilesListShow :model-value="appeal.files" show-preview />
         </div>
       </q-card-section>
       <q-separator />

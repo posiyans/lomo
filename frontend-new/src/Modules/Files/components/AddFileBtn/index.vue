@@ -5,6 +5,7 @@
       type="file"
       class="hidden"
       :multiple="multiple"
+      :accept="acceptFileType"
       @change="change"
     />
     <div @click.stop="showDialog">
@@ -35,6 +36,10 @@ export default defineComponent({
     parentType: {
       type: String,
       default: 'article'
+    },
+    acceptFileType: {
+      type: String,
+      default: 'image/*,.pdf,video/*,.doc,.docx,.xls,.xlsx,.txt'
     },
     maxSize: {
       type: Number,

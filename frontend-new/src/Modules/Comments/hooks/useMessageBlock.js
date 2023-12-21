@@ -71,12 +71,14 @@ export function useMessageBlock(type, prentUid) {
   const newMessage = ref({
     reply: false,
     message: '',
-    file: null
+    files: []
   })
+
   const replyMessage = (item) => {
     newMessage.value.reply = item
     window.scrollTo(0, document.body.scrollHeight)
   }
+
   const showAllMessage = () => {
     showAll.value = true
     showCount.value = messageList.value.length
@@ -97,7 +99,7 @@ export function useMessageBlock(type, prentUid) {
       }
       sendMessage(data)
         .then(async response => {
-          if (newMessage.value.file) {
+          if (newMessage.value.files.length > 0) {
             console.log(response.data.uid)
             newMessage.value.file.parent.uid = response.data.uid
             console.log(newMessage.value.file)
@@ -107,6 +109,7 @@ export function useMessageBlock(type, prentUid) {
           newMessage.value.file = null
           newMessage.value.message = ''
           newMessage.value.reply = null
+          getData()
         })
         .catch(er => {
           getStatusBan()
@@ -121,7 +124,7 @@ export function useMessageBlock(type, prentUid) {
         .finally(() => {
           uploadMessage.value = false
           showAll.value = true
-          getData()
+          // getData()
           // props.messageBlock.reload++
           // emit('reload')
         })

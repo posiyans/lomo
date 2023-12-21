@@ -49,19 +49,16 @@
             bg-color="white"
             :placeholder="placeholderInput"
           >
-            <AddFileBtn v-if="file" parent-type="comment" parent-uid="no-uid" @add-files="change">
+            <AddFileBtn v-if="file" parent-type="comment" multiple parent-uid="no-uid" @add-files="change">
               <q-icon flat name="attach_file" size="sm" class="cursor-pointer q-pt-xs text-grey-8" />
             </AddFileBtn>
           </q-input>
-          {{ message.newMessage.value }}
         </div>
-        <div v-if="inputHint" class="row items-center q-pa-sm q-col-gutter-md">
-          <div class="text-grey-7">
-            {{ inputHint }}
-          </div>
-          <div class="delete-btn" @click="deleteFile">
-            <q-icon name="highlight_off" />
-          </div>
+        <div v-if="inputHint" class="">
+          <FilesListShow
+            v-model="message.newMessage.value.files"
+            edit
+          />
         </div>
       </div>
       <div class="">
@@ -76,11 +73,13 @@ import { computed, defineComponent, onMounted } from 'vue'
 import UserAvatarByUid from 'src/Modules/Avatar/components/UserAvatarByUid/index.vue'
 import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
 import AddFileBtn from 'src/Modules/Files/components/AddFileBtn/index.vue'
+import FilesListShow from 'src/Modules/Files/components/FilesListShow/index.vue'
 
 export default defineComponent({
   components: {
     UserAvatarByUid,
-    AddFileBtn
+    AddFileBtn,
+    FilesListShow
   },
   props: {
     file: {
@@ -99,23 +98,20 @@ export default defineComponent({
     const authStore = useAuthStore()
 
     const placeholderInput = computed(() => {
-      if (message.newMessage.value.file) {
-        return 'Добавить описание к файлу'
+      if (message.newMessage.value.files.length > 0) {
+        return 'Добавить описание'
       }
       return 'Написать комментарий...'
     })
     const inputHint = computed(() => {
-      if (message.newMessage.value.file) {
-        return message.newMessage.value.file.model.name
+      if (message.newMessage.value.files.length > 0) {
+        return true
       }
-      return ''
+      return false
     })
-    const deleteFile = () => {
-      message.newMessage.value.file = null
-    }
     const change = (files) => {
-      if (files[0]) {
-        message.newMessage.value.file = files[0]
+      if (files.length > 0) {
+        message.newMessage.value.files = files
       }
     }
 
@@ -127,7 +123,6 @@ export default defineComponent({
     return {
       inputHint,
       placeholderInput,
-      deleteFile,
       authStore,
       change,
       message

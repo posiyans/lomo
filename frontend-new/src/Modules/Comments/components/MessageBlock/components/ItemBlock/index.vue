@@ -1,36 +1,38 @@
 <template>
-  <div v-if="item" class="row no-wrap relative-position" :class="{ 'reply-block': reply, 'cursor-pointer': reply }">
-    <div v-if="fullView" class="q-px-sm">
-      <div class="text-center q-pt-sm">
-        <UserAvatarByUid :uid="item.user.uid" size="40px" />
-      </div>
-    </div>
-    <div class="col">
-      <div class="row items-center q-col-gutter-sm">
-        <div class="text-weight-bold text-primary">
-          {{ item.user.name }}
+  <div v-if="item">
+    <div class="row no-wrap relative-position" :class="{ 'reply-block': reply, 'cursor-pointer': reply }">
+      <div v-if="fullView" class="q-px-sm">
+        <div class="text-center q-pt-sm">
+          <UserAvatarByUid :uid="item.user.uid" size="40px" />
         </div>
-        <ShowTime v-if="fullView" :time="item.updated_at" class="text-grey-8" style="font-size: 0.9em" />
-        <slot name="header"></slot>
       </div>
-      <slot></slot>
-      <div v-html="messageTextHtml"
-           :class=" { 'q-py-sm': fullView, 'text-strike' : item.delete, 'text-grey':  item.delete, ellipsis: reply, 'reply-block__message': reply, 'message-block__message': fullView }" />
-    </div>
-    <div class="q-px-sm absolute-bottom-right text-grey-8 row ">
-      <div v-if="edit" class="q-pr-sm">
-        ред.
+      <div class="col">
+        <div class="row items-center q-col-gutter-sm">
+          <div class="text-weight-bold text-primary">
+            {{ item.user.name }}
+          </div>
+          <ShowTime v-if="fullView" :time="item.updated_at" class="text-grey-8" style="font-size: 0.9em" />
+          <slot name="header"></slot>
+        </div>
+        <slot></slot>
+        <div v-html="messageTextHtml"
+             :class=" { 'q-py-sm': fullView, 'text-strike' : item.delete, 'text-grey':  item.delete, ellipsis: reply, 'reply-block__message': reply, 'message-block__message': fullView }" />
+        <FilesListShow :model-value="item.files" show-preview />
+      </div>
+      <div class="q-px-sm absolute-bottom-right text-grey-8 row ">
+        <div v-if="edit" class="q-pr-sm">
+          ред.
+        </div>
       </div>
     </div>
 
   </div>
-
   <div v-else>
     <div class="text-grey reply-block">
       Сообщение удалено
     </div>
   </div>
-  <FilesListShow :model-value="item.files" />
+
 </template>
 
 <script>

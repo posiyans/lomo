@@ -2,37 +2,14 @@
   <div>
     <table>
       <tr v-for="(file, index) in filtersList" :key="file.uid" class="pt4">
-        <td>{{ ++index }}.</td>
-        <td>
-          <div class="relative-position">
-            <div class="row items-center q-col-gutter-sm">
-              <div class="text-grey">
-                <q-icon name="text_snippet" />
-              </div>
-              <div>
-                {{ file.model?.name || file.name }}
-              </div>
-            </div>
-            <div v-if="file.upload && !file.upload.success && file.upload.process > 0 && file.upload.process < 1" class="absolute-bottom full-width">
-              <q-linear-progress :value="file.upload.process" class="" track-color="grey" size="2px" />
-            </div>
+        <td class="vertical-bottom">
+          <div>
+            {{ ++index }}.
           </div>
         </td>
-        <td>
-          <FileSize :size="file.model?.size || file.size" class="q-px-sm text-grey-7" />
-        </td>
-        <td>
-          <div class="row items-center q-col-gutter-sm">
-            <div v-if="file.model?.uid && file.model.url">
-              <DownloadFileBtn :url-file="file.model.url" />
-            </div>
-            <div v-if="getUrl" class="cursor-pointer text-secondary" @click="emitUrl(file.model.url)">
-              Скопировать ссылку
-            </div>
-          </div>
-        </td>
+        <FileItem :file="file" :get-url="getUrl" :show-preview="showPreview" />
         <td v-if="edit">
-          <div v-if="file.upload?.success" class="text-secondary q-px-md row items-center">
+          <div class="text-secondary q-px-md row items-center">
             <div
               class="text-red q-px-md"
               @click="deleteFile(file)">
@@ -49,17 +26,15 @@
 </template>
 
 <script>
-import FileSize from 'src/Modules/Files/components/FileSize/index.vue'
 import DeleteIcon from 'src/Modules/Files/components/FilesListShow/DeleteIcon.vue'
-import DownloadFileBtn from 'src/Modules/Files/components/DownloadFileBtn/index.vue'
 import { copyToClipboard } from 'quasar'
 import { successMessage } from 'src/utils/message'
+import FileItem from './FileItem.vue'
 
 export default {
   components: {
-    FileSize,
-    DeleteIcon,
-    DownloadFileBtn
+    FileItem,
+    DeleteIcon
   },
   props: {
     modelValue: {
@@ -71,6 +46,10 @@ export default {
       default: false
     },
     getUrl: {
+      type: Boolean,
+      default: false
+    },
+    showPreview: {
       type: Boolean,
       default: false
     }

@@ -9,7 +9,7 @@
       :message-block="messageBlock"
       file
       class="bg-grey-3"
-      ikk />
+    />
   </div>
 </template>
 
