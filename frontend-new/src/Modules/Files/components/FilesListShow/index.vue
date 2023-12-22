@@ -1,14 +1,12 @@
 <template>
   <div>
-    <table>
-      <tr v-for="(file, index) in filtersList" :key="file.uid" class="pt4">
-        <td class="vertical-bottom">
-          <div>
-            {{ ++index }}.
-          </div>
-        </td>
+    <div class="row q-col-gutter-md">
+      <div v-for="(file, index) in filtersList" :key="file.uid" class="row" :class="{ 'items-center': !showPreview }">
+        <div v-if="!showPreview" class="vertical-bottom">
+          {{ ++index }}.
+        </div>
         <FileItem :file="file" :get-url="getUrl" :show-preview="showPreview" />
-        <td v-if="edit">
+        <div v-if="edit">
           <div class="text-secondary q-px-md row items-center">
             <div
               class="text-red q-px-md"
@@ -19,9 +17,9 @@
           <div v-if="file.upload.error" class="text-red">
             Ошибка {{ file.upload.errorsMessage }}
           </div>
-        </td>
-      </tr>
-    </table>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 

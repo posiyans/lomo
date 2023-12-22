@@ -13,8 +13,8 @@
     </div>
     <q-separator />
     <div v-if="showChat">
-      <MessageBlock :message-block="messageBlock" class="q-pa-md comments-block" />
-      <SendCommentBlock :message-block="messageBlock" class="bg-grey-3" />
+      <MessageBlock :message-block="messageBlock" class="comments-block" />
+      <SendCommentBlock :message-block="messageBlock" file class="bg-grey-3" />
     </div>
   </div>
 

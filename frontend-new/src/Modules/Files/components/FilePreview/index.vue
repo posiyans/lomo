@@ -1,21 +1,35 @@
 <template>
   <div>
-    <q-img :src="filePreviewUrl" :width="width">
-      <template v-slot:error>
-        <div class="absolute-full flex flex-center bg-negative text-white ellipsis">
+    <div class="cursor-pointer" @click="showImgAction">
+      <q-img :src="filePreviewUrl" :width="width" :style="{'min-height': width}" class="br-05">
+        <template v-slot:error>
+          <div class="absolute-full flex flex-center bg-negative text-white ellipsis">
+            {{ name }}
+          </div>
+        </template>
+        <div class="absolute-bottom ellipsis q-pa-none" style="padding: 0 5px;">
           {{ name }}
         </div>
-      </template>
-    </q-img>
+      </q-img>
+    </div>
+    <ShowMediaBlock
+      v-if="showImg"
+      :src-img="filePreviewUrl"
+      :file-name="name"
+      @close="showImg = false"
+    />
   </div>
 </template>
 
 <script>
 /* eslint-disable */
 import { computed, defineComponent, ref } from 'vue'
+import ShowMediaBlock from 'src/Modules/Files/components/ShowMediaBlock/index.vue'
 
 export default defineComponent({
-  components: {},
+  components: {
+    ShowMediaBlock
+  },
   props: {
     file: {
       type: Object,
@@ -27,11 +41,14 @@ export default defineComponent({
     },
     width: {
       type: String,
-      default: '150px'
+      default: '120px'
     }
   },
   setup(props, { emit }) {
-    const data = ref(false)
+    const showImg = ref(false)
+    const showImgAction = () => {
+      showImg.value = true
+    }
     const filePreviewUrl = computed(() => {
       if (fileDownloadUrl.value) {
         return process.env.BASE_API + fileDownloadUrl.value + '&preview=1&width=300'
@@ -41,7 +58,8 @@ export default defineComponent({
       return props.file.url || props.file?.model?.url
     })
     return {
-      data,
+      showImg,
+      showImgAction,
       fileDownloadUrl,
       filePreviewUrl
     }

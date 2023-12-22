@@ -17,7 +17,7 @@
         <slot></slot>
         <div v-html="messageTextHtml"
              :class=" { 'q-py-sm': fullView, 'text-strike' : item.delete, 'text-grey':  item.delete, ellipsis: reply, 'reply-block__message': reply, 'message-block__message': fullView }" />
-        <FilesListShow :model-value="item.files" show-preview />
+        <FilesListShow v-if="!item.delete" :model-value="item.files" show-preview />
       </div>
       <div class="q-px-sm absolute-bottom-right text-grey-8 row ">
         <div v-if="edit" class="q-pr-sm">
@@ -74,8 +74,11 @@ export default defineComponent({
       return !props.reply
     })
     const messageTextHtml = computed(() => {
-      // return props.item.message.replace(/\n/g, '<br />').replace(/(http:\/\/[.\w/=&?]+)/gi, "<a href='$1' class='text-primary'>$1</a>")
-      return props.item.message.replace(/\n/g, '<br />').replace(/([-a-zA-Z0-9@:%_\+.~#?&\/\/=]{2,256}\.[a-zA-Zа-яА-ЯёЁ]{2,4}\b(\/?[-a-zA-Z0-9а-яА-ЯёЁ@:%_\+.~#?&\/\/=]*)?)/gi, "<a href='$1' class='text-primary' target='_blank'>$1</a>")
+      if (props.item.message) {
+        // return props.item.message.replace(/\n/g, '<br />').replace(/(http:\/\/[.\w/=&?]+)/gi, "<a href='$1' class='text-primary'>$1</a>")
+        return props.item.message.replace(/\n/g, '<br />').replace(/([-a-zA-Z0-9@:%_\+.~#?&\/\/=]{2,256}\.[a-zA-Zа-яА-ЯёЁ]{2,4}\b(\/?[-a-zA-Z0-9а-яА-ЯёЁ@:%_\+.~#?&\/\/=]*)?)/gi, "<a href='$1' class='text-primary' target='_blank'>$1</a>")
+      }
+      return ''
     })
     const authStore = useAuthStore()
     const deleteAccess = computed(() => {

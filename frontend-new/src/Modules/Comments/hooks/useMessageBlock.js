@@ -73,7 +73,9 @@ export function useMessageBlock(type, prentUid) {
     message: '',
     files: []
   })
-
+  const messageSend = computed(() => {
+    return newMessage.value.message.length > 0 || newMessage.value.files.length > 0
+  })
   const replyMessage = (item) => {
     newMessage.value.reply = item
     window.scrollTo(0, document.body.scrollHeight)
@@ -89,7 +91,7 @@ export function useMessageBlock(type, prentUid) {
   const uploadMessage = ref(false)
 
   const sendComment = () => {
-    if (newMessage.value.message) {
+    if (messageSend.value) {
       uploadMessage.value = true
       const data = {
         type: objectType,
@@ -100,13 +102,14 @@ export function useMessageBlock(type, prentUid) {
       sendMessage(data)
         .then(async response => {
           if (newMessage.value.files.length > 0) {
-            console.log(response.data.uid)
-            newMessage.value.file.parent.uid = response.data.uid
-            console.log(newMessage.value.file)
-            console.log(newMessage.value.file.parent.uid)
-            await newMessage.value.file.sendFileToServer()
+            for (const file of newMessage.value.files) {
+              if (!file.delete) {
+                file.parent.uid = response.data.uid
+                await file.sendFileToServer()
+              }
+            }
           }
-          newMessage.value.file = null
+          newMessage.value.files = []
           newMessage.value.message = ''
           newMessage.value.reply = null
           getData()
@@ -139,6 +142,7 @@ export function useMessageBlock(type, prentUid) {
     messageList,
     showMessage,
     nextMessage,
+    messageSend,
     messageLoading,
     ban,
     replyMessage,

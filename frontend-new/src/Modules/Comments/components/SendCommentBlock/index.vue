@@ -62,7 +62,7 @@
         </div>
       </div>
       <div class="">
-        <q-btn flat icon="send" :loading="message.uploadMessage.value" :color="message.newMessage.value.message.length > 0 ? 'primary' : 'grey-6'" @click="messageBlock.sendComment" />
+        <q-btn flat icon="send" :loading="message.uploadMessage.value" :color="message.messageSend.value ? 'primary' : 'grey-6'" @click="messageBlock.sendComment" />
       </div>
     </div>
   </div>
@@ -74,6 +74,7 @@ import UserAvatarByUid from 'src/Modules/Avatar/components/UserAvatarByUid/index
 import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
 import AddFileBtn from 'src/Modules/Files/components/AddFileBtn/index.vue'
 import FilesListShow from 'src/Modules/Files/components/FilesListShow/index.vue'
+import { errorMessage } from 'src/utils/message'
 
 export default defineComponent({
   components: {
@@ -111,7 +112,13 @@ export default defineComponent({
     })
     const change = (files) => {
       if (files.length > 0) {
-        message.newMessage.value.files = files
+        files.forEach(file => {
+          if (message.newMessage.value.files.length < 10) {
+            message.newMessage.value.files.push(file)
+          } else {
+            errorMessage('Не более 10 файлов')
+          }
+        })
       }
     }
 

@@ -1,33 +1,31 @@
 <template>
-  <td class="vertical-bottom">
-    <FilePreview v-if="showPreview" :file="file" :name="fileName" />
-    <div class="relative-position">
+  <div>
+    <FilePreview v-if="showPreview" :file="file" :name="fileName" :width="imgWidth" />
+    <div v-if="!showPreview">
+      <div class="relative-position">
+        <div class="row items-center q-col-gutter-sm">
+          <div class="ellipsis" style="max-width: 200px;">
+            <q-tooltip>
+              {{ fileName }}
+            </q-tooltip>
+            {{ fileName }}
+          </div>
+        </div>
+        <div v-if="file.upload && !file.upload.success && file.upload.process > 0 && file.upload.process < 1" class="absolute-bottom full-width">
+          <q-linear-progress :value="file.upload.process" class="" track-color="grey" size="2px" />
+        </div>
+      </div>
+      <FileSize :size="fileSize" class="q-px-sm text-grey-7" />
       <div class="row items-center q-col-gutter-sm">
-        <div class="text-grey">
-          <q-icon name="text_snippet" size="sm" />
+        <div v-if="fileDownloadUrl">
+          <DownloadFileBtn :url-file="fileDownloadUrl" />
         </div>
-        <div>
-          {{ fileName }}
+        <div v-if="getUrl" class="cursor-pointer text-secondary" @click="emitUrl(fileDownloadUrl)">
+          Скопировать ссылку
         </div>
-      </div>
-      <div v-if="file.upload && !file.upload.success && file.upload.process > 0 && file.upload.process < 1" class="absolute-bottom full-width">
-        <q-linear-progress :value="file.upload.process" class="" track-color="grey" size="2px" />
       </div>
     </div>
-  </td>
-  <td class="vertical-bottom">
-    <FileSize :size="fileSize" class="q-px-sm text-grey-7" />
-  </td>
-  <td class="vertical-bottom">
-    <div class="row items-center q-col-gutter-sm">
-      <div v-if="fileDownloadUrl">
-        <DownloadFileBtn :url-file="fileDownloadUrl" />
-      </div>
-      <div v-if="getUrl" class="cursor-pointer text-secondary" @click="emitUrl(fileDownloadUrl)">
-        Скопировать ссылку
-      </div>
-    </div>
-  </td>
+  </div>
 </template>
 
 <script>
@@ -35,7 +33,7 @@
 import { computed, defineComponent, ref } from 'vue'
 import FileSize from 'src/Modules/Files/components/FileSize/index.vue'
 import DownloadFileBtn from 'src/Modules/Files/components/DownloadFileBtn/index.vue'
-import { copyToClipboard } from 'quasar'
+import { copyToClipboard, useQuasar } from 'quasar'
 import { successMessage } from 'src/utils/message'
 import FilePreview from 'src/Modules/Files/components/FilePreview/index.vue'
 
@@ -62,6 +60,7 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const data = ref(false)
+    const $q = useQuasar()
     const fileSize = computed(() => {
       return props.file.size || props.file.model?.size
     })
@@ -70,6 +69,12 @@ export default defineComponent({
     })
     const fileDownloadUrl = computed(() => {
       return props.file.url || props.file?.model?.url
+    })
+    const imgWidth = computed(() => {
+      if ($q.screen.width < 450) {
+        return ($q.screen.width - 150) / 2 + 'px'
+      }
+      return '150px'
     })
     const emitUrl = (url) => {
       copyToClipboard(url)
@@ -80,6 +85,7 @@ export default defineComponent({
     return {
       data,
       emitUrl,
+      imgWidth,
       fileDownloadUrl,
       fileSize,
       fileName

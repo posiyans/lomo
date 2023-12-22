@@ -1,6 +1,6 @@
 <template>
   <div
-    @click="downloadFile"
+    @click.stop="downloadFile"
   >
     <div v-if="loading" class="text-center">
       <q-spinner-facebook

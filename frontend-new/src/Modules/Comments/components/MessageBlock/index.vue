@@ -14,7 +14,7 @@
           />
         </div>
       </ItemBlock>
-      <q-separator style="margin-left: 55px;" />
+      <q-separator style="margin-left: 55px;" class="q-mt-xs" />
       <div v-if="item.actions.write && !list.ban.value.status" class="absolute-top-right row q-pr-lg">
         <div class="cursor-pointer message-btn message-btn_reply q-px-xs" @click="messageBlock.replyMessage(item)">
           <q-icon name="reply">
