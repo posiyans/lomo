@@ -38,6 +38,21 @@
             </div>
           </td>
         </tr>
+        <tr>
+          <td>
+            <div class="row text-grey-8">
+              <div>Пользователь</div>
+            </div>
+          </td>
+          <td>
+            <div class="row items-center justify-between">
+              <div></div>
+              <div>
+                <ChangeUserOwher :owner="owner" />
+              </div>
+            </div>
+          </td>
+        </tr>
       </table>
     </div>
   </div>
@@ -54,13 +69,15 @@ import OwnerUserFieldValueEdit from 'src/Modules/Owner/components/OwnerUserField
 import FieldValueBlock from './components/FieldValueBlock/index.vue'
 import AddSteadToOwner from 'src/Modules/Owner/components/AddSteadToOwner/index.vue'
 import DeleteOwnerBtn from 'src/Modules/Owner/components/DeleteOwnerBtn/index.vue'
+import ChangeUserOwher from 'src/Modules/Owner/components/ChangeUserOwher/index.vue'
 
 export default defineComponent({
   components: {
     OwnerUserFieldValueEdit,
     FieldValueBlock,
     DeleteOwnerBtn,
-    AddSteadToOwner
+    AddSteadToOwner,
+    ChangeUserOwher
   },
   props: {},
   setup(props, { emit }) {
