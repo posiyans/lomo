@@ -20,9 +20,15 @@
               <UserAvatarByUid :uid="row.uid" />
             </div>
             <div>
-              <div class="text-no-wrap">
-                {{ fullNameFilter(row) }}
+              <div class="row items-center q-col-gutter-xs">
+                <div class="text-no-wrap ">
+                  {{ fullNameFilter(row) }}
+                </div>
+                <div v-if="row.owner" class="text-teal cursor-pointer" @click="toOwner(row.owner.uid)">
+                  <q-icon name="home" />
+                </div>
               </div>
+
               <div v-if="row.last_connect" class="text-small-80">
                 <ShowTime :time="row.last_connect" />
               </div>
@@ -115,12 +121,16 @@ export default defineComponent({
     const handleFilter = () => {
       key.value++
     }
+    const toOwner = (uid) => {
+      router.push('/admin/owner/show-info/' + uid)
+    }
     onMounted(() => {
 
     })
     return {
       key,
       func,
+      toOwner,
       list,
       mobile,
       setList,

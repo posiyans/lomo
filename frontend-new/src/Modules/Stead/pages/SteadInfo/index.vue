@@ -24,9 +24,11 @@
 
 <script>
 /* eslint-disable */
-import { defineComponent, ref } from 'vue'
+import { defineComponent, onMounted, ref } from 'vue'
 import SteadTab from './components/SteadTab/index.vue'
 import { useRoute } from 'vue-router'
+import { getSteadInfo } from 'src/Modules/Stead/api/stead'
+import { usePrimaryStore } from 'stores/parimary-store'
 
 export default defineComponent({
   components: {
@@ -35,8 +37,24 @@ export default defineComponent({
   props: {},
   setup(props, { emit }) {
     const tab = ref('steadinfo')
+    const stead = ref({})
     const route = useRoute()
     const steadId = ref(route.params.id)
+    const primaryStore = usePrimaryStore()
+    const getData = () => {
+      const data = {
+        id: steadId.value,
+        full: 1
+      }
+      getSteadInfo(data)
+        .then(res => {
+          stead.value = res.data.data
+          primaryStore.setPageName('Участок № ' + stead.value.number)
+        })
+    }
+    onMounted(() => {
+      getData()
+    })
     return {
       tab,
       steadId

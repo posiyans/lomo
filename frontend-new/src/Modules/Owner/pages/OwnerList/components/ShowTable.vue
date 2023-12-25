@@ -20,8 +20,13 @@
       </template>
       <template v-slot:body-cell-fio="props">
         <q-td :props="props">
-          <div class="">
-            {{ props.row.fullName }}
+          <div class="row items-center q-gutter-xs">
+            <div class="">
+              {{ props.row.fullName }}
+            </div>
+            <div v-if="props.row.user" class="cursor-pointer" @click="toUser(props.row.user.uid)">
+              <q-icon name="person" class="text-teal" />
+            </div>
           </div>
         </q-td>
       </template>
@@ -128,6 +133,10 @@ export default defineComponent({
     const showInfo = (uid) => {
       $router.push('/admin/owner/show-info/' + uid)
     }
+    const toUser = (uid) => {
+      $router.push('/admin/user/show/' + uid)
+    }
+
     const propFilter = (val) => {
       if (val < 100) {
         return '(' + val + '%)'
@@ -137,6 +146,7 @@ export default defineComponent({
     return {
       filterColumns,
       index,
+      toUser,
       propFilter,
       pushToStead,
       showInfo

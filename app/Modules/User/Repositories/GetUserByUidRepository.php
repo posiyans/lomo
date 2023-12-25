@@ -15,6 +15,10 @@ class GetUserByUidRepository
         $this->uid = $uid;
     }
 
+    /**
+     * @return UserModel|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|object
+     * @throws \Exception
+     */
     public function run()
     {
         if (is_integer($this->uid)) {

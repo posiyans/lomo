@@ -2,6 +2,7 @@
 
 namespace App\Modules\File\AccessClass;
 
+use App\Modules\File\Classes\CheckAccessToFileClass;
 use App\Modules\File\Repositories\GetObjectForFileRepository;
 
 /**
@@ -28,10 +29,13 @@ class CommentModelAccessClass extends FileAccessAbstract
         if ($this->file->user_id == $this->user->id) {
             return true;
         }
-//        if ($this->user->ability('superAdmin', 'appeal-edit', 'appeal-show')) {
-//            return true;
-//        }
-        throw new \Exception('Ошибка доступа');
+
+        if ($this->user->ability('superAdmin', [])) {
+            return true;
+        }
+
+        $class = (new CheckAccessToFileClass())->getAccessClass($model->commentable_type);
+        return (new $class([$this->file, $this->user]))->read();
     }
 
     public function write()

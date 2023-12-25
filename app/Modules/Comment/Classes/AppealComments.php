@@ -17,7 +17,7 @@ class AppealComments extends AbstractComments
     {
         return [
             'label' => 'обращения ' . $this->object->title,
-            'url' => '/appeal/show/' . $this->object->id,
+            'url' => '/admin/appeal/show/' . $this->object->id,
         ];
     }
 

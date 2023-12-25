@@ -107,7 +107,7 @@ export default defineComponent({
     const listQuery = ref({
       page: 1,
       limit: 5,
-      find: 'posiyans'
+      find: ''
     })
     return {
       columns,

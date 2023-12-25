@@ -25,6 +25,7 @@ export default defineComponent({
       required: true
     }
   },
+  emits: ['success'],
   setup(props, { emit }) {
     const loading = ref(false)
     const dialogVisible = ref(false)

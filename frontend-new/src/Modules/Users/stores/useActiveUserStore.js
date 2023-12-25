@@ -42,7 +42,7 @@ export const useActiveUserStore = defineStore('activeUser', {
     },
     getUserInfo() {
       const data = {
-        user_uid: this.userUid
+        uid: this.userUid
       }
       fetchUserInfo(data)
         .then(response => {

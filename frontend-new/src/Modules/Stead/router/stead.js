@@ -27,7 +27,7 @@ export const adminStead =
         hidden: true,
         meta: {
           icon: 'view_module',
-          title: 'Участки',
+          title: 'Участок',
           roles: ['stead-show']
         }
       }

@@ -46,9 +46,11 @@
           </td>
           <td>
             <div class="row items-center justify-between">
-              <div></div>
+              <div class="col-grow cursor-pointer" @click="toUser(owner.user_uid)">
+                <UserNameByUid :uid="owner.user_uid" />
+              </div>
               <div>
-                <ChangeUserOwher :owner="owner" />
+                <ChangeUserOwher :owner="owner" @success="getUserData" />
               </div>
             </div>
           </td>
@@ -70,12 +72,14 @@ import FieldValueBlock from './components/FieldValueBlock/index.vue'
 import AddSteadToOwner from 'src/Modules/Owner/components/AddSteadToOwner/index.vue'
 import DeleteOwnerBtn from 'src/Modules/Owner/components/DeleteOwnerBtn/index.vue'
 import ChangeUserOwher from 'src/Modules/Owner/components/ChangeUserOwher/index.vue'
+import UserNameByUid from 'src/Modules/Users/components/UserNameByUid/index.vue'
 
 export default defineComponent({
   components: {
     OwnerUserFieldValueEdit,
     FieldValueBlock,
     DeleteOwnerBtn,
+    UserNameByUid,
     AddSteadToOwner,
     ChangeUserOwher
   },
@@ -114,11 +118,15 @@ export default defineComponent({
     const toOwnerList = () => {
       router.push('/admin/owner/list')
     }
+    const toUser = (uid) => {
+      router.push('/admin/user/show/' + uid)
+    }
     const toStead = (id) => {
       router.push('/admin/stead/info/' + id)
     }
     return {
       data,
+      toUser,
       ownerUid,
       fullName,
       toOwnerList,

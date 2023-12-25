@@ -6,11 +6,11 @@
       leave-active-class="animated fadeOut"
     >
       <div v-for="item in commentsList.list.value" :key="item.id" class="relative-position">
-        <ItemBlock :item="item">
+        <ItemBlock :item="item" class="q-pb-xs">
           <template v-slot:header>
             <div>
               <router-link :to="item.parentObject.url" class="text-primary">
-                для {{ item.parentObject.type }}
+                для {{ item.parentObject.label }}
               </router-link>
             </div>
           </template>
@@ -64,7 +64,7 @@ export default defineComponent({
     const router = useRouter()
     const route = useRoute()
     const $q = useQuasar()
-    const list = toRefs(props.commentsList.list.value)
+    const list = props.commentsList.list.value
     // const list = props.commentsList.list.value
     const columns = ref(
       [

@@ -4,6 +4,7 @@ namespace App\Modules\Owner\Models;
 
 use App\Models\MyModel;
 use App\Modules\Stead\Models\SteadModel;
+use App\Modules\User\Models\UserModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
@@ -162,6 +163,16 @@ class OwnerUserModel extends MyModel
 //    {
 //        return $this->hasMany(OwnerUserSteadModel::class, 'owner_uid', 'uid');
 //    }
+
+    /**
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function user()
+    {
+        return $this->hasOne(UserModel::class, 'uid', 'user_uid');
+    }
+
 
     public function steads()
     {

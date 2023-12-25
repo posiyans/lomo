@@ -20,6 +20,7 @@ class OwnerUserAndSteadsResource extends JsonResource
         $data['fullName'] = $this->nameForMyRole();
         $data['email'] = '';
         $data['general_phone'] = '';
+        $data['user'] = $this->user_uid ? ['uid' => $this->user_uid] : false;
         if (\Auth::user()->ability('superAdmin', 'owner-show')) {
             $data['email'] = $this->getValue('email', '');
             $data['general_phone'] = $this->getValue('general_phone', '');

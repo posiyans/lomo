@@ -133,6 +133,7 @@ class UserModel extends MyModel implements MustVerifyEmail,
         return $this->hasOne(BanUserModel::class);
     }
 
+
     /**
      * пользователь собствеенник
      *

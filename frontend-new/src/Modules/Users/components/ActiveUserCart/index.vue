@@ -1,10 +1,22 @@
 <template>
   <div class="q-pa-md">
-    <div class="page-title">
-      <UserAvatarImg :uid="activeUserStore.user.uid" style="width: 48px;" />
-      {{ activeUserStore.user.last_name }}
-      {{ activeUserStore.user.name }}
-      {{ activeUserStore.user.middle_name }}
+    <div class="row items-center">
+      <div class="page-title">
+        <UserAvatarImg :uid="activeUserStore.user.uid" style="width: 48px;" />
+        {{ activeUserStore.user.last_name }}
+        {{ activeUserStore.user.name }}
+        {{ activeUserStore.user.middle_name }}
+      </div>
+      <div v-if="activeUserStore.user.owner" class="text-primary cursor-pointer" @click="toOwner(activeUserStore.user.owner.uid)">
+        Собственник
+        <div class="row ">
+          <div v-for="stead in activeUserStore.user.owner.steads" :key="stead.id" class="" @click="toStead(stead.id)">
+            <q-chip outline color="primary" text-color="white">
+              уч. {{ stead.number }} {{ propFilter(stead.proportion) }}
+            </q-chip>
+          </div>
+        </div>
+      </div>
     </div>
     <div>
       <q-tabs
@@ -94,6 +106,18 @@ export default defineComponent({
     onMounted(() => {
 
     })
+    const toOwner = (uid) => {
+      router.push('/admin/owner/show-info/' + uid)
+    }
+    const toStead = (id) => {
+      router.push('/admin/stead/info/' + id)
+    }
+    const propFilter = (val) => {
+      if (val < 100) {
+        return '(' + val + '%)'
+      }
+      return ''
+    }
     const sentToken = () => {
       sendVerifyMailToken(activeUserStore.userId)
         .then(response => {
@@ -112,6 +136,9 @@ export default defineComponent({
     }
     return {
       data,
+      toOwner,
+      propFilter,
+      toStead,
       sentToken,
       activeUserStore
     }

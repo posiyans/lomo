@@ -22,6 +22,20 @@ class AdminUserAllInfoResource extends JsonResource
         foreach ($this->permissions as $permission) {
             $permissions[] = $permission->name;
         }
+        if ($this->owner) {
+            $owner = [
+                'uid' => $this->owner->uid,
+                'steads' => $this->owner->steads->sortBy('stead.number', SORT_NATURAL)->map(function ($item) {
+                    return [
+                        'stead_id' => $item->id,
+                        'number' => $item->number,
+                        'proportion' => $item->pivot->proportion,
+                    ];
+                })->values(),
+            ];
+        } else {
+            $owner = false;
+        }
         return [
             'id' => $this->id,
             'uid' => $this->uid,
@@ -31,10 +45,9 @@ class AdminUserAllInfoResource extends JsonResource
             'email' => $this->email,
             'email_verified_at' => $this->email_verified_at ? true : false,
             'options' => $this->options,
-            'avatar' => $this->avatar,
             'created_at' => $this->created_at,
+            'owner' => $owner,
             'consent_to_email' => $this->consent_to_email,
-            'consent_personal' => $this->consent_personal,
             'last_connect' => $this->last_connect,
             'roles' => ['roles' => $roles, 'permissions' => $permissions],
         ];

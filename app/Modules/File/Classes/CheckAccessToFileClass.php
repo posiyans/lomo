@@ -39,13 +39,21 @@ class CheckAccessToFileClass
         return $this;
     }
 
-    public function read()
+    public function getAccessClass($prentClass)
     {
-        $class = $this->file->commentable_type;
-        if (isset($this->classMap[$class])) {
-            return (new $this->classMap[$class]([$this->file, $this->user]))->read();
+//        $class = $this->file->commentable_type;
+        if (isset($this->classMap[$prentClass])) {
+            return $this->classMap[$prentClass];
         }
         throw new \Exception('Ошибка определения прав на файл');
+    }
+
+
+    public function read()
+    {
+        $className = $this->file->commentable_type;
+        $class = $this->getAccessClass($className);
+        return (new $class([$this->file, $this->user]))->read();
     }
 
 

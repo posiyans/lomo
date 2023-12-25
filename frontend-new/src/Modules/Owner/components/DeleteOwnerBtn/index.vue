@@ -46,6 +46,7 @@ export default defineComponent({
       required: true
     }
   },
+  emits: ['success'],
   setup(props, { emit }) {
     const dialogVisible = ref(false)
     const deleteOwner = () => {

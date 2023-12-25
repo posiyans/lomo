@@ -15,13 +15,15 @@
           <q-linear-progress :value="file.upload.process" class="" track-color="grey" size="2px" />
         </div>
       </div>
-      <FileSize :size="fileSize" class="q-px-sm text-grey-7" />
-      <div class="row items-center q-col-gutter-sm">
-        <div v-if="fileDownloadUrl">
-          <DownloadFileBtn :url-file="fileDownloadUrl" />
-        </div>
-        <div v-if="getUrl" class="cursor-pointer text-secondary" @click="emitUrl(fileDownloadUrl)">
-          Скопировать ссылку
+      <div class="row">
+        <FileSize :size="fileSize" class="q-px-sm text-grey-7" />
+        <div class="row items-center q-col-gutter-sm q-px-sm">
+          <div v-if="fileDownloadUrl">
+            <DownloadFileBtn :url-file="fileDownloadUrl" />
+          </div>
+          <div v-if="getUrl" class="cursor-pointer text-secondary" @click="emitUrl(fileDownloadUrl)">
+            Скопировать ссылку
+          </div>
         </div>
       </div>
     </div>

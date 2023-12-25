@@ -71,3 +71,19 @@ export function deleteOwnerUser(uid) {
     method: 'delete'
   })
 }
+
+export function compareOwnerAndUser(data) {
+  return request({
+    url: '/api/v2/owner/compare-owner-and-user',
+    method: 'post',
+    data
+  })
+}
+
+export function deleteUserFromOwner(data) {
+  return request({
+    url: '/api/v2/owner/delete-user-from-owner',
+    method: 'post',
+    data
+  })
+}

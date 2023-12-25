@@ -54,6 +54,7 @@ export default defineComponent({
       default: false
     }
   },
+  emits: ['success'],
   setup(props, { emit }) {
     const edit = ref(false)
     const saveData = () => {

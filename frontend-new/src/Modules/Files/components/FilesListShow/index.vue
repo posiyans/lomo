@@ -1,23 +1,27 @@
 <template>
   <div>
     <div class="row q-col-gutter-md">
-      <div v-for="(file, index) in filtersList" :key="file.uid" class="row" :class="{ 'items-center': !showPreview }">
-        <div v-if="!showPreview" class="vertical-bottom">
-          {{ ++index }}.
-        </div>
-        <FileItem :file="file" :get-url="getUrl" :show-preview="showPreview" />
-        <div v-if="edit">
-          <div class="text-secondary q-px-md row items-center">
-            <div
-              class="text-red q-px-md"
-              @click="deleteFile(file)">
-              <DeleteIcon />
+      <div v-for="(file, index) in filtersList" :key="file.uid">
+        <q-card>
+          <q-card-section class="row q-pa-xs" :class="{ 'items-center': !showPreview }">
+            <div v-if="!showPreview" class="vertical-bottom">
+              {{ ++index }}.
             </div>
-          </div>
-          <div v-if="file.upload.error" class="text-red">
-            Ошибка {{ file.upload.errorsMessage }}
-          </div>
-        </div>
+            <FileItem :file="file" :get-url="getUrl" :show-preview="showPreview" />
+            <div v-if="edit">
+              <div class="text-secondary q-px-md row items-center">
+                <div
+                  class="text-red q-px-md"
+                  @click="deleteFile(file)">
+                  <DeleteIcon />
+                </div>
+              </div>
+              <div v-if="file.upload.error" class="text-red">
+                Ошибка {{ file.upload.errorsMessage }}
+              </div>
+            </div>
+          </q-card-section>
+        </q-card>
       </div>
     </div>
   </div>

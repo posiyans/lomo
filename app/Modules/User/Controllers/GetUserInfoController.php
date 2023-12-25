@@ -24,7 +24,8 @@ class GetUserInfoController extends Controller
     public function __invoke(Request $request)
     {
         try {
-            $user = (new GetUserByUidRepository($request->user_uid))->run();
+            $user_uid = $request->user_uid ?? $request->uid;
+            $user = (new GetUserByUidRepository($user_uid))->run();
             return new AdminUserAllInfoResource($user);
 //            return ['user' => $user];
         } catch (\Exception $e) {
