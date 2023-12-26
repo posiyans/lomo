@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-md">
+  <div class="q-pa-xs">
     <div class="row items-center q-col-gutter-md justify-between">
       <div class="vertical-middle full-height ">
         <q-btn :icon="icon" size="28px" flat :class="`text-${color}`" />

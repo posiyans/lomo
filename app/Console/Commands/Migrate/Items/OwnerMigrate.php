@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands\Migrate\Items;
 
-use App\Models\Owner\OwnerUserModel;
+use App\Modules\Owner\Models\OwnerUserModel;
 use App\Modules\Owner\Models\OwnerUserSteadModel;
 use App\Modules\Owner\Models\OwnerUserValueModel as OwnerUserValueModelOriginal;
 use Illuminate\Support\Facades\DB;

@@ -106,8 +106,10 @@ class LaratrustSeeder extends Seeder
         'user-edit' => 'Редактирование пользователей',
         'user-show' => 'Просмотр пользователей',
 
+        'rate-edit' => 'Редактирование тарифов',
+        'rate-show' => 'Просмотр тарифов',
+
         'settings-gardening' => 'Редактирование данных садоводства',
-        'settings-rate' => 'Редактирование тарифов',
         'settings-camera' => 'Настройка камер',
 
         'bookkeeping-show' => 'Доступ для бухгалтерию',

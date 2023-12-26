@@ -8,6 +8,7 @@ use App\Console\Commands\Migrate\Items\FileMigrate;
 use App\Console\Commands\Migrate\Items\GardeningMigrate;
 use App\Console\Commands\Migrate\Items\GlobalOptionsMigrate;
 use App\Console\Commands\Migrate\Items\OwnerMigrate;
+use App\Console\Commands\Migrate\Items\RateMigrate;
 use App\Console\Commands\Migrate\Items\SiteMenuMigrate;
 use App\Console\Commands\Migrate\Items\SocialMigrate;
 use App\Console\Commands\Migrate\Items\SteadMigrate;
@@ -65,6 +66,7 @@ class MasterMigrate extends Command
         SocialMigrate::run();
         OwnerMigrate::run();
         Cache::flush();
+        RateMigrate::run();
 //        $users = DB::connection('mysql_old')->table('users')->get();
 //        dump($users);
     }

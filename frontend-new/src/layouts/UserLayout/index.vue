@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="lHh Lpr lFf" class="user-main-layout ">
+  <q-layout view="lHh Lpr lFf" class="user-main-layout">
     <HeaderBlock />
     <MenuBlock />
     <q-page-container class="">

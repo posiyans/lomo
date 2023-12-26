@@ -4,7 +4,7 @@ import { adminOwner } from 'src/Modules/Owner/router/ownerRouter.js'
 import { adminAppeal } from 'src/Modules/Appeal/router/appealRouter.js'
 import { adminVoting } from 'src/Modules/Voting/router/votingRouter.js'
 import { adminUser } from 'src/Modules/Users/router/userRouter.js'
-import { adminUserRole } from 'src/Modules/UserRole/router/userRoleRouter.js'
+// import { adminUserRole } from 'src/Modules/UserRole/router/userRoleRouter.js'
 import { adminSettingsRouter } from 'src/router/SettingsRouter.js'
 import { adminBookkeeping } from 'src/Modules/Bookkeeping/router/bookkeepingRouter'
 import { adminUserBan } from 'src/Modules/BanUsers/router/userBanRouter'
@@ -30,7 +30,7 @@ const adminRoutes =
     adminAppeal,
     adminVoting,
     adminUser,
-    adminUserRole,
+    // adminUserRole,
     adminBookkeeping,
     adminSettingsRouter
   ]

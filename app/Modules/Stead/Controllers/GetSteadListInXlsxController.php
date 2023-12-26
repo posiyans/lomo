@@ -2,8 +2,8 @@
 
 namespace App\Modules\Stead\Controllers;
 
-use App\Http\Controllers\Admin\Stead\Resources\AdminSteadListXlsxFileResource;
 use App\Http\Controllers\Controller;
+use App\Modules\Stead\Repositories\AdminSteadListXlsxFileResource;
 use App\Modules\Stead\Repositories\SteadRepository;
 use App\Modules\Stead\Validators\GetSteadListValidator;
 

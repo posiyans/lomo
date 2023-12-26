@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateReceiptTypesTable extends Migration
 {
@@ -13,7 +13,7 @@ class CreateReceiptTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('receipt_types', function (Blueprint $table) {
+        Schema::create('rate_group_models', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable();
             $table->boolean('auto_invoice')->default(false)->comment('автоматическое выставление счета');
@@ -31,6 +31,6 @@ class CreateReceiptTypesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('receipt_types');
+        Schema::dropIfExists('rate_group_models');
     }
 }

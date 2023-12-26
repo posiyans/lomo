@@ -3,6 +3,7 @@
 namespace App\Modules\Receipt\Models;
 
 use App\Models\MyModel;
+use App\Modules\Rate\Models\RateModel;
 
 /**
  * Модель для показаний

@@ -10,10 +10,9 @@
       <template v-for="(item, index) in list" :key="item.id">
         <q-item>
           <q-item-section avatar top>
-            <q-icon name="subject" color="black" size="34px" />
+            <q-icon name="subject" color="black" size="28px" />
           </q-item-section>
-
-          <q-item-section top class="col-2 gt-sm">
+          <q-item-section top class="col-2">
             <q-item-label class="q-mt-sm cursor-pointer">
               <router-link :to="`/article/list/${item.id}`">
                 {{ item.name }}
@@ -31,9 +30,8 @@
               {{ `/article/list/${item.id}` }}
             </q-item-label>
           </q-item-section>
-
           <q-item-section top side>
-            <div class="text-grey-8 q-gutter-xs">
+            <div class="text-grey-8">
               <CategorySettingDialogBtn :item="item" @success="getData" />
             </div>
           </q-item-section>

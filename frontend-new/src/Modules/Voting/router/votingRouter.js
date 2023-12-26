@@ -33,6 +33,7 @@ export const voting =
   }
 export const adminVoting = {
   path: 'voting',
+  hidden: true,
   meta: {
     title: 'Голосование',
     roles: ['voting-show', 'voting-edit']

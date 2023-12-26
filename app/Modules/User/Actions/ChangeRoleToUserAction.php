@@ -29,7 +29,6 @@ class ChangeRoleToUserAction
     {
         $role = Role::where('name', $role_name)->first();
         $this->user->attachRole($role);
-//        $this->user->save();
         return true;
     }
 

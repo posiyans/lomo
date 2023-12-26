@@ -28,7 +28,7 @@
       </template>
       <template v-slot:body-cell-owner="props">
         <q-td :props="props">
-          <div v-for="owner in props.row.owners" :key="owner.uid">
+          <div v-for="owner in props.row.owners" :key="owner.uid" class="cursor-pointer" @click="toOwner(owner.uid)">
             <OwnerUserNameAndProportionBlock :owner="owner" class="justify-center" />
           </div>
         </q-td>
@@ -37,7 +37,6 @@
         <q-td :props="props">
           <div class="q-gutter-sm">
             <q-btn label="Инфо" color="primary" :to="`/admin/stead/info/${props.row.id}`" />
-            <q-btn label="Квит." color="primary" />
           </div>
         </q-td>
       </template>
@@ -47,8 +46,9 @@
 
 <script>
 /* eslint-disable */
-import { defineComponent, ref } from 'vue'
+import { defineComponent } from 'vue'
 import OwnerUserNameAndProportionBlock from 'src/Modules/Owner/components/OwnerUserNameAndProportionBlock/index.vue'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   components: {
@@ -61,7 +61,7 @@ export default defineComponent({
     }
   },
   setup(props, { emit }) {
-    const data = ref(false)
+    const router = useRouter()
     const columns = [
       {
         name: 'number',
@@ -78,19 +78,22 @@ export default defineComponent({
         align: 'center',
         label: 'Собственник',
       },
-      {
-        name: 'balans',
-        align: 'center',
-        label: 'Баланс',
-      },
+      // {
+      //   name: 'balans',
+      //   align: 'center',
+      //   label: 'Баланс',
+      // },
       {
         name: 'actions',
         align: 'center',
         label: '',
       }
     ]
+    const toOwner = (uid) => {
+      router.push('/admin/owner/show-info/' + uid)
+    }
     return {
-      data,
+      toOwner,
       columns
     }
   }

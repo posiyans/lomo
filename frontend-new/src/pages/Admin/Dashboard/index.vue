@@ -148,7 +148,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .card-panel {
-  min-height: 108px;
+  min-height: 85px;
   cursor: pointer;
   overflow: hidden;
   line-height: 18px;

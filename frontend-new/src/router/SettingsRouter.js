@@ -37,7 +37,7 @@ export const adminSettingsRouter = {
     },
     {
       path: 'rate',
-      component: () => import('src/Modules/Rates/pages/SettingsRates/index.vue'),
+      component: () => import('src/Modules/Rate/pages/SettingsRates/index.vue'),
       meta: {
         icon: 'star_rate',
         title: 'Тарифы',

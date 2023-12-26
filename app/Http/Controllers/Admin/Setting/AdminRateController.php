@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin\Setting;
 
 use App\Http\Controllers\Controller;
+use App\Modules\Rate\Models\RateModel;
 use App\Modules\Receipt\Models\MeteringDevice;
-use App\Modules\Receipt\Models\RateModel;
 use App\Modules\Receipt\Models\ReceiptTypeModels;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

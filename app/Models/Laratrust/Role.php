@@ -24,10 +24,6 @@ use Laratrust\Models\LaratrustRole;
  * @method static \Illuminate\Database\Eloquent\Builder|Role whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Role whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Role whereUpdatedAt($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Laratrust\Permission> $permissions
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Laratrust\Permission> $permissions
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Laratrust\Permission> $permissions
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Laratrust\Permission> $permissions
  * @mixin \Eloquent
  */
 class Role extends LaratrustRole

@@ -48,7 +48,7 @@
 <script>
 import { getReceiptForStead } from 'src/Modules/Receipt/api/receipt.js'
 import SelectStead from 'src/Modules/Stead/components/SelectStead/index.vue'
-import RateList from 'src/Modules/Rates/components/ShowRateList/index.vue'
+import RateList from 'src/Modules/Rate/components/ShowRateList/index.vue'
 import SteadInfo from 'src/Modules/Stead/components/ShowSteadInfo/index.vue'
 import { exportFile } from 'quasar'
 

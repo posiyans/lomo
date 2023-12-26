@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { authUser } from 'src/Modules/Auth/router/auth'
 import { article } from 'src/Modules/Article/router/article'
-import rates from 'src/Modules/Rates/router/rates'
+import rates from 'src/Modules/Rate/router/rates'
 import receipt from 'src/Modules/Receipt/router/receipt.js'
 import yandex from 'src/Modules/Yandex/router/yandex.js'
 import camera from 'src/Modules/Camera/router/camera.js'

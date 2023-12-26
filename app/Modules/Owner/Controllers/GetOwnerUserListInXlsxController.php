@@ -2,9 +2,9 @@
 
 namespace App\Modules\Owner\Controllers;
 
-use App\Http\Controllers\Admin\Owner\Resource\OwnreListXlsxFileResource;
 use App\Http\Controllers\Controller;
 use App\Modules\Owner\Repositories\OwnerUserRepository;
+use App\Modules\Owner\Resources\OwnreListXlsxFileResource;
 use Illuminate\Http\Request;
 
 /**
@@ -26,6 +26,7 @@ class GetOwnerUserListInXlsxController extends Controller
             ->run();
 
         $tmpfname = tempnam("/tmp", "owners");
+//        return $tmpfname;
         (new OwnreListXlsxFileResource())->render($owners, $tmpfname);
         return response()->download($tmpfname, 'Список' . date("Y-m-d_H-i-s") . '.xlsx');
     }

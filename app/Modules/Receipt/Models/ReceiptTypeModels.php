@@ -11,6 +11,7 @@ use App\Models\MyModel;
 
 /**
  * App\Modules\Receipt\Models\ReceiptTypeModels
+ * @deprecated
  *
  * @property int $id
  * @property string|null $name

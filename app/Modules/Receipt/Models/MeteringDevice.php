@@ -5,6 +5,7 @@ namespace App\Modules\Receipt\Models;
 
 use App\Models\MyModel;
 use App\Models\Stead;
+use App\Modules\Rate\Models\RateModel;
 
 /*
  * Модель приборов учета
@@ -12,6 +13,8 @@ use App\Models\Stead;
 
 /**
  * App\Modules\Receipt\Models\MeteringDevice
+ *
+ * @deprecated
  *
  * @property int $id
  * @property string $type_id
