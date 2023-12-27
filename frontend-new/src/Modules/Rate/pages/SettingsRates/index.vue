@@ -14,7 +14,8 @@
     </q-tabs>
     <q-separator color="teal" />
     <q-tab-panels v-model="tab" animated>
-      <q-tab-panel v-for="item in rateGroup" :key="item.id" :name="'rate_' + item.id">
+      <q-tab-panel v-for="item in rateGroup" :key="item.id" :name="'rate_' + item.id" class="q-pa-xs">
+        <EditRateGroup :rate-group="item" />
         <RateGroupEditInfo :rate-group="item" />
       </q-tab-panel>
     </q-tab-panels>
@@ -27,11 +28,13 @@ import { defineComponent, onMounted, ref } from 'vue'
 import AddRateGroupBtn from 'src/Modules/Rate/components/AddRateGroupBtn/index.vue'
 import { getRateGroupList } from 'src/Modules/Rate/api/rateAdminApi'
 import RateGroupEditInfo from 'src/Modules/Rate/components/RateGroupEditInfo/index.vue'
+import EditRateGroup from 'src/Modules/Rate/components/EditRateGroup/index.vue'
 
 export default defineComponent({
   components: {
     AddRateGroupBtn,
-    RateGroupEditInfo
+    RateGroupEditInfo,
+    EditRateGroup
   },
   props: {},
   setup(props, { emit }) {

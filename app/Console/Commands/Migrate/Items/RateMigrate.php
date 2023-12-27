@@ -38,21 +38,27 @@ class RateMigrate
             $newItem->save();
         }
         $rates = DB::connection('mysql_old')->table('metering_devices')->get();
-        $fields = ['id', 'type_id', 'name', 'enable', 'description', 'created_at', 'updated_at'];
+        $fields = ['id', 'name', 'enable', 'description', 'created_at', 'updated_at'];
         foreach ($rates as $item) {
             $newItem = new RateTypeModel();
             foreach ($fields as $value) {
                 $newItem->$value = $item->$value;
             }
+            $newItem->rate_group_id = $item->type_id;
             $newItem->save();
         }
         $rates = DB::connection('mysql_old')->table('rates')->get();
-        $fields = ['id', 'device_id', 'ratio_a', 'ratio_b', 'description', 'created_at', 'updated_at'];
+        $fields = ['id', 'created_at', 'updated_at'];
         foreach ($rates as $item) {
             $newItem = new RateModel();
             foreach ($fields as $value) {
                 $newItem->$value = $item->$value;
             }
+            $newItem->ratio_a = str_replace(',', '.', $item->ratio_a);
+            $newItem->ratio_b = str_replace(',', '.', $item->ratio_b);
+            $newItem->description = str_replace(',', '.', $item->description);
+
+            $newItem->rate_type_id = $item->device_id;
             $newItem->date_start = $item->created_at;
             $newItem->save();
         }

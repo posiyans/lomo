@@ -17,7 +17,7 @@ class RateGroupModel extends MyModel
     //depends рассчитывать
     // 0 - фиксированная сумма (наверно)
     // 1 - расчитывается от плащади участка
-    // 2 - расчитывается  по показания
+    // 2 - расчитывается по показания
 
     protected $casts = [
         'options' => 'array',
@@ -34,7 +34,7 @@ class RateGroupModel extends MyModel
 
     public function rateType()
     {
-        return $this->hasMany(RateTypeModel::class, 'type_id', 'id');
+        return $this->hasMany(RateTypeModel::class, 'rate_group_id', 'id');
     }
 
 

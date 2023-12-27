@@ -15,7 +15,7 @@ class CreateRateTypesTable extends Migration
     {
         Schema::create('rate_type_models', function (Blueprint $table) {
             $table->id();
-            $table->string('type_id');
+            $table->string('rate_group_id');
             $table->string('name')->nullable();
             $table->string('description')->nullable();
             $table->integer('enable')->nullable();

@@ -15,9 +15,9 @@ class CreateRatesTable extends Migration
     {
         Schema::create('rate_models', function (Blueprint $table) {
             $table->id();
-            $table->integer('device_id');
-            $table->string('ratio_a');
-            $table->string('ratio_b');
+            $table->integer('rate_type_id')->comment('тип тарифа');
+            $table->float('ratio_a');
+            $table->float('ratio_b');
             $table->string('description')->nullable();
             $table->date('date_start')->nullable()->comment('дата начала действия тарифа');
             $table->timestamps();

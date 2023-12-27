@@ -1,9 +1,6 @@
 <template>
   <div>
-    {{ rateGroup.name }}
-    <div>
-      <ShowRateForGroup :rate-group-id="rateGroup.id" edit />
-    </div>
+    <ShowRateForGroup :rate-group-id="rateGroup.id" edit @success="success" />
   </div>
 </template>
 
@@ -24,8 +21,12 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const data = ref(false)
+    const success = () => {
+      emit('success')
+    }
     return {
-      data
+      data,
+      success
     }
   }
 })

@@ -149,6 +149,12 @@ export default defineComponent({
           axisPointer: {
             snap: true
           },
+          max: function (value) {
+            if (value.max > 1) {
+              return value.max
+            }
+            return 1
+          },
           type: 'value',
           name: 'Осадки, мм',
           boundaryGap: false,

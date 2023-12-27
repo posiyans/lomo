@@ -3,7 +3,7 @@ export const adminSettingsRouter = {
   meta: {
     icon: 'settings',
     title: 'Настройки',
-    roles: ['site-menu-edit', 'settings-gardening', 'settings-rate', 'settings-camera']
+    roles: ['site-menu-edit', 'settings-gardening', 'rate-edit', 'rate-show', 'settings-camera']
   },
   redirect: { name: 'EditSiteMenu' },
   children: [
@@ -41,7 +41,7 @@ export const adminSettingsRouter = {
       meta: {
         icon: 'star_rate',
         title: 'Тарифы',
-        roles: ['settings-rate']
+        roles: ['rate-edit', 'rate-show']
       }
     },
     {
