@@ -14,6 +14,15 @@ class RateGroupRepository
         $this->query = RateGroupModel::query();
     }
 
+    /**
+     * @param $id
+     * @return RateGroupModel
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     */
+    public function byId($id)
+    {
+        return $this->query->where('id', $id)->firstOrFail();
+    }
 
     public function run()
     {

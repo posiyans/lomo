@@ -9,16 +9,16 @@
       <q-card style="min-width: 450px;">
         <q-card-section class="q-pb-none">
           <div class="row items-center">
-            <div class="text-h6">Редактировать тариф {{ rate.name }}</div>
+            <div class="text-h6">{{ dialogLabel }}</div>
             <q-space />
             <q-btn icon="close" flat round dense v-close-popup />
           </div>
           <div class="text-grey text-small-80">
-            {{ rate.description }}
+            {{ dataRateType.description }}
           </div>
         </q-card-section>
         <q-card-section>
-          <EditRateForm v-if="dialogVisible" :rate="rate" @cancel="cancel" @success="success" />
+          <EditRateForm v-if="dialogVisible" :rate="dataRateType" :add="add" @cancel="cancel" @success="success" />
         </q-card-section>
       </q-card>
     </q-dialog>
@@ -27,7 +27,7 @@
 
 <script>
 /* eslint-disable */
-import { defineComponent, ref } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
 import EditRateForm from './EditForm.vue'
 
 export default defineComponent({
@@ -37,13 +37,36 @@ export default defineComponent({
   props: {
     rate: {
       type: Object,
-      required: true
-    }
+      default: () => {
+      }
+    },
+    add: {
+      type: Boolean,
+      default: false
+    },
+    rateGroupId: {
+      type: [String, Number],
+      default: null
+    },
   },
   setup(props, { emit }) {
-    const data = ref(false)
+    const dataRateType = ref({})
     const dialogVisible = ref(false)
+    const dialogLabel = computed(() => {
+      if (props.add) {
+        return 'Добавить тип тарифа'
+      } else {
+        return 'Редактировать тариф ' + props.rate.name
+      }
+    })
     const showDialog = () => {
+      if (props.add) {
+        dataRateType.value.rate_group_id = props.rateGroupId
+        dataRateType.value.name = ''
+        dataRateType.value.description = ''
+      } else {
+        dataRateType.value = props.rate
+      }
       dialogVisible.value = true
     }
     const cancel = () => {
@@ -54,7 +77,8 @@ export default defineComponent({
       emit('success')
     }
     return {
-      data,
+      dataRateType,
+      dialogLabel,
       success,
       cancel,
       showDialog,

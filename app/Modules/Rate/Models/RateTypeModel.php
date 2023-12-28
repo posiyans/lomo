@@ -5,7 +5,7 @@ namespace App\Modules\Rate\Models;
 use App\Models\MyModel;
 
 /**
- * Модель едииницы тарифа (день, ночь, мусор, взнос)
+ * Модель едииницы тарифа (день, ночь, мусор, Целевой взнос, Членский взнос)
  **/
 class RateTypeModel extends MyModel
 {

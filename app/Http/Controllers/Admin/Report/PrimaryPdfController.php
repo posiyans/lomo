@@ -102,7 +102,7 @@ class PrimaryPdfController extends Controller
      */
     public function Output($name)
     {
-        $this->pdf->Output($name, 'I');
+        $this->pdf->Output($name, 'F');
     }
 
 
@@ -130,13 +130,14 @@ class PrimaryPdfController extends Controller
             $this->pdf->Text(75, $s + 51, $stead);
 
             $this->pdf->SetFont('freesans', '', 9);
-            if (strlen($purpose) > 100) {
-                $t1 = substr($purpose, 0, strrpos(substr($purpose, 0, 110), ' '));
+            $max_len = 70;
+            if (mb_strlen($purpose) > $max_len) {
+                $t1 = mb_substr($purpose, 0, mb_strrpos(mb_substr($purpose, 0, $max_len), ',') + 1);
             } else {
                 $t1 = $purpose;
             }
             $this->pdf->Text(88, $s + 63, $t1);
-            $this->pdf->Text(55, $s + 68, mb_substr($purpose, strlen($t1)));
+            $this->pdf->Text(55, $s + 68, mb_substr($purpose, mb_strlen($t1)));
             if ($cash) {
                 $this->pdf->Text(82, $s + 74, floor($cash));
                 $this->pdf->Text(103.5, $s + 74, $kop);

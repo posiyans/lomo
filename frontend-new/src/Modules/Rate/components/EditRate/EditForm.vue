@@ -1,13 +1,10 @@
 <template>
   <div class="q-gutter-sm">
-    <div v-if="rate.depends === 1">
-      <q-input v-model="newRate.rate.ratio_a" label="Тариф на 1 сотку" outlined @update:model-value="chandeRate" />
+    <div>
+      <InputNumber v-model="newRate.rate.ratio_a" :label="rate.depends === 1 ? 'Тариф на 1 сотку' : rateLabel" outlined @update:model-value="chandeRate" />
     </div>
     <div v-if="rate.depends === 1">
-      <q-input v-model="newRate.rate.ratio_b" label="Тариф на 1 участок" outlined @update:model-value="chandeRate" />
-    </div>
-    <div v-if="rate.depends === 2">
-      <q-input v-model="newRate.rate.ratio_a" :label="rateLabel" outlined @update:model-value="chandeRate" />
+      <InputNumber v-model="newRate.rate.ratio_b" label="Тариф на 1 участок" outlined @update:model-value="chandeRate" />
     </div>
     <div>
       <q-input v-model="newRate.rate.description" :readonly="readonly" label="Описание оплаты" outlined>
@@ -32,10 +29,12 @@ import { computed, defineComponent, onMounted, ref } from 'vue'
 import InputDate from 'components/Input/InputDate/index.vue'
 import { updateRate } from 'src/Modules/Rate/api/rateAdminApi'
 import { errorMessage } from 'src/utils/message'
+import InputNumber from './InputNumberFloat.vue'
 
 export default defineComponent({
   components: {
-    InputDate
+    InputDate,
+    InputNumber
   },
   props: {
     rate: {
@@ -78,8 +77,8 @@ export default defineComponent({
     const saveData = () => {
       const data = {
         description: newRate.value.rate.description,
-        ratio_a: newRate.value.rate.ratio_a,
-        ratio_b: newRate.value.rate.ratio_b,
+        ratio_a: newRate.value.rate.ratio_a || 0,
+        ratio_b: newRate.value.rate.ratio_b || 0,
         date_start: newRate.value.rate.date_start
       }
       console.log(data)

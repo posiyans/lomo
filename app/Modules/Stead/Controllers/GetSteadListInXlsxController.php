@@ -19,7 +19,7 @@ class GetSteadListInXlsxController extends Controller
     public function __invoke(GetSteadListValidator $request)
     {
         $steads = (new SteadRepository())->findByNumber($request->find)->run();
-        $tmpfname = tempnam("/tmp", "owners");
+        $tmpfname = tempnam(sys_get_temp_dir(), "owners");
         (new AdminSteadListXlsxFileResource())->render($steads, $tmpfname);
         return response()->download($tmpfname, 'Список_участков_' . date("Y-m-d_H-i-s") . '.xlsx');
     }

@@ -12,6 +12,7 @@ Route::group(['prefix' => 'v2/rate'], function () {
     Route::group(['prefix' => 'type'], function () {
         Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::post('update/{typeModel}', \App\Modules\Rate\Controllers\UpdateRateTypeController::class);
+            Route::post('create', \App\Modules\Rate\Controllers\CreateRateTypeController::class);
         });
     });
 
@@ -21,6 +22,7 @@ Route::group(['prefix' => 'v2/rate'], function () {
 
         Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::post('create', \App\Modules\Rate\Controllers\CreateRateGroupController::class);
+            Route::post('update/{groupModel}', \App\Modules\Rate\Controllers\UpdateRateGroupController::class);
         });
     });
 });

@@ -1,6 +1,5 @@
 <template>
   <div class="q-gutter-sm">
-
     <div>
       <q-input v-model="newRate.name" label="Название" outlined />
     </div>
@@ -9,7 +8,7 @@
     </div>
     <div class="text-right">
       <q-btn color="negative" flat label="Отмена" @click="cancel" />
-      <q-btn color="primary" label="Сохранить" @click="saveData" />
+      <q-btn color="primary" :label="add ? 'Добавить' : 'Сохранить'" @click="saveData" />
     </div>
   </div>
 </template>
@@ -18,7 +17,7 @@
 /* eslint-disable */
 import { defineComponent, onMounted, ref } from 'vue'
 import InputDate from 'components/Input/InputDate/index.vue'
-import { updateRateType } from 'src/Modules/Rate/api/rateAdminApi'
+import { createRateType, updateRateType } from 'src/Modules/Rate/api/rateAdminApi'
 import { errorMessage } from 'src/utils/message'
 
 export default defineComponent({
@@ -29,6 +28,10 @@ export default defineComponent({
     rate: {
       type: Object,
       required: true
+    },
+    add: {
+      type: Boolean,
+      default: false
     }
   },
   setup(props, { emit }) {
@@ -44,13 +47,24 @@ export default defineComponent({
         description: newRate.value.description,
         name: newRate.value.name
       }
-      updateRateType(props.rate.id, data)
-        .then(res => {
-          emit('success')
-        })
-        .catch(er => {
-          errorMessage(er.response.data.errors)
-        })
+      if (props.add) {
+        data.rate_group_id = props.rate.rate_group_id
+        createRateType(data)
+          .then(res => {
+            emit('success')
+          })
+          .catch(er => {
+            errorMessage(er.response.data.errors)
+          })
+      } else {
+        updateRateType(props.rate.id, data)
+          .then(res => {
+            emit('success')
+          })
+          .catch(er => {
+            errorMessage(er.response.data.errors)
+          })
+      }
     }
 
     onMounted(() => {

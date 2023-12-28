@@ -1,89 +1,107 @@
 <template>
   <div>
-    <div v-if="loading" class="text-center q-pa-lg`">
-      <q-spinner-facebook
-        color="primary"
-        size="5em"
-      />
+    <div v-if="edit" class="row absolute-top-right" style="top: 10px; right: 10px;z-index: 1000;">
+      <AddRateGroupBtn>
+        <q-btn icon="add" flat dense color="teal" />
+      </AddRateGroupBtn>
+      <EditRateGroup v-if="activeTabData" :rate-group="activeTabData" @success="getData">
+        <q-btn icon="more_horiz" flat dense color="teal" />
+      </EditRateGroup>
     </div>
-    <div v-else>
-
-      <q-tabs
-        v-model="tab"
-        class="bg-grey-1"
-        active-color="primary"
-        active-bg-color="teal-1"
-        indicator-color="primary"
-        align="left"
-        narrow-indicator
-        @update:model-value="setTab"
-      >
-        <q-tab no-caps v-for="item in typeList" :key="item.id" :label="item.name" :name="item.id" />
-      </q-tabs>
-
-      <q-separator />
-
-      <q-tab-panels v-model="tab" animated>
-        <q-tab-panel v-for="item in typeList" :key="item.id" :name="item.id">
-          <TabPane :type="item.id" />
-        </q-tab-panel>
-      </q-tab-panels>
-
-    </div>
+    <q-tabs
+      v-model="tab"
+      align="left"
+      class="text-teal"
+      v-loading="loading"
+      :breakpoint="0"
+      @update:model-value="setTab"
+    >
+      <q-tab v-for="item in rateGroup" :key="item.id" :name="item.id" :label="item.name" />
+    </q-tabs>
+    <q-separator color="teal" />
+    <q-tab-panels
+      v-model="tab"
+      v-loading="loading"
+      animated
+    >
+      <q-tab-panel v-for="item in rateGroup" :key="item.id" :name="item.id" class="q-pa-xs">
+        <ShowRateForGroup :rate-group-id="item.id" :edit="edit" />
+      </q-tab-panel>
+    </q-tab-panels>
   </div>
 </template>
 
 <script>
-import TabPane from 'src/Modules/Rate/components/RateTable/index.vue'
-import { getReceiptTypeList } from 'src/Modules/Rate/api/rates.js'
+/* eslint-disable */
+import { computed, defineComponent, onMounted, ref } from 'vue'
+import AddRateGroupBtn from 'src/Modules/Rate/components/AddRateGroupBtn/index.vue'
+import { getRateGroupList } from 'src/Modules/Rate/api/rateAdminApi'
+import EditRateGroup from 'src/Modules/Rate/components/EditRateGroup/index.vue'
+import ShowRateForGroup from 'src/Modules/Rate/components/ShowRateForGroup/index.vue'
 
-export default {
+
+export default defineComponent({
   components: {
-    TabPane
+    AddRateGroupBtn,
+    EditRateGroup,
+    ShowRateForGroup
   },
   props: {
+    modelValue: {
+      type: [String, Number],
+      default: 0
+    },
+    edit: {
+      type: Boolean,
+      default: false
+    },
     tabDefault: {
       type: [String, Number],
-      default: ''
+      default: 0
     }
   },
-  data() {
-    return {
-      tab: 1,
-      loading: true,
-      typeList: []
-    }
-  },
-  created() {
-    this.getReceipList()
-  },
-  mounted() {
-    if (this.tabDefault) {
-      this.tab = +this.tabDefault
-    }
-  },
-  methods: {
-    setTab(val) {
-      this.$emit('setTab', val)
-      // this.$router.push(`${this.$route.path}?tab=${val}`)
-    },
-    getReceipList() {
-      getReceiptTypeList()
-        .then(response => {
-          if (response.data.status) {
-            this.typeList = response.data.data
-          } else if (response.data.data) {
-            this.$message.error(response.data.data)
+  setup(props, { emit }) {
+    const tab = ref('')
+    const loading = ref(true)
+    const rateGroup = ref([])
+    const activeTabData = computed(() => {
+      return rateGroup.value.find(item => item.id === tab.value)
+    })
+    const getData = () => {
+      loading.value = true
+      getRateGroupList()
+        .then(res => {
+          rateGroup.value = res.data.data
+          if (props.modelValue > 0) {
+            tab.value = props.modelValue
+          } else if (!tab.value && rateGroup.value.length > 0) {
+            tab.value = rateGroup.value[0].id
           }
+          console.log(tab.value)
+          setTab(tab.value || '')
         })
         .finally(() => {
-          this.loading = false
+          loading.value = false
         })
     }
+    const setTab = (val) => {
+      emit('update:model-value', val)
+    }
+    onMounted(() => {
+      getData()
+    })
+    return {
+      tab,
+      setTab,
+      getData,
+      loading,
+      activeTabData,
+      rateGroup
+    }
   }
-}
+})
 </script>
 
-<style scoped>
+<style scoped lang='scss'>
 
 </style>

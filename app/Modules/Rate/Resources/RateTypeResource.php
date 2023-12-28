@@ -15,7 +15,7 @@ class RateTypeResource extends JsonResource
     public function toArray($request)
     {
         $data = parent::toArray($request);
-        $data['rate'] = $this->currentRate;
+        $data['rate'] = $this->currentRate ?? ['ratio_a' => '', 'ratio_b' => '', 'date_start' => ''];
         $data['depends'] = $this->rateGroup->depends;
         $data['unit_name'] = $this->rateGroup->options['unit_name'] ?? '';
         return $data;

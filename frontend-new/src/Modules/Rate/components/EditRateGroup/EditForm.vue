@@ -46,10 +46,7 @@
       />
       <q-btn icon="add" rounded color="secondary" dense @click="addTag" />
     </div>
-    <div>
-      <q-input v-model="newRate.description" label="Назначение платежа" outlined />
-    </div>
-    <div class="text-right">
+    <div class="text-right q-pt-md">
       <q-btn color="negative" flat label="Отмена" @click="cancel" />
       <q-btn color="primary" label="Сохранить" @click="saveData" />
     </div>
@@ -64,6 +61,7 @@ import { errorMessage } from 'src/utils/message'
 import RateDependsSelect from 'src/Modules/Rate/components/RateDependsSelect/index.vue'
 import PaymentPeriodSelect from 'src/Modules/Rate/components/PaymentPeriodSelect/index.vue'
 import { useQuasar } from 'quasar'
+import { updateRateGroup } from 'src/Modules/Rate/api/rateAdminApi'
 
 export default defineComponent({
   components: {
@@ -87,8 +85,11 @@ export default defineComponent({
     }
     const saveData = () => {
       const data = {
-        description: newRate.value.description,
         name: newRate.value.name,
+        depends: newRate.value.depends,
+        unit_name: newRate.value.options.unit_name,
+        auto_invoice: newRate.value.auto_invoice,
+        payment_period: newRate.value.payment_period,
         tag: newRate.value.options.tag || []
       }
       updateRateGroup(props.rateGroup.id, data)

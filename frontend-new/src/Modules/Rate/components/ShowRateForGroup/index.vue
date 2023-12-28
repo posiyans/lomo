@@ -17,16 +17,26 @@
           </div>
         </q-td>
       </template>
+      <template v-slot:header-cell-name="props">
+        <q-th :props="props">
+          <div class="row items-center">
+            <div>
+              {{ headerCellNameLabel }}
+            </div>
+            <EditRateType v-if="edit" add :rate-group-id="rateGroupId">
+              <q-btn icon="add" flat dense color="teal" />
+            </EditRateType>
+          </div>
+        </q-th>
+      </template>
       <template v-slot:body-cell-name="props">
         <q-td :props="props">
-          <div class="row items-center q-col-gutter-sm">
+          <div>
             <div>
               {{ props.row.name }}
             </div>
-            <div>
-              <q-chip outline square dense>
-                {{ props.row.description }}
-              </q-chip>
+            <div class="text-grey text-small-80 ellipsis">
+              {{ props.row.description }}
             </div>
           </div>
           <div v-if="edit" class="absolute-top-right">
@@ -40,18 +50,18 @@
         <q-td :props="props">
           <div>
             <div>
-              {{ props.row.rate.description }}
+              {{ props.row.rate?.description }}
             </div>
-            <div class="text-grey text-small-80 row items-center q-col-gutter-xs justify-center">
+            <div v-if="props.row.rate.date_start" class="text-grey text-small-80 row items-center q-col-gutter-xs justify-center">
               <div>
                 от
               </div>
               <ShowTime :time="props.row.rate.date_start" format="DD-MM-YYYY" />
             </div>
-            <EditRate v-if="edit" :rate="props.row" @success="getData" class="absolute-top-right">
-              <q-btn icon="more_horiz" flat dense color="grey" />
-            </EditRate>
           </div>
+          <EditRate v-if="edit" :rate="props.row" @success="getData" class="absolute-top-right">
+            <q-btn icon="more_horiz" flat dense color="grey" />
+          </EditRate>
         </q-td>
       </template>
       <template v-slot:body-cell-status="props">
@@ -67,11 +77,12 @@
 
 <script>
 /* eslint-disable */
-import { defineComponent, onMounted, ref } from 'vue'
+import { computed, defineComponent, onMounted, ref } from 'vue'
 import { getRateListForGroup } from 'src/Modules/Rate/api/rateAdminApi'
 import ShowTime from 'components/ShowTime/index.vue'
 import EditRate from 'src/Modules/Rate/components/EditRate/index.vue'
 import EditRateType from 'src/Modules/Rate/components/EditRateType/index.vue'
+
 
 export default defineComponent({
   components: {
@@ -91,6 +102,13 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const rate = ref([])
+    const headerCellNameLabel = computed(() => {
+      if (props.edit) {
+        return 'Назначение платежа'
+      } else {
+        return 'Название'
+      }
+    })
     const columns = [
       {
         name: 'number',
@@ -120,6 +138,7 @@ export default defineComponent({
     return {
       rate,
       getData,
+      headerCellNameLabel,
       columns
     }
   }

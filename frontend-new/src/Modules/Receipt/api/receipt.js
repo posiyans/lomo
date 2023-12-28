@@ -2,7 +2,7 @@ import request from 'src/utils/request'
 
 export function getReceiptForStead(params) {
   return request({
-    url: '/api/v1/receipt/get-receipt-contributions-for-stead',
+    url: '/api/v2/receipt/get-receipt-for-stead',
     method: 'get',
     responseType: 'blob',
     params

@@ -1,12 +1,14 @@
 <template>
   <div>
-    <div>
-      <q-btn color="primary" label="Добавить" @click="showDialog" />
+    <div @click="showDialog">
+      <slot>
+        <q-btn color="primary" label="Добавить" />
+      </slot>
     </div>
     <q-dialog v-model="dialogVisible">
       <q-card style="min-width: 450px;">
         <q-card-section class="row items-center q-pb-none">
-          <div class="text-h6">Добавить тип платежа</div>
+          <div class="text-h6">Добавить группу платежей</div>
           <q-space />
           <q-btn icon="close" flat round dense v-close-popup />
         </q-card-section>
@@ -16,7 +18,7 @@
             v-model="newRate.title"
             outlined
             hint="Введите название типа платежа (электроэнергия, взносы)"
-            label="Тип платежа"
+            label="Название группы платежей"
           />
         </q-card-section>
         <q-card-section>

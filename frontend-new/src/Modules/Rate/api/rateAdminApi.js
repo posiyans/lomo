@@ -16,9 +16,25 @@ export function createRate(data) {
   })
 }
 
+export function createRateType(data) {
+  return request({
+    url: '/api/v2/rate/type/create',
+    method: 'post',
+    data
+  })
+}
+
 export function updateRateType(id, data) {
   return request({
     url: '/api/v2/rate/type/update/' + id,
+    method: 'post',
+    data
+  })
+}
+
+export function updateRateGroup(id, data) {
+  return request({
+    url: '/api/v2/rate/group/update/' + id,
     method: 'post',
     data
   })

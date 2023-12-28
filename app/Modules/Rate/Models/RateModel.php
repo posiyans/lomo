@@ -40,4 +40,9 @@ class RateModel extends MyModel
     // Модель тарифов
 
     protected $fillable = ['ratio_a', 'ratio_b', 'description', 'date_start'];
+    protected $casts = [
+        'ratio_a' => 'decimal:2',
+        'ratio_b' => 'decimal:2',
+        'date_start' => 'date:Y-m-d',
+    ];
 }

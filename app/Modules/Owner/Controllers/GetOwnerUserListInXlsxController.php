@@ -25,7 +25,7 @@ class GetOwnerUserListInXlsxController extends Controller
             ->find($find)
             ->run();
 
-        $tmpfname = tempnam("/tmp", "owners");
+        $tmpfname = tempnam(sys_get_temp_dir(), "owners");
 //        return $tmpfname;
         (new OwnreListXlsxFileResource())->render($owners, $tmpfname);
         return response()->download($tmpfname, 'Список' . date("Y-m-d_H-i-s") . '.xlsx');

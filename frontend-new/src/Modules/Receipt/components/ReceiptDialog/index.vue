@@ -89,7 +89,8 @@ export default defineComponent({
 
     download() {
       const data = {
-        stead: this.stead_id
+        stead_id: this.stead_id,
+        rate_group_id: 2 // todo костыль!!!
       }
       getReceiptForStead(data)
         .then(response => {
