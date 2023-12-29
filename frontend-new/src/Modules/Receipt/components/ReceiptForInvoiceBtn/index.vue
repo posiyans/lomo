@@ -9,7 +9,6 @@
 <script>
 /* eslint-disable */
 import { defineComponent, ref } from 'vue'
-import request from 'src/utils/request'
 import { exportFile, useQuasar } from 'quasar'
 import { getReceiptForInvoice } from 'src/Modules/Receipt/api/receipt'
 
@@ -27,7 +26,6 @@ export default defineComponent({
     const $q = useQuasar()
     const download = () => {
       loading.value = true
-      request.defaults.timeout = ''
       const data = {
         invoice_id: props.invoiceId
       }
