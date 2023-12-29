@@ -59,7 +59,8 @@ class GetReceiptForSteadController extends Controller
         $pdf->render();
         $tmpfname = tempnam(sys_get_temp_dir(), 'ticket_stead_' . $stead->id);
         $pdf->Output($tmpfname);
-        return response()->download($tmpfname, 'Квитанция_участок_' . $stead->number . '.pdf');
+        $stead_number = str_replace('/', '-', $stead->number);
+        return response()->download($tmpfname, 'Квитанция_участок_' . $stead_number . '.pdf');
     }
 
 }

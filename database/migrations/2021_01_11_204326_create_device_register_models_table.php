@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateDeviceRegisterModelsTable extends Migration
 {
@@ -13,9 +13,9 @@ class CreateDeviceRegisterModelsTable extends Migration
      */
     public function up()
     {
-        Schema::create('device_register', function (Blueprint $table) {
+        Schema::create('device_register_models', function (Blueprint $table) {
             $table->id();
-            $table->integer('type_id')->comment('тип прибора');
+            $table->integer('rate_type_id')->comment('к какому типу тирафа относится прибор');
             $table->integer('stead_id')->comment('к какому участку отностся');
             $table->integer('initial_data')->comment('начальные показания');
             $table->string('serial_number')->comment('серийный номер прибора');
@@ -35,6 +35,6 @@ class CreateDeviceRegisterModelsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('device_register');
+        Schema::dropIfExists('device_register_models');
     }
 }

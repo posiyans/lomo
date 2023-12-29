@@ -46,7 +46,7 @@ use App\Models\Receipt\id;
  */
 class DeviceRegisterModel extends MyModel
 {
-    protected $table = 'device_register';
+//    protected $table = 'device_register';
     protected $casts = [
         'active' => 'boolean'
     ];

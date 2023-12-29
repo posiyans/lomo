@@ -157,7 +157,7 @@
 <script>
 import { fetchBillingBalansSteadInfo, fetchBillingBalansSteadInfoFronXlsx } from 'src/Modules/Bookkeeping/api/billingAminApi.js'
 import PaymentInfo from 'src/Modules/Bookkeeping/components/Playment/BillingPaymetnInfo/index.vue'
-import InvoiceInfo from 'src/Modules/Bookkeeping/components/Invoice/BillingInvoiceInfo/index.vue'
+import InvoiceInfo from 'src/Modules/Bookkeeping/components/Invoice/InvoiceInfo/index.vue'
 import { fetchReceiptTypeList } from 'src/Modules/Receipt/api/receiptAdminApi.js'
 import AddInvoiceForStead from 'src/Modules/Bookkeeping/components/Invoice/AddInvoiceForStead/index.vue'
 import AddPaymentForStead from 'src/Modules/Bookkeeping/components/Playment/AddPaymentForStead/index.vue'

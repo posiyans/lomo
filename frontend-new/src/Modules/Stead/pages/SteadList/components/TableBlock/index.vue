@@ -45,7 +45,6 @@
 </template>
 
 <script>
-/* eslint-disable */
 import { defineComponent } from 'vue'
 import OwnerUserNameAndProportionBlock from 'src/Modules/Owner/components/OwnerUserNameAndProportionBlock/index.vue'
 import { useRouter } from 'vue-router'
@@ -66,17 +65,17 @@ export default defineComponent({
       {
         name: 'number',
         align: 'center',
-        label: '№',
+        label: '№'
       },
       {
         name: 'size',
         align: 'center',
-        label: 'Размер, кв.м',
+        label: 'Размер, кв.м'
       },
       {
         name: 'owner',
         align: 'center',
-        label: 'Собственник',
+        label: 'Собственник'
       },
       // {
       //   name: 'balans',
@@ -86,7 +85,7 @@ export default defineComponent({
       {
         name: 'actions',
         align: 'center',
-        label: '',
+        label: ''
       }
     ]
     const toOwner = (uid) => {

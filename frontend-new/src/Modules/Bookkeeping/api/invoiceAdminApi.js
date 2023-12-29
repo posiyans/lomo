@@ -1,5 +1,20 @@
 import request from 'src/utils/request'
 
+export function getInvoiceList(params) {
+  return request({
+    url: '/api/v2/billing/invoice/get-list',
+    method: 'get',
+    params
+  })
+}
+
+export function deleteInvoice(id) {
+  return request({
+    url: '/api/v2/billing/invoice/delete/' + id,
+    method: 'delete'
+  })
+}
+
 export function fetchInvoiceInfo(id) {
   return request({
     url: '/api/v1/admin/billing/invoice/' + id,
@@ -61,12 +76,3 @@ export function changeStatusForInvoice(data) {
     data
   })
 }
-
-// export function updatePaymentInfo(id, data) {
-//   return request({
-//     url: '/api/v1/admin/billing/payment/' + id,
-//     method: 'put',
-//     data
-//   })
-// }
-//

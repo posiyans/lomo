@@ -9,6 +9,7 @@ use function App\Models\Billing\mb_strtolower;
 
 /**
  * App\Modules\Billing\Models\BillingBankReestr
+ * @deprecated
  *
  * @property int $id
  * @property array $data

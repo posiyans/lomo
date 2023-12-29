@@ -2,16 +2,10 @@
 
 namespace App\Modules\Billing\Models;
 
-use App\Models\Billing\сумма;
-use App\Models\Billing\счет;
-use App\Models\Billing\тип;
-use App\Models\Billing\участок;
 use App\Models\MyModel;
 use App\Models\Stead;
-use App\Modules\Receipt\Models\InstrumentReadingModel;
-use App\Modules\Receipt\Models\ReceiptTypeModels;
+use App\Modules\Stead\Models\SteadModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Cache;
 
 /**
  * App\Modules\Billing\Models\BillingInvoice
@@ -67,24 +61,37 @@ class BillingInvoiceModel extends MyModel
 
     use SoftDeletes;
 
-    protected $fillable = ['title', 'type', 'description'];
+    protected $fillable = ['title', 'description'];
 
     protected $casts = [
         'paid' => 'boolean',
-        'price' => 'float',
+        'price' => 'decimal:2',
+        'description' => 'array',
     ];
 
 
     /**
-     * сохранить и очисть зависящие кеши
+     * участок счета
      *
-     * @return bool|void
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function save(array $options = [])
+    public function stead()
     {
-        Cache::tags('invoice')->flush();
-        return parent::save($options);
+        return $this->hasOne(SteadModel::class, 'id', 'stead_id');
     }
+
+
+//
+//    /**
+//     * сохранить и очисть зависящие кеши
+//     *
+//     * @return bool|void
+//     */
+//    public function save(array $options = [])
+//    {
+//        Cache::tags('invoice')->flush();
+//        return parent::save($options);
+//    }
 
 
     public function payments()
@@ -92,129 +99,120 @@ class BillingInvoiceModel extends MyModel
         return $this->hasMany(BillingPaymentModel::class, 'invoice_id', 'id');
     }
 
-
-    /**
-     * получить участок счета
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function metersData()
-    {
-        return $this->hasMany(InstrumentReadingModel::class, 'invoice_id', 'id');
-    }
-
-    public function ReceiptType()
-    {
-        return $this->hasOne(ReceiptTypeModels::class, 'id', 'type');
-    }
-
-    /**
-     * получить участок счета
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function stead()
-    {
-        return $this->hasOne(Stead::class, 'id', 'stead_id');
-    }
-
-    public function steadNumber()
-    {
-        if ($this->stead) {
-            return $this->stead->number;
-        }
-        return '';
-    }
-
-//    /**
-//     *создать счет на электроэнергию на основании показаний из платежки
-//     */
-//    public static function createInvoiceCommunalForPayment()
-//    {
 //
+//    /**
+//     * получить участок счета
+//     *
+//     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+//     */
+//    public function metersData()
+//    {
+//        return $this->hasMany(InstrumentReadingModel::class, 'invoice_id', 'id');
 //    }
-
-    /**
-     * создать счет на взносы для участка
-     *
-     * @param $stead_id
-     * @param $title
-     * @param $reestr_id
-     * @param $price
-     * @return BillingInvoice|false
-     */
-    public static function createInvoiceСontributions($stead_id, $title, $reestr_id, $price)
-    {
-        $invoce = new BillingInvoice();
-        $invoce->stead_id = $stead_id;
-        $invoce->title = $title;
-        $invoce->reestr_id = $reestr_id;
-        $invoce->price = $price;
-        $invoce->type = 2;
-        if ($invoce->save()) {
-            return $invoce;
-        }
-        return false;
-    }
-
-    /**
-     * добавить счет
-     *
-     * @param $stead_id участок
-     * @param $price сумма
-     * @param $title счет на что
-     * @param $receipt_type тип счета
-     * @return BillingInvoice|false
-     */
-    public static function createInvoiceForStead($stead_id, $price, $title, $receipt_type, $date = false, $reestr = null, $description = '')
-    {
-        $invoice = new self();
-        $invoice->title = $title;
-        $invoice->stead_id = $stead_id;
-        $invoice->type = $receipt_type;
-        $invoice->price = (float)$price;
-        $invoice->reestr_id = $reestr;
-        $invoice->description = $description;
-        if ($date) {
-            $invoice->created_at = $date;
-        }
-        if ($invoice->logAndSave('Добавлен счет', $stead_id)) {
-            return $invoice;
-        }
-        return false;
-    }
-
-
-    /**
-     * получить счета для участка
-     *
-     * @param $stead_id
-     * @param false $type
-     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
-     */
-    public static function getInvocesForStead($stead_id, $type = false)
-    {
-        $query = BillingInvoice::query()->where('stead_id', $stead_id);
-        if ($type) {
-            $query->where('type', $type);
-        }
-        $invoices = $query->orderBy('created_at')->get();
-        return $invoices;
-    }
-
-
-    /**
-     * установить что платеж от этого счета
-     *
-     * @param BillingPaymentModel $payment
-     * @return bool
-     */
-    public function match(BillingPaymentModel $payment)
-    {
-        $payment->invoice_id = $this->id;
-        if ($payment->logAndSave('Сопоставили платеж')) {
-            return true;
-        }
-        return false;
-    }
+//
+//    public function ReceiptType()
+//    {
+//        return $this->hasOne(ReceiptTypeModels::class, 'id', 'type');
+//    }
+//
+//
+//    public function steadNumber()
+//    {
+//        if ($this->stead) {
+//            return $this->stead->number;
+//        }
+//        return '';
+//    }
+//
+////    /**
+////     *создать счет на электроэнергию на основании показаний из платежки
+////     */
+////    public static function createInvoiceCommunalForPayment()
+////    {
+////
+////    }
+//
+//    /**
+//     * создать счет на взносы для участка
+//     *
+//     * @param $stead_id
+//     * @param $title
+//     * @param $reestr_id
+//     * @param $price
+//     * @return BillingInvoice|false
+//     */
+//    public static function createInvoiceСontributions($stead_id, $title, $reestr_id, $price)
+//    {
+//        $invoce = new BillingInvoice();
+//        $invoce->stead_id = $stead_id;
+//        $invoce->title = $title;
+//        $invoce->reestr_id = $reestr_id;
+//        $invoce->price = $price;
+//        $invoce->type = 2;
+//        if ($invoce->save()) {
+//            return $invoce;
+//        }
+//        return false;
+//    }
+//
+//    /**
+//     * добавить счет
+//     *
+//     * @param $stead_id участок
+//     * @param $price сумма
+//     * @param $title счет на что
+//     * @param $receipt_type тип счета
+//     * @return BillingInvoice|false
+//     */
+//    public static function createInvoiceForStead($stead_id, $price, $title, $receipt_type, $date = false, $reestr = null, $description = '')
+//    {
+//        $invoice = new self();
+//        $invoice->title = $title;
+//        $invoice->stead_id = $stead_id;
+//        $invoice->type = $receipt_type;
+//        $invoice->price = (float)$price;
+//        $invoice->reestr_id = $reestr;
+//        $invoice->description = $description;
+//        if ($date) {
+//            $invoice->created_at = $date;
+//        }
+//        if ($invoice->logAndSave('Добавлен счет', $stead_id)) {
+//            return $invoice;
+//        }
+//        return false;
+//    }
+//
+//
+//    /**
+//     * получить счета для участка
+//     *
+//     * @param $stead_id
+//     * @param false $type
+//     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+//     */
+//    public static function getInvocesForStead($stead_id, $type = false)
+//    {
+//        $query = BillingInvoice::query()->where('stead_id', $stead_id);
+//        if ($type) {
+//            $query->where('type', $type);
+//        }
+//        $invoices = $query->orderBy('created_at')->get();
+//        return $invoices;
+//    }
+//
+//
+//    /**
+//     * установить что платеж от этого счета
+//     *
+//     * @param BillingPaymentModel $payment
+//     * @return bool
+//     */
+//    public function match(BillingPaymentModel $payment)
+//    {
+//        $payment->invoice_id = $this->id;
+//        if ($payment->logAndSave('Сопоставили платеж')) {
+//            return true;
+//        }
+//        return false;
+//    }
 }

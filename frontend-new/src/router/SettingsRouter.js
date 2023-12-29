@@ -36,15 +36,6 @@ export const adminSettingsRouter = {
       }
     },
     {
-      path: 'rate',
-      component: () => import('src/Modules/Rate/pages/SettingsRates/index.vue'),
-      meta: {
-        icon: 'star_rate',
-        title: 'Тарифы',
-        roles: ['rate-edit', 'rate-show']
-      }
-    },
-    {
       path: 'camera',
       component: () => import('src/Modules/Camera/page/CameraSetting/index.vue'),
       meta: {

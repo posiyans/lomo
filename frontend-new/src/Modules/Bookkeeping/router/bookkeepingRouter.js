@@ -42,7 +42,7 @@ export const adminBookkeeping =
         meta: {
           icon: 'receipt',
           title: 'Платежи',
-          roles: ['payment-show']
+          roles: ['payment-show', 'payment-edit']
         }
       },
       {
@@ -56,14 +56,22 @@ export const adminBookkeeping =
         }
       },
       {
-        path: 'contributions',
-        component: () => import('src/Modules/Receipt/pages/AdminReceiptList/index.vue'),
+        path: 'invoice',
+        component: () => import('src/Modules/Bookkeeping/pages/Invoice/AdminInvoiceList/index.vue'),
         meta: {
           icon: 'receipt',
-          title: 'Квитанции',
-          roles: ['bookkeeping-show']
+          title: 'Счета',
+          roles: ['invoice-show', 'invoice-edit']
+        }
+      },
+      {
+        path: 'rate',
+        component: () => import('src/Modules/Rate/pages/SettingsRates/index.vue'),
+        meta: {
+          icon: 'star_rate',
+          title: 'Тарифы',
+          roles: ['rate-edit', 'rate-show']
         }
       }
-
     ]
   }

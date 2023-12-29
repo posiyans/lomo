@@ -52,6 +52,11 @@ class InstrumentReadingModel extends MyModel
         'device_id'
     ];
 
+    protected $casts = [
+        'value' => 'decimal:2',
+    ];
+
+
     public function deviceRegister()
     {
         return $this->hasOne(DeviceRegisterModel::class, 'id', 'device_id');

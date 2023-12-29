@@ -113,8 +113,8 @@ class LaratrustSeeder extends Seeder
         'settings-camera' => 'Настройка камер',
 
         'bookkeeping-show' => 'Доступ для бухгалтерию',
-        'profit-show' => 'Просмотр начислений',
-        'profit-edit' => 'Редактирование начислений',
+        'invoice-show' => 'Просмотр счетов',
+        'invoice-edit' => 'Редактирование счетов',
         'payment-show' => 'Просмотр платежей',
         'payment-edit' => 'Редактирование платежей',
 
