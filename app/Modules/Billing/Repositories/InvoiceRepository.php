@@ -23,9 +23,38 @@ class InvoiceRepository
         return $this->query->where('id', $id)->firstOrFail();
     }
 
+    public function forStead($stead_id = false)
+    {
+        if ($stead_id) {
+            $this->query->where('stead_id', $stead_id);
+        }
+        return $this;
+    }
+
+    public function forRateGroup($group_id = false)
+    {
+        if ($group_id) {
+            $this->query->where('rate_group_id', $group_id);
+        }
+        return $this;
+    }
+
+    public function isPaid($isPaid = 1)
+    {
+        if ($isPaid === '1') {
+            $this->query->where('is_paid', true);
+        } elseif ($isPaid == '0') {
+            $this->query->where('is_paid', false);
+        }
+        return $this;
+    }
+
+
     public function paginate($limit)
     {
-        return $this->query->paginate($limit);
+        return $this->query
+            ->orderBy('id', 'DESC')
+            ->paginate($limit);
     }
 
 

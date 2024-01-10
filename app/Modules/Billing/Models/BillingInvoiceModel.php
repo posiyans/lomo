@@ -64,7 +64,7 @@ class BillingInvoiceModel extends MyModel
     protected $fillable = ['title', 'description'];
 
     protected $casts = [
-        'paid' => 'boolean',
+        'is_paid' => 'boolean',
         'price' => 'decimal:2',
         'description' => 'array',
     ];

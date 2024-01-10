@@ -142,7 +142,7 @@
 </template>
 
 <script>
-import { fetchPaymentInfo, updatePaymentInfo } from 'src/Modules/Bookkeeping/api/paymentAdminApi.js'
+import { fetchPaymentInfo, updatePaymentInfo } from 'src/Modules/Bookkeeping/api/paymentApi.js'
 import ChangeMetersData from 'src/Modules/Bookkeeping/components/ChangeMetersData/index.vue'
 import { fetchReceiptTypeList } from 'src/Modules/Receipt/api/receiptAdminApi.js'
 import UserSteadFind from 'src/Modules/Stead/components/UserSteadFind/index.vue'

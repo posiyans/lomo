@@ -37,7 +37,7 @@
 
 <script>
 import { fetchReceiptTypeList } from 'src/Modules/Receipt/api/receiptAdminApi.js'
-import { addPaymentForStead } from 'src/Modules/Bookkeeping/api/paymentAdminApi.js'
+import { addPaymentForStead } from 'src/Modules/Bookkeeping/api/paymentApi.js'
 
 export default {
   props: {

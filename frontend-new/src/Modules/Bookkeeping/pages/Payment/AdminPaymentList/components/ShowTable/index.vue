@@ -16,31 +16,44 @@
           {{ props.row.id }}
         </q-td>
       </template>
+      <template v-slot:body-cell-date="props">
+        <q-td :props="props" auto-width>
+          <ShowTime :time="props.row.payment_date" format="DD-MM-YYYY" />
+        </q-td>
+      </template>
       <template v-slot:body-cell-stead="props">
         <q-td :props="props" auto-width>
-          {{ props.row.stead.number }}
+          <router-link v-if="props.row.stead" :to="`/admin/stead/info/${props.row.stead.id}`">
+            <q-chip outline square color="primary" text-color="white">
+              {{ props.row.stead.number }}
+            </q-chip>
+          </router-link>
         </q-td>
       </template>
       <template v-slot:body-cell-title="props">
         <q-td :props="props">
-          {{ props.row.title }}
+          {{ props.row.raw_data[4] }}
+        </q-td>
+      </template>
+      <template v-slot:body-cell-group="props">
+        <q-td :props="props">
+          {{ props.row.rate?.name }}
         </q-td>
       </template>
       <template v-slot:body-cell-price="props">
-        <q-td :props="props">
+        <q-td :props="props" auto-width>
           <div>
-            {{ props.row.price }} руб
+            <ShowPrice :price="props.row.price" hide-icon />
           </div>
-          <div v-if="props.row.is_paid" class="text-teal text-small-85">
-            Оплачен
+          <div v-if="props.row.error" class="text-red text-small-85">
+            Ошибка
           </div>
         </q-td>
       </template>
       <template v-slot:body-cell-actions="props">
         <q-td :props="props">
           <div class="row justify-center">
-            <InvoiceInfoBtn :invoice="props.row" edit @success="reload" />
-            <ReceiptForInvoiceBtn :invoice-id="props.row.id" />
+            <PaymentInfo :payment="props.row" />
           </div>
         </q-td>
       </template>
@@ -51,13 +64,15 @@
 
 <script>
 import { defineComponent } from 'vue'
-import InvoiceInfoBtn from 'src/Modules/Bookkeeping/components/Invoice/InvoiceInfo/Btn.vue'
-import ReceiptForInvoiceBtn from 'src/Modules/Receipt/components/ReceiptForInvoiceBtn/index.vue'
+import ShowTime from 'components/ShowTime/index.vue'
+import ShowPrice from 'components/ShowPrice/index.vue'
+import PaymentInfo from './PaymentInfo.vue'
 
 export default defineComponent({
   components: {
-    InvoiceInfoBtn,
-    ReceiptForInvoiceBtn
+    PaymentInfo,
+    ShowTime,
+    ShowPrice
   },
   props: {
     list: {
@@ -73,19 +88,30 @@ export default defineComponent({
         label: '№'
       },
       {
+        name: 'date',
+        align: 'center',
+        label: 'Дата'
+      },
+      {
+        name: 'price',
+        align: 'center',
+        label: 'Сумма, руб'
+      },
+
+      {
+        name: 'title',
+        align: 'left',
+        label: 'Назначение'
+      },
+      {
         name: 'stead',
         align: 'center',
         label: 'Участок'
       },
       {
-        name: 'title',
+        name: 'group',
         align: 'center',
-        label: 'Назначение'
-      },
-      {
-        name: 'price',
-        align: 'center',
-        label: 'Сумма'
+        label: 'Группа'
       },
       {
         name: 'actions',

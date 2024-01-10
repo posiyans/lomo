@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Cache;
 
 /**
  * Модель участков
- *
+ * @deprecated
  * @property int $id
  * @property int $gardening_id
  * @property string $number
@@ -62,26 +62,6 @@ use Illuminate\Support\Facades\Cache;
  * @method static \Illuminate\Database\Eloquent\Builder|Stead whereSurname($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Stead whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Stead whereUserId($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, BillingInvoice> $Invoices
- * @property-read \Illuminate\Database\Eloquent\Collection<int, OwnerUserSteadModel> $Owners
- * @property-read \Illuminate\Database\Eloquent\Collection<int, BillingPaymentModel> $Payment
- * @property-read \Illuminate\Database\Eloquent\Collection<int, InstrumentReadingModel> $indications
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\Billing\Models\BillingInvoice> $Invoices
- * @property-read \Illuminate\Database\Eloquent\Collection<int, OwnerUserSteadModel> $Owners
- * @property-read \Illuminate\Database\Eloquent\Collection<int, BillingPaymentModel> $Payment
- * @property-read \Illuminate\Database\Eloquent\Collection<int, InstrumentReadingModel> $indications
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, BillingInvoice> $Invoices
- * @property-read \Illuminate\Database\Eloquent\Collection<int, OwnerUserSteadModel> $Owners
- * @property-read \Illuminate\Database\Eloquent\Collection<int, BillingPaymentModel> $Payment
- * @property-read \Illuminate\Database\Eloquent\Collection<int, InstrumentReadingModel> $indications
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, BillingInvoice> $Invoices
- * @property-read \Illuminate\Database\Eloquent\Collection<int, OwnerUserSteadModel> $Owners
- * @property-read \Illuminate\Database\Eloquent\Collection<int, BillingPaymentModel> $Payment
- * @property-read \Illuminate\Database\Eloquent\Collection<int, InstrumentReadingModel> $indications
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
  * @mixin \Eloquent
  */
 class Stead extends SteadModel

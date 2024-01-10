@@ -6,7 +6,7 @@ export const adminBookkeeping =
       title: 'Бухгалтерия',
       roles: ['bookkeeping-show', 'profit-show', 'payment-show']
     },
-    redirect: { name: 'adminArticleList' },
+    redirect: { name: 'adminUserBalance' },
     children: [
       {
         path: 'billing_reestr',
@@ -19,6 +19,7 @@ export const adminBookkeeping =
       },
       {
         path: 'billing_balance',
+        name: 'adminUserBalance',
         component: () => import('src/Modules/Bookkeeping/pages/BillingBalansList/index.vue'),
         meta: {
           icon: 'receipt',
@@ -38,7 +39,7 @@ export const adminBookkeeping =
       },
       {
         path: 'payment_list',
-        component: () => import('src/Modules/Bookkeeping/pages/BillingPayment/PaymentList/index.vue'),
+        component: () => import('src/Modules/Bookkeeping/pages/Payment/AdminPaymentList/index.vue'),
         meta: {
           icon: 'receipt',
           title: 'Платежи',

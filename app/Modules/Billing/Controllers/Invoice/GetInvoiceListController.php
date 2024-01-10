@@ -18,7 +18,11 @@ class GetInvoiceListController extends Controller
     {
         try {
             $limit = $request->limit;
-            $invoices = (new InvoiceRepository())->paginate($limit);
+            $invoices = (new InvoiceRepository())
+                ->forStead($request->stead_id)
+                ->forRateGroup($request->rate_group_id)
+                ->isPaid($request->is_paid)
+                ->paginate($limit);
             return InvoiceResource::collection($invoices);
         } catch (\Exception $e) {
             return response(['errors' => $e->getMessage()], 450);

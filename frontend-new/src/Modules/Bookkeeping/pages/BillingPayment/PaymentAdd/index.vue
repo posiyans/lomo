@@ -105,7 +105,7 @@ import UserSteadFind from 'src/Modules/Stead/components/UserSteadFind/index.vue'
 import readFile from './js/readFile'
 import { uploadDischarge } from 'src/Modules/Bookkeeping/api/bankAdminApi.js'
 import { fetchReceiptTypeList } from 'src/Modules/Receipt/api/receiptAdminApi.js'
-import { updatePaymentInfo } from 'src/Modules/Bookkeeping/api/paymentAdminApi.js'
+import { updatePaymentInfo } from 'src/Modules/Bookkeeping/api/paymentApi.js'
 
 export default {
   components: {

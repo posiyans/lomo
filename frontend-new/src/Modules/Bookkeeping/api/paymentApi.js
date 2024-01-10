@@ -1,8 +1,8 @@
 import request from 'src/utils/request'
 
-export function fetchPaymentList(params) {
+export function getPaymentList(params) {
   return request({
-    url: '/api/v1/admin/billing/payment',
+    url: '/api/v2/billing/payment/get-list',
     method: 'get',
     params
   })

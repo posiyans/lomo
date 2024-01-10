@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import { fetchPaymentInfo, updatePaymentInfo } from 'src/Modules/Bookkeeping/api/paymentAdminApi.js'
+import { fetchPaymentInfo, updatePaymentInfo } from 'src/Modules/Bookkeeping/api/paymentApi.js'
 import MeterReading from 'src/Modules/Bookkeeping/components/MeterReading/index.vue'
 import UserSteadFind from 'src/Modules/Stead/components/UserSteadFind/index.vue'
 import ShowTime from 'components/ShowTime/index.vue'
