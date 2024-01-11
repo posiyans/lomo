@@ -68,7 +68,11 @@ export default defineComponent({
           readFile(item).then(text => {
             console.log(text)
             text.forEach(i => {
-              paymentData.value.push(i)
+              paymentData.value.push({
+                raw: i,
+                error: false,
+                upload: false,
+              })
             })
           })
           // if (item.size > props.maxSize) {

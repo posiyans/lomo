@@ -25,7 +25,7 @@
               {{ ++j }}
             </span>
             <span v-if="i > 0">
-              {{ line[i - 1] }}
+              {{ line.raw[i - 1] }}
             </span>
           </td>
           <td v-if="edit">
