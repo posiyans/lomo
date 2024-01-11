@@ -8,6 +8,14 @@ export function getPaymentList(params) {
   })
 }
 
+export function updatePayment(id, data) {
+  return request({
+    url: '/api/v2/billing/payment/' + id,
+    method: 'post',
+    data
+  })
+}
+
 export function fetchPaymentInfo(id) {
   return request({
     url: '/api/v1/admin/billing/payment/' + id,

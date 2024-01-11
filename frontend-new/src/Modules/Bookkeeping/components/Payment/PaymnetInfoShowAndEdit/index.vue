@@ -1,6 +1,13 @@
 <template>
   <div>
-    <table class="do-not-carry full-width">
+    <q-markup-table
+      separator="cell"
+      wrap-cells
+      bordered
+      flat
+      class="full-width"
+    >
+      <thead>
       <tr class="bg-black-05">
         <th>Поле</th>
         <th>
@@ -12,6 +19,8 @@
           </div>
         </th>
       </tr>
+      </thead>
+      <tbody>
       <tr>
         <td>id</td>
         <td>{{ payment.id }}</td>
@@ -22,33 +31,33 @@
           <ShowTime :time="payment.payment_date" format="DD-MM-YYYY HH:mm" />
         </td>
       </tr>
-      <tr class="black" :class="{'bg-red-2': steadError}">
+      <tr :class="{'bg-red-1': steadError}">
         <td>Участок</td>
         <td>
           <div v-if="findSteadShow" class="row items-center">
             <SteadSelect
-              :model-value="payment.stead.id"
+              v-model="steadId"
               outlined
               dense
+              clearable
               @selectStead="setStead" />
             <q-space />
-
             <div>
-              <q-btn label="Ok" color="primary" @click="findSteadShow = !findSteadShow" />
+              <q-btn label="Ok" color="primary" @click="changeStead" />
             </div>
           </div>
           <div v-else class="row items-center">
             <div>
               <span v-if="steadError">
                 {{ payment.raw_data[2] }} -->
-                {{ payment.stead.number }}
               </span>
-              <span v-else @click="putStead(payment.stead.id)">
-                {{ payment.stead.number }}
-              </span>
+              <q-chip v-if="payment.stead" outline square color="primary" text-color="white">
+                {{ payment.stead?.number }}
+              </q-chip>
+              <span v-else>?</span>
             </div>
             <q-space />
-            <div class="">
+            <div v-if="edit">
               <q-btn icon="edit" flat color="primary" dense size="sm" @click="findSteadShow = !findSteadShow" />
             </div>
           </div>
@@ -57,13 +66,20 @@
       <tr>
         <td>ФИО</td>
         <td>
-          {{ payment.raw_data[3] }}
+          <div class="row items-center">
+            <div>
+              {{ payment.raw_data[3] }}
+            </div>
+            <q-space />
+            <FindOwnerPopup v-if="edit" class="text-primary" :owner-name="payment.raw_data[3] || ''" />
+          </div>
         </td>
       </tr>
       <tr>
         <td>Сумма</td>
-        <td>{{ payment.price }}</td>
-
+        <td>
+          <ShowPrice :price="payment.price" />
+        </td>
       </tr>
       <tr>
         <td>Назначение</td>
@@ -78,29 +94,36 @@
         </td>
 
       </tr>
-      <tr class="black" :class="{'bg-washed-red': type_error}">
+      <tr :class="{'bg-red-1': typeError}">
         <td>Тип платежа</td>
         <td>
-          <el-dropdown @command="setType">
-              <span class="el-dropdown-link">
-                {{ payment.type_name }}<i class="el-icon-arrow-down el-icon--right" />
-              </span>
-            <el-dropdown-menu>
-              <el-dropdown-item
-                v-for="item in receipType"
-                :key="item.id"
-                :command="item.id"
-              >
-                {{ item.name }}
-              </el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
+          <div v-if="editRateGroup" class="row items-center">
+            <RateGroupSelect
+              v-model="rateGroupId"
+              outlined
+              dense
+              class="filter-item"
+            />
+            <q-space />
+            <div>
+              <q-btn label="Ok" color="primary" @click="changeRateGroup" />
+            </div>
+          </div>
+          <div v-else class="row items-center">
+            <div>
+              {{ payment.rate?.name }}
+            </div>
+            <q-space />
+            <div v-if="edit">
+              <q-btn icon="edit" flat color="primary" dense size="sm" @click="editRateGroup = !editRateGroup" />
+            </div>
+          </div>
         </td>
       </tr>
-      <tr v-if="payment.type_depends">
+      <tr class="bg-red">
         <td>Показания</td>
         <td>
-          <div v-if="payment.depends.length > 0" class="flex">
+          <div v-if="payment.depends?.length > 0" class="flex">
             <div
               v-for="dep in payment.depends"
               :key="dep.id"
@@ -121,56 +144,167 @@
               </div>
             </div>
           </div>
-          <div v-else class="red"> Приборы не найдены</div>
+          <div v-else class="text-teal"> Приборы не найдены!!! (В разработке)</div>
         </td>
       </tr>
       <tr>
         <td>Примечание</td>
         <td>
-          <div class="row items-center">
+          <div v-if="editDescription" class="row items-center">
+            <div>
+              <q-input
+                v-model="description"
+                outlined
+                autogrow
+                dense
+              />
 
-            <div v-html="payment.description" />
+            </div>
             <q-space />
             <div>
-              <q-btn icon="edit" flat color="primary" dense size="sm" @click="findSteadShow = !findSteadShow" />
-              <el-button type="primary" size="mini" plain icon="el-icon-edit" @click="editDescription" />
+              <q-btn label="Ok" color="primary" @click="saveDescription" />
+            </div>
+          </div>
+          <div v-else class="row items-center">
+            <div v-html="descriptionHtml" />
+            <q-space />
+            <div v-if="edit">
+              <q-btn icon="edit" flat color="primary" dense size="sm" @click="editDescription = !editDescription" />
             </div>
           </div>
         </td>
       </tr>
-    </table>
+      </tbody>
+    </q-markup-table>
+    <div v-if="edit && payment.error" class="q-pa-sm">
+      <q-btn label="Подтвердить данные" icon="done" color="secondary" @click="deleteError" />
+    </div>
   </div>
 </template>
 
 <script>
 /* eslint-disable */
-import { computed, defineComponent, ref } from 'vue'
+import { computed, defineComponent, onMounted, ref } from 'vue'
 import ShowTime from 'components/ShowTime/index.vue'
 import SteadSelect from 'src/Modules/Stead/components/SteadSelect/index.vue'
+import FindOwnerPopup from 'src/Modules/Owner/components/FindOwnerPopup/index.vue'
+import ShowPrice from 'components/ShowPrice/index.vue'
+import { updatePayment } from 'src/Modules/Bookkeeping/api/paymentApi'
+import { successMessage } from 'src/utils/message'
+import RateGroupSelect from 'src/Modules/Rate/components/RateGroupSelect/index.vue'
+import { useQuasar } from 'quasar'
 
 export default defineComponent({
   components: {
     ShowTime,
-    SteadSelect
+    SteadSelect,
+    ShowPrice,
+    FindOwnerPopup,
+    RateGroupSelect
   },
   props: {
     payment: {
       type: Object,
       required: true
+    },
+    edit: {
+      type: Boolean,
+      default: false
     }
   },
   setup(props, { emit }) {
+    const $q = useQuasar()
     const findSteadShow = ref(false)
-    const data = ref(false)
+    const editRateGroup = ref(false)
+    const editDescription = ref(false)
+    const steadId = ref('')
+    const rateGroupId = ref('')
+    const description = ref('')
     const steadError = computed(() => {
-      return props.payment.stead.number !== props.payment.raw_data[2]
+      return props.payment.stead?.number !== props.payment?.raw_data[2]
+    })
+    const typeError = computed(() => {
+      return !props.payment.rate
     })
     const setStead = () => {
 
     }
+    const changeStead = () => {
+      const data = {
+        stead_id: steadId.value
+      }
+      saveData(data)
+      findSteadShow.value = false
+    }
+    const saveDescription = () => {
+      const data = {
+        description: description.value
+      }
+      saveData(data)
+      editDescription.value = false
+    }
+
+    const deleteError = () => {
+      $q.dialog({
+        title: 'Подтвердите',
+        message: 'Установить что что все данные в платеже проверены?',
+        cancel: {
+          noCaps: true,
+          flat: true,
+          label: 'Отмена',
+          color: 'negative'
+        },
+        ok: {
+          noCaps: true,
+          outline: true,
+          label: 'Сохранить',
+          color: 'primary'
+        },
+        persistent: true
+      }).onOk(() => {
+        const data = {
+          data_verified: true
+        }
+        saveData(data)
+      })
+    }
+    const descriptionHtml = computed(() => {
+      return description.value.replace(/\n/g, '<br />')
+    })
+    const changeRateGroup = () => {
+      const data = {
+        rate_group_id: rateGroupId.value
+      }
+      saveData(data)
+      editRateGroup.value = false
+    }
+    const saveData = (data) => {
+      updatePayment(props.payment.id, data)
+        .then(res => {
+          successMessage('ok')
+        })
+        .finally(() => {
+          emit('reload')
+        })
+    }
+    onMounted(() => {
+      steadId.value = props.payment.stead_id
+      rateGroupId.value = props.payment.rate_group_id
+      description.value = props.payment.description
+    })
     return {
-      data,
+      changeStead,
+      deleteError,
+      changeRateGroup,
+      saveDescription,
+      editRateGroup,
+      description,
+      editDescription,
+      rateGroupId,
+      steadId,
       setStead,
+      descriptionHtml,
+      typeError,
       steadError,
       findSteadShow
     }

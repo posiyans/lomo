@@ -22,15 +22,12 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const data = ref(false)
-    const opt = computed(() => {
-      if (props.hideIcon) {
-        return {}
-      } else {
-        return { style: 'currency', currency: 'RUB' }
-      }
-    })
     const formatedPrice = computed(() => {
-      return new Intl.NumberFormat('ru-RU', opt.value).format(props.price)
+      if (props.hideIcon) {
+        return new Intl.NumberFormat('ru-RU').format(props.price)
+      } else {
+        return new Intl.NumberFormat('ru-RU').format(props.price) + ' руб.'
+      }
     })
     return {
       data,

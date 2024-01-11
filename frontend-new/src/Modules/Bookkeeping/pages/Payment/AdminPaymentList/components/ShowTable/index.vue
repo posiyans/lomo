@@ -28,6 +28,9 @@
               {{ props.row.stead.number }}
             </q-chip>
           </router-link>
+          <div v-if="props.row.error && props.row.stead?.number !== props.row?.raw_data[2]" class="text-grey">
+            {{ props.row?.raw_data[2] }}
+          </div>
         </q-td>
       </template>
       <template v-slot:body-cell-title="props">
@@ -42,8 +45,8 @@
       </template>
       <template v-slot:body-cell-price="props">
         <q-td :props="props" auto-width>
-          <div>
-            <ShowPrice :price="props.row.price" hide-icon />
+          <div class="text-no-wrap">
+            <ShowPrice :price="props.row.price" />
           </div>
           <div v-if="props.row.error" class="text-red text-small-85">
             Ошибка
@@ -53,7 +56,7 @@
       <template v-slot:body-cell-actions="props">
         <q-td :props="props">
           <div class="row justify-center">
-            <PaymentInfo :payment="props.row" />
+            <PaymentInfo :payment="props.row" @reload="reload" />
           </div>
         </q-td>
       </template>

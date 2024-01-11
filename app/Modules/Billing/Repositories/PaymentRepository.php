@@ -35,10 +35,12 @@ class PaymentRepository
     public function findPayment($find = '')
     {
         if ($find) {
-            $this->query->where('price', 'like', "%$find%");
-            $this->query->orWhere('raw_data', 'like', "%$find%");
-            $steads = SteadModel::query()->where('number', 'like', "%$find%")->get(['id']);
-            $this->query->orWhereIn('stead_id', $steads);
+            $this->query->where(function ($query) use ($find) {
+                $query->where('price', 'like', "%$find%");
+                $query->orWhere('raw_data', 'like', "%$find%");
+                $steads = SteadModel::query()->where('number', 'like', "%$find%")->get(['id']);
+                $query->orWhereIn('stead_id', $steads);
+            });
         }
         return $this;
     }

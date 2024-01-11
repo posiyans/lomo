@@ -47,12 +47,13 @@ export const adminBookkeeping =
         }
       },
       {
-        path: 'payment_add',
-        component: () => import('src/Modules/Bookkeeping/pages/BillingPayment/PaymentAdd/index.vue'),
+        path: 'payment/add',
+        // component: () => import('src/Modules/Bookkeeping/pages/BillingPayment/PaymentAdd/index.vue'),
+        component: () => import('src/Modules/Bookkeeping/pages/Payment/PaymentAdd/index.vue'),
         hidden: true,
         meta: {
           icon: 'receipt',
-          title: 'Добавить выписку',
+          title: 'Добавить платежи',
           roles: ['payment-edit']
         }
       },

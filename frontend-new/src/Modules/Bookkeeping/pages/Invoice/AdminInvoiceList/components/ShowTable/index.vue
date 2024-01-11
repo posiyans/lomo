@@ -28,9 +28,7 @@
       </template>
       <template v-slot:body-cell-price="props">
         <q-td :props="props">
-          <div>
-            {{ props.row.price }} руб
-          </div>
+          <ShowPrice :price="props.row.price" />
           <div v-if="props.row.is_paid" class="text-teal text-small-85">
             Оплачен
           </div>
@@ -53,10 +51,12 @@
 import { defineComponent } from 'vue'
 import InvoiceInfoBtn from 'src/Modules/Bookkeeping/components/Invoice/InvoiceInfo/Btn.vue'
 import ReceiptForInvoiceBtn from 'src/Modules/Receipt/components/ReceiptForInvoiceBtn/index.vue'
+import ShowPrice from 'components/ShowPrice/index.vue'
 
 export default defineComponent({
   components: {
     InvoiceInfoBtn,
+    ShowPrice,
     ReceiptForInvoiceBtn
   },
   props: {

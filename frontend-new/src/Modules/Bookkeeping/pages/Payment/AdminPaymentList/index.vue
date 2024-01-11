@@ -3,14 +3,13 @@
     <div class="row items-center q-col-gutter-sm">
       <FilterBlock v-model="listQuery" />
       <div>
-        <q-btn label="Excel" color="primary" />
+        <q-btn label="Excel" color="primary" @click="alert('ой')" />
       </div>
       <q-space />
       <div>
-        <q-btn label="Добавить" color="primary" />
+        <q-btn label="Добавить" color="primary" to="/admin/bookkeeping/payment/add" />
       </div>
     </div>
-    {{ listQuery }}
     <ShowTable :list="list" @reload="reload" class="q-pt-sm" />
     <LoadMore :key="key" v-model:list-query="listQuery" :func="func" @setList="setList" />
   </div>
