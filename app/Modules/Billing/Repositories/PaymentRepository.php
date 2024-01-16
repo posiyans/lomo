@@ -32,6 +32,22 @@ class PaymentRepository
         return $this;
     }
 
+    public function findByPrice($price)
+    {
+        if ($price) {
+            $this->query->where('price', $price);
+        }
+        return $this;
+    }
+
+    public function findByDate($date)
+    {
+        if ($date) {
+            $this->query->where('payment_date', $date);
+        }
+        return $this;
+    }
+
     public function findPayment($find = '')
     {
         if ($find) {
@@ -81,6 +97,11 @@ class PaymentRepository
         return $this->query
             ->orderBy('id', 'DESC')
             ->paginate($limit);
+    }
+
+    public function firstOrFail()
+    {
+        return $this->query->firstOrFail();
     }
 
 

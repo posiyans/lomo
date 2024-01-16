@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="relative-position">
     <div class="q-pa-xs">Добавить выписку из банка</div>
     <div>
       <div>
@@ -20,7 +20,18 @@
       </div>
     </div>
     <div>
-      <ShowTable :list="paymentData" />
+      <ShowTable :list="paymentData" :edit="edit" @reload="reload" />
+    </div>
+    <div v-if="paymentErrors > 0" class="fixed-bottom-right bg-red text-white q-px-md">
+      {{ paymentErrors }}
+      <DecOfNum :number="paymentErrors" :titles="['платеж', 'платежа', 'платежей']" />
+      требуют уточнения
+    </div>
+
+    <div v-if="uploadingData" class="fixed-bottom-right" style="bottom: 1.25em">
+      <div class="bg-grey q-px-md text-white">
+        Обрабатывается {{ paymentData.length - poolPayment.length }} / {{ paymentData.length }} платеж {{ uploadingData?.raw_data[1] }} руб. от {{ uploadingData?.raw_data[0] }}
+      </div>
     </div>
     <div>
       <q-btn color="negative" flat label="Отмена" @click="cancel" />
@@ -31,24 +42,36 @@
 
 <script>
 /* eslint-disable */
-import { defineComponent, ref } from 'vue'
-import { useQuasar } from 'quasar'
+import { computed, defineComponent, ref } from 'vue'
+import { uid, useQuasar } from 'quasar'
 import readFile from './js/readFile'
 import ShowTable from './components/ShowTable/index.vue'
+import { addPayment, getPayment } from 'src/Modules/Bookkeeping/api/paymentApi'
+import DecOfNum from 'components/DecOfNum/index.vue'
 
 export default defineComponent({
   components: {
-    ShowTable
+    ShowTable,
+    DecOfNum
   },
   props: {},
   setup(props, { emit }) {
     const loading = ref(false)
+    const edit = ref(false)
     const btnRefd = ref(null)
+    const poolPayment = ref([])
     const paymentData = ref([])
+    const uploadingData = ref(null)
+    const paymentErrors = computed(() => {
+      return paymentData.value.reduce((accumulator, currentValue) => {
+        if (currentValue.error) {
+          accumulator++
+        }
+        return accumulator
+      }, 0)
+    })
     const $q = useQuasar()
     const showDialog = () => {
-      console.log('klick')
-      console.log(btnRefd.value)
       btnRefd.value.click()
     }
     const acceptFileType = '.txt,.csv,.xls,.xlsx'
@@ -57,42 +80,99 @@ export default defineComponent({
       loading.value = false
     }
     const uploadData = () => {
+      edit.value = true
       loading.value = true
+      paymentErrors.value = 0
+      poolPayment.value = paymentData.value.map(item => item.uid)
+      sendPayment()
+    }
+    const sendPayment = () => {
+      if (poolPayment.value.length > 0) {
+        const payUid = poolPayment.value.shift()
+        const data = paymentData.value.find(item => item.uid === payUid)
+        uploadingData.value = data
+        if (!data.done) {
+          data.upload = true
+          const tmp = {
+            raw: data.raw_data
+          }
+          addPayment(tmp)
+            .then(res => {
+              data.id = res.data.data.id
+              data.stead = res.data.data.stead
+              data.stead_id = res.data.data.stead_id
+              data.rate_group_id = res.data.data.rate_group_id
+              data.rate = res.data.data.rate
+              data.price = res.data.data.price
+              data.error = res.data.data.error
+              data.description = res.data.data.description
+              data.duplicate = res.data.data.duplicate || false
+              data.done = true
+              data.uploadError = false
+              // if (data.error) {
+              //   paymentErrors.value++
+              // }
+            })
+            .catch(() => {
+              data.uploadError = true
+            })
+            .finally(() => {
+              data.upload = false
+              sendPayment()
+            })
+        } else {
+          sendPayment()
+        }
+      } else {
+        uploadingData.value = null
+        loading.value = false
+      }
+    }
+    const reload = (uid) => {
+      const data = paymentData.value.find(item => item.uid === uid)
+      getPayment(data.id)
+        .then(res => {
+          data.id = res.data.data.id
+          data.stead = res.data.data.stead
+          data.stead_id = res.data.data.stead_id
+          data.rate_group_id = res.data.data.rate_group_id
+          data.rate = res.data.data.rate
+          data.price = res.data.data.price
+          data.error = res.data.data.error
+          data.description = res.data.data.description
+          data.done = true
+        })
+        .finally(() => {
+          data.upload = false
+        })
     }
     const change = () => {
-      console.log(btnRefd.value.files)
       const tmp = []
       if (btnRefd.value.files) {
         [...btnRefd.value.files].forEach(item => {
-          console.log(item)
           readFile(item).then(text => {
-            console.log(text)
             text.forEach(i => {
               paymentData.value.push({
-                raw: i,
+                raw_data: i,
+                done: false,
+                uid: uid(),
                 error: false,
+                uploadError: false,
                 upload: false,
               })
             })
           })
-          // if (item.size > props.maxSize) {
-          //   $q.dialog({
-          //     title: 'Ошибка',
-          //     message: 'Файл ' + item.name + ' превышает максимальный размер в ' + fileSize(props.maxSize)
-          //   })
-          // } else {
-          //   const data = useFile()
-          //   data.addFile(item, props.parentType, props.parentUid)
-          //   // const data = useFile(item, props.parentType, props.parentUid)
-          //   tmp.push(data)
-          // }
         })
       }
-      emit('add-files', tmp)
     }
     return {
       showDialog,
       cancel,
+      reload,
+      edit,
+      paymentErrors,
+      poolPayment,
+      uploadingData,
       loading,
       acceptFileType,
       paymentData,

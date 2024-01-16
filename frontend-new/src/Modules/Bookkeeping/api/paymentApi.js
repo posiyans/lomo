@@ -8,9 +8,24 @@ export function getPaymentList(params) {
   })
 }
 
+export function getPayment(id) {
+  return request({
+    url: '/api/v2/billing/payment/' + id,
+    method: 'get'
+  })
+}
+
 export function updatePayment(id, data) {
   return request({
     url: '/api/v2/billing/payment/' + id,
+    method: 'post',
+    data
+  })
+}
+
+export function addPayment(data) {
+  return request({
+    url: '/api/v2/billing/payment/',
     method: 'post',
     data
   })

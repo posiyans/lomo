@@ -69,7 +69,7 @@
 import { defineComponent } from 'vue'
 import ShowTime from 'components/ShowTime/index.vue'
 import ShowPrice from 'components/ShowPrice/index.vue'
-import PaymentInfo from './PaymentInfo.vue'
+import PaymentInfo from 'src/Modules/Bookkeeping/components/Payment/PaymentInfoShowAndEdit/Dialog.vue'
 
 export default defineComponent({
   components: {

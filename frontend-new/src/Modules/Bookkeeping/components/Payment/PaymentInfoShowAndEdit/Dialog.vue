@@ -1,6 +1,10 @@
 <template>
   <div>
-    <q-btn @click="showDialog" label="Подробнее" color="primary" />
+    <div @click="showDialog">
+      <slot>
+        <q-btn label="Подробнее" color="primary" />
+      </slot>
+    </div>
     <q-dialog v-model="dialogVisible">
       <q-card>
         <q-card-section class="row items-center q-pb-none">
@@ -28,7 +32,7 @@
 <script>
 /* eslint-disable */
 import { defineComponent, ref } from 'vue'
-import PaymentInfoShowAndEdit from 'src/Modules/Bookkeeping/components/Payment/PaymnetInfoShowAndEdit/index.vue'
+import PaymentInfoShowAndEdit from 'src/Modules/Bookkeeping/components/Payment/PaymentInfoShowAndEdit/index.vue'
 import ShowPrice from 'components/ShowPrice/index.vue'
 import ShowTime from 'components/ShowTime/index.vue'
 
