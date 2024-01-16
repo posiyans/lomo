@@ -80,12 +80,16 @@
                   </div>
                 </td>
                 <td v-if="line.done && !line.uploadError && edit">
-                  <PaymentInfoShowAndEdit :payment="line" @reload="reload(line.uid)">
-                    <q-btn label="Подробнее" color="primary" outline />
-                  </PaymentInfoShowAndEdit>
-                  <div v-if="line.error" class="text-red">
-                    <q-btn label="Подтвердить данные" icon="done" color="secondary" @click="deleteError(line)" />
-                    Требует проверки
+                  <div class="row items-center q-col-gutter-xs no-wrap">
+                    <PaymentInfoShowAndEdit :payment="line" @reload="reload(line.uid)">
+                      <q-btn label="Подробнее" color="primary" outline />
+                    </PaymentInfoShowAndEdit>
+                    <div v-if="line.error" class="text-red">
+                      <q-btn icon="done" color="secondary" @click="deleteError(line)" />
+                    </div>
+                  </div>
+                  <div v-if="line.error" class="text-red text-center">
+                    Необходима проверка
                   </div>
                 </td>
               </template>
