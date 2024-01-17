@@ -2,13 +2,11 @@
 
 namespace App\Modules\Billing\Models;
 
-use App\Models\Log;
 use App\Models\MyModel;
-use App\Models\Stead;
 use App\Modules\Rate\Models\RateGroupModel;
 use App\Modules\Stead\Models\SteadModel;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-use function App\Models\Billing\mb_strtolower;
 
 /**
  * App\Modules\Billing\Models\BillingPaymentModel
@@ -63,6 +61,8 @@ use function App\Models\Billing\mb_strtolower;
  */
 class BillingPaymentModel extends MyModel
 {
+    use SoftDeletes;
+
     //
     protected $casts = [
         'raw_data' => 'array',

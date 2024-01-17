@@ -9,6 +9,7 @@
       :clearable="clearable"
       :dense="dense"
       :outlined="outlined"
+      :disable="disable"
       emit-value
       transition-show="jump-up"
       transition-hide="jump-up"
@@ -45,6 +46,10 @@ export default defineComponent({
       default: false
     },
     dense: {
+      type: Boolean,
+      default: false
+    },
+    disable: {
       type: Boolean,
       default: false
     },

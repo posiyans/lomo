@@ -11,11 +11,30 @@
       <tr class="bg-black-05">
         <th>Поле</th>
         <th>
-          <div>
-            Значение
-          </div>
-          <div v-if="payment.payment_type === 2" class="text-small-85 text-red">
-            Платеж в кассу
+
+          <div class="row items-center">
+            <div class="col-grow">
+              <div>
+                Значение
+              </div>
+              <div v-if="payment.payment_type === 2" class="text-small-85 text-red">
+                Платеж в кассу
+              </div>
+            </div>
+            <div>
+              <q-fab
+                flat
+                text-color="black"
+                icon="more_vert"
+                direction="down"
+                padding="xs"
+              >
+                <PaymentDeleteBtn v-if="edit" :payment-id="payment.id" @success="deletePayment">
+                  <q-fab-action color="negative" text-color="white" icon="delete" />
+                </PaymentDeleteBtn>
+              </q-fab>
+
+            </div>
           </div>
         </th>
       </tr>
@@ -40,7 +59,7 @@
               outlined
               dense
               clearable
-              @selectStead="setStead" />
+            />
             <q-space />
             <div>
               <q-btn label="Ok" color="primary" @click="changeStead" />
@@ -176,8 +195,10 @@
       </tr>
       </tbody>
     </q-markup-table>
-    <div v-if="edit && payment.error" class="q-pa-sm">
-      <q-btn label="Подтвердить данные" icon="done" color="secondary" @click="deleteError" />
+    <div v-if="edit && payment.error" class="row items-center q-pt-sm">
+      <div class="q-pa-sm">
+        <q-btn label="Подтвердить данные" icon="done" color="secondary" @click="deleteError" />
+      </div>
     </div>
   </div>
 </template>
@@ -193,10 +214,12 @@ import { updatePayment } from 'src/Modules/Bookkeeping/api/paymentApi'
 import { successMessage } from 'src/utils/message'
 import RateGroupSelect from 'src/Modules/Rate/components/RateGroupSelect/index.vue'
 import { useQuasar } from 'quasar'
+import PaymentDeleteBtn from 'src/Modules/Bookkeeping/components/Payment/PaymentDeleteBtn/index.vue'
 
 export default defineComponent({
   components: {
     ShowTime,
+    PaymentDeleteBtn,
     SteadSelect,
     ShowPrice,
     FindOwnerPopup,
@@ -226,9 +249,7 @@ export default defineComponent({
     const typeError = computed(() => {
       return !props.payment.rate
     })
-    const setStead = () => {
 
-    }
     const changeStead = () => {
       const data = {
         stead_id: steadId.value
@@ -243,7 +264,9 @@ export default defineComponent({
       saveData(data)
       editDescription.value = false
     }
-
+    const deletePayment = () => {
+      emit('deletePayment')
+    }
     const deleteError = () => {
       $q.dialog({
         title: 'Подтвердите',
@@ -290,10 +313,11 @@ export default defineComponent({
     onMounted(() => {
       steadId.value = props.payment.stead_id
       rateGroupId.value = props.payment.rate_group_id
-      description.value = props.payment.description
+      description.value = props.payment.description || ''
     })
     return {
       changeStead,
+      deletePayment,
       deleteError,
       changeRateGroup,
       saveDescription,
@@ -302,7 +326,6 @@ export default defineComponent({
       editDescription,
       rateGroupId,
       steadId,
-      setStead,
       descriptionHtml,
       typeError,
       steadError,

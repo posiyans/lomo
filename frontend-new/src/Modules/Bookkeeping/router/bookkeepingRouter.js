@@ -18,9 +18,10 @@ export const adminBookkeeping =
         }
       },
       {
-        path: 'billing_balance',
+        path: 'balance',
         name: 'adminUserBalance',
-        component: () => import('src/Modules/Bookkeeping/pages/BillingBalansList/index.vue'),
+        // component: () => import('src/Modules/Bookkeeping/pages/BillingBalansList/index.vue'),
+        component: () => import('src/Modules/Bookkeeping/pages/Balans/AdminBalansList/index.vue'),
         meta: {
           icon: 'receipt',
           title: 'Баланс',

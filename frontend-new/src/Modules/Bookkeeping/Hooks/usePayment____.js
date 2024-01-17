@@ -3,7 +3,7 @@ import { updatePayment } from 'src/Modules/Bookkeeping/api/paymentApi'
 
 const $q = useQuasar()
 
-export function usePayment(obj) {
+export function usePayment____(obj) {
   const payment = obj
   const deleteError = () => {
     $q.dialog({

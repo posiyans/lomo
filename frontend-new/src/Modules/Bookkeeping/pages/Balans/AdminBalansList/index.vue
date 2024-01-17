@@ -39,9 +39,8 @@ export default defineComponent({
     const listQuery = ref({
       find: '',
       rate_group_id: '',
-      is_error: '',
-      date_start: '',
-      date_end: '',
+      duty: '',
+      zeroLine: 0,
       page: 1,
       limit: 20
     })

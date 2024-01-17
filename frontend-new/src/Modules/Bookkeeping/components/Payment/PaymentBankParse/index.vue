@@ -1,8 +1,7 @@
 <template>
   <div class="relative-position">
-    <div class="q-pa-xs">Добавить выписку из банка</div>
     <div>
-      <div>
+      <div class="row items-center q-col-gutter-md justify-between">
         <input
           ref="btnRefd"
           type="file"
@@ -12,17 +11,20 @@
           @change="change"
         />
         <div @click.stop="showDialog">
-          <q-btn color="primary" no-caps label="Выбрать файлы" />
+          <q-btn color="primary" no-caps label="Добавить выписку из банка" />
           <div class="text-small-85 text-grey">
             txt,cvs,xlsx выписки из банка, до 100 файлов
           </div>
         </div>
+        <div>
+          <q-checkbox v-model="onlyError" label="Показать только с ошибками" />
+        </div>
       </div>
     </div>
     <div>
-      <ShowTable :list="paymentData" :edit="edit" @reload="reload" />
+      <ShowTable :list="filtredPaymentData" :edit="edit" @reload="reload" />
     </div>
-    <div v-if="paymentErrors > 0" class="fixed-bottom-right bg-red text-white q-px-md">
+    <div v-if="paymentErrors > 0" class="fixed-bottom-right bg-red text-white q-px-md cursor-pointer" @click="onlyError = true">
       {{ paymentErrors }}
       <DecOfNum :number="paymentErrors" :titles="['платеж', 'платежа', 'платежей']" />
       требуют уточнения
@@ -57,10 +59,17 @@ export default defineComponent({
   props: {},
   setup(props, { emit }) {
     const loading = ref(false)
+    const onlyError = ref(false)
     const edit = ref(false)
     const btnRefd = ref(null)
     const poolPayment = ref([])
     const paymentData = ref([])
+    const filtredPaymentData = computed(() => {
+      if (onlyError.value) {
+        return paymentData.value.filter(item => item.error)
+      }
+      return paymentData.value
+    })
     const uploadingData = ref(null)
     const paymentErrors = computed(() => {
       return paymentData.value.reduce((accumulator, currentValue) => {
@@ -166,8 +175,10 @@ export default defineComponent({
       }
     }
     return {
+      filtredPaymentData,
       showDialog,
       cancel,
+      onlyError,
       reload,
       edit,
       paymentErrors,

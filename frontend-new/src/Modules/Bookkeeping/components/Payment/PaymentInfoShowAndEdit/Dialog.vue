@@ -22,7 +22,10 @@
           <q-btn icon="close" flat round dense v-close-popup />
         </q-card-section>
         <q-card-section>
-          <PaymentInfoShowAndEdit :payment="payment" edit @reload="reload" />
+          <PaymentInfoShowAndEdit :payment="payment" :edit="edit" @reload="reload" @deletePayment="deletePayment" />
+          <div class="text-right q-py-sm">
+            <q-btn label="Закрыть" flat color="primary" v-close-popup />
+          </div>
         </q-card-section>
       </q-card>
     </q-dialog>
@@ -46,10 +49,13 @@ export default defineComponent({
     payment: {
       type: Object,
       required: true
+    },
+    edit: {
+      type: Boolean,
+      default: false
     }
   },
   setup(props, { emit }) {
-    const data = ref(false)
     const dialogVisible = ref(false)
     const showDialog = () => {
       dialogVisible.value = true
@@ -57,10 +63,14 @@ export default defineComponent({
     const reload = () => {
       emit('reload')
     }
+    const deletePayment = () => {
+      dialogVisible.value = false
+      emit('deletePayment')
+    }
     return {
-      data,
       reload,
       showDialog,
+      deletePayment,
       dialogVisible
     }
   }

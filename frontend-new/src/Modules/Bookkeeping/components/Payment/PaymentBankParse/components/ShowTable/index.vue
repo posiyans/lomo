@@ -68,9 +68,20 @@
             <template v-else>
               <template v-if="line.duplicate && edit">
                 <td>
-                  <PaymentInfoShowAndEdit :payment="line">
-                    <q-btn label="Повтор" color="purple" outline />
-                  </PaymentInfoShowAndEdit>
+                  <div class="text-center">
+                    <div class="row items-center q-col-gutter-xs no-wrap">
+
+                      <PaymentInfoShowAndEdit :payment="line" @reload="reload(line.uid)">
+                        <q-btn label="Повтор" color="purple" outline />
+                      </PaymentInfoShowAndEdit>
+                      <div v-if="line.error" class="text-red">
+                        <q-btn icon="done" color="secondary" @click="deleteError(line)" />
+                      </div>
+                    </div>
+                    <div v-if="line.error" class="text-red text-center">
+                      Необходима проверка
+                    </div>
+                  </div>
                 </td>
               </template>
               <template v-else>
@@ -161,10 +172,8 @@ export default defineComponent({
           persistent: true
         }).onOk(val => {
           if (val.includes('hideDialog')) {
-            console.log('hideDialog')
             noMessage.value = true
           }
-          console.log(val)
           saveData(payment)
         })
       }

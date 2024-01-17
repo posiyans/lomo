@@ -23,6 +23,13 @@ export function updatePayment(id, data) {
   })
 }
 
+export function deletePayment(id) {
+  return request({
+    url: '/api/v2/billing/payment/' + id,
+    method: 'delete'
+  })
+}
+
 export function addPayment(data) {
   return request({
     url: '/api/v2/billing/payment/',
