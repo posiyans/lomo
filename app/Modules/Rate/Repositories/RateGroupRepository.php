@@ -24,9 +24,14 @@ class RateGroupRepository
         return $this->query->where('id', $id)->firstOrFail();
     }
 
+    /**
+     * @return \App\Models\MyModel[]|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     * @deprecated
+     *
+     */
     public function run()
     {
-        return $this->query->get();
+        return $this->get();
     }
 
     public function paginate($limit)
@@ -34,4 +39,9 @@ class RateGroupRepository
         return $this->query->orderBy('id')->paginate($limit);
     }
 
+
+    public function get()
+    {
+        return $this->query->get();
+    }
 }

@@ -5,7 +5,7 @@ namespace App\Modules\Billing\Controllers\Payment;
 use App\Http\Controllers\Controller;
 use App\Modules\Billing\Repositories\PaymentRepository;
 use App\Modules\Billing\Resources\PaymentResource;
-use App\Modules\Billing\Validators\Invoice\GetPaymentListValidator;
+use App\Modules\Billing\Validators\Payment\GetPaymentListValidator;
 
 /**
  * получить список платежей

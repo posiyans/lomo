@@ -21,8 +21,8 @@ import { computed, defineComponent, ref } from 'vue'
 import ShowTable from './components/ShowTable/index.vue'
 import LoadMore from 'src/components/LoadMore/index.vue'
 import FilterBlock from './components/FiltersBlock/index.vue'
-import { getPaymentList } from 'src/Modules/Bookkeeping/api/paymentApi.js'
 import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
+import { getBalanceList } from 'src/Modules/Bookkeeping/api/balaceApi'
 
 export default defineComponent({
   components: {
@@ -34,7 +34,7 @@ export default defineComponent({
   setup(props, { emit }) {
     const key = ref(1)
     const list = ref([])
-    const func = getPaymentList
+    const func = getBalanceList
     const authStore = useAuthStore()
     const listQuery = ref({
       find: '',

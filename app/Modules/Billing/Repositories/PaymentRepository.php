@@ -104,5 +104,12 @@ class PaymentRepository
         return $this->query->firstOrFail();
     }
 
+    public function get()
+    {
+        return $this->query
+            ->orderBy('id', 'DESC')
+            ->get();
+    }
+
 
 }

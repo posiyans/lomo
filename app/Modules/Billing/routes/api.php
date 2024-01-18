@@ -19,9 +19,9 @@ Route::group(['prefix' => 'v2/billing'], function () {
             Route::post('/', \App\Modules\Billing\Controllers\Payment\AddPaymentController::class);
         });
     });
-    Route::group(['prefix' => 'balans'], function () {
+    Route::group(['prefix' => 'balance'], function () {
         Route::group(['middleware' => ['auth:sanctum']], function () {
-            Route::get('/get-list', \App\Modules\Billing\Controllers\Balans\GetBalansListController::class);
+            Route::get('/get-list', \App\Modules\Billing\Controllers\Balance\GetBalanceListController::class);
 //            Route::post('/{payment}', \App\Modules\Billing\Controllers\Payment\UpdatePaymentController::class);
 //            Route::delete('/{payment}', \App\Modules\Billing\Controllers\Payment\DeletePaymentController::class);
 //            Route::get('/{payment}', \App\Modules\Billing\Controllers\Payment\GetPaymentController::class);

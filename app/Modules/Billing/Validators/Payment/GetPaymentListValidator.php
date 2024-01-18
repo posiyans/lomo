@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Billing\Validators\Invoice;
+namespace App\Modules\Billing\Validators\Payment;
 
 use App\Modules\Rate\Models\RateGroupModel;
 use Illuminate\Foundation\Http\FormRequest;

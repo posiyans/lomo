@@ -39,8 +39,8 @@
       class="filter-item"
       @update:model-value="setValue($event, 'rate_group_id')"
     />
-    <div class="filter-item">
-      <q-input
+    <div style="width: 170px;">
+      <InputNumber
         :model-value="modelValue.zeroLine"
         label="Сумма долга"
         :disable="!modelValue.duty"
@@ -60,12 +60,14 @@ import { computed, defineComponent, ref } from 'vue'
 import PaymentErrorStatusSelect from 'src/Modules/Bookkeeping/components/Payment/PaymentErrorStatusSelect/index.vue'
 import InputDateRange from 'components/Input/InputDateRange/index.vue'
 import RateGroupSelect from 'src/Modules/Rate/components/RateGroupSelect/index.vue'
+import InputNumber from 'src/components/Input/InputNumber/index.vue'
 
 export default defineComponent({
   components: {
     PaymentErrorStatusSelect,
     RateGroupSelect,
-    InputDateRange
+    InputDateRange,
+    InputNumber
   },
   props: {
     modelValue: {
@@ -75,7 +77,6 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const data = ref(false)
-    const label = ref(false)
     const groupLabel = computed(() => {
       if (props.modelValue.duty === 1) {
         return 'C долгами по'
@@ -86,15 +87,15 @@ export default defineComponent({
       return ''
     })
     const options = computed(() => {
-      if (props.modelValue.price !== 0) {
+      if (props.modelValue.zeroLine !== 0) {
         return [
           {
             value: 1,
-            label: 'C долгами ( > ' + props.modelValue.price + ' руб)'
+            label: 'C долгами ( > ' + props.modelValue.zeroLine + ' руб)'
           },
           {
             value: 2,
-            label: 'Без долгов ( < ' + props.modelValue.price + ' руб)'
+            label: 'Без долгов ( < ' + props.modelValue.zeroLine + ' руб)'
           },
 
         ]

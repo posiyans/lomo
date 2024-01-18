@@ -57,5 +57,12 @@ class InvoiceRepository
             ->paginate($limit);
     }
 
+    public function get()
+    {
+        return $this->query
+            ->orderBy('id', 'DESC')
+            ->get();
+    }
+
 
 }
