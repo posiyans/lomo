@@ -2,6 +2,8 @@
 
 namespace App\Modules\Billing\Repositories;
 
+use Illuminate\Support\Facades\Cache;
+
 class BalanceRepository
 {
 
@@ -20,6 +22,12 @@ class BalanceRepository
         $this->invoices = [];
     }
 
+
+    public function getCacheName(): string
+    {
+        return 'balance_stead_' . $this->stead_id . '_rate_group_' . $this->rate_group_id;
+    }
+
     public function forStead($stead_id)
     {
         $this->stead_id = $stead_id;
@@ -33,13 +41,17 @@ class BalanceRepository
     }
 
     /*
-     * пполучить сумму баланса
+     * получить сумму баланса
      */
     public function getPrice()
     {
-        $invoice_price = $this->getInvoicePrice();
-        $payment_price = $this->getPaymentPrice();
-        return round($payment_price - $invoice_price, 2);
+        $cache_name = $this->getCacheName();
+        $price = Cache::tags(['payment', 'invoice'])->remember($cache_name, 6000, function () {
+            $invoice_price = $this->getInvoicePrice();
+            $payment_price = $this->getPaymentPrice();
+            return round($payment_price - $invoice_price, 2);
+        });
+        return $price;
     }
 
 

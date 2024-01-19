@@ -2,9 +2,7 @@
   <div class="q-pa-md">
     <div class="row items-center q-col-gutter-sm">
       <FilterBlock v-model="listQuery" />
-      <div>
-        <q-btn label="Excel" color="primary" @click="alert('ой')" />
-      </div>
+      <DownloadXlsxBtn :func="funcXlsx" />
       <q-space />
       <div v-if="edit">
         <q-btn label="Добавить" color="primary" to="/admin/bookkeeping/payment/add" />
@@ -21,21 +19,23 @@ import { computed, defineComponent, ref } from 'vue'
 import ShowTable from './components/ShowTable/index.vue'
 import LoadMore from 'src/components/LoadMore/index.vue'
 import FilterBlock from './components/FiltersBlock/index.vue'
-import { getPaymentList } from 'src/Modules/Bookkeeping/api/paymentApi.js'
+import { getPaymentList, getPaymentListXlsx } from 'src/Modules/Bookkeeping/api/paymentApi.js'
 import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
+import DownloadXlsxBtn from 'src/Modules/Files/components/DownloadXlsxFileBtn/index.vue'
 
 export default defineComponent({
   components: {
     ShowTable,
     FilterBlock,
-    LoadMore
+    LoadMore,
+    DownloadXlsxBtn
   },
   props: {},
   setup(props, { emit }) {
     const key = ref(1)
     const list = ref([])
     const func = getPaymentList
-    const authStore = useAuthStore()
+    // const funcXlsx = getPaymentListXlsx
     const listQuery = ref({
       find: '',
       rate_group_id: '',
@@ -45,6 +45,14 @@ export default defineComponent({
       page: 1,
       limit: 20
     })
+    const funcXlsx = computed(() => {
+      const tmp = Object.assign({}, listQuery.value)
+      tmp.xlsx = 1
+      return () => {
+        return getPaymentListXlsx(tmp)
+      }
+    })
+    const authStore = useAuthStore()
     const edit = computed(() => {
       return authStore.permissions.includes('payment-edit')
     })
@@ -61,6 +69,7 @@ export default defineComponent({
       reload,
       setList,
       func,
+      funcXlsx,
       list
     }
   }

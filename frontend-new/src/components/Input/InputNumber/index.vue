@@ -56,7 +56,7 @@ export default {
     setField(val) {
       let tmp = 0
       if (typeof val === 'string' || val instanceof String) {
-        tmp = +(val.replace(/[^0-9.]/g, ''))
+        tmp = val.replace(/[^0-9.-]/g, '')
         // val = +(val.replace(/[^0-9.]/g, ''))
       } else {
         tmp = val

@@ -6,22 +6,18 @@
         <q-btn label="Excel" color="primary" @click="alert('ой')" />
       </div>
       <q-space />
-      <div v-if="edit">
-        <q-btn label="Добавить" color="primary" to="/admin/bookkeeping/payment/add" />
-      </div>
     </div>
-    <ShowTable :list="list" :edit="edit" @reload="reload" class="q-pt-sm" />
-    <LoadMore :key="key" v-model:list-query="listQuery" :func="func" @setList="setList" />
+    <ShowTable :list="list" class="q-pt-sm" />
+    <LoadMore v-model:list-query="listQuery" :func="func" @setList="setList" />
   </div>
 </template>
 
 <script>
 /* eslint-disable */
-import { computed, defineComponent, ref } from 'vue'
+import { defineComponent, ref } from 'vue'
 import ShowTable from './components/ShowTable/index.vue'
 import LoadMore from 'src/components/LoadMore/index.vue'
 import FilterBlock from './components/FiltersBlock/index.vue'
-import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
 import { getBalanceList } from 'src/Modules/Bookkeeping/api/balaceApi'
 
 export default defineComponent({
@@ -35,29 +31,20 @@ export default defineComponent({
     const key = ref(1)
     const list = ref([])
     const func = getBalanceList
-    const authStore = useAuthStore()
     const listQuery = ref({
       find: '',
       rate_group_id: '',
       duty: '',
-      zeroLine: 0,
+      zero_line: 0,
       page: 1,
       limit: 20
     })
-    const edit = computed(() => {
-      return authStore.permissions.includes('payment-edit')
-    })
-    const reload = () => {
-      key.value++
-    }
     const setList = (val) => {
       list.value = val
     }
     return {
       listQuery,
       key,
-      edit,
-      reload,
       setList,
       func,
       list

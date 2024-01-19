@@ -30,6 +30,10 @@ class GetPaymentListValidator extends FormRequest
                 'nullable',
                 'boolean'
             ],
+            'xlsx' => [
+                'nullable',
+                'boolean'
+            ],
             'rate_group_id' => [
                 'nullable',
                 'exists:' . RateGroupModel::class . ',id'

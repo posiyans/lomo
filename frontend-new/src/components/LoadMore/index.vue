@@ -106,22 +106,23 @@ export default defineComponent({
       }
       props.func(tmp)
         .then(response => {
-          total.value = response.data.meta.total || response.data.total || 0
-          offset.value = response.data.meta.offset || response.data.offset || 0
+          total.value = response.data?.meta?.total || response.data.total || 0
+          offset.value = response.data?.meta?.offset || response.data.offset || 0
           if (!addList.value) {
             list.value = []
           }
-          response.data.data.forEach(val => {
+          response.data?.data?.forEach(val => {
             list.value.push(val)
           })
           emit('setList', list.value)
           emit('setOffset', offset.value)
         })
         .catch(er => {
-          total.value = 0
+          console.log(er)
+          // total.value = 0
           offset.value = 0
           list.value = []
-          const errorMessage = er.response.data.error || er.response.data.errors || er.response.data.data
+          const errorMessage = er?.response?.data?.error || er?.response?.data?.errors || er?.response?.data?.data || ''
           emit('error', errorMessage)
         })
         .finally(() => {
@@ -166,6 +167,7 @@ export default defineComponent({
     watch(
       props.listQuery,
       () => {
+        console.log('w2')
         if (timer.value) {
           clearTimeout(timer.value)
         }

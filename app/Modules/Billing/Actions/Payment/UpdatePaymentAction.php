@@ -3,6 +3,7 @@
 namespace App\Modules\Billing\Actions\Payment;
 
 use App\Modules\Billing\Models\BillingPaymentModel;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * обновить данные платежа
@@ -72,6 +73,7 @@ class UpdatePaymentAction
     public function run(): BillingPaymentModel
     {
         if ($this->payment->logAndSave('Изменние платежа')) {
+            Cache::tags(['payment'])->flush();
             return $this->payment;
         }
         return throw  new \Exception('Ошибка измения платежа');

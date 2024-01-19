@@ -26,7 +26,7 @@ class GetBalansListValidator extends FormRequest
                 'numeric',
                 'required'
             ],
-            'zeroLine' => [
+            'zero_line' => [
                 'nullable',
                 'numeric'
             ],

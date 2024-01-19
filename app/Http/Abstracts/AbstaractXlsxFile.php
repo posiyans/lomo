@@ -4,7 +4,6 @@ namespace App\Http\Abstracts;
 
 
 use App\Http\Controllers\Controller;
-use Auth;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
@@ -25,7 +24,7 @@ abstract class AbstaractXlsxFile extends Controller
     public function createXLSX()
     {
         $this->spreadsheet = new Spreadsheet();
-        $this->spreadsheet->getProperties()->setCreator('snt site')
+        $this->spreadsheet->getProperties()->setCreator('CNT CRM')
             ->setLastModifiedBy('posiyans')
             ->setTitle('https://github.com/posiyans/lomo')
             ->setSubject('https://github.com/posiyans/lomo')

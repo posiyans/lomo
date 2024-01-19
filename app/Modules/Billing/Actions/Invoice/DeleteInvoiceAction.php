@@ -3,6 +3,7 @@
 namespace App\Modules\Billing\Actions\Invoice;
 
 use App\Modules\Billing\Models\BillingInvoiceModel;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * Удалить счет
@@ -22,7 +23,10 @@ class DeleteInvoiceAction
     public function run()
     {
         $this->unlink_payments();
-        $this->invoice->logAndDelete('Удаление счета');
+        if ($this->invoice->logAndDelete('Удаление счета')) {
+            Cache::tags(['invoice'])->flush();
+            return true;
+        }
     }
 
 

@@ -41,14 +41,14 @@
     />
     <div style="width: 170px;">
       <InputNumber
-        :model-value="modelValue.zeroLine"
+        :model-value="modelValue.zero_line"
         label="Сумма долга"
         :disable="!modelValue.duty"
         dense
         outlined
         clearable
-        @update:model-value="setValue($event, 'zeroLine')"
-        @clear="setValue(0, 'zeroLine')"
+        @update:model-value="setValue($event, 'zero_line')"
+        @clear="setValue(0, 'zero_line')"
       />
     </div>
   </div>
@@ -87,15 +87,15 @@ export default defineComponent({
       return ''
     })
     const options = computed(() => {
-      if (props.modelValue.zeroLine !== 0) {
+      if (props.modelValue.zero_line !== 0) {
         return [
           {
             value: 1,
-            label: 'C долгами ( > ' + props.modelValue.zeroLine + ' руб)'
+            label: 'C долгами ( < ' + props.modelValue.zero_line + ' руб)'
           },
           {
             value: 2,
-            label: 'Без долгов ( < ' + props.modelValue.zeroLine + ' руб)'
+            label: 'Без долгов ( > ' + props.modelValue.zero_line + ' руб)'
           },
 
         ]

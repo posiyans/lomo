@@ -7,6 +7,7 @@ use App\Modules\Billing\Repositories\PaymentRepository;
 use App\Modules\Rate\Models\RateGroupModel;
 use App\Modules\Stead\Models\SteadModel;
 use Auth;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * обновить данные платежа
@@ -42,6 +43,7 @@ class AddPaymentAction
     {
         $this->checkNoDublicate();
         if ($this->payment->duplicate || $this->payment->logAndSave('Создание платежа')) {
+            Cache::tags(['payment'])->flush();
             return $this->payment;
         }
         return throw  new \Exception('Ошибка создания платежа');

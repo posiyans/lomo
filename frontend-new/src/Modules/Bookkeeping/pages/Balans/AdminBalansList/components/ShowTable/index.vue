@@ -121,33 +121,10 @@ export default defineComponent({
       })
       return tmp
     })
-    const columns = [
-      {
-        name: 'stead',
-        align: 'center',
-        label: 'Участок'
-      },
-      {
-        name: 'balance',
-        align: 'center',
-        label: 'Баланс'
-      },
-      {
-        name: 'lastpay',
-        align: 'center',
-        label: 'Последний платеж'
-      },
-      {
-        name: 'actions',
-        align: 'center',
-        label: ''
-      }
-    ]
     const reload = () => {
       emit('reload')
     }
     return {
-      columns,
       rateGroup,
       columnsDinamic,
       reload

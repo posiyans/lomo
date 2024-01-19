@@ -1,6 +1,7 @@
 import request from 'src/utils/request'
 
 export function getBalanceList(params) {
+  request.defaults.timeout = 50000
   return request({
     url: '/api/v2/billing/balance/get-list',
     method: 'get',

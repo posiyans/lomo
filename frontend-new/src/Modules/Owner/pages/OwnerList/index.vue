@@ -3,7 +3,7 @@
     <div class="row items-center q-col-gutter-sm q-pb-sm">
       <FilterBlock v-model="listQuery" />
       <div>
-        <q-btn color="primary" :loading="fileDownload" label="XLSX" @click="download" />
+        <q-btn color="primary" :loading="fileDownload" label="Скачать" @click="download" />
       </div>
       <q-space />
       <div>
