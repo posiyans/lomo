@@ -34,6 +34,13 @@
           </div>
         </q-td>
       </template>
+      <template v-slot:body-cell-rate="props">
+        <q-td :props="props">
+          <div v-if="props.row.rate" class="text-small-85">
+            {{ props.row.rate.name }}
+          </div>
+        </q-td>
+      </template>
       <template v-slot:body-cell-actions="props">
         <q-td :props="props">
           <div class="row justify-center">
@@ -86,6 +93,11 @@ export default defineComponent({
         name: 'price',
         align: 'center',
         label: 'Сумма'
+      },
+      {
+        name: 'rate',
+        align: 'center',
+        label: 'Тип'
       },
       {
         name: 'actions',

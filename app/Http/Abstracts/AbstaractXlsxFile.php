@@ -51,11 +51,15 @@ abstract class AbstaractXlsxFile extends Controller
      * @param $cells ячейка
      * @param string $color цвет
      */
-    public function cellColor($cells, $color = 'F28A8C')
+    public function fontColor($cells, $color = \PhpOffice\PhpSpreadsheet\Style\Color::COLOR_DARKRED)
     {
-        $this->spreadsheet->getActiveSheet()->getStyle($cells)->getFill()
-            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
-            ->getStartColor()->setARGB($color);
+//        $this->spreadsheet->getActiveSheet()->getStyle($cells)->getFill()
+//            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+//            ->getStartColor()->setARGB($color);
+        $this->spreadsheet->getActiveSheet()->getStyle($cells)
+            ->getFont()
+            ->getColor()
+            ->setARGB($color);
     }
 
     /**

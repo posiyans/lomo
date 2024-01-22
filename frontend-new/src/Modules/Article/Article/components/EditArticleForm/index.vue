@@ -30,14 +30,33 @@
         <q-btn no-caps no-wrap color="primary" :loading="savingData" :label="btnLabel" @click="saveArticle" />
       </div>
       <q-space />
-      <div v-if="articleStore.article?.user" class="row items-center bg-white br4">
-        <router-link :to="`/admin/user/show/${articleStore.article?.user?.uid}`" class="user-link">
-          <UserAvatarByUid :uid="articleStore.article?.user?.uid" size="24px" />
-          {{ articleStore.article?.user?.name }}
-        </router-link>
-        <AddBanUserBtn :user-uid="articleStore.article?.user?.uid" type="article" object-uid="all">
-          <q-btn icon="delete" flat round color="negative" />
-        </AddBanUserBtn>
+      <div>
+        <div v-if="articleStore.article?.user" class="row items-center bg-white br2">
+          <router-link :to="`/admin/user/show/${articleStore.article?.user?.uid}`" class="user-link">
+            <UserAvatarByUid :uid="articleStore.article?.user?.uid" size="24px" />
+            {{ articleStore.article?.user?.name }}
+          </router-link>
+          <q-fab
+            flat
+            text-color="black"
+            icon="more_vert"
+            direction="down"
+            padding="xs"
+          >
+            <AddBanUserBtn :user-uid="articleStore.article?.user?.uid" type="article" object-uid="all">
+              <q-btn icon="voice_over_off" flat round color="negative">
+                <q-tooltip>
+                  Забанить пользователя
+                </q-tooltip>
+              </q-btn>
+            </AddBanUserBtn>
+            <q-btn icon="delete" flat round color="negative" @click="deleteAuthor">
+              <q-tooltip>
+                Удалить автора
+              </q-tooltip>
+            </q-btn>
+          </q-fab>
+        </div>
       </div>
       <div>
         <q-btn no-caps no-wrap color="info" label="Смотреть" :to="'/article/show/' + articleStore.article.slug" />
@@ -125,6 +144,10 @@ export default defineComponent({
         val.sendFileToServer()
       })
     }
+    const deleteAuthor = () => {
+      articleStore.article.user_id = null
+      saveArticle()
+    }
     const saveArticle = () => {
       savingData.value = true
       const barRef = bar.value
@@ -154,6 +177,7 @@ export default defineComponent({
     return {
       showMoreSetting,
       bar,
+      deleteAuthor,
       addFile,
       articleStore,
       savingData,

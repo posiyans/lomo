@@ -56,7 +56,7 @@ class ArticleModel extends MyModel implements CommentedInterface
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'text', 'resume', 'category_id', 'uid', 'status', 'allow_comments', 'slug'];
+    protected $fillable = ['title', 'text', 'resume', 'category_id', 'uid', 'status', 'allow_comments', 'slug', 'user_id'];
 
     protected $hidden = [];
 

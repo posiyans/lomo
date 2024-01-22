@@ -9,6 +9,16 @@ export function getBalanceList(params) {
   })
 }
 
+export function getBalanceListXlsx(params) {
+  request.defaults.timeout = 50000
+  return request({
+    url: '/api/v2/billing/balance/get-list',
+    method: 'get',
+    responseType: 'blob',
+    params
+  })
+}
+
 //
 // export function getPayment(id) {
 //   return request({

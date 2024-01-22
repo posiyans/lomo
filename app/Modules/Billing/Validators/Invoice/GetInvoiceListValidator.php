@@ -35,6 +35,10 @@ class GetInvoiceListValidator extends FormRequest
                 'nullable',
                 'boolean'
             ],
+            'xlsx' => [
+                'nullable',
+                'boolean'
+            ],
             'stead_id' => [
                 'nullable',
                 'exists:' . SteadModel::class . ',id',

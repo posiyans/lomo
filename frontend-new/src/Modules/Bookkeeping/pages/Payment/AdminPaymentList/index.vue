@@ -35,7 +35,6 @@ export default defineComponent({
     const key = ref(1)
     const list = ref([])
     const func = getPaymentList
-    // const funcXlsx = getPaymentListXlsx
     const listQuery = ref({
       find: '',
       rate_group_id: '',

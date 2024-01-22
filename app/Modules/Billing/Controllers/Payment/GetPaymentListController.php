@@ -32,8 +32,6 @@ class GetPaymentListController extends Controller
             } else {
                 return PaymentResource::collection($payments->paginate($limit));
             }
-//                ->paginate($limit);
-
         } catch (\Exception $e) {
             return response(['errors' => $e->getMessage()], 450);
         }

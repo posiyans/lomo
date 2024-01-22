@@ -2,9 +2,7 @@
   <div class="q-pa-md">
     <div class="row items-center q-col-gutter-sm">
       <FilterBlock v-model="listQuery" />
-      <div>
-        <q-btn label="Excel" color="primary" @click="alert('ой')" />
-      </div>
+      <DownloadXlsxBtn :func="funcXlsx" />
       <q-space />
     </div>
     <ShowTable :list="list" class="q-pt-sm" />
@@ -14,16 +12,19 @@
 
 <script>
 /* eslint-disable */
-import { defineComponent, ref } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
 import ShowTable from './components/ShowTable/index.vue'
 import LoadMore from 'src/components/LoadMore/index.vue'
 import FilterBlock from './components/FiltersBlock/index.vue'
-import { getBalanceList } from 'src/Modules/Bookkeeping/api/balaceApi'
+import { getBalanceList, getBalanceListXlsx } from 'src/Modules/Bookkeeping/api/balaceApi'
+import DownloadXlsxBtn from 'src/Modules/Files/components/DownloadXlsxFileBtn/index.vue'
+
 
 export default defineComponent({
   components: {
     ShowTable,
     FilterBlock,
+    DownloadXlsxBtn,
     LoadMore
   },
   props: {},
@@ -42,8 +43,16 @@ export default defineComponent({
     const setList = (val) => {
       list.value = val
     }
+    const funcXlsx = computed(() => {
+      const tmp = Object.assign({}, listQuery.value)
+      tmp.xlsx = 1
+      return () => {
+        return getBalanceListXlsx(tmp)
+      }
+    })
     return {
       listQuery,
+      funcXlsx,
       key,
       setList,
       func,

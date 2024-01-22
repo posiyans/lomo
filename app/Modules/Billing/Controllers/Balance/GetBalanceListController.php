@@ -5,6 +5,7 @@ namespace App\Modules\Billing\Controllers\Balance;
 use App\Http\Controllers\Controller;
 use App\Modules\Billing\Repositories\BalanceRepository;
 use App\Modules\Billing\Repositories\PaymentRepository;
+use App\Modules\Billing\Resources\BalanceXlsxFileResource;
 use App\Modules\Billing\Validators\Balance\GetBalansListValidator;
 use App\Modules\Rate\Repositories\RateGroupRepository;
 use App\Modules\Stead\Repositories\SteadRepository;
@@ -70,8 +71,14 @@ class GetBalanceListController extends Controller
                     }
                 });
             }
-            
-            return ['data' => $steads->forPage($page, $limit)->values(), 'meta' => ['total' => $steads->count()]];
+            if ($request->xlsx) {
+                $tmpfname = tempnam(sys_get_temp_dir(), "balance");
+                $rate_groups = (new RateGroupRepository())->get();
+                (new BalanceXlsxFileResource())->setRateGroups($rate_groups)->render($steads, $tmpfname);
+                return response()->download($tmpfname, 'Баланс_' . date("Y-m-d_H-i-s") . '.xlsx');
+            } else {
+                return ['data' => $steads->forPage($page, $limit)->values(), 'meta' => ['total' => $steads->count()]];
+            }
         } catch (\Exception $e) {
             return response(['errors' => $e->getMessage()], 450);
         }

@@ -22,7 +22,14 @@ class InvoiceResource extends JsonResource
             'size' => $this->stead->size,
         ];
         $data['payments'] = $this->payments;
-
+        if ($this->rate_group_id) {
+            $data['rate'] = [
+                'id' => $this->rate_group_id,
+                'name' => $this->rate_group->name,
+            ];
+        } else {
+            $data['rate'] = null;
+        }
         return $data;
     }
 }

@@ -8,6 +8,16 @@ export function getInvoiceList(params) {
   })
 }
 
+export function getInvoiceListXlsx(params) {
+  request.defaults.timeout = 60000
+  return request({
+    url: '/api/v2/billing/invoice/get-list',
+    method: 'get',
+    responseType: 'blob',
+    params
+  })
+}
+
 export function deleteInvoice(id) {
   return request({
     url: '/api/v2/billing/invoice/delete/' + id,

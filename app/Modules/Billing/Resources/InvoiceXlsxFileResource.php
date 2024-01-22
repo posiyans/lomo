@@ -10,7 +10,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Exception;
  * @refactory
  *
  */
-class PaymentXlsxFileResource extends AbstaractXlsxFile
+class InvoiceXlsxFileResource extends AbstaractXlsxFile
 {
 
     protected $spreadsheet;
@@ -19,11 +19,11 @@ class PaymentXlsxFileResource extends AbstaractXlsxFile
     /**
      * @throws Exception
      */
-    public function render($payments, $file_name)
+    public function render($invoices, $file_name)
     {
         $this->createHeader();
-        $this->fillLine($payments);
-        $this->setAutoSize(['B', 'F']);
+        $this->fillLine($invoices);
+        $this->setAutoSize(['B', 'E']);
         $this->setAutoFilter();
         $this->output($file_name);
     }
@@ -35,32 +35,28 @@ class PaymentXlsxFileResource extends AbstaractXlsxFile
         $row = 1;
         $i = 1;
         $sheet->setCellValue([$i++, $row], '№');
-        $sheet->setCellValue([$i++, $row], 'Дата');
-        $sheet->setCellValue([$i++, $row], 'Сумма, руб');
-        $sheet->setCellValue([$i++, $row], 'Назначение');
         $sheet->setCellValue([$i++, $row], 'Участок');
+        $sheet->setCellValue([$i++, $row], 'Назначение');
+        $sheet->setCellValue([$i++, $row], 'Сумма, руб');
         $sheet->setCellValue([$i++, $row], 'Группа');
     }
 
-
-    private function fillLine($balances)
+    private function fillLine($invoices)
     {
         $sheet = $this->spreadsheet->getActiveSheet();
         $row = 2;
-        foreach ($balances as $item) {
+        foreach ($invoices as $item) {
             $this->set_line($sheet, $item, $row++);
         }
     }
-
 
     private function set_line($sheet, $item, $row)
     {
         $i = 1;
         $sheet->setCellValue([$i++, $row], $item->id);
-        $sheet->setCellValue([$i++, $row], $item->payment_date);
-        $sheet->setCellValue([$i++, $row], $item->price);
-        $sheet->setCellValue([$i++, $row], $item->raw_data[4] ?? '');
         $sheet->setCellValue([$i++, $row], $item->stead->number ?? '');
+        $sheet->setCellValue([$i++, $row], $item->title);
+        $sheet->setCellValue([$i++, $row], $item->price);
         $sheet->setCellValue([$i++, $row], $item->rate_group->name ?? '');
     }
 

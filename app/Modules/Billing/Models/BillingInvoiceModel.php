@@ -4,6 +4,7 @@ namespace App\Modules\Billing\Models;
 
 use App\Models\MyModel;
 use App\Models\Stead;
+use App\Modules\Rate\Models\RateGroupModel;
 use App\Modules\Stead\Models\SteadModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -80,7 +81,15 @@ class BillingInvoiceModel extends MyModel
         return $this->hasOne(SteadModel::class, 'id', 'stead_id');
     }
 
-
+    /**
+     * группа тарифов
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function rate_group()
+    {
+        return $this->hasOne(RateGroupModel::class, 'id', 'rate_group_id');
+    }
 //
 //    /**
 //     * сохранить и очисть зависящие кеши

@@ -20,7 +20,6 @@ export default defineComponent({
     const fileDownload = ref(false)
     const downloadPayment = () => {
       fileDownload.value = true
-      console.log(props.func)
       props.func()
         .then(response => {
           let fileName = response.headers['content-disposition'].split('filename=')[1].split(';')[0]
