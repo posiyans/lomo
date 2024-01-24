@@ -31,7 +31,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read int|null $log_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Message\MessageModel> $message
  * @property-read int|null $message_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\Receipt\Models\InstrumentReadingModel> $metersData
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\MeteringDevice\Models\InstrumentReadingModel> $metersData
  * @property-read int|null $meters_data_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\Billing\Models\BillingPaymentModel> $payments
  * @property-read int|null $payments_count

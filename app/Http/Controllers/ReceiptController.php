@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Gardening;
 use App\Models\Stead;
-use App\Modules\Receipt\Models\MeteringDevice;
+use App\Modules\MeteringDevice\Models\MeteringDevice;
 use App\Modules\Receipt\Models\ReceiptTypeModels;
 use Illuminate\Http\Request;
 

@@ -4,7 +4,12 @@
       <q-card-section>
         <div class="relative-position">
           <div class="text-weight-bold text-h6">{{ article.title }}</div>
-          <ShowTime :time="article.updated_at" format="DD-MM-YYYY HH:mm" class="text-grey-8 text-small-80" />
+          <div class="row items-center q-col-gutter-md text-grey-8 text-small-80">
+            <div v-if="article.author">
+              {{ article.author.name }}
+            </div>
+            <ShowTime :time="article.updated_at" />
+          </div>
           <div v-if="authStore.checkPermission('article-edit') " class="absolute-top-right">
             <q-btn icon="settings" color="primary" flat :to="'/admin/article/edit/' + article.id" />
           </div>

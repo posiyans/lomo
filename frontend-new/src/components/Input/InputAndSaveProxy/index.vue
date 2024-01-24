@@ -39,7 +39,7 @@ export default defineComponent({
   components: {},
   props: {
     modelValue: {
-      type: String, Number,
+      type: [String, Number],
       default: ''
     },
     func: {

@@ -12,7 +12,7 @@ class PaymentRepository
 
     public function __construct()
     {
-        $this->query = BillingPaymentModel::query();
+        $this->query = BillingPaymentModel::query()->orderBy('id', 'DESC');
     }
 
     /**
@@ -107,7 +107,6 @@ class PaymentRepository
     public function get()
     {
         return $this->query
-            ->orderBy('id', 'DESC')
             ->get();
     }
 

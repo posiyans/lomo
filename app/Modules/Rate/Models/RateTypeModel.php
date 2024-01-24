@@ -15,9 +15,19 @@ class RateTypeModel extends MyModel
 
     protected $fillable = ['name', 'description'];
 
-    public function rateGroup()
+    public function rate_group()
     {
         return $this->belongsTo(RateGroupModel::class, 'rate_group_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @deprecated
+     *
+     */
+    public function rateGroup()
+    {
+        return $this->rate_group();
     }
 
     public function currentRate()

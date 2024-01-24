@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Bookkeeping\Billing\InstrumentReadings\Classes;
 
-use App\Modules\Receipt\Models\InstrumentReadingModel;
+use App\Modules\MeteringDevice\Models\InstrumentReadingModel;
 
 
 class DeleteInstrumentReadingClass
@@ -12,7 +12,7 @@ class DeleteInstrumentReadingClass
     /**
      * удалить показание прибора
      *
-     * @param InstrumentReadingModel $reading
+     * @param \App\Modules\MeteringDevice\Models\InstrumentReadingModel $reading
      * @return bool
      * @throws \Exception
      */

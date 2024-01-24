@@ -17,6 +17,7 @@
       option-value="id"
       @update:model-value="setValue"
       @clear="setValue('')"
+      :rules="rules"
     />
   </div>
 </template>
@@ -60,6 +61,15 @@ export default defineComponent({
     readOnly: {
       type: Boolean,
       default: false
+    },
+    rules: {
+      type: Array,
+      default: () => []
+    },
+    params: {
+      type: Object,
+      default: () => {
+      }
     }
   },
   setup(props, { emit }) {
@@ -67,10 +77,13 @@ export default defineComponent({
     const loading = ref(false)
     const getData = () => {
       loading.value = true
-      getRateGroupList()
+      getRateGroupList(props.params)
         .then(response => {
           options.value = response.data.data
           loading.value = false
+          if (props.autoSelect && options.value.length === 1) {
+            setValue(options.value[0].id)
+          }
         })
     }
     const setValue = (val) => {

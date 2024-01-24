@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin\Bookkeeping\Billing\InstrumentReadings;
 
 use App\Http\Controllers\Admin\AbstractAdminController;
 use App\Http\Controllers\Admin\Bookkeeping\Billing\InstrumentReadings\Classes\DeleteInstrumentReadingClass;
-use App\Modules\Receipt\Models\InstrumentReadingModel;
+use App\Modules\MeteringDevice\Models\InstrumentReadingModel;
 use Illuminate\Http\Request;
 
 

@@ -15,7 +15,7 @@ class ArticleResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+        $data = [
             'id' => $this->id,
             'uid' => $this->uid,
             'title' => $this->title,
@@ -25,6 +25,14 @@ class ArticleResource extends JsonResource
             'status' => $this->status,
             'updated_at' => $this->updated_at,
             'slug' => $this->slug,
+            'author' => null
         ];
+        if ($this->author) {
+            $data['author'] = [
+                'uid' => $this->author->uid,
+                'name' => $this->author->name,
+            ];
+        }
+        return $data;
     }
 }

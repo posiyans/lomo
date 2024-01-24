@@ -1,11 +1,16 @@
 <template>
   <q-card class="q-mb-lg">
-    <q-card-section class="relative-position row items-center q-col-gutter-md">
+    <q-card-section class="relative-position row items-center q-col-gutter-md q-pb-none">
       <div>
         <div class="text-weight-bold text-h6 overflow-hidden  ">
           {{ article.title }}
         </div>
-        <ShowTime :time="article.updated_at" class="text-grey-8 text-small-80" />
+        <div class="row items-center q-col-gutter-md text-grey-8 text-small-80">
+          <div v-if="article.author">
+            {{ article.author.name }}
+          </div>
+          <ShowTime :time="article.updated_at" />
+        </div>
       </div>
       <q-space />
       <div v-if="article.status !== 2">

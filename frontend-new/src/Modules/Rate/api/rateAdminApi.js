@@ -56,10 +56,11 @@ export function createRateGroup(data) {
   })
 }
 
-export function getRateGroupList() {
+export function getRateGroupList(params) {
   return request({
     url: '/api/v2/rate/group/get-list',
-    method: 'get'
+    method: 'get',
+    params
   })
 }
 

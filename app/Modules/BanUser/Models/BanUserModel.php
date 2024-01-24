@@ -47,10 +47,6 @@ use Ramsey\Uuid\Uuid;
  * @method static \Illuminate\Database\Eloquent\Builder|BanUserModel whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|BanUserModel withTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|BanUserModel withoutTrashed()
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
  * @mixin \Eloquent
  */
 class BanUserModel extends MyModel

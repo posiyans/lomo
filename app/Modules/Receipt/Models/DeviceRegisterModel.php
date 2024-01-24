@@ -4,6 +4,8 @@ namespace App\Modules\Receipt\Models;
 
 use App\Models\MyModel;
 use App\Models\Receipt\id;
+use App\Modules\MeteringDevice\Models\InstrumentReadingModel;
+use App\Modules\MeteringDevice\Models\MeteringDevice;
 
 /**
  * App\Modules\Receipt\Models\DeviceRegisterModel
@@ -20,7 +22,7 @@ use App\Models\Receipt\id;
  * @property bool $active запрашивать показания
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Modules\Receipt\Models\MeteringDevice|null $MeteringDevice
+ * @property-read \App\Modules\MeteringDevice\Models\MeteringDevice|null $MeteringDevice
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\File\Models\FileModel> $files
  * @property-read int|null $files_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log

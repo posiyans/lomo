@@ -23,7 +23,7 @@ class GetBalanceListController extends Controller
             $limit = $request->limit;
             $page = $request->page;
             $find = $request->find;
-            $steads = (new SteadRepository())->findByNumber($find)->run();
+            $steads = (new SteadRepository())->findByNumber($find)->findById($request->stead_id)->run();
             $rate_groups = (new RateGroupRepository())->get();
             $steads->each(function ($item, $key) use ($rate_groups) {
                 $item->stead = [

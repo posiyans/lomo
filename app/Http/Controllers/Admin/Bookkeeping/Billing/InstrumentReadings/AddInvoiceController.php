@@ -4,8 +4,7 @@ namespace App\Http\Controllers\Admin\Bookkeeping\Billing\InstrumentReadings;
 
 use App\Http\Controllers\Controller;
 use App\Modules\Billing\Models\BillingInvoice;
-use App\Modules\Receipt\Models\InstrumentReadingModel;
-use Auth;
+use App\Modules\MeteringDevice\Models\InstrumentReadingModel;
 use Illuminate\Http\Request;
 
 class AddInvoiceController extends Controller

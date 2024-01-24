@@ -21,8 +21,8 @@ class GetPaymentListController extends Controller
             $limit = $request->limit;
             $payments = (new PaymentRepository())
                 ->findPayment($request->find)
-                ->forRateGroup($request->rate_group_id)
                 ->isError($request->is_error)
+                ->forStead($request->stead_id)
                 ->forRateGroup($request->rate_group_id)
                 ->forDate($request->date_start, $request->date_end);
             if ($request->xlsx) {

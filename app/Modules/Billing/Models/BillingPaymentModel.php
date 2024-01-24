@@ -30,7 +30,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\File\Models\FileModel> $files
  * @property-read int|null $files_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\Receipt\Models\InstrumentReadingModel> $instrumentReadings
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\MeteringDevice\Models\InstrumentReadingModel> $instrumentReadings
  * @property-read int|null $instrument_readings_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Log> $log
  * @property-read int|null $log_count
@@ -90,6 +90,16 @@ class BillingPaymentModel extends MyModel
     public function rate_group()
     {
         return $this->hasOne(RateGroupModel::class, 'id', 'rate_group_id');
+    }
+
+    /**
+     * участок который платил
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function invoice()
+    {
+        return $this->hasOne(BillingInvoiceModel::class, 'id', 'invoice_id');
     }
 
 

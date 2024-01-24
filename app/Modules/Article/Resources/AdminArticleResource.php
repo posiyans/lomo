@@ -25,7 +25,7 @@ class AdminArticleResource extends JsonResource
             'category_id' => $this->category_id,
             'status' => $this->status,
             'allow_comments' => $this->allow_comments,
-            'user' => (new AdminUserResource($this->user)),
+            'author' => (new AdminUserResource($this->user)),
             'slug' => $this->slug,
             'updated_at' => $this->updated_at,
             'files' => FileResource::collection($this->files)

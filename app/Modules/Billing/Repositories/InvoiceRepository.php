@@ -49,6 +49,17 @@ class InvoiceRepository
         return $this;
     }
 
+    public function forDate($date_start, $date_end)
+    {
+        if ($date_start) {
+            $this->query->where('created_at', '>=', $date_start);
+        }
+        if ($date_end) {
+            $this->query->where('created_at', '<=', $date_end);
+        }
+        return $this;
+    }
+
 
     public function paginate($limit)
     {

@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Admin\Bookkeeping\Billing\InstrumentReadings;
 use App\Http\Controllers\Admin\AbstractAdminController;
 use App\Http\Resources\Admin\Bookkeeping\AdminInstrumentReadingsResource;
 use App\Models\Stead;
-use App\Modules\Receipt\Models\InstrumentReadingModel;
-use App\Modules\Receipt\Models\MeteringDevice;
+use App\Modules\MeteringDevice\Models\InstrumentReadingModel;
+use App\Modules\MeteringDevice\Models\MeteringDevice;
 use Illuminate\Http\Request;
 
 

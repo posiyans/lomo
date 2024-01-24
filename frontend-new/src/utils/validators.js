@@ -5,6 +5,13 @@ const required = function (val) {
   return ((val && val.length > 0) || 'Поле должно быть заполнено')
 }
 
+const isNumber = function (val) {
+  if (!isNaN(+val)) {
+    return true
+  }
+  return 'Поле должно быть числом'
+}
+
 const short = function (val, length = 3) {
   return ((val && val.length > length) || 'Минимальная длина ' + length + ' символов')
 }
@@ -45,5 +52,6 @@ export {
   isExternal,
   required,
   isEmail,
+  isNumber,
   short
 }

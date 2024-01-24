@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Modules\Receipt\Models;
+namespace App\Modules\MeteringDevice\Models;
 
 use App\Models\MyModel;
 use App\Modules\Rate\Models\RateModel;
+use App\Modules\Receipt\Models\DeviceRegisterModel;
 
 /**
  * Модель для показаний
@@ -47,9 +48,8 @@ class InstrumentReadingModel extends MyModel
      * @var array
      */
     protected $fillable = [
-        'stead_id',
-        'payment_id',
-        'device_id'
+        'metering_device_id',
+        'value'
     ];
 
     protected $casts = [

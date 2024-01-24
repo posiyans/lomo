@@ -6,9 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Stead;
 use App\Modules\Billing\Models\BillingInvoice;
 use App\Modules\Billing\Models\BillingReestrModel;
-use App\Modules\Receipt\Models\MeteringDevice;
+use App\Modules\MeteringDevice\Models\MeteringDevice;
 use App\Modules\Receipt\Models\ReceiptTypeModels;
-use Auth;
 use Illuminate\Support\Facades\DB;
 
 class AddRegisterOfChargesController extends Controller

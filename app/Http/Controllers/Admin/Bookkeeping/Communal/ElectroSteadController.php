@@ -3,9 +3,8 @@
 namespace App\Http\Controllers\Admin\Bookkeeping\Communal;
 
 use App\Http\Controllers\Controller;
+use App\Modules\MeteringDevice\Models\InstrumentReadingModel;
 use App\Modules\Receipt\Models\DeviceRegisterModel;
-use App\Modules\Receipt\Models\InstrumentReadingModel;
-use Auth;
 use Illuminate\Http\Request;
 
 class ElectroSteadController extends Controller

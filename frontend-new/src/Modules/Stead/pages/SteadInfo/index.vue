@@ -9,12 +9,18 @@
           :breakpoint="0"
         >
           <q-tab name="steadinfo" label="Данные" />
-          <q-tab name="ban" label="Показания" />
-          <q-tab name="payment" label="Платежи" />
+          <q-tab name="readings" label="Показания" />
+          <q-tab v-if="bookkeeping" name="payment" label="Платежи" />
         </q-tabs>
         <q-tab-panels v-model="tab" animated>
           <q-tab-panel name="steadinfo" class="ba b--dark-green" style="min-height: 250px;">
             <SteadTab :stead-id="steadId" />
+          </q-tab-panel>
+          <q-tab-panel name="readings" class="ba b--dark-green" style="min-height: 250px;">
+
+          </q-tab-panel>
+          <q-tab-panel v-if="bookkeeping" name="payment" class="ba b--dark-green" style="min-height: 250px;">
+            <PaymentAndInvoiceForStead :stead-id="steadId" />
           </q-tab-panel>
         </q-tab-panels>
       </q-card-section>
@@ -24,15 +30,18 @@
 
 <script>
 /* eslint-disable */
-import { defineComponent, onMounted, ref } from 'vue'
+import { computed, defineComponent, onMounted, ref } from 'vue'
 import SteadTab from './components/SteadTab/index.vue'
 import { useRoute } from 'vue-router'
 import { getSteadInfo } from 'src/Modules/Stead/api/stead'
 import { usePrimaryStore } from 'stores/parimary-store'
+import PaymentAndInvoiceForStead from 'src/Modules/Bookkeeping/components/PaymentAndInvoiceForStead/index.vue'
+import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
 
 export default defineComponent({
   components: {
-    SteadTab
+    SteadTab,
+    PaymentAndInvoiceForStead
   },
   props: {},
   setup(props, { emit }) {
@@ -41,6 +50,10 @@ export default defineComponent({
     const route = useRoute()
     const steadId = ref(route.params.id)
     const primaryStore = usePrimaryStore()
+    const authStore = useAuthStore()
+    const bookkeeping = computed(() => {
+      return authStore.checkPermission(['payment-show', 'payment-edit', 'invoice-show', 'invoice-edit'])
+    })
     const getData = () => {
       const data = {
         id: steadId.value,
@@ -57,6 +70,7 @@ export default defineComponent({
     })
     return {
       tab,
+      bookkeeping,
       steadId
     }
   }

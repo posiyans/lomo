@@ -66,24 +66,33 @@ class RateMigrate
         }
 
         $devices = DB::connection('mysql_old')->table('device_register')->get();
-        $fields = ['id', 'stead_id', 'initial_data', 'serial_number', 'device_brand', 'installation_date', 'verification_date', 'descriptions', 'active', 'created_at', 'updated_at'];
+        $fields = ['id', 'stead_id', 'initial_data', 'active', 'created_at', 'updated_at'];
+        // 'serial_number', 'device_brand', 'installation_date', 'verification_date',
         foreach ($devices as $item) {
-            $newItem = new DeviceRegisterModel();
+            $newItem = new MeteringDeviceModel();
             foreach ($fields as $value) {
                 $newItem->$value = $item->$value;
             }
             $newItem->rate_type_id = $item->type_id;
+            $options = [
+                'serial_number' => $item->serial_number,
+                'device_brand' => $item->device_brand,
+                'installation_date' => $item->installation_date,
+                'verification_date' => $item->verification_date,
+            ];
+            $newItem->description = $item->descriptions;
+            $newItem->options = $options;
             $newItem->save();
         }
 
         $readings = DB::connection('mysql_old')->table('instrument_readings')->get();
-        $fields = ['id', 'stead_id', 'device_id', 'value', 'invoice_id', 'payment_id', 'created_at', 'updated_at'];
+        $fields = ['id', 'value', 'invoice_id', 'payment_id', 'created_at', 'updated_at'];
         foreach ($readings as $item) {
             $newItem = new InstrumentReadingModel();
             foreach ($fields as $value) {
                 $newItem->$value = $item->$value;
             }
-            $newItem->rate_type_id = $item->device_id;
+            $newItem->metering_device_id = $item->device_id;
             $newItem->save();
         }
     }
@@ -95,12 +104,20 @@ class RateGroupModel extends RateGroupModelOriginal
     public $timestamps = false;
 }
 
-class DeviceRegisterModel extends MyModel
+class MeteringDeviceModel extends MyModel
 {
+
+    protected $casts = [
+        'enable' => 'boolean',
+        'options' => 'array',
+    ];
     public $timestamps = false;
 }
 
 class InstrumentReadingModel extends MyModel
 {
     public $timestamps = false;
+    protected $casts = [
+        'value' => 'decimal:2',
+    ];
 }

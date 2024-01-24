@@ -3,6 +3,8 @@
 namespace App\Modules\Receipt\Models;
 
 use App\Models\MyModel;
+use App\Modules\MeteringDevice\Models\InstrumentReadingModel;
+use App\Modules\MeteringDevice\Models\MeteringDevice;
 
 /*
  * Классификация квитанций
@@ -21,7 +23,7 @@ use App\Models\MyModel;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int|null $payment_period период оплаты
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\Receipt\Models\MeteringDevice> $MeteringDevice
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\MeteringDevice\Models\MeteringDevice> $MeteringDevice
  * @property-read int|null $metering_device_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\File\Models\FileModel> $files
  * @property-read int|null $files_count

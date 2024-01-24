@@ -24,6 +24,14 @@ class RateGroupRepository
         return $this->query->where('id', $id)->firstOrFail();
     }
 
+    public function depends($depands)
+    {
+        if ($depands) {
+            $this->query->where('depends', $depands);
+        }
+        return $this;
+    }
+
     /**
      * @return \App\Models\MyModel[]|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
      * @deprecated
