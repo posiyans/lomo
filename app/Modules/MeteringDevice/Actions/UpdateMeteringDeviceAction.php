@@ -18,9 +18,9 @@ class UpdateMeteringDeviceAction
 
     public function field($field, $value): UpdateMeteringDeviceAction
     {
-        if ($field != 'options' && in_array($field, array_keys($this->device->getAttributes()))) {
+        if (in_array($field, $this->device->getFillable())) {
             $this->device->$field = $value;
-        } else {
+        } elseif (in_array($field, $this->device->getOptions())) {
             $options = $this->device->options;
             $options[$field] = $value;
             $this->device->options = $options;

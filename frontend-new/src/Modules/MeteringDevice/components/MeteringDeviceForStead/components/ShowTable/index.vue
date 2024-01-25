@@ -11,14 +11,17 @@
       row-key="id"
     >
       <template v-slot:body-cell-rate="props">
-        <q-td :props="props">
-          <div>
+        <q-td :props="props" :class="{ 'o-60': !props.row.active }">
+          <div :class="{ 'text-grey': !props.row.active }">
             {{ props.row.rate.group_name }} {{ props.row.rate.name }}
+          </div>
+          <div v-if="!props.row.active" class="text-red">
+            Не активный
           </div>
         </q-td>
       </template>
       <template v-slot:body-cell-device="props">
-        <q-td :props="props">
+        <q-td :props="props" :class="{ 'o-60': !props.row.active }">
           <div>
             {{ props.row.device_brand }}
             <span class="text-primary">
@@ -38,32 +41,34 @@
         </q-td>
       </template>
       <template v-slot:body-cell-init_value="props">
-        <q-td :props="props">
+        <q-td :props="props" :class="{ 'o-60': !props.row.active }">
           {{ props.row.initial_data }} {{ props.row.rate.unit_name }}
         </q-td>
       </template>
       <template v-slot:body-cell-last_value="props">
-        <q-td :props="props">
-          <div>
-            {{ props.row.last_reading.value }} {{ props.row.rate.unit_name }}
-          </div>
-          <div class="row items-center q-col-gutter-xs text-grey justify-center">
+        <q-td :props="props" :class="{ 'o-60': !props.row.active }">
+          <div v-if="props.row.last_reading">
             <div>
-              от
+              {{ props.row.last_reading.value }} {{ props.row.rate.unit_name }}
             </div>
-            <ShowTime :time="props.row.last_reading.created_at" format="DD-MM-YYYY" class="text-grey" />
+            <div class="row items-center q-col-gutter-xs text-grey justify-center">
+              <div>
+                от
+              </div>
+              <ShowTime :time="props.row.last_reading.created_at" format="DD-MM-YYYY" class="text-grey" />
+            </div>
           </div>
         </q-td>
       </template>
       <template v-slot:body-cell-desc="props">
-        <q-td :props="props">
+        <q-td :props="props" :class="{ 'o-60': !props.row.active }">
           <div class="ellipsis">
             {{ props.row.description }}
           </div>
         </q-td>
       </template>
       <template v-slot:body-cell-actions="props">
-        <q-td :props="props">
+        <q-td :props="props" :class="{ 'o-60': !props.row.active }">
           <div class="row items-center q-col-gutter-xs">
             <div>
               <q-btn color="secondary" label="Подать показания" />

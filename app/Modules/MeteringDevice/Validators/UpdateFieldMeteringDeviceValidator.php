@@ -2,6 +2,7 @@
 
 namespace App\Modules\MeteringDevice\Validators;
 
+use App\Modules\MeteringDevice\Models\MeteringDeviceModel;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -15,18 +16,11 @@ class UpdateFieldMeteringDeviceValidator extends FormRequest
      */
     public function rules()
     {
+        $device = new MeteringDeviceModel();
         return [
             'field' => [
                 'required',
-                Rule::in([
-                    'device_brand',
-                    'serial_number',
-                    'installation_date',
-                    'initial_data',
-                    'verification_date',
-                    'description',
-                    'active'
-                ])
+                Rule::in(array_merge($device->getFillable(), $device->getOptions()))
             ],
             'value' => [
                 'nullable'

@@ -43,9 +43,27 @@ class MeteringDeviceModel extends MyModel
 {
 
     protected $casts = [
-        'enable' => 'boolean',
+//        'active' => 'boolean',
         'options' => 'array',
     ];
+
+    protected $fillable = [
+        'initial_data',
+        'description',
+        'active'
+    ];
+
+    protected $optionField = [
+        'device_brand',
+        'serial_number',
+        'installation_date',
+        'verification_date',
+    ];
+
+    public function getOptions()
+    {
+        return $this->optionField;
+    }
 
     /**
      * по какому тарифу тарифицируется прибор
@@ -57,11 +75,20 @@ class MeteringDeviceModel extends MyModel
         return $this->hasOne(RateTypeModel::class, 'id', 'rate_type_id');
     }
 
+    /**
+     * показания прибора
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function instrument_readings()
     {
         return $this->hasMany(InstrumentReadingModel::class, 'metering_device_id', 'id');
     }
 
+    /**
+     * последнее показание пробора
+     *
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Relations\HasMany|object|null
+     */
     public function last_reading()
     {
         return $this->instrument_readings()->orderByDesc('created_at')->first();

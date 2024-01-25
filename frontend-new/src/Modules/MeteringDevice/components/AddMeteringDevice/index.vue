@@ -96,6 +96,8 @@ import RateGroupSelect from 'src/Modules/Rate/components/RateGroupSelect/index.v
 import RateTypeForGroupSelect from 'src/Modules/Rate/components/RateTypeForGroupSelect/index.vue'
 import InputNumber from 'components/Input/InputNumber/index.vue'
 import { isNumber, required } from 'src/utils/validators.js'
+import { createMeteringDevice } from 'src/Modules/MeteringDevice/api/meteringDeviceApi'
+import { errorMessage } from 'src/utils/message'
 
 export default defineComponent({
   components: {
@@ -124,8 +126,14 @@ export default defineComponent({
       installation_date: '',
       verification_date: ''
     })
-    const onSubmit = () => {
-
+    const onSubmit = (trg) => {
+      createMeteringDevice(device.value)
+        .then(res => {
+          emit('success')
+        })
+        .catch(er => {
+          errorMessage(er.response.data.errors)
+        })
     }
     return {
       data,

@@ -1,5 +1,32 @@
 <template>
-  <div class="q-gutter-sm">
+  <div class="q-gutter-sm relative-position">
+    <div v-if="!editDevice.last_reading" class="absolute-top-right">
+      <DeleteMeteringDevice :device-id="device.id" @success="deleteDevice" />
+    </div>
+    <div>
+      <InputAndSaveProxy
+        v-model="editDevice.active"
+        outlined
+        label="Дата установки"
+        name="active"
+        :func="func"
+      >
+        <template #default="{ modelValue, setValue }">
+          <div class="q-pt-xs">
+            <q-btn-toggle
+              :model-value="modelValue"
+              toggle-color="teal"
+              no-caps
+              :options="[
+              {label: 'Активный', value: 1},
+              {label: 'Не рабочий', value: 0}
+            ]"
+              @update:model-value="setValue"
+            />
+          </div>
+        </template>
+      </InputAndSaveProxy>
+    </div>
     <div>
       <InputAndSaveProxy
         v-model="editDevice.device_brand"
@@ -63,30 +90,6 @@
         :func="func"
       />
     </div>
-    <div>
-      <InputAndSaveProxy
-        v-model="editDevice.active"
-        outlined
-        label="Дата установки"
-        name="active"
-        :func="func"
-      >
-        <template #default="{ modelValue, setValue }">
-          <div class="q-pt-xs">
-            <q-btn-toggle
-              :model-value="modelValue"
-              toggle-color="teal"
-              no-caps
-              :options="[
-              {label: 'Активный', value: 1},
-              {label: 'Не рабочий', value: 0}
-            ]"
-              @update:model-value="setValue"
-            />
-          </div>
-        </template>
-      </InputAndSaveProxy>
-    </div>
   </div>
 </template>
 
@@ -96,11 +99,13 @@ import { defineComponent, onMounted, ref } from 'vue'
 import InputAndSaveProxy from 'components/Input/InputAndSaveProxy/index.vue'
 import InputDate from 'components/Input/InputDate/index.vue'
 import { updateFieldMeteringDevice } from 'src/Modules/MeteringDevice/api/meteringDeviceApi'
+import DeleteMeteringDevice from 'src/Modules/MeteringDevice/components/DeleteMeteringDevice/index.vue'
 
 export default defineComponent({
   components: {
     InputAndSaveProxy,
-    InputDate
+    InputDate,
+    DeleteMeteringDevice
   },
   props: {
     device: {
@@ -115,15 +120,20 @@ export default defineComponent({
     const func = (data) => {
       return updateFieldMeteringDevice(props.device.id, data)
     }
+
     const showDialog = () => {
       dialogVisible.value = true
     }
     onMounted(() => {
       editDevice.value = props.device
     })
+    const deleteDevice = () => {
+      emit('delete')
+    }
     return {
       data,
       func,
+      deleteDevice,
       editDevice,
       dialogVisible,
       showDialog

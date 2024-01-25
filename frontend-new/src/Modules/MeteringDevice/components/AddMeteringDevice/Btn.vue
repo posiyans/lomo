@@ -18,7 +18,7 @@
         </q-card-section>
 
         <q-card-section>
-          <AddMeteringDeviceEdit :stead-id="steadId" />
+          <AddMeteringDeviceEdit :stead-id="steadId" @success="close" />
         </q-card-section>
       </q-card>
     </q-dialog>
@@ -47,6 +47,7 @@ export default defineComponent({
       dialogVisible.value = true
     }
     const close = () => {
+      dialogVisible.value = false
       emit('close')
     }
     return {

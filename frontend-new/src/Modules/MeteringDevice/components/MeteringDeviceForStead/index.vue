@@ -1,6 +1,6 @@
 <template>
   <div>
-    <AddMeteringDevice v-if="edit" :stead-id="steadId" @reload="getData" />
+    <AddMeteringDevice v-if="edit" :stead-id="steadId" @close="getData" />
     <ShowTable :list="devices" :edit="edit" @reload="getData" />
   </div>
 </template>

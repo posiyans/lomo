@@ -14,3 +14,18 @@ export function updateFieldMeteringDevice(deviceId, data) {
     data
   })
 }
+
+export function createMeteringDevice(data) {
+  return request({
+    url: '/api/v2/metering-device',
+    method: 'post',
+    data
+  })
+}
+
+export function deleteMeteringDevice(deviceId) {
+  return request({
+    url: '/api/v2/metering-device/' + deviceId,
+    method: 'delete'
+  })
+}

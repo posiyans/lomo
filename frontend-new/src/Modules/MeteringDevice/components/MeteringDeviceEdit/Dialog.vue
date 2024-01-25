@@ -17,7 +17,7 @@
           <q-btn icon="close" flat round dense v-close-popup />
         </q-card-section>
         <q-card-section>
-          <MeteringDeviceEdit :device="device" />
+          <MeteringDeviceEdit :device="device" @delete="close" />
         </q-card-section>
       </q-card>
     </q-dialog>
@@ -46,6 +46,7 @@ export default defineComponent({
       dialogVisible.value = true
     }
     const close = () => {
+      dialogVisible.value = false
       emit('close')
     }
     return {
