@@ -25,6 +25,7 @@ module.exports = configure(function (ctx) {
     // https://v2.quasar.dev/quasar-cli-webpack/boot-files
     boot: [
       'main',
+      'yandex',
       'element',
       'quasar-defaults'
     ],
@@ -54,7 +55,8 @@ module.exports = configure(function (ctx) {
         SITE_NAME: 'ЛОМО',
         BASE_API: ctx.dev
           ? 'http://localhost'
-          : ''
+          : '',
+        VUE_APP_YANDEX_API_MAP: '514f0fcd-01fe-491b-bcae-19cfa790af54'
       },
       // target: {
       //   browser: ['es2019', 'edge88', 'firefox78', 'chrome87', 'safari13.1'],

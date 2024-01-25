@@ -1,9 +1,9 @@
 import request from 'src/utils/request'
 
-export function getYandexMap(query) {
+export function getYandexMap(params) {
   return request({
-    url: '/api/v1/yandex/get-map',
+    url: '/api/v2/yandex/map/get-steads',
     method: 'get',
-    params: query
+    params
   })
 }

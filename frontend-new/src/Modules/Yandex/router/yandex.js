@@ -10,6 +10,14 @@ const yandex =
         meta: {
           title: 'Яндекс расписание'
         }
+      },
+      {
+        path: 'map',
+        component: () => import('src/Modules/Yandex/page/YandexMap/index.vue'),
+        hidden: true,
+        meta: {
+          title: 'Яндекс карта'
+        }
       }
     ]
   }

@@ -1,72 +1,138 @@
 <template>
-  <div id="map" v-id="show">
-    <yandex-map
-      :coords="center"
-      :zoom="16"
-      style="width: 100%; height: 600px;"
-    >
-      <ymap-marker
-        v-for="i in list"
-        :key="i.center"
-        :marker-id="i.number"
-        marker-type="Polygon"
-        :coords="i.krd"
-        :marker-fill="i.color"
-        :marker-stroke="{color: '#ff0000', width: 1}"
-        :balloon="{header: 'Участок ' + i.number, body: i.size+' кв.м'}"
-      />
+  <yandex-map
+    :settings="{
+      location: {
+        center,
+        zoom,
+      },
+    }"
+  >
+    <yandex-map-default-scheme-layer :settings="{ }" />
+    <yandex-map-default-features-layer />
+    <yandex-map-feature v-for="item in figure" :key="item.id" :settings="item" />
+    <yandex-map-hint v-if="show" hint-property="hint">
+      <template #default="props">
+        <div
+          class="hint text-center"
+          v-if="props.content"
+        >
+          <div class="text-weight-bold">
+            {{ props.content.title }}
+          </div>
+          <div>
+            {{ props.content.body }}
+          </div>
 
-    </yandex-map>
-
-  </div>
+        </div>
+      </template>
+    </yandex-map-hint>
+  </yandex-map>
 </template>
 
 <script>
+/* eslint-disable */
+import { defineComponent, onMounted, ref } from 'vue'
+import { YandexMap, YandexMapControls, YandexMapDefaultFeaturesLayer, YandexMapDefaultSchemeLayer, YandexMapFeature, YandexMapHint, YandexMapZoomControl } from 'vue-yandex-maps'
 import { getYandexMap } from 'src/Modules/Yandex/api/apiYandexMap.js'
 
-export default {
-  data() {
-    return {
-      center: [59.110174, 30.473105],
-      coords: [
-        [[59.11028192721815, 30.479524846676256], [59.11027189724136, 30.479465683631645], [59.11024398638894, 30.478946008239774], [59.11007487897361, 30.478984384268713], [59.11011838727184, 30.479560024702778], [59.11028092721815, 30.479524846676256]],
-        []
-      ],
-      list: [],
-      show: true,
-      markerIcon: {
-        layout: 'default#imageWithContent',
-        content: 'уч. 421 <br> 612 кв.м',
-        contentOffset: [-100, 50],
-        contentLayout: '<div style=" width: 100px; color: #696969;">$[properties.iconContent]</div>'
-      }
+
+export default defineComponent({
+  components: {
+    YandexMap,
+    YandexMapControls,
+    YandexMapDefaultSchemeLayer,
+    YandexMapDefaultFeaturesLayer,
+    YandexMapZoomControl,
+    YandexMapFeature,
+    YandexMapHint
+  },
+  props: {
+    steadId: {
+      type: [String, Number],
+      default: ''
     }
   },
-  mounted() {
-    this.getPoints()
-  },
-  methods: {
-    showmarker(i) {
-      return {
-        layout: 'default#imageWithContent',
-        content: 'уч. 421 <br> 612 кв.м',
-        contentOffset: [0, 0],
-        contentLayout: '<div style=" width: 100px; color: #696969;">' + i.address + '<br>' + i.size + ' кв.м</div>'
-      }
-    },
-    getPoints() {
-      getYandexMap().then(response => {
-        console.log(response)
-        this.list = response.data
-      })
+  setup(props, { emit }) {
+    const list = ref([])
+    const center = ref([30.473105, 59.110174])
+    const zoom = ref(16)
+    const show = ref(false)
+    const figure = ref([])
+    const getData = () => {
+      getYandexMap()
+        .then(response => {
+          console.log(response)
+          list.value = response.data
+          list.value.forEach(item => {
+            if (+props.steadId === +item.id) {
+              console.log(item.center)
+              const centerX = item.krd.reduce((summ, item) => {
+                return summ + item[0]
+              }, 0)
+              const centerY = item.krd.reduce((summ, item) => {
+                return summ + item[1]
+              }, 0)
+              center.value = [centerX / item.krd.length, centerY / item.krd.length]
+              console.log(item.center)
+              console.log(center.value)
+              zoom.value = 17
+            }
+            const color = +props.steadId === +item.id ? 'rgba(255,0,0, 1)' : 'rgba(255,0,0,0.1)'
+            figure.value.push({
+              id: item.number,
+              draggable: false,
+              geometry: {
+                type: 'Polygon',
+                coordinates: [item.krd]
+              },
+              style: {
+                fillRule: 'nonzero',
+                fill: color,
+                fillOpacity: item.color.opacity,
+                stroke: [
+                  {
+                    color: item.color.color,
+                    width: 1
+                  },
+                ],
+              },
+              properties: {
+                hint: {
+                  title: 'Участок ' + item.number,
+                  body: item.size + ' кв.м'
+                },
+              },
+
+              onDragEnd: (val) => {
+                console.log(val)
+              }
+            })
+          })
+          show.value = true
+        })
+    }
+    onMounted(() => {
+      getData()
+    })
+    return {
+      show,
+      center,
+      zoom,
+      list,
+      figure
     }
   }
-}
+})
 </script>
 
-<style>
-.ymap-class {
-  width: 100%;
-  height: 600px;
+<style scoped lang='scss'>
+.hint {
+  position: absolute;
+  padding: 4px;
+  background: white;
+  border: 1px solid black;
+  white-space: nowrap;
+  opacity: 0.7;
+  transform: translate(8px, -50%)
 }
 </style>

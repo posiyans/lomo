@@ -1,15 +1,20 @@
 <template>
-  <div>
-    <table v-if="stead">
-      <TrTableBlock
-        v-for="item in columns"
-        :key="item.field"
-        v-model="stead"
-        :field="item"
-        :edit="edit"
-        @reload="getData"
-      />
-    </table>
+  <div class="row items-center no-wrap" style="align-content: stretch;">
+    <div class="q-py-lg" style="width: 450px;">
+      <table v-if="stead">
+        <TrTableBlock
+          v-for="item in columns"
+          :key="item.field"
+          v-model="stead"
+          :field="item"
+          :edit="edit"
+          @reload="getData"
+        />
+      </table>
+    </div>
+    <div class="" style="align-self: stretch; flex-grow: 1;">
+      <YandexMap :stead-id="steadId" />
+    </div>
   </div>
 </template>
 
@@ -18,10 +23,12 @@
 import { defineComponent, onMounted, ref } from 'vue'
 import { getSteadInfo } from 'src/Modules/Stead/api/stead'
 import TrTableBlock from './components/TrTableBlock/index.vue'
+import YandexMap from 'src/Modules/Yandex/components/YandexMap/index.vue'
 
 export default defineComponent({
   components: {
-    TrTableBlock
+    TrTableBlock,
+    YandexMap
   },
   props: {
     steadId: {
