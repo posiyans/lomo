@@ -1,12 +1,28 @@
 <template>
-  <div v-if="showBtn">
-    <UserOfferNews @success="toPrimary" />
+  <div class="bg-white">
+    <div v-if="showBtn">
+      <UserOfferNews @success="toPrimary" />
+    </div>
+    <div v-if="errors" class="q-pa-md">
+      <div class="text-weight-bold text-big-50">
+        Предложить новость
+      </div>
+
+      <div class="fixed-center text-center text-weight-bold text-red">
+        <div class="text-big-50">
+          Ошибка
+        </div>
+        <div>
+          {{ errors }}
+        </div>
+      </div>
+    </div>
+    <q-card v-if="authStore.is_guest">
+      <q-card-section class="q-pa-lg text-center content-center page-title" style="min-height: 400px;">
+        Необходима авторизация
+      </q-card-section>
+    </q-card>
   </div>
-  <q-card v-if="authStore.is_guest">
-    <q-card-section class="q-pa-lg text-center content-center page-title" style="min-height: 400px;">
-      Необходима авторизация
-    </q-card-section>
-  </q-card>
 </template>
 
 <script>
@@ -25,19 +41,24 @@ export default defineComponent({
   setup(props, { emit }) {
     const router = useRouter()
     const showBtn = ref(false)
+    const errors = ref(false)
     const authStore = useAuthStore()
     const toPrimary = () => {
       router.push('/')
     }
     onMounted(() => {
-      getAllowPublicationArticle({ value: 1 })
+      getAllowPublicationArticle()
         .then(res => {
           showBtn.value = true
+        })
+        .catch(er => {
+          errors.value = er.response.data.errors
         })
     })
     return {
       toPrimary,
       authStore,
+      errors,
       showBtn
     }
   }

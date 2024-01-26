@@ -1,5 +1,13 @@
 import request from 'src/utils/request'
 
+export function getKadastrInfo(params) {
+  return request({
+    url: '/api/v2/stead/get-kadastr-info',
+    method: 'get',
+    params
+  })
+}
+
 export function getSteadsList(params) {
   return request({
     url: '/api/v2/stead/list',

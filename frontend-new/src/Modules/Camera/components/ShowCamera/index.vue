@@ -5,7 +5,7 @@
     </div>
     <div>
       <q-img
-        :src="cameraUrlFilter"
+        :src="cameraUrl"
         spinner-color="white"
         style="min-width: 300px; min-height: 200px; max-width: 60vw"
       >
@@ -20,7 +20,11 @@
 </template>
 
 <script>
-export default {
+/* eslint-disable */
+import { computed, defineComponent } from 'vue'
+
+export default defineComponent({
+  components: {},
   props: {
     item: Object,
     showName: {
@@ -28,21 +32,19 @@ export default {
       default: false
     }
   },
-  data() {
+  setup(props, { emit }) {
+    const time = new Date().getTime()
+    const cameraUrl = computed(() => {
+      return process.env.BASE_API + '/api/v2/camera/get-image/' + props.item.id + '?s=' + time + '.jpg'
+    })
     return {
-      time: new Date().getTime()
-    }
-  },
-  computed: {
-    cameraUrlFilter() {
-      return process.env.BASE_API + '/api/v2/camera/get-image/' + this.item.id + '?s=' + this.time + '.jpg'
+      cameraUrl
     }
   }
-
-}
+})
 </script>
 
-<style scoped>
+<style scoped lang='scss'>
 .image-slot {
   min-width: 300px;
   min-height: 200px;

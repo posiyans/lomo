@@ -20,7 +20,7 @@ class UpdateMeteringDeviceAction
     {
         if (in_array($field, $this->device->getFillable())) {
             $this->device->$field = $value;
-        } elseif (in_array($field, $this->device->getOptions())) {
+        } elseif (in_array($field, $this->device->getOptionsFillable())) {
             $options = $this->device->options;
             $options[$field] = $value;
             $this->device->options = $options;

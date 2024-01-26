@@ -1,17 +1,15 @@
 <template>
   <div>
     <div class="row q-col-gutter-md">
-      <div v-for="(file, index) in filtersList" :key="file.uid">
+      <div v-for="(file) in filtersList" :key="file.uid">
         <q-card>
           <q-card-section class="row q-pa-xs" :class="{ 'items-center': !showPreview }">
-            <div v-if="!showPreview" class="vertical-bottom">
-              {{ ++index }}.
-            </div>
-            <FileItem :file="file" :get-url="getUrl" :show-preview="showPreview" />
+            <FilePreview v-if="!showPreview" :file="file" width="36px" class="overflow-hidden br-05" style="width: 36px; height: 36px;" />
+            <FileItem :file="file" :get-url="getUrl" :show-preview="showPreview" class="q-ml-xs" />
             <div v-if="edit">
-              <div class="text-secondary q-px-md row items-center">
+              <div class="text-secondary row items-center">
                 <div
-                  class="text-red q-px-md"
+                  class="text-red q-px-sm text-big-100"
                   @click="deleteFile(file)">
                   <DeleteIcon />
                 </div>
@@ -32,10 +30,12 @@ import DeleteIcon from 'src/Modules/Files/components/FilesListShow/DeleteIcon.vu
 import { copyToClipboard } from 'quasar'
 import { successMessage } from 'src/utils/message'
 import FileItem from './FileItem.vue'
+import FilePreview from 'src/Modules/Files/components/FilePreview/index.vue'
 
 export default {
   components: {
     FileItem,
+    FilePreview,
     DeleteIcon
   },
   props: {

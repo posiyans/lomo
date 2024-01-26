@@ -122,6 +122,7 @@ class LaratrustSeeder extends Seeder
         'camera-edit' => 'Редактирование списка камер',
 
         'device-edit' => 'Редактирование приборов учета',
+        'instrument_reading-edit' => 'Редактирование показания приборов учета',
 
 //        'access-to-personal' => 'Доступ к персональным данным',
 //        'write-personal-data' => 'Изменение персональных данных'

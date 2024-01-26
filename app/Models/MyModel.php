@@ -23,6 +23,22 @@ class MyModel extends Model
 {
 
     /**
+     * под свойства хранящиеся в вполе optinons
+     * @var array
+     */
+    protected $options_fillable = [];
+
+    /**
+     * получить массив возможных доп полей
+     * @return array
+     */
+    public function getOptionsFillable()
+    {
+        return $this->options_fillable;
+    }
+
+
+    /**
      * Логи привязанные к модели
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany

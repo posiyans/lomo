@@ -26,6 +26,9 @@ class GetAllowPublicationArticleController extends Controller
         try {
             $user = Auth::user();
             $access = GetGlobalOption::getOneValue(ArticleModel::getAllowPublicationArticleSettingName(), 1);
+            if ($request->admin && $user->hasRole('superAdmin')) {
+                return ['data' => $access];
+            }
             (new AllowPublicationArticleAction($access))->run($user);
             return ['data' => $access];
         } catch (\Exception $e) {

@@ -24,7 +24,7 @@
       <TextEditor v-model="article.text" add-image parent-type="article" :parent-uid="article.uid" />
       <div class="q-pa-sm">
         <AddFileBtn @add-files="addFiles" multiple :disabled="article.files.length >= maxFiles" :max-size="maxSize * 1024 * 1024" parent-type="article" :parent-uid="article.uid" />
-        <small> До {{ maxFiles }} файлов, размером до {{ maxSize }} Мб</small>
+        <small> Максимум {{ maxFiles }} файлов, размером до {{ maxSize }} Мб</small>
       </div>
       <FilesListShow v-model="article.files" edit />
       <div class="q-pl-sm q-pt-lg">

@@ -13,4 +13,9 @@ Route::group(['prefix' => 'v2/metering-device'], function () {
 //    Route::get('get-qrcode', \App\Modules\Gardening\Controllers\GetGardeningInfoController::class);
 });
 
+Route::group(['prefix' => 'v2/instrument-reading'], function () {
+    Route::get('get-list', \App\Modules\MeteringDevice\Controllers\GetInstrumentReadingListController::class);
+    Route::group(['middleware' => ['auth:sanctum']], function () {
+    });
+});
 

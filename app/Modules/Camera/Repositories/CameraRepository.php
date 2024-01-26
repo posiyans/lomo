@@ -2,6 +2,7 @@
 
 namespace App\Modules\Camera\Repositories;
 
+use App\Modules\Camera\Actions\SaveImageFromCameraAction;
 use App\Modules\Setting\Actions\GetGlobalOption;
 use Illuminate\Support\Facades\Cache;
 
@@ -14,13 +15,18 @@ class CameraRepository
     public static function getById($id)
     {
         $item = GetGlobalOption::findOneByValueField(self::$optionName, 'id', $id);
-//        return $item;
         if ($item) {
-            return self::getObject($item->value, true);
+            return $item;
         }
         throw new \Exception('Камера не найдена');
     }
 
+
+    public static function getObjectById($id)
+    {
+        $item = self::getById($id);
+        return self::getObject($item->value, true);
+    }
 
     public static function all($fullFields = false)
     {
@@ -48,8 +54,11 @@ class CameraRepository
 
     public static function getImagePath($id)
     {
-        $cache_name = static::getCacheName($id);
-        return Cache::tags('Camera')->get($cache_name, false);
+        $model = CameraRepository::getObjectById($id);
+        $cacheName = CameraRepository::getCacheName($id);
+        return Cache::tags('Camera')->remember($cacheName, $model->ttl, function () use ($model) {
+            return (new SaveImageFromCameraAction($model))->run();
+        });
     }
 
 

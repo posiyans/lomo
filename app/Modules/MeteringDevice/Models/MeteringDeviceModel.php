@@ -53,17 +53,13 @@ class MeteringDeviceModel extends MyModel
         'active'
     ];
 
-    protected $optionField = [
+    protected $options_fillable = [
         'device_brand',
         'serial_number',
         'installation_date',
         'verification_date',
     ];
 
-    public function getOptions()
-    {
-        return $this->optionField;
-    }
 
     /**
      * по какому тарифу тарифицируется прибор

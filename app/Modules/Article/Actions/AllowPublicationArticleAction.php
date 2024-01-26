@@ -37,7 +37,7 @@ class AllowPublicationArticleAction
                 $errors = 'Только собственники';
                 break;
             case 3:
-                $errors = 'Пользователь с подтвержденным email';
+                $errors = 'Только пользователи с подтвержденным email';
                 break;
         }
         if ($this->access === 3) {

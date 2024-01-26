@@ -10,7 +10,11 @@ class SetGlobalOption
     public static function setOneValue($name, $value)
     {
         try {
-            $item = GetGlobalOption::getOne($name);
+            if (is_object($name) && is_subclass_of($name, GlobalOptionModel::class)) {
+                $item = $name;
+            } else {
+                $item = GetGlobalOption::getOne($name);
+            }
         } catch (\Exception $e) {
             $item = new GlobalOptionModel();
             $item->name = $name;

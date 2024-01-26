@@ -73,8 +73,6 @@ export default defineComponent({
                 return summ + item[1]
               }, 0)
               center.value = [centerX / item.krd.length, centerY / item.krd.length]
-              console.log(item.center)
-              console.log(center.value)
               zoom.value = 17
             }
             const color = +props.steadId === +item.id ? 'rgba(255,0,0, 1)' : 'rgba(255,0,0,0.1)'

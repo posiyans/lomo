@@ -25,8 +25,8 @@
     <q-separator />
     <q-card-section v-if="showBody">
       <div v-html="article.text" class="q-px-sm"></div>
-      <div v-if="article.files?.length > 0">
-        <div v-if="article.files?.length > 0" class="text-weight-bold">Файлы:</div>
+      <div v-if="article.files?.length > 0" class="q-gutter-sm">
+        <div class="text-weight-bold">Файлы:</div>
         <FilesListShow :model-value="article.files" />
       </div>
       <ArticleChatBlock :article="article" />

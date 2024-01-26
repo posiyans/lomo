@@ -53,6 +53,13 @@ class SteadModel extends MyModel
 
     protected $fillable = ['number', 'size'];
 
+    protected $options_fillable = [
+        'kadastr',
+        'coordinates',
+        'address'
+    ];
+
+
     protected $casts = [
         'options' => 'array',
     ];

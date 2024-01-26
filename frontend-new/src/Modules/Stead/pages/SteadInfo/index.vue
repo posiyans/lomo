@@ -17,7 +17,7 @@
             <SteadTab :stead-id="steadId" />
           </q-tab-panel>
           <q-tab-panel name="readings" class="ba b--dark-green" style="min-height: 250px;">
-
+            <InstrumentReadingForStead :stead-id="steadId" />
           </q-tab-panel>
           <q-tab-panel v-if="bookkeeping" name="payment" class="ba b--dark-green" style="min-height: 250px;">
             <PaymentAndInvoiceForStead :stead-id="steadId" />
@@ -37,11 +37,13 @@ import { getSteadInfo } from 'src/Modules/Stead/api/stead'
 import { usePrimaryStore } from 'stores/parimary-store'
 import PaymentAndInvoiceForStead from 'src/Modules/Bookkeeping/components/PaymentAndInvoiceForStead/index.vue'
 import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
+import InstrumentReadingForStead from 'src/Modules/MeteringDevice/components/InstrumentReadingForStead/index.vue'
 
 export default defineComponent({
   components: {
     SteadTab,
-    PaymentAndInvoiceForStead
+    PaymentAndInvoiceForStead,
+    InstrumentReadingForStead
   },
   props: {},
   setup(props, { emit }) {

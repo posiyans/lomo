@@ -15,8 +15,10 @@
           <q-linear-progress :value="file.upload.process" class="" track-color="grey" size="2px" />
         </div>
       </div>
-      <div class="row">
-        <FileSize :size="fileSize" class="q-px-sm text-grey-7" />
+      <div class="row items-center">
+        <FileSize :size="fileSize" class="text-grey-7 text-small-85" />
+        <q-space />
+
         <div class="row items-center q-col-gutter-sm q-px-sm">
           <div v-if="fileDownloadUrl">
             <DownloadFileBtn :url-file="fileDownloadUrl" />

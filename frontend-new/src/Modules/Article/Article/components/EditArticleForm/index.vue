@@ -31,10 +31,10 @@
       </div>
       <q-space />
       <div>
-        <div v-if="articleStore.article?.user" class="row items-center bg-white br2">
-          <router-link :to="`/admin/user/show/${articleStore.article?.user?.uid}`" class="user-link">
-            <UserAvatarByUid :uid="articleStore.article?.user?.uid" size="24px" />
-            {{ articleStore.article?.user?.name }}
+        <div v-if="articleStore.article?.author" class="row items-center bg-white q-pa-none" style="border-radius: 16px;">
+          <router-link :to="`/admin/user/show/${articleStore.article?.author?.uid}`" class="user-link">
+            <UserAvatarByUid :uid="articleStore.article?.author?.uid" size="32px" />
+            {{ articleStore.article?.author?.name }}
           </router-link>
           <q-fab
             flat

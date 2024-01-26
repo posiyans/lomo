@@ -55,7 +55,7 @@ export default defineComponent({
 
     onMounted(() => {
       loading.value = true
-      getAllowPublicationArticle({ value: 1 })
+      getAllowPublicationArticle({ admin: 1 })
         .then(res => {
           allowPublic.value = res.data.data
         })

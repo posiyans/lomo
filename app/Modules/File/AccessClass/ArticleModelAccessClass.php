@@ -22,15 +22,15 @@ class ArticleModelAccessClass extends FileAccessAbstract
 
     public function read()
     {
+        if ($this->file->user_id == $this->user->id) {
+            return true;
+        }
         $model = (new GetObjectForFileRepository($this->file))->run();
         if ($model->public == 2) {
             return true;
         }
         if (!$this->user) {
             throw new \Exception('Ошибка доступа');
-        }
-        if ($this->file->user_id == $this->user->id) {
-            return true;
         }
         if ($this->user->ability('superAdmin', 'article-edit', 'article-show')) {
             return true;

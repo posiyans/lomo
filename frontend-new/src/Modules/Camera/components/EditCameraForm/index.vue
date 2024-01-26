@@ -81,7 +81,9 @@ export default defineComponent({
     const saveData = () => {
       let func = addCamera
       if (edit.value) {
-        func = updateCamera
+        func = (data) => {
+          updateCamera(props.camera.id, data)
+        }
       }
       func(data.value)
         .then(res => {

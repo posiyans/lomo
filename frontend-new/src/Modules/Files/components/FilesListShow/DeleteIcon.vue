@@ -1,16 +1,14 @@
 <template>
-  <div
-      class="text-red"
-      @mouseover="focusing = true"
-      @mouseleave="focusing = false"
-  >
-    <q-icon :name="focusing ? 'delete' : 'highlight_off'" />
-  </div>
+  <q-icon
+    :name="focusing ? 'delete' : 'highlight_off'"
+    @mouseover="focusing = true"
+    @mouseleave="focusing = false"
+  />
 </template>
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       focusing: false
     }

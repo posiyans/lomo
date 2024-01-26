@@ -20,7 +20,7 @@ class UpdateFieldMeteringDeviceValidator extends FormRequest
         return [
             'field' => [
                 'required',
-                Rule::in(array_merge($device->getFillable(), $device->getOptions()))
+                Rule::in(array_merge($device->getFillable(), $device->getOptionsFillable()))
             ],
             'value' => [
                 'nullable'

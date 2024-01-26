@@ -9,7 +9,7 @@ Route::group(['prefix' => 'v2/camera'], function () {
     Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('/reload/{id}', \App\Modules\Camera\Controllers\ReloadCameraImageController::class);
         Route::post('/create', \App\Modules\Camera\Controllers\CreateCameraController::class);
-        Route::post('/update', \App\Modules\Camera\Controllers\UpdateCameraController::class);
+        Route::post('/{id}', \App\Modules\Camera\Controllers\UpdateCameraController::class);
     });
 });
 

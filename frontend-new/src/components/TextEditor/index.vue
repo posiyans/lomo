@@ -89,7 +89,7 @@ export default {
         path = process.env.BASE_API
       }
       files.forEach(item => {
-        const a = `<img src="${path}${item.model.url}" class="artic-img" >`
+        const a = `<img src="${path}${item.model.url}" class="article-img" >`
         val = val + a
       })
       emit('update:model-value', val)

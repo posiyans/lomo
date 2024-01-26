@@ -10,10 +10,11 @@
           :edit="edit"
           @reload="getData"
         />
+        <RosreestrDataTr v-if="stead.kadastr" :kadastr="stead.kadastr" />
       </table>
     </div>
     <div class="" style="align-self: stretch; flex-grow: 1;">
-      <YandexMap :stead-id="steadId" />
+      <YandexMap v-if="false" :stead-id="steadId" class="q-pl-sm" />
     </div>
   </div>
 </template>
@@ -24,11 +25,13 @@ import { defineComponent, onMounted, ref } from 'vue'
 import { getSteadInfo } from 'src/Modules/Stead/api/stead'
 import TrTableBlock from './components/TrTableBlock/index.vue'
 import YandexMap from 'src/Modules/Yandex/components/YandexMap/index.vue'
+import RosreestrDataTr from './components/RosreestrDataTr/index.vue'
 
 export default defineComponent({
   components: {
     TrTableBlock,
-    YandexMap
+    YandexMap,
+    RosreestrDataTr
   },
   props: {
     steadId: {
@@ -42,12 +45,12 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const columns = [
-      {
-        label: 'id',
-        name: 'id',
-        type: 'number',
-        readonly: true
-      },
+      // {
+      //   label: 'id',
+      //   name: 'id',
+      //   type: 'number',
+      //   readonly: true
+      // },
       {
         label: 'Номер участка',
         name: 'number',
@@ -67,6 +70,7 @@ export default defineComponent({
     ]
     const data = ref(false)
     const stead = ref(null)
+
     const getData = () => {
       const data = {
         id: props.steadId,

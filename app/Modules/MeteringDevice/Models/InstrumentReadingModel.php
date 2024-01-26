@@ -57,9 +57,9 @@ class InstrumentReadingModel extends MyModel
     ];
 
 
-    public function deviceRegister()
+    public function device_register()
     {
-        return $this->hasOne(DeviceRegisterModel::class, 'id', 'device_id');
+        return $this->hasOne(MeteringDeviceModel::class, 'id', 'metering_device_id');
     }
 
     /**

@@ -16,9 +16,9 @@ export function addCamera(data) {
   })
 }
 
-export function updateCamera(data) {
+export function updateCamera(id, data) {
   return request({
-    url: '/api/v2/camera/update',
+    url: '/api/v2/camera/' + id,
     method: 'post',
     data
   })

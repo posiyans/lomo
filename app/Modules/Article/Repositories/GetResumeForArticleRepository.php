@@ -20,6 +20,7 @@ class GetResumeForArticleRepository
             return $this->article->resume;
         }
         $text = explode('</p>', $this->article->text);
+        $text = explode('<img', $text[0]);
         return $text[0] . '</p>';
     }
 

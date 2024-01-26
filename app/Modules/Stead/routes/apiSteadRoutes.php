@@ -18,6 +18,7 @@ Route::group(['prefix' => 'v2/stead'], function () {
         Route::post('update/{stead}', \App\Modules\Stead\Controllers\UpdateSteadInfoController::class);
         Route::post('update-proportion', \App\Modules\Stead\Controllers\UpdateSteadOwnerProportionController::class);
         Route::get('/list-xlsx', \App\Modules\Stead\Controllers\GetSteadListInXlsxController::class);
+        Route::get('/get-kadastr-info', \App\Modules\Stead\Controllers\GetKadastrInfoController::class);
     });
     Route::get('/list', [\App\Modules\Stead\Controllers\GetSteadListController::class, 'index']);
 
