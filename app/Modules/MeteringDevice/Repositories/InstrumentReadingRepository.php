@@ -19,14 +19,15 @@ class InstrumentReadingRepository
     {
         if ($steadId) {
             if (is_array($steadId)) {
-                $this->query->whereIn('stead_id', $steadId);
+                $this->query->whereHas('device_register', function ($query) use ($steadId) {
+                    $query->whereIn('stead_id', $steadId);
+                });
             } else {
                 $this->query->whereHas('device_register', function ($query) use ($steadId) {
-                    $query->where('id', $steadId);
+                    $query->where('stead_id', $steadId);
                 });
             }
         }
-        dd($this->query->toSql());
         return $this;
     }
 
