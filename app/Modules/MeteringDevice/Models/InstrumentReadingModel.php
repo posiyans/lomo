@@ -3,6 +3,8 @@
 namespace App\Modules\MeteringDevice\Models;
 
 use App\Models\MyModel;
+use App\Modules\Billing\Models\BillingInvoiceModel;
+use App\Modules\Billing\Models\BillingPaymentModel;
 use App\Modules\Rate\Models\RateModel;
 use App\Modules\Receipt\Models\DeviceRegisterModel;
 
@@ -53,14 +55,35 @@ class InstrumentReadingModel extends MyModel
     ];
 
     protected $casts = [
-        'value' => 'decimal:2',
+        'value' => 'decimal:0',
     ];
 
 
-    public function device_register()
+    public function device_register(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(MeteringDeviceModel::class, 'id', 'metering_device_id');
     }
+
+    /**
+     * счет который выставлен на оплату данных показаний
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function invoice(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(BillingInvoiceModel::class, 'id', 'invoice_id');
+    }
+
+
+    /**
+     * платеж в который входят данные показания
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function payment(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(BillingPaymentModel::class, 'id', 'payment_id');
+    }
+
 
     /**
      * вернуть название типа и подтип устройства

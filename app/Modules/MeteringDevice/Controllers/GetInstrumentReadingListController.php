@@ -4,6 +4,7 @@ namespace App\Modules\MeteringDevice\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Modules\MeteringDevice\Repositories\InstrumentReadingRepository;
+use App\Modules\MeteringDevice\Resources\InstrumentReadingResource;
 use App\Modules\MeteringDevice\Validators\GetInstrumentReadingListValidator;
 
 /**
@@ -29,7 +30,7 @@ class GetInstrumentReadingListController extends Controller
 //            }
 
             $reading = (new InstrumentReadingRepository())->forStead($request->stead_id)->get();
-            return response(['status' => true, 'data' => $reading]);
+            return response(['status' => true, 'data' => InstrumentReadingResource::collection($reading)]);
         } catch (\Exception $e) {
             return response(['errors' => $e->getMessage()], 450);
         }
