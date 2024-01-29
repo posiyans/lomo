@@ -14,8 +14,10 @@ Route::group(['prefix' => 'v2/metering-device'], function () {
 });
 
 Route::group(['prefix' => 'v2/instrument-reading'], function () {
-    Route::get('get-list', \App\Modules\MeteringDevice\Controllers\GetInstrumentReadingListController::class);
     Route::group(['middleware' => ['auth:sanctum']], function () {
+        Route::get('get-list', \App\Modules\MeteringDevice\Controllers\GetInstrumentReadingListController::class);
+        Route::post('/', \App\Modules\MeteringDevice\Controllers\AddInstrumentReadingController::class);
+        Route::delete('/{reading}', \App\Modules\MeteringDevice\Controllers\DeleteInstrumentReadingController::class);
     });
 });
 

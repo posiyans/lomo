@@ -2,6 +2,9 @@
 
 namespace App\Modules\MeteringDevice\Validators;
 
+use App\Modules\Billing\Models\BillingInvoiceModel;
+use App\Modules\Billing\Models\BillingPaymentModel;
+use App\Modules\MeteringDevice\Models\MeteringDeviceModel;
 use App\Modules\Rate\Models\RateGroupModel;
 use App\Modules\Rate\Models\RateTypeModel;
 use App\Modules\Stead\Models\SteadModel;
@@ -28,6 +31,10 @@ class GetInstrumentReadingListValidator extends FormRequest
                 'nullable',
                 'exists:' . SteadModel::class . ',id'
             ],
+            'device_id' => [
+                'nullable',
+                'exists:' . MeteringDeviceModel::class . ',id'
+            ],
             'rate_type_id' => [
                 'nullable',
                 'exists:' . RateTypeModel::class . ',id'
@@ -35,6 +42,14 @@ class GetInstrumentReadingListValidator extends FormRequest
             'rate_group_id' => [
                 'nullable',
                 'exists:' . RateGroupModel::class . ',id'
+            ],
+            'invoice_id' => [
+                'nullable',
+                'exists:' . BillingInvoiceModel::class . ',id'
+            ],
+            'payment_id' => [
+                'nullable',
+                'exists:' . BillingPaymentModel::class . ',id'
             ],
             'date_start' => [
                 'nullable',

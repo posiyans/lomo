@@ -5,7 +5,6 @@ namespace App\Modules\MeteringDevice\Models;
 use App\Models\MyModel;
 use App\Modules\Billing\Models\BillingInvoiceModel;
 use App\Modules\Billing\Models\BillingPaymentModel;
-use App\Modules\Rate\Models\RateModel;
 use App\Modules\Receipt\Models\DeviceRegisterModel;
 
 /**
@@ -50,16 +49,17 @@ class InstrumentReadingModel extends MyModel
      * @var array
      */
     protected $fillable = [
-        'metering_device_id',
         'value'
     ];
 
+
     protected $casts = [
         'value' => 'decimal:0',
+        'options' => 'array'
     ];
 
 
-    public function device_register(): \Illuminate\Database\Eloquent\Relations\HasOne
+    public function metering_device(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(MeteringDeviceModel::class, 'id', 'metering_device_id');
     }
@@ -85,95 +85,32 @@ class InstrumentReadingModel extends MyModel
     }
 
 
-    /**
-     * вернуть название типа и подтип устройства
-     * @return mixed
-     */
-    public function deviceTypeName()
-    {
-        return $this->deviceRegister->getTypeName();
-    }
+//    /**
+//     * вернуть название типа и подтип устройства
+//     * @return mixed
+//     */
+//    public function deviceTypeName()
+//    {
+//        return $this->deviceRegister->getTypeName();
+//    }
+//
+//    /**
+//     * получить единицы измерения
+//     */
+//    public function getUnit()
+//    {
+//        return $this->deviceRegister->MeteringDevice->receiptType->options['unit_name'];
+//    }
 
-    /**
-     * получить единицы измерения
-     */
-    public function getUnit()
-    {
-        return $this->deviceRegister->MeteringDevice->receiptType->options['unit_name'];
-    }
-
-    public function getPrice()
-    {
-        $price = RateModel::query()
-            ->where('device_id', $this->deviceRegister->type_id)
-            ->where('created_at', '<', $this->created_at)
-            ->orderBy('created_at', 'desc')
-            ->first();
-        return $price->ratio_a;
-    }
-
-    /**
-     * получить модель придыдущих показаний
-     * todo переделать !!
-     *
-     * @return \Illuminate\Database\Eloquent\HigherOrderBuilderProxy|mixed
-     */
-    public function getPreviousReadingsModel()
-    {
-        $item = self::query()
-            ->where('device_id', $this->device_id)
-            ->where('created_at', '<=', $this->created_at)
-            ->where('id', '<', $this->id)
-            ->orderBy('created_at', 'desc')
-            ->first();
-        if ($item) {
-            return $item;
-        }
-        $item = DeviceRegisterModel::find($this->device_id);
-        return $item;
-    }
-
-
-    /**
-     * получить придыдущее показание
-     *
-     * @return \Illuminate\Database\Eloquent\HigherOrderBuilderProxy|mixed
-     */
-    public function getPreviousReadings()
-    {
-        $item = self::query()
-            ->where('device_id', $this->device_id)
-            ->where('created_at', '<=', $this->created_at)
-            ->where('id', '<', $this->id)
-            ->orderBy('created_at', 'desc')
-            ->first();
-        if ($item) {
-            return $item->value;
-        }
-        $item = DeviceRegisterModel::find($this->device_id);
-        return $item->initial_data;
-    }
-
-    /**
-     * получить придыдущее показание
-     *
-     * @return \Illuminate\Database\Eloquent\HigherOrderBuilderProxy|mixed
-     */
-    public function getPreviousInvoiceReadings()
-    {
-        $item = self::query()
-            ->where('device_id', $this->device_id)
-            ->where('created_at', '<=', $this->created_at)
-            ->where('id', '<', $this->id)
-            ->whereNotNull('invoice_id')
-            ->orderBy('created_at', 'desc')
-            ->first();
-        if ($item) {
-            return $item->value;
-        }
-        $item = DeviceRegisterModel::find($this->device_id);
-        return $item->initial_data;
-    }
+//    public function getPrice()
+//    {
+//        $price = RateModel::query()
+//            ->where('device_id', $this->deviceRegister->type_id)
+//            ->where('created_at', '<', $this->created_at)
+//            ->orderBy('created_at', 'desc')
+//            ->first();
+//        return $price->ratio_a;
+//    }
 
 
     /**

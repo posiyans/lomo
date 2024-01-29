@@ -16,6 +16,7 @@
       label="Тариф прибора"
       outlined
       dense
+      clearable
       class="filter-item"
       @update:model-value="setValue($event, 'rate_type_id')"
     />

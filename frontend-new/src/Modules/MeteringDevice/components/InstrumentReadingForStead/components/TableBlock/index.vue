@@ -12,7 +12,8 @@
     >
       <template v-slot:body-cell-date="props">
         <q-td :props="props">
-          <ShowTime :time="props.row.created_at" format="DD-MM-YYYY" class="" />
+          <ShowTime :time="props.row.date" format="DD-MM-YYYY" class="" />
+          {{ props.row.device.rate.name }}
         </q-td>
       </template>
       <template v-slot:body-cell-rate="props">
@@ -36,18 +37,45 @@
         </q-td>
       </template>
       <template v-slot:body-cell-init_value="props">
-        <q-td :props="props" :class="{ 'o-60': !props.row.active }">
-          {{ props.row.value }} {{ props.row.device.rate.unit_name }}
+        <q-td :props="props" :class="{ 'o-60': !props.row.device.active }">
+          <div class="text-weight-bold">
+            {{ props.row.value }} {{ props.row.device.rate.unit_name }}
+          </div>
+          <div class="text-small-85 text-grey">
+            {{ props.row.previous_value }} {{ props.row.device.rate.unit_name }}
+          </div>
+
         </q-td>
       </template>
       <template v-slot:body-cell-last_value="props">
         <q-td :props="props" :class="{ 'o-60': !props.row.device.active }">
-          \
+          {{ props.row.previous_value }} {{ props.row.device.rate.unit_name }}
+        </q-td>
+      </template>
+      <template v-slot:body-cell-delta="props">
+        <q-td :props="props" :class="{ 'o-60': !props.row.device.active }">
+          <div class="ellipsis">
+            {{ props.row.delta }} {{ props.row.device.rate.unit_name }}
+          </div>
+          <div class="text-small-85 text-grey">
+            {{ props.row.rate.description }}
+          </div>
+          <div>
+            <ShowPrice :price="props.row.cost" />
+          </div>
         </q-td>
       </template>
       <template v-slot:body-cell-desc="props">
         <q-td :props="props" :class="{ 'o-60': !props.row.device.active }">
-          <div class="ellipsis">
+          <div v-if="props.row.invoice" class="cursor-pointer text-red-10">
+            <InvoiceInfo :invoice="props.row.invoice">
+              Счет № {{ props.row.invoice.id }}
+            </InvoiceInfo>
+          </div>
+          <div v-if="props.row.payment" class="cursor-pointer text-teal">
+            <PaymentInfoShowAndEdit :payment="props.row.payment">
+              Платеж № {{ props.row.payment.id }}
+            </PaymentInfoShowAndEdit>
           </div>
         </q-td>
       </template>
@@ -57,6 +85,7 @@
             <div>
               <q-btn color="secondary" label="Подать показания" />
             </div>
+            <DeleteInstrumentReading :reading-id="props.row.id" />
             <div v-if="edit" class="q-gutter-sm">
             </div>
           </div>
@@ -71,11 +100,19 @@
 import { defineComponent, ref } from 'vue'
 import ShowTime from 'components/ShowTime/index.vue'
 import MeteringDeviceEdit from 'src/Modules/MeteringDevice/components/MeteringDeviceEdit/Dialog.vue'
+import PaymentInfoShowAndEdit from 'src/Modules/Bookkeeping/components/Payment/PaymentInfoShowAndEdit/Dialog.vue'
+import InvoiceInfo from 'src/Modules/Bookkeeping/components/Invoice/InvoiceInfo/Dialog.vue'
+import ShowPrice from 'components/ShowPrice/index.vue'
+import DeleteInstrumentReading from 'src/Modules/MeteringDevice/components/DeleteInstrumentReading/index.vue'
 
 export default defineComponent({
   components: {
     ShowTime,
-    MeteringDeviceEdit
+    MeteringDeviceEdit,
+    PaymentInfoShowAndEdit,
+    DeleteInstrumentReading,
+    InvoiceInfo,
+    ShowPrice
   },
   props: {
     list: {
@@ -106,9 +143,9 @@ export default defineComponent({
         label: 'Показания'
       },
       {
-        name: 'last_value',
+        name: 'delta',
         align: 'center',
-        label: 'Последние показания'
+        label: 'К оплате'
       },
       {
         name: 'desc',

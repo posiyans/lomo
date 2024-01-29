@@ -56,7 +56,7 @@
 
 <script>
 import { defineComponent } from 'vue'
-import InvoiceInfoBtn from 'src/Modules/Bookkeeping/components/Invoice/InvoiceInfo/Btn.vue'
+import InvoiceInfoBtn from 'src/Modules/Bookkeeping/components/Invoice/InvoiceInfo/Dialog.vue'
 import ReceiptForInvoiceBtn from 'src/Modules/Receipt/components/ReceiptForInvoiceBtn/index.vue'
 import ShowPrice from 'components/ShowPrice/index.vue'
 

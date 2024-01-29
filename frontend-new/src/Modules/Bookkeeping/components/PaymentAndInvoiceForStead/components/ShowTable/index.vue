@@ -56,7 +56,7 @@ import { defineComponent } from 'vue'
 import ShowTime from 'components/ShowTime/index.vue'
 import ShowPrice from 'components/ShowPrice/index.vue'
 import PaymentInfo from 'src/Modules/Bookkeeping/components/Payment/PaymentInfoShowAndEdit/Dialog.vue'
-import InvoiceInfo from 'src/Modules/Bookkeeping/components/Invoice/InvoiceInfo/Btn.vue'
+import InvoiceInfo from 'src/Modules/Bookkeeping/components/Invoice/InvoiceInfo/Dialog.vue'
 
 export default defineComponent({
   components: {

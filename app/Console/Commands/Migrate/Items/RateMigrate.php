@@ -93,6 +93,7 @@ class RateMigrate
                 $newItem->$value = $item->$value;
             }
             $newItem->metering_device_id = $item->device_id;
+            $newItem->date = $item->created_at;
             $newItem->save();
         }
     }

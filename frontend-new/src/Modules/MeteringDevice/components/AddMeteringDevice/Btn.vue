@@ -18,7 +18,9 @@
         </q-card-section>
 
         <q-card-section>
-          <AddMeteringDeviceEdit :stead-id="steadId" @success="close" />
+          <AddMeteringDeviceEdit
+            :stead-id="steadId"
+            @success="close" />
         </q-card-section>
       </q-card>
     </q-dialog>

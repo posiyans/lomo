@@ -14,6 +14,10 @@ class MeteringDeviceRepository
         $this->query = MeteringDeviceModel::query();
     }
 
+    public function getById($id)
+    {
+        return $this->query->where('id', $id)->firstOrFail();
+    }
 
     public function forStead($steadId)
     {

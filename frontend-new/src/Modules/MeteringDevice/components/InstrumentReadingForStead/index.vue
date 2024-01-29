@@ -1,6 +1,6 @@
 <template>
   <div>
-    <FilterBlock v-model="listQuery" />
+    <FilterBlock v-model="listQuery" class="q-mb-xs" />
     <TableBlock :list="list" />
     <LoadMore v-model:listQuery="listQuery" :func="func" @setList="setList" />
   </div>

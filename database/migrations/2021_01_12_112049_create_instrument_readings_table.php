@@ -17,9 +17,11 @@ class CreateInstrumentReadingsTable extends Migration
         Schema::create('instrument_reading_models', function (Blueprint $table) {
             $table->id();
             $table->integer('metering_device_id')->nullable()->comment('id прибора');
-            $table->float('value')->comment('значение показаний');
+            $table->integer('value')->comment('значение показаний');
+            $table->date('date')->comment('дата подачи показаний');
             $table->integer('invoice_id')->nullable();
             $table->integer('payment_id')->nullable();
+            $table->json('options')->default('{}')->nullable();
             $table->timestamps();
         });
     }
