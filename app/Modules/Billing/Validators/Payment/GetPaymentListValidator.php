@@ -6,6 +6,7 @@ use App\Modules\Rate\Models\RateGroupModel;
 use App\Modules\Stead\Models\SteadModel;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 
 class GetPaymentListValidator extends FormRequest
@@ -30,6 +31,11 @@ class GetPaymentListValidator extends FormRequest
             'is_error' => [
                 'nullable',
                 'boolean'
+            ],
+            'is_invoice' => [
+                'nullable',
+                'integer',
+                Rule::in([1, 2])
             ],
             'xlsx' => [
                 'nullable',

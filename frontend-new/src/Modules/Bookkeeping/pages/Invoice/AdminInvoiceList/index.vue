@@ -32,7 +32,7 @@ export default defineComponent({
     const func = getInvoiceList
     const listQuery = ref({
       stead_id: '',
-      is_paid: 0,
+      is_paid: '',
       rate_group_id: '',
       page: 1,
       limit: 20

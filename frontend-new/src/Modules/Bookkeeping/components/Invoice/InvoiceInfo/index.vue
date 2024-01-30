@@ -1,13 +1,17 @@
 <template>
   <div>
     <table class="do-not-carry black">
-      <tr class="bg-black-05">
+      <tr class="bg-black-05" :class="{ 'bg-teal-1': invoice.is_paid, 'text-red': !invoice.is_paid }">
         <th>Поле</th>
         <th>Значение</th>
       </tr>
       <tr>
-        <td>id</td>
-        <td>{{ invoice.id }}</td>
+        <td>id {{ invoice.id }}</td>
+        <td>
+          <div class="text-primary text-weight-bold">
+            {{ invoice.rate.name }}
+          </div>
+        </td>
       </tr>
       <tr>
         <td>Дата</td>
@@ -26,73 +30,7 @@
       <tr>
         <td>Сумма</td>
         <td :class="priceLineClass">
-          {{ invoice.price }} руб.
-        </td>
-      </tr>
-      <tr :class="{ 'text-green': invoice.is_paid, 'text-red': !invoice.is_paid }">
-        <td>Статус</td>
-        <td class="relative-position">
-          <div v-if="!editStatusShow">
-            {{ invoice.is_paid ? 'Оплачен' : 'Неоплачен' }}
-          </div>
-          <el-button-group v-if="editStatusShow">
-            <el-button type="danger" :plain="invoice.paid" size="mini" @click="setStatus(false)">Неоплачен</el-button>
-            <el-button type="success" :plain="!invoice.paid" size="mini" @click="setStatus(true)">Оплачен</el-button>
-          </el-button-group>
-          <div class="absolute-top-right">
-            <q-btn color="primary" flat size="xs" icon="edit" @click="editStatus" />
-          </div>
-        </td>
-
-      </tr>
-      <tr v-if="editStatusShow">
-        <td colspan="3">
-          Добавить платеж к счету
-          <el-table
-            border
-            :data="payments"
-            empty-text="Подходящие платежи не найдены"
-            style="width: 100%"
-          >
-            <el-table-column
-              label="Дата"
-              width="100"
-              align="center"
-            >
-              <template #default="{row}">
-                  <span>
-                    <ShowTime :time="row.data.payment_date" format="DD-MM-YYYY" />
-                  </span>
-              </template>
-            </el-table-column>
-            <el-table-column
-              label="Сумма"
-              width="100"
-              align="center"
-            >
-              <template #default="{row}">
-                <span>{{ row.data.price }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column
-              label="Назаначение"
-            >
-              <template #default="{row}">
-                <span>{{ row.data.raw_data[4] }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column
-              label=""
-              width="50"
-              align="center"
-            >
-              <template #default="{row}">
-                <div @click="addPayment(row)">
-                  <i class="el-icon-circle-plus dark-green f4" />
-                </div>
-              </template>
-            </el-table-column>
-          </el-table>
+          <ShowPrice :price="invoice.price" />
         </td>
       </tr>
       <tr>
@@ -100,22 +38,22 @@
         <td class="text-left">
           <div class="text-left">
             <ol>
-              <li v-for="i in invoice.payments" :key="i.id" class="text-no-wrap text-grey-7">
-                <ShowTime :time="i.payment_date" block="span" format="DD-MM-YYYY" />
-                на сумму {{ i.price }} руб.
-                <span v-if="editStatusShow" @click="deletePayment(i)">
-                  <q-icon name="delete" />
-                </span>
+              <li v-for="i in invoice.payments" :key="i.id">
+                <div class="row q-col-gutter-xs text-no-wrap text-grey-7">
+                  <ShowTime :time="i.payment_date" block="span" format="DD-MM-YYYY" />
+                  <ShowPrice :price="i.price" append-text="на сумму" />
+                  <q-space />
+                  <div v-if="edit" @click="deletePayment(i)">
+                    <q-btn icon="delete" color="negative" flat dense round size="xs" />
+                  </div>
+                </div>
               </li>
             </ol>
           </div>
-          <div :class="priceLineClass">
-            <em>
-              Итого: {{ sumPayment }} руб.
-            </em>
-          </div>
+          <ShowPrice :price="sumPayment" append-text="Итого:" :class="priceLineClass" class="text-weight-bold" />
         </td>
       </tr>
+      <TrStatus :invoice="invoice" :edit="edit" />
       <tr>
         <td>Назначение</td>
         <td>
@@ -123,21 +61,40 @@
         </td>
 
       </tr>
-      <tr class="black">
-        <td>Тип платежа</td>
-        <td>
-            <span>
-              {{ invoice.type_name }}
-            </span>
+      <tr>
+        <td>Подробнее</td>
+        <td class="relative-position">
+          <EditInvoiceDescription
+            v-if="editDescriptionShow"
+            :invoice="invoice"
+            @reload="editDescriptionShow = false"
+          />
+          <div v-else>
+            <div v-for="item in descriptionList" :key="item" class="text-small-70">
+              {{ item }}
+            </div>
+          </div>
+          <div class="absolute-top-right">
+            <q-btn color="primary" flat size="xs" icon="edit" @click="editDescriptionShow = !editDescriptionShow" />
+          </div>
         </td>
-
       </tr>
       <tr>
         <td>Примечание</td>
         <td class="relative-position">
-          <div v-for="item in descriptionList" :key="item" class="f7">{{ item }}</div>
+          <EditInvoiceDescription
+            v-if="editCommentShow"
+            :invoice="invoice"
+            field-name="comment"
+            @reload="editCommentShow = false"
+          />
+          <div v-else>
+            <div class="text-small-70">
+              {{ invoice.description?.comment }}
+            </div>
+          </div>
           <div class="absolute-top-right">
-            <q-btn color="primary" flat size="xs" icon="edit" @click="editDescription" />
+            <q-btn color="primary" flat size="xs" icon="edit" @click="editCommentShow = !editCommentShow" />
           </div>
         </td>
       </tr>
@@ -150,16 +107,26 @@
 
 <script>
 /* eslint-disable */
-import { addPaymentForInvoice, changeStatusForInvoice, deletePaymentForInvoice, fetchInvoiceInfo, updateInvoice } from 'src/Modules/Bookkeeping/api/invoiceAdminApi.js'
-import { fetchReceiptTypeList } from 'src/Modules/Receipt/api/receiptAdminApi.js'
-import { fetchBillingBalansSteadInfo } from 'src/Modules/Bookkeeping/api/billingAminApi.js'
+import { computed, defineComponent, ref } from 'vue'
 import ShowTime from 'components/ShowTime/index.vue'
 import DeleteInvoiceBtn from 'src/Modules/Bookkeeping/components/Invoice/DeleteInvoiceBtn/index.vue'
+import InvoiceChangeStatus from 'src/Modules/Bookkeeping/components/Invoice/InvoiceChangeStatus/index.vue'
+import EditInvoiceDescription from './components/EditInvoiceDescription/index.vue'
+import PaymentList from 'src/Modules/Bookkeeping/components/Payment/PaymentList/index.vue'
+import TrStatus from './components/TrStatus/index.vue'
+import ShowPrice from 'components/ShowPrice/index.vue'
+import { useQuasar } from 'quasar'
+import { deletePaymentFromInvoice } from 'src/Modules/Bookkeeping/api/paymentApi'
 
-export default {
+export default defineComponent({
   components: {
     ShowTime,
-    DeleteInvoiceBtn
+    DeleteInvoiceBtn,
+    InvoiceChangeStatus,
+    EditInvoiceDescription,
+    PaymentList,
+    ShowPrice,
+    TrStatus
   },
   props: {
     invoice: {
@@ -171,208 +138,78 @@ export default {
       default: false
     }
   },
-  data() {
-    return {
-      key: 1,
-      editStatusShow: false,
-      findSteadShow: false,
-      dialogVisible: true,
-      meteringShow: false,
-      showRaw: false,
-      tempStead: null,
-      receipType: [],
-      payments: []
-    }
-  },
-  computed: {
-    descriptionList() {
-      return this.invoice.description.description.split('@')
-    },
-    priceLineClass() {
-      if (this.sumPayment === +this.invoice.price) {
-        return 'green'
-      }
-      return 'red'
-    },
-    sumPayment() {
+  setup(props, { emit }) {
+    const data = ref(false)
+    const $q = useQuasar()
+    const editStatusShow = ref(false)
+    const editDescriptionShow = ref(false)
+    const editCommentShow = ref(false)
+    const sumPayment = computed(() => {
       let paySum = 0
-      this.invoice?.payments.forEach(i => {
-        paySum += i.price
+      props.invoice?.payments.forEach(i => {
+        paySum += +i.price
       })
       return paySum
-    }
-  },
-  mounted() {
-    // this.getInvoiceData()
-    this.getReceipt()
-  },
-  methods: {
-    reload() {
-      this.$emit('success')
-    },
-    setStatus(val) {
-      let text = 'Сменить стутус на НЕОПЛАЧЕННЫЙ?'
-      if (val) {
-        text = 'Сменить стутус на ОПЛАЧЕННЫЙ?'
+    })
+    const priceLineClass = computed(() => {
+      if (Math.floor(sumPayment.value) === Math.floor(props.invoice.price)) {
+        return 'text-teal'
       }
-      this.$q.dialog({
+      return 'text-red'
+    })
+    const descriptionList = computed(() => {
+      if (props.invoice.description?.description) {
+        return props.invoice.description?.description.split('@') || []
+      }
+      return []
+    })
+    const deletePayment = (val) => {
+      $q.dialog({
         title: 'Подтвердите',
-        message: text,
+        message: 'Открепить платеж от счета?',
         cancel: {
           noCaps: true,
           flat: true,
-          label: 'Нет',
-          color: 'negative'
+          label: 'Отмена',
+          color: 'primary'
         },
         ok: {
           noCaps: true,
           outline: true,
-          label: 'Да',
-          color: 'primary'
+          label: 'Открепить',
+          color: 'negative'
         },
         persistent: true
       }).onOk(() => {
-        const data = {
-          invoice_id: this.invoice.id,
-          status: val
-        }
-        changeStatusForInvoice(data)
-          .then(response => {
-            if (response.data.status) {
-              this.getInvoiceData()
-              this.getPayment()
-            } else {
-              if (response.data.data) {
-                this.$message.error(response.data.data)
-              }
-            }
+        deletePaymentFromInvoice(val.id)
+          .then(() => {
+            props.invoice.is_paid = false
+            props.invoice.payments.splice(props.invoice.payments.findIndex(item => item.id === val.id), 1)
           })
       })
-    },
-    addPayment(row) {
-      // this.invoice.payments.push(row.data)
-      const data = {
-        payment_id: row.data.id,
-        invoice_id: this.invoice.id
-      }
-      addPaymentForInvoice(data)
-        .then(response => {
-          if (response.data.status) {
-            this.getInvoiceData()
-            this.getPayment()
-          } else {
-            if (response.data.data) {
-              this.$message.error(response.data.data)
-            }
-          }
-        })
-    },
-    deletePayment(row) {
-      const data = {
-        payment_id: row.id,
-        invoice_id: this.invoice.id
-      }
-      deletePaymentForInvoice(data)
-        .then(response => {
-          if (response.data.status) {
-            this.getInvoiceData()
-            this.getPayment()
-          } else {
-            if (response.data.data) {
-              this.$message.error(response.data.data)
-            }
-          }
-        })
-      // let k = 0
-      // this.invoice.payments.forEach(i => {
-      //   if (i.id === row.id) {
-      //     this.invoice.payments.splice(k, 1)
-      //   }
-      //
-      //   k++
-      // })
-    },
-    editStatus() {
-      this.editStatusShow = !this.editStatusShow
-      this.getPayment()
-    },
-    getPayment() {
-      const data = {
-        stead_id: this.invoice.stead_id,
-        receiptType: this.invoice.type,
-        type: 'payment_without_invoice'
-        // type: 'payment'
-      }
-      fetchBillingBalansSteadInfo(data)
-        .then(response => {
-          if (response.data.status) {
-            // this.$message('Данные успешно сохранены')
-            this.payments = response.data.data
-          } else {
-            if (response.data.data) {
-              this.$message.error(response.data.data)
-            }
-          }
-        })
-    },
-    getInvoiceData() {
-      fetchInvoiceInfo(this.id)
-        .then(response => {
-          if (response.data.status) {
-            this.invoice = response.data.data
-          } else {
-            if (response.data.data) {
-              this.$message.error(response.data.data)
-            }
-          }
-        })
-    },
-    close() {
-      this.$emit('close')
-    },
-    getReceipt() {
-      fetchReceiptTypeList()
-        .then(response => {
-          if (response.data.status) {
-            this.receipType = response.data.data
-          } else {
-            if (response.data.data) {
-              this.$message.error(response.data.data)
-            }
-          }
-        })
-    },
-    editDescription() {
-      this.$prompt('Добавить', 'Примечание', {
-        confirmButtonText: 'Сохранить',
-        cancelButtonText: 'Отмена',
-        inputValue: this.invoice.description.description
-      }).then(({ value }) => {
-        this.invoice.description.description = value
-        this.saveData()
-      }).catch(() => {
-      })
-    },
-    saveData() {
-      updateInvoice(this.invoice.id, this.invoice)
-        .then(response => {
-          if (response.data.status) {
-            this.getInvoiceData()
-            // this.close()
-          } else {
-            if (response.data.data) {
-              this.$message.error(response.data.data)
-            }
-          }
-        })
+    }
+    const reload = () => {
+      emit('success')
+    }
+    return {
+      data,
+      sumPayment,
+      priceLineClass,
+      editStatusShow,
+      editCommentShow,
+      editDescriptionShow,
+      descriptionList,
+      deletePayment,
+      reload
     }
   }
-}
+})
 </script>
 
-<style scoped>
+<style scoped lang='scss'>
 ol {
   margin: 0;
+  padding-left: 12px;
 }
 
 table {

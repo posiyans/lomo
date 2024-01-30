@@ -11,7 +11,6 @@
       <tr class="bg-black-05">
         <th>Поле</th>
         <th>
-
           <div class="row items-center">
             <div class="col-grow">
               <div>
@@ -41,13 +40,15 @@
       </thead>
       <tbody>
       <tr>
-        <td>id</td>
-        <td>{{ payment.id }}</td>
+        <td>id {{ payment.id }}</td>
+        <td>
+          <ShowTime :time="payment.payment_date" before="от" format="DD-MM-YYYY HH:mm" />
+        </td>
       </tr>
       <tr>
         <td>Дата</td>
         <td>
-          <ShowTime :time="payment.payment_date" format="DD-MM-YYYY HH:mm" />
+
         </td>
       </tr>
       <tr :class="{'bg-red-1': steadError}">

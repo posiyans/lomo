@@ -92,8 +92,8 @@ export default defineComponent({
       }
     )
     const loading = ref(false)
-    const newValue = ref(null)
-    const oldValue = ref(null)
+    const newValue = ref('')
+    const oldValue = ref('')
     const noSave = computed(() => {
       return oldValue.value !== newValue.value
 
@@ -124,6 +124,7 @@ export default defineComponent({
     }
     const setValue = (val) => {
       newValue.value = val
+      emit('reset-data')
     }
     onMounted(() => {
       init()

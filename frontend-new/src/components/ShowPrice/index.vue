@@ -1,6 +1,6 @@
 <template>
   <div>
-    {{ formatedPrice }}
+    {{ appendText }} {{ formatedPrice }}
   </div>
 </template>
 
@@ -18,6 +18,10 @@ export default defineComponent({
     hideIcon: {
       type: Boolean,
       default: false
+    },
+    appendText: {
+      type: String,
+      default: ''
     }
   },
   setup(props, { emit }) {

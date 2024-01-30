@@ -80,13 +80,10 @@
         </q-td>
       </template>
       <template v-slot:body-cell-actions="props">
-        <q-td :props="props" :class="{ 'o-60': !props.row.device.active }">
+        <q-td :props="props" auto-width :class="{ 'o-60': !props.row.device.active }">
           <div class="row items-center q-col-gutter-xs">
-            <div>
-              <q-btn color="secondary" label="Подать показания" />
-            </div>
-            <DeleteInstrumentReading :reading-id="props.row.id" />
             <div v-if="edit" class="q-gutter-sm">
+              <DeleteInstrumentReading v-if="!props.row.invoice" :reading-id="props.row.id" @success="reload" />
             </div>
           </div>
         </q-td>

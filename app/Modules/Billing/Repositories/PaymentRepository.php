@@ -32,6 +32,25 @@ class PaymentRepository
         return $this;
     }
 
+    /**
+     * отбор по наличию счета у платежа $invoice = 2 или его отсуствия $invoice = 1
+     *
+     * @param $invoice
+     * @return $this
+     */
+    public function isInvoice($invoice)
+    {
+        if ($invoice) {
+            if ($invoice == 1) {
+                $this->query->whereNull('invoice_id');
+            }
+            if ($invoice == 2) {
+                $this->query->whereNotNull('invoice_id');
+            }
+        }
+        return $this;
+    }
+
     public function findByPrice($price)
     {
         if ($price) {

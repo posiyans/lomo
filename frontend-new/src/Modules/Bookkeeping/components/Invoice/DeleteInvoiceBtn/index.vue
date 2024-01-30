@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="inline-block">
     <div @click="clickAction">
       <slot>
         <q-btn label="Удалить счет" color="negative" />

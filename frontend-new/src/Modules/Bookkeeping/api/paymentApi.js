@@ -40,6 +40,13 @@ export function deletePayment(id) {
   })
 }
 
+export function deletePaymentFromInvoice(paymentId) {
+  return request({
+    url: '/api/v2/billing/payment/from-invoice/' + paymentId,
+    method: 'delete'
+  })
+}
+
 export function addPayment(data) {
   return request({
     url: '/api/v2/billing/payment/',

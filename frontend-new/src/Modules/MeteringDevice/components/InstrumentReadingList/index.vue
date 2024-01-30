@@ -1,8 +1,8 @@
 <template>
   <div>
     <FilterBlock v-model="listQuery" class="q-mb-xs" />
-    <TableBlock :list="list" />
-    <LoadMore v-model:listQuery="listQuery" :func="func" @setList="setList" />
+    <TableBlock :list="list" :edit="edit" @reload="reload" />
+    <LoadMore :key="key" v-model:listQuery="listQuery" :func="func" @setList="setList" />
   </div>
 </template>
 
@@ -25,10 +25,14 @@ export default defineComponent({
     steadId: {
       type: [String, Number],
       default: ''
+    },
+    edit: {
+      type: Boolean,
+      default: false
     }
   },
   setup(props, { emit }) {
-    const data = ref(false)
+    const key = ref(1)
     const list = ref([])
     const func = getInstrumentReadingList
     const listQuery = ref({
@@ -38,11 +42,15 @@ export default defineComponent({
       date_start: '',
       date_end: ''
     })
+    const reload = () => {
+      key.value++
+    }
     const setList = (val) => {
       list.value = val
     }
     return {
-      data,
+      key,
+      reload,
       list,
       listQuery,
       func,

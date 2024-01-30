@@ -1,5 +1,5 @@
 <template>
-  <component :is="block">{{ time_show }}</component>
+  <component :is="block">{{ before }} {{ time_show }}</component>
 </template>
 <script>
 import { date } from 'quasar'
@@ -14,7 +14,12 @@ export default {
     block: {
       type: String,
       default: 'div'
+    },
+    before: {
+      type: String,
+      default: ''
     }
+
   },
   data() {
     return {}

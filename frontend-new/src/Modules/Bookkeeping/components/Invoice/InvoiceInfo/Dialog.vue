@@ -5,7 +5,10 @@
         <q-btn label="Подробнее" color="primary" />
       </slot>
     </div>
-    <q-dialog v-model="dialogVisible">
+    <q-dialog
+      v-model="dialogVisible"
+      @hide="close"
+    >
       <q-card>
         <q-card-section class="row items-center q-pb-none">
           <div class="text-h6 row items-center q-col-gutter-xs">

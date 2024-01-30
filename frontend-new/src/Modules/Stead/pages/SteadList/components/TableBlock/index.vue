@@ -12,11 +12,11 @@
     >
       <template v-slot:body-cell-number="props">
         <q-td :props="props" auto-width>
-          <div class="my-table-details">
+          <router-link class="my-table-details" :to="`/admin/stead/info/${props.row.id}`">
             <q-chip outline square color="primary" text-color="white">
               {{ props.row.number }}
             </q-chip>
-          </div>
+          </router-link>
         </q-td>
       </template>
       <template v-slot:body-cell-size="props">

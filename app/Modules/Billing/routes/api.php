@@ -7,6 +7,8 @@ Route::group(['prefix' => 'v2/billing'], function () {
     Route::group(['prefix' => 'invoice'], function () {
         Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::get('/get-list', \App\Modules\Billing\Controllers\Invoice\GetInvoiceListController::class);
+            Route::put('/{invoice}', \App\Modules\Billing\Controllers\Invoice\UpdateInvoiceFieldController::class);
+            Route::post('/add-payment/{invoice}', \App\Modules\Billing\Controllers\Invoice\AddPaymentToInvoiceController::class);
             Route::delete('/delete/{invoice}', \App\Modules\Billing\Controllers\Invoice\DeleteInvoiceController::class);
         });
     });
@@ -17,6 +19,7 @@ Route::group(['prefix' => 'v2/billing'], function () {
             Route::delete('/{payment}', \App\Modules\Billing\Controllers\Payment\DeletePaymentController::class);
             Route::get('/{payment}', \App\Modules\Billing\Controllers\Payment\GetPaymentController::class);
             Route::post('/', \App\Modules\Billing\Controllers\Payment\AddPaymentController::class);
+            Route::delete('/from-invoice/{payment}', \App\Modules\Billing\Controllers\Payment\DeletePaymentFromInvoiceController::class);
         });
     });
     Route::group(['prefix' => 'balance'], function () {

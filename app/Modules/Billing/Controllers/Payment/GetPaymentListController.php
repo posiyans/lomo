@@ -23,6 +23,7 @@ class GetPaymentListController extends Controller
                 ->findPayment($request->find)
                 ->isError($request->is_error)
                 ->forStead($request->stead_id)
+                ->isInvoice($request->is_invoice)
                 ->forRateGroup($request->rate_group_id)
                 ->forDate($request->date_start, $request->date_end);
             if ($request->xlsx) {

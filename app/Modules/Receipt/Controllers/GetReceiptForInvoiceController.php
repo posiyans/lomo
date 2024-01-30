@@ -9,7 +9,6 @@ use App\Modules\Gardening\Repositories\GardeningRepository;
 use App\Modules\Receipt\Validators\GetReceiptForInvoiceValidator;
 
 /**
- *
  * Получить квитанцию на счет
  */
 class GetReceiptForInvoiceController extends Controller

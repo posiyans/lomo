@@ -2,7 +2,7 @@
   <div>
     <div @click="onSubmit">
       <slot>
-        <q-btn flat label="Удалить" color="negative" />
+        <q-btn flat :loading="loading" icon="delete" color="negative" />
       </slot>
     </div>
   </div>
@@ -10,7 +10,7 @@
 
 <script>
 /* eslint-disable */
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 import { deleteInstrumentReading } from 'src/Modules/MeteringDevice/api/instrumentReadingApi'
 import { errorMessage } from 'src/utils/message'
 import { useQuasar } from 'quasar'
@@ -24,6 +24,7 @@ export default defineComponent({
     }
   },
   setup(props, { emit }) {
+    const loading = ref(false)
     const $q = useQuasar()
     const onSubmit = () => {
       $q.dialog({
@@ -42,6 +43,7 @@ export default defineComponent({
         },
         persistent: true
       }).onOk(() => {
+        loading.value = true
         deleteInstrumentReading(props.readingId)
           .then(res => {
             emit('success')
@@ -52,7 +54,8 @@ export default defineComponent({
       })
     }
     return {
-      onSubmit
+      onSubmit,
+      loading
     }
   }
 })

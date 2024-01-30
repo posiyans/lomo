@@ -25,6 +25,22 @@ export function deleteInvoice(id) {
   })
 }
 
+export function updateInvoiceField(id, data) {
+  return request({
+    url: '/api/v2/billing/invoice/' + id,
+    method: 'put',
+    data
+  })
+}
+
+export function addPaymentInInvoice(id, data) {
+  return request({
+    url: '/api/v2/billing/invoice/add-payment/' + id,
+    method: 'post',
+    data
+  })
+}
+
 export function fetchInvoiceInfo(id) {
   return request({
     url: '/api/v1/admin/billing/invoice/' + id,

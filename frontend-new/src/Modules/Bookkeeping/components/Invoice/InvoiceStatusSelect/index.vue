@@ -61,7 +61,7 @@ export default defineComponent({
       },
       {
         value: 0,
-        label: 'не оплаченный'
+        label: 'неоплаченный'
       }
 
     ])
