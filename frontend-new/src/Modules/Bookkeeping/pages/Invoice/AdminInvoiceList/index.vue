@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-md">
+  <div>
     <div class="row items-center q-col-gutter-sm">
       <FilterBlock v-model="listQuery" />
       <DownloadXlsxBtn :func="funcXlsx" />

@@ -2,6 +2,7 @@
 
 namespace App\Modules\Billing\Resources;
 
+use App\Modules\MeteringDevice\Resources\InstrumentReadingSmallResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class PaymentResource extends JsonResource
@@ -28,11 +29,12 @@ class PaymentResource extends JsonResource
             $data['rate'] = [
                 'id' => $this->rate_group_id,
                 'name' => $this->rate_group->name,
+                'depends' => $this->rate_group->depends,
             ];
         } else {
             $data['rate'] = null;
         }
-//        $data['payments'] = $this->payments;
+        $data['readings'] = InstrumentReadingSmallResource::collection($this->instrument_readings);
 
         return $data;
     }

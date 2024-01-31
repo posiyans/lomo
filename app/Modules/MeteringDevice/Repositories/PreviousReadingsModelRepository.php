@@ -23,7 +23,7 @@ class PreviousReadingsModelRepository
         $device = $this->reading->metering_device;
         $reading = (new InstrumentReadingRepository())->for_device($device->id)
             ->where('date', '<=', $this->reading->date)
-            ->where('id', '<', $this->reading->id)
+            ->where('id', '!=', $this->reading->id)
             ->orderBy('date', 'desc')
             ->first();
         return $reading;

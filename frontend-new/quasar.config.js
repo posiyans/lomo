@@ -52,7 +52,6 @@ module.exports = configure(function (ctx) {
     // Full list of options: https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js#Property%3A-build
     build: {
       env: {
-        SITE_NAME: 'ЛОМО',
         BASE_API: ctx.dev
           ? 'http://localhost'
           : '',

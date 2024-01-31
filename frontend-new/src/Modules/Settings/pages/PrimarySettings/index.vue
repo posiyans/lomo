@@ -3,6 +3,9 @@
     <div>
       <AllowPublicationOfArticlesForm />
     </div>
+    <div>
+      <ChangeFavicon v-if="false" />
+    </div>
   </div>
 </template>
 
@@ -10,10 +13,12 @@
 /* eslint-disable */
 import { defineComponent, ref } from 'vue'
 import AllowPublicationOfArticlesForm from 'src/Modules/Article/Article/components/AllowPublicationOfArticlesForm/index.vue'
+import ChangeFavicon from 'src/Modules/Settings/components/ChangeFavicon/index.vue'
 
 export default defineComponent({
   components: {
-    AllowPublicationOfArticlesForm
+    AllowPublicationOfArticlesForm,
+    ChangeFavicon
   },
   props: {},
   setup(props, { emit }) {

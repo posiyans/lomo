@@ -11,7 +11,7 @@ class InstrumentReadingRepository
 
     public function __construct()
     {
-        $this->query = InstrumentReadingModel::query()->orderBy('id', 'desc');
+        $this->query = InstrumentReadingModel::query();
     }
 
     /**
@@ -42,7 +42,7 @@ class InstrumentReadingRepository
      * @param $deviceId
      * @return $this
      */
-    public function for_device($deviceId)
+    public function for_device($deviceId): InstrumentReadingRepository
     {
         if ($deviceId) {
             if (is_array($deviceId)) {

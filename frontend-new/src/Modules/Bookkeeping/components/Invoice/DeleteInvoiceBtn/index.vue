@@ -2,7 +2,11 @@
   <div class="inline-block">
     <div @click="clickAction">
       <slot>
-        <q-btn label="Удалить счет" color="negative" />
+        <q-btn icon="delete" round flat color="negative">
+          <q-tooltip>
+            Удалить счет
+          </q-tooltip>
+        </q-btn>
       </slot>
     </div>
   </div>

@@ -2,8 +2,8 @@
 
 namespace App\Modules\MeteringDevice\Validators;
 
+use App\Modules\Billing\Models\BillingPaymentModel;
 use App\Modules\MeteringDevice\Models\MeteringDeviceModel;
-use App\Modules\Stead\Models\SteadModel;
 use Illuminate\Foundation\Http\FormRequest;
 
 class AddInstrumentReadingValidator extends FormRequest
@@ -17,13 +17,13 @@ class AddInstrumentReadingValidator extends FormRequest
     public function rules()
     {
         return [
-            'stead_id' => [
-                'nullable',
-                'exists:' . SteadModel::class . ',id'
-            ],
             'device_id' => [
                 'required',
                 'exists:' . MeteringDeviceModel::class . ',id'
+            ],
+            'payment_id' => [
+                'nullable',
+                'exists:' . BillingPaymentModel::class . ',id'
             ],
             'value' => [
                 'required',

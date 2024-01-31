@@ -4,6 +4,11 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::group(['prefix' => 'v2/billing'], function () {
+    Route::group(['prefix' => 'invoice-group'], function () {
+        Route::group(['middleware' => ['auth:sanctum']], function () {
+            Route::get('/get-list', \App\Modules\Billing\Controllers\InvoiceGroup\GetInvoiceGroupListController::class);
+        });
+    });
     Route::group(['prefix' => 'invoice'], function () {
         Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::get('/get-list', \App\Modules\Billing\Controllers\Invoice\GetInvoiceListController::class);

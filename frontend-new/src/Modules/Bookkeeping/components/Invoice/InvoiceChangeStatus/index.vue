@@ -51,6 +51,7 @@ export default defineComponent({
       } else {
         props.invoice.is_paid = false
       }
+      emit('success')
     }
     return {
       status,

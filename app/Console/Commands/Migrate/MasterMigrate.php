@@ -69,7 +69,5 @@ class MasterMigrate extends Command
         Cache::flush();
         RateMigrate::run();
         InvoiceMigrate::run();
-//        $users = DB::connection('mysql_old')->table('users')->get();
-//        dump($users);
     }
 }

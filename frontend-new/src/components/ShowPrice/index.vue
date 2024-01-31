@@ -1,6 +1,6 @@
 <template>
   <div>
-    {{ appendText }} {{ formatedPrice }}
+    {{ appendText }} {{ beforeText }} {{ formatedPrice }}
   </div>
 </template>
 
@@ -20,6 +20,10 @@ export default defineComponent({
       default: false
     },
     appendText: {
+      type: String,
+      default: ''
+    },
+    beforeText: {
       type: String,
       default: ''
     }

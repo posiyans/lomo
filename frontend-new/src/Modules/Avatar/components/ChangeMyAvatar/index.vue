@@ -27,7 +27,7 @@
 
 <script>
 /* eslint-disable */
-import { computed, defineComponent, onMounted, ref } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
 import ImageCropper from 'vue-image-crop-upload'
 import UserAvatarByUid from 'src/Modules/Avatar/components/UserAvatarByUid/index.vue'
 import { Cookies } from 'quasar'
@@ -59,9 +59,6 @@ export default defineComponent({
       authStore.key++
     }
 
-    onMounted(() => {
-
-    })
     return {
       close,
       imagecropperShow,

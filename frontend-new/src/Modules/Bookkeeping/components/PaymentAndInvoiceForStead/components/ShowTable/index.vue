@@ -33,7 +33,15 @@
             </div>
           </q-td>
           <q-td>
-            {{ props.row?.title }}
+            <div class="row items-center">
+              <div>
+                {{ props.row?.title }}
+              </div>
+              <q-space />
+              <div v-if="props.row.type.uid === 'payment' && props.row.rate.depends === 2">
+                <ShowReadingListInPayment :payment="props.row" />
+              </div>
+            </div>
           </q-td>
           <q-td>
             {{ props.row.rate?.name }}
@@ -57,9 +65,11 @@ import ShowTime from 'components/ShowTime/index.vue'
 import ShowPrice from 'components/ShowPrice/index.vue'
 import PaymentInfo from 'src/Modules/Bookkeeping/components/Payment/PaymentInfoShowAndEdit/Dialog.vue'
 import InvoiceInfo from 'src/Modules/Bookkeeping/components/Invoice/InvoiceInfo/Dialog.vue'
+import ShowReadingListInPayment from 'src/Modules/Bookkeeping/components/Payment/ShowReadingListInPayment/index.vue'
 
 export default defineComponent({
   components: {
+    ShowReadingListInPayment,
     PaymentInfo,
     InvoiceInfo,
     ShowTime,

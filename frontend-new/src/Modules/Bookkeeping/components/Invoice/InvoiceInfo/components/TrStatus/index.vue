@@ -8,7 +8,7 @@
       <div v-if="!editStatusShow">
         {{ invoice.is_paid ? 'Оплачен' : 'Неоплачен' }}
       </div>
-      <InvoiceChangeStatus v-if="editStatusShow" :invoice="invoice" class="q-pr-lg" />
+      <InvoiceChangeStatus v-if="editStatusShow" :invoice="invoice" class="q-pr-lg" @success="editStatusShow = false" />
     </td>
   </tr>
   <tr v-if="editStatusShow">
@@ -89,7 +89,6 @@ export default defineComponent({
       }
     ]
     const selectPayment = (payment) => {
-      console.log('selectPayment')
       const data = {
         payment_id: payment.id
       }

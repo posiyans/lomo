@@ -3,6 +3,7 @@
 namespace App\Modules\Billing\Models;
 
 use App\Models\MyModel;
+use App\Modules\MeteringDevice\Models\InstrumentReadingModel;
 use App\Modules\Rate\Models\RateGroupModel;
 use App\Modules\Stead\Models\SteadModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -102,16 +103,17 @@ class BillingPaymentModel extends MyModel
         return $this->hasOne(BillingInvoiceModel::class, 'id', 'invoice_id');
     }
 
+    /**
+     * показания приборов за который заплатили
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function instrument_readings()
+    {
+        return $this->hasMany(InstrumentReadingModel::class, 'payment_id', 'id');
+    }
 
-//    /**
-//     * типо за что оплатитли
-//     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-//     * @deprecated
-//     */
-//    public function instrumentReadings()
-//    {
-//        return $this->hasMany(InstrumentReadingModel::class, 'payment_id', 'id');
-//    }
+
 ////    public function getType()
 ////    {
 ////        return $this->hasOne(ReceiptTypeModels::class, 'id', 'type');

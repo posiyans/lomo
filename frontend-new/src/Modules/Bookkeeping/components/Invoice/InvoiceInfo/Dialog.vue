@@ -58,7 +58,7 @@ export default defineComponent({
     }
     const close = () => {
       dialogVisible.value = false
-      emit('success')
+      emit('reload')
     }
     return {
       dialogVisible,

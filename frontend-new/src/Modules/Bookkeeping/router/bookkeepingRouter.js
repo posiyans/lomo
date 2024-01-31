@@ -60,7 +60,7 @@ export const adminBookkeeping =
       },
       {
         path: 'invoice',
-        component: () => import('src/Modules/Bookkeeping/pages/Invoice/AdminInvoiceList/index.vue'),
+        component: () => import('src/Modules/Bookkeeping/pages/Invoice/AdminInvoicePrimaryPage/index.vue'),
         meta: {
           icon: 'receipt',
           title: 'Счета',

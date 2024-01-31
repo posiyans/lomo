@@ -1,5 +1,12 @@
 <template>
   <div>
+    <q-input
+      :model-value="listQuery.find"
+      dense
+      outlined
+      label="Найти"
+      @update:model-value="setFind"
+    />
     <ShowTable :list="list" :columns="columns" :dense="dense" @selected="selected" />
     <div v-if="noList" class="text-center q-pa-sm text-weight-bold">
       Платежи не найдены
@@ -97,6 +104,11 @@ export default defineComponent({
       page: 1,
       limit: 5
     })
+    const setFind = (val) => {
+      const tmp = Object.assign({}, listQuery.value)
+      tmp.find = val
+      listQuery.value = tmp
+    }
     const reload = () => {
       key.value++
     }
@@ -108,6 +120,7 @@ export default defineComponent({
       emit('selected', data)
     }
     return {
+      setFind,
       listQuery,
       selected,
       key,

@@ -3,19 +3,17 @@
 namespace App\Modules\MeteringDevice\Actions;
 
 use App\Modules\MeteringDevice\Models\InstrumentReadingModel;
-use App\Modules\MeteringDevice\Models\MeteringDeviceModel;
 
 /**
- * Добавить показяния прибора учета
+ * Обновить показания прибора учета
  */
-class AddInstrumentReadingAction
+class UpdateInstrumentReadingAction
 {
     protected $reading;
 
-    public function __construct(MeteringDeviceModel $device)
+    public function __construct(InstrumentReadingModel $reading)
     {
-        $this->reading = new InstrumentReadingModel();
-        $this->reading->metering_device_id = $device->id;
+        $this->reading = $reading;
     }
 
     public function value($value)
@@ -44,10 +42,10 @@ class AddInstrumentReadingAction
      */
     public function run()
     {
-        if ($this->reading->logAndSave('Добавление показаний прибора учета')) {
+        if ($this->reading->logAndSave('Изменние показаний прибора учета')) {
             return $this->reading;
         }
-        throw new \Exception('Ошибка добавления показаний пибора учета');
+        throw new \Exception('Ошибка изменниея показаний пибора учета');
     }
 
 

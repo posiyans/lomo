@@ -49,8 +49,6 @@
               <q-btn label="Добавить" color="primary" type="submit" />
             </div>
           </q-form>
-
-          {{ reading }}
         </q-card-section>
       </q-card>
     </q-dialog>
@@ -65,7 +63,7 @@ import InputDate from 'components/Input/InputDate/index.vue'
 import { required } from 'src/utils/validators.js'
 import { addInstrumentReading } from 'src/Modules/MeteringDevice/api/instrumentReadingApi'
 import { errorMessage } from 'src/utils/message'
-import { useQuasar } from 'quasar'
+import { date, useQuasar } from 'quasar'
 
 export default defineComponent({
   components: {
@@ -84,7 +82,7 @@ export default defineComponent({
       stead_id: props.steadId,
       device_id: '',
       value: '',
-      date: '',
+      date: date.formatDate(new Date(), 'YYYY-MM-DD'),
     })
     const dialogVisible = ref(false)
     const showDialog = () => {

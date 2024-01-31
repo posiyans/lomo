@@ -5,7 +5,10 @@
         <q-btn label="Подробнее" color="primary" />
       </slot>
     </div>
-    <q-dialog v-model="dialogVisible">
+    <q-dialog
+      v-model="dialogVisible"
+      @hide="reload"
+    >
       <q-card>
         <q-card-section class="row items-center q-pb-none">
           <div class="text-h6 row items-center q-col-gutter-xs">
@@ -23,9 +26,6 @@
         </q-card-section>
         <q-card-section>
           <PaymentInfoShowAndEdit :payment="payment" :edit="edit" @reload="reload" @deletePayment="deletePayment" />
-          <div class="text-right q-py-sm">
-            <q-btn label="Закрыть" flat color="primary" v-close-popup />
-          </div>
         </q-card-section>
       </q-card>
     </q-dialog>

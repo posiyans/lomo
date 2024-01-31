@@ -3,7 +3,29 @@
     <table class="do-not-carry black">
       <tr class="bg-black-05" :class="{ 'bg-teal-1': invoice.is_paid, 'text-red': !invoice.is_paid }">
         <th>Поле</th>
-        <th>Значение</th>
+        <th>
+          <div class="row items-center">
+            <div class="col-grow">
+              <div>
+                Значение
+              </div>
+            </div>
+            <div v-if="edit">
+              <q-fab
+                flat
+                text-color="black"
+                icon="more_vert"
+                direction="left"
+                padding="xs"
+              >
+                <div class="q-pa-sm">
+                  <DeleteInvoiceBtn :invoice-id="invoice.id" @success="reload" />
+                </div>
+              </q-fab>
+
+            </div>
+          </div>
+        </th>
       </tr>
       <tr>
         <td>id {{ invoice.id }}</td>
@@ -99,9 +121,6 @@
         </td>
       </tr>
     </table>
-    <div v-if="edit" class="q-pa-sm">
-      <DeleteInvoiceBtn :invoice-id="invoice.id" @success="reload" />
-    </div>
   </div>
 </template>
 

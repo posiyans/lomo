@@ -45,12 +45,6 @@
           <ShowTime :time="payment.payment_date" before="от" format="DD-MM-YYYY HH:mm" />
         </td>
       </tr>
-      <tr>
-        <td>Дата</td>
-        <td>
-
-        </td>
-      </tr>
       <tr :class="{'bg-red-1': steadError}">
         <td>Участок</td>
         <td>
@@ -103,7 +97,7 @@
       </tr>
       <tr>
         <td>Назначение</td>
-        <td>
+        <td style="padding: 0px;">
           <q-expansion-item
             :label="payment.raw_data[4]"
           >
@@ -112,11 +106,10 @@
             </div>
           </q-expansion-item>
         </td>
-
       </tr>
       <tr :class="{'bg-red-1': typeError}">
         <td>Тип платежа</td>
-        <td>
+        <td style="padding: 0 16px">
           <div v-if="editRateGroup" class="row items-center">
             <RateGroupSelect
               v-model="rateGroupId"
@@ -140,33 +133,12 @@
           </div>
         </td>
       </tr>
-      <tr class="bg-red">
-        <td>Показания</td>
-        <td>
-          <div v-if="payment.depends?.length > 0" class="flex">
-            <div
-              v-for="dep in payment.depends"
-              :key="dep.id"
-              class="flex br2 b--solid bw1 mh1 ph2 pv1"
-              :class="{'b--dark-green': payment.instr_read['d' + dep.id] && payment.instr_read['d' + dep.id].value, 'b--dark-red': !payment.instr_read['d' + dep.id]}"
-              @click="setMetering(dep)"
-            >
-              <div>
-                <div>
-                  {{ dep.name[1] }}:
-                </div>
-                <div class="f7 gray">
-                  sn: {{ dep.serial_number }}
-                </div>
-              </div>
-              <div v-if="payment.instr_read['d' + dep.id]">
-                {{ payment.instr_read['d' + dep.id].value }}
-              </div>
-            </div>
-          </div>
-          <div v-else class="text-teal"> Приборы не найдены!!! (В разработке)</div>
-        </td>
-      </tr>
+      <TrReading
+        v-if="payment.rate.depends === 2"
+        :payment="payment"
+        :edit="edit"
+        @reloadData="reloadData"
+      />
       <tr>
         <td>Примечание</td>
         <td>
@@ -216,6 +188,7 @@ import { successMessage } from 'src/utils/message'
 import RateGroupSelect from 'src/Modules/Rate/components/RateGroupSelect/index.vue'
 import { useQuasar } from 'quasar'
 import PaymentDeleteBtn from 'src/Modules/Bookkeeping/components/Payment/PaymentDeleteBtn/index.vue'
+import TrReading from './components/TrReading/index.vue'
 
 export default defineComponent({
   components: {
@@ -224,7 +197,8 @@ export default defineComponent({
     SteadSelect,
     ShowPrice,
     FindOwnerPopup,
-    RateGroupSelect
+    RateGroupSelect,
+    TrReading
   },
   props: {
     payment: {
@@ -302,6 +276,9 @@ export default defineComponent({
       saveData(data)
       editRateGroup.value = false
     }
+    const reloadData = () => {
+      emit('reload')
+    }
     const saveData = (data) => {
       updatePayment(props.payment.id, data)
         .then(res => {
@@ -320,6 +297,7 @@ export default defineComponent({
       changeStead,
       deletePayment,
       deleteError,
+      reloadData,
       changeRateGroup,
       saveDescription,
       editRateGroup,

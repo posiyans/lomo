@@ -7,6 +7,7 @@ use App\Modules\Billing\Repositories\InvoiceRepository;
 use App\Modules\Billing\Repositories\PaymentRepository;
 use App\Modules\Billing\Resources\PaymentAndInvoiceXlsxFileResource;
 use App\Modules\Billing\Validators\Balance\GetPaymentAndInvoiceListValidator;
+use App\Modules\MeteringDevice\Resources\InstrumentReadingSmallResource;
 
 /**
  * получить список счетов и платежей
@@ -22,31 +23,6 @@ class GetPaymentAndInvoiceListController extends Controller
             $page = $request->page;
 
             $result = collect();
-            if (!$request->type || $request->type == 'payment') {
-                $result = $result->merge(
-                    (new PaymentRepository())
-                        ->forStead($request->stead_id)
-                        ->forRateGroup($request->rate_group_id)
-                        ->forDate($request->date_start, $request->date_end)
-                        ->get()->each(function ($item, $key) {
-                            $item->type = [
-                                'uid' => 'payment',
-                                'label' => 'Платеж',
-                            ];
-                            $item->stead = [
-                                'id' => $item->stead->id,
-                                'number' => $item->stead->number,
-                                'size' => $item->stead->size,
-                            ];
-                            $item->title = $item->raw_data[4] ?? '';
-                            $item->date = $item->payment_date;
-                            $item->is_paid = $item->invoice ? $item->invoice->is_paid : false;
-                            $item->sort = strtotime($item->payment_date);
-                            $item->rate = $item->rate_group ? ['id' => $item->rate_group->id, 'name' => $item->rate_group->name] : null;
-                        })
-                );
-            }
-
             if (!$request->type || $request->type == 'invoice') {
                 $result = $result->merge(
                     (new InvoiceRepository())
@@ -70,7 +46,40 @@ class GetPaymentAndInvoiceListController extends Controller
                         })
                 );
             }
+
+            if (!$request->type || $request->type == 'payment') {
+                $result = $result->merge(
+                    (new PaymentRepository())
+                        ->forStead($request->stead_id)
+                        ->forRateGroup($request->rate_group_id)
+                        ->forDate($request->date_start, $request->date_end)
+                        ->get()->each(function ($item, $key) {
+                            $item->type = [
+                                'uid' => 'payment',
+                                'label' => 'Платеж',
+                            ];
+                            $item->stead = [
+                                'id' => $item->stead->id,
+                                'number' => $item->stead->number,
+                                'size' => $item->stead->size,
+                            ];
+                            $item->title = $item->raw_data[4] ?? '';
+                            $item->date = $item->payment_date;
+                            $item->is_paid = $item->invoice ? $item->invoice->is_paid : false;
+                            $item->sort = strtotime($item->payment_date);
+                            $item->rate = $item->rate_group ? [
+                                'id' => $item->rate_group->id,
+                                'name' => $item->rate_group->name,
+                                'depends' => $item->rate_group->depends,
+                            ] : null;
+                            $item->readings = InstrumentReadingSmallResource::collection($item->instrument_readings);
+                        })
+                );
+            }
+
             $is_paid = $request->is_paid;
+
+
             if ($is_paid) {
                 $result = $result->filter(function ($value, $key) use ($is_paid) {
                     if ($is_paid == 'paid') {
