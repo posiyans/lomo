@@ -22,11 +22,17 @@ export default defineComponent({
     }
   },
   setup(props, { emit }) {
+    let timer = null
     const setField = (val) => {
-      console.log(val)
-      const tmp = val.replace(/[^0-9.]/g, '')
-      // emit('update:model-value', tmp)
+
+      if (timer) clearTimeout(timer)
+      timer = setTimeout(() => {
+        let tmp = val.replace(',', '.')
+        tmp = tmp.replace(/[^0-9\\.-]+/g, '')
+        emit('update:model-value', tmp)
+      }, 200)
     }
+
     return {
       setField
     }

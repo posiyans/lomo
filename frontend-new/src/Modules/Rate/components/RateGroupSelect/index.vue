@@ -73,8 +73,8 @@ export default defineComponent({
     }
   },
   setup(props, { emit }) {
-    const options = ref([])
     const loading = ref(false)
+    const options = ref([])
     const getData = () => {
       loading.value = true
       getRateGroupList(props.params)

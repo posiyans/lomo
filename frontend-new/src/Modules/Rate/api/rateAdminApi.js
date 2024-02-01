@@ -64,10 +64,11 @@ export function getRateGroupList(params) {
   })
 }
 
-export function getRateListForGroup(id) {
+export function getRateListForGroup(id, params) {
   return request({
     url: '/api/v2/rate/get/' + id,
-    method: 'get'
+    method: 'get',
+    params
   })
 }
 

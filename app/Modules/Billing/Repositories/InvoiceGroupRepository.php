@@ -23,6 +23,14 @@ class InvoiceGroupRepository
         return $this->query->where('id', $id)->firstOrFail();
     }
 
+    public function forRateGroup($group_id = false)
+    {
+        if ($group_id) {
+            $this->query->where('rate_group_id', $group_id);
+        }
+        return $this;
+    }
+
     public function paginate($limit)
     {
         return $this->query

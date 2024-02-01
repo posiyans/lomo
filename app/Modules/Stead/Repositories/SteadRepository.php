@@ -52,9 +52,19 @@ class SteadRepository
         return $this->query->paginate($limit);
     }
 
-    public function run()
+    public function get()
     {
         return $this->query->get();
+    }
+
+    /**
+     * @return SteadModel[]|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Query\Builder[]|\Illuminate\Support\Collection
+     * @deprecated
+     *
+     */
+    public function run()
+    {
+        return $this->get();
     }
 
     public function ids()

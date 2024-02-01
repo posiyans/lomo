@@ -29,16 +29,6 @@ export const adminBookkeeping =
         }
       },
       {
-        path: 'billing_balance_stead/:id',
-        component: () => import('src/Modules/Bookkeeping/pages/BillingBalansStead/index.vue'),
-        hidden: true,
-        meta: {
-          icon: 'receipt',
-          title: 'Баланс',
-          roles: ['bookkeeping-show']
-        }
-      },
-      {
         path: 'payment_list',
         component: () => import('src/Modules/Bookkeeping/pages/Payment/AdminPaymentList/index.vue'),
         meta: {
@@ -49,7 +39,6 @@ export const adminBookkeeping =
       },
       {
         path: 'payment/add',
-        // component: () => import('src/Modules/Bookkeeping/pages/BillingPayment/PaymentAdd/index.vue'),
         component: () => import('src/Modules/Bookkeeping/pages/Payment/PaymentAdd/index.vue'),
         hidden: true,
         meta: {

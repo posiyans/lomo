@@ -22,7 +22,7 @@ class CreateBillingInvoicesTable extends Migration
             $table->float('price');
             $table->boolean('is_paid')->default(false)->comment('оплачен');
             $table->integer('user_id')->nullable()->comment('кто выставил счет');
-            $table->json('description')->nullable()->comment('расшифровка счета');
+            $table->json('options')->nullable()->comment('расшифровка счета');
             $table->softDeletes();
             $table->timestamps();
         });

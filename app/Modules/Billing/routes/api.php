@@ -7,6 +7,7 @@ Route::group(['prefix' => 'v2/billing'], function () {
     Route::group(['prefix' => 'invoice-group'], function () {
         Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::get('/get-list', \App\Modules\Billing\Controllers\InvoiceGroup\GetInvoiceGroupListController::class);
+            Route::post('/', \App\Modules\Billing\Controllers\InvoiceGroup\AddInvoiceGroupController::class);
         });
     });
     Route::group(['prefix' => 'invoice'], function () {

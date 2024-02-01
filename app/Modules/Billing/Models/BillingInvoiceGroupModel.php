@@ -47,6 +47,8 @@ class BillingInvoiceGroupModel extends MyModel
 {
     use SoftDeletes;
 
+    protected $fillable = ['title'];
+
     protected $casts = [
         'options' => 'array',
     ];
@@ -55,11 +57,6 @@ class BillingInvoiceGroupModel extends MyModel
     {
         return $this->hasMany(BillingInvoiceModel::class, 'invoice_group_id', 'id');
     }
-
-    private $typeList = [
-        1 => 'Электроэнергия',
-        2 => 'Взносы'
-    ];
 
 //    /**
 //     * добавить историю и сохранить

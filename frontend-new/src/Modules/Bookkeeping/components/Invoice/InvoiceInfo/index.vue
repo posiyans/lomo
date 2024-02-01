@@ -63,7 +63,7 @@
               <li v-for="i in invoice.payments" :key="i.id">
                 <div class="row q-col-gutter-xs text-no-wrap text-grey-7">
                   <ShowTime :time="i.payment_date" block="span" format="DD-MM-YYYY" />
-                  <ShowPrice :price="i.price" append-text="на сумму" />
+                  <ShowPrice :price="i.price" before-text="на сумму" />
                   <q-space />
                   <div v-if="edit" @click="deletePayment(i)">
                     <q-btn icon="delete" color="negative" flat dense round size="xs" />
@@ -72,7 +72,7 @@
               </li>
             </ol>
           </div>
-          <ShowPrice :price="sumPayment" append-text="Итого:" :class="priceLineClass" class="text-weight-bold" />
+          <ShowPrice :price="sumPayment" before-text="Итого:" :class="priceLineClass" class="text-weight-bold" />
         </td>
       </tr>
       <TrStatus :invoice="invoice" :edit="edit" />
@@ -112,7 +112,7 @@
           />
           <div v-else>
             <div class="text-small-70">
-              {{ invoice.description?.comment }}
+              {{ invoice.options?.comment }}
             </div>
           </div>
           <div class="absolute-top-right">
@@ -177,8 +177,8 @@ export default defineComponent({
       return 'text-red'
     })
     const descriptionList = computed(() => {
-      if (props.invoice.description?.description) {
-        return props.invoice.description?.description.split('@') || []
+      if (props.invoice.options?.description) {
+        return props.invoice.options?.description.split('@') || []
       }
       return []
     })

@@ -62,12 +62,12 @@ class BillingInvoiceModel extends MyModel
 
     use SoftDeletes;
 
-    protected $fillable = ['title', 'description'];
+    protected $fillable = ['title'];
 
     protected $casts = [
         'is_paid' => 'boolean',
         'price' => 'decimal:2',
-        'description' => 'array',
+        'options' => 'array',
     ];
 
 

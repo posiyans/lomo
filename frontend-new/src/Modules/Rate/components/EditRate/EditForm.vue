@@ -7,11 +7,7 @@
       <InputNumber v-model="newRate.rate.ratio_b" label="Тариф на 1 участок" outlined @update:model-value="chandeRate" />
     </div>
     <div>
-      <q-input v-model="newRate.rate.description" :readonly="readonly" label="Описание оплаты" outlined>
-        <template v-slot:append>
-          <q-btn round dense flat icon="edit" color="grey-5" @click="readonly = !readonly" />
-        </template>
-      </q-input>
+      <q-input v-model="newRate.rate.description" readonly label="Описание оплаты" outlined />
     </div>
     <div>
       <InputDate v-model="newRate.rate.date_start" label="Дата начала действия тарифа" outlined />

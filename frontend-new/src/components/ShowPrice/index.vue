@@ -1,6 +1,6 @@
 <template>
   <div>
-    {{ appendText }} {{ beforeText }} {{ formatedPrice }}
+    {{ beforeText }}{{ formatedPrice }}{{ appendText }}
   </div>
 </template>
 

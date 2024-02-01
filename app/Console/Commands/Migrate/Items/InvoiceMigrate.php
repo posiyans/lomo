@@ -17,12 +17,13 @@ class InvoiceMigrate
         echo 'конвертация счетов и платежей' . PHP_EOL;
         $invoice_groups = DB::connection('mysql_old')->table('billing_reestrs')->get();
         foreach ($invoice_groups as $item) {
-            $fields = ['id', 'title', 'options', 'user_id', 'created_at', 'updated_at', 'deleted_at'];
+            $fields = ['id', 'title', 'user_id', 'created_at', 'updated_at', 'deleted_at'];
             $newItem = new BillingInvoiceGroupModel();
             foreach ($fields as $key) {
                 $newItem->$key = $item->$key;
             }
             $newItem->rate_group_id = $item->type;
+            $newItem->options = json_decode($item->options, false);
             $newItem->save();
         }
 
@@ -36,7 +37,7 @@ class InvoiceMigrate
             $newItem->rate_group_id = $item->type;
             $newItem->invoice_group_id = $item->reestr_id;
             $newItem->is_paid = $item->paid;
-            $newItem->description = ['description' => $item->description];
+            $newItem->options = ['description' => $item->description];
             $newItem->save();
         }
 
@@ -56,6 +57,9 @@ class InvoiceMigrate
 class BillingInvoiceGroupModel extends MyModel
 {
     public $timestamps = false;
+    protected $casts = [
+        'options' => 'array',
+    ];
 }
 
 class BillingInvoiceModel extends MyModel
@@ -64,7 +68,7 @@ class BillingInvoiceModel extends MyModel
     protected $casts = [
         'paid' => 'boolean',
         'price' => 'decimal:2',
-        'description' => 'array',
+        'options' => 'array',
     ];
     public $timestamps = false;
 }

@@ -5,9 +5,10 @@ namespace App\Modules\Billing\Validators\Invoice;
 use App\Modules\Rate\Models\RateGroupModel;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 
-class GetInvoiceGroupListValidator extends FormRequest
+class AddInvoiceGroupValidator extends FormRequest
 {
     public function authorize()
     {
@@ -17,18 +18,23 @@ class GetInvoiceGroupListValidator extends FormRequest
     public function rules()
     {
         return [
-            'page' => [
-                'numeric',
+            'title' => [
+                'string',
                 'required'
             ],
-            'limit' => [
-                'numeric',
-                'required'
+            'stead_type' => [
+                'string',
+                'required',
+                Rule::in(['all'])
             ],
             'rate_group_id' => [
-                'nullable',
+                'required',
                 'exists:' . RateGroupModel::class . ',id',
             ],
+            'rate' => [
+                'required',
+                'array'
+            ]
         ];
     }
 

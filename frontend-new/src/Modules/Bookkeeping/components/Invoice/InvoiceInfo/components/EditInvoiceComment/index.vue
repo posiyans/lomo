@@ -36,7 +36,7 @@ export default defineComponent({
       return updateInvoiceField(props.invoice.id, data)
     }
     onMounted(() => {
-      data.value = props.invoice.description?.comment?.replaceAll('@', "\n") || ''
+      data.value = props.invoice.options?.comment?.replaceAll('@', "\n") || ''
     })
     const setValue = (data) => {
       props.invoice.description.comment = data.replaceAll("\n", '@')

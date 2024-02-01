@@ -19,6 +19,9 @@
       <q-tab-panel name="invoice">
         <AdminInvoiceList />
       </q-tab-panel>
+      <q-tab-panel name="add">
+        <InvoiceGroupList />
+      </q-tab-panel>
     </q-tab-panels>
   </div>
 </template>
@@ -28,10 +31,12 @@
 import { computed, defineComponent, ref } from 'vue'
 import AdminInvoiceList from 'src/Modules/Bookkeeping/pages/Invoice/AdminInvoiceList/index.vue'
 import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
+import InvoiceGroupList from 'src/Modules/Bookkeeping/components/InvoiceGroup/InvoiceGroupList/index.vue'
 
 export default defineComponent({
   components: {
-    AdminInvoiceList
+    AdminInvoiceList,
+    InvoiceGroupList
   },
   props: {},
   setup(props, { emit }) {
