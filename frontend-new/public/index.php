@@ -28,10 +28,11 @@ if (LARAVEL_DEMO && $_SERVER['REQUEST_METHOD'] != 'OPTIONS') {
     } else {
         $user = $_SESSION['sql_lite'];
     }
-    if (!file_exists("D:\OSPanel\domains\lomo.loc\database\\" . $user . "_database.sqlite")) {
+    $path = realpath(__DIR__ . '/../database/' . $user . '_database.sqlite');
+    if (!file_exists($path)) {
         copy(__DIR__ . '/../database/database.sqlite', __DIR__ . '/../database/' . $user . '_database.sqlite');
     }
-    putenv("DB_DATABASE=D:\OSPanel\domains\lomo.loc\database\\" . $user . "_database.sqlite");
+    putenv("DB_DATABASE=" . $path);
 }
 require __DIR__ . '/../vendor/autoload.php';
 /*
@@ -69,3 +70,4 @@ $response = $kernel->handle(
 $response->send();
 
 $kernel->terminate($request, $response);
+
