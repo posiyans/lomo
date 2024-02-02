@@ -15,7 +15,7 @@ export default defineComponent({
     onMounted(() => {
       getGardeningInfo()
         .then(res => {
-          siteName.value = res.data.name
+          siteName.value = res.data.name || 'СНТ'
           LocalStorage.set('SiteName', siteName.value)
         })
     })

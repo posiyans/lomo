@@ -14,7 +14,7 @@
       </table>
     </div>
     <div class="" style="align-self: stretch; flex-grow: 1;">
-      <YandexMap v-if="false" :stead-id="steadId" class="q-pl-sm" />
+      <YandexMap :stead-id="steadId" class="q-pl-sm" />
     </div>
   </div>
 </template>

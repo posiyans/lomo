@@ -83,6 +83,7 @@ class CreateInvoiceAction
         foreach ($rates as $rate) {
             $text .= $this->getDescriptionForRate($rate);
         }
+        $text .= 'Итого: ' . $this->getPriceForRates($rates) . ' руб;';
         return $text;
     }
 

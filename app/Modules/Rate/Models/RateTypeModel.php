@@ -58,20 +58,7 @@ class RateTypeModel extends MyModel
         $data = $this->getCurrentDate();
         return $this->hasOne(RateModel::class, 'rate_type_id', 'id')
             ->where('date_start', '<', $data)
-            ->orderByDesc('created_at');
-    }
-
-    /**
-     * получить тариф на опредленную дату
-     * @param $date
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function rateForDate()
-    {
-        $data = $this->for_date ?? date('Y-m-d');
-        return $this->hasOne(RateModel::class, 'rate_type_id', 'id')
-            ->where('date_start', '<', $data)
-            ->orderByDesc('created_at');
+            ->orderBy('date_start', 'desc');
     }
 
 

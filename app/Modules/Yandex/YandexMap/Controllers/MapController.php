@@ -15,6 +15,20 @@ class  MapController extends Controller
         $steads = SteadModel::all();
         $data = [];
         foreach ($steads as $item) {
+            $temp = [
+                'id' => $item->id,
+                'size' => $item->size,
+                'number' => $item->number,
+                'color' => ['color' => '#ff0000', 'opacity' => '0.4'],
+            ];
+            if (isset($item->options['coordinates'])) {
+                $ks = $item->options['coordinates'];
+                $l = [];
+                foreach ($ks as $k) {
+                    $l[] = [$k[0] + 0.00006000100000, $k[1] + 0.00004500100000];
+                }
+                $temp['coordinates'] = $l;
+            }
             if (isset($item->options['geodata'])) {
                 $js = $item->options['geodata'];
                 $temp = [
@@ -38,8 +52,8 @@ class  MapController extends Controller
                     }
                     $temp['krd'] = $l;
                 }
-                $data[] = $temp;
             }
+            $data[] = $temp;
         }
         return json_encode($data);
     }

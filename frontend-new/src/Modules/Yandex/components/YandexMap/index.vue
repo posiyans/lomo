@@ -66,13 +66,13 @@ export default defineComponent({
           list.value.forEach(item => {
             if (+props.steadId === +item.id) {
               console.log(item.center)
-              const centerX = item.krd.reduce((summ, item) => {
+              const centerX = item.coordinates.reduce((summ, item) => {
                 return summ + item[0]
               }, 0)
-              const centerY = item.krd.reduce((summ, item) => {
+              const centerY = item.coordinates.reduce((summ, item) => {
                 return summ + item[1]
               }, 0)
-              center.value = [centerX / item.krd.length, centerY / item.krd.length]
+              center.value = [centerX / item.coordinates.length, centerY / item.coordinates.length]
               zoom.value = 17
             }
             const color = +props.steadId === +item.id ? 'rgba(255,0,0, 1)' : 'rgba(255,0,0,0.1)'
@@ -81,7 +81,7 @@ export default defineComponent({
               draggable: false,
               geometry: {
                 type: 'Polygon',
-                coordinates: [item.krd]
+                coordinates: [item.coordinates]
               },
               style: {
                 fillRule: 'nonzero',

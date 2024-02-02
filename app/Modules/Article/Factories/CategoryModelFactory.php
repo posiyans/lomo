@@ -1,0 +1,30 @@
+<?php
+
+namespace App\Modules\Article\Factories;
+
+use App\Modules\Article\Models\CategoryModel;
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+use function now;
+
+class CategoryModelFactory extends Factory
+{
+    protected $model = CategoryModel::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        $title = $this->faker->sentence;
+        return [
+            'name' => $title,
+            'public' => 1,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ];
+    }
+
+}

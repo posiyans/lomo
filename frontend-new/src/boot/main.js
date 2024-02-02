@@ -2,11 +2,11 @@ import { boot } from 'quasar/wrappers'
 import { useSiteMenuStore } from 'src/Modules/SiteMenu/store/useSiteMenu'
 import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
 import { usePrimaryStore } from 'stores/parimary-store'
+import { LocalStorage } from 'quasar'
 
 const authStore = useAuthStore()
 const siteMenuStore = useSiteMenuStore()
 const primaryStore = usePrimaryStore()
-const title = 'СНТ'
 
 export default boot(async ({ router }) => {
   const permission = await authStore.getMyInfo()
@@ -16,7 +16,9 @@ export default boot(async ({ router }) => {
     router.addRoute(item)
   })
   router.beforeEach(async (to, from, next) => {
-    document.title = getPageTitle(to.meta.title)
+    if (!to.meta.noTitle) {
+      document.title = getPageTitle(to.meta.title)
+    }
     primaryStore.setPageName(to.meta.title || 'Панель управления')
     if (to.meta.guest) {
       if (authStore.is_guest === to.meta.guest) {
@@ -40,8 +42,6 @@ export default boot(async ({ router }) => {
 })
 
 function getPageTitle(pageTitle) {
-  if (pageTitle) {
-    return `${pageTitle} - ${title}`
-  }
-  return `${title}`
+  const txt = pageTitle ? `${pageTitle} - ` : ''
+  return txt + LocalStorage.getItem('SiteName') || 'СНТ'
 }

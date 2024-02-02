@@ -30,7 +30,7 @@ class AddPaymentAction
         $this->payment->payment_date = $payment_date;
         $this->payment->payment_type = 1;
         $this->payment->raw_data = $raw;
-        $this->payment->user_id = Auth::user()->id;
+        $this->payment->user_id = Auth::user()->id ?? null;
         $this->parseStead();
         $this->parseType();
         return $this;

@@ -1,11 +1,11 @@
 <?php
 
-namespace Database\Seeders;
+namespace Database\Seeders\Demo;
 
 use App\Modules\Comment\Models\CommentModel;
 use Illuminate\Database\Seeder;
 
-class CommnetsModelSeeder extends Seeder
+class CommentsModelDemoSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,6 +14,7 @@ class CommnetsModelSeeder extends Seeder
      */
     public function run()
     {
-        $comments = CommentModel::factory()->count(10)->create();
+        echo get_class($this) . "\n";
+        CommentModel::factory()->count(10)->create();
     }
 }

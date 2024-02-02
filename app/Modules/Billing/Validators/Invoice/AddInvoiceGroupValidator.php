@@ -34,7 +34,12 @@ class AddInvoiceGroupValidator extends FormRequest
             'rate' => [
                 'required',
                 'array'
+            ],
+            'invoice_date' => [
+                'required',
+                'date_format:Y-m-d'
             ]
+
         ];
     }
 

@@ -8,7 +8,8 @@ export const article =
         component: () => import('src/Modules/Article/Article/page/Show/index.vue'),
         hidden: true,
         meta: {
-          title: 'Показать статью'
+          title: 'Показать статью',
+          noTitle: true
         }
       },
       {
@@ -16,7 +17,8 @@ export const article =
         component: () => import('src/Modules/Article/Article/page/List/index.vue'),
         hidden: true,
         meta: {
-          title: 'Статьи раздела'
+          title: 'Статьи раздела',
+          noTitle: true
         }
       },
       {

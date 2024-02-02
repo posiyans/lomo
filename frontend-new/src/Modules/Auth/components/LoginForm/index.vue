@@ -59,8 +59,8 @@ export default defineComponent({
     const loginForm = ref(null)
     const siteMenuStore = useSiteMenuStore()
     const form = reactive({
-      email: 'posiyans@yandex.ru',
-      password: 'Q12345678',
+      email: 'admin@examples.com',
+      password: 'password',
       remember: true
     })
     const authStore = useAuthStore()

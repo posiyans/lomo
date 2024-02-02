@@ -3,6 +3,9 @@
 namespace App\Modules\Article\Models;
 
 use App\Models\MyModel;
+use App\Modules\Article\Factories\CategoryModelFactory;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * App\Modules\SiteMenu\Models\CategoryModel
@@ -30,7 +33,15 @@ use App\Models\MyModel;
  */
 class CategoryModel extends MyModel
 {
-//    use SoftDeletes;
+    use HasFactory;
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): Factory
+    {
+        return CategoryModelFactory::new();
+    }
 
     protected $casts = [
         'public' => 'boolean'

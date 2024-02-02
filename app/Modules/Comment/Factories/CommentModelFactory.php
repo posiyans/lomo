@@ -22,15 +22,15 @@ class CommentModelFactory extends Factory
     public function definition()
     {
         $reply = null;
-        $article = ArticleModel::query()->where('allow_comments', 1)->with(['comments'])->get()->random();
-        try {
-            $comment = $article->comments->random();
-            $rnd = rand(0, 10);
-            if ($comment && $rnd > 2) {
-                $reply = $comment->uid;
-            }
-        } catch (\Exception $e) {
-        }
+        $article = ArticleModel::query()->where('allow_comments', 2)->get()->random();
+//        try {
+//            $comment = $article->comments->random();
+//            $rnd = rand(0, 10);
+//            if ($comment && $rnd > 2) {
+//                $reply = $comment->uid;
+//            }
+//        } catch (\Exception $e) {
+//        }
         return [
             'uid' => Str::uuid(),
             'user_id' => UserModel::all()->random()->id,

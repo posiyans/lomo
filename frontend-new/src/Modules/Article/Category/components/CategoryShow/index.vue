@@ -5,8 +5,9 @@
 </template>
 
 <script>
-import { computed, defineComponent, onMounted } from 'vue'
+import { computed, defineComponent, onMounted, watch } from 'vue'
 import { userCategoryStore } from 'src/Modules/Article/Category/stores/useCategoryStore'
+import { LocalStorage } from 'quasar'
 
 export default defineComponent({
   components: {},
@@ -30,7 +31,13 @@ export default defineComponent({
       }
       return ''
     })
-
+    watch(
+      () => title.value,
+      () => {
+        const txt = title.value ? `${title.value} - ` : ''
+        document.title = txt + LocalStorage.getItem('SiteName') || 'СНТ'
+      }
+    )
     return {
       categoryStore,
       title

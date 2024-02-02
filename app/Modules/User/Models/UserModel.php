@@ -6,6 +6,7 @@ use App\Models\MyModel;
 use App\Modules\Auth\Notifications\VerifyEmail;
 use App\Modules\BanUser\Models\BanUserModel;
 use App\Modules\Owner\Models\OwnerUserModel;
+use App\Modules\User\Factories\UserModelFactory;
 use App\Notifications\ResetPassword;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -13,6 +14,7 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\Notifiable;
@@ -90,6 +92,12 @@ class UserModel extends MyModel implements MustVerifyEmail,
     use Authenticatable, Authorizable, CanResetPassword, \Illuminate\Auth\MustVerifyEmail;
 
     public static $no_email_prefix = 'no_email_';
+
+
+    protected static function newFactory(): Factory
+    {
+        return UserModelFactory::new();
+    }
 
     /**
      * The attributes that are mass assignable.

@@ -8,11 +8,12 @@
 </template>
 
 <script>
-import { defineComponent, onMounted, ref } from 'vue'
+import { defineComponent, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import ArticleShow from 'src/Modules/Article/Article/components/ArticleShow/index.vue'
 import { fetchUserArticle } from 'src/Modules/Article/Article/api/article'
 import { useFile } from 'src/Modules/Files/hooks/useFile'
+import { LocalStorage } from 'quasar'
 
 export default defineComponent({
   components: {
@@ -47,6 +48,13 @@ export default defineComponent({
       uid.value = route.params.uid
       fetchArticle()
     })
+    watch(
+      () => article.value?.title,
+      () => {
+        const txt = article.value?.title ? `${article.value.title} - ` : ''
+        document.title = txt + LocalStorage.getItem('SiteName') || 'СНТ'
+      }
+    )
     return {
       uid,
       article,

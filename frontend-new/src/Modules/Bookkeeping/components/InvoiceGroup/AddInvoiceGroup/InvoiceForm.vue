@@ -32,6 +32,7 @@
           @update:model-value="getRateData"
         />
       </div>
+
       <div style="padding-top: 4px">
         <div class="row items-center q-col-gutter-xs br-05 ba b--gray text-grey-8 ">
           <ShowTime :time="invoiceDate" before="на дату" format="DD-MM-YYYY" />
@@ -53,10 +54,17 @@
         </div>
       </div>
     </div>
+    <div class="q-px-sm">
+      {{ rateDescription }}
+    </div>
+    <div v-if="currentRateGroup?.depends === 2" class="text-primary q-px-sm ">
+      Выставить счета на показания приборов переданные в указанный периуд
+    </div>
     <div>
       <q-input v-model="invoiceGroup.title" outlined dense />
     </div>
     <RateBlock :rate-type="rateType" />
+
     <div>
       <q-btn label="Начислить" color="primary" :loading="loading" :disable="saveDisable" @click="saveInvoice" />
     </div>
@@ -126,24 +134,47 @@ export default defineComponent({
       getRateGroupData()
     })
     const renderName = () => {
-      let title = currentRateGroup.value.name
-      if (currentRateGroup.value.payment_period === 1) {
-        title += ' ' + date.formatDate(invoiceDate.value, 'MM-YYYY')
-      } else if (currentRateGroup.value.payment_period === 12) {
-        title += ' ' + date.formatDate(invoiceDate.value, 'YYYY')
-      } else {
-        title += ' ' + date.formatDate(invoiceDate.value, 'MM-YYYY')
-      }
-      rateType.value.forEach(item => {
-        if (item.selected) {
-          title += ', ' + item.name
+      if (currentRateGroup.value) {
+        let title = currentRateGroup.value.name
+        if (currentRateGroup.value.payment_period === 1) {
+          title += ' ' + date.formatDate(invoiceDate.value, 'MM-YYYY')
+        } else if (currentRateGroup.value.payment_period === 12) {
+          title += ' ' + date.formatDate(invoiceDate.value, 'YYYY')
+        } else {
+          title += ' ' + date.formatDate(invoiceDate.value, 'MM-YYYY')
         }
-      })
-      invoiceGroup.value.title = title
+        rateType.value.forEach(item => {
+          if (item.selected) {
+            title += ', ' + item.name
+          }
+        })
+        invoiceGroup.value.title = title
+      } else {
+        invoiceGroup.value.title = ''
+      }
     }
+    const rateDescription = computed(() => {
+      if (currentRateGroup.value) {
+        let text = currentRateGroup.value.name
+        if (currentRateGroup.value.payment_period === 12) {
+          text += ' за период с '
+          text += date.formatDate(date.startOfDate(invoiceDate.value, 'year'), 'DD-MM-YYYY')
+          text += ' по ' + date.formatDate(date.endOfDate(invoiceDate.value, 'year'), 'DD-MM-YYYY')
+        } else if (currentRateGroup.value.payment_period === 1) {
+          text += ' за период с '
+          text += date.formatDate(date.startOfDate(invoiceDate.value, 'month'), 'DD-MM-YYYY')
+          text += ' по ' + date.formatDate(date.endOfDate(invoiceDate.value, 'month'), 'DD-MM-YYYY')
+        }
+        return text
+      }
+      return ''
+    })
+
+
     const saveInvoice = () => {
       const data = {
         rate_group_id: invoiceGroup.value.rate_group_id,
+        invoice_date: invoiceDate.value,
         stead_type: invoiceGroup.value.stead_type,
         title: invoiceGroup.value.title,
         rate: rateType.value.filter(item => item.selected)
@@ -168,6 +199,7 @@ export default defineComponent({
     )
     return {
       data,
+      rateDescription,
       rateGroupList,
       invoiceGroup,
       getRateData,

@@ -3,6 +3,7 @@
 namespace App\Modules\MeteringDevice\Repositories;
 
 use App\Modules\MeteringDevice\Models\InstrumentReadingModel;
+use App\Modules\Rate\Models\RateGroupModel;
 
 class InstrumentReadingRepository
 {
@@ -59,12 +60,21 @@ class InstrumentReadingRepository
     }
 
     /**
+     * @deprecated
+     */
+    public function for_rate_type($rate_type)
+    {
+        $this->forRateType($rate_type);
+        return $this;
+    }
+
+    /**
      * отбор по типу тарифа у прибора
      *
      * @param $deviceId
      * @return $this
      */
-    public function for_rate_type($rate_type)
+    public function forRateType($rate_type)
     {
         if ($rate_type) {
             if (is_array($rate_type)) {
@@ -77,6 +87,14 @@ class InstrumentReadingRepository
                 });
             }
         }
+        return $this;
+    }
+
+
+    public function forRateGroup(RateGroupModel $rate_group)
+    {
+        $rate_types = $rate_group->rateType->pluck('id');
+        $this->forRateType($rate_types->toArray());
         return $this;
     }
 

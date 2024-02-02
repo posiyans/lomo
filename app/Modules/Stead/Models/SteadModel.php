@@ -4,6 +4,9 @@ namespace App\Modules\Stead\Models;
 
 use App\Models\MyModel;
 use App\Modules\Owner\Models\OwnerUserModel;
+use App\Modules\Stead\Factories\SteadModelFactory;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 
 /**
@@ -50,6 +53,7 @@ use App\Modules\Owner\Models\OwnerUserModel;
  */
 class SteadModel extends MyModel
 {
+    use HasFactory;
 
     protected $fillable = ['number', 'size'];
 
@@ -63,6 +67,11 @@ class SteadModel extends MyModel
     protected $casts = [
         'options' => 'array',
     ];
+
+    protected static function newFactory(): Factory
+    {
+        return SteadModelFactory::new();
+    }
 
     public function owners()
     {
