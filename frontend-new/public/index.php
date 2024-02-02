@@ -8,7 +8,7 @@
  */
 
 define('LARAVEL_START', microtime(true));
-
+define('LARAVEL_DEMO', false);
 /*
 |--------------------------------------------------------------------------
 | Register The Auto Loader
@@ -20,9 +20,20 @@ define('LARAVEL_START', microtime(true));
 | loading any of our classes later on. It feels great to relax.
 |
 */
-
+if (LARAVEL_DEMO && $_SERVER['REQUEST_METHOD'] != 'OPTIONS') {
+    session_start();
+    if (!isset($_SESSION['sql_lite'])) {
+        $user = time();
+        $_SESSION['sql_lite'] = $user;
+    } else {
+        $user = $_SESSION['sql_lite'];
+    }
+    if (!file_exists("D:\OSPanel\domains\lomo.loc\database\\" . $user . "_database.sqlite")) {
+        copy(__DIR__ . '/../database/database.sqlite', __DIR__ . '/../database/' . $user . '_database.sqlite');
+    }
+    putenv("DB_DATABASE=D:\OSPanel\domains\lomo.loc\database\\" . $user . "_database.sqlite");
+}
 require __DIR__ . '/../vendor/autoload.php';
-
 /*
 |--------------------------------------------------------------------------
 | Turn On The Lights
@@ -58,4 +69,3 @@ $response = $kernel->handle(
 $response->send();
 
 $kernel->terminate($request, $response);
-
