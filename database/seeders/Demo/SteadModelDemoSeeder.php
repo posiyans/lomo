@@ -18,7 +18,7 @@ class SteadModelDemoSeeder extends Seeder
     public function run()
     {
         echo get_class($this) . "\n";
-        $steads = SteadModel::factory()->count(20)->create();
+        $steads = SteadModel::factory()->count(5)->create();
         $owner = null;
         foreach ($steads as $stead) {
             if ($owner && rand(0, 10) > 8) {
@@ -38,4 +38,8 @@ class SteadModelDemoSeeder extends Seeder
             (new AddSteadToOwnerAction($stead, $owner))->run();
         }
     }
+
+
 }
+
+

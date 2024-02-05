@@ -47,9 +47,10 @@
             {{ props.row.rate?.name }}
           </q-td>
           <q-td>
-            <div class="row justify-center">
+            <div class="row">
               <PaymentInfo v-if="props.row.type.uid === 'payment'" :payment="props.row" :edit="edit" @reload="reload" @deletePayment="reload" />
               <InvoiceInfo v-if="props.row.type.uid === 'invoice'" :invoice="props.row" :edit="edit" @reload="reload" @deletePayment="reload" />
+              <ReceiptForInvoiceBtn v-if="props.row.type.uid === 'invoice'" :invoice-id="props.row.id" />
             </div>
           </q-td>
         </q-tr>
@@ -66,10 +67,12 @@ import ShowPrice from 'components/ShowPrice/index.vue'
 import PaymentInfo from 'src/Modules/Bookkeeping/components/Payment/PaymentInfoShowAndEdit/Dialog.vue'
 import InvoiceInfo from 'src/Modules/Bookkeeping/components/Invoice/InvoiceInfo/Dialog.vue'
 import ShowReadingListInPayment from 'src/Modules/Bookkeeping/components/Payment/ShowReadingListInPayment/index.vue'
+import ReceiptForInvoiceBtn from 'src/Modules/Receipt/components/ReceiptForInvoiceBtn/index.vue'
 
 export default defineComponent({
   components: {
     ShowReadingListInPayment,
+    ReceiptForInvoiceBtn,
     PaymentInfo,
     InvoiceInfo,
     ShowTime,

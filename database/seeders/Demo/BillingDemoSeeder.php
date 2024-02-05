@@ -6,6 +6,10 @@ use App\Modules\Billing\Actions\Invoice\CreateInvoiceAction;
 use App\Modules\Billing\Actions\InvoiceGroup\CreateInvoiceGroupAction;
 use App\Modules\Billing\Actions\Payment\AddPaymentAction;
 use App\Modules\Billing\Repositories\InvoiceRepository;
+use App\Modules\MeteringDevice\Actions\AddInstrumentReadingAction;
+use App\Modules\MeteringDevice\Actions\CheckDataInInstrumentReadingAction;
+use App\Modules\MeteringDevice\Actions\CreateMeteringDeviceAction;
+use App\Modules\MeteringDevice\Models\InstrumentReadingModel;
 use App\Modules\Rate\Actions\CreateRateTypeAction;
 use App\Modules\Rate\Models\RateModel;
 use App\Modules\Rate\Models\RateTypeModel;
@@ -24,8 +28,9 @@ class BillingDemoSeeder extends Seeder
         echo get_class($this) . "\n";
         $this->rate();
         $this->invoice();
-        self::$date = 0;
         $this->payment();
+        $this->createMeteringDevice();
+        self::$date = 0;
     }
 
     private function rate()
@@ -188,4 +193,122 @@ class BillingDemoSeeder extends Seeder
             }
         });
     }
+
+    private function createMeteringDevice()
+    {
+        echo __METHOD__ . "\n";
+        $rate_types = RateTypeModel::where('rate_group_id', 2)->get();
+        (new SteadRepository())->get()->each(function ($stead) use ($rate_types) {
+            $devices = [
+                'Ленэлектро ЛЕ 221.1.R2.DO',
+                'Энергомера СЕ 102 R5.1 145-J 5-60',
+                'ПЗИП ЦЭ 2726А А1-S-E4-R01',
+                'Энергомера СЕ 102М R5 145-J 5-60А ',
+                'Энергомера СЕ 102 R5.1 145-JAN'
+            ];
+            $options = [
+                'serial_number' => '2014-00' . rand(1000, 9999),
+                'device_brand' => $devices[rand(0, count($devices) - 1)],
+                'installation_date' => null,
+                'verification_date' => null,
+            ];
+            if (rand(0, 100) < 90) {
+                foreach ($rate_types as $rate_type) {
+                    $fill = [
+                        'initial_data' => rand(100, 800),
+                        'description' => '',
+                        'active' => 1
+                    ];
+                    (new CreateMeteringDeviceAction($stead, $rate_type))
+                        ->fill($fill)
+                        ->options($options)
+                        ->run();
+                }
+            }
+        });
+        $this->createReading();
+    }
+
+
+    private function createReading()
+    {
+        echo __METHOD__ . "\n";
+        $count = $this->count_years * 6;
+        (new SteadRepository())->get()->each(function ($stead) use ($count) {
+            $devices = $stead->metering_devices;
+            $date = strtotime('-' . $count . ' month');
+            for ($i = 1; $i <= $count; $i++) {
+                $date = strtotime('+1 month', $date);
+                foreach ($devices as $device) {
+                    if ($device->rate_type_id == 5) {
+                        $value = $device->initial_data + rand(200, 500);
+                    } else {
+                        $value = $device->initial_data + rand(50, 200);
+                    }
+                    $device->initial_data = $value;
+                    $reading = (new AddInstrumentReadingAction($device))
+                        ->value($value)
+                        ->date(date('Y-m-d', $date))
+                        ->run();
+                    (new CheckDataInInstrumentReadingAction())
+                        ->after_reading($reading)
+                        ->run();
+                }
+            }
+        });
+        $this->createReadingPaymentInvoice();
+    }
+
+    private function createReadingPaymentInvoice()
+    {
+        echo __METHOD__ . "\n";
+        $steads = (new SteadRepository())->get();
+        $d = 100;
+        foreach ($steads as $stead) {
+            $readings = InstrumentReadingModel::whereHas('metering_device', function ($query) use ($stead) {
+                $query->where('stead_id', $stead->id);
+            })
+                ->orderBy('date', 'desc')
+                ->offset(8)
+                ->limit(100000)
+                ->get();
+            foreach ($readings->groupBy('date') as $groups) {
+                $invoice = (new CreateInvoiceAction($stead))
+                    ->rateGroup($groups[0]->metering_device->rate_type->rate_group_id)
+                    ->title($groups[0]->metering_device->rate_type->rate_group->name . '.');
+                foreach ($groups as $reading) {
+                    $invoice->byInstrumentReading($reading);
+                }
+                $invoice = $invoice->run();
+
+                $invoice->created_at = ($groups[0]->date . ' 10:10:10');
+                $payment = null;
+                $d += 150;
+                if (rand(0, 100) < 85) {
+                    $raw = [
+                        date('Y-m-d h:i:s', strtotime($invoice->created_at) + $d),
+                        $invoice->price,
+                        $invoice->stead->number,
+                        $invoice->stead->owners[0]->smallName(),
+                        $invoice->title
+                    ];
+                    $payment = (new AddPaymentAction())->parseRawData($raw)->run();
+                    $payment->rate_group_id = $invoice->rate_group_id;
+                    $payment->invoice_id = $invoice->id;
+                    $payment->error = false;
+                    $payment->created_at = date('Y-m-d h:i:s', strtotime($invoice->created_at) + $d);
+                    $payment->save();
+                }
+                $invoice->is_paid = $payment ? true : false;
+                $invoice->save();
+                foreach ($groups as $reading) {
+                    $reading->payment_id = $payment->id ?? null;
+                    $reading->invoice_id = $invoice->id;
+                    $reading->save();
+                }
+            }
+        }
+    }
+
+
 }

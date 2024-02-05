@@ -30,13 +30,14 @@ class GetInstrumentReadingListController extends Controller
                 });
             }
 
-            $reading = (new InstrumentReadingRepository())
+            $readings = (new InstrumentReadingRepository())
                 ->for_stead($request->stead_id)
                 ->for_device($request->device_id)
-                ->for_rate_type($request->rate_type_id)
+                ->forRateType($request->rate_type_id)
                 ->between_date($request->date_start, $request->date_end)
-                ->get();
-            return response(['status' => true, 'data' => InstrumentReadingResource::collection($reading)]);
+                ->orderBy('date', 'desc')
+                ->paginate($request->limit);
+            return InstrumentReadingResource::collection($readings);
         } catch (\Exception $e) {
             return response(['errors' => $e->getMessage()], 450);
         }

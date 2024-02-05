@@ -37,7 +37,7 @@ class FillOptionsInstrumentReadingAction
         $options = $this->reading->options;
         $options['previous_value'] = (new PreviousReadingsModelRepository($this->reading))->value();
         $options['delta'] = (new PreviousReadingsModelRepository($this->reading))->delta();
-        $options['rate'] = (new RateRepository())->for_instrument_reading($this->reading);
+        $options['rate'] = RateRepository::for_instrument_reading($this->reading);
         $options['cost'] = $options['delta'] * $options['rate']->ratio_a;
         $this->reading->options = $options;
     }

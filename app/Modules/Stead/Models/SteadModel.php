@@ -3,6 +3,7 @@
 namespace App\Modules\Stead\Models;
 
 use App\Models\MyModel;
+use App\Modules\MeteringDevice\Models\MeteringDeviceModel;
 use App\Modules\Owner\Models\OwnerUserModel;
 use App\Modules\Stead\Factories\SteadModelFactory;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -84,6 +85,12 @@ class SteadModel extends MyModel
             'uid'
         )
             ->withPivot('proportion');
+    }
+
+
+    public function metering_devices()
+    {
+        return $this->hasMany(MeteringDeviceModel::class, 'stead_id', 'id');
     }
 
 

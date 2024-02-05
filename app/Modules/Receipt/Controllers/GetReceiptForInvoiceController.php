@@ -34,7 +34,7 @@ class GetReceiptForInvoiceController extends Controller
         $options = [
             'stead_num' => $stead->number,
             'purpose' => $invoice->title,
-            'description' => $invoice->description['description'] ?? '',
+            'description' => $invoice->options['description'] ?? '',
             'sum' => $invoice->price,
             'last_name' => $stead->owners[0]->getValue('surname', '') ?? '',
             'first_name' => $stead->owners[0]->getValue('name', '') ?? '',

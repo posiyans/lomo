@@ -28,7 +28,7 @@ class CreateMeteringDeviceAction
 
     public function options($array): CreateMeteringDeviceAction
     {
-        $option_fields = $this->device->getOptions();
+        $option_fields = $this->device->getOptionsFillable();
         $tmp = array_filter($array, function ($k) use ($option_fields) {
             return in_array($k, $option_fields);
         }, ARRAY_FILTER_USE_KEY);

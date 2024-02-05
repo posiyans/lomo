@@ -131,6 +131,13 @@ class InstrumentReadingRepository
         return $this;
     }
 
+    public function noInvoice()
+    {
+        $this->query->whereNull('invoice_id');
+        return $this;
+    }
+
+
     /**
      * отбор по платежу
      *
@@ -170,7 +177,7 @@ class InstrumentReadingRepository
 
     public function paginate($limit)
     {
-        return $this->query->orderBy('sort')->paginate($limit);
+        return $this->query->paginate($limit);
     }
 
 }

@@ -21,7 +21,7 @@ class InstrumentReadingSmallResource extends JsonResource
         $data['device'] = new MeteringDeviceResource($this->metering_device);
         $data['previous_value'] = $this->reading->options['previous_reading'] ?? (new PreviousReadingsModelRepository($this->resource))->value();
         $data['delta'] = $this->reading->options['calculated_value'] ?? (new PreviousReadingsModelRepository($this->resource))->delta();
-        $data['rate'] = $this->reading->options['rate'] ?? (new RateRepository())->for_instrument_reading($this->resource);;
+        $data['rate'] = $this->reading->options['rate'] ?? RateRepository::for_instrument_reading($this->resource);
         $data['cost'] = $this->reading->options['cost'] ?? $data['delta'] * $data['rate']->ratio_a;
         return $data;
     }

@@ -40,7 +40,9 @@ export default defineComponent({
       rate_group_id: '',
       rate_type_id: '',
       date_start: '',
-      date_end: ''
+      date_end: '',
+      page: 1,
+      limit: 20
     })
     const reload = () => {
       key.value++

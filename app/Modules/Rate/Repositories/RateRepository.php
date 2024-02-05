@@ -15,12 +15,11 @@ class RateRepository
         $this->query = RateModel::query();
     }
 
-    public function for_instrument_reading(InstrumentReadingModel $reading)
+    public static function for_instrument_reading(InstrumentReadingModel $reading)
     {
         $device = $reading->metering_device;
         $rate_type_id = $device->rate_type_id;
-        $price = $this->query
-            ->where('rate_type_id', $rate_type_id)
+        $price = RateModel::where('rate_type_id', $rate_type_id)
             ->where('date_start', '<', $reading->date)
             ->orderBy('created_at', 'desc')
             ->first();
