@@ -62,6 +62,7 @@ class AddInvoiceGroupController extends Controller
                     foreach ($groups as $reading) {
                         $invoice->byInstrumentReading($reading);
                     }
+                    //todo Итого!!!!!
                     $invoice->run();
                 }
                 DB::commit();
