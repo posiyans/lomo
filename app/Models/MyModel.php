@@ -59,9 +59,8 @@ class MyModel extends Model
         return false;
     }
 
-    public function logAndDelete($description = null,)
+    public function logAndDelete($description = null)
     {
-        $original_model = $this->getOriginal();
         LogModel::deleteModel($this, $description);
         if ($this->delete()) {
             return true;
