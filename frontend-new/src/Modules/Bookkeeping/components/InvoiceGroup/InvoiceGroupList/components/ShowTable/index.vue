@@ -39,7 +39,7 @@
       <template v-slot:body-cell-description="props">
         <q-td :props="props">
           <div class="text-small-75">
-            <div v-for="item in props.row.options" :key="item.id">
+            <div v-for="item in props.row.options.rate" :key="item.id">
               {{ item.name }}
               {{ item.rate?.description }}
             </div>

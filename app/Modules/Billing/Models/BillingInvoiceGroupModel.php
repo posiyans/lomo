@@ -3,6 +3,7 @@
 namespace App\Modules\Billing\Models;
 
 use App\Models\MyModel;
+use App\Modules\Rate\Models\RateGroupModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 
@@ -57,6 +58,17 @@ class BillingInvoiceGroupModel extends MyModel
     {
         return $this->hasMany(BillingInvoiceModel::class, 'invoice_group_id', 'id');
     }
+
+    /**
+     * группа тарифов
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function rateGroup()
+    {
+        return $this->hasOne(RateGroupModel::class, 'id', 'rate_group_id');
+    }
+
+
 
 //    /**
 //     * добавить историю и сохранить

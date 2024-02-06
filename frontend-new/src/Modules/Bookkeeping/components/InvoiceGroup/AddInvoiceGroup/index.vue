@@ -7,6 +7,7 @@
       v-model="dialogVisible"
       full-height
       full-width
+      @hide="close"
     >
       <q-card>
         <q-card-section class="row items-center q-pb-none">
@@ -15,7 +16,7 @@
           <q-btn icon="close" flat round dense v-close-popup />
         </q-card-section>
         <q-card-section>
-          <InvoiceForm />
+          <InvoiceForm @success="success" />
         </q-card-section>
       </q-card>
     </q-dialog>
@@ -38,9 +39,18 @@ export default defineComponent({
     const showDialog = () => {
       dialogVisible.value = true
     }
+    const success = () => {
+      dialogVisible.value = false
+    }
+    const close = () => {
+      dialogVisible.value = false
+      emit('close')
+    }
     return {
       data,
       showDialog,
+      success,
+      close,
       dialogVisible
     }
   }

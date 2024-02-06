@@ -15,6 +15,6 @@ class CommentsModelDemoSeeder extends Seeder
     public function run()
     {
         echo get_class($this) . "\n";
-        CommentModel::factory()->count(10)->create();
+        CommentModel::factory()->count(300)->create();
     }
 }

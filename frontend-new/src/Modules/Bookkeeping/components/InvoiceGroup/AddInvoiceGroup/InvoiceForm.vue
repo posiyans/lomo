@@ -77,7 +77,7 @@ import { computed, defineComponent, onMounted, ref, watch } from 'vue'
 import RateGroupSelect from 'src/Modules/Rate/components/RateGroupSelect/index.vue'
 import RateBlock from './components/RateBlock/index.vue'
 import { getRateGroupList, getRateListForGroup } from 'src/Modules/Rate/api/rateAdminApi'
-import { date } from 'quasar'
+import { date, useQuasar } from 'quasar'
 import { addInvoiceGroup } from 'src/Modules/Bookkeeping/api/invoiceGroupApi'
 import ShowTime from 'components/ShowTime/index.vue'
 
@@ -90,6 +90,7 @@ export default defineComponent({
   props: {},
   setup(props, { emit }) {
     const data = ref(false)
+    const $q = useQuasar()
     const loading = ref(false)
     const rateType = ref([])
     const invoiceDate = ref(date.formatDate(new Date(), 'YYYY-MM-DD'))
@@ -170,8 +171,7 @@ export default defineComponent({
       return ''
     })
 
-
-    const saveInvoice = () => {
+    const sendData = () => {
       const data = {
         rate_group_id: invoiceGroup.value.rate_group_id,
         invoice_date: invoiceDate.value,
@@ -182,9 +182,63 @@ export default defineComponent({
       console.log(data)
       loading.value = true
       addInvoiceGroup(data)
+        .then(res => {
+          $q.dialog({
+            title: 'Успех',
+            message: 'Кол-во созданных счетов: ' + res.data.data.total + ' на сумму ' + res.data.data.price + ' руб.',
+            ok: {
+              noCaps: true,
+              outline: true,
+              label: 'Ок',
+              color: 'primary'
+            },
+            persistent: true
+          })
+            .onOk(() => {
+              emit('success')
+            })
+        })
+        .catch(er => {
+          $q.dialog({
+            title: 'Ошибка',
+            message: er.response.data.errors,
+            icon: 'info',
+            ok: {
+              noCaps: true,
+              label: 'Ок',
+              color: 'negative'
+            },
+            persistent: true
+          })
+        })
         .finally(() => {
           loading.value = false
         })
+    }
+    const saveInvoice = () => {
+      $q.dialog({
+        title: 'Подтвердите',
+        message: 'Выставить счета на ' + invoiceGroup.value.title + ' ?',
+        cancel: {
+          noCaps: true,
+          outline: true,
+          flat: true,
+          label: 'Отмена',
+          color: 'negative'
+        },
+        ok: {
+          noCaps: true,
+          outline: true,
+          label: 'Да',
+          color: 'primary'
+        },
+        persistent: true
+      })
+        .onOk(() => {
+          sendData()
+        })
+
+
     }
 
     watch(() => [invoiceGroup.value.rate_group_id, invoiceDate.value],

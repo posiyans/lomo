@@ -21,15 +21,20 @@ class ArticleModelFactory extends Factory
      */
     public function definition()
     {
-        $title = $this->faker->sentence;
+//        $title = $this->faker->sentence;
+        $title = $this->faker->realText(120, 1);
         $uid = Str::uuid();
         $category = CategoryModel::query()->get()->random();
+        $text = '';
+        for ($i = 1; $i < 7; $i++) {
+            $text .= '<p>' . $this->faker->realText(200, 5) . '</p>';
+        }
         return [
             'title' => $title,
             'uid' => $uid,
             'user_id' => UserModel::all()->random()->id ?? 1,
             'resume' => $this->faker->realText,
-            'text' => nl2br($this->faker->paragraphs(5, true)),
+            'text' => $text,
             'category_id' => $category->id,
             'status' => 2,
             'allow_comments' => 2,

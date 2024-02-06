@@ -32,7 +32,11 @@ class SteadRepository
     public function findById($id)
     {
         if ($id) {
-            $this->query->where('id', $id);
+            if (is_array($id)) {
+                $this->query->whereIn('id', $id);
+            } else {
+                $this->query->where('id', $id);
+            }
         }
         return $this;
     }

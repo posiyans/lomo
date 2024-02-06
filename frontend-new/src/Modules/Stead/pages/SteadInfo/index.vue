@@ -10,7 +10,7 @@
         >
           <q-tab name="steadinfo" label="Данные" />
           <q-tab name="readings" label="Показания" />
-          <q-tab v-if="bookkeeping" name="payment" label="Платежи" />
+          <q-tab v-if="bookkeeping" name="payment" label="Счета" />
         </q-tabs>
         <q-tab-panels v-model="tab" animated>
           <q-tab-panel name="steadinfo" class="ba b--dark-green" style="min-height: 250px;">

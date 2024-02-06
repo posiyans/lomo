@@ -3,7 +3,7 @@
     <div v-if="errors" class="page-title text-center q-pa-lg">
       Данная страница не найдена
     </div>
-    <ArticleShow v-if="!errors && article" :article="article" />
+    <ArticleShow v-if="!errors && article?.title" :article="article" />
   </div>
 </template>
 
@@ -23,7 +23,7 @@ export default defineComponent({
     const route = useRoute()
     const errors = ref(null)
     const uid = ref(null)
-    const article = ref(null)
+    const article = ref({})
     const fetchArticle = () => {
       fetchUserArticle(route.params.uid)
         .then(response => {

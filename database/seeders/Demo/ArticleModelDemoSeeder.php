@@ -15,6 +15,6 @@ class ArticleModelDemoSeeder extends Seeder
     public function run()
     {
         echo 'Demo ArticleModelSeeder ' . "\n";
-        ArticleModel::factory()->count(10)->create();
+        ArticleModel::factory()->count(100)->create();
     }
 }

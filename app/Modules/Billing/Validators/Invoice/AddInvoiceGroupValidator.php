@@ -35,6 +35,9 @@ class AddInvoiceGroupValidator extends FormRequest
                 'required',
                 'array'
             ],
+            'steads' => [
+                'array'
+            ],
             'invoice_date' => [
                 'required',
                 'date_format:Y-m-d'

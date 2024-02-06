@@ -49,11 +49,11 @@ class PreviewFileRepository
             $im = new \imagick($filePath);
             $im->setImageFormat('jpg');
             try {
-//                $im->thumbnailImage($this->width, $this->height, true, true);
+                $im->thumbnailImage($this->width, $this->height, true, true);
             } catch (\Exception $e) {
                 $im = new \imagick($filePath);
                 $im->setImageFormat('jpg');
-//                $im->thumbnailImage($this->width, $this->height);
+                $im->thumbnailImage($this->width, $this->height);
             }
             $tmpName = tempnam(sys_get_temp_dir(), 'preview_file_');
             $im->writeImage($tmpName);

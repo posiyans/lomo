@@ -18,12 +18,10 @@ class RateRepository
     public static function for_instrument_reading(InstrumentReadingModel $reading)
     {
         $device = $reading->metering_device;
-        $rate_type_id = $device->rate_type_id;
-        $price = RateModel::where('rate_type_id', $rate_type_id)
-            ->where('date_start', '<', $reading->date)
-            ->orderBy('created_at', 'desc')
-            ->first();
-        return $price;
+        $rate_type = $device->rate_type;
+        $rate_type->setCurrentDate($reading->date);
+        $rate = $rate_type->currentRate;
+        return $rate;
     }
 
 

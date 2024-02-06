@@ -11,8 +11,9 @@
     <div v-else>
       <slot>
         <div
-          class="text-blue cursor-pointer"
+          class="text-blue cursor-pointer text-weight-bold"
         >
+          <q-icon name="download" />
           Скачать
         </div>
       </slot>

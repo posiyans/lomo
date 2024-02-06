@@ -59,6 +59,9 @@ class InstrumentReadingModel extends MyModel
     ];
 
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne|MeteringDeviceModel
+     */
     public function metering_device(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(MeteringDeviceModel::class, 'id', 'metering_device_id');

@@ -30,11 +30,21 @@ export function useFile() {
   const addFile = (oldFile, parentType, parentUid) => {
     model.uid = newUid()
     model.blob = oldFile
+    model.base64 = null
     model.name = oldFile.name
     model.size = oldFile.size
     model.type = oldFile.type
     parent.type = parentType
     parent.uid = parentUid
+    setSourceImg(oldFile)
+  }
+
+  const setSourceImg = (file) => {
+    const fr = new FileReader()
+    fr.onload = function (e) {
+      model.base64 = fr.result
+    }
+    fr.readAsDataURL(file)
   }
   const upload = reactive(
     {

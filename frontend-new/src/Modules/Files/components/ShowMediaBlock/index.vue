@@ -8,12 +8,12 @@
         <div class="absolute-top-right">
           <q-btn icon="highlight_off" color="white" flat @click="closeForm" />
         </div>
-        <img :src="srcImg" alt="">
-        <div class="absolute-bottom text-teal text-center row items-center justify-center bg-grey-4 q-py-xs">
+        <img :src="filePreviewUrl" alt="">
+        <div class="absolute-bottom text-teal text-center row items-center justify-center bg-orange-2 q-py-xs">
           <div class="q-mr-md">
             {{ fileName }}
           </div>
-          <DownloadFileBtn :url-file="srcImg" />
+          <DownloadFileBtn :url-file="fileUrl" class="text-big-50" />
         </div>
       </div>
     </div>
@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { onUnmounted, ref } from 'vue'
+import { computed, ref } from 'vue'
 import DownloadFileBtn from 'src/Modules/Files/components/DownloadFileBtn/index.vue'
 
 export default {
@@ -33,30 +33,27 @@ export default {
       type: String,
       required: true
     },
+    fileUrl: {
+      type: String,
+      required: true
+    },
     fileName: {
       type: String,
       default: ''
     }
   },
   setup(props, { emit }) {
-    // const $q = useQuasar()
-    // onMounted(() => {
-    //   $q.fullscreen.toggle()
-    // })
-    onUnmounted(() => {
-      // $q.fullscreen.exit()
+    const filePreviewUrl = computed(() => {
+      return process.env.BASE_API + props.fileUrl + '&preview=1&width=300'
     })
-    const closeMedia = () => {
-      // $q.fullscreen.exit()
-    }
     const hideControl = ref(true)
     const closeForm = () => {
       emit('close')
     }
     return {
       hideControl,
-      closeForm,
-      closeMedia
+      filePreviewUrl,
+      closeForm
     }
   }
 }
@@ -95,6 +92,7 @@ export default {
   -ms-flex-align: center;
   align-items: center;
   padding-bottom: 17px;
+
   img {
     max-height: 100%;
     max-width: 100%;

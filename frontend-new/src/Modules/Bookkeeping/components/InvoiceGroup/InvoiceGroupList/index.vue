@@ -2,7 +2,7 @@
   <div>
     <div class="row items-center q-col-gutter-sm">
       <FilterBlock v-model="listQuery" />
-      <AddInvoiceGroup @success="reload" />
+      <AddInvoiceGroup @close="reload" />
     </div>
     <ShowTable :list="list" @reload="reload" class="q-pt-sm" />
     <LoadMore :key="key" v-model:list-query="listQuery" :func="func" @setList="setList" />

@@ -5,6 +5,7 @@ namespace Database\Seeders\Demo;
 use App\Modules\Billing\Actions\Invoice\CreateInvoiceAction;
 use App\Modules\Billing\Actions\InvoiceGroup\CreateInvoiceGroupAction;
 use App\Modules\Billing\Actions\Payment\AddPaymentAction;
+use App\Modules\Billing\Models\BillingInvoiceModel;
 use App\Modules\Billing\Repositories\InvoiceRepository;
 use App\Modules\MeteringDevice\Actions\AddInstrumentReadingAction;
 use App\Modules\MeteringDevice\Actions\CheckDataInInstrumentReadingAction;
@@ -14,6 +15,7 @@ use App\Modules\Rate\Actions\CreateRateTypeAction;
 use App\Modules\Rate\Models\RateModel;
 use App\Modules\Rate\Models\RateTypeModel;
 use App\Modules\Rate\Repositories\RateGroupRepository;
+use App\Modules\Rate\Resources\RateTypeResource;
 use App\Modules\Stead\Repositories\SteadRepository;
 use Illuminate\Database\Seeder;
 
@@ -143,6 +145,12 @@ class BillingDemoSeeder extends Seeder
             $title = 'Взносы ' . date('Y') - $this->count_years + $i . ', Членский взнос, Целевой взнос, Земельный налог, Вывоз мусора';
             $rate = [];
             $curDate = date('Y') - $this->count_years + $i . '-06-01';
+            $options = [
+                'steads' => null,
+                'stead_type' => 'all',
+                'invoice_date' => $curDate
+            ];
+
             foreach ($rate_types as $rate_type) {
                 $tmp = $rate_type->toArray();
                 $r = RateTypeModel::find($rate_type->id);
@@ -150,18 +158,19 @@ class BillingDemoSeeder extends Seeder
                 $tmp['rate'] = $r->currentRate;
                 $rate[] = $tmp;
             }
+            $options['rate'] = $rate;
             $invoiceGroup = (new CreateInvoiceGroupAction())
                 ->title($title)
                 ->rateGroup($rate_group->id)
-                ->options($rate)
+                ->options($options)
                 ->run();
             $invoiceGroup->created_at = date('Y') - $this->count_years + $i . '-06-01 10.10.10';
             $invoiceGroup->save();
-            (new SteadRepository())->get()->each(function ($stead) use ($invoiceGroup, $i) {
-                $invoice = (new CreateInvoiceAction($stead))->byInvoiceGroup($invoiceGroup)->run();
+            $invoices = CreateInvoiceAction::byInvoiceGroup($invoiceGroup, null);
+            foreach ($invoices as $invoice) {
                 $invoice->created_at = (date('Y') - $this->count_years + $i . '-06-01 10:10:10');
                 $invoice->save();
-            });
+            }
         }
     }
 
@@ -262,52 +271,96 @@ class BillingDemoSeeder extends Seeder
     private function createReadingPaymentInvoice()
     {
         echo __METHOD__ . "\n";
-        $steads = (new SteadRepository())->get();
-        $d = 100;
-        foreach ($steads as $stead) {
-            $readings = InstrumentReadingModel::whereHas('metering_device', function ($query) use ($stead) {
-                $query->where('stead_id', $stead->id);
-            })
-                ->orderBy('date', 'desc')
-                ->offset(8)
-                ->limit(100000)
-                ->get();
-            foreach ($readings->groupBy('date') as $groups) {
-                $invoice = (new CreateInvoiceAction($stead))
-                    ->rateGroup($groups[0]->metering_device->rate_type->rate_group_id)
-                    ->title($groups[0]->metering_device->rate_type->rate_group->name . '.');
-                foreach ($groups as $reading) {
-                    $invoice->byInstrumentReading($reading);
-                }
-                $invoice = $invoice->run();
-
-                $invoice->created_at = ($groups[0]->date . ' 10:10:10');
-                $payment = null;
-                $d += 150;
-                if (rand(0, 100) < 85) {
-                    $raw = [
-                        date('Y-m-d h:i:s', strtotime($invoice->created_at) + $d),
-                        $invoice->price,
-                        $invoice->stead->number,
-                        $invoice->stead->owners[0]->smallName(),
-                        $invoice->title
-                    ];
-                    $payment = (new AddPaymentAction())->parseRawData($raw)->run();
-                    $payment->rate_group_id = $invoice->rate_group_id;
-                    $payment->invoice_id = $invoice->id;
-                    $payment->error = false;
-                    $payment->created_at = date('Y-m-d h:i:s', strtotime($invoice->created_at) + $d);
-                    $payment->save();
-                }
-                $invoice->is_paid = $payment ? true : false;
+        $count = $this->count_years * 6;
+        $date = strtotime('-' . $count . ' month');
+        for ($i = 1; $i < $count - 4; $i++) {
+            $date = strtotime('+1 month', $date);
+            $options = [
+                'rate' => RateTypeResource::collection((new RateTypeModel())->get()),
+                'steads' => null,
+                'stead_type' => 'all',
+                'invoice_date' => $date
+            ];
+            $invoiceGroup = (new CreateInvoiceGroupAction())
+                ->title('Электричество ' . date('m-Y', $date) . ', Электр. День, Электр. Ночь')
+                ->rateGroup('2')
+                ->options($options)
+                ->run();
+            $invoices = CreateInvoiceAction::byInvoiceGroup($invoiceGroup);
+            foreach ($invoices as $invoice) {
+                $invoice->created_at = date('Y-m-d', $date) . ' 10:10:10';
+//                $invoice->is_paid = (rand(0, 100) < 85) ? true : false;
                 $invoice->save();
-                foreach ($groups as $reading) {
-                    $reading->payment_id = $payment->id ?? null;
-                    $reading->invoice_id = $invoice->id;
-                    $reading->save();
-                }
             }
         }
+        $readings = InstrumentReadingModel::whereNotNull('invoice_id')
+            ->orderBy('date', 'desc')
+            ->get();
+        $d = 100;
+        foreach ($readings->groupBy('invoice_id') as $groups) {
+            $payment = null;
+            $d += 150;
+            $invoice = BillingInvoiceModel::find($groups[0]->invoice_id);
+            if (rand(0, 100) < 85) {
+                $raw = [
+                    date('Y-m-d h:i:s', strtotime($groups[0]->date . ' 10:10:10') + $d),
+                    $invoice->price,
+                    $invoice->stead->number,
+                    $invoice->stead->owners[0]->smallName(),
+                    $invoice->title
+                ];
+                $payment = (new AddPaymentAction())->parseRawData($raw)->run();
+                $payment->rate_group_id = $invoice->rate_group_id;
+                $payment->invoice_id = $invoice->id;
+                $payment->error = false;
+                $payment->created_at = date('Y-m-d h:i:s', strtotime($groups[0]->date . ' 10:10:10') + $d);
+                $payment->save();
+            }
+            if ($payment) {
+                foreach ($groups as $reading) {
+                    $reading->payment_id = $payment->id;
+                    $reading->save();
+                }
+                $invoice->is_paid = true;
+                $invoice->save();
+            }
+//            }
+        }
+
+//        $steads = (new SteadRepository())->get();
+//        $d = 100;
+//        foreach ($steads as $stead) {
+//            $readings = InstrumentReadingModel::whereHas('metering_device', function ($query) use ($stead) {
+//                $query->where('stead_id', $stead->id);
+//            })
+//                ->orderBy('date', 'desc')
+//                ->offset(8)
+//                ->limit(100000)
+//                ->get();
+//            foreach ($readings->groupBy('date') as $groups) {
+//                $payment = null;
+//                $d += 150;
+//                if (rand(0, 100) < 85) {
+//                    $raw = [
+//                        date('Y-m-d h:i:s', strtotime($groups[0]->date . ' 10:10:10') + $d),
+//                        $invoice->price,
+//                        $invoice->stead->number,
+//                        $invoice->stead->owners[0]->smallName(),
+//                        $invoice->title
+//                    ];
+//                    $payment = (new AddPaymentAction())->parseRawData($raw)->run();
+//                    $payment->rate_group_id = $invoice->rate_group_id;
+//                    $payment->invoice_id = $invoice->id;
+//                    $payment->error = false;
+//                    $payment->created_at = date('Y-m-d h:i:s', strtotime($groups[0]->date . ' 10:10:10') + $d);
+//                    $payment->save();
+//                }
+//                foreach ($groups as $reading) {
+//                    $reading->payment_id = $payment->id;
+//                    $reading->save();
+//                }
+//            }
+//        }
     }
 
 

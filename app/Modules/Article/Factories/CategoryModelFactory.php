@@ -10,6 +10,7 @@ use function now;
 class CategoryModelFactory extends Factory
 {
     protected $model = CategoryModel::class;
+    protected static $countCategory = 1;
 
     /**
      * Define the model's default state.
@@ -20,7 +21,7 @@ class CategoryModelFactory extends Factory
     {
         $title = $this->faker->sentence;
         return [
-            'name' => $title,
+            'name' => 'Раздел ' . self::$countCategory++,
             'public' => 1,
             'created_at' => now(),
             'updated_at' => now(),

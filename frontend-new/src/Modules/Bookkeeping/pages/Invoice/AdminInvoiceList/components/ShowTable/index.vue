@@ -18,7 +18,9 @@
       </template>
       <template v-slot:body-cell-stead="props">
         <q-td :props="props" auto-width>
-          {{ props.row.stead.number }}
+          <router-link :to="`/admin/stead/info/${props.row.stead.id}`">
+            {{ props.row.stead.number }}
+          </router-link>
         </q-td>
       </template>
       <template v-slot:body-cell-title="props">

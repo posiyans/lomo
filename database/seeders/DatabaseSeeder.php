@@ -6,6 +6,7 @@ use Database\Seeders\Demo\ArticleModelDemoSeeder;
 use Database\Seeders\Demo\BillingDemoSeeder;
 use Database\Seeders\Demo\CategoryDemoSeeder;
 use Database\Seeders\Demo\CommentsModelDemoSeeder;
+use Database\Seeders\Demo\GardeningDemoSeeder;
 use Database\Seeders\Demo\SteadModelDemoSeeder;
 use Database\Seeders\Demo\UserModelDemoSeeder;
 use Illuminate\Database\Seeder;
@@ -39,14 +40,13 @@ class DatabaseSeeder extends Seeder
         ]);
         if ($this->demo) {
             $this->call([
+                GardeningDemoSeeder::class,
                 UserModelDemoSeeder::class,
                 SteadModelDemoSeeder::class,
                 BillingDemoSeeder::class,
                 CategoryDemoSeeder::class,
                 ArticleModelDemoSeeder::class,
                 CommentsModelDemoSeeder::class,
-
-
             ]);
         }
         Cache::flush();

@@ -33,6 +33,6 @@ class UserModelDemoSeeder extends Seeder
         if ($role) {
             $user->syncRolesWithoutDetaching([$role->id]);
         }
-        UserModel::factory()->count(10)->create();
+        UserModel::factory()->count(50)->create();
     }
 }

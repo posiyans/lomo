@@ -15,6 +15,7 @@
     <ShowMediaBlock
       v-if="showImg"
       :src-img="filePreviewUrl"
+      :file-url="fileDownloadUrl"
       :file-name="name"
       @close="showImg = false"
     />
@@ -50,10 +51,15 @@ export default defineComponent({
       showImg.value = true
     }
     const filePreviewUrl = computed(() => {
-      if (fileDownloadUrl.value) {
+      if (props.file.model && isFileImage(props.file.model.type) && props.file.model.base64) {
+        return props.file.model.base64
+      } else if (fileDownloadUrl.value) {
         return process.env.BASE_API + fileDownloadUrl.value + '&preview=1&width=300'
       }
     })
+    const isFileImage = (fileType) => {
+      return fileType.split('/')[0] === 'image';
+    }
     const fileDownloadUrl = computed(() => {
       return props.file.url || props.file?.model?.url
     })
