@@ -9,7 +9,7 @@ class MeteringDeviceResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return array
      */
     public function toArray($request)
@@ -22,6 +22,10 @@ class MeteringDeviceResource extends JsonResource
             'description' => $this->rate_type->description,
             'group_name' => $this->rate_type->rate_group->name,
             'unit_name' => $this->rate_type->rate_group->options['unit_name'] ?? '',
+        ];
+        $data['stead'] = [
+            'id' => $this->stead_id,
+            'number' => $this->stead->number
         ];
         $data['last_reading'] = $this->last_reading();  // todo  Убрать отсюда
         $data['rate'] = $rate;

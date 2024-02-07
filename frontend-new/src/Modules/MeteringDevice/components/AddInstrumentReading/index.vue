@@ -18,27 +18,30 @@
             class="q-gutter-md"
           >
             <div>
-              <MeteringDeviceForSteadSelect
-                v-model="reading.device_id"
-                :stead-id="steadId"
+              <SteadSelect
+                v-model="currentSteadId"
                 outlined
                 dense
-                :rules="[required]"
+                @update:model-value="changeStead"
               />
             </div>
-            <div>
-              <q-input
-                v-model="reading.value"
-                outlined
-                dense
-                label="Показания"
-                :rules="[required]"
-                @update:model-value="setValue"
-              />
+            <div
+              class="q-gutter-sm"
+              style="min-height: 90px;"
+            >
+              <div
+                v-for="item in allDevice"
+                :key="item.id"
+              >
+                <EditReadingItem
+                  :device="item"
+                  @setValue="setValue"
+                />
+              </div>
             </div>
-            <div>
+            <div v-if="showDateInput">
               <InputDate
-                v-model="reading.date"
+                v-model="currentDate"
                 outlined
                 dense
                 label="От какой даты"
@@ -46,7 +49,7 @@
               />
             </div>
             <div class="text-right">
-              <q-btn label="Добавить" color="primary" type="submit" />
+              <q-btn label="Добавить" color="primary" :disable="disableBtn" type="submit" />
             </div>
           </q-form>
         </q-card-section>
@@ -57,51 +60,56 @@
 
 <script>
 /* eslint-disable */
-import { defineComponent, ref } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
 import MeteringDeviceForSteadSelect from 'src/Modules/MeteringDevice/components/MeteringDeviceForSteadSelect/index.vue'
 import InputDate from 'components/Input/InputDate/index.vue'
-import { required } from 'src/utils/validators.js'
 import { addInstrumentReading } from 'src/Modules/MeteringDevice/api/instrumentReadingApi'
 import { errorMessage } from 'src/utils/message'
 import { date, useQuasar } from 'quasar'
+import SteadSelect from 'src/Modules/Stead/components/SteadSelect/index.vue'
+import { getMeteringDeviceForStead } from 'src/Modules/MeteringDevice/api/meteringDeviceApi'
+import EditReadingItem from './components/EditReadingItem/index.vue'
+import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
+import { required } from 'src/utils/validators.js'
 
 export default defineComponent({
   components: {
     MeteringDeviceForSteadSelect,
-    InputDate
+    InputDate,
+    SteadSelect,
+    EditReadingItem
   },
   props: {
     steadId: {
       type: [String, Number],
-      required: true
+      default: ''
     }
   },
   setup(props, { emit }) {
-    let timer = null
-    const reading = ref({
-      stead_id: props.steadId,
-      device_id: '',
-      value: '',
-      date: date.formatDate(new Date(), 'YYYY-MM-DD'),
+    const disableBtn = computed(() => {
+      return Object.values(devices.value).length === 0
     })
+    const authStore = useAuthStore()
+    const showDateInput = computed(() => {
+      return authStore.checkPermission('reading-edit')
+    })
+    const devices = ref({})
+    const currentDate = ref(date.formatDate(new Date(), 'YYYY-MM-DD'))
+    const currentSteadId = ref(props.steadId)
     const dialogVisible = ref(false)
     const showDialog = () => {
-      reading.value.value = ''
-      reading.value.device_id = ''
+      currentSteadId.value = props.steadId
+      if (currentSteadId.value) {
+        getData()
+      }
+      devices.value = {}
       dialogVisible.value = true
     }
-    const setValue = () => {
-      if (timer) clearTimeout(timer)
-      timer = setTimeout(() => {
-        if (reading.value.value) {
-          const tmp = reading.value.value
-          if (!isNaN(tmp)) {
-            reading.value.value = tmp
-          } else {
-            reading.value.value = ''
-          }
-        }
-      }, 500)
+    const setValue = (val) => {
+      delete devices.value[val.device_id]
+      if (val.value) {
+        devices.value[val.device_id] = val
+      }
     }
     const $q = useQuasar()
     const onSubmit = () => {
@@ -122,7 +130,11 @@ export default defineComponent({
         },
         persistent: true
       }).onOk(() => {
-        addInstrumentReading(reading.value)
+        const data = {
+          date: currentDate.value,
+          devices: Object.values(devices.value)
+        }
+        addInstrumentReading(data)
           .then(res => {
             dialogVisible.value = false
             emit('success')
@@ -132,12 +144,30 @@ export default defineComponent({
           })
       })
     }
+    const changeStead = () => {
+      getData()
+    }
+    const allDevice = ref([])
+    const getData = () => {
+      getMeteringDeviceForStead(currentSteadId.value)
+        .then(res => {
+          allDevice.value = res.data.data
+          devices.value = {}
+        })
+    }
+
     return {
-      reading,
+      currentDate,
+      showDateInput,
+      currentSteadId,
+      disableBtn,
+      devices,
       setValue,
+      required,
       onSubmit,
       dialogVisible,
-      required,
+      allDevice,
+      changeStead,
       showDialog
     }
   }

@@ -17,6 +17,9 @@ class GetMyInfoController extends MyController
         $data = [
             'user' => new UserInfoResource($user),
             'permissions' => array_merge(['user'], (new GetPermissionsForUserRepository($user))->toArray()),
+            'roles' => $user->roles->map(function ($role) {
+                return $role->name;
+            }),
         ];
         return response($data);
     }

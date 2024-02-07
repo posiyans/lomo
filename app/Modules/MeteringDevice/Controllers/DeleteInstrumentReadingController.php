@@ -15,7 +15,7 @@ class DeleteInstrumentReadingController extends Controller
     // 'instrument_reading-edit'
     public function __construct()
     {
-        $this->middleware('ability:superAdmin,instrument_reading-edit');
+        $this->middleware('ability:superAdmin,reading-edit');
     }
 
     public function __invoke(InstrumentReadingModel $reading)

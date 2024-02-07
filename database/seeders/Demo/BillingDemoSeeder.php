@@ -22,7 +22,7 @@ use Illuminate\Database\Seeder;
 class BillingDemoSeeder extends Seeder
 {
 
-    private $count_years = 10;
+    private $count_years = 4;
     private static $date;
 
     public function run()

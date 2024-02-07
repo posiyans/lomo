@@ -12,14 +12,12 @@
     >
       <template v-slot:body-cell-number="props">
         <q-td :props="props" auto-width>
-          <div>
-            {{ props.row.id }}
+          <div class="row items-center no-wrap q-col-gutter-sm">
+            <div class="text-small-85">
+              {{ props.row.id }}
+            </div>
+            <ShowPublicTime :time="props.row.updated_at" class="text-wrap text-small-65" />
           </div>
-        </q-td>
-      </template>
-      <template v-slot:body-cell-date="props">
-        <q-td :props="props">
-          <ShowPublicTime :time="props.row.updated_at" />
         </q-td>
       </template>
       <template v-slot:body-cell-status="props">
@@ -29,19 +27,21 @@
       </template>
       <template v-slot:body-cell-title="props">
         <q-td :props="props">
-          <router-link :to="'/admin/article/edit/'+props.row.id" class="link-type">
+          <router-link :to="'/admin/article/edit/'+props.row.id" class="link-type ellipsis-2-lines">
             <span>{{ props.row.title }}</span>
           </router-link>
         </q-td>
       </template>
       <template v-slot:body-cell-user="props">
         <q-td :props="props">
-          <span>{{ props.row.user?.last_name }} {{ props.row.user?.name }}</span>
+          <div class="text-small-85">
+            {{ props.row.user?.last_name }} {{ props.row.user?.name }}
+          </div>
         </q-td>
       </template>
       <template v-slot:body-cell-category="props">
         <q-td :props="props" auto-width>
-          <CategoryShow v-model="props.row.category_id" />
+          <CategoryShow v-model="props.row.category_id" class="text-no-wrap" />
         </q-td>
       </template>
       <template v-slot:body-cell-comment="props">
@@ -61,7 +61,7 @@
       <template v-slot:body-cell-actions="props">
         <q-td :props="props">
           <div class="q-gutter-sm text-grey-7">
-            <q-btn color="primary" size="sm" icon="edit" label="Edit" :to="'/admin/article/edit/'+props.row.id" />
+            <q-btn color="primary" flat icon="edit" :to="'/admin/article/edit/'+props.row.id" />
           </div>
         </q-td>
       </template>
@@ -98,13 +98,9 @@ export default defineComponent({
       {
         name: 'number',
         align: 'center',
-        label: 'ID',
+        label: '№',
       },
-      {
-        name: 'date',
-        align: 'center',
-        label: 'Дата',
-      },
+
       {
         name: 'status',
         align: 'center',

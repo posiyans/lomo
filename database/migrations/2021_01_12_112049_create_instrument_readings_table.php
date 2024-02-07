@@ -21,7 +21,7 @@ class CreateInstrumentReadingsTable extends Migration
             $table->date('date')->comment('дата подачи показаний');
             $table->integer('invoice_id')->nullable();
             $table->integer('payment_id')->nullable();
-            $table->json('options')->default('{}')->nullable();
+            $table->json('options')->nullable();
             $table->timestamps();
         });
     }

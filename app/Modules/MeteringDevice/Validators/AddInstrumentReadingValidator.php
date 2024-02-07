@@ -17,15 +17,22 @@ class AddInstrumentReadingValidator extends FormRequest
     public function rules()
     {
         return [
-            'device_id' => [
-                'required',
-                'exists:' . MeteringDeviceModel::class . ',id'
-            ],
             'payment_id' => [
                 'nullable',
                 'exists:' . BillingPaymentModel::class . ',id'
             ],
-            'value' => [
+            'devices' => [
+                'required',
+                'array'
+            ],
+            'devices.*' => [
+                'array:device_id,value'
+            ],
+            'devices.*.device_id' => [
+                'required',
+                'exists:' . MeteringDeviceModel::class . ',id'
+            ],
+            'devices.*.value' => [
                 'required',
                 'integer'
             ],

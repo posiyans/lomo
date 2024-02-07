@@ -86,13 +86,13 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const data = ref(false)
-    const options = ref([])
     const selectedItem = computed(() => {
       if (props.modelValue) {
         return options.value.find(item => item.id === props.modelValue)
       }
       return ''
     })
+    const options = ref([])
     const getData = () => {
       getMeteringDeviceForStead(props.steadId)
         .then(res => {

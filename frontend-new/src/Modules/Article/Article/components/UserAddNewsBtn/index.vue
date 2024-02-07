@@ -5,6 +5,7 @@
         @success="showForm = false"
       />
       <div class="absolute-top-right q-ma-md">
+        <q-btn icon="open_in_new" flat color="grey" to="/article/add-news" />
         <q-btn icon="close" flat color="primary" @click="showForm = false" />
       </div>
     </div>

@@ -19,7 +19,7 @@ class CreateDeviceRegisterModelsTable extends Migration
             $table->integer('rate_type_id')->comment('к какому тирафа относится прибор');
             $table->integer('initial_data')->comment('начальные показания');
             $table->string('description')->nullable()->comment('комментарий');
-            $table->json('options')->default('{}')->comment('данные прибора (серийный номер прибора, модель прибора, дата установки, дата до следующей поверки прибора)');
+            $table->json('options')->comment('данные прибора (серийный номер прибора, модель прибора, дата установки, дата до следующей поверки прибора)');
             $table->boolean('active')->default(true)->comment('запрашивать показания');
             $table->timestamps();
         });

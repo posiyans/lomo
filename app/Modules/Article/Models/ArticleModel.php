@@ -61,7 +61,9 @@ class ArticleModel extends MyModel implements CommentedInterface
     protected $hidden = [];
 
     protected $casts = [
-//        'allow_comments' => 'boolean',
+        'allow_comments' => 'integer',
+        'status' => 'integer',
+        'category_id' => 'integer',
     ];
 
     /**

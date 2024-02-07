@@ -10,9 +10,13 @@ export const useAuthStore = defineStore('auth', {
     is_guest: true,
     user: {},
     permissions: [],
+    roles: [],
     key: 1
   }),
   getters: {
+    isOwner: (state) => {
+      return state.roles.includes('owner')
+    },
     checkPermission: (state) => {
       return (role) => {
         if (Array.isArray(role)) {
@@ -39,6 +43,7 @@ export const useAuthStore = defineStore('auth', {
           .then(res => {
             this.user = res.data.user
             this.permissions = res.data.permissions
+            this.roles = res.data.roles
             this.is_guest = false
             resolve(res.data)
           })
@@ -93,6 +98,7 @@ export const useAuthStore = defineStore('auth', {
                 if (res.data.status === 'done') {
                   this.user = res.data.user
                   this.permissions = res.data.permissions
+                  this.roles = res.data.roles
                   this.is_guest = false
                   resolve(data)
                 } else {

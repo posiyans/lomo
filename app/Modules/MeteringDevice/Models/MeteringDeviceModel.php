@@ -5,6 +5,7 @@ namespace App\Modules\MeteringDevice\Models;
 
 use App\Models\MyModel;
 use App\Modules\Rate\Models\RateTypeModel;
+use App\Modules\Stead\Models\SteadModel;
 
 /*
  * Модель приборов учета
@@ -60,6 +61,15 @@ class MeteringDeviceModel extends MyModel
         'verification_date',
     ];
 
+    /**
+     * jот какого участка прибор
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     *
+     */
+    public function stead()
+    {
+        return $this->hasOne(SteadModel::class, 'id', 'stead_id');
+    }
 
     /**
      * по какому тарифу тарифицируется прибор
@@ -87,7 +97,7 @@ class MeteringDeviceModel extends MyModel
      */
     public function last_reading()
     {
-        return $this->instrument_readings()->orderByDesc('created_at')->first();
+        return $this->instrument_readings()->orderByDesc('created_at')->orderByDesc('date')->first();
     }
 
 
