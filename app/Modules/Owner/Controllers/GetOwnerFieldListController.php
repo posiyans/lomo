@@ -10,7 +10,7 @@ class GetOwnerFieldListController extends Controller
 
     public function __construct()
     {
-        $this->middleware('ability:superAdmin,owner-show|owner-edit');
+        $this->middleware('ability:superAdmin|owner,owner-show|owner-edit');
     }
 
     public function __invoke()

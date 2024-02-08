@@ -28,8 +28,11 @@
       </template>
       <template v-slot:body-cell-owner="props">
         <q-td :props="props">
-          <div v-for="owner in props.row.owners" :key="owner.uid" class="cursor-pointer" @click="toOwner(owner.uid)">
-            <OwnerUserNameAndProportionBlock :owner="owner" class="justify-center" />
+          <div v-for="owner in props.row.owners" :key="owner.uid" class="row q-col-gutter-sm">
+            <OwnerUserNameAndProportionBlock :owner="owner" class="justify-center cursor-pointer" @click="toOwner(owner.uid)" />
+            <router-link v-if="owner.user_uid" class="text-grey" :to="`/admin/user/show/${owner.user_uid}`">
+              <UserNameByUid :uid="owner.user_uid" before="(" after=")" />
+            </router-link>
           </div>
         </q-td>
       </template>
@@ -48,10 +51,12 @@
 import { defineComponent } from 'vue'
 import OwnerUserNameAndProportionBlock from 'src/Modules/Owner/components/OwnerUserNameAndProportionBlock/index.vue'
 import { useRouter } from 'vue-router'
+import UserNameByUid from 'src/Modules/Users/components/UserNameByUid/index.vue'
 
 export default defineComponent({
   components: {
-    OwnerUserNameAndProportionBlock
+    OwnerUserNameAndProportionBlock,
+    UserNameByUid
   },
   props: {
     list: {

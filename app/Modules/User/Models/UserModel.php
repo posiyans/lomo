@@ -110,9 +110,8 @@ class UserModel extends MyModel implements MustVerifyEmail,
         'password',
         'last_name',
         'middle_name',
-//        'phone',
         'uid',
-//        'adres',
+
     ];
 
     /**

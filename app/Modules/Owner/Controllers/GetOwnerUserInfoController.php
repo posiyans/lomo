@@ -11,11 +11,15 @@ class GetOwnerUserInfoController extends Controller
 
     public function __construct()
     {
-        $this->middleware('ability:superAdmin,owner-show|owner-edit');
+        $this->middleware('ability:superAdmin|owner,owner-show|owner-edit');
     }
 
     public function __invoke(OwnerUserModel $owner)
     {
+        $user = \Auth::user();
+        if (!$user->ability(['superAdmin'], ['owner-show', 'owner-edit'])) {
+            $owner = $user->owner;
+        }
         $ownerData = new OwnerUserAllFieldResource($owner);
         $steads = $owner->steads->sortBy('stead.number', SORT_NATURAL)->map(function ($item) {
             return [

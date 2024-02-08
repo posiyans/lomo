@@ -7,6 +7,7 @@
           :func="func"
           :fields="{user_uid: activeUserStore.user.uid}"
           class="col-grow"
+          name="email"
           :readonly="readOnly"
           @success="setValue($event, 'email')"
         >

@@ -4,9 +4,9 @@
       <q-skeleton type="text" />
     </div>
     <div v-else>
-      {{ user.last_name }}
+      {{ before }}{{ user.last_name }}
       {{ user.name }}
-      {{ user.middle_name }}
+      {{ user.middle_name }}{{ after }}
     </div>
   </div>
 </template>
@@ -20,6 +20,14 @@ export default defineComponent({
   components: {},
   props: {
     uid: {
+      type: String,
+      default: ''
+    },
+    before: {
+      type: String,
+      default: ''
+    },
+    after: {
       type: String,
       default: ''
     }

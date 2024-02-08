@@ -7,30 +7,18 @@
       class="text-teal"
       :breakpoint="0"
     >
-      <q-tab v-if="isOwner" name="steads" label="Участок" />
-      <q-tab name="profile" label="Мой профиль" />
-      <q-tab name="ban" label="Ограничения" />
-      <q-tab name="appeal" label="Обращения" />
+      <q-tab name="user" label="Пользователь" />
+      <q-tab v-if="isOwner" name="owner" label="Собственник" />
     </q-tabs>
     <q-separator color="teal" />
     <q-tab-panels v-model="tab" animated>
-      <q-tab-panel name="profile" class="q-pa-none">
-        <ProfileTab />
-      </q-tab-panel>
-      <q-tab-panel name="ban">
-        <BanUserInfo :user-uid="authStore.user.uid" />
-      </q-tab-panel>
-      <q-tab-panel name="appeal">
-        <div v-if="authStore.user.email_verified_at">
-          <UserAppealList :user-uid="authStore.user.uid" />
-        </div>
-        <div v-else class="page-title text-red text-center q-pa-lg">
-          Для создания обращения подтвердите свою почту
-        </div>
-      </q-tab-panel>
-      <q-tab-panel name="steads">
+      <q-tab-panel name="user">
         <MyProfile />
       </q-tab-panel>
+      <q-tab-panel name="owner">
+        <ShowOwnerInfo :owner-uid="authStore.user.owner.uid" />
+      </q-tab-panel>
+
     </q-tab-panels>
   </q-card>
 </template>
@@ -43,18 +31,18 @@ import MyProfile from 'src/Modules/Auth/page/MyProfile/index.vue'
 import BanUserInfo from 'src/Modules/BanUsers/components/BanUserInfo/index.vue'
 import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
 import UserAppealList from 'src/Modules/Appeal/pages/UserApealList/index.vue'
-import ProfileTab from './components/ProfileTab/index.vue'
+import ShowOwnerInfo from 'src/Modules/Owner/components/ShowOwnerInfo/index.vue'
 
 export default defineComponent({
   components: {
     MyProfile,
-    ProfileTab,
+    ShowOwnerInfo,
     BanUserInfo,
     UserAppealList
   },
   props: {},
   setup(props, { emit }) {
-    const tab = ref('profile')
+    const tab = ref('user')
     const router = useRouter()
     const route = useRoute()
     const authStore = useAuthStore()
@@ -63,7 +51,7 @@ export default defineComponent({
     })
     onMounted(() => {
       if (isOwner.value) {
-        // tab.value = 'steads'
+        tab.value = 'steads'
       }
     })
     return {

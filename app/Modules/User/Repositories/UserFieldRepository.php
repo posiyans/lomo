@@ -3,6 +3,8 @@
 namespace App\Modules\User\Repositories;
 
 
+use App\Modules\User\Models\UserModel;
+
 class UserFieldRepository
 {
     //todo переделать на базу
@@ -57,8 +59,8 @@ class UserFieldRepository
         ],
         'email' => [
             'rules' => [
+                'unique:' . UserModel::class . ',email',
                 'email:rfc,dns',
-                'unique:App\Modules\User\Models\UserModel',
             ],
             'label' => '',
         ]

@@ -25,6 +25,7 @@ class UserInfoResource extends JsonResource
             'created_at' => $this->created_at,
             'consent_to_email' => $this->consent_to_email,
             'last_connect' => $this->last_connect,
+            'owner' => $this->owner ? ['uid' => $this->owner->uid] : null,
         ];
         $options = $this->options;
         return array_merge($data, $options);

@@ -47,10 +47,7 @@ class UpdateUserInfoValidator extends FormRequest
                 'required',
                 Rule::in(UserFieldRepository::getKeys())
             ],
-            'value' => [
-                'required',
-                UserFieldRepository::getRules($this->field)
-            ]
+            'value' => array_merge(['required'], UserFieldRepository::getRules($this->field))
         ];
     }
 
