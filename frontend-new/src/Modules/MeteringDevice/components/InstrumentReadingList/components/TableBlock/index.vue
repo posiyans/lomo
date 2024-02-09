@@ -68,12 +68,12 @@
       <template v-slot:body-cell-desc="props">
         <q-td :props="props" :class="{ 'o-60': !props.row.device.active }">
           <div v-if="props.row.invoice" class="cursor-pointer text-red-10">
-            <InvoiceInfo :invoice="props.row.invoice">
+            <InvoiceInfo :invoice="props.row.invoice" :edit="edit">
               Счет № {{ props.row.invoice.id }}
             </InvoiceInfo>
           </div>
           <div v-if="props.row.payment" class="cursor-pointer text-teal">
-            <PaymentInfoShowAndEdit :payment="props.row.payment">
+            <PaymentInfoShowAndEdit :payment="props.row.payment" :edit="edit">
               Платеж № {{ props.row.payment.id }}
             </PaymentInfoShowAndEdit>
           </div>
@@ -94,7 +94,7 @@
 
 <script>
 /* eslint-disable */
-import { defineComponent, ref } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
 import ShowTime from 'components/ShowTime/index.vue'
 import MeteringDeviceEdit from 'src/Modules/MeteringDevice/components/MeteringDeviceEdit/Dialog.vue'
 import PaymentInfoShowAndEdit from 'src/Modules/Bookkeeping/components/Payment/PaymentInfoShowAndEdit/Dialog.vue'
@@ -123,38 +123,43 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const data = ref(false)
-    const columns = [
-      {
-        name: 'date',
-        align: 'center',
-        label: 'Дата'
-      },
-      {
-        name: 'device',
-        align: 'center',
-        label: 'Прибор'
-      },
-      {
-        name: 'init_value',
-        align: 'center',
-        label: 'Показания'
-      },
-      {
-        name: 'delta',
-        align: 'center',
-        label: 'К оплате'
-      },
-      {
-        name: 'desc',
-        align: 'center',
-        label: 'Примечание',
-      },
-      {
-        name: 'actions',
-        align: 'center',
-        label: ''
+    const columns = computed(() => {
+      const tmp = [
+        {
+          name: 'date',
+          align: 'center',
+          label: 'Дата'
+        },
+        {
+          name: 'device',
+          align: 'center',
+          label: 'Прибор'
+        },
+        {
+          name: 'init_value',
+          align: 'center',
+          label: 'Показания'
+        },
+        {
+          name: 'delta',
+          align: 'center',
+          label: 'К оплате'
+        },
+        {
+          name: 'desc',
+          align: 'center',
+          label: 'Примечание',
+        }
+      ]
+      if (props.edit) {
+        tmp.push({
+          name: 'actions',
+          align: 'center',
+          label: ''
+        })
       }
-    ]
+      return tmp
+    })
     const reload = () => {
       emit('reload')
     }

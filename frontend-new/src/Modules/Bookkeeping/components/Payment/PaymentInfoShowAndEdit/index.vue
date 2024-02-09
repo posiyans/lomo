@@ -22,13 +22,14 @@
             </div>
             <div>
               <q-fab
+                v-if="edit"
                 flat
                 text-color="black"
                 icon="more_vert"
                 direction="down"
                 padding="xs"
               >
-                <PaymentDeleteBtn v-if="edit" :payment-id="payment.id" @success="deletePayment">
+                <PaymentDeleteBtn :payment-id="payment.id" @success="deletePayment">
                   <q-fab-action color="negative" text-color="white" icon="delete" />
                 </PaymentDeleteBtn>
               </q-fab>

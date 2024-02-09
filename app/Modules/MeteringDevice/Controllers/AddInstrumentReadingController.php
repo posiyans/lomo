@@ -56,8 +56,11 @@ class AddInstrumentReadingController extends Controller
                     }
                 } else {
                     $last_reading = $device->last_reading();
-                    if (strtotime($last_reading->date) >= strtotime($request->date)) {
+                    if (strtotime($last_reading->date) > strtotime($request->date)) {
                         return response(['errors' => 'В системе есть показания на более поздний период'], 450);
+                    }
+                    if (strtotime($last_reading->date) == strtotime($request->date)) {
+                        return response(['errors' => 'Сегодня уже передовали показания'], 450);
                     }
                     if ($last_reading->value >= $data['value']) {
                         return response(['errors' => 'Значение показаний должны быть больше предыдущих (' . $data['value'] . ')'], 450);

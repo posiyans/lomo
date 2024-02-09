@@ -28,7 +28,16 @@ class GetSteadInfoController extends Controller
         $id = $request->get('id');
         $stead = (new GetSteadByIdRepository($id))->run();
         $user = \Auth::user();
-        if ($request->full && $user && $user->ability('superAdmin', ['stead-show', 'stead-edit'])) {
+        $access = false;
+        if ($user) {
+            if ($user->ability('superAdmin', ['stead-show', 'stead-edit'])) {
+                $access = true;
+            }
+            if ($user->owner && $user->owner->steads->where('id', $id)->isNotEmpty()) {
+                $access = true;
+            }
+        }
+        if ($request->full && $access) {
             return new AdminSteadResource($stead);
         }
         return new SteadResource($stead);

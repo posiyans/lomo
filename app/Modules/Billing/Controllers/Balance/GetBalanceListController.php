@@ -17,13 +17,26 @@ use App\Modules\Stead\Repositories\SteadRepository;
 class GetBalanceListController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('ability:superAdmin|owner,payment-edit|payment-show|invoice-edit|invoice-show');
+    }
+
+
     public function __invoke(GetBalansListValidator $request)
     {
         try {
+            $user = \Auth::user();
+            if ($user->ability('superAdmin', ['payment-edit', 'payment-show', 'invoice-edit', 'invoice-show']) || $user->owner->steads->where('id', $request->stead_id)->isNotEmpty()) {
+                $stead_id = $request->stead_id;
+            } else {
+                throw new \Exception('Ошибка доступа');
+            }
+
             $limit = $request->limit;
             $page = $request->page;
             $find = $request->find;
-            $steads = (new SteadRepository())->findByNumber($find)->findById($request->stead_id)->run();
+            $steads = (new SteadRepository())->findByNumber($find)->findById($stead_id)->run();
             $rate_groups = (new RateGroupRepository())->get();
             $steads->each(function ($item, $key) use ($rate_groups) {
                 $item->stead = [

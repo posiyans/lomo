@@ -11,7 +11,7 @@ class GetKadastrInfoController extends Controller
 
     public function __construct()
     {
-        $this->middleware('ability:superAdmin,stead-show|stead-edit');
+//        $this->middleware('ability:superAdmin|owner,stead-show|stead-edit');
     }
 
     public function __invoke(Request $request)

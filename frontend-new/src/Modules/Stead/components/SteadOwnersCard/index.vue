@@ -1,6 +1,6 @@
 <template>
   <div class="relative-position">
-    <div class="absolute-top-right">
+    <div v-if="edit" class="absolute-top-right">
       <q-btn color="primary" icon="add" flat :to="'/admin/owner/add?stead_id=[' +stead.id + ']'" />
     </div>
     <table v-if="stead" :class="{ 'text-red': proportionErrors }">

@@ -29,7 +29,7 @@
         </div>
       </q-tab-panel>
       <q-tab-panel name="steads">
-        <MyProfile />
+        <SteadsTab />
       </q-tab-panel>
     </q-tab-panels>
   </q-card>
@@ -44,11 +44,13 @@ import BanUserInfo from 'src/Modules/BanUsers/components/BanUserInfo/index.vue'
 import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
 import UserAppealList from 'src/Modules/Appeal/pages/UserApealList/index.vue'
 import ProfileTab from './components/ProfileTab/index.vue'
+import SteadsTab from './components/SteadsTab/index.vue'
 
 export default defineComponent({
   components: {
     MyProfile,
     ProfileTab,
+    SteadsTab,
     BanUserInfo,
     UserAppealList
   },

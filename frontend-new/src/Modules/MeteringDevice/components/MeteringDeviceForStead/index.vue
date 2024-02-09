@@ -1,7 +1,10 @@
 <template>
   <div>
     <AddMeteringDevice v-if="edit" :stead-id="steadId" @close="getData" />
-    <ShowTable :list="devices" :edit="edit" @reload="getData" />
+    <div class="relative-position">
+      <ShowTable :list="devices" :edit="edit" @reload="getData" />
+      <AddInstrumentReading :stead-id="steadId" class="absolute-top-right" @success="getData" style="top: 7px;" />
+    </div>
   </div>
 </template>
 
@@ -11,11 +14,13 @@ import { defineComponent, onMounted, ref } from 'vue'
 import { getMeteringDeviceForStead } from 'src/Modules/MeteringDevice/api/meteringDeviceApi'
 import ShowTable from './components/ShowTable/index.vue'
 import AddMeteringDevice from 'src/Modules/MeteringDevice/components/AddMeteringDevice/Btn.vue'
+import AddInstrumentReading from 'src/Modules/MeteringDevice/components/AddInstrumentReading/index.vue'
 
 export default defineComponent({
   components: {
     ShowTable,
-    AddMeteringDevice
+    AddMeteringDevice,
+    AddInstrumentReading
   },
   props: {
     steadId: {

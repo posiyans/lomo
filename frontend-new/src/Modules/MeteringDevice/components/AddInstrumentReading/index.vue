@@ -2,7 +2,11 @@
   <div>
     <div @click="showDialog">
       <slot>
-        <q-btn icon="add" flat color="primary" />
+        <q-btn icon="add" flat color="primary">
+          <q-tooltip>
+            Добавить показяния приборов
+          </q-tooltip>
+        </q-btn>
       </slot>
     </div>
     <q-dialog v-model="dialogVisible">
@@ -17,7 +21,7 @@
             @submit="onSubmit"
             class="q-gutter-md"
           >
-            <div>
+            <div v-if="!steadId">
               <SteadSelect
                 v-model="currentSteadId"
                 outlined
@@ -25,7 +29,17 @@
                 @update:model-value="changeStead"
               />
             </div>
+            <div v-if="loading"
+                 class="text-center"
+                 style="min-height: 90px;"
+            >
+              <q-spinner
+                color="primary"
+                size="10em"
+              />
+            </div>
             <div
+              v-else
               class="q-gutter-sm"
               style="min-height: 90px;"
             >
@@ -64,7 +78,7 @@ import { computed, defineComponent, ref } from 'vue'
 import MeteringDeviceForSteadSelect from 'src/Modules/MeteringDevice/components/MeteringDeviceForSteadSelect/index.vue'
 import InputDate from 'components/Input/InputDate/index.vue'
 import { addInstrumentReading } from 'src/Modules/MeteringDevice/api/instrumentReadingApi'
-import { errorMessage } from 'src/utils/message'
+import { errorMessage, successMessage } from 'src/utils/message'
 import { date, useQuasar } from 'quasar'
 import SteadSelect from 'src/Modules/Stead/components/SteadSelect/index.vue'
 import { getMeteringDeviceForStead } from 'src/Modules/MeteringDevice/api/meteringDeviceApi'
@@ -137,6 +151,7 @@ export default defineComponent({
         addInstrumentReading(data)
           .then(res => {
             dialogVisible.value = false
+            successMessage('Данные успешно добавлены')
             emit('success')
           })
           .catch(er => {
@@ -148,11 +163,16 @@ export default defineComponent({
       getData()
     }
     const allDevice = ref([])
+    const loading = ref(false)
     const getData = () => {
+      loading.value = true
       getMeteringDeviceForStead(currentSteadId.value)
         .then(res => {
           allDevice.value = res.data.data
           devices.value = {}
+        })
+        .finally(() => {
+          loading.value = false
         })
     }
 
@@ -165,6 +185,7 @@ export default defineComponent({
       setValue,
       required,
       onSubmit,
+      loading,
       dialogVisible,
       allDevice,
       changeStead,

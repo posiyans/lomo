@@ -105,15 +105,11 @@
         </div>
       </q-card-section>
     </div>
-    <div v-if="isOwner">
-      Собственик
-      <ShowOwnerInfo :owner-uid="authStore.user.owner.uid" />
-    </div>
   </div>
 </template>
 
 <script>
-import { computed, defineComponent, onMounted, ref } from 'vue'
+import { defineComponent, onMounted, ref } from 'vue'
 import ChangeMyAvatar from 'src/Modules/Avatar/components/ChangeMyAvatar/index.vue'
 import InputPhone from 'components/Input/InputPhone/index.vue'
 import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
@@ -124,12 +120,10 @@ import SocialMediaList from 'src/Modules/SocialMedia/components/SocialMediaList/
 import SendVerifyEmailBtn from 'src/Modules/Auth/components/SendVerifyEmailBtn/index.vue'
 import { useQuasar } from 'quasar'
 import { errorMessage } from 'src/utils/message'
-import ShowOwnerInfo from 'src/Modules/Owner/components/ShowOwnerInfo/index.vue'
 
 export default defineComponent({
   components: {
     ChangeMyAvatar,
-    ShowOwnerInfo,
     InputPhone,
     InputAndSaveProxy,
     SocialMediaList,
@@ -144,9 +138,6 @@ export default defineComponent({
     const reloadMyData = () => {
       authStore.getMyInfo(true)
     }
-    const isOwner = computed(() => {
-      return authStore.isOwner
-    })
     const sendSuccess = () => {
       $q.dialog({
         title: 'Успех',
@@ -161,7 +152,6 @@ export default defineComponent({
     }
     return {
       sendSuccess,
-      isOwner,
       isEmail,
       required,
       showErrors,

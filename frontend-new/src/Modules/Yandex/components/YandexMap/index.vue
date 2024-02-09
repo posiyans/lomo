@@ -1,6 +1,9 @@
 <template>
   <yandex-map
+    real-settings-location
+
     :settings="{
+      behaviors: [],
       location: {
         center,
         zoom,
@@ -61,7 +64,6 @@ export default defineComponent({
     const getData = () => {
       getYandexMap()
         .then(response => {
-          console.log(response)
           list.value = response.data
           list.value.forEach(item => {
             if (+props.steadId === +item.id) {

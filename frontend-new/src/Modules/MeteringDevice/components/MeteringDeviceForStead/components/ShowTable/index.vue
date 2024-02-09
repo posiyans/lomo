@@ -126,16 +126,6 @@ export default defineComponent({
         name: 'last_value',
         align: 'center',
         label: 'Последние показания'
-      },
-      {
-        name: 'desc',
-        align: 'center',
-        label: 'Примечание',
-      },
-      {
-        name: 'actions',
-        align: 'center',
-        label: ''
       }
     ]
     const reload = () => {

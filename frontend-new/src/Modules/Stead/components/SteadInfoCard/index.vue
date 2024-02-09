@@ -13,7 +13,7 @@
         <RosreestrDataTr v-if="stead.kadastr" :kadastr="stead.kadastr" />
       </table>
     </div>
-    <div class="" style="align-self: stretch; flex-grow: 1;">
+    <div style="align-self: stretch; flex-grow: 1;">
       <YandexMap :stead-id="steadId" class="q-pl-sm" />
     </div>
   </div>
@@ -45,12 +45,6 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const columns = [
-      // {
-      //   label: 'id',
-      //   name: 'id',
-      //   type: 'number',
-      //   readonly: true
-      // },
       {
         label: 'Номер участка',
         name: 'number',

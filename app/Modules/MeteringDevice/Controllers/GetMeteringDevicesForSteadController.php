@@ -15,14 +15,21 @@ class GetMeteringDevicesForSteadController extends Controller
 
     public function __construct()
     {
-        $this->middleware('ability:superAdmin,owner-edit');
+        $this->middleware('ability:superAdmin|owner,access-admin-panel');
     }
 
     public function __invoke(SteadModel $stead)
     {
         try {
-            $devices = (new MeteringDeviceRepository())->forStead($stead->id)->get();
-            return response(['status' => true, 'data' => MeteringDeviceResource::collection($devices)]);
+            $user = \Auth::user();
+            if ($user->ability(['superAdmin'], ['access-admin-panel']) ||
+                $user->owner->steads->where('id', $stead->id)->isNotEmpty()
+            ) {
+                $devices = (new MeteringDeviceRepository())->forStead($stead->id)->get();
+                return response(['status' => true, 'data' => MeteringDeviceResource::collection($devices)]);
+            } else {
+                throw new \Exception('Ошбка доступа');
+            }
         } catch (\Exception $e) {
             return response(['errors' => $e->getMessage()], 450);
         }

@@ -16,17 +16,30 @@ use App\Modules\MeteringDevice\Resources\InstrumentReadingSmallResource;
 class GetPaymentAndInvoiceListController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('ability:superAdmin|owner,payment-edit|payment-show|invoice-edit|invoice-show');
+    }
+
+
     public function __invoke(GetPaymentAndInvoiceListValidator $request)
     {
         try {
             $limit = $request->limit;
             $page = $request->page;
+            $user = \Auth::user();
+            if ($user->ability('superAdmin', ['payment-edit', 'payment-show', 'invoice-edit', 'invoice-show']) || $user->owner->steads->where('id', $request->stead_id)->isNotEmpty()) {
+                $stead_id = $request->stead_id;
+            } else {
+                throw new \Exception('Ошибка доступа');
+            }
+
 
             $result = collect();
             if (!$request->type || $request->type == 'invoice') {
                 $result = $result->merge(
                     (new InvoiceRepository())
-                        ->forStead($request->stead_id)
+                        ->forStead($stead_id)
                         ->forRateGroup($request->rate_group_id)
                         ->forDate($request->date_start, $request->date_end)
                         ->get()->each(function ($item, $key) use ($result) {
@@ -50,7 +63,7 @@ class GetPaymentAndInvoiceListController extends Controller
             if (!$request->type || $request->type == 'payment') {
                 $result = $result->merge(
                     (new PaymentRepository())
-                        ->forStead($request->stead_id)
+                        ->forStead($stead_id)
                         ->forRateGroup($request->rate_group_id)
                         ->forDate($request->date_start, $request->date_end)
                         ->get()->each(function ($item, $key) {

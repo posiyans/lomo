@@ -65,3 +65,10 @@ export function updateSteadOwnerProportion(data) {
     data
   })
 }
+
+export function getMySteads() {
+  return request({
+    url: '/api/v2/stead/get-my-steads',
+    method: 'get'
+  })
+}

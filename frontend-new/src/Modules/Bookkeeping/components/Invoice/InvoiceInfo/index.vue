@@ -96,7 +96,7 @@
               {{ item }}
             </div>
           </div>
-          <div class="absolute-top-right">
+          <div v-if="edit" class="absolute-top-right">
             <q-btn color="primary" flat size="xs" icon="edit" @click="editDescriptionShow = !editDescriptionShow" />
           </div>
         </td>
@@ -115,7 +115,7 @@
               {{ invoice.options?.comment }}
             </div>
           </div>
-          <div class="absolute-top-right">
+          <div v-if="edit" class="absolute-top-right">
             <q-btn color="primary" flat size="xs" icon="edit" @click="editCommentShow = !editCommentShow" />
           </div>
         </td>
