@@ -13,7 +13,7 @@
         <RosreestrDataTr v-if="stead.kadastr" :kadastr="stead.kadastr" />
       </table>
     </div>
-    <div style="align-self: stretch; flex-grow: 1;">
+    <div v-if="false" style="align-self: stretch; flex-grow: 1;">
       <YandexMap :stead-id="steadId" class="q-pl-sm" />
     </div>
   </div>
