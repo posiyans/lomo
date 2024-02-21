@@ -2,7 +2,7 @@
 
 namespace App\Modules\Appeal\Repositories;
 
-use App\Modules\Appeal\Modules\AppealModel;
+use App\Modules\Appeal\Models\AppealModel;
 
 class AppealRepository
 {
@@ -28,7 +28,7 @@ class AppealRepository
     public function type($type)
     {
         if ($type) {
-            $this->query->where('type', $type);
+            $this->query->where('appeal_type_id', $type);
         }
         return $this;
     }

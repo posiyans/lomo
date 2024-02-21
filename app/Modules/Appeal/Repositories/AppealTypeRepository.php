@@ -2,7 +2,7 @@
 
 namespace App\Modules\Appeal\Repositories;
 
-use App\Modules\Appeal\Modules\AppealTypeModel;
+use App\Modules\Appeal\Models\AppealTypeModel;
 
 class AppealTypeRepository
 {

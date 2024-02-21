@@ -41,10 +41,6 @@ use Auth;
  * @method static \Illuminate\Database\Eloquent\Builder|UserAnswerModel whereSteadId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserAnswerModel whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserAnswerModel whereUserId($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
  * @mixin \Eloquent
  */
 class UserAnswerModel extends MyModel

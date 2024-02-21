@@ -1,33 +1,100 @@
 <template>
   <div>
-    <div class="page-title">Мой участок</div>
-    <ListOfOwnerStead :owner-uid="authStore.user.owner_uid" />
+    <q-card>
+      <q-card-section>
+        <div v-if="multiStead">
+          <q-tabs
+            v-model="tab"
+            align="left"
+            class="text-teal"
+            :breakpoint="0"
+          >
+
+            <q-tab
+              v-for="stead  in steads"
+              :key="stead.id"
+              :name="stead.id"
+              :label="stead.number"
+            />
+          </q-tabs>
+          <q-separator color="teal" />
+          <q-tab-panels v-model="tab" animated>
+            <q-tab-panel
+              v-for="stead  in steads"
+              :key="stead.id"
+              :name="stead.id"
+              class="q-pa-none"
+            >
+              <SteadTab :stead-id="stead.id" />
+            </q-tab-panel>
+          </q-tab-panels>
+        </div>
+        <div v-else>
+          <div class="q-pl-sm text-primary">
+            Участок: {{ currentStead.number }}
+          </div>
+          <SteadTab v-if="tab" :stead-id="tab" />
+        </div>
+      </q-card-section>
+    </q-card>
   </div>
 </template>
 
 <script>
 /* eslint-disable */
-import { defineComponent, onMounted, ref } from 'vue'
+import { computed, defineComponent, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import ListOfOwnerStead from 'src/Modules/Stead/components/ListOfOwnerStead/index.vue'
+import MyProfile from 'src/Modules/Auth/page/MyProfile/index.vue'
+import BanUserInfo from 'src/Modules/BanUsers/components/BanUserInfo/index.vue'
 import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
+import UserAppealList from 'src/Modules/Appeal/pages/UserApealList/index.vue'
+import ShowOwnerInfo from 'src/Modules/Owner/components/ShowOwnerInfo/index.vue'
+import { getMySteads } from 'src/Modules/Stead/api/stead'
+import SteadTab from './components/SteadTab/index.vue'
 
 export default defineComponent({
   components: {
-    ListOfOwnerStead
+    MyProfile,
+    SteadTab,
+    ShowOwnerInfo,
+    BanUserInfo,
+    UserAppealList
   },
   props: {},
   setup(props, { emit }) {
-    const data = ref(null)
+    const tab = ref(null)
+    const steads = ref([])
     const router = useRouter()
     const route = useRoute()
     const authStore = useAuthStore()
-    onMounted(() => {
+    const isOwner = computed(() => {
+      return authStore.isOwner
+    })
+    const multiStead = computed(() => {
+      return steads.value.length > 1
+    })
+    const currentStead = computed(() => {
+      return steads.value.find(i => i.id === tab.value) || {}
+    })
 
+    const getData = () => {
+      getMySteads()
+        .then(res => {
+          steads.value = res.data.data
+          tab.value = steads.value[0].id
+        })
+
+    }
+    onMounted(() => {
+      getData()
     })
     return {
-      data,
-      authStore
+      tab,
+      isOwner,
+      steads,
+      authStore,
+      multiStead,
+      currentStead
     }
   }
 })

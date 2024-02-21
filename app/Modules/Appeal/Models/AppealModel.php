@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Modules\Appeal\Modules;
+namespace App\Modules\Appeal\Models;
 
-use App\Models\Message\MessageModel;
 use App\Models\MyModel;
 use App\Modules\Comment\Interfaces\CommentedInterface;
 use App\Modules\File\Models\FileModel;
@@ -11,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 
 /**
- * App\Modules\Appeal\Modules\AppealModel
+ * App\Modules\Appeal\Models\AppealModel
  *
  * @property int $id
  * @property int $user_id

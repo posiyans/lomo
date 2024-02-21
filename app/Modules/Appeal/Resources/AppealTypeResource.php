@@ -11,7 +11,9 @@ class AppealTypeResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'label' => $this->label
+            'label' => $this->label,
+            'description' => $this->description,
+            'public' => $this->public ? 1 : 0,
         ];
     }
 }

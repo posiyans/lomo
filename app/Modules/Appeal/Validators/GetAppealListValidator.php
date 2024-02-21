@@ -58,7 +58,7 @@ class GetAppealListValidator extends FormRequest
             'type' => [
                 'integer',
                 'nullable',
-                'exists:App\Modules\Appeal\Modules\AppealTypeModel,id',
+                'exists:App\Modules\Appeal\Models\AppealTypeModel,id',
             ],
             'status' => [
                 'string'

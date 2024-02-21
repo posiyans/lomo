@@ -3,7 +3,7 @@
 namespace App\Modules\Appeal\Controlles;
 
 use App\Http\Controllers\Controller;
-use App\Modules\Appeal\Modules\AppealModel;
+use App\Modules\Appeal\Models\AppealModel;
 use Illuminate\Support\Facades\Auth;
 
 /**

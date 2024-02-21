@@ -2,7 +2,7 @@
 
 namespace App\Modules\Appeal\Actions;
 
-use App\Modules\Appeal\Modules\AppealModel;
+use App\Modules\Appeal\Models\AppealModel;
 
 /**
  *

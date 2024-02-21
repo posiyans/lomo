@@ -5,7 +5,7 @@
         <DeleteOwnerBtn :owner-uid="ownerUid" @success="toOwnerList" />
       </q-fab>
     </div>
-    <div class="page-title">
+    <div v-if="admin" class="page-title">
       {{ fullName }}
     </div>
     <div>
@@ -50,7 +50,7 @@
                 <UserNameByUid :uid="owner.user_uid" />
               </div>
               <div>
-                <ChangeUserOwher :owner="owner" @success="getUserData" />
+                <ChangeUserOwner :owner="owner" @success="getUserData" />
               </div>
             </div>
           </td>
@@ -70,7 +70,7 @@ import OwnerUserFieldValueEdit from 'src/Modules/Owner/components/OwnerUserField
 import FieldValueBlock from './components/FieldValueBlock/index.vue'
 import AddSteadToOwner from 'src/Modules/Owner/components/AddSteadToOwner/index.vue'
 import DeleteOwnerBtn from 'src/Modules/Owner/components/DeleteOwnerBtn/index.vue'
-import ChangeUserOwher from 'src/Modules/Owner/components/ChangeUserOwher/index.vue'
+import ChangeUserOwner from 'src/Modules/Owner/components/ChangeUserOwner/index.vue'
 import UserNameByUid from 'src/Modules/Users/components/UserNameByUid/index.vue'
 
 export default defineComponent({
@@ -80,7 +80,7 @@ export default defineComponent({
     DeleteOwnerBtn,
     UserNameByUid,
     AddSteadToOwner,
-    ChangeUserOwher
+    ChangeUserOwner
   },
   props: {
     ownerUid: {

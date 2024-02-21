@@ -20,7 +20,16 @@ const routes = [
         path: '',
         component: () => import('layouts/UserLayout/index.vue'),
         children: [
-          { path: '', component: () => import('src/pages/MainPage/index.vue') }
+          { path: '', component: () => import('src/pages/MainPage/index.vue') },
+          {
+            path: 'profile',
+            component: () => import('src/Modules/PersonalArea/pages/Profile/index.vue'),
+            meta: {
+              title: 'Профиль',
+              roles: ['owner', 'user'],
+              redirect: 'UserLogin'
+            }
+          }
         ]
       },
       personalAreaRouter,

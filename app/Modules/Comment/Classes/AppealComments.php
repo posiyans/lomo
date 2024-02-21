@@ -2,7 +2,7 @@
 
 namespace App\Modules\Comment\Classes;
 
-use App\Modules\Appeal\Modules\AppealModel as Model;
+use App\Modules\Appeal\Models\AppealModel as Model;
 use App\Modules\User\Models\UserModel;
 
 class AppealComments extends AbstractComments

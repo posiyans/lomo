@@ -22,7 +22,7 @@
             </div>
           </template>
           <q-list>
-            <q-item clickable v-close-popup to="/personal-area/profile">
+            <q-item clickable v-close-popup to="/profile">
               <q-item-section>
                 <q-item-label>Профиль</q-item-label>
               </q-item-section>

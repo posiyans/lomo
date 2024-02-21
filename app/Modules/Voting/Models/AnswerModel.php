@@ -29,10 +29,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|AnswerModel whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|AnswerModel withTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|AnswerModel withoutTrashed()
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Voting\UserAnswerModel> $userAnswers
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Voting\UserAnswerModel> $userAnswers
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Voting\UserAnswerModel> $userAnswers
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Voting\UserAnswerModel> $userAnswers
  * @mixin \Eloquent
  */
 class AnswerModel extends Model
@@ -63,7 +59,8 @@ class AnswerModel extends Model
     /**
      *получить голосование
      */
-    public function voting(){
+    public function voting()
+    {
         return $this->question->voting;
     }
 

@@ -14,13 +14,15 @@ class GetMyInfoController extends MyController
     public function __invoke()
     {
         $user = Auth::user();
+        $roles = $user->roles->map(function ($role) {
+            return $role->name;
+        });
         $data = [
             'user' => new UserInfoResource($user),
-            'permissions' => array_merge(['user'], (new GetPermissionsForUserRepository($user))->toArray()),
-            'roles' => $user->roles->map(function ($role) {
-                return $role->name;
-            }),
+            'permissions' => array_merge(['user'], (new GetPermissionsForUserRepository($user))->toArray(), $roles->toArray()),
+            'roles' => $roles,
         ];
+
         return response($data);
     }
 

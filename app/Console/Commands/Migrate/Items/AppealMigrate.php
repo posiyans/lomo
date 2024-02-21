@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands\Migrate\Items;
 
-use App\Modules\Appeal\Modules\AppealModel as AppealModelOriginal;
+use App\Modules\Appeal\Models\AppealModel as AppealModelOriginal;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 

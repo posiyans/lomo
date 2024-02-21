@@ -3,13 +3,17 @@ import { fetchAppealType } from 'src/Modules/Appeal/api/appealTypeApi'
 
 export function useAppealType() {
   const type = ref([])
-  onMounted(() => {
+  const getType = () => {
     fetchAppealType()
       .then(res => {
         type.value = res.data.data
       })
+  }
+  onMounted(() => {
+    getType()
   })
   return {
-    type
+    type,
+    getType
   }
 }

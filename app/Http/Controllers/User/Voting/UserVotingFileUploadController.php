@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Stead;
 use App\Models\Voting\VotingFileModel;
 use App\Models\Voting\VotingModel;
-use App\Modules\Appeal\Modules\AppealModel;
+use App\Modules\Appeal\Models\AppealModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Mail;

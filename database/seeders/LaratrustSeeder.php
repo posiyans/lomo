@@ -102,6 +102,7 @@ class LaratrustSeeder extends Seeder
 
         'appeal-show' => 'Просмотр обращений',
         'appeal-edit' => 'Обработка обращений',
+        'appeal-setting' => 'Настойка параметров обращений',
 
         'user-edit' => 'Редактирование пользователей',
         'user-show' => 'Просмотр пользователей',

@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Modules\Appeal\Modules\AppealTypeModel;
+use App\Modules\Appeal\Models\AppealTypeModel;
 use Illuminate\Database\Seeder;
 
 class AppealTypeSeeder extends Seeder
@@ -16,7 +16,11 @@ class AppealTypeSeeder extends Seeder
     {
         echo 'AppealTypeSeeder ' . "\n";
         $fields = [
-            'Участок'
+            [
+                'label' => 'Участок',
+                'description' => 'Обращение связанные с вашим участком'
+            ]
+
         ];
 
         foreach ($fields as $item) {
@@ -27,7 +31,9 @@ class AppealTypeSeeder extends Seeder
     protected function createModel($item)
     {
         $model = new AppealTypeModel();
-        $model->label = $item;
+        $model->label = $item['label'];
+        $model->description = $item['description'] ?? '';
+        $model->public = true;
         $model->save();
     }
 

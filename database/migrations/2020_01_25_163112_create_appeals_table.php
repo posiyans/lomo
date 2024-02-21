@@ -16,6 +16,8 @@ class CreateAppealsTable extends Migration
         Schema::create('appeal_type_models', function (Blueprint $table) {
             $table->id();
             $table->string('label')->nullable()->comment('тип обращения');
+            $table->boolean('public')->default(true)->comment('Доступен пользователю');
+            $table->string('description')->nullable()->comment('Описание типа');
             $table->softDeletes();
             $table->timestamps();
         });

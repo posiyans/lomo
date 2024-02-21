@@ -7,3 +7,18 @@ export function fetchAppealType(query) {
     params: query
   })
 }
+
+export function updateAppealType(id, data) {
+  return request({
+    url: '/api/v2/appeal/type/' + id,
+    method: 'put',
+    data
+  })
+}
+
+export function deleteAppealType(id) {
+  return request({
+    url: '/api/v2/appeal/type/' + id,
+    method: 'delete'
+  })
+}

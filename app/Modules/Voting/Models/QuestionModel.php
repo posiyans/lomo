@@ -4,10 +4,9 @@ namespace App\Modules\Voting\Models;
 
 use App\Models\MyModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Auth;
 
 /**
- * App\Modules\Voting\Models\QuestionModel
+ * App\Models\Voting\Models\QuestionModel
  *
  * @property int $id
  * @property int $voting_id
@@ -36,19 +35,12 @@ use Auth;
  * @method static \Illuminate\Database\Eloquent\Builder|QuestionModel whereVotingId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|QuestionModel withTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|QuestionModel withoutTrashed()
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\Voting\Models\AnswerModel> $answers
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\Voting\Models\AnswerModel> $answers
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\Voting\Models\AnswerModel> $answers
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\Voting\Models\AnswerModel> $answers
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
  * @mixin \Eloquent
  */
 class QuestionModel extends MyModel
 {
     use SoftDeletes;
+
 //    protected $fillable= [];
 
     public function answers()

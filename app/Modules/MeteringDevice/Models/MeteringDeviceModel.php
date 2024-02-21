@@ -12,7 +12,7 @@ use App\Modules\Stead\Models\SteadModel;
  */
 
 /**
- * App\Modules\MeteringDevice\Models\MeteringDevice
+ * App\Models\MeteringDevice\Models\MeteringDevice
  *
  * @property int $id
  * @property string $type_id
@@ -21,13 +21,13 @@ use App\Modules\Stead\Models\SteadModel;
  * @property bool|null $enable
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\File\Models\FileModel> $files
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\File\Models\FileModel> $files
  * @property-read int|null $files_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Log> $log
  * @property-read int|null $log_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Message\MessageModel> $message
  * @property-read int|null $message_count
- * @property-read \App\Modules\Receipt\Models\ReceiptTypeModels|null $receiptType
+ * @property-read \App\Models\Receipt\Models\ReceiptTypeModels|null $receiptType
  * @method static \Illuminate\Database\Eloquent\Builder|MeteringDevice newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|MeteringDevice newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|MeteringDevice query()

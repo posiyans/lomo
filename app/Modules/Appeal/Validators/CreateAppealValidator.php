@@ -23,7 +23,7 @@ class CreateAppealValidator extends FormRequest
             ],
             'uid' => [
                 'required',
-                'unique:App\Modules\Appeal\Modules\AppealModel,uid',
+                'unique:App\Modules\Appeal\Models\AppealModel,uid',
             ],
             'title' => [
                 'required',
@@ -38,7 +38,7 @@ class CreateAppealValidator extends FormRequest
             'appeal_type_id' => [
                 'integer',
                 'nullable',
-                'exists:App\Modules\Appeal\Modules\AppealTypeModel,id',
+                'exists:App\Modules\Appeal\Models\AppealTypeModel,id',
             ]
         ];
     }

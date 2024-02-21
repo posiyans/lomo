@@ -140,9 +140,9 @@ export default defineComponent({
 </style>
 
 <!--<script>-->
-<!--import LoginByVkBtn from 'src/Modules/Auth/components/LoginByVkBtn/index.vue'-->
+<!--import LoginByVkBtn from 'src/Models/Auth/components/LoginByVkBtn/index.vue'-->
 <!--import { defineComponent } from 'vue'-->
-<!--import { useUserStore } from 'src/Modules/Auth/store/user-store'-->
+<!--import { useUserStore } from 'src/Models/Auth/store/user-store'-->
 
 <!--export default defineComponent({-->
 <!--  components: {-->

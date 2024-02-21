@@ -2,7 +2,7 @@
 
 namespace App\Modules\Comment\Repositories;
 
-use App\Modules\Appeal\Modules\AppealModel;
+use App\Modules\Appeal\Models\AppealModel;
 use App\Modules\Article\Models\ArticleModel;
 use App\Modules\Comment\Classes\AppealComments;
 use App\Modules\Comment\Classes\ArticleComments;
