@@ -7,39 +7,41 @@
         @reload="getData"
         @scroll="scrollTo"
       >
-        <div v-if="item.options?.reply" class="q-pl-sm" @click="scrollTo(item.options.reply)">
-          <ItemBlock
-            :item="refBlock[item.options.reply]?.item"
-            reply
-          />
-        </div>
+        <ItemBlock
+          reply
+          v-if="item.options?.reply"
+          :item="refBlock[item.options.reply]?.item"
+          @click="scrollTo(item.options.reply)"
+        />
+        <template v-slot:header>
+          <div v-if="item.actions.write && !list.ban.value.status" class="row q-pr-lg no-wrap">
+            <div class="cursor-pointer message-btn message-btn_reply q-px-xs" @click="messageBlock.replyMessage(item)">
+              <q-icon name="reply">
+                <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
+                  <strong>Ответить</strong>
+                </q-tooltip>
+              </q-icon>
+            </div>
+            <div v-if="item.actions.delete" class="cursor-pointer message-btn message-btn_delete  q-px-xs" @click="deleteItem(item)">
+              <q-icon name="close">
+                <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
+                  <strong>Удалить</strong>
+                </q-tooltip>
+              </q-icon>
+            </div>
+            <AddBanUserBtn v-if="item.actions.ban" :user-uid="item.user.uid" :type="messageBlock.objectType" :object-uid="messageBlock.objectUid">
+              <div class="cursor-pointer message-btn message-btn_delete  q-px-xs">
+                <q-icon name="block">
+                  <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
+                    <span>Бан пользователя</span>
+                  </q-tooltip>
+                </q-icon>
+              </div>
+            </AddBanUserBtn>
+          </div>
+        </template>
       </ItemBlock>
       <q-separator style="margin-left: 55px;" class="q-mt-xs" />
-      <div v-if="item.actions.write && !list.ban.value.status" class="absolute-top-right row q-pr-lg">
-        <div class="cursor-pointer message-btn message-btn_reply q-px-xs" @click="messageBlock.replyMessage(item)">
-          <q-icon name="reply">
-            <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
-              <strong>Ответить</strong>
-            </q-tooltip>
-          </q-icon>
-        </div>
-        <div v-if="item.actions.delete" class="cursor-pointer message-btn message-btn_delete  q-px-xs" @click="deleteItem(item)">
-          <q-icon name="close">
-            <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
-              <strong>Удалить</strong>
-            </q-tooltip>
-          </q-icon>
-        </div>
-        <AddBanUserBtn v-if="item.actions.ban" :user-uid="item.user.uid" :type="messageBlock.objectType" :object-uid="messageBlock.objectUid">
-          <div class="cursor-pointer message-btn message-btn_delete  q-px-xs">
-            <q-icon name="block">
-              <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
-                <span>Бан пользователя</span>
-              </q-tooltip>
-            </q-icon>
-          </div>
-        </AddBanUserBtn>
-      </div>
     </div>
     <div v-if="list.showMessage.value.length < list.messageList.value.length" class="q-px-lg text-primary cursor-pointer" @click="messageBlock.nextMessage">
       Показать следующие...
@@ -181,7 +183,7 @@ export default defineComponent({
 <style scoped lang="scss">
 .message-btn {
   color: $grey;
-  font-size: 1.5em;
+  font-size: 1em;
 }
 
 .message-btn_delete {

@@ -13,6 +13,7 @@ class GetMyInfoController extends MyController
 
     public function __invoke()
     {
+        //todo запихать это в ресурс
         $user = Auth::user();
         $roles = $user->roles->map(function ($role) {
             return $role->name;

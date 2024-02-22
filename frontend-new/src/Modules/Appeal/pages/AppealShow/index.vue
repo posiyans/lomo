@@ -27,13 +27,20 @@
                 </div>
               </div>
             </div>
-            <q-chip class="text-teal">
-              {{ appeal.type.label }}
-            </q-chip>
+            <div>
+              <q-chip class="text-teal">
+                {{ appeal.type.label }}
+                <q-tooltip>
+                  {{ appeal.type.description }}
+
+                </q-tooltip>
+
+              </q-chip>
+            </div>
           </div>
           <q-space />
           <div>
-            <q-btn v-if="appeal.status === 'open'" rounded label="Закрыть" color="negative" @click="closeAppealAction" />
+            <q-btn v-if="appeal.status === 'open'" rounded outline label="Закрыть обращение" color="negative" @click="closeAppealAction" />
             <q-btn v-if="appeal.status === 'close'" label="Закрыто" color="secondary" disable />
           </div>
         </div>
@@ -51,7 +58,7 @@
         </div>
       </q-card-section>
       <q-separator />
-      <q-card-section class="bg-grey-1">
+      <q-card-section class="bg-grey-1 q-pa-none">
         <ChatBlock :appeal="appeal" />
       </q-card-section>
     </q-card>

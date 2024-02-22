@@ -1,31 +1,29 @@
 <template>
   <div v-if="item">
-    <div class="row no-wrap relative-position" :class="{ 'reply-block': reply, 'cursor-pointer': reply }">
+    <div class="row no-wrap" :class="{ 'reply-block': reply, 'cursor-pointer': reply }">
       <div v-if="fullView" class="q-px-sm">
         <div class="text-center q-pt-sm">
           <UserAvatarByUid :uid="item.user.uid" size="40px" />
         </div>
       </div>
-      <div class="col">
-        <div class="row items-center q-col-gutter-sm">
+      <div class="">
+        <div class="row items-center q-col-gutter-sm no-wrap">
           <div class="text-weight-bold text-primary">
             {{ item.user.name }}
           </div>
-          <ShowTime v-if="fullView" :time="item.updated_at" class="text-grey-8" style="font-size: 0.9em" />
-          <slot name="header"></slot>
+          <ShowTime v-if="fullView" :time="item.updated_at" class="text-grey-8 text-small-85" />
+          <q-space />
+          <div>
+            <slot name="header"></slot>
+          </div>
         </div>
         <slot></slot>
         <div v-html="messageTextHtml"
-             :class=" { 'q-py-sm': fullView, 'text-strike' : item.delete, 'text-grey':  item.delete, ellipsis: reply, 'reply-block__message': reply, 'message-block__message': fullView }" />
+             class="q-py-sm"
+             :class=" { 'text-strike' : item.delete, 'text-grey':  item.delete, 'reply-block__message': reply, 'message-block__message': fullView }" />
         <FilesListShow v-if="!item.delete" :model-value="item.files" show-preview />
       </div>
-      <div class="q-px-sm absolute-bottom-right text-grey-8 row ">
-        <div v-if="edit" class="q-pr-sm">
-          ред.
-        </div>
-      </div>
     </div>
-
   </div>
   <div v-else>
     <div class="text-grey reply-block">
@@ -37,8 +35,7 @@
 
 <script>
 /* eslint-disable */
-import { computed, defineComponent, onMounted, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { computed, defineComponent, ref } from 'vue'
 import UserAvatarByUid from 'src/Modules/Avatar/components/UserAvatarByUid/index.vue'
 import { deleteMessage } from 'src/Modules/Comments/api/commentApi.js'
 import ShowTime from 'src/components/ShowTime/index.vue'
@@ -64,8 +61,6 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const data = ref(null)
-    const router = useRouter()
-    const route = useRoute()
     const $q = useQuasar()
     const edit = computed(() => {
       return props.item.created_at !== props.item.updated_at
@@ -108,9 +103,6 @@ export default defineComponent({
           })
       })
     }
-    onMounted(() => {
-
-    })
     return {
       fullView,
       replyMessage,
@@ -129,9 +121,8 @@ export default defineComponent({
   border-left-style: solid;
   border-left-width: 4px;
   border-left-color: $grey-5;
-  padding-left: 5px;
+  padding-left: 8px;
   color: $grey-8;
-
 
   &:hover {
     border-left-color: $grey;
@@ -139,8 +130,11 @@ export default defineComponent({
 }
 
 .reply-block__message {
-  max-width: 70%;
-  height: 1.5em;
+  max-width: 70vw;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  height: 2.5em;
 }
 
 </style>

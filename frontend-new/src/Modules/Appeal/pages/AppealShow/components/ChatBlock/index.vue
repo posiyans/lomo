@@ -42,7 +42,7 @@ export default defineComponent({
       if (messageCount.value === 0) {
         return ''
       }
-      return 'Всего ' + messageCount.value + ' ' + declOfNum(messageCount.value, ['сообшщение', 'сообщения', 'сообщений'])
+      return 'Всего ' + messageCount.value + ' ' + declOfNum(messageCount.value, ['сообщение', 'сообщения', 'сообщений'])
     })
     const appealClose = computed(() => {
       return props.appeal.status === 'close'

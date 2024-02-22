@@ -31,7 +31,8 @@ class AppealResource extends JsonResource
             'type' =>
                 [
                     'id' => $this->type->id,
-                    'label' => $this->type->label
+                    'label' => $this->type->label,
+                    'description' => $this->type->description,
                 ],
             'status' => $this->status,
             'close' => [

@@ -21,7 +21,12 @@
       <template v-slot:body-cell-label="props">
         <q-td :props="props">
           <div class="">
-            {{ props.row.label }}
+            <div v-if="props.row.label">
+              {{ props.row.label }}
+            </div>
+            <div v-else class="text-grey text-small-85">
+              Редактировать
+            </div>
             <q-popup-edit v-model="props.row.label" title="Тип" buttons persistent v-slot="scope" @save="saveData(props.row)">
               <q-input v-model="scope.value" autofocus />
             </q-popup-edit>
@@ -31,7 +36,12 @@
       <template v-slot:body-cell-description="props">
         <q-td :props="props">
           <div class="">
-            {{ props.row.description }}
+            <div v-if="props.row.description">
+              {{ props.row.description }}
+            </div>
+            <div v-else class="text-grey text-small-85">
+              Редактировать
+            </div>
             <q-popup-edit v-model="props.row.description" title="Описание" buttons persistent v-slot="scope" @save="saveData(props.row)">
               <q-input v-model="scope.value" autofocus />
             </q-popup-edit>

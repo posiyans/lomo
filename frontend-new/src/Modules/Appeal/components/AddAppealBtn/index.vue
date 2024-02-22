@@ -20,6 +20,7 @@
               <AppealTypeSelect
                 v-model="data.appeal_type_id"
                 outlined
+                show-description
                 label="Категория обращения"
               />
             </div>

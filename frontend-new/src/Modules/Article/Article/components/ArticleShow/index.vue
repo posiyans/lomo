@@ -1,6 +1,6 @@
 <template>
   <q-card class="q-mb-lg">
-    <q-card-section class="relative-position row items-center q-col-gutter-md q-pb-none">
+    <q-card-section class="relative-position row items-center q-col-gutter-md q-pb-none no-wrap">
       <div>
         <div class="text-weight-bold text-h6 overflow-hidden  ">
           {{ article.title }}
@@ -18,7 +18,7 @@
           <StatusShow :model-value="article.status" />
         </q-btn>
       </div>
-      <div v-if="authStore.checkPermission('article-edit') " class="">
+      <div v-if="showEdit">
         <q-btn icon="settings" color="primary" flat :to="'/admin/article/edit/' + article.id" />
       </div>
     </q-card-section>
@@ -44,6 +44,7 @@ import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
 import FilesListShow from 'src/Modules/Files/components/FilesListShow/index.vue'
 import StatusShow from 'src/Modules/Article/Article/components/StatusShow/index.vue'
 import ArticleChatBlock from './components/ArticleChatBlock/index.vue'
+import { useQuasar } from 'quasar'
 
 export default defineComponent({
   components: {
@@ -60,6 +61,7 @@ export default defineComponent({
   },
   setup(props) {
     const authStore = useAuthStore()
+    const $q = useQuasar()
     const showBody = computed(() => {
       if (authStore.permissions.includes('owner')) {
         return true
@@ -69,9 +71,13 @@ export default defineComponent({
       }
       return false
     })
+    const showEdit = computed(() => {
+      return $q.screen.width > 600 && authStore.checkPermission('article-edit')
+    })
 
     return {
       showBody,
+      showEdit,
       authStore
     }
   }

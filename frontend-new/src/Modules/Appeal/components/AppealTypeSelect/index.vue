@@ -11,12 +11,13 @@
     option-value="id"
     option-label="label"
     @update:model-value="setValue"
+    :hint="hintText"
   />
 </template>
 
 <script>
 /* eslint-disable */
-import { computed, defineComponent, onMounted, ref } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
 import { useAppealType } from 'src/Modules/Appeal/hooks/useAppealType'
 
 export default defineComponent({
@@ -35,6 +36,10 @@ export default defineComponent({
       default: undefined
     },
     outlined: {
+      type: Boolean,
+      default: false
+    },
+    showDescription: {
       type: Boolean,
       default: false
     },
@@ -57,14 +62,21 @@ export default defineComponent({
       }
       return type.value
     })
+    const currentValue = computed(() => {
+      return type.value.find(i => i.id === props.modelValue)
+    })
+    const hintText = computed(() => {
+      if (props.showDescription && currentValue.value) {
+        return currentValue.value.description || undefined
+      }
+      return undefined
+    })
     const setValue = (val) => {
       emit('update:model-value', val)
     }
-    onMounted(() => {
-
-    })
     return {
       data,
+      hintText,
       setValue,
       type,
       showType

@@ -34,12 +34,17 @@ class LoginController extends Controller
         if (Auth::guard()->attempt($credentials)) {
             // togo добавить логирование входа по паролю + тоже самое через соц сети
             $user = Auth::user();
-            $permissions = array_merge(['user'], (new GetPermissionsForUserRepository($user))->toArray());
             $roles = $user->roles->map(function ($role) {
                 return $role->name;
             });
+            $permissions = array_merge(['user'], (new GetPermissionsForUserRepository($user))->toArray(), $roles->toArray());
             Session::put('user_uid', $user->uid);
-            return response(['status' => 'done', 'user' => Auth::user(), 'permissions' => $permissions, 'roles' => $roles]);
+            return response([
+                'status' => 'done',
+                'user' => Auth::user(),
+                'permissions' => $permissions,
+                'roles' => $roles
+            ]);
         }
         $log = new LogModel();
         $log->description = 'bad login or password';

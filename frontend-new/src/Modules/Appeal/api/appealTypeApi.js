@@ -8,6 +8,14 @@ export function fetchAppealType(query) {
   })
 }
 
+export function createAppealType(data) {
+  return request({
+    url: '/api/v2/appeal/type/',
+    method: 'post',
+    data
+  })
+}
+
 export function updateAppealType(id, data) {
   return request({
     url: '/api/v2/appeal/type/' + id,
