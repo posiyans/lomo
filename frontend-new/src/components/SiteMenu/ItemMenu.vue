@@ -104,9 +104,11 @@ export default defineComponent({
 </script>
 
 <style lang='scss'>
-.q-expansion-item__content {
-  margin-left: 26px;
-  padding-left: 4px;
-  border-left: 1px solid rgba(0, 0, 0, .12);
-}
+// todo переделать имя класса
+
+//.q-expansion-item__content {
+//  margin-left: 26px;
+//  padding-left: 4px;
+//  border-left: 1px solid rgba(0, 0, 0, .12);
+//}
 </style>

@@ -1,7 +1,9 @@
 <template>
   <div>
-    <div class="row items-center justify-between">
-      <FilterBlock v-model="listQuery" class="q-pb-sm" />
+    <div class="row items-center no-wrap justify-between q-pb-sm">
+      <DropDownBlock only-mobile :max-width="580">
+        <FilterBlock v-model="listQuery" />
+      </DropDownBlock>
       <slot></slot>
     </div>
     <TableBlock :list="list" :add-fio="!userUid" />
@@ -17,9 +19,11 @@ import LoadMore from 'src/components/LoadMore/index.vue'
 import { fetchAppealList } from 'src/Modules/Appeal/api/appealApi'
 import FilterBlock from './components/FilterBlock/index.vue'
 import TableBlock from './components/TableBlock/index.vue'
+import DropDownBlock from 'components/DropDownBlock/index.vue'
 
 export default defineComponent({
   components: {
+    DropDownBlock,
     LoadMore,
     FilterBlock,
     TableBlock

@@ -1,9 +1,9 @@
 <template>
   <div>
     <AddMeteringDevice v-if="edit" :stead-id="steadId" @close="getData" />
-    <div class="relative-position">
+    <div class="text-right">
+      <AddInstrumentReading :stead-id="steadId" @success="getData" />
       <ShowTable :list="devices" :edit="edit" @reload="getData" />
-      <AddInstrumentReading :stead-id="steadId" class="absolute-top-right" @success="getData" style="top: 7px;" />
     </div>
   </div>
 </template>

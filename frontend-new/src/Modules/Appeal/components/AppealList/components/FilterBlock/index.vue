@@ -1,5 +1,5 @@
 <template>
-  <div class="row items-center q-col-gutter-sm">
+  <div class="row items-center q-col-gutter-sm justify-center">
     <div class="filter-item">
       <q-input
         :model-value="modelValue.find"

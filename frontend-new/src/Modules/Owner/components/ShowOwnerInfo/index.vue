@@ -9,14 +9,20 @@
       {{ fullName }}
     </div>
     <div>
-      <table>
+      <q-markup-table
+        flat
+        bordered
+        separator="cell"
+        style="max-width: 95vw;"
+      >
+        <tbody>
         <tr v-for="item in fieldList" :key="item.name">
-          <td>
+          <td style="max-width: 50vw;">
             <div class="ellipsis text-grey-8">
               {{ item.label }}
             </div>
           </td>
-          <td style="min-width: 300px;">
+          <td>
             <FieldValueBlock v-model="owner[item.name]" :owner-uid="ownerUid" :field="item" :editable="editable" @success="getUserData" />
           </td>
         </tr>
@@ -55,7 +61,8 @@
             </div>
           </td>
         </tr>
-      </table>
+        </tbody>
+      </q-markup-table>
     </div>
   </div>
 </template>
@@ -152,13 +159,5 @@ export default defineComponent({
 </script>
 
 <style scoped lang='scss'>
-table {
-  border-collapse: collapse;
-}
 
-td, th {
-  border: 1px solid #000000;
-  padding: 3px 10px;
-  line-height: 1.5em;
-}
 </style>

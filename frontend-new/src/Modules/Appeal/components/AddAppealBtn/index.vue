@@ -47,7 +47,7 @@
         </q-card-section>
         <q-card-section>
           <div>
-            <q-btn label="Создать" color="primary" @click="saveData" />
+            <q-btn label="Создать" color="primary" :loading="loading" @click="saveData" />
           </div>
         </q-card-section>
       </q-card>
@@ -58,7 +58,6 @@
 <script>
 /* eslint-disable */
 import { defineComponent, onMounted, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
 import AppealTypeSelect from 'src/Modules/Appeal/components/AppealTypeSelect/index.vue'
 import { createAppeal } from 'src/Modules/Appeal/api/appealApi'
 import { errorMessage } from 'src/utils/message'
@@ -87,9 +86,9 @@ export default defineComponent({
       appeal_type_id: 1
     })
     const dialogVisible = ref(null)
-    const router = useRouter()
-    const route = useRoute()
+    const loading = ref(false)
     const saveData = () => {
+      loading.value = true
       createAppeal(data.value)
         .then(res => {
           data.value.files.forEach(item => {
@@ -100,6 +99,9 @@ export default defineComponent({
         })
         .catch(er => {
           errorMessage(er.response.data.errors)
+        })
+        .finally(() => {
+          loading.value = false
         })
     }
     const addFile = (ar) => {
@@ -124,6 +126,7 @@ export default defineComponent({
       data,
       addFile,
       saveData,
+      loading,
       dialogVisible
     }
   }

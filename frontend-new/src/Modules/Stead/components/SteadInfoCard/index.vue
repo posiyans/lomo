@@ -1,6 +1,6 @@
 <template>
   <div class="row items-center no-wrap" style="align-content: stretch;">
-    <div class="q-py-lg" style="width: 450px;">
+    <div style="max-width: 95vw;">
       <table v-if="stead">
         <TrTableBlock
           v-for="item in columns"

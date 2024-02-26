@@ -1,6 +1,6 @@
 <template>
   <div class="row items-center">
-    <ComponentField v-if="edit" style="min-width: 250px;" v-model="newValue" :item="field" dense outlined class="text-grey-7" />
+    <ComponentField v-if="edit" style="max-width: 45vw;" v-model="newValue" :item="field" dense outlined class="text-grey-7" />
     <div v-if="!edit" class="">
       <div v-if="field.type === 'date'">
         <ShowTime :time="modelValue" format="DD-MM-YYYY" />

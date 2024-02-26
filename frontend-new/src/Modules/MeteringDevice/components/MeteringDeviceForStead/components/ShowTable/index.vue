@@ -3,7 +3,7 @@
     <q-table
       flat bordered
       :rows="list"
-      :columns="columns"
+      :columns="columnsFilter"
       hide-bottom
       :pagination="{ rowsPerPage: 0 }"
       wrap-cells
@@ -22,6 +22,14 @@
       </template>
       <template v-slot:body-cell-device="props">
         <q-td :props="props" :class="{ 'o-60': !props.row.active }">
+          <div class="text-weight-bold xs">
+            <div :class="{ 'text-grey': !props.row.active }">
+              {{ props.row.rate.group_name }} {{ props.row.rate.name }}
+            </div>
+            <div v-if="!props.row.active" class="text-red">
+              Не активный
+            </div>
+          </div>
           <div>
             {{ props.row.device_brand }}
             <span class="text-primary">
@@ -85,9 +93,10 @@
 
 <script>
 /* eslint-disable */
-import { defineComponent, ref } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
 import ShowTime from 'components/ShowTime/index.vue'
 import MeteringDeviceEdit from 'src/Modules/MeteringDevice/components/MeteringDeviceEdit/Dialog.vue'
+import { useQuasar } from 'quasar'
 
 export default defineComponent({
   components: {
@@ -106,11 +115,21 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const data = ref(false)
-    const columns = [
+    const $q = useQuasar()
+    const columnsFilter = computed(() => {
+      if ($q.screen.xs) {
+        return columns.value.filter(item => {
+          return !item.hideMobile
+        })
+      }
+      return columns.value
+    })
+    const columns = ref([
       {
         name: 'rate',
         align: 'center',
-        label: 'Тип'
+        label: 'Тип',
+        hideMobile: true
       },
       {
         name: 'device',
@@ -120,19 +139,21 @@ export default defineComponent({
       {
         name: 'init_value',
         align: 'center',
-        label: 'Начальные показания'
+        label: 'Начальные показания',
+        hideMobile: true
       },
       {
         name: 'last_value',
         align: 'center',
         label: 'Последние показания'
       }
-    ]
+    ])
     const reload = () => {
       emit('reload')
     }
     return {
       data,
+      columnsFilter,
       reload,
       columns
     }

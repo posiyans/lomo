@@ -27,8 +27,7 @@
               </q-list>
             </q-btn-dropdown>
           </div>
-          <q-separator color="teal" />
-          <q-tab-panels v-model="tab" animated swipeable>
+          <q-tab-panels v-model="tab" animated>
             <q-tab-panel
               v-for="stead  in steads"
               :key="stead.id"

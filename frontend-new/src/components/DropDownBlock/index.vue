@@ -1,30 +1,15 @@
 <template>
   <div>
-    <div v-if="showMobileBlock">
-      <div @click="showFilter = !showFilter">
-        <slot name="header" v-bind:showFilter="showFilter">
-          <div class="row cursor-pointer show-btn inline items-center q-px-sm" >
-            <div>
-              {{ labelBtn }}
-            </div>
-            <div>
-              <q-icon
-                  name="arrow_drop_down"
-                  size="sm"
-                  :class="{ 'rotate-180': showFilter,'rotate-0': !showFilter}"
-              />
-            </div>
-          </div>
-        </slot>
-      </div>
-      <div class="overflow-hidden-y">
-        <q-slide-transition>
-          <div v-if="showFilter">
+    <div v-if="showMobileBlock" style="width: 250px">
+      <q-expansion-item
+        :label="labelBtn"
+      >
+        <q-card>
+          <q-card-section class="q-pa-none row justify-center text-center">
             <slot></slot>
-          </div>
-        </q-slide-transition>
-      </div>
-
+          </q-card-section>
+        </q-card>
+      </q-expansion-item>
     </div>
     <div v-else>
       <slot></slot>
@@ -33,8 +18,12 @@
 </template>
 
 <script>
+/* eslint-disable */
+import { computed, defineComponent, ref } from 'vue'
+import { useQuasar } from 'quasar'
 
-export default {
+export default defineComponent({
+  components: {},
   props: {
     showLabel: {
       type: String,
@@ -47,46 +36,30 @@ export default {
     onlyMobile: {
       type: Boolean,
       default: false
-    }
-  },
-  data () {
-    return {
-      showFilter: false
-    }
-  },
-  computed: {
-    showMobileBlock () {
-      return this.$q.platform.is.mobile || !this.onlyMobile
     },
-    labelBtn () {
-      return this.showFilter ? this.hideLabel : this.showLabel
+    maxWidth: {
+      type: Number,
+      default: 500
+    },
+  },
+  setup(props, { emit }) {
+    const showFilter = ref(false)
+    const $q = useQuasar()
+    const showMobileBlock = computed(() => {
+      return $q.platform.is.mobile || !props.onlyMobile || $q.screen.width < props.maxWidth
+    })
+    const labelBtn = computed(() => {
+      return showFilter ? props.hideLabel : props.showLabel
+    })
+    return {
+      showFilter,
+      showMobileBlock,
+      labelBtn
     }
   }
-}
+})
 </script>
 
-<style scoped>
-  .show-btn:hover {
-    background-color: #f5f7fa;
-  }
-  .rotate-180 {
-    animation: rotate-180;
-    animation-duration: 0.3s;
-    animation-timing-function: linear;
-    animation-fill-mode: forwards;
-  }
-  @keyframes rotate-180 {
-    from {transform: rotate(0deg);}
-    to {transform: rotate(180deg);}
-  }
-  .rotate-0 {
-    animation: rotate-0;
-    animation-duration: 0.3s;
-    animation-timing-function: linear;
-    animation-fill-mode: forwards;
-  }
-  @keyframes rotate-0 {
-    from {transform: rotate(180deg);}
-    to {transform: rotate(0deg);}
-  }
+<style scoped lang='scss'>
+
 </style>

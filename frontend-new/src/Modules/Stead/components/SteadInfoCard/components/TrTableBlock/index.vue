@@ -4,7 +4,7 @@
       {{ field.label }}
     </td>
     <td>
-      <div class="row items-center q-col-gutter-sm justify-center" style="min-width: 250px;">
+      <div class="row items-center q-col-gutter-sm justify-center">
         <div v-if="!showEdit" :class="{ 'cursor-pointer': kadastr}" @click="showEvent">
           {{ value }}
         </div>
