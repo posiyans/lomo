@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="row items-center no-wrap justify-between q-pb-sm">
+    <div class="row no-wrap justify-between q-pb-sm">
       <DropDownBlock only-mobile :max-width="580">
         <FilterBlock v-model="listQuery" />
       </DropDownBlock>

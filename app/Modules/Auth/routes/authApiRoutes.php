@@ -15,6 +15,9 @@ Route::group(['middleware' => ['auth:sanctum'], 'prefix' => 'v2/auth'], function
     Route::get('info', \App\Modules\Auth\Controllers\GetMyInfoController::class);
     Route::post('send-verify-email', \App\Modules\Auth\Controllers\SendMailVerifyCodeController::class);
     Route::get('logout', \App\Modules\Auth\Controllers\LogoutController::class);
+    Route::get('2f/get-for-user', \App\Modules\Auth\Controllers\UserInfo2FController::class);
+    Route::post('2f/update', \App\Modules\Auth\Controllers\UpdateUser2FController::class);
+    Route::post('2f/change-secret-key', \App\Modules\Auth\Controllers\ChangeTwoFactorSecretKeyController::class);
 });
 
 

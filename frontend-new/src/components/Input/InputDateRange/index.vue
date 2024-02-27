@@ -117,14 +117,14 @@ export default {
 
 <style scoped lang="scss">
 .date-row {
-  width: 300px;
+  max-width: 300px;
   @media only screen and (max-width: 420px) {
-    width: 100%;
-    padding-right: 5px;
+    max-width: 90vw;
   }
 }
 
 .date-block {
-  width: 49%;
+  width: 145px;
+  padding-right: 5px;
 }
 </style>

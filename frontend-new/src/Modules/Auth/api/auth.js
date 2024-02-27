@@ -74,3 +74,19 @@ export function sendVerifyEmail() {
     method: 'post'
   })
 }
+
+export function getTwoFactorSettingsForUser(params) {
+  return request({
+    url: '/api/v2/auth/2f/get-for-user',
+    method: 'get',
+    params
+  })
+}
+
+export function updateTwoFactorSettingsForUser(data) {
+  return request({
+    url: '/api/v2/auth/2f/update',
+    method: 'post',
+    data
+  })
+}

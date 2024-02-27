@@ -1,15 +1,20 @@
 <template>
   <div>
-    <div v-if="showMobileBlock" style="width: 250px">
+    <div v-if="showMobileBlock">
       <q-expansion-item
+        v-model="showFilter"
         :label="labelBtn"
+        style="width: 300px"
+        class="q-pb-xs"
       >
-        <q-card>
-          <q-card-section class="q-pa-none row justify-center text-center">
-            <slot></slot>
-          </q-card-section>
-        </q-card>
       </q-expansion-item>
+      <q-slide-transition
+        class="q-pb-xs"
+      >
+        <div v-if="showFilter">
+          <slot></slot>
+        </div>
+      </q-slide-transition>
     </div>
     <div v-else>
       <slot></slot>
@@ -49,7 +54,7 @@ export default defineComponent({
       return $q.platform.is.mobile || !props.onlyMobile || $q.screen.width < props.maxWidth
     })
     const labelBtn = computed(() => {
-      return showFilter ? props.hideLabel : props.showLabel
+      return showFilter.value ? props.hideLabel : props.showLabel
     })
     return {
       showFilter,
@@ -61,5 +66,39 @@ export default defineComponent({
 </script>
 
 <style scoped lang='scss'>
+.show-btn:hover {
+  background-color: #f5f7fa;
+}
 
+.rotate-180 {
+  animation: rotate-180;
+  animation-duration: 0.3s;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+@keyframes rotate-180 {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(180deg);
+  }
+}
+
+.rotate-0 {
+  animation: rotate-0;
+  animation-duration: 0.3s;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+@keyframes rotate-0 {
+  from {
+    transform: rotate(180deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
 </style>

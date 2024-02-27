@@ -82,13 +82,13 @@
             </div>
             <div>
               <div class="col">
-                <InputAndSaveProxy
+                <TelegramIdFiled
                   v-model="authStore.user.telegram"
-                  label="Телеграм ID"
-                  name="telegram"
+                  :user-id='user.id'
                   :func="func"
-                  outlined
-                  @update:model-value="reloadMyData"
+                  name="telegram"
+                  outlined label="Телеграм ID"
+                  @reload="reloadMyData"
                 />
               </div>
               <div class="col"></div>
@@ -105,6 +105,7 @@
         </div>
       </q-card-section>
     </div>
+    <User2FaSetting />
   </div>
 </template>
 
@@ -120,14 +121,18 @@ import SocialMediaList from 'src/Modules/SocialMedia/components/SocialMediaList/
 import SendVerifyEmailBtn from 'src/Modules/Auth/components/SendVerifyEmailBtn/index.vue'
 import { useQuasar } from 'quasar'
 import { errorMessage } from 'src/utils/message'
+import TelegramIdFiled from 'src/Modules/Telegram/components/TelegramIdFiled/index.vue'
+import User2FaSetting from 'src/Modules/Auth/components/User2FaSetting/index.vue'
 
 export default defineComponent({
   components: {
+    User2FaSetting,
     ChangeMyAvatar,
     InputPhone,
     InputAndSaveProxy,
     SocialMediaList,
-    SendVerifyEmailBtn
+    SendVerifyEmailBtn,
+    TelegramIdFiled
   },
   props: {},
   setup() {

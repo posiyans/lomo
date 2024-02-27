@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <q-btn icon="add" outline color="primary" label="Создать" @click="openDialogAction" />
+      <q-btn icon="add" outline color="primary" label="Создать" no-wrap @click="openDialogAction" />
     </div>
     <q-dialog
       v-model="dialogVisible"

@@ -1,11 +1,9 @@
 <template>
-  <div>
-    <UserSteadsSelected>
-      <template v-slot:default="{stead}">
-        <PaymentAndInvoiceForStead :stead-id="stead" />
-      </template>
-    </UserSteadsSelected>
-  </div>
+  <UserSteadsSelected>
+    <template v-slot:default="{stead}">
+      <PaymentAndInvoiceForStead :stead-id="stead" />
+    </template>
+  </UserSteadsSelected>
 </template>
 
 <script>

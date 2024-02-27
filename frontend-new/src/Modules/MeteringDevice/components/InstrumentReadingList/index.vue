@@ -1,6 +1,8 @@
 <template>
   <div>
-    <FilterBlock v-model="listQuery" class="q-mb-xs" />
+    <DropDownBlock only-mobile>
+      <FilterBlock v-model="listQuery" />
+    </DropDownBlock>
     <TableBlock :list="list" :edit="edit" @reload="reload" />
     <LoadMore :key="key" v-model:listQuery="listQuery" :func="func" @setList="setList" />
   </div>
@@ -13,10 +15,12 @@ import FilterBlock from './components/FilterBlock/index.vue'
 import LoadMore from 'src/components/LoadMore/index.vue'
 import { getInstrumentReadingList } from 'src/Modules/MeteringDevice/api/instrumentReadingApi'
 import TableBlock from './components/TableBlock/index.vue'
+import DropDownBlock from 'components/DropDownBlock/index.vue'
 
 export default defineComponent({
   components: {
     FilterBlock,
+    DropDownBlock,
     LoadMore,
     TableBlock
 

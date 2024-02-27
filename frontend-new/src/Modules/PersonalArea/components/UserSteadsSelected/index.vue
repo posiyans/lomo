@@ -1,54 +1,52 @@
 <template>
-  <div>
-    <q-card v-if="steads.length > 0">
-      <q-card-section>
-        <div v-if="multiStead">
-          <div>
-            <q-btn-dropdown
-              color="primary"
-              flat
-              no-wrap
-              :disable-dropdown="steads.length === 1"
-              no-caps
-              :label="'Участок: ' + currentStead.number"
-            >
-              <q-list>
-                <q-item
-                  clickable
-                  v-close-popup
-                  v-for="stead  in steads"
-                  :key="stead.id"
-                  @click="setStead(stead)"
-                >
-                  <q-item-section :class="{ 'text-primary': stead.id === currentStead.id }">
-                    <q-item-label>Участок {{ stead.number }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-              </q-list>
-            </q-btn-dropdown>
-          </div>
-          <q-tab-panels v-model="tab" animated>
-            <q-tab-panel
-              v-for="stead  in steads"
-              :key="stead.id"
-              :name="stead.id"
-              class="q-pa-none"
-            >
-              <slot v-bind:stead="stead.id">
-              </slot>
-            </q-tab-panel>
-          </q-tab-panels>
+  <q-card v-if="steads.length > 0">
+    <q-card-section class="q-pa-xs q-pa-sm-sm">
+      <div v-if="multiStead">
+        <div>
+          <q-btn-dropdown
+            color="primary"
+            flat
+            no-wrap
+            :disable-dropdown="steads.length === 1"
+            no-caps
+            :label="'Участок: ' + currentStead.number"
+          >
+            <q-list>
+              <q-item
+                clickable
+                v-close-popup
+                v-for="stead  in steads"
+                :key="stead.id"
+                @click="setStead(stead)"
+              >
+                <q-item-section :class="{ 'text-primary': stead.id === currentStead.id }">
+                  <q-item-label>Участок {{ stead.number }}</q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-btn-dropdown>
         </div>
-        <div v-else>
-          <div class="q-pl-sm text-primary">
-            Участок: {{ currentStead.number }}
-          </div>
-          <slot v-bind:stead="tab">
-          </slot>
+        <q-tab-panels v-model="tab" animated>
+          <q-tab-panel
+            v-for="stead  in steads"
+            :key="stead.id"
+            :name="stead.id"
+            class="q-pa-none"
+          >
+            <slot v-bind:stead="stead.id">
+            </slot>
+          </q-tab-panel>
+        </q-tab-panels>
+      </div>
+      <div v-else>
+        <div class="q-pl-sm text-primary">
+          Участок: {{ currentStead.number }}
         </div>
-      </q-card-section>
-    </q-card>
-  </div>
+        <slot v-bind:stead="tab">
+        </slot>
+      </div>
+    </q-card-section>
+  </q-card>
 </template>
 
 <script>

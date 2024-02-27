@@ -1,13 +1,11 @@
 <template>
-  <div>
-    <q-card>
-      <q-card-section class="relative-position">
-        <AppealList :user-uid="authStore.user.uid" :key="key">
-          <AddAppealBtn v-if="authStore.user.uid" :user-uid="authStore.user.uid" @success="reloadData" />
-        </AppealList>
-      </q-card-section>
-    </q-card>
-  </div>
+  <q-card class="bg-white">
+    <q-card-section>
+      <AppealList :user-uid="authStore.user.uid" :key="key">
+        <AddAppealBtn v-if="authStore.user.uid" :user-uid="authStore.user.uid" @success="reloadData" />
+      </AppealList>
+    </q-card-section>
+  </q-card>
 </template>
 
 <script>

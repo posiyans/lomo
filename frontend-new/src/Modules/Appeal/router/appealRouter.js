@@ -35,6 +35,7 @@ export const appeal =
     children: [
       {
         path: 'show/:id',
+        name: 'UserAppealShow',
         component: () => import('src/Modules/Appeal/pages/AppealShow/index.vue'),
         meta: {
           title: 'Обращения'

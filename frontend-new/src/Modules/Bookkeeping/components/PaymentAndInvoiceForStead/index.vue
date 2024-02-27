@@ -1,12 +1,14 @@
 <template>
   <div>
     <BalanceForStead :stead-id="steadId" class="q-pa-sm" />
-    <div class="row items-center q-col-gutter-sm">
-      <FilterBlock v-model="listQuery" />
-      <DownloadXlsxBtn :func="funcXlsx" />
+    <div class="row q-col-gutter-sm no-wrap">
+      <DropDownBlock>
+        <FilterBlock v-model="listQuery" />
+      </DropDownBlock>
       <q-space />
+      <DownloadXlsxBtn :func="funcXlsx" />
     </div>
-    <ShowTable :list="list" :edit="edit" @reload="reload" class="q-pt-sm" />
+    <ShowTable :list="list" :edit="edit" @reload="reload" />
     <LoadMore :key="key" v-model:list-query="listQuery" :func="func" @setList="setList" />
   </div>
 </template>
@@ -21,10 +23,12 @@ import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
 import DownloadXlsxBtn from 'src/Modules/Files/components/DownloadXlsxFileBtn/index.vue'
 import { getFullBalanceForStead, getFullBalanceForSteadXlsx } from 'src/Modules/Bookkeeping/api/balaceApi.js'
 import BalanceForStead from 'src/Modules/Bookkeeping/components/Balance/BalanceForStead/index.vue'
+import DropDownBlock from 'components/DropDownBlock/index.vue'
 
 export default defineComponent({
   components: {
     ShowTable,
+    DropDownBlock,
     FilterBlock,
     BalanceForStead,
     LoadMore,

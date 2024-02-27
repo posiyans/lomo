@@ -47,21 +47,17 @@ export default defineComponent({
   min-height: 100vh;
 
   div {
-
     min-height: calc(100vh - 100px);
     //min-height: 100%;
     background-color: rgba(255, 255, 255, .85);
     padding: 5px;
-    width: 90%;
+    width: 95vw;
     margin: 0 auto;
     @media only screen and (max-width: 599px) {
       min-height: calc(100vh - 50px);
       width: 100%;
       margin: 0;
-      padding: 0 10px;
-    }
-    @media only screen and (max-width: 400px) {
-      padding: 0 5px;
+      padding: 0;
     }
   }
 }

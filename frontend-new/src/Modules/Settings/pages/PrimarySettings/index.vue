@@ -6,6 +6,9 @@
     <div>
       <ChangeFavicon v-if="false" />
     </div>
+    <div>
+      <SettingTelegramBotToken />
+    </div>
   </div>
 </template>
 
@@ -14,9 +17,11 @@
 import { defineComponent, ref } from 'vue'
 import AllowPublicationOfArticlesForm from 'src/Modules/Article/Article/components/AllowPublicationOfArticlesForm/index.vue'
 import ChangeFavicon from 'src/Modules/Settings/components/ChangeFavicon/index.vue'
+import SettingTelegramBotToken from 'src/Modules/Telegram/components/SettingTelegramBotToken/index.vue'
 
 export default defineComponent({
   components: {
+    SettingTelegramBotToken,
     AllowPublicationOfArticlesForm,
     ChangeFavicon
   },

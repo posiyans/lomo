@@ -51,6 +51,9 @@ class RouteServiceProvider extends ServiceProvider
                 ->group(base_path('app/Modules/Setting/routes/api.php'));
             Route::middleware('api')
                 ->prefix('api')
+                ->group(base_path('app/Modules/Telegram/routes/api.php'));
+            Route::middleware('api')
+                ->prefix('api')
                 ->group(base_path('app/Modules/File/routes/apiFileRoutes.php'));
             Route::middleware('api')
                 ->prefix('api')
