@@ -27,7 +27,10 @@ class UserInfoResource extends JsonResource
             'last_connect' => $this->last_connect,
             'owner' => $this->owner ? ['uid' => $this->owner->uid] : null,
         ];
-        $options = $this->options;
-        return array_merge($data, $options);
+        $fields = $this->getUserPublicFieldName();
+        foreach ($fields as $field) {
+            $data[$field] = $this->getField($field, '');
+        }
+        return $data;
     }
 }

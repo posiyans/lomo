@@ -4,8 +4,8 @@ namespace App\Modules\Auth\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Modules\Auth\Actions\TwoFactor\SendOrCheckTwoFactorCodeClass;
+use App\Modules\Auth\Resources\AuthUserResource;
 use App\Modules\Log\Models\LogModel;
-use App\Modules\User\Repositories\GetPermissionsForUserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -32,24 +32,20 @@ class LoginController extends Controller
         }
         $credentials = ['email' => $email, 'password' => $password];
 
-        if (Auth::guard()->attempt($credentials)) {
+        if (Auth::guard()->once($credentials)) {
             // togo добавить логирование входа по паролю + тоже самое через соц сети
             $user = Auth::user();
             try {
                 return (new SendOrCheckTwoFactorCodeClass($user))->code($request->code)->run();
             } catch (\Exception $e) {
             }
-            $roles = $user->roles->map(function ($role) {
-                return $role->name;
-            });
-            $permissions = array_merge(['user'], (new GetPermissionsForUserRepository($user))->toArray(), $roles->toArray());
             Session::put('user_uid', $user->uid);
-            return response([
+            Auth::login($user);
+            $result = [
                 'status' => 'done',
-                'user' => Auth::user(),
-                'permissions' => $permissions,
-                'roles' => $roles
-            ]);
+                'data' => new AuthUserResource($user)
+            ];
+            return response($result);
         }
         $log = new LogModel();
         $log->description = 'bad login or password';

@@ -13,12 +13,10 @@ class UpdateUser2FController extends MyController
     public function __invoke(Request $request)
     {
         $user = Auth::user();
-        $opt = $user->options;
-        $opt['two_factor'] = $request->two_factor ?? $opt['two_factor'] ?? [];
-        $opt['two_factor_enable'] = $request->two_factor_enable ?? $opt['two_factor_enable'] ?? [];
-        $user->options = $opt;
-        $user->save();
-        //todo add log
+        $two_factor = $request->two_factor ?? $opt['two_factor'] ?? [];
+        $two_factor_enable = $request->two_factor_enable ?? $opt['two_factor_enable'] ?? [];
+        $user->setField('two_factor', $two_factor);
+        $user->setField('two_factor_enable', $two_factor_enable);
         return response(true);
     }
 

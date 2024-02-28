@@ -23,6 +23,20 @@ class TwoFactorAuthentication extends Notification
         $this->code = $code;
     }
 
+
+    /**
+     * Определите, нужно ли отправлять уведомление.
+     *
+     * @param mixed $notifiable
+     * @param string $channel
+     * @return bool
+     */
+    public function shouldSend($notifiable, $channel)
+    {
+        return true;
+    }
+
+
     /**
      * Get the notification's delivery channels.
      *
@@ -31,12 +45,10 @@ class TwoFactorAuthentication extends Notification
     public function via(object $notifiable): array
     {
         $route = [];
-        if ($notifiable->email && in_array('mail', $notifiable->options['two_factor_enable'])) {
+        if ($notifiable->email && in_array('mail', $notifiable->getField('two_factor_enable', []))) {
             $route[] = 'mail';
         }
-        if (isset($notifiable->options['telegram']) &&
-            !empty($notifiable->options['telegram']) &&
-            in_array('telegram', $notifiable->options['two_factor_enable'])
+        if ($notifiable->getField('telegram', false) && in_array('telegram', $notifiable->getField('two_factor_enable', []))
         ) {
             $route[] = 'telegram';
         }
@@ -51,7 +63,7 @@ class TwoFactorAuthentication extends Notification
     {
         $content = "Код для входа:" . $this->code;
         return (new TelegramMessage())
-            ->to($notifiable->options['telegram'])
+            ->to($notifiable->getField('telegram', false))
             ->content($content);
     }
 

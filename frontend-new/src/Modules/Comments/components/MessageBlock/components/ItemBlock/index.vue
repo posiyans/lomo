@@ -6,7 +6,7 @@
           <UserAvatarByUid :uid="item.user.uid" size="40px" />
         </div>
       </div>
-      <div class="">
+      <div class="col-grow">
         <div class="row items-center q-col-gutter-sm no-wrap">
           <div class="text-weight-bold text-primary">
             {{ item.user.name }}

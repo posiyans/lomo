@@ -91,7 +91,7 @@ export default defineComponent({
     })
     const authStote = useAuthStore()
     const qrCodeText = computed(() => {
-      return 'otpauth://totp/' + authStote.user.login + '?issuer=' + window.location.hostname + '&secret=' + secret.value
+      return 'otpauth://totp/' + authStote.user.email + '?issuer=' + window.location.hostname + '&secret=' + secret.value
     })
     const changeKey = () => {
       secret.value = null

@@ -26,6 +26,17 @@
           required
         ]"
       />
+      <q-input
+        ref="codeRef"
+        v-show="showCodeForm"
+        filled
+        v-model="form.code"
+        label="Код подтверждения"
+        lazy-rules
+        maxlength="6"
+        @update:model-value="setCode"
+      />
+
       <q-checkbox v-model="form.remember" label="Запомнить меня" />
 
       <div>
@@ -43,7 +54,7 @@
 
 <script>
 /* eslint-disable */
-import { defineComponent, onMounted, reactive, ref } from 'vue'
+import { defineComponent, nextTick, onMounted, reactive, ref } from 'vue'
 import LoginByVkBtn from 'src/Modules/SocialMedia/vendors/Vk/components/LoginByVkBtn/index.vue'
 import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
 import { isEmail, required } from 'src/utils/validators'
@@ -57,12 +68,20 @@ export default defineComponent({
   props: {},
   setup(props, { emit }) {
     const loginForm = ref(null)
+    const codeRef = ref(null)
+    const showCodeForm = ref(false)
     const siteMenuStore = useSiteMenuStore()
     const form = reactive({
       email: 'admin@examples.com',
       password: 'password',
+      code: '',
       remember: true
     })
+    const setCode = (val) => {
+      if (val.length === 6) {
+        login()
+      }
+    }
     const authStore = useAuthStore()
     const $q = useQuasar()
     const login = () => {
@@ -74,6 +93,16 @@ export default defineComponent({
                 if (res.status === 'done') {
                   siteMenuStore.getSiteMenu()
                   emit('success')
+                } else if (res.status === 'sendCode') {
+                  showCodeForm.value = true
+                  nextTick(() => {
+                    codeRef.value.focus()
+                  })
+                } else if (res.status === 'errorCode') {
+                  $q.notify({
+                    message: res.error,
+                    color: 'negative'
+                  })
                 } else {
                   $q.notify({
                     message: res.error,
@@ -90,7 +119,10 @@ export default defineComponent({
     return {
       authStore,
       loginForm,
+      showCodeForm,
       isEmail,
+      setCode,
+      codeRef,
       required,
       form,
       login

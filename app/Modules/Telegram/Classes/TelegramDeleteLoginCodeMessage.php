@@ -16,20 +16,21 @@ class TelegramDeleteLoginCodeMessage
 
     public function run()
     {
-        $opt = $this->user->options;
-        if (isset($opt['telegram_login_message_id'])) {
+        $telegram_login_message_id = $this->user->getField('telegram_login_message_id', false);
+        $chat_id = $this->user->getField('telegram', false);
+
+        if ($telegram_login_message_id && $chat_id) {
             try {
                 $telegram = new TelegramClass();
                 $d = [
-                    'chat_id' => $opt['telegram'],
-                    'message_id' => $opt['telegram_login_message_id'],
+                    'chat_id' => $chat_id,
+                    'message_id' => $telegram_login_message_id,
                 ];
+//            dd($d);
                 $telegram->deleteMessage($d);
             } catch (\Exception $e) {
             }
-            unset($opt['telegram_login_message_id']);
-            $this->user->options = $opt;
-            $this->user->save();
+            $this->user->setField('telegram_login_message_id', false);
         }
     }
 

@@ -107,12 +107,27 @@ class UserModel extends MyModel implements MustVerifyEmail,
     protected $fillable = [
         'name',
         'email',
-        'password',
         'last_name',
-        'middle_name',
-        'uid',
-
+        'middle_name'
     ];
+
+    /**
+     * публичные дополнительные поля для пользователя
+     * todo в будущем для возможности раширения перенести в базу
+     *
+     * @var string[]
+     */
+    protected $userField = [
+        'telegram',
+        'phone',
+        'adres'
+    ];
+
+    public function getUserPublicFieldName(): array
+    {
+        return $this->userField;
+    }
+
 
     /**
      * The attributes that should be hidden for arrays.
@@ -196,26 +211,75 @@ class UserModel extends MyModel implements MustVerifyEmail,
 
     public function getEmailAttribute()
     {
-//        return strlen(self::$no_email_prefix);
         if (mb_substr($this->attributes['email'], 0, strlen(self::$no_email_prefix)) == self::$no_email_prefix) {
             return '';
         }
         return $this->attributes['email'];
     }
 
+    public function getField($name, $defaultValue = null)
+    {
+        $field_model = UserFieldModel::where('user_id', $this->id)->where('property', $name)->first();
+        if ($field_model) {
+            $value = $field_model->value;
+            $type = $field_model->type;
+            switch ($type) {
+                case 'array':
+                    return $value;
+                case 'bool':
+                    return !!$value[0];
+                default:
+                    return $value[0];
+            }
+        }
+        return $defaultValue;
+    }
+
+    /**
+     * @param $name
+     * @param $value
+     * @return $this
+     * @throws \Exception
+     */
+    public function setField($name, $value)
+    {
+        $field_model = UserFieldModel::where('user_id', $this->id)->where('property', $name)->first();
+        if (!$field_model) {
+            $field_model = new UserFieldModel();
+            $field_model->property = $name;
+            $field_model->user_id = $this->id;
+        }
+        $type = 'string';
+        $val = [$value];
+        if (is_array($value)) {
+            $type = 'array';
+            $val = $value;
+        } elseif (is_bool($value)) {
+            $type = 'bool';
+        } elseif (is_numeric($value)) {
+            $type = 'numeric';
+        }
+        $field_model->value = $val;
+        $field_model->type = $type;
+        if ($field_model->logAndSave('Изменение свойств пользователя')) {
+            return $this;
+        }
+        throw new \Exception('Ошибка изменения свойст впользователя');
+    }
+
     public function fullName(): string
     {
         return $this->last_name . ' ' . $this->name . ' ' . $this->middle_name;
     }
-
-    public function smallName()
-    {
-        return $this->last_name . ' ' . $this->name;
-    }
+//
+//    public function smallName()
+//    {
+//        return $this->last_name . ' ' . $this->name;
+//    }
 
 
     public function routeNotificationForTelegram()
     {
-        return $this->options['telegram'];
+        return $this->getField('telegram', '');
     }
 }

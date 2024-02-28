@@ -38,8 +38,7 @@ class AdminNewCommentsNotification extends Notification implements ShouldQueue
 
     public function toTelegram($notifiable)
     {
-//        $url = env('APP_URL') . '/admin/article/edit/' . $this->article->id;
-        if (isset($notifiable->options['telegram']) && !empty($notifiable->options['telegram'])) {
+        if ($notifiable->getField('telegram', false)) {
             $text = '***Новый комментарий***' . "\n";
             $commentedModel = CommentTypeRepository::getCommentedRoleObject($this->comment->parentModel);
             $user = $this->comment->user;
@@ -54,12 +53,11 @@ class AdminNewCommentsNotification extends Notification implements ShouldQueue
                 $url = env('APP_URL') . $commentedModel->descriptionForComment()['url'];
             }
             return TelegramMessage::create()
-                // Optional recipient user id.
                 ->chunk()
                 ->content($text)
                 ->button('Смотреть', $url);
         } else {
-            throw new \Exception('Нt указан телеграм id');
+            throw new \Exception('Не указан телеграм id');
         }
     }
 

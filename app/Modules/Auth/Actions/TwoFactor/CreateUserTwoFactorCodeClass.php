@@ -18,10 +18,7 @@ class CreateUserTwoFactorCodeClass
     public function run()
     {
         $code = rand(100000, 999999);
-        $opt = $this->user->options;
-        $opt['two_code'] = $code;
-        $this->user->options = $opt;
-        $this->user->save();
+        $this->user->setField('two_factor_code', $code);
         (new TelegramDeleteLoginCodeMessage($this->user))->run();
         return $code;
     }

@@ -6,6 +6,10 @@ use App\Modules\Comment\Models\CommentModel;
 use App\Modules\Comment\Notifications\AdminNewCommentsNotification;
 use App\Modules\User\Models\UserModel;
 
+/**
+ * разослать уведомление о новом коментарии
+ *
+ */
 class SendNewMessageNotificationAction
 {
     private $comment;
@@ -14,7 +18,6 @@ class SendNewMessageNotificationAction
     {
         $this->comment = $comment;
     }
-
 
     public function run()
     {

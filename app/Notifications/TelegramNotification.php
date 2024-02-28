@@ -22,6 +22,20 @@ class TelegramNotification extends Notification
         $this->content = $content;
     }
 
+
+    /**
+     * Определите, нужно ли отправлять уведомление.
+     *
+     * @param mixed $notifiable
+     * @param string $channel
+     * @return bool
+     */
+    public function shouldSend($notifiable, $channel)
+    {
+        return true;
+    }
+
+
     /**
      * Get the notification's delivery channels.
      *
@@ -35,7 +49,7 @@ class TelegramNotification extends Notification
 
     public function toTelegram($notifiable)
     {
-        $chat_id = is_object($notifiable) ? $notifiable->options['telegram'] : $notifiable;
+        $chat_id = is_object($notifiable) ? $notifiable->getField('telegram') : $notifiable;
 //        dd($notifiable);
         return (new TelegramMessage())
             ->to($chat_id)

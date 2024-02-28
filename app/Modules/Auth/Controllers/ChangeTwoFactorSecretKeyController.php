@@ -18,10 +18,7 @@ class ChangeTwoFactorSecretKeyController extends MyController
         if ($password && Hash::check($password, $user->password)) {
             $google2fa = new Google2FA();
             $secret = $google2fa->generateSecretKey(32);
-            $opt = $user->options;
-            $opt['twofa_secret'] = $secret;
-            $user->options = $opt;
-            $user->save();
+            $user->setField('two_factor_secret', $secret);
             // todo log change
             return response(['secret' => $secret]);
         }

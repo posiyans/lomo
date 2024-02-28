@@ -96,9 +96,9 @@ export const useAuthStore = defineStore('auth', {
               .then(res => {
                 const data = res.data
                 if (res.data.status === 'done') {
-                  this.user = res.data.user
-                  this.permissions = res.data.permissions
-                  this.roles = res.data.roles
+                  this.user = res.data.data.user
+                  this.permissions = res.data.data.permissions
+                  this.roles = res.data.data.roles
                   this.is_guest = false
                   resolve(data)
                 } else {
@@ -106,6 +106,7 @@ export const useAuthStore = defineStore('auth', {
                 }
               })
               .catch(error => {
+                console.log(error.response)
                 errorMessage(error.response.data.errors)
                 this.user = {}
                 this.permissions = []

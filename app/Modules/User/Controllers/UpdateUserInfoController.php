@@ -4,7 +4,6 @@ namespace App\Modules\User\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Modules\User\Repositories\GetUserByUidRepository;
-use App\Modules\User\Repositories\UserFieldRepository;
 use App\Modules\User\Resources\AdminUserAllInfoResource;
 use App\Modules\User\Validators\UpdateUserInfoValidator;
 
@@ -22,15 +21,15 @@ class UpdateUserInfoController extends Controller
         try {
             $user = (new GetUserByUidRepository($request->user_uid))->run();
             $field = $request->field;
-            if (UserFieldRepository::isOptional($field)) {
-                $options = $user->options;
-                $options[$field] = $request->value;
-                $user->options = $options;
+            if (in_array($field, $user->getUserPublicFieldName())) {
+                $user->setField($field, $request->value);
             } else {
-                $user->$field = $request->value;
+                $data = [
+                    $field => $request->value
+                ];
+                $user->fill($data);
+                $user->logAndSave('Изменение данных профиля');
             }
-            $user->logAndSave('Изменение данных профиля');
-//                $user->fill($request->validated())->save();
             return new AdminUserAllInfoResource($user);
         } catch (\Exception $e) {
             return response(['errors' => $e->getMessage()], 410);

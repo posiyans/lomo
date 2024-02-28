@@ -4,6 +4,7 @@ namespace App\Modules\Auth\Actions\TwoFactor;
 
 use App\Models\User;
 use App\Modules\Telegram\Classes\TelegramDeleteLoginCodeMessage;
+use App\Modules\User\Models\UserModel;
 use PragmaRX\Google2FA\Google2FA;
 
 class CheckUserTwoFactorCodeClass
@@ -12,7 +13,7 @@ class CheckUserTwoFactorCodeClass
 
     private $code;
 
-    public function __construct(User $user, $code)
+    public function __construct(UserModel $user, $code)
     {
         $this->code = $code;
         $this->user = $user;
@@ -20,18 +21,16 @@ class CheckUserTwoFactorCodeClass
 
     public function run()
     {
-        $opt = $this->user->options;
-        if (isset($opt['two_code']) && !empty($opt['two_code']) && $opt['two_code'] == $this->code) {
-            $opt['two_code'] = '';
-            $this->user->options = $opt;
+        $two_factor_code = $this->user->getField('two_factor_code', null);
+        if ($two_factor_code && $two_factor_code == $this->code) {
+            $this->user->setField('two_factor_code', null);
             $this->deleteTelegramCode();
-            $this->user->save();
             return true;
         }
-        if (isset($opt['two_code']) && !empty($opt['two_code']) && in_array('google2fa', $opt['two_factor_enable'])) {
+        if (in_array('google2fa', $this->user->getField('two_factor_enable', []))) {
             $google2fa = new Google2FA();
-            $secret = $this->user->twofa_secret;
-            if ($google2fa->verifyKey($secret, $this->code)) {
+            $secret = $this->user->getField('two_factor_secret', false);
+            if ($secret && $google2fa->verifyKey($secret, $this->code)) {
                 $this->deleteTelegramCode();
                 return true;
             }

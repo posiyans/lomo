@@ -82,7 +82,7 @@ export default defineComponent({
       if (props.item.children && props.item.children.length > 0) {
         const tmp = []
         props.item.children.forEach(child => {
-          tmp.push(h(ItemMenu, { item: child, parentKey: nextKey, icon: props.icon }))
+          tmp.push(h(ItemMenu, { item: child, parentKey: nextKey, icon: props.icon, class: 'user-site-menu-item' }))
         })
         const icon = props.item.meta?.icon
         l = [h(QExpansionItem,
@@ -91,7 +91,8 @@ export default defineComponent({
             label: props.item.label,
             icon,
             dense: true,
-            group: 'menu_' + props.parentKey
+            group: 'menu_' + props.parentKey,
+            expandIconClass: 'site-menu'
           },
           () => h(QList, {}, () => tmp))
         ]
@@ -106,9 +107,11 @@ export default defineComponent({
 <style lang='scss'>
 // todo переделать имя класса
 
-//.q-expansion-item__content {
-//  margin-left: 26px;
-//  padding-left: 4px;
-//  border-left: 1px solid rgba(0, 0, 0, .12);
-//}
+.user-site-menu-item {
+  margin-left: 16px;
+  padding-left: 10px;
+  font-size: 0.85em;
+  opacity: 0.8;
+  //border-left: 1px solid rgba(0, 0, 0, .12);
+}
 </style>

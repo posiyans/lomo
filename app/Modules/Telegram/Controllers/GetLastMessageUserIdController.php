@@ -28,7 +28,7 @@ class GetLastMessageUserIdController extends Controller
             if (isset($updates['result'][0])) {
                 $userTelegram = $updates['result'][0]['message']['from'];
                 $line = "Ваш id:" . $userTelegram['id'];
-                \Notification::sendNow($userTelegram['id'], new TelegramNotification($line));
+                \Notification::send($userTelegram['id'], new TelegramNotification($line));
                 return ['status' => true, 'data' => $userTelegram];
             } else {
                 return ['status' => false, 'error' => 'Нет сообщений'];

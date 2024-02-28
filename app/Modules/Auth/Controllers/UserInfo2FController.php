@@ -16,14 +16,14 @@ class UserInfo2FController extends MyController
         $user = Auth::user();
         $data = [
             'id' => $user->id,
-            'two_factor' => $user->options['two_factor'] ?? false,
-            'two_factor_enable' => $user->options['two_factor_enable'] ?? [],
+            'two_factor' => $user->getField('two_factor', false),
+            'two_factor_enable' => $user->getField('two_factor_enable', []),
 
             'two_factor_valid' => [
                 [
                     'key' => 'google2fa',
                     'label' => 'Google Authenticator',
-                    'error' => isset($user->options['twofa_secret']) ? false : true,
+                    'error' => !$user->getField('two_factor_secret', false),
                     'error_message' => 'Не утановлен SecretKey',
                 ]
             ]
@@ -32,7 +32,7 @@ class UserInfo2FController extends MyController
             $data['two_factor_valid'][] = [
                 'key' => 'telegram',
                 'label' => 'Telegram ',
-                'error' => !isset($user->options['telegram']) && !empty($user->options['telegram']),
+                'error' => !$user->getField('telegram', false),
                 'error_message' => 'Не указан id в Telegram',
             ];
         }

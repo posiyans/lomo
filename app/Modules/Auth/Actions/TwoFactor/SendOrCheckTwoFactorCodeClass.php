@@ -25,10 +25,12 @@ class SendOrCheckTwoFactorCodeClass
 
     public function run()
     {
-        if ($this->user->options['two_factor'] &&
+        if ($this->user->getField('two_factor', false) &&
             (
-                (in_array('google2fa', $this->user->options['two_factor_enable']) && $this->user->options['twofa_secret']) ||
-                (in_array('telegram', $this->user->options['two_factor_enable']) && isset($this->user->options['telegram']) && !empty($this->user->options['telegram']))
+                (in_array('google2fa', $this->user->getField('two_factor_enable', [])) &&
+                    $this->user->getField('two_factor_secret', false)) ||
+                (in_array('telegram', $this->user->getField('two_factor_enable', [])) &&
+                    $this->user->getField('telegram', false) && !empty($this->user->getField('telegram')))
             )
         ) {
             if ($this->code) {
@@ -37,7 +39,6 @@ class SendOrCheckTwoFactorCodeClass
                 return $this->sendCode();
             }
         }
-
         throw new \Exception('2fa disable');
     }
 
@@ -55,7 +56,7 @@ class SendOrCheckTwoFactorCodeClass
     {
         $code = (new CreateUserTwoFactorCodeClass($this->user))->run();
         try {
-            \Notification::sendNow($this->user, new TwoFactorAuthentication($code));
+            \Notification::send($this->user, new TwoFactorAuthentication($code));
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\Log::error($e->getMessage());
             throw new \Exception('send code error');
