@@ -33,7 +33,11 @@ class AdminNewCommentsNotification extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['telegram'];
+        $data = [];
+        if ($notifiable->getField('telegram', false)) {
+            $data[] = 'telegram';
+        }
+        return $data;
     }
 
     public function toTelegram($notifiable)

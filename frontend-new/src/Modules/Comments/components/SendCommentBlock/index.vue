@@ -69,7 +69,7 @@
 </template>
 
 <script>
-import { computed, defineComponent, onMounted } from 'vue'
+import { computed, defineComponent, onMounted, watch } from 'vue'
 import UserAvatarByUid from 'src/Modules/Avatar/components/UserAvatarByUid/index.vue'
 import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
 import AddFileBtn from 'src/Modules/Files/components/AddFileBtn/index.vue'
@@ -121,7 +121,10 @@ export default defineComponent({
         })
       }
     }
-
+    watch(
+      () => authStore.user,
+      () => message.getStatusBan()
+    )
     onMounted(() => {
       if (!authStore.user.email_verified_at) {
         authStore.getMyInfo(true)

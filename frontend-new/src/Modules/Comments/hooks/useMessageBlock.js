@@ -145,6 +145,7 @@ export function useMessageBlock(type, prentUid) {
     messageSend,
     messageLoading,
     ban,
+    getStatusBan,
     replyMessage,
     showAllMessage,
     sendComment,
