@@ -56,8 +56,6 @@ class AdminNewCommentsNotification extends Notification implements ShouldQueue
                 ->chunk()
                 ->content($text)
                 ->button('Смотреть', $url);
-        } else {
-            throw new \Exception('Не указан телеграм id');
         }
     }
 
