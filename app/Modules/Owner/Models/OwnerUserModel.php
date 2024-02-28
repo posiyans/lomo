@@ -47,6 +47,7 @@ class OwnerUserModel extends MyModel
 
     protected $primaryKey = 'uid';
     protected $keyType = 'string';
+    public $incrementing = false;
 
     public function fullName()
     {

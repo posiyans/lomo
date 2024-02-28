@@ -29,18 +29,20 @@ class CreateOwnerAction
     {
         if (count($this->data) > 0) {
             $uid = Str::uuid();
-            $owner = new OwnerUserModel();
-            $owner->uid = $uid;
-            if (!$owner->logAndSave('Добавление собственника')) {
+            $this->owner = new OwnerUserModel();
+            $this->owner->uid = $uid;
+            if (!$this->owner->logAndSave('Добавление собственника')) {
                 return throw new \Exception('Ошибка добавления собственника');
             }
-            $id = $owner->uid;
-            $owner->uid = $uid;
-            $owner->id = $id;
-            $this->owner = $owner;
+            //todo зачем это????
+//            $id = $owner->uid;
+//            $owner->uid = $uid;
+//            $owner->id = $id;
+//            $this->owner = $owner;
             $this->addValues();
             return $this->owner;
         }
+        throw new \Exception('error create owner');
     }
 
     private function addValues()

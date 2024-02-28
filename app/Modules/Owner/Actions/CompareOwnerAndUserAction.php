@@ -23,7 +23,6 @@ class CompareOwnerAndUserAction
     public function run()
     {
         if ($this->user->owner()->save($this->owner)) {
-            // todo добавить роль собственника
             (new ChangeRoleToUserAction($this->user))->addRole('owner');
             return true;
         }

@@ -33,6 +33,17 @@ class UserModelDemoSeeder extends Seeder
         if ($role) {
             $user->syncRolesWithoutDetaching([$role->id]);
         }
+        $user = UserModel::create([
+            'name' => 'owner',
+            'email' => 'owner@examples.com',
+            'email_verified_at' => '2020-10-10 10:10:10',
+            'password' => Hash::make('password'),
+            'uid' => Str::uuid(),
+            'options' => [
+                'adres' => '',
+                'phone' => '',
+            ],
+        ]);
         UserModel::factory()->count(50)->create();
     }
 }
