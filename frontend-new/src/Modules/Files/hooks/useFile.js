@@ -64,7 +64,9 @@ export function useFile() {
         maxChunk: Math.round(model.blob.size / maxChunkSize)
       }
       sendData(data)
-      resolve()
+        .then(() => {
+          resolve()
+        })
     })
   }
   const deleteFile = () => {
@@ -86,45 +88,58 @@ export function useFile() {
     })
   }
   const sendData = (data) => {
-    if (data.chunk <= data.maxChunk) {
-      const start = data.chunk * maxChunkSize
-      const end = start + maxChunkSize
-      const chunk = model.blob.slice(start, end)
-      const formData = new FormData()
-      let done = false
-      if (data.chunk === data.maxChunk) {
-        done = true
-        formData.append('action', 'done')
-        formData.append('name', model.name)
-        formData.append('size', model.size)
-        formData.append('type', model.type)
-        formData.append('model', parent.type)
-        formData.append('model_uid', parent.uid)
+    return new Promise((resolve, reject) => {
+      if (data.chunk <= data.maxChunk) {
+        const start = data.chunk * maxChunkSize
+        const end = start + maxChunkSize
+        const chunk = model.blob.slice(start, end)
+        const formData = new FormData()
+        let done = false
+        if (data.chunk === data.maxChunk) {
+          done = true
+          formData.append('action', 'done')
+          formData.append('name', model.name)
+          formData.append('size', model.size)
+          formData.append('type', model.type)
+          formData.append('model', parent.type)
+          formData.append('model_uid', parent.uid)
+        } else {
+          formData.append('action', 'chunk')
+          formData.append('model', parent.type)
+          formData.append('model_uid', parent.uid)
+        }
+        formData.append('chunk', data.chunk)
+        formData.append('uid', model.uid)
+        formData.append('file', chunk)
+        data.chunk++
+        const test = (progressEvent) => {
+          const chankProcess = progressEvent.loaded / progressEvent.total
+          const process = (data.chunk - 1 + chankProcess) / data.maxChunk
+          upload.process = process <= 1 ? process : 1
+        }
+        userUploadFile(formData, test)
+          .then(response => {
+            // upload.process = (data.chunk - 1) / data.maxChunk
+            if (done) {
+              upload.success = true
+              model.url = response.data.data.url
+              upload.error = false
+            }
+            sendData(data)
+              .then(() => {
+                resolve()
+              })
+          })
+          .catch(er => {
+            upload.error = true
+            upload.success = false
+            upload.errorsMessage = er.response.data.errors
+            reject()
+          })
       } else {
-        formData.append('action', 'chunk')
-        formData.append('model', parent.type)
-        formData.append('model_uid', parent.uid)
+        resolve()
       }
-      formData.append('chunk', data.chunk)
-      formData.append('uid', model.uid)
-      formData.append('file', chunk)
-      data.chunk++
-      userUploadFile(formData)
-        .then(response => {
-          upload.process = (data.chunk - 1) / data.maxChunk
-          if (done) {
-            upload.success = true
-            model.url = response.data.data.url
-            upload.error = false
-          }
-          sendData(data)
-        })
-        .catch(er => {
-          upload.error = true
-          upload.success = false
-          upload.errorsMessage = er.response.data.errors
-        })
-    }
+    })
   }
 
   return {

@@ -28,7 +28,8 @@ class CreateAppealValidator extends FormRequest
             'title' => [
                 'required',
                 'string',
-                'min:10'
+                'min:10',
+                'max: 250'
             ],
             'text' => [
                 'required',

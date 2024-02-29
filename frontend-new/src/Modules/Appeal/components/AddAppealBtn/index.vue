@@ -29,6 +29,7 @@
                 v-model="data.title"
                 outlined
                 label="Тема обращения"
+                maxlength="250"
               />
             </div>
             <div>
@@ -87,27 +88,44 @@ export default defineComponent({
     })
     const dialogVisible = ref(null)
     const loading = ref(false)
+    const sendFilesArray = ref([])
     const saveData = () => {
       loading.value = true
-      createAppeal(data.value)
+      const tmp = {
+        uid: data.value.uid,
+        title: data.value.title,
+        text: data.value.text,
+        appeal_type_id: data.value.appeal_type_id,
+      }
+      createAppeal(tmp)
         .then(res => {
-          data.value.files.forEach(item => {
-            item.sendFileToServer()
-          })
-          dialogVisible.value = false
-          emit('success')
+          sendFilesArray.value = [...data.value.files]
+          sendFiles()
         })
         .catch(er => {
           errorMessage(er.response.data.errors)
-        })
-        .finally(() => {
           loading.value = false
         })
     }
+    const sendFiles = () => {
+      if (sendFilesArray.value.length > 0) {
+        const file = sendFilesArray.value.shift()
+        console.log(file)
+        file.sendFileToServer()
+          .then(() => {
+            sendFiles()
+          })
+      } else {
+        dialogVisible.value = false
+        loading.value = false
+        emit('success')
+      }
+    }
+
+
     const addFile = (ar) => {
       ar.forEach(val => {
         data.value.files.push(val)
-        // val.sendFileToServer()
       })
     }
     const openDialogAction = () => {

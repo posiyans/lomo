@@ -17,7 +17,7 @@
       </router-link>
     </div>
     <div v-else class="row q-py-sm q-pl-sm no-wrap">
-      <div v-if="showAvatar" class="q-pr-sm xs-hide q-pt-xs">
+      <div class="q-pr-sm xs-hide q-pt-xs">
         <UserAvatarByUid :uid="authStore.user.uid" size="30px" />
       </div>
       <div class="col">
@@ -94,8 +94,6 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const message = props.messageBlock
-    // const message = toRefs(props.messageBlock)
-
     const authStore = useAuthStore()
 
     const placeholderInput = computed(() => {
@@ -109,9 +107,6 @@ export default defineComponent({
         return true
       }
       return false
-    })
-    const showAvatar = computed(() => {
-      return true
     })
     const change = (files) => {
       if (files.length > 0) {
@@ -136,7 +131,6 @@ export default defineComponent({
     return {
       inputHint,
       placeholderInput,
-      showAvatar,
       authStore,
       change,
       message

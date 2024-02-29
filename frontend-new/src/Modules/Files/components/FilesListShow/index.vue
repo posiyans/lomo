@@ -19,6 +19,9 @@
               </div>
             </div>
           </q-card-section>
+          <div v-if="file.upload && !file.upload.success && file.upload.process > 0 && file.upload.process < 1" class="absolute-bottom full-width">
+            <q-linear-progress :value="file.upload.process" class="" track-color="grey" size="3px" />
+          </div>
         </q-card>
       </div>
     </div>

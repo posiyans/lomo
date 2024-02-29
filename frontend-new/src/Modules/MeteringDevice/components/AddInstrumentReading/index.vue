@@ -9,8 +9,11 @@
         </q-btn>
       </slot>
     </div>
-    <q-dialog v-model="dialogVisible">
-      <q-card style="min-width: 450px;">
+    <q-dialog
+      v-model="dialogVisible"
+      :maximized="$q.screen.width < 500"
+    >
+      <q-card style="width: 450px;">
         <q-card-section class="row items-center q-pb-none">
           <div class="text-h6">Добавить показания</div>
           <q-space />
@@ -126,6 +129,9 @@ export default defineComponent({
       }
     }
     const $q = useQuasar()
+    const dialogmaximized = computed(() => {
+      return $q.screen.width < 500
+    })
     const onSubmit = () => {
       $q.dialog({
         title: 'Подтвердите',
@@ -177,6 +183,7 @@ export default defineComponent({
     }
 
     return {
+      $q,
       currentDate,
       showDateInput,
       currentSteadId,

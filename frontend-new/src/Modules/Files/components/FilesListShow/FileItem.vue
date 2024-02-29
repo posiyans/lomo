@@ -11,9 +11,6 @@
             {{ fileName }}
           </div>
         </div>
-        <div v-if="file.upload && !file.upload.success && file.upload.process > 0 && file.upload.process < 1" class="absolute-bottom full-width">
-          <q-linear-progress :value="file.upload.process" class="" track-color="grey" size="2px" />
-        </div>
       </div>
       <div class="row items-center">
         <FileSize :size="fileSize" class="text-grey-7 text-small-85" />

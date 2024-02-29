@@ -4,14 +4,15 @@ export function getUploadFileUrl() {
   return '/api/v2/file/upload'
 }
 
-export async function userUploadFile(data) {
+export async function userUploadFile(data, func) {
   return request.post(
     getUploadFileUrl(),
     data,
     {
       headers: {
         'Content-Type': 'multipart/form-data'
-      }
+      },
+      onUploadProgress: func
     }
   )
 }
