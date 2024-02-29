@@ -10,7 +10,7 @@
             </div>
             <ShowTime :time="article.updated_at" />
           </div>
-          <div v-if="authStore.checkPermission('article-edit') " class="absolute-top-right">
+          <div v-if="authStore.checkPermission('article-edit') " class="absolute-top-right desktop-only">
             <q-btn icon="settings" color="primary" flat :to="'/admin/article/edit/' + article.id" />
           </div>
         </div>
@@ -40,7 +40,7 @@
 
 <script>
 /* eslint-disable */
-import { defineComponent, onMounted, ref } from 'vue'
+import { defineComponent, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import ShowTime from 'src/components/ShowTime/index.vue'
 import CountMessageBlock from 'src/Modules/Comments/components/CountMessageBlock/index.vue'
@@ -65,9 +65,6 @@ export default defineComponent({
     const showArticle = () => {
       router.push('/article/show/' + props.article.slug)
     }
-    onMounted(() => {
-
-    })
     return {
       data,
       showArticle,

@@ -27,7 +27,9 @@ class ReceiptClearController extends Controller
         $options = [];
         $pdf->addPage($options);
         $pdf->render();
-        return $pdf->Output('Ticket_CHT.pdf');
+        $tmpfname = tempnam(sys_get_temp_dir(), 'ticket_stead_clear');
+        $pdf->Output($tmpfname);
+        return response()->download($tmpfname, 'Ticket_CHT.pdf');
     }
 
 }
