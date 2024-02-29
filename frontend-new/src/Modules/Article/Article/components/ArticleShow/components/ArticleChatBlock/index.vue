@@ -12,8 +12,8 @@
       </div>
     </div>
     <q-separator />
-    <div v-if="showChat">
-      <MessageBlock :message-block="messageBlock" class="comments-block" />
+    <div v-if="showChat" style="max-width: 100vw">
+      <MessageBlock :message-block="messageBlock" />
       <SendCommentBlock :message-block="messageBlock" file class="bg-grey-3" />
     </div>
   </div>

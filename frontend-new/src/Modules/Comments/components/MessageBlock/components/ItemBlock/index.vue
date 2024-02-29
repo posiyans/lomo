@@ -3,15 +3,15 @@
     <div class="row no-wrap" :class="{ 'reply-block': reply, 'cursor-pointer': reply }">
       <div v-if="fullView" class="q-px-sm">
         <div class="text-center q-pt-sm">
-          <UserAvatarByUid :uid="item.user.uid" size="40px" />
+          <UserAvatarByUid :uid="item.user.uid" size="35px" />
         </div>
       </div>
-      <div class="col-grow">
+      <div class="col-grow" style="width: calc(100% - 65px)">
         <div class="row items-center q-col-gutter-sm no-wrap">
-          <div class="text-weight-bold text-primary">
+          <div class="text-weight-bold text-primary ellipsis">
             {{ item.user.name }}
           </div>
-          <ShowTime v-if="fullView" :time="item.updated_at" class="text-grey-8 text-small-85" />
+          <ShowTime v-if="fullView" :time="item.updated_at" class="text-grey-8 text-small-85 ellipsis" />
           <q-space />
           <div>
             <slot name="header"></slot>
@@ -20,7 +20,7 @@
         <slot></slot>
         <div v-html="messageTextHtml"
              class="q-py-sm"
-             :class=" { 'text-strike' : item.delete, 'text-grey':  item.delete, 'reply-block__message': reply, 'message-block__message': fullView }" />
+             :class="messageTextClass" />
         <FilesListShow v-if="!item.delete" :model-value="item.files" show-preview />
       </div>
     </div>
@@ -68,6 +68,15 @@ export default defineComponent({
     const fullView = computed(() => {
       return !props.reply
     })
+    const messageTextClass = computed(() => {
+      return {
+        'text-strike': props.item.delete,
+        'text-grey': props.item.delete,
+        'reply-block__message': props.reply,
+        'message-block__message': fullView.value
+      }
+
+    })
     const messageTextHtml = computed(() => {
       if (props.item.message) {
         // return props.item.message.replace(/\n/g, '<br />').replace(/(http:\/\/[.\w/=&?]+)/gi, "<a href='$1' class='text-primary'>$1</a>")
@@ -106,6 +115,7 @@ export default defineComponent({
     return {
       fullView,
       replyMessage,
+      messageTextClass,
       deleteItem,
       deleteAccess,
       data,

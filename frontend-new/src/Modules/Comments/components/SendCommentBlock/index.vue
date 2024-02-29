@@ -16,8 +16,8 @@
         {{ message.ban.value.errorMessage }}
       </router-link>
     </div>
-    <div v-else class="row items-center q-py-sm no-wrap">
-      <div class="q-pa-md">
+    <div v-else class="row q-py-sm q-pl-sm no-wrap">
+      <div v-if="showAvatar" class="q-pr-sm xs-hide q-pt-xs">
         <UserAvatarByUid :uid="authStore.user.uid" size="30px" />
       </div>
       <div class="col">
@@ -40,7 +40,7 @@
             </div>
           </div>
           <q-input
-            v-model="message.newMessage.value.message"
+            v-model.trim="message.newMessage.value.message"
             autogrow
             dense
             outlined
@@ -61,7 +61,7 @@
           />
         </div>
       </div>
-      <div class="">
+      <div>
         <q-btn flat icon="send" :loading="message.uploadMessage.value" :color="message.messageSend.value ? 'primary' : 'grey-6'" @click="messageBlock.sendComment" />
       </div>
     </div>
@@ -110,6 +110,9 @@ export default defineComponent({
       }
       return false
     })
+    const showAvatar = computed(() => {
+      return true
+    })
     const change = (files) => {
       if (files.length > 0) {
         files.forEach(file => {
@@ -133,6 +136,7 @@ export default defineComponent({
     return {
       inputHint,
       placeholderInput,
+      showAvatar,
       authStore,
       change,
       message

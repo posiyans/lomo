@@ -14,7 +14,7 @@
           @click="scrollTo(item.options.reply)"
         />
         <template v-slot:header>
-          <div v-if="item.actions.write && !list.ban.value.status" class="row q-pr-lg no-wrap">
+          <div v-if="item.actions.write && !list.ban.value.status" class="row no-wrap">
             <div class="cursor-pointer message-btn message-btn_reply q-px-xs" @click="messageBlock.replyMessage(item)">
               <q-icon name="reply">
                 <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">

@@ -2,7 +2,7 @@
   <q-card class="q-mb-lg">
     <q-card-section class="relative-position row items-center q-col-gutter-md q-pb-none no-wrap">
       <div>
-        <div class="text-weight-bold text-h6 overflow-hidden  ">
+        <div class="text-weight-bold text-h6 overflow-hidden">
           {{ article.title }}
         </div>
         <div class="row items-center q-col-gutter-md text-grey-8 text-small-80">
@@ -23,7 +23,7 @@
       </div>
     </q-card-section>
     <q-separator />
-    <q-card-section v-if="showBody">
+    <q-card-section v-if="showBody" class="q-px-xs-none q-pa-sm-sm">
       <div v-html="article.text" class="q-px-sm"></div>
       <div v-if="article.files?.length > 0" class="q-gutter-sm">
         <div class="text-weight-bold">Файлы:</div>
