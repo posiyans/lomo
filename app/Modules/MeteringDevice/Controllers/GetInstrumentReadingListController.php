@@ -26,10 +26,14 @@ class GetInstrumentReadingListController extends Controller
         try {
             $user = Auth::user();
             if (!$user->ability('superAdmin', 'stead-show')) {
-                $request->stead_id = $user->owner->steads->map(function ($item) {
+                $steads = $user->owner->steads->map(function ($item) {
                     return $item->id;
                 });
+                if (!in_array($request->stead_id, $steads->toArray())) {
+                    throw new \Exception('Ошибка доступа');
+                }
             }
+
             $readings = (new InstrumentReadingRepository())
                 ->for_stead($request->stead_id)
                 ->for_device($request->device_id)
