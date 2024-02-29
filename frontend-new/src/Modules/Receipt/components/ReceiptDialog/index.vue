@@ -1,5 +1,4 @@
 <template>
-
   <q-tabs
     v-model="tab"
     class="bg-grey-1"
@@ -19,6 +18,12 @@
     <q-tab-panel name="stead" class="q-pa-lg row justify-center">
       <div class="" style="max-width: 500px;">
         <SelectStead v-model="stead_id" outlined auto-select label="Укажите номер участка" style="min-width: 300px;" />
+        <RateGroupSelect
+          v-model="rateGroupId"
+          outlined
+          auto-select
+          :params="{depends: 1}"
+        />
         <div style="min-height: 150px;">
           <div v-if="stead_id" class="text-red q-pa-sm">
             <div>
@@ -33,8 +38,8 @@
             </div>
           </div>
         </div>
-        <div class="q-pa-lg">
-          <q-btn color="negative" flat label="Отмена" @click="show = false" />
+        <div class="text-center">
+          <q-btn color="negative" flat label="Отмена" v-close-popup />
           <q-btn color="primary" :disabled="!stead_id" label="Скачать" @click="download" />
         </div>
       </div>
@@ -47,50 +52,31 @@
 
 <script>
 /* eslint-disable */
-import { defineComponent, onMounted, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { defineComponent, ref } from 'vue'
 import { getReceiptForStead } from 'src/Modules/Receipt/api/receipt.js'
 import SelectStead from 'src/Modules/Stead/components/SelectStead/index.vue'
 import RateList from 'src/Modules/Rate/components/ShowRateList/index.vue'
 import SteadInfo from 'src/Modules/Stead/components/ShowSteadInfo/index.vue'
 import { exportFile } from 'quasar'
+import RateGroupSelect from 'src/Modules/Rate/components/RateGroupSelect/index.vue'
 
 export default defineComponent({
   components: {
     SelectStead,
     RateList,
-    SteadInfo
+    SteadInfo,
+    RateGroupSelect
   },
   props: {},
   setup(props, { emit }) {
     const data = ref(null)
     const tab = ref('stead')
     const stead_id = ref('')
-    const router = useRouter()
-    const route = useRoute()
-
-    onMounted(() => {
-
-    })
-    return {
-      data,
-      stead_id,
-      tab
-    }
-  },
-  methods: {
-    totalFilter(size, rate) {
-      let sum = 0
-      rate.forEach(i => {
-        sum = Number(sum) + Number(i.rate.ratio_a) * Number(size) / 100 + Number(i.rate.ratio_b)
-      })
-      return sum.toFixed(2)
-    },
-
-    download() {
+    const rateGroupId = ref('')
+    const download = () => {
       const data = {
-        stead_id: this.stead_id,
-        rate_group_id: 2 // todo костыль!!!
+        stead_id: stead_id.value,
+        rate_group_id: rateGroupId.value
       }
       getReceiptForStead(data)
         .then(response => {
@@ -100,18 +86,15 @@ export default defineComponent({
           } catch (e) {
           }
           exportFile(fileName, response.data)
-          this.show = false
         })
-    },
-    setStead(val) {
-      if (val.id) {
-        this.stead = val
-      } else {
-        this.stead = ''
-      }
-    },
-    close() {
-      this.$emit('close')
+    }
+
+    return {
+      data,
+      stead_id,
+      rateGroupId,
+      download,
+      tab
     }
   }
 })
