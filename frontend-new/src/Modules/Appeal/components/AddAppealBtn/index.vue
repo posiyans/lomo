@@ -88,7 +88,6 @@ export default defineComponent({
     })
     const dialogVisible = ref(null)
     const loading = ref(false)
-    const sendFilesArray = ref([])
     const saveData = () => {
       loading.value = true
       const tmp = {
@@ -98,30 +97,20 @@ export default defineComponent({
         appeal_type_id: data.value.appeal_type_id,
       }
       createAppeal(tmp)
-        .then(res => {
-          sendFilesArray.value = [...data.value.files]
-          sendFiles()
+        .then(async () => {
+          for (const file of data.value.files) {
+            await file.sendFileToServer()
+          }
+          dialogVisible.value = false
+          emit('success')
         })
         .catch(er => {
           errorMessage(er.response.data.errors)
+        })
+        .finally(() => {
           loading.value = false
         })
     }
-    const sendFiles = () => {
-      if (sendFilesArray.value.length > 0) {
-        const file = sendFilesArray.value.shift()
-        console.log(file)
-        file.sendFileToServer()
-          .then(() => {
-            sendFiles()
-          })
-      } else {
-        dialogVisible.value = false
-        loading.value = false
-        emit('success')
-      }
-    }
-
 
     const addFile = (ar) => {
       ar.forEach(val => {
