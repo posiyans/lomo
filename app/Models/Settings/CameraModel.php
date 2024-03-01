@@ -120,7 +120,7 @@ class CameraModel
 
     /**
      * получить jpg из rtsp потока
-     * @param  int  $count  макс кол-во неудачных попыток
+     * @param int $count макс кол-во неудачных попыток
      * @return bool
      */
     public function rtspToJpeg($count = 2)
@@ -135,7 +135,7 @@ class CameraModel
             mkdir($folder, 0777, true);
         }
         $file = $folder . '/' . date('Y-m-d_H:i:s') . '.jpg';
-        $ffmpeg = env('FFMPEG_BIN', false);
+        $ffmpeg = env('FFMPEG_BIN', '/usr/bin/ffmpeg');
         if ($ffmpeg) {
 //            echo $ffmpeg . " -rtsp_transport tcp  -y -i " . $this->url . " -f image2 -vframes 1 " . $file;
             //echo PHP_EOL;

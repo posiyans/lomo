@@ -38,7 +38,7 @@ class SaveImageFromCameraAction
             mkdir($folder, 0777, true);
         }
         $file = $folder . '/' . date('Y-m-d_H:i:s') . '.jpg';
-        $ffmpeg = env('FFMPEG_BIN', false);
+        $ffmpeg = env('FFMPEG_BIN', '/usr/bin/ffmpeg');
 
         if ($ffmpeg) {
             $cmd = $ffmpeg . " -rtsp_transport tcp  -y -i " . $this->camera->url . " -f image2 -vframes 1 " . $file;
