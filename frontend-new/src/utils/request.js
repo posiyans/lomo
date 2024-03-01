@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { getCsrfCookieToken } from 'src/Modules/Auth/api/auth'
-import { Notify } from 'quasar'
 import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
 
 // create an axios instance
@@ -45,13 +44,14 @@ service.interceptors.response.use(
         .then(res => {
           const autUserSore = useAuthStore()
           autUserSore.getMyInfo()
-          Notify.create({
-            message: 'Ваша сессия устарела.',
-            caption: 'Попробуйте еще раз',
-            color: 'info'
-          })
+          // Notify.create({
+          //   message: 'Ваша сессия устарела.',
+          //   caption: 'Попробуйте еще раз',
+          //   color: 'info'
+          // })
         })
     }
+    // return error
     return Promise.reject(error)
   }
 )

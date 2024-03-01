@@ -95,6 +95,8 @@ export const useAuthStore = defineStore('auth', {
             userLoginByEmail(data)
               .then(res => {
                 const data = res.data
+                console.log('res')
+                console.log(res)
                 if (res.data.status === 'done') {
                   this.user = res.data.data.user
                   this.permissions = res.data.data.permissions
@@ -106,12 +108,11 @@ export const useAuthStore = defineStore('auth', {
                 }
               })
               .catch(error => {
-                console.log(error.response)
                 errorMessage(error.response.data.errors)
                 this.user = {}
                 this.permissions = []
                 this.is_guest = true
-                reject()
+                reject(error)
               })
               .finally(() => {
                 this.loginLoading = false

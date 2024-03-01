@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="wrapper-vue-image-crop-upload">
     <div>
       <q-btn label="Сменить иконку сайта" color="primary" @click="imageCropperShow = true" />
     </div>

@@ -1,0 +1,38 @@
+.wrapper-vue-image-crop-upload {
+  @media screen and (max-width: 700px) {
+    .vue-image-crop-upload {
+      .vicp-wrap {
+        padding: 100px 10px;
+        width: 100%;
+        height: 100%;
+
+        .vicp-close {
+          right: 10px !important;
+          top: 10px;
+
+          .vicp-icon4 {
+            &:before {
+              background-color: #8a8888;
+            }
+
+            &:after {
+              background-color: #8a8888;
+            }
+          }
+        }
+
+        .vicp-step2 {
+          .vicp-crop {
+            display: flex;
+            justify-content: space-evenly;
+            flex-wrap: wrap;
+
+            .vicp-crop-left {
+              margin-bottom: 25px;
+            }
+          }
+        }
+      }
+    }
+  }
+}

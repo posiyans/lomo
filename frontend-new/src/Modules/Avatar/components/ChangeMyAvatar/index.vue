@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="wrapper-vue-image-crop-upload">
     <div @click="imagecropperShow=true">
       <slot>
         <div class="relative-position" :style="'width:' + size">

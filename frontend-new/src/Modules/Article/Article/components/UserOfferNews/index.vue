@@ -7,7 +7,7 @@
             Предложить новость
           </div>
           <div class="filter-item">
-            <ArticleCategorySelect v-model="article.category_id" label="В раздел" outlined dense only-public set-default />
+            <ArticleCategorySelect v-model="newArticleStore.article.category_id" label="В раздел" outlined dense only-public set-default />
           </div>
         </div>
       </div>
@@ -15,20 +15,22 @@
     <q-card-section>
       <div class="q-mb-md" style="width: 100%;">
         <q-input
-          v-model="article.title"
+          v-model="newArticleStore.article.title"
           no-caps
           outlined
           label="Заголовок"
         />
       </div>
-      <TextEditor v-model="article.text" add-image parent-type="article" :parent-uid="article.uid" />
+      <TextEditor v-model.trim="newArticleStore.article.text" add-image parent-type="article" :parent-uid="newArticleStore.article.uid" />
       <div class="q-pa-sm">
-        <AddFileBtn @add-files="addFiles" multiple :disabled="article.files.length >= maxFiles" :max-size="maxSize * 1024 * 1024" parent-type="article" :parent-uid="article.uid" />
+        <AddFileBtn @add-files="addFiles" multiple :disabled="newArticleStore.article.files.length >= maxFiles" :max-size="maxSize * 1024 * 1024" parent-type="article"
+                    :parent-uid="newArticleStore.article.uid" />
         <small> Максимум {{ maxFiles }} файлов, размером до {{ maxSize }} Мб</small>
       </div>
-      <FilesListShow v-model="article.files" edit />
+      <FilesListShow v-model="newArticleStore.article.files" edit />
       <div class="q-pl-sm q-pt-lg">
-        <q-btn color="primary" label="Сохранить" @click="showDialog" />
+        <q-btn label="Очистить" color="negative" :disable="newArticleStore.loading.upload" flat @click="newArticleStore.clear" />
+        <q-btn color="primary" label="Сохранить" @click="showDialog" :loading="newArticleStore.loading.upload" />
         <q-dialog
           title="Внимание"
           v-model="dialogVisible"
@@ -55,7 +57,7 @@
                   <q-btn label="Отмена" flat color="negative" v-close-popup />
                 </div>
                 <div>
-                  <q-btn label="Сохранить" color="primary" @click="saveArticle" />
+                  <q-btn label="Сохранить" :loading="newArticleStore.loading.upload" color="primary" @click="saveArticle" />
                 </div>
               </div>
             </q-card-section>
@@ -68,14 +70,13 @@
 
 <script>
 /* eslint-disable */
-import { computed, defineComponent, reactive, ref } from 'vue'
+import { defineComponent, ref } from 'vue'
 import AddFileBtn from 'src/Modules/Files/components/AddFileBtn/index.vue'
 import FilesListShow from 'src/Modules/Files/components/FilesListShow/index.vue'
-import { uid, useQuasar } from 'quasar'
+import { useQuasar } from 'quasar'
 import ArticleCategorySelect from 'src/Modules/Article/Category/components/ArticleCategorySelect/index.vue'
-import { userAddArticle } from 'src/Modules/Article/Article/api/article'
 import TextEditor from 'components/TextEditor/index.vue'
-import { errorMessage } from 'src/utils/message'
+import { useNewArticleStore } from 'src/Modules/Article/Article/stores/useNewArticleStore'
 
 export default defineComponent({
   components: {
@@ -87,36 +88,20 @@ export default defineComponent({
   props: {},
   setup(props, { emit }) {
     const $q = useQuasar()
-    const data = ref(null)
     const dialogVisible = ref(false)
     const maxFiles = 10
     const maxSize = 5
-    const article = reactive({
-      uid: uid(),
-      title: '',
-      category_id: '',
-      text: '',
-      files: []
-    })
-    const countUploadsFile = computed(() => {
-      let i = 0
-      article.files.forEach(item => {
-        if (item.upload.success) {
-          i++
-        }
-      })
-      return i
-    })
+    const newArticleStore = useNewArticleStore()
     const cancel = () => {
       emit('close')
     }
     const showDialog = () => {
-      if (article.title === '') {
+      if (newArticleStore.article.title === '') {
         $q.dialog({
           title: 'Внимание',
           message: 'Укажите заголовок для записи'
         })
-      } else if (article.text === '') {
+      } else if (newArticleStore.article.text.length < 10) {
         $q.dialog({
           title: 'Внимание',
           message: 'Текст записи не может быть пустым'
@@ -127,48 +112,29 @@ export default defineComponent({
     }
     const addFiles = (ar) => {
       ar.forEach(val => {
-        if (article.files.length < maxFiles) {
-          article.files.push(val)
-          val.sendFileToServer()
+        if (newArticleStore.article.files.length < maxFiles) {
+          newArticleStore.article.files.push(val)
         }
       })
     }
+    const articleSuccessSave = () => {
+      dialogVisible.value = false
+      emit('success')
+    }
     const saveArticle = () => {
-      const data = {
-        title: article.title,
-        text: article.text,
-        category_id: article.category_id,
-        uid: article.uid
-      }
-      userAddArticle(data)
-        .then(res => {
-          // saveFiles()
-          dialogVisible.value = false
-          $q.notify({
-            message: 'Данные успешно отправлены, после проверки она появится на сайте',
-            color: 'secondary'
-          })
-          emit('success')
-        })
-        .catch(er => {
-          if (er.response.status === 403) {
-            errorMessage('Вам запрещено предлагать записи')
-          } else {
-            errorMessage(er.response.data.errors)
-          }
-        })
+      newArticleStore.saveArticle(articleSuccessSave)
+      dialogVisible.value = false
     }
 
 
     return {
+      newArticleStore,
       saveArticle,
       dialogVisible,
       showDialog,
       maxFiles,
       maxSize,
-      article,
       addFiles,
-      data,
       cancel
     }
   }
