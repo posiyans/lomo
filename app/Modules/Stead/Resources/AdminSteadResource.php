@@ -20,7 +20,7 @@ class AdminSteadResource extends JsonResource
         foreach ($owners as $owner) {
             $tmp = new OwnerUserResource($owner);
             $tmp = $tmp->resolve();
-            $tmp['proportion'] = $owner->pivot->proportion;
+            $tmp['proportion'] = (int)$owner->pivot->proportion;
             $tmp['stead_id'] = $this->id;
             $tmp['user_uid'] = $owner->user_uid;
             $data[] = $tmp;

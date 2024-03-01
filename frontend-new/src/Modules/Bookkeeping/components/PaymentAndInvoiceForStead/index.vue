@@ -1,8 +1,8 @@
 <template>
   <div>
     <BalanceForStead :stead-id="steadId" class="q-pa-sm" />
-    <div class="row q-col-gutter-sm no-wrap">
-      <DropDownBlock>
+    <div class="row q-col-gutter-sm">
+      <DropDownBlock only-mobile>
         <FilterBlock v-model="listQuery" />
       </DropDownBlock>
       <q-space />

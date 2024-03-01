@@ -3,7 +3,7 @@
     <q-card>
       <q-card-section>
         <div class="relative-position">
-          <div class="text-weight-bold text-h6">{{ article.title }}</div>
+          <div class="article-preview-title">{{ article.title }}</div>
           <div class="row items-center q-col-gutter-md text-grey-8 text-small-80">
             <div v-if="article.author">
               {{ article.author.name }}
@@ -78,6 +78,13 @@ export default defineComponent({
 
 </style>
 <style lang="scss">
+.article-preview-title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  line-height: 1.5rem;
+  //letter-spacing: 0.0125em;
+}
+
 .article-preview {
   & img {
     max-height: 100px;

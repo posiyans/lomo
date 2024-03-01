@@ -21,6 +21,10 @@ use Illuminate\Database\Eloquent\Model;
  */
 class MyModel extends Model
 {
+    protected $casts = [
+        'id' => 'integer'
+    ];
+
 
     /**
      * под свойства хранящиеся в вполе optinons

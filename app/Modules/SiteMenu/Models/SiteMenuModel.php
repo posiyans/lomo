@@ -9,5 +9,9 @@ class SiteMenuModel extends MyModel
 {
     use HasFactory;
 
+    protected $casts = [
+        'id' => 'integer'
+    ];
+
     protected $fillable = ['label', 'icon', 'path'];
 }

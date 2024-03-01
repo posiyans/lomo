@@ -1,17 +1,22 @@
 <template>
   <div v-if="item">
     <div class="row no-wrap" :class="{ 'reply-block': reply, 'cursor-pointer': reply }">
-      <div v-if="fullView" class="q-px-sm">
-        <div class="text-center q-pt-sm">
-          <UserAvatarByUid :uid="item.user.uid" size="35px" />
-        </div>
-      </div>
       <div class="col-grow" style="width: calc(100% - 65px)">
         <div class="row items-center q-col-gutter-sm no-wrap">
-          <div class="text-weight-bold text-primary ellipsis">
-            {{ item.user.name }}
+          <div class="row items-center">
+            <div v-if="fullView" class="text-center q-pr-sm">
+              <UserAvatarByUid :uid="item.user.uid" size="30px" />
+            </div>
+            <div>
+              <div class="text-weight-bold text-primary ellipsis">
+                {{ item.user.name }}
+              </div>
+              <ShowTime v-if="fullView" :time="item.updated_at" class="text-grey-8 text-small-75 ellipsis" />
+            </div>
           </div>
-          <ShowTime v-if="fullView" :time="item.updated_at" class="text-grey-8 text-small-85 ellipsis" />
+          <div>
+            <slot name="description"></slot>
+          </div>
           <q-space />
           <div>
             <slot name="header"></slot>
@@ -20,6 +25,7 @@
         <slot></slot>
         <div v-html="messageTextHtml"
              class="q-py-sm"
+             style="margin-left: 40px;"
              :class="messageTextClass" />
         <FilesListShow v-if="!item.delete" :model-value="item.files" show-preview />
       </div>

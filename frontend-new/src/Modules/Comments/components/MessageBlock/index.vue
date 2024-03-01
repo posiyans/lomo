@@ -41,7 +41,7 @@
           </div>
         </template>
       </ItemBlock>
-      <q-separator style="margin-left: 55px;" class="q-mt-xs" />
+      <q-separator class="q-mt-md" />
     </div>
     <div v-if="list.showMessage.value.length < list.messageList.value.length" class="q-px-lg text-primary cursor-pointer" @click="messageBlock.nextMessage">
       Показать следующие...

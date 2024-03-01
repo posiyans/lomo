@@ -49,6 +49,10 @@ class OwnerUserSteadModel extends MyModel
     protected $fillable = ['stead_id', 'owner_uid'];
     protected $table = 'owner_user_model_stead_model';
 
+    protected $casts = [
+        'proportion' => 'integer'
+    ];
+
     public function owner()
     {
         return $this->hasOne(OwnerUserModel::class, 'uid', 'owner_uid');

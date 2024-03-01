@@ -5,36 +5,39 @@
       enter-active-class="animated fadeIn"
       leave-active-class="animated fadeOut"
     >
-      <div v-for="item in list" :key="item.id" class="relative-position">
-        <ItemBlock :item="item">
-          <template v-slot:header>
-            <div class="text-small-80">
-              <router-link :to="item.parentObject.url" class="text-primary">
-                для {{ item.parentObject.label }}
-              </router-link>
-            </div>
-          </template>
-        </ItemBlock>
-        <q-separator />
-        <div class="absolute-top-right row q-pr-lg">
-          <div v-if="item.actions.delete" class="cursor-pointer message-btn message-btn_delete  q-px-xs" @click="deleteItem(item)">
-            <q-icon name="close">
-              <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
-                <strong>Удалить</strong>
-              </q-tooltip>
-            </q-icon>
-          </div>
-          <AddBanUserBtn v-if="item.actions.ban" :user-uid="item.user.uid" :type="item.parentObject.type" :object-uid="item.parentObject.uid">
-            <div class="cursor-pointer message-btn message-btn_delete  q-px-xs">
-              <q-icon name="block">
-                <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
-                  <span>Бан пользователя</span>
-                </q-tooltip>
-              </q-icon>
-            </div>
-          </AddBanUserBtn>
-        </div>
-      </div>
+      <q-list bordered separator>
+        <q-item v-for="item in list" :key="item.id" clickable>
+          <ItemBlock :item="item" class="full-width">
+            <template v-slot:description>
+              <div class="text-small-80">
+                <router-link :to="item.parentObject.url" class="text-primary">
+                  для {{ item.parentObject.label }}
+                </router-link>
+              </div>
+            </template>
+            <template v-slot:header>
+              <div class="row q-pr-lg">
+                <div v-if="item.actions.delete" class="cursor-pointer message-btn message-btn_delete  q-px-xs" @click="deleteItem(item)">
+                  <q-icon name="close">
+                    <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
+                      <strong>Удалить</strong>
+                    </q-tooltip>
+                  </q-icon>
+                </div>
+                <AddBanUserBtn v-if="item.actions.ban" :user-uid="item.user.uid" :type="item.parentObject.type" :object-uid="item.parentObject.uid">
+                  <div class="cursor-pointer message-btn message-btn_delete  q-px-xs">
+                    <q-icon name="block">
+                      <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
+                        <span>Бан пользователя</span>
+                      </q-tooltip>
+                    </q-icon>
+                  </div>
+                </AddBanUserBtn>
+              </div>
+            </template>
+          </ItemBlock>
+        </q-item>
+      </q-list>
     </transition-group>
   </div>
 </template>

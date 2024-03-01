@@ -67,6 +67,7 @@ class SteadModel extends MyModel
 
     protected $casts = [
         'options' => 'array',
+        'id' => 'integer'
     ];
 
     protected static function newFactory(): Factory
