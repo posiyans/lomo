@@ -85,11 +85,10 @@ export default defineComponent({
     const showPassword = ref(false)
     const myForm = ref(null)
     const form = reactive({
-      name: 'posiyans_' + +new Date(),
-      // email: 'posiyans' + +new Date() + '@yandex.ru',
-      email: 'posiyans@yandex.ru',
-      password: 'Q12345678',
-      password_confirmation: 'Q12345678',
+      name: '',
+      email: '',
+      password: '',
+      password_confirmation: '',
       personal: false
     })
     const router = useRouter()

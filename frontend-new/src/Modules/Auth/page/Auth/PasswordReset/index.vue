@@ -41,7 +41,7 @@ import { useRouter } from 'vue-router'
 
 export default defineComponent({
   setup() {
-    const email = ref('posiyans@yandex.ru')
+    const email = ref('')
     const $q = useQuasar()
     const formRef = ref(null)
     const $router = useRouter()

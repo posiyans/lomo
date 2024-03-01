@@ -22,7 +22,7 @@ class UserModelDemoSeeder extends Seeder
             'name' => 'admin',
             'email' => 'admin@examples.com',
             'email_verified_at' => '2020-10-10 10:10:10',
-            'password' => Hash::make('password'),
+            'password' => Hash::make('123admin'),
             'uid' => Str::uuid(),
             'options' => [
                 'adres' => '',
@@ -37,7 +37,7 @@ class UserModelDemoSeeder extends Seeder
             'name' => 'owner',
             'email' => 'owner@examples.com',
             'email_verified_at' => '2020-10-10 10:10:10',
-            'password' => Hash::make('password'),
+            'password' => Hash::make('123admin'),
             'uid' => Str::uuid(),
             'options' => [
                 'adres' => '',

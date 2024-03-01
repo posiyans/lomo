@@ -72,8 +72,8 @@ export default defineComponent({
     const showCodeForm = ref(false)
     const siteMenuStore = useSiteMenuStore()
     const form = reactive({
-      email: 'admin@examples.com',
-      password: 'password',
+      email: '',
+      password: '',
       code: '',
       remember: true
     })

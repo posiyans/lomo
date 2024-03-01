@@ -67,8 +67,8 @@ export default defineComponent({
       {
         email: '',
         token: '',
-        password: 'Q1234567811',
-        password_confirmation: 'Q1234567811'
+        password: '',
+        password_confirmation: ''
       }
     )
 

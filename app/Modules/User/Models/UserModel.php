@@ -105,6 +105,8 @@ class UserModel extends MyModel implements MustVerifyEmail,
      * @var array
      */
     protected $fillable = [
+        'password',
+        'uid',
         'name',
         'email',
         'last_name',
