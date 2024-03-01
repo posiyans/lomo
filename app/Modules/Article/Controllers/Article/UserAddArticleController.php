@@ -24,7 +24,10 @@ class UserAddArticleController extends Controller
         $users = UserModel::whereRoleIs(['superAdmin'])->get();
         foreach ($users as $user) {
             // Уведомляем о необходимости промадерировать статью
-            Notification::send($user, new NewArticleUnderModeration($article));
+            try {
+                Notification::send($user, new NewArticleUnderModeration($article));
+            } catch (\Exception $e) {
+            }
         }
         return $article;
     }

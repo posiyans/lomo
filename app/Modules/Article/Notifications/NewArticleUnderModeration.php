@@ -33,7 +33,11 @@ class NewArticleUnderModeration extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['telegram', 'mail'];
+        $data = ['mail'];
+        if ($notifiable->getField('telegram', false)) {
+            $data[] = 'telegram';
+        }
+        return $data;
     }
 
     /**
