@@ -3,6 +3,7 @@
 namespace App\Modules\Comment\Classes;
 
 use App\Modules\Appeal\Models\AppealModel as Model;
+use App\Modules\Comment\Models\CommentModel;
 use App\Modules\User\Models\UserModel;
 
 class AppealComments extends AbstractComments
@@ -34,7 +35,7 @@ class AppealComments extends AbstractComments
         return $this->object->commentWrite($user);
     }
 
-    public function commentDelete(UserModel $user): bool
+    public function commentDelete(UserModel $user, CommentModel|null $comment = null): bool
     {
         return false;
     }

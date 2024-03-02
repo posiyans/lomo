@@ -12,7 +12,7 @@ class CommentResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      * @return array
      */
     public function toArray($request)
@@ -35,7 +35,7 @@ class CommentResource extends JsonResource
             'parentObject' => $commentedModel->descriptionForComment(),
             'actions' => [
                 'edit' => $user ? $commentedModel->commentEdit($user) : false,
-                'delete' => $user ? $commentedModel->commentDelete($user) : false,
+                'delete' => $user ? $commentedModel->commentDelete($user, $this->resource) : false,
                 'ban' => $user ? $commentedModel->commentUserBan($user) : false,
                 'write' => $user ? $commentedModel->commentWrite($user) : false,
             ]

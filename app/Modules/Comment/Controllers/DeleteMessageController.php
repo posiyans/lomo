@@ -31,7 +31,7 @@ class DeleteMessageController extends Controller
             $user = Auth::user();
             $uid = $request->get('uid');
             $model = (new CommentRepository())->byUid($uid)->one();
-            if (CommentTypeRepository::getCommentedRoleObject($model->parentModel)->commentDelete($user)) {
+            if (CommentTypeRepository::getCommentedRoleObject($model->parentModel)->commentDelete($user, $model)) {
                 (new DeleteCommentAction($model))->run();
                 return ['status' => true];
             }

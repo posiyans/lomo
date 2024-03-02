@@ -4,6 +4,7 @@ namespace App\Modules\Comment\Classes;
 
 use App\Modules\Article\Models\ArticleModel as Model;
 use App\Modules\Comment\Interfaces\CommentedObjectInterface;
+use App\Modules\Comment\Models\CommentModel;
 use App\Modules\User\Models\UserModel;
 
 abstract class AbstractComments implements CommentedObjectInterface
@@ -66,9 +67,9 @@ abstract class AbstractComments implements CommentedObjectInterface
      * @param $user UserModel
      * @return mixed
      */
-    public function commentDelete(UserModel $user): bool
+    public function commentDelete(UserModel $user, CommentModel|null $comment = null): bool
     {
-        return $this->commentWrite($user);
+        return false;
     }
 
     /**

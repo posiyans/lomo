@@ -53,7 +53,7 @@ module.exports = configure(function (ctx) {
     build: {
       env: {
         BASE_API: ctx.dev
-          ? 'http://localhost'
+          ? 'http://lomo.loc'
           : '',
         VUE_APP_YANDEX_API_MAP: '514f0fcd-01fe-491b-bcae-19cfa790af54'
       },
@@ -98,7 +98,7 @@ module.exports = configure(function (ctx) {
       server: {
         type: 'http'
       },
-      host: 'localhost',
+      host: 'lomo.loc',
       port: 8099,
       open: true // opens browser window automatically
     },
