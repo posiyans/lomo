@@ -30,16 +30,16 @@ class AddInstrumentReadingController extends Controller
     {
         try {
             $user = Auth::user();
-            $stead_id = '';
             $user_admin = $user->ability('superAdmin', ['stead-show', 'reading-edit']);
-            if (!$user_admin) {
-                $stead_id = $user->owner->steads->map(function ($item) {
+            $steads = '';
+            if (!$user->ability('superAdmin', ['stead-show', 'reading-edit'])) {
+                $steads = $user->owner->steads->map(function ($item) {
                     return $item->id;
-                });
+                })->toArray();
             }
             DB::beginTransaction();
             foreach ($request->devices as $data) {
-                $device = (new MeteringDeviceRepository())->forStead($stead_id)->getById($data['device_id']);
+                $device = (new MeteringDeviceRepository())->forStead($steads)->getById($data['device_id']);
                 $payment_id = '';
                 if ($request->payment_id && $user_admin) {
                     $payment = (new PaymentRepository())->byId($request->payment_id);

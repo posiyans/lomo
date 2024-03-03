@@ -147,6 +147,7 @@ class UserModel extends MyModel implements MustVerifyEmail,
      * @var array
      */
     protected $casts = [
+        'id' => 'integer',
         'email_verified_at' => 'datetime',
         'options' => 'array',
     ];

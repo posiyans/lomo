@@ -22,7 +22,11 @@ class MeteringDeviceRepository
     public function forStead($steadId)
     {
         if ($steadId) {
-            $this->query->where('stead_id', $steadId);
+            if (is_array($steadId)) {
+                $this->query->whereIn('stead_id', $steadId);
+            } else {
+                $this->query->where('stead_id', $steadId);
+            }
         }
         return $this;
     }

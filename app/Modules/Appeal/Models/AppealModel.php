@@ -65,6 +65,11 @@ class AppealModel extends MyModel implements CommentedInterface
 //        $this->uid = Str::uuid();
     }
 
+    protected $casts = [
+        'id' => 'integer',
+        'user_id' => 'integer',
+    ];
+
     /**
      * модель пользователя создавшего обращения
      *
