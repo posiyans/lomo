@@ -1,5 +1,8 @@
 <template>
   <div class="q-pa-md">
+    <DropDownBlock show-label="Статистика" hide-label="Статистика">
+      <BalanceGrid />
+    </DropDownBlock>
     <div class="row items-center q-col-gutter-sm">
       <FilterBlock v-model="listQuery" />
       <DownloadXlsxBtn :func="funcXlsx" />
@@ -18,12 +21,15 @@ import LoadMore from 'src/components/LoadMore/index.vue'
 import FilterBlock from './components/FiltersBlock/index.vue'
 import { getBalanceList, getBalanceListXlsx } from 'src/Modules/Bookkeeping/api/balaceApi'
 import DownloadXlsxBtn from 'src/Modules/Files/components/DownloadXlsxFileBtn/index.vue'
-
+import BalanceGrid from 'src/Modules/Bookkeeping/components/Balance/BalanceGrid/index.vue'
+import DropDownBlock from 'components/DropDownBlock/index.vue'
 
 export default defineComponent({
   components: {
+    DropDownBlock,
     ShowTable,
     FilterBlock,
+    BalanceGrid,
     DownloadXlsxBtn,
     LoadMore
   },

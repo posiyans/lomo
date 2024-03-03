@@ -10,16 +10,6 @@
       separator="cell"
       row-key="id"
     >
-      <template v-slot:body-cell-number="props">
-        <q-td :props="props" auto-width>
-          <div class="row items-center no-wrap q-col-gutter-sm">
-            <div class="text-small-85">
-              {{ props.row.id }}
-            </div>
-            <ShowPublicTime :time="props.row.updated_at" class="text-wrap text-small-65" />
-          </div>
-        </q-td>
-      </template>
       <template v-slot:body-cell-status="props">
         <q-td :props="props" class="text-grey-7">
           <StatusShow v-model="props.row.status" color class="ellipsis" />
@@ -28,7 +18,7 @@
       <template v-slot:body-cell-title="props">
         <q-td :props="props">
           <router-link :to="'/admin/article/edit/'+props.row.id" class="link-type ellipsis-2-lines">
-            <span>{{ props.row.title }}</span>
+            {{ props.row.id }}. <span>{{ props.row.title }}</span>
           </router-link>
         </q-td>
       </template>
@@ -37,6 +27,7 @@
           <div class="text-small-85">
             {{ props.row.user?.last_name }} {{ props.row.user?.name }}
           </div>
+          <ShowPublicTime :time="props.row.updated_at" class="text-wrap text-small-65" />
         </q-td>
       </template>
       <template v-slot:body-cell-category="props">
@@ -96,20 +87,14 @@ export default defineComponent({
   setup(props, { emit }) {
     const columns = [
       {
-        name: 'number',
-        align: 'center',
-        label: '№',
+        name: 'title',
+        align: 'left',
+        label: 'Заголовок',
       },
-
       {
         name: 'status',
         align: 'center',
         label: 'Статус',
-      },
-      {
-        name: 'title',
-        align: 'left',
-        label: 'Заголовок',
       },
       {
         name: 'user',

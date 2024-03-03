@@ -50,6 +50,7 @@ export const useAuthStore = defineStore('auth', {
           .catch(() => {
             this.user = {}
             this.permissions = []
+            this.roles = []
             this.is_guest = true
             resolve({})
           })
@@ -82,6 +83,7 @@ export const useAuthStore = defineStore('auth', {
           .then(res => {
             this.user = {}
             this.permissions = []
+            this.roles = []
             this.is_guest = true
             resolve()
           })
@@ -111,6 +113,7 @@ export const useAuthStore = defineStore('auth', {
                 errorMessage(error.response.data.errors)
                 this.user = {}
                 this.permissions = []
+                this.roles = []
                 this.is_guest = true
                 reject(error)
               })
