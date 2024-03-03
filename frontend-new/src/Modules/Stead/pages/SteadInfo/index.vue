@@ -50,10 +50,10 @@ export default defineComponent({
   },
   props: {},
   setup(props, { emit }) {
-    const tab = ref('steadinfo')
+    const route = useRoute()
+    const tab = ref(route.query.tab || 'steadinfo')
     const keyReading = ref(1)
     const stead = ref({})
-    const route = useRoute()
     const steadId = ref(route.params.id)
     const primaryStore = usePrimaryStore()
     const authStore = useAuthStore()
@@ -78,7 +78,6 @@ export default defineComponent({
       getData()
     })
     const reloadReading = () => {
-      console.log('reload')
       keyReading.value++
     }
     return {
