@@ -27,15 +27,23 @@
                 </div>
               </div>
             </div>
-            <div>
-              <q-chip class="text-teal">
+            <div class="row items-center bg-grey-2 q-pa-none" style="border-radius: 16px;">
+              <div class="text-teal" :class="{'q-pa-sm' : !showAppealTypeSetting, 'q-pl-mh' : showAppealTypeSetting}">
                 {{ appeal.type.label }}
                 <q-tooltip>
                   {{ appeal.type.description }}
-
                 </q-tooltip>
-
-              </q-chip>
+              </div>
+              <q-fab
+                v-if="showAppealTypeSetting"
+                flat
+                text-color="black"
+                icon="more_vert"
+                direction="down"
+                padding="xs"
+              >
+                <ChangeAppealTypeBtn :appeal="appeal" @success="getData" />
+              </q-fab>
             </div>
           </div>
           <q-space />
@@ -67,7 +75,7 @@
 
 <script>
 /* eslint-disable */
-import { defineComponent, onMounted, ref } from 'vue'
+import { computed, defineComponent, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { closeAppeal, getAppeal } from 'src/Modules/Appeal/api/appealApi.js'
 import AppealStatusLabelById from 'src/Modules/Appeal/components/AppealStatusLabelById/index.vue'
@@ -77,9 +85,12 @@ import ShowTime from 'components/ShowTime/index.vue'
 import ChatBlock from './components/ChatBlock/index.vue'
 import FilesListShow from 'src/Modules/Files/components/FilesListShow/index.vue'
 import { useFile } from 'src/Modules/Files/hooks/useFile'
+import ChangeAppealTypeBtn from 'src/Modules/Appeal/components/ChangeAppealTypeBtn/index.vue'
+import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
 
 export default defineComponent({
   components: {
+    ChangeAppealTypeBtn,
     AppealStatusLabelById,
     AppealTypeNameById,
     ShowTime,
@@ -95,6 +106,10 @@ export default defineComponent({
     const router = useRouter()
     const route = useRoute()
     const $q = useQuasar()
+    const authStore = useAuthStore()
+    const showAppealTypeSetting = computed(() => {
+      return appeal.value.status !== 'close' && authStore.checkPermission('appeal-edit')
+    })
     const getData = () => {
       getAppeal(route.params.id)
         .then(res => {
@@ -142,7 +157,9 @@ export default defineComponent({
     return {
       appeal,
       closeAppealAction,
-      loading
+      showAppealTypeSetting,
+      loading,
+      getData
     }
   }
 })

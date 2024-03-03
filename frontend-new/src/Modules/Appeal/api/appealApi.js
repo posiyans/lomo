@@ -30,3 +30,11 @@ export function closeAppeal(id, data) {
     data
   })
 }
+
+export function updateAppeal(id, data) {
+  return request({
+    url: '/api/v2/appeal/' + id,
+    method: 'put',
+    data
+  })
+}

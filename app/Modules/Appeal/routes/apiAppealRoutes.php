@@ -16,5 +16,6 @@ Route::group(['prefix' => 'v2/appeal'], function () {
         Route::get('get-list', \App\Modules\Appeal\Controlles\GetAppealListController::class);
         Route::post('create', \App\Modules\Appeal\Controlles\CreateAppealController::class);
         Route::post('close/{appeal}', \App\Modules\Appeal\Controlles\CloseAppealController::class);
+        Route::put('/{appeal}', \App\Modules\Appeal\Controlles\UpdateAppealController::class);
     });
 });
