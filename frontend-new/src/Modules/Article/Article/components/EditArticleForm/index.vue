@@ -37,13 +37,14 @@
             {{ articleStore.article?.author?.name }}
           </router-link>
           <q-fab
+            v-if="articleStore.article?.author?.uid"
             flat
             text-color="black"
             icon="more_vert"
             direction="down"
             padding="xs"
           >
-            <AddBanUserBtn :user-uid="articleStore.article?.user?.uid" type="article" object-uid="all">
+            <AddBanUserBtn :user-uid="articleStore.article?.author?.uid" type="article" object-uid="all">
               <q-btn icon="voice_over_off" flat round color="negative">
                 <q-tooltip>
                   Забанить пользователя

@@ -1,6 +1,18 @@
 <template>
   <div class="q-pa-md">
-    <EditArticleForm />
+    <div v-if="loading" class="text-center q-pa-lg">
+      <q-spinner
+        color="primary"
+        size="5em"
+        :thickness="2"
+      />
+    </div>
+    <div v-else>
+      <div v-if="noFound" class="text-center text-h4 q-pa-lg">
+        Статья не найдена
+      </div>
+      <EditArticleForm v-else />
+    </div>
   </div>
 </template>
 
@@ -18,15 +30,29 @@ export default defineComponent({
   props: {},
   setup() {
     const data = ref(null)
+    const noFound = ref(false)
+    const loading = ref(true)
     const key = ref(1)
     const route = useRoute()
     const articleStore = useArticleStore()
     watch(route, () => getData())
     const getData = () => {
+      loading.value = true
       const id = route.params.id
       if (id) {
         articleStore.init(id)
         articleStore.getData()
+          .then(() => {
+            noFound.value = false
+          })
+          .catch(er => {
+            if (er.response.status === 404) {
+              noFound.value = true
+            }
+          })
+          .finally(() => {
+            loading.value = false
+          })
       } else {
         articleStore.init(null)
         articleStore.article = {
@@ -46,6 +72,8 @@ export default defineComponent({
     })
     return {
       data,
+      noFound,
+      loading,
       key
     }
   }

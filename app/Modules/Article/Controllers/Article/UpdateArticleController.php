@@ -19,7 +19,7 @@ class UpdateArticleController extends Controller
         $this->middleware('ability:superAdmin,article-edit');
     }
 
-    public function index($id, Request $request)
+    public function __invoke(ArticleModel $article, Request $request)
     {
         if (is_numeric($id)) {
             $article = ArticleModel::find($id);

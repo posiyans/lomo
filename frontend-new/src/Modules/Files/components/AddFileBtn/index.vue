@@ -58,12 +58,9 @@ export default defineComponent({
     const btnRefd = ref(null)
     const $q = useQuasar()
     const showDialog = () => {
-      console.log('klick')
-      console.log(btnRefd.value)
       btnRefd.value.click()
     }
     const change = () => {
-      console.log(btnRefd.value.files)
       const tmp = []
       if (btnRefd.value.files) {
         [...btnRefd.value.files].forEach(item => {

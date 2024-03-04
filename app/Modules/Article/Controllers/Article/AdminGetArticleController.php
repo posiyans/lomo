@@ -19,13 +19,8 @@ class AdminGetArticleController extends Controller
         $this->middleware('ability:superAdmin,article-show,article-edit');
     }
 
-    public function index($id, Request $request)
+    public function __invoke(ArticleModel $article, Request $request)
     {
-        if (is_numeric($id)) {
-            $model = ArticleModel::find($id);
-//            $model->files = $model->files;
-//            return $model;
-            return new AdminArticleResource($model);
-        }
+        return new AdminArticleResource($article);
     }
 }

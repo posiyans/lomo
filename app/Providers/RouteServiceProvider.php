@@ -38,94 +38,34 @@ class RouteServiceProvider extends ServiceProvider
         $this->configureRateLimiting();
 
         $this->routes(function () {
-            Route::prefix('api')
-                ->middleware('api')
-                ->namespace($this->namespace)
-                ->group(base_path('routes/api.php'));
+            $ModulesDir = __DIR__ . '/../Modules';
+            $scanned_directory = array_diff(scandir($ModulesDir), array('..', '.'));
+            foreach ($scanned_directory as $item) {
+                $fullPath = $ModulesDir . '/' . $item . '/routes/api.php';
+                if (file_exists($fullPath)) {
+                    Route::middleware('api')
+                        ->prefix('api')
+                        ->group(base_path('app/Modules/' . $item . '/routes/api.php'));
+                }
+            }
 
-            Route::middleware('web')
-                ->namespace($this->namespace)
-                ->group(base_path('routes/web.php'));
-            Route::middleware('api')
-                ->prefix('api')
-                ->group(base_path('app/Modules/Setting/routes/api.php'));
-            Route::middleware('api')
-                ->prefix('api')
-                ->group(base_path('app/Modules/Telegram/routes/api.php'));
-            Route::middleware('api')
-                ->prefix('api')
-                ->group(base_path('app/Modules/File/routes/apiFileRoutes.php'));
-            Route::middleware('api')
-                ->prefix('api')
-                ->group(base_path('app/Modules/MeteringDevice/routes/api.php'));
-            Route::middleware('api')
-                ->prefix('api')
-                ->group(base_path('app/Modules/Billing/routes/api.php'));
-            Route::middleware('api')
-                ->prefix('api')
-                ->group(base_path('app/Modules/Rate/routes/api.php'));
-            Route::middleware('web')
-                ->group(base_path('app/Modules/File/routes/web.php'));
-            Route::middleware('api')
-                ->prefix('api')
-                ->group(base_path('app/Modules/Avatar/routes/api.php'));
-            Route::middleware('api')
-                ->prefix('api')
-                ->group(base_path('app/Modules/Auth/routes/authApiRoutes.php'));
+
             Route::middleware('web')
                 ->prefix('api')
                 ->group(base_path('app/Modules/Auth/routes/authWebRoutes.php'));
-            Route::middleware('api')
-                ->prefix('api')
-                ->group(base_path('app/Modules/SiteMenu/routes/siteMenuApiRoutes.php'));
-            Route::middleware('api')
-                ->prefix('api')
-                ->group(base_path('app/Modules/Owner/routes/apiOwnerRoutes.php'));
-            Route::middleware('api')
-                ->prefix('api')
-                ->group(base_path('app/Modules/Article/routes/apiArticleRoutes.php'));
-            Route::middleware('api')
-                ->prefix('api')
-                ->group(base_path('app/Modules/Gardening/routes/apiGardeningRoutes.php'));
-            Route::middleware('api')
-                ->prefix('api')
-                ->group(base_path('app/Modules/Receipt/routes/apiReceiptRoutes.php'));
-            Route::middleware('api')
-                ->prefix('api')
-                ->group(base_path('app/Modules/User/routes/apiUserRoutes.php'));
-            Route::middleware('api')
-                ->prefix('api')
-                ->group(base_path('app/Modules/Comment/routes/api.php'));
-            Route::middleware('api')
-                ->prefix('api')
-                ->group(base_path('app/Modules/BanUser/routes/api.php'));
-            Route::middleware('api')
-                ->prefix('api')
-                ->group(base_path('app/Modules/Weather/routes/apiWeatherRoutes.php'));
+
             Route::middleware('web')
                 ->namespace($this->namespace)
                 ->group(base_path('app/Modules/User/routes/web.php'));
-            Route::middleware('api')
-                ->prefix('api/v2/social')
-                ->group(base_path('app/Modules/Social/routes/apiSocialRoutes.php'));
-            Route::middleware('api')
-                ->prefix('api')
-                ->group(base_path('app/Modules/Yandex/routes/api.php'));
+
             Route::middleware('web')
                 ->prefix('api/v2/social')
                 ->group(base_path('app/Modules/Social/routes/webSocialRoutes.php'));
-            Route::middleware('api')
-                ->prefix('api')
-                ->group(base_path('app/Modules/Stead/routes/apiSteadRoutes.php'));
-            Route::middleware('web')
-                ->namespace($this->namespace)
-                ->group(base_path('app/Modules/Voting/routes/web.php'));
-            Route::middleware('api')
-                ->prefix('api')
-                ->group(base_path('app/Modules/Camera/routes/apiCameraRouter.php'));
-            Route::middleware('api')
-                ->prefix('api')
-                ->group(base_path('app/Modules/Appeal/routes/apiAppealRoutes.php'));
+
+//            Route::middleware('web')
+//                ->namespace($this->namespace)
+//                ->group(base_path('app/Modules/Voting/routes/web.php'));
+
         });
     }
 
