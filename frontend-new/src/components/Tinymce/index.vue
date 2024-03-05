@@ -205,7 +205,7 @@ export default {
   line-height: normal;
 }
 
-.tinymce-container >>> .mce-fullscreen {
+.tinymce-container ::v-deep(.mce-fullscreen) {
   z-index: 10000;
 }
 
