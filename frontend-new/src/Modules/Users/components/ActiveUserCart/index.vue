@@ -57,11 +57,17 @@
           <AppealList :user-uid="activeUserStore.user.uid" />
         </q-tab-panel>
         <q-tab-panel name="actions">
-          <div v-if="!activeUserStore.user.email_verified_at">
-            Повторное потверждение почты
-            <el-button type="primary" size="small" @click="sentToken">
-              Отправить
-            </el-button>
+          <div v-if="!activeUserStore.user.email_verified_at" class="row items-center q-col-gutter-sm">
+            <div>
+              Повторное потверждение почты
+            </div>
+            <SendVerifyEmailBtn :user-uid="activeUserStore.userUid">
+              <q-btn color="primary" label="Отправить код">
+                <q-tooltip>
+                  Email не подтвержден, Нажмите чтоб отправитть письмо с кодом подтверждения
+                </q-tooltip>
+              </q-btn>
+            </SendVerifyEmailBtn>
           </div>
         </q-tab-panel>
 
@@ -78,15 +84,16 @@ import ActiveUserData from 'src/Modules/Users/components/ActiveUserData/index.vu
 import ActiveUserRolesAndPermissions from 'src/Modules/Users/components/ActiveUserRolesAndPermissions/index.vue'
 import ActiveUserPermissions from 'src/Modules/Users/components/ActiveUserPermissions/index.vue'
 import { useActiveUserStore } from 'src/Modules/Users/stores/useActiveUserStore'
-import { sendVerifyMailToken } from 'src/Modules/Users/api/user-admin-api'
 import BanUserInfo from 'src/Modules/BanUsers/components/BanUserInfo/index.vue'
 import CommentsList from 'src/Modules/Comments/components/CommentsList/index.vue'
 import AppealList from 'src/Modules/Appeal/pages/AppealList/index.vue'
 import UserAvatarByUid from 'src/Modules/Avatar/components/UserAvatarByUid/index.vue'
 import UserAvatarImg from 'src/Modules/Avatar/components/UserAvatarImg/index.vue'
+import SendVerifyEmailBtn from 'src/Modules/Auth/components/SendVerifyEmailBtn/index.vue'
 
 export default defineComponent({
   components: {
+    SendVerifyEmailBtn,
     UserAvatarImg,
     UserAvatarByUid,
     ActiveUserData,
@@ -118,28 +125,11 @@ export default defineComponent({
       }
       return ''
     }
-    const sentToken = () => {
-      sendVerifyMailToken(activeUserStore.userId)
-        .then(response => {
-          if (response.data.status) {
-            this.$message({
-              message: response.data.data,
-              type: 'success'
-            })
-          } else {
-            this.$message({
-              message: response.data.data,
-              type: 'error'
-            })
-          }
-        })
-    }
     return {
       data,
       toOwner,
       propFilter,
       toStead,
-      sentToken,
       activeUserStore
     }
   }

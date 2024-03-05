@@ -68,10 +68,11 @@ export function setUserInfo(data) {
   })
 }
 
-export function sendVerifyEmail() {
+export function sendVerifyEmail(data) {
   return request({
     url: '/api/v2/auth/send-verify-email',
-    method: 'post'
+    method: 'post',
+    data
   })
 }
 

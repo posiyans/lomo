@@ -9,18 +9,8 @@ export const adminBookkeeping =
     redirect: { name: 'adminUserBalance' },
     children: [
       {
-        path: 'billing_reestr',
-        component: () => import('src/Modules/Bookkeeping/pages/BillingReestr/index.vue'),
-        meta: {
-          icon: 'receipt',
-          title: 'Начисления',
-          roles: ['profit-show']
-        }
-      },
-      {
         path: 'balance',
         name: 'adminUserBalance',
-        // component: () => import('src/Modules/Bookkeeping/pages/BillingBalansList/index.vue'),
         component: () => import('src/Modules/Bookkeeping/pages/Balance/AdminBalansList/index.vue'),
         meta: {
           icon: 'receipt',

@@ -23,10 +23,3 @@ export function fetchUserInfo(params) {
     params
   })
 }
-
-export function sendVerifyMailToken(id) {
-  return request({
-    url: '/api/v1/admin/user/profile/send-verify-mail-token/' + id,
-    method: 'get'
-  })
-}

@@ -58,18 +58,18 @@
         @success="setValue($event, 'middle_name')"
       />
       <InputAndSaveProxy
-        :model-value="activeUserStore.user?.options?.phone"
+        :model-value="activeUserStore.user?.phone"
         :func="func"
         :fields="{user_uid: activeUserStore.user.uid}"
         name="phone"
-        @success="setValue($event, 'options.phone')"
+        @success="setValue($event, 'phone')"
       >
         <template #default="{ modelValue, setValue }">
           <InputPhone outlined :model-value="modelValue" :readonly="readOnly" label="Телефон" @update:model-value="setValue" />
         </template>
       </InputAndSaveProxy>
       <InputAndSaveProxy
-        :model-value="activeUserStore.user?.options?.adres"
+        :model-value="activeUserStore.user?.adres"
         :func="func"
         :fields="{user_uid: activeUserStore.user.uid}"
         label="Адрес регистрации/почтовый адрес"
@@ -77,7 +77,7 @@
         :readonly="readOnly"
         outlined
         autogrow
-        @success="setValue($event, 'options.adres')"
+        @success="setValue($event, 'adres')"
       />
     </div>
   </div>

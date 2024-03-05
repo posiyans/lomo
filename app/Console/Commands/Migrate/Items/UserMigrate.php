@@ -4,6 +4,8 @@ namespace App\Console\Commands\Migrate\Items;
 
 use App\Models\Laratrust\Role;
 use App\Modules\File\Classes\SaveFileForObjectClass;
+use App\Modules\User\Models\UserFieldModel;
+use App\Modules\User\Repositories\GetUserByUidRepository;
 use Http;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -42,17 +44,17 @@ class UserMigrate
             }
             $newItem->email = strtolower($item->email);
             $newItem->uid = Str::uuid();
-            $options = [
-                'adres' => $item->adres,
-                'phone' => $item->phone,
-            ];
-            $newItem->options = $options;
+            $newItem->options = [];
             $newItem->save();
+            $primaryUser = (new GetUserByUidRepository($newItem->id))->run();
+
+            $primaryUser->setField('adres', $item->adres);
+            $primaryUser->setField('phone', $item->phone);
             if ($item->avatar) {
-//                self::saveAvatar($newItem, $item->avatar);
+                self::saveAvatar($primaryUser, $item->avatar);
             }
             if ($newItem->id == 1) {
-                self::setRole($newItem, 'superAdmin');
+                self::setRole($primaryUser, 'superAdmin');
             }
         }
 //        dump($users);
@@ -100,4 +102,27 @@ class UserModel extends Model
     ];
 
     public $timestamps = false;
+
+    public function setField($name, $value)
+    {
+        $field_model = UserFieldModel::where('user_id', $this->id)->where('property', $name)->first();
+        if (!$field_model) {
+            $field_model = new UserFieldModel();
+            $field_model->property = $name;
+            $field_model->user_id = $this->id;
+        }
+        $type = 'string';
+        $val = [$value];
+        if (is_array($value)) {
+            $type = 'array';
+            $val = $value;
+        } elseif (is_bool($value)) {
+            $type = 'bool';
+        } elseif (is_numeric($value)) {
+            $type = 'numeric';
+        }
+        $field_model->value = $val;
+        $field_model->type = $type;
+        $field_model->save();
+    }
 }

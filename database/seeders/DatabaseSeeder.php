@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Cache;
 
 class DatabaseSeeder extends Seeder
 {
-    private $demo = true;
+    private $demo = false;
 
     /**
      * Seed the application's database.
@@ -33,8 +33,8 @@ class DatabaseSeeder extends Seeder
             /**
              * доп
              */
-            CategorySeeder::class,
-            SiteMenuSeeder::class,
+//            CategorySeeder::class,
+//            SiteMenuSeeder::class,
 
 
         ]);

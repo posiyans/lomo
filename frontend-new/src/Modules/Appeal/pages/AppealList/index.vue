@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-md">
-    <AppealList>
+    <AppealList :user-uid="userUid">
       <AppealSettings v-if="showSetting" />
     </AppealList>
   </div>

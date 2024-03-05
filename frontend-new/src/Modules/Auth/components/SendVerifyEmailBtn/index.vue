@@ -18,13 +18,18 @@ import { useQuasar } from 'quasar'
 
 export default defineComponent({
   components: {},
-  props: {},
+  props: {
+    userUid: {
+      type: String,
+      default: ''
+    }
+  },
   setup(props, { emit }) {
     const loading = ref(false)
     const $q = useQuasar()
     const sendCheckEmail = () => {
       loading.value = true
-      sendVerifyEmail()
+      sendVerifyEmail({ uid: props.userUid })
         .then(() => {
           emit('success')
         })

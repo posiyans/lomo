@@ -21,12 +21,7 @@ class GetUserByUidRepository
      */
     public function run()
     {
-        if (is_integer($this->uid)) {
-            $model = UserModel::where('id', $this->uid)->first();
-        }
-        if (is_string($this->uid)) {
-            $model = UserModel::where('uid', $this->uid)->first();
-        }
+        $model = UserModel::where('id', $this->uid)->orWhere('uid', $this->uid)->first();
         if ($model) {
             return $model;
         }

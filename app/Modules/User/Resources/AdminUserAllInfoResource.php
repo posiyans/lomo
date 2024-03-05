@@ -36,7 +36,7 @@ class AdminUserAllInfoResource extends JsonResource
         } else {
             $owner = false;
         }
-        return [
+        $data = [
             'id' => $this->id,
             'uid' => $this->uid,
             'last_name' => $this->last_name,
@@ -51,5 +51,10 @@ class AdminUserAllInfoResource extends JsonResource
             'last_connect' => $this->last_connect,
             'roles' => ['roles' => $roles, 'permissions' => $permissions],
         ];
+        $fields = $this->getUserPublicFieldName();
+        foreach ($fields as $field) {
+            $data[$field] = $this->getField($field, '');
+        }
+        return $data;
     }
 }
