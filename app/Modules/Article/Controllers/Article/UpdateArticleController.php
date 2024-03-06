@@ -21,18 +21,12 @@ class UpdateArticleController extends Controller
 
     public function __invoke(ArticleModel $article, Request $request)
     {
-        if (is_numeric($id)) {
-            $article = ArticleModel::find($id);
-            if ($article) {
-                $article->fill($request->all());
-                if (empty($article->slug)) {
-                    $article->slug = Str::slug($article->title);
-                }
-                if ($article->logAndSave('Изменение содержания')) {
-                    return true;
-                }
-            }
-            return false;
+        $article->fill($request->all());
+        if (empty($article->slug)) {
+            $article->slug = Str::slug($article->title);
+        }
+        if ($article->logAndSave('Изменение содержания')) {
+            return true;
         }
     }
 }

@@ -48,7 +48,7 @@
           </div>
           <q-space />
           <div>
-            <q-btn v-if="appeal.status === 'open'" rounded outline label="Закрыть обращение" color="negative" @click="closeAppealAction" />
+            <AppealCloseBtn v-if="appeal.status === 'open'" :appeal="appeal" @success="getData" />
             <q-btn v-if="appeal.status === 'close'" label="Закрыто" color="secondary" disable />
           </div>
         </div>
@@ -76,17 +76,17 @@
 <script>
 /* eslint-disable */
 import { computed, defineComponent, onMounted, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { closeAppeal, getAppeal } from 'src/Modules/Appeal/api/appealApi.js'
+import { useRoute } from 'vue-router'
+import { getAppeal } from 'src/Modules/Appeal/api/appealApi.js'
 import AppealStatusLabelById from 'src/Modules/Appeal/components/AppealStatusLabelById/index.vue'
 import AppealTypeNameById from 'src/Modules/Appeal/components/AppealTypeNameById/index.vue'
-import { useQuasar } from 'quasar'
 import ShowTime from 'components/ShowTime/index.vue'
 import ChatBlock from './components/ChatBlock/index.vue'
 import FilesListShow from 'src/Modules/Files/components/FilesListShow/index.vue'
 import { useFile } from 'src/Modules/Files/hooks/useFile'
 import ChangeAppealTypeBtn from 'src/Modules/Appeal/components/ChangeAppealTypeBtn/index.vue'
 import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
+import AppealCloseBtn from 'src/Modules/Appeal/components/AppealCloseBtn/index.vue'
 
 export default defineComponent({
   components: {
@@ -95,6 +95,7 @@ export default defineComponent({
     AppealTypeNameById,
     ShowTime,
     FilesListShow,
+    AppealCloseBtn,
     ChatBlock
   },
   props: {},
@@ -103,9 +104,7 @@ export default defineComponent({
       files: []
     })
     const loading = ref(true)
-    const router = useRouter()
     const route = useRoute()
-    const $q = useQuasar()
     const authStore = useAuthStore()
     const showAppealTypeSetting = computed(() => {
       return appeal.value.status !== 'close' && authStore.checkPermission('appeal-edit')
@@ -126,37 +125,11 @@ export default defineComponent({
           loading.value = false
         })
     }
-    const closeAppealAction = () => {
-      $q.dialog({
-        title: 'Подтвердите',
-        message: 'Закрыть данное обращение?',
-        cancel: {
-          label: 'Отмена',
-          color: 'negative',
-          flat: true
-        },
-        ok: {
-          label: 'Закрыть'
-        },
-        persistent: true
-      }).onOk(() => {
-        closeAppeal(appeal.value.id)
-          .then(res => {
-            getData()
-          })
-      }).onOk(() => {
-        // console.log('>>>> second OK catcher')
-      }).onCancel(() => {
-        // console.log('>>>> Cancel')
-      })
-    }
     onMounted(() => {
-      console.log(route.params.id)
       getData()
     })
     return {
       appeal,
-      closeAppealAction,
       showAppealTypeSetting,
       loading,
       getData

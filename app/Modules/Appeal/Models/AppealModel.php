@@ -129,12 +129,18 @@ class AppealModel extends MyModel implements CommentedInterface
         return false;
     }
 
+    /**
+     * @param UserModel $user
+     * @return bool
+     * @deprecated
+     *
+     */
     public function commentWrite(UserModel $user): bool
     {
         if ($this->user_id === $user->id) {
             return true;
         }
-        if ($user->ability('superAdmin', ['appeal->edit'])) {
+        if ($user->ability('superAdmin', ['appeal-edit'])) {
             return true;
         }
         return false;

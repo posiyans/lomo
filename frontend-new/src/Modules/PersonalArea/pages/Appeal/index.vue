@@ -22,7 +22,7 @@ export default defineComponent({
   },
   props: {},
   setup(props, { emit }) {
-    const key = ref(false)
+    const key = ref(1)
     const authStore = useAuthStore()
     const reloadData = (val) => {
       key.value++

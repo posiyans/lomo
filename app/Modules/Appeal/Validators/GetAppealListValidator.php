@@ -22,7 +22,7 @@ class GetAppealListValidator extends FormRequest
         try {
             $user = Auth::user();
             if ($user) {
-                if ($user->ability('superAdmin', ['appeal-edit', 'appeal-edit'])) {
+                if ($user->ability('superAdmin', ['appeal-show', 'appeal-edit'])) {
                     return true;
                 }
                 Request::merge(['user_uid' => $user->uid]);

@@ -27,7 +27,7 @@
         <SelectCommentEnable v-model="articleStore.article.allow_comments" />
       </div>
       <div>
-        <q-btn no-caps no-wrap color="primary" :loading="savingData" :label="btnLabel" @click="saveArticle" />
+        <q-btn no-caps no-wrap color="primary" :loading="savingData" :disable="!writeAccess" :label="btnLabel" @click="saveArticle" />
       </div>
       <q-space />
       <div>
@@ -37,7 +37,7 @@
             {{ articleStore.article?.author?.name }}
           </router-link>
           <q-fab
-            v-if="articleStore.article?.author?.uid"
+            v-if="articleStore.article?.author?.uid && writeAccess"
             flat
             text-color="black"
             icon="more_vert"
@@ -93,7 +93,7 @@
         :height="300" />
     </div>
     <div class="q-pa-md">
-      <AddFileBtn @add-files="addFile" multiple parent-type="article" :parent-uid="articleStore.article.uid" />
+      <AddFileBtn v-if="writeAccess" @add-files="addFile" multiple parent-type="article" :parent-uid="articleStore.article.uid" />
       <FilesListShow v-model="articleStore.files" edit get-url />
     </div>
   </div>
@@ -113,6 +113,7 @@ import FilesListShow from 'src/Modules/Files/components/FilesListShow/index.vue'
 import UserAvatarByUid from 'src/Modules/Avatar/components/UserAvatarByUid/index.vue'
 import AddBanUserBtn from 'src/Modules/BanUsers/components/AddBanUserBtn/index.vue'
 import { errorMessage } from 'src/utils/message'
+import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
 
 export default defineComponent({
   components: {
@@ -133,6 +134,10 @@ export default defineComponent({
     const articleStore = useArticleStore()
     const router = useRouter()
     const savingData = ref(false)
+    const authStore = useAuthStore()
+    const writeAccess = computed(() => {
+      return authStore.checkPermission(['article-edit'])
+    })
     const editArticle = computed(() => {
       return !!articleStore.id
     })
@@ -178,6 +183,7 @@ export default defineComponent({
     return {
       showMoreSetting,
       bar,
+      writeAccess,
       deleteAuthor,
       addFile,
       articleStore,

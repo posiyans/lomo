@@ -54,6 +54,7 @@ export default defineComponent({
             loading.value = false
           })
       } else {
+        loading.value = false
         articleStore.init(null)
         articleStore.article = {
           status: 1,

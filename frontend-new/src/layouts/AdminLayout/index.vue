@@ -15,7 +15,7 @@
               </div>
             </template>
             <q-list>
-              <q-item clickable v-close-popup to="/auth/profile">
+              <q-item clickable v-close-popup to="/profile">
                 <q-item-section>
                   <q-item-label>Профиль</q-item-label>
                 </q-item-section>

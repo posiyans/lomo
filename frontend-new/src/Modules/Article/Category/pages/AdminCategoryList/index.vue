@@ -4,7 +4,7 @@
       <div>
         Разделы статей
       </div>
-      <AddCategoryBtn @success="getData" />
+      <AddCategoryBtn v-if="showSettingBtn" @success="getData" />
     </div>
     <q-list bordered class="rounded-borders" style="">
       <template v-for="(item, index) in list" :key="item.id">
@@ -30,7 +30,7 @@
               {{ `/article/list/${item.id}` }}
             </q-item-label>
           </q-item-section>
-          <q-item-section top side>
+          <q-item-section v-if="showSettingBtn" top side>
             <div class="text-grey-8">
               <CategorySettingDialogBtn :item="item" @success="getData" />
             </div>
@@ -44,11 +44,11 @@
 
 <script>
 /* eslint-disable */
-import { defineComponent, onMounted, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { computed, defineComponent, onMounted, ref } from 'vue'
 import { fetchCategoryList } from 'src/Modules/Article/Category/api/category'
 import CategorySettingDialogBtn from 'src/Modules/Article/Category/components/CategorySettingDialog/ShowBtn.vue'
 import AddCategoryBtn from 'src/Modules/Article/Category/components/AddCategoryBtn/index.vue'
+import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
 
 export default defineComponent({
   components: {
@@ -58,8 +58,10 @@ export default defineComponent({
   props: {},
   setup(props, { emit }) {
     const list = ref([])
-    const router = useRouter()
-    const route = useRoute()
+    const authStore = useAuthStore()
+    const showSettingBtn = computed(() => {
+      return authStore.checkPermission(['article-edit'])
+    })
     const getData = () => {
       const data = {
         markDefault: true
@@ -74,6 +76,7 @@ export default defineComponent({
     })
     return {
       getData,
+      showSettingBtn,
       list
     }
   }

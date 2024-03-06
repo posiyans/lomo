@@ -20,7 +20,9 @@
       </q-tab-panel>
       <q-tab-panel name="appeal">
         <div v-if="authStore.user.email_verified_at">
-          <UserAppealList :user-uid="authStore.user.uid" />
+          <AppealList :user-uid="authStore.user.uid" :key="key">
+            <AddAppealBtn v-if="authStore.user.uid" :user-uid="authStore.user.uid" @success="reloadData" />
+          </AppealList>
         </div>
         <div v-else class="page-title text-red text-center q-pa-lg">
           Для создания обращения подтвердите свою почту
@@ -36,22 +38,29 @@ import { defineComponent, ref } from 'vue'
 import MyProfile from 'src/Modules/Auth/page/MyProfile/index.vue'
 import BanUserInfo from 'src/Modules/BanUsers/components/BanUserInfo/index.vue'
 import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
-import UserAppealList from 'src/Modules/Appeal/pages/UserApealList/index.vue'
+import AddAppealBtn from 'src/Modules/Appeal/components/AddAppealBtn/index.vue'
+import AppealList from 'src/Modules/Appeal/components/AppealList/index.vue'
 
 export default defineComponent({
   components: {
     MyProfile,
     BanUserInfo,
-    UserAppealList
+    AppealList,
+    AddAppealBtn
   },
   props: {},
   setup(props, { emit }) {
     const tab = ref('profile')
     const authStore = useAuthStore()
-
+    const key = ref(1)
+    const reloadData = (val) => {
+      key.value++
+    }
     return {
       tab,
-      authStore
+      authStore,
+      reloadData,
+      key
     }
   }
 })

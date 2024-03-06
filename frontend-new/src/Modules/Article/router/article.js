@@ -54,7 +54,7 @@ export const adminArticle =
         hidden: true,
         meta: {
           title: 'Редактировать',
-          roles: ['article-edit']
+          roles: ['article-edit', 'article-show']
         }
       },
       {

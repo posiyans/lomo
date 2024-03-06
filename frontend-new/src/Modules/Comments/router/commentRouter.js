@@ -4,7 +4,7 @@ export const adminComment =
     meta: {
       icon: 'message',
       title: 'Комментарии',
-      roles: ['comment-edit', 'comment-delete']
+      roles: ['comment-delete']
     },
     redirect: { name: 'adminCommentList' },
     children: [
@@ -16,7 +16,7 @@ export const adminComment =
         meta: {
           icon: 'article',
           title: 'Все комментарии',
-          roles: ['comment-edit', 'comment-delete']
+          roles: ['comment-delete']
         }
       },
       {
@@ -26,7 +26,7 @@ export const adminComment =
         meta: {
           icon: 'people',
           title: 'Комментарий',
-          roles: ['comment-edit', 'comment-delete']
+          roles: ['comment-delete']
         }
       }
     ]

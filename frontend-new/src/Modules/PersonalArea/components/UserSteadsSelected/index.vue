@@ -52,10 +52,8 @@
 <script>
 /* eslint-disable */
 import { computed, defineComponent, onMounted, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
 import BanUserInfo from 'src/Modules/BanUsers/components/BanUserInfo/index.vue'
 import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
-import UserAppealList from 'src/Modules/Appeal/pages/UserApealList/index.vue'
 import ShowOwnerInfo from 'src/Modules/Owner/components/ShowOwnerInfo/index.vue'
 import { getMySteads } from 'src/Modules/Stead/api/stead'
 
@@ -63,15 +61,12 @@ import { getMySteads } from 'src/Modules/Stead/api/stead'
 export default defineComponent({
   components: {
     ShowOwnerInfo,
-    BanUserInfo,
-    UserAppealList
+    BanUserInfo
   },
   props: {},
   setup(props, { emit }) {
     const tab = ref(null)
     const steads = ref([])
-    const router = useRouter()
-    const route = useRoute()
     const authStore = useAuthStore()
     const isOwner = computed(() => {
       return authStore.isOwner
