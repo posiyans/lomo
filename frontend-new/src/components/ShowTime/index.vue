@@ -6,6 +6,7 @@
 /* eslint-disable */
 import { computed, defineComponent } from 'vue'
 import { date } from 'quasar'
+import { declOfNum } from 'src/utils/helper'
 
 export default defineComponent({
   components: {},
@@ -18,6 +19,10 @@ export default defineComponent({
     block: {
       type: String,
       default: 'div'
+    },
+    from: {
+      type: Boolean,
+      default: false
     },
     before: {
       type: String,
@@ -49,13 +54,54 @@ export default defineComponent({
       return ''
     })
     const showTime = computed(() => {
-      if (dateUtc.value) {
-        const offset = dateUtc.value.getTimezoneOffset()
-        const newDate = date.subtractFromDate(dateUtc.value, { minutes: offset })
-        return date.formatDate(newDate, props.format)
+      if (props.from) {
+        return from()
+      } else {
+        if (dateUtc.value) {
+          const offset = dateUtc.value.getTimezoneOffset()
+          const newDate = date.subtractFromDate(dateUtc.value, { minutes: offset })
+          return date.formatDate(newDate, props.format)
+        }
+        return ''
       }
-      return ''
     })
+
+    const from = () => {
+      const dateNow = new Date()
+      if (dateUtc.value) {
+        // const date2 = new Date(dateUtc.value)
+        const offset = dateUtc.value.getTimezoneOffset()
+        const date2 = new Date(date.subtractFromDate(dateUtc.value, { minutes: offset }))
+        // const unit = 'days'
+        const unit = 'second'
+        const sec = date.getDateDiff(dateNow, date2, 'second')
+        const minute = date.getDateDiff(dateNow, date2, 'minute')
+        const hour = date.getDateDiff(dateNow, date2, 'hour')
+        const day = date.getDateDiff(dateNow, date2, 'day')
+        const month = date.getDateDiff(dateNow, date2, 'month')
+        // return sec + '-d' + day + '-h' + hour + '-m' + minute + '-s' + sec
+        // return sec
+        // return hour + '-' + minute + ' ' + declOfNum(minute, ['минута', 'минуты', 'минут']) + ' назад'
+        if (month > 12) {
+          return 'больше года назад'
+        } else if (month > 0) {
+          return month + ' ' + declOfNum(month, ['месяц', 'месяца', 'месяцев']) + ' назад'
+        } else if (day > 0) {
+          return day + ' ' + declOfNum(day, ['день', 'дня', 'дней']) + ' назад'
+        } else if (hour > 0) {
+          return hour + ' ' + declOfNum(hour, ['час', 'часа', 'часов']) + ' назад'
+        } else if (minute > 0) {
+          return minute + ' ' + declOfNum(minute, ['минута', 'минуты', 'минут']) + ' назад'
+        } else {
+          return sec + ' ' + declOfNum(sec, ['секунда', 'секунды', 'секунд']) + ' назад'
+        }
+
+
+      } else {
+        return ''
+      }
+    }
+
 
     return {
       showTime

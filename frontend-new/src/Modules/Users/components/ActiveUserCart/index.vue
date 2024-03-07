@@ -1,11 +1,19 @@
 <template>
   <div class="q-pa-md">
     <div class="row items-center">
-      <div class="page-title">
-        <UserAvatarImg :uid="activeUserStore.user.uid" style="width: 48px;" />
-        {{ activeUserStore.user.last_name }}
-        {{ activeUserStore.user.name }}
-        {{ activeUserStore.user.middle_name }}
+      <div>
+        <div class="row items-center">
+          <UserAvatarImg :uid="activeUserStore.user.uid" style="width: 48px;" />
+          <div class="page-title">
+            <div>
+              {{ activeUserStore.user.last_name }}
+              {{ activeUserStore.user.name }}
+              {{ activeUserStore.user.middle_name }}
+            </div>
+            <ShowTime :time="activeUserStore.user.last_connect" class="text-grey-8 text-small-65 text-weight-thin" />
+          </div>
+        </div>
+
       </div>
       <div v-if="activeUserStore.user.owner" class="text-primary cursor-pointer" @click="toOwner(activeUserStore.user.owner.uid)">
         Собственник
@@ -90,6 +98,7 @@ import UserAvatarByUid from 'src/Modules/Avatar/components/UserAvatarByUid/index
 import UserAvatarImg from 'src/Modules/Avatar/components/UserAvatarImg/index.vue'
 import SendVerifyEmailBtn from 'src/Modules/Auth/components/SendVerifyEmailBtn/index.vue'
 import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
+import ShowTime from 'components/ShowTime/index.vue'
 
 export default defineComponent({
   components: {
@@ -101,7 +110,8 @@ export default defineComponent({
     ActiveUserPermissions,
     BanUserInfo,
     AppealList,
-    CommentsList
+    CommentsList,
+    ShowTime
   },
   props: {},
 
