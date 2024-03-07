@@ -20,7 +20,7 @@ class GetSteadListController extends Controller
         } else {
             $steads = (new SteadRepository())->findByNumber($request->find)->findById($request->id)->run();
         }
-        if ($request->admin && Auth::user() && Auth::user()->ability('superAdmin', ['owner-show', 'owner-edit'])) {
+        if ($request->admin && Auth::user() && Auth::user()->ability('superAdmin', ['owner-show', 'owner-edit', 'stead-show', 'stead-edit'])) {
             return AdminSteadResource::collection($steads);
         }
         return SteadResource::collection($steads);

@@ -55,7 +55,7 @@
               <div class="col-grow cursor-pointer" @click="toUser(owner.user_uid)">
                 <UserNameByUid :uid="owner.user_uid" />
               </div>
-              <div>
+              <div v-if="editable">
                 <ChangeUserOwner :owner="owner" @success="getUserData" />
               </div>
             </div>

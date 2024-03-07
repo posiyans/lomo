@@ -6,6 +6,7 @@
       v-model="allowPublic"
       :options="options"
       label="Предлагать статьи"
+      :disable="!writeMode"
       map-options
       emit-value
       @update:model-value="changeValue"
@@ -15,9 +16,10 @@
 
 <script>
 /* eslint-disable */
-import { defineComponent, onMounted, ref } from 'vue'
+import { computed, defineComponent, onMounted, ref } from 'vue'
 import { changeAllowPublicationArticle, getAllowPublicationArticle } from 'src/Modules/Article/Article/api/article'
 import { errorMessage } from 'src/utils/message'
+import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
 
 export default defineComponent({
   components: {},
@@ -39,6 +41,10 @@ export default defineComponent({
         value: 3
       }
     ]
+    const authStore = useAuthStore()
+    const writeMode = computed(() => {
+      return authStore.checkPermission(['article-edit'])
+    })
     const changeValue = () => {
       loading.value = true
       const data = {
@@ -66,6 +72,7 @@ export default defineComponent({
     return {
       allowPublic,
       loading,
+      writeMode,
       changeValue,
       options
     }

@@ -17,6 +17,10 @@ export default defineComponent({
       type: Boolean,
       default: false
     },
+    uclass: {
+      type: String,
+      default: ''
+    },
     parentKey: {
       type: Number,
       default: 0
@@ -40,7 +44,7 @@ export default defineComponent({
           menuAnchor: 'bottom left',
           menuSelf: 'top left',
           menuOffset: [0, 8],
-          contentClass: 'no-border-radius'
+          contentClass: 'no-border-radius '
         },
         type: QBtn
       }
@@ -77,12 +81,12 @@ export default defineComponent({
       } else {
         propsObject.to = props.item.path
       }
-      let l = h(QItem, propsObject, () => h(QItemSection, {}, () => props.item.label))
+      let l = h(QItem, propsObject, () => h(QItemSection, { class: props.uclass }, () => props.item.label))
       const nextKey = props.parentKey + 1
       if (props.item.children && props.item.children.length > 0) {
         const tmp = []
         props.item.children.forEach(child => {
-          tmp.push(h(ItemMenu, { item: child, parentKey: nextKey, icon: props.icon, class: 'user-site-menu-item' }))
+          tmp.push(h(ItemMenu, { item: child, parentKey: nextKey, icon: props.icon, uclass: 'user-site-menu-item' }))
         })
         const icon = props.item.meta?.icon
         l = [h(QExpansionItem,
@@ -90,7 +94,6 @@ export default defineComponent({
             switchToggleSide: false,
             label: props.item.label,
             icon,
-            dense: true,
             group: 'menu_' + props.parentKey,
             expandIconClass: 'site-menu'
           },
@@ -108,8 +111,8 @@ export default defineComponent({
 // todo переделать имя класса
 
 .user-site-menu-item {
-  margin-left: 16px;
-  padding-left: 10px;
+  margin-left: 5px;
+  padding-left: 0px;
   font-size: 0.85em;
   opacity: 0.8;
   //border-left: 1px solid rgba(0, 0, 0, .12);

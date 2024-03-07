@@ -16,7 +16,7 @@ class GetUserBanListController extends Controller
 
     public function __construct()
     {
-        $this->middleware('ability:superAdmin,comment-ban');
+        $this->middleware('ability:superAdmin,user-ban-show|user-ban-edit|comment-ban');
     }
 
     public function __invoke(Request $request)

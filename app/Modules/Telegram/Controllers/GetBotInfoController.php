@@ -10,17 +10,14 @@ use Illuminate\Http\Request;
 class GetBotInfoController extends Controller
 {
 
-    public function __construct()
-    {
-//        $this->middleware('role:superAdmin');
-    }
-
-
     public function __invoke(Request $request)
     {
         $bot = (new TelegramMyInfo())->run();
-        $bot->two_factor_telegram = GetGlobalOption::getOneValue('two_factor_telegram_enable', false);
-        return $bot;
+        if ($bot) {
+            $bot->two_factor_telegram = GetGlobalOption::getOneValue('two_factor_telegram_enable', false);
+            return response(['status' => true, 'data' => $bot]);
+        }
+        return response(['status' => false]);
     }
 
 

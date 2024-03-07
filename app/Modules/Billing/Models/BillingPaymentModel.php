@@ -66,6 +66,12 @@ class BillingPaymentModel extends MyModel
 
     //
     protected $casts = [
+        "id" => 'integer',
+        'stead_id' => 'integer',
+        'rate_group_id' => 'integer',
+        'invoice_id' => 'integer',
+        'payment_type' => 'integer',
+        'user_id' => 'integer',
         'raw_data' => 'array',
         'price' => 'decimal:2',
         'error' => 'boolean'

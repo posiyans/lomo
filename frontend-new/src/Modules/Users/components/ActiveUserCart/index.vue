@@ -29,11 +29,11 @@
         narrow-indicator
       >
         <q-tab name="pers" label="Данные" />
-        <q-tab name="roles" label="Роли" />
+        <q-tab v-if="authStore.checkPermission(['user-edit'])" name="roles" label="Роли" />
         <q-tab name="ban" label="Бан" />
         <q-tab name="comments" label="Комментарии" />
         <q-tab name="appeal" label="Обращения" />
-        <q-tab name="actions" label="Действия" />
+        <q-tab v-if="authStore.checkPermission(['user-edit'])" name="actions" label="Действия" />
       </q-tabs>
       <q-separator />
 
@@ -53,7 +53,7 @@
         <q-tab-panel name="comments">
           <CommentsList v-if="activeUserStore.user.uid" :user-uid="activeUserStore.user.uid" />
         </q-tab-panel>
-        <q-tab-panel name="appeal">
+        <q-tab-panel name="appeal" class="q-pa-npne">
           <AppealList :user-uid="activeUserStore.user.uid" />
         </q-tab-panel>
         <q-tab-panel name="actions">
@@ -70,7 +70,6 @@
             </SendVerifyEmailBtn>
           </div>
         </q-tab-panel>
-
       </q-tab-panels>
     </div>
   </div>
@@ -90,6 +89,7 @@ import AppealList from 'src/Modules/Appeal/pages/AppealList/index.vue'
 import UserAvatarByUid from 'src/Modules/Avatar/components/UserAvatarByUid/index.vue'
 import UserAvatarImg from 'src/Modules/Avatar/components/UserAvatarImg/index.vue'
 import SendVerifyEmailBtn from 'src/Modules/Auth/components/SendVerifyEmailBtn/index.vue'
+import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
 
 export default defineComponent({
   components: {
@@ -108,6 +108,7 @@ export default defineComponent({
   setup() {
     const route = useRoute()
     const data = ref(route.query?.tab || 'pers')
+    const authStore = useAuthStore()
     const router = useRouter()
     const activeUserStore = useActiveUserStore()
     onMounted(() => {
@@ -128,6 +129,7 @@ export default defineComponent({
     return {
       data,
       toOwner,
+      authStore,
       propFilter,
       toStead,
       activeUserStore

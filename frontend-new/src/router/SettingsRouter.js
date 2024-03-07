@@ -3,12 +3,13 @@ export const adminSettingsRouter = {
   meta: {
     icon: 'settings',
     title: 'Настройки',
-    roles: ['site-menu-edit', 'settings-gardening', 'rate-edit', 'rate-show', 'settings-camera']
+    roles: ['site-menu-edit', 'settings-gardening', 'settings-camera', 'access-admin-panel']
   },
-  redirect: { name: 'EditSiteMenu' },
+  redirect: { name: 'globalSettings' },
   children: [
     {
       path: 'global',
+      name: 'globalSettings',
       component: () => import('src/Modules/Settings/pages/PrimarySettings/index.vue'),
       meta: {
         icon: 'menu',

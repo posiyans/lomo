@@ -113,7 +113,7 @@ class LaratrustSeeder extends Seeder
         'settings-gardening' => 'Редактирование данных садоводства',
         'settings-camera' => 'Настройка камер',
 
-        'bookkeeping-show' => 'Доступ для бухгалтерию',
+        'bookkeeping-show' => 'Доступ в бухгалтерию',
         'invoice-show' => 'Просмотр счетов',
         'invoice-edit' => 'Редактирование счетов',
         'payment-show' => 'Просмотр платежей',

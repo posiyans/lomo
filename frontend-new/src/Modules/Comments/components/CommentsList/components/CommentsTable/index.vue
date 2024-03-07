@@ -1,39 +1,42 @@
 <template>
-  <div class="q-pa-md">
+  <div>
     <transition-group
       appear
       enter-active-class="animated fadeIn"
       leave-active-class="animated fadeOut"
     >
       <div v-for="item in commentsList.list.value" :key="item.id" class="relative-position">
-        <ItemBlock :item="item" class="q-pb-xs">
-          <template v-slot:header>
+        <ItemBlock :item="item" class="q-pb-sm">
+          <template v-slot:description>
             <div>
               <router-link :to="item.parentObject.url" class="text-primary">
                 для {{ item.parentObject.label }}
               </router-link>
             </div>
           </template>
+          <template v-slot:header>
+            <div class="row q-pr-lg">
+              <div class="cursor-pointer message-btn message-btn_delete  q-px-xs" @click="deleteItem(item)">
+                <q-icon name="close">
+                  <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
+                    <strong>Удалить</strong>
+                  </q-tooltip>
+                </q-icon>
+              </div>
+              <AddBanUserBtn :user-uid="item.user.uid" :type="item.parentObject.type" :object-uid="item.parentObject.uid">
+                <div class="cursor-pointer message-btn message-btn_delete  q-px-xs">
+                  <q-icon name="block">
+                    <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
+                      <span>Бан пользователя</span>
+                    </q-tooltip>
+                  </q-icon>
+                </div>
+              </AddBanUserBtn>
+            </div>
+          </template>
         </ItemBlock>
         <q-separator />
-        <div class="absolute-top-right row q-pr-lg">
-          <div class="cursor-pointer message-btn message-btn_delete  q-px-xs" @click="deleteItem(item)">
-            <q-icon name="close">
-              <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
-                <strong>Удалить</strong>
-              </q-tooltip>
-            </q-icon>
-          </div>
-          <AddBanUserBtn :user-uid="item.user.uid" :type="item.parentObject.type" :object-uid="item.parentObject.uid">
-            <div class="cursor-pointer message-btn message-btn_delete  q-px-xs">
-              <q-icon name="block">
-                <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
-                  <span>Бан пользователя</span>
-                </q-tooltip>
-              </q-icon>
-            </div>
-          </AddBanUserBtn>
-        </div>
+
       </div>
     </transition-group>
   </div>

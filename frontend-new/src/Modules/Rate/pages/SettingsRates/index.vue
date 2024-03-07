@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-md">
-    <ShowRateList edit class="relative-position" />
+    <ShowRateList class="relative-position" />
   </div>
 </template>
 

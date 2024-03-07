@@ -12,7 +12,7 @@
       />
     </div>
     <div v-else-if="message.ban.value.status" class="text-red text-center q-pa-md text-weight-bold text-h6 cursor-pointer">
-      <router-link :to="{ name: 'UserAppealShow' }">
+      <router-link :to="{ name: 'UserProfile', query: {tab: 'ban'}  }">
         {{ message.ban.value.errorMessage }}
       </router-link>
     </div>

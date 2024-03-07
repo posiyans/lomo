@@ -29,7 +29,7 @@ export const adminUserBan =
     meta: {
       icon: 'block',
       title: 'Бан',
-      roles: ['comment-ban']
+      roles: ['user-ban-show', 'user-ban-edit', 'comment-ban']
     },
     redirect: { name: 'adminUserBanList' },
     children: [
@@ -41,7 +41,7 @@ export const adminUserBan =
         meta: {
           icon: 'list_alt',
           title: 'Черный список',
-          roles: ['comment-ban']
+          roles: ['user-ban-show', 'user-ban-edit', 'comment-ban']
         }
       }
     ]

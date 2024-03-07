@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="showBtn">
     <q-btn icon="add" flat color="primary" @click="showDialog" />
     <q-dialog v-model="dialogVisible">
       <q-card>
@@ -36,10 +36,10 @@
 
 <script>
 /* eslint-disable */
-import { defineComponent, onMounted, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { computed, defineComponent, onMounted, ref } from 'vue'
 import InputNumber from 'components/Input/InputNumber/index.vue'
 import { addStead } from 'src/Modules/Stead/api/stead'
+import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
 
 export default defineComponent({
   components: {
@@ -52,8 +52,10 @@ export default defineComponent({
       number: '',
       size: ''
     })
-    const router = useRouter()
-    const route = useRoute()
+    const authStore = useAuthStore()
+    const showBtn = computed(() => {
+      return authStore.checkPermission(['stead-edit'])
+    })
     const saveData = () => {
       addStead(data.value)
         .then(res => {
@@ -75,6 +77,7 @@ export default defineComponent({
     return {
       data,
       dialogVisible,
+      showBtn,
       saveData,
       showDialog
     }

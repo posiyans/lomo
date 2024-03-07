@@ -18,7 +18,7 @@ class GetPaymentAndInvoiceListController extends Controller
 
     public function __construct()
     {
-        $this->middleware('ability:superAdmin|owner,payment-edit|payment-show|invoice-edit|invoice-show');
+        $this->middleware('ability:superAdmin|owner,payment-edit|payment-show|invoice-edit|invoice-show|bookkeeping-show');
     }
 
 
@@ -28,7 +28,8 @@ class GetPaymentAndInvoiceListController extends Controller
             $limit = $request->limit;
             $page = $request->page;
             $user = \Auth::user();
-            if ($user->ability('superAdmin', ['payment-edit', 'payment-show', 'invoice-edit', 'invoice-show']) || $user->owner->steads->where('id', $request->stead_id)->isNotEmpty()) {
+            if ($user->ability('superAdmin', ['payment-edit', 'payment-show', 'invoice-edit', 'invoice-show', 'bookkeeping-show']) || $user->owner->steads->where('id', $request->stead_id)->isNotEmpty(
+                )) {
                 $stead_id = $request->stead_id;
             } else {
                 throw new \Exception('Ошибка доступа');

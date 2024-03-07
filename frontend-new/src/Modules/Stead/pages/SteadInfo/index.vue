@@ -58,7 +58,7 @@ export default defineComponent({
     const primaryStore = usePrimaryStore()
     const authStore = useAuthStore()
     const bookkeeping = computed(() => {
-      return authStore.checkPermission(['payment-show', 'payment-edit', 'invoice-show', 'invoice-edit'])
+      return authStore.checkPermission(['payment-show', 'payment-edit', 'invoice-show', 'invoice-edit', 'bookkeeping-show'])
     })
     const readingEdit = computed(() => {
       return authStore.checkPermission(['instrument_reading-edit'])

@@ -8,7 +8,7 @@
       <q-space />
       <DownloadXlsxBtn :func="funcXlsx" />
     </div>
-    <ShowTable :list="list" :edit="edit" @reload="reload" />
+    <ShowTable :list="list" @reload="reload" />
     <LoadMore :key="key" v-model:list-query="listQuery" :func="func" @setList="setList" />
   </div>
 </template>
@@ -19,7 +19,6 @@ import { computed, defineComponent, ref } from 'vue'
 import ShowTable from './components/ShowTable/index.vue'
 import LoadMore from 'src/components/LoadMore/index.vue'
 import FilterBlock from './components/FiltersBlock/index.vue'
-import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
 import DownloadXlsxBtn from 'src/Modules/Files/components/DownloadXlsxFileBtn/index.vue'
 import { getFullBalanceForStead, getFullBalanceForSteadXlsx } from 'src/Modules/Bookkeeping/api/balaceApi.js'
 import BalanceForStead from 'src/Modules/Bookkeeping/components/Balance/BalanceForStead/index.vue'
@@ -61,10 +60,6 @@ export default defineComponent({
         return getFullBalanceForSteadXlsx(tmp)
       }
     })
-    const authStore = useAuthStore()
-    const edit = computed(() => {
-      return authStore.permissions.includes('payment-edit')
-    })
     const reload = () => {
       key.value++
     }
@@ -74,7 +69,6 @@ export default defineComponent({
     return {
       listQuery,
       key,
-      edit,
       reload,
       setList,
       func,

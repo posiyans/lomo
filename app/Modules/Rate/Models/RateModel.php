@@ -41,6 +41,11 @@ class RateModel extends MyModel
 
     protected $fillable = ['ratio_a', 'ratio_b', 'description', 'date_start'];
     protected $casts = [
+        'id' => 'integer',
+        'rate_group_id' => 'integer',
+        'stead_id' => 'integer',
+        'depends' => 'integer',
+        'payment_type' => 'integer',
         'ratio_a' => 'decimal:2',
         'ratio_b' => 'decimal:2',
         'date_start' => 'date:Y-m-d',

@@ -5,6 +5,7 @@
       align="left"
       class="text-teal"
       :breakpoint="0"
+      @update:model-value="changeRoute"
     >
       <q-tab name="profile" label="Мой профиль" />
       <q-tab name="ban" label="Ограничения" />
@@ -40,6 +41,7 @@ import BanUserInfo from 'src/Modules/BanUsers/components/BanUserInfo/index.vue'
 import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
 import AddAppealBtn from 'src/Modules/Appeal/components/AddAppealBtn/index.vue'
 import AppealList from 'src/Modules/Appeal/components/AppealList/index.vue'
+import { useRoute, useRouter } from 'vue-router'
 
 export default defineComponent({
   components: {
@@ -50,14 +52,20 @@ export default defineComponent({
   },
   props: {},
   setup(props, { emit }) {
-    const tab = ref('profile')
+    const route = useRoute()
+    const router = useRouter()
+    const tab = ref(route.query.tab || 'profile')
     const authStore = useAuthStore()
     const key = ref(1)
+    const changeRoute = (val) => {
+      router.replace({ path: route.fullPath, query: { tab: val } })
+    }
     const reloadData = (val) => {
       key.value++
     }
     return {
       tab,
+      changeRoute,
       authStore,
       reloadData,
       key

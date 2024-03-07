@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="edit" class="row absolute-top-right" style="top: 10px; right: 10px;z-index: 1000;">
+    <div v-if="editRate" class="row absolute-top-right" style="top: 10px; right: 10px;z-index: 1000;">
       <AddRateGroupBtn>
         <q-btn icon="add" flat dense color="teal" />
       </AddRateGroupBtn>
@@ -25,7 +25,7 @@
       animated
     >
       <q-tab-panel v-for="item in rateGroup" :key="item.id" :name="item.id" class="q-pa-xs">
-        <ShowRateForGroup :rate-group-id="item.id" :edit="edit" />
+        <ShowRateForGroup :rate-group-id="item.id" :edit="editRate" />
       </q-tab-panel>
     </q-tab-panels>
   </div>
@@ -38,6 +38,7 @@ import AddRateGroupBtn from 'src/Modules/Rate/components/AddRateGroupBtn/index.v
 import { getRateGroupList } from 'src/Modules/Rate/api/rateAdminApi'
 import EditRateGroup from 'src/Modules/Rate/components/EditRateGroup/index.vue'
 import ShowRateForGroup from 'src/Modules/Rate/components/ShowRateForGroup/index.vue'
+import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
 
 
 export default defineComponent({
@@ -51,10 +52,6 @@ export default defineComponent({
       type: [String, Number],
       default: 0
     },
-    edit: {
-      type: Boolean,
-      default: false
-    },
     tabDefault: {
       type: [String, Number],
       default: 0
@@ -64,6 +61,10 @@ export default defineComponent({
     const tab = ref('')
     const loading = ref(true)
     const rateGroup = ref([])
+    const authStore = useAuthStore()
+    const editRate = computed(() => {
+      return authStore.checkPermission(['rate-edit'])
+    })
     const activeTabData = computed(() => {
       return rateGroup.value.find(item => item.id === tab.value)
     })
@@ -94,6 +95,7 @@ export default defineComponent({
       tab,
       setTab,
       getData,
+      editRate,
       loading,
       activeTabData,
       rateGroup

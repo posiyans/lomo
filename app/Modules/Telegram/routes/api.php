@@ -17,7 +17,7 @@ Route::group(['prefix' => 'v2/telegram'], function () {
     Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('get-bot-info', \App\Modules\Telegram\Controllers\GetBotInfoController::class);
         Route::get('get-last-user-from-telegram', \App\Modules\Telegram\Controllers\GetLastMessageUserIdController::class);
-        Route::get('setting/get-telegram-bot-token', \App\Modules\Telegram\Controllers\GetTelegramTokenController::class);
+//        Route::get('setting/get-telegram-bot-token', \App\Modules\Telegram\Controllers\GetTelegramTokenController::class);
         Route::post('setting/update-telegram-bot-token', \App\Modules\Telegram\Controllers\UpdateTelegramTokenController::class);
         Route::post('setting/change-two-factor-enable', \App\Modules\Telegram\Controllers\ChangeTwoFactorEnableController::class);
     });

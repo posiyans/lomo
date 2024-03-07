@@ -46,7 +46,7 @@
       <template v-slot:body-cell-actions="props">
         <q-td :props="props">
           <div class="row justify-center">
-            <InvoiceInfoBtn :invoice="props.row" edit @success="reload" />
+            <InvoiceInfoBtn :invoice="props.row" :edit="editInvoice" @success="reload" />
             <ReceiptForInvoiceBtn :invoice-id="props.row.id" />
           </div>
         </q-td>
@@ -57,10 +57,11 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
 import InvoiceInfoBtn from 'src/Modules/Bookkeeping/components/Invoice/InvoiceInfo/Dialog.vue'
 import ReceiptForInvoiceBtn from 'src/Modules/Receipt/components/ReceiptForInvoiceBtn/index.vue'
 import ShowPrice from 'components/ShowPrice/index.vue'
+import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
 
 export default defineComponent({
   components: {
@@ -75,6 +76,10 @@ export default defineComponent({
     }
   },
   setup(props, { emit }) {
+    const authStore = useAuthStore()
+    const editInvoice = computed(() => {
+      return authStore.checkPermission(['invoice-edit'])
+    })
     const columns = [
       {
         name: 'id',
@@ -112,6 +117,7 @@ export default defineComponent({
     }
     return {
       columns,
+      editInvoice,
       reload
     }
   }

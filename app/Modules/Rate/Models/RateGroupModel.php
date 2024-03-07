@@ -20,6 +20,8 @@ class RateGroupModel extends MyModel
     // 2 - расчитывается по показания
 
     protected $casts = [
+        'id' => 'integer',
+        'depends' => 'integer',
         'options' => 'array',
         'auto_invoice' => 'boolean'
     ];

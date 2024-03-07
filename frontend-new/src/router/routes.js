@@ -22,6 +22,7 @@ const routes = [
           { path: '', component: () => import('src/pages/MainPage/index.vue') },
           {
             path: 'profile',
+            name: 'UserProfile',
             component: () => import('src/Modules/PersonalArea/pages/Profile/index.vue'),
             meta: {
               title: 'Профиль',
