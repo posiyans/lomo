@@ -21,6 +21,9 @@
       </div>
       <q-space />
       <div>
+        <SearchBtn />
+      </div>
+      <div>
         <RightBlock />
       </div>
     </q-toolbar>
@@ -41,13 +44,15 @@ import TemperWidget from 'src/Modules/Weather/componets/TemperWidget/index.vue'
 import RightBlock from './components/RightBlock/index.vue'
 import { useRouter } from 'vue-router'
 import UserMenu from 'src/layouts/UserLayout/components/UserMenu/index.vue'
+import SearchBtn from 'src/Modules/Search/components/SearchBtn/index.vue'
 
 export default defineComponent({
   components: {
     SiteName,
     TemperWidget,
     RightBlock,
-    UserMenu
+    UserMenu,
+    SearchBtn
   },
   setup() {
     const router = useRouter()

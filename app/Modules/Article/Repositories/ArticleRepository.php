@@ -28,6 +28,25 @@ class ArticleRepository
         return $this;
     }
 
+
+    public function search($text)
+    {
+        if ($text) {
+            $text = strtolower($text);
+//            try {
+//                $this->query->whereRaw('lower(concat_ws(" ",title,resume, text)) like ?', '"%' . $text . '%"');
+//            } catch (\Exception $e) {
+            $this->query->where(function ($subQuery) use ($text) {
+                $subQuery->whereRaw('lower(title) like ?', '%' . $text . '%')
+                    ->orwhereRaw('lower(resume) like ?', '%' . $text . '%')
+                    ->orwhereRaw('lower(text) like ?', '%' . $text . '%');
+            });
+//            }
+        }
+//        dd([$this->query->toSql()]);
+        return $this;
+    }
+
     public function run()
     {
         $model = $this->query->first();
@@ -35,6 +54,16 @@ class ArticleRepository
             return $model;
         }
         throw new \Exception('Статья  не найдена');
+    }
+
+    public function all()
+    {
+        return $this->query->get();
+    }
+
+    public function paginate($limit)
+    {
+        return $this->query->paginate($limit);
     }
 
 

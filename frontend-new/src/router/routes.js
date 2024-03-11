@@ -9,6 +9,7 @@ import weather from 'src/Modules/Weather/router/weather.js'
 import adminRoutes from './adminRoutes.js'
 import { personalAreaRouter } from 'src/Modules/PersonalArea/router/personalAreaRouter'
 import { appeal } from 'src/Modules/Appeal/router/appealRouter'
+import search from 'src/Modules/Search/router/search.js'
 
 const routes = [
   {
@@ -40,7 +41,8 @@ const routes = [
       yandex,
       camera,
       weather,
-      appeal
+      appeal,
+      search
     ]
   },
   {
