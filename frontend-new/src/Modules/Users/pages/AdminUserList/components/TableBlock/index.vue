@@ -34,7 +34,7 @@
               </div>
 
               <div v-if="props.row.last_connect" class="text-small-80">
-                <ShowTime :time="props.row.last_connect" />
+                <ShowTime :time="props.row.last_connect" from />
               </div>
             </div>
           </div>

@@ -10,7 +10,7 @@
               {{ activeUserStore.user.name }}
               {{ activeUserStore.user.middle_name }}
             </div>
-            <ShowTime :time="activeUserStore.user.last_connect" class="text-grey-8 text-small-65 text-weight-thin" />
+            <ShowTime :time="activeUserStore.user.last_connect" from class="text-grey-8 text-small-65 text-weight-thin" />
           </div>
         </div>
 

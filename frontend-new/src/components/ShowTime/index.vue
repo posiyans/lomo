@@ -72,17 +72,14 @@ export default defineComponent({
         // const date2 = new Date(dateUtc.value)
         const offset = dateUtc.value.getTimezoneOffset()
         const date2 = new Date(date.subtractFromDate(dateUtc.value, { minutes: offset }))
-        // const unit = 'days'
-        const unit = 'second'
         const sec = date.getDateDiff(dateNow, date2, 'second')
-        const minute = date.getDateDiff(dateNow, date2, 'minute')
-        const hour = date.getDateDiff(dateNow, date2, 'hour')
-        const day = date.getDateDiff(dateNow, date2, 'day')
-        const month = date.getDateDiff(dateNow, date2, 'month')
-        // return sec + '-d' + day + '-h' + hour + '-m' + minute + '-s' + sec
-        // return sec
-        // return hour + '-' + minute + ' ' + declOfNum(minute, ['минута', 'минуты', 'минут']) + ' назад'
-        if (month > 12) {
+        const minute = Math.floor(sec / 60)
+        const hour = Math.floor(minute / 60)
+        const day = Math.floor(hour / 24)
+        const month = (date.getDateDiff(dateNow, date2, 'month') - 1)
+        if (month > 24) {
+          return 'больше 2 лет назад'
+        } else if (month > 12) {
           return 'больше года назад'
         } else if (month > 0) {
           return month + ' ' + declOfNum(month, ['месяц', 'месяца', 'месяцев']) + ' назад'
