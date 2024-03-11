@@ -22,7 +22,7 @@ class BanUserTypeRepository
         ],
         'article' => [
             'className' => ArticleModel::class,
-            'label' => 'бан на добавление статей'
+            'label' => 'бан на добавление  и комментирование статей'
         ]
     ];
 

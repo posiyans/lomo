@@ -8,7 +8,7 @@
             <div v-if="article.author">
               {{ article.author.name }}
             </div>
-            <ShowTime :time="article.updated_at" />
+            <ShowTime :time="article.updated_at" from />
           </div>
           <div v-if="authStore.checkPermission('article-edit') " class="absolute-top-right desktop-only">
             <q-btn icon="settings" color="primary" flat :to="'/admin/article/edit/' + article.id" />

@@ -34,7 +34,16 @@ class GetGlobalOption
 
     public static function findOneByValueField($name, $field, $val)
     {
-        $item = GlobalOptionModel::where('name', $name)->whereJsonContains('value->' . $field, $val)->first();
+        try {
+            $item = GlobalOptionModel::where('name', $name)->whereJsonContains('value->' . $field, $val)->first();
+        } catch (\Exception $e) {
+            $items = GlobalOptionModel::where('name', $name)->get();
+            foreach ($items as $options) {
+                if ($options->value[$field] == $val) {
+                    $item = $options;
+                }
+            }
+        }
         if ($item) {
             return $item;
         }
