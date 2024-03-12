@@ -40,6 +40,8 @@ class DatabaseSeeder extends Seeder
         ]);
         if ($demo) {
             $this->call([
+                CategorySeeder::class,
+                SiteMenuSeeder::class,
                 GardeningDemoSeeder::class,
                 UserModelDemoSeeder::class,
                 SteadModelDemoSeeder::class,
