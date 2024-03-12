@@ -8,6 +8,7 @@
  */
 
 define('LARAVEL_START', microtime(true));
+define('LARAVEL_DEMO', false);
 /*
 |--------------------------------------------------------------------------
 | Register The Auto Loader
@@ -19,8 +20,7 @@ define('LARAVEL_START', microtime(true));
 | loading any of our classes later on. It feels great to relax.
 |
 */
-$demo = env('DEMO', false);
-if ($demo && $_SERVER['REQUEST_METHOD'] != 'OPTIONS') {
+if (LARAVEL_DEMO && $_SERVER['REQUEST_METHOD'] != 'OPTIONS') {
     session_start();
     if (!isset($_SESSION['sql_lite'])) {
         $user = time();
