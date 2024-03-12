@@ -10,10 +10,6 @@ Route::group(['prefix' => 'v2/camera'], function () {
         Route::get('/reload/{id}', \App\Modules\Camera\Controllers\ReloadCameraImageController::class);
         Route::post('/create', \App\Modules\Camera\Controllers\CreateCameraController::class);
         Route::post('/{id}', \App\Modules\Camera\Controllers\UpdateCameraController::class);
+        Route::delete('/{id}', \App\Modules\Camera\Controllers\DeleteCameraController::class);
     });
 });
-
-
-//Route::group(['middleware' => ['auth:sanctum'], 'prefix' => 'v2/avatar'], function () {
-//    Route::post('/user/upload', [\App\Modules\Avatar\Controllers\UploadUserAvatarController::class, 'index']);
-//});

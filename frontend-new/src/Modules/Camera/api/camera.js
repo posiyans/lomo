@@ -24,6 +24,13 @@ export function updateCamera(id, data) {
   })
 }
 
+export function deleteCamera(id) {
+  return request({
+    url: '/api/v2/camera/' + id,
+    method: 'delete'
+  })
+}
+
 export function refreshCamera(id) {
   return request({
     url: '/api/v2/camera/reload/' + id,

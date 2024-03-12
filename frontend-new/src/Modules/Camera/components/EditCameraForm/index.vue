@@ -30,8 +30,15 @@
         :rules="[required]"
         style="max-width: 250px;"
       />
-      <div>
-        <q-btn :label="buttonTitle" type="submit" color="primary" />
+      <div class="row">
+        <div>
+          <q-btn label="Отмена" flat color="negative" />
+          <q-btn :label="buttonTitle" type="submit" color="primary" />
+        </div>
+        <q-space />
+        <div>
+          <q-btn label="Удалить" color="negative" @click="deleteCameraAction" />
+        </div>
       </div>
     </q-form>
   </div>
@@ -41,9 +48,10 @@
 /* eslint-disable */
 import { computed, defineComponent, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { addCamera, updateCamera } from 'src/Modules/Camera/api/camera.js'
+import { addCamera, deleteCamera, updateCamera } from 'src/Modules/Camera/api/camera.js'
 import { required } from 'src/utils/validators'
 import InputNumber from 'components/Input/InputNumber/index.vue'
+import { useQuasar } from 'quasar'
 
 export default defineComponent({
   components: {
@@ -83,6 +91,9 @@ export default defineComponent({
       if (edit.value) {
         func = (data) => {
           updateCamera(props.camera.id, data)
+            .then(res => {
+              emit('success')
+            })
         }
       }
       func(data.value)
@@ -91,12 +102,39 @@ export default defineComponent({
         })
 
     }
+    const $q = useQuasar()
+    const deleteCameraAction = () => {
+      $q.dialog({
+        title: 'Подтвердите',
+        message: 'Подтвердите удаление камеры',
+        cancel: {
+          noCaps: true,
+          flat: true,
+          label: 'Отмена',
+          color: 'primary'
+        },
+        ok: {
+          noCaps: true,
+          outline: true,
+          label: 'Удалить',
+          color: 'negative'
+        },
+        persistent: true
+      }).onOk(() => {
+        deleteCamera(props.camera.id)
+          .then(() => {
+            emit('success')
+          })
+      })
+
+    }
     onMounted(() => {
       data.value = props.camera
     })
     return {
       buttonTitle,
       required,
+      deleteCameraAction,
       data,
       saveData
     }

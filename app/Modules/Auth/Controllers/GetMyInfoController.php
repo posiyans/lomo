@@ -12,7 +12,6 @@ class GetMyInfoController extends MyController
 
     public function __invoke()
     {
-//        return response('', 403);
         $user = Auth::user();
         return response(new AuthUserResource($user));
     }

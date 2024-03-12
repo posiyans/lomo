@@ -4,7 +4,10 @@ namespace App\Modules\Camera\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Modules\Camera\Repositories\CameraRepository;
+use App\Modules\File\Repositories\PreviewFileRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * Получить изображение с камеры камеру
@@ -17,8 +20,13 @@ class GetCameraImageController extends Controller
     {
         try {
             $file = CameraRepository::getImagePath($id);
-            if (file_exists($file)) {
-                return response()->download($file, 'cam_' . $id . '_' . time() . '.jpg');
+            $user = Auth::user() ?? false;
+
+            if (!$user || !$user->ability(['superAdmin', 'owner'], ['camera-show'])) {
+                $file = (new PreviewFileRepository($file))->width(200)->path();
+            }
+            if (Storage::exists($file)) {
+                return Storage::download($file, 'cam_' . $id . '_' . time() . '.jpg');
             }
         } catch (\Exception $e) {
         }
