@@ -27,7 +27,7 @@
             {{ item.ttl }}
           </div>
         </td>
-        <td class="">
+        <td style="min-width: 300px;">
           <ShowCamera :key="key" :item="item" />
         </td>
       </tr>
