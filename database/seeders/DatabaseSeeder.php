@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\Cache;
 
 class DatabaseSeeder extends Seeder
 {
-    private $demo = false;
 
     /**
      * Seed the application's database.
@@ -26,6 +25,7 @@ class DatabaseSeeder extends Seeder
 
     public function run()
     {
+        $demo = env('DEMO', false);
         $this->call([
             LaratrustSeeder::class,
             AppealTypeSeeder::class,
@@ -38,7 +38,7 @@ class DatabaseSeeder extends Seeder
 
 
         ]);
-        if ($this->demo) {
+        if ($demo) {
             $this->call([
                 GardeningDemoSeeder::class,
                 UserModelDemoSeeder::class,
