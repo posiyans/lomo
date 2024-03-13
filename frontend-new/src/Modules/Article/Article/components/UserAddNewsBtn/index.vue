@@ -43,7 +43,9 @@ export default defineComponent({
     onMounted(() => {
       getAllowPublicationArticle()
         .then(res => {
-          showBtn.value = true
+          if (res.data.status) {
+            showBtn.value = true
+          }
         })
     })
 

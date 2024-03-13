@@ -53,7 +53,9 @@ export default defineComponent({
       }
     }
     const findAction = () => {
-      router.push('/search?find=' + find.value)
+      if (find.value) {
+        router.push('/search?find=' + find.value)
+      }
       inputVisible.value = false
       find.value = ''
     }

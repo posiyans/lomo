@@ -1,9 +1,6 @@
 import { Notify } from 'quasar'
 
 export function errorMessage(val) {
-  console.log('val')
-  console.log(val)
-  console.log(typeof val)
   if (typeof val === 'string') {
     Notify.create({
       type: 'negative',

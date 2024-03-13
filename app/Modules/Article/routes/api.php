@@ -11,9 +11,12 @@ Route::group(['prefix' => 'v2/article'], function () {
     Route::post('user-add', \App\Modules\Article\Controllers\Article\UserAddArticleController::class);
     Route::get('get-list', \App\Modules\Article\Controllers\Article\GetArtileListForCategoryController::class);
     Route::get('get/{slug}', [\App\Modules\Article\Controllers\Article\UserGetArticleController::class, 'index']);
-    Route::group(['middleware' => ['auth:sanctum'], 'prefix' => 'setting'], function () {
+
+    Route::group(['prefix' => 'setting'], function () {
         Route::get('allow-publication', \App\Modules\Article\Controllers\Settings\GetAllowPublicationArticleController::class);
-        Route::post('allow-publication/update', \App\Modules\Article\Controllers\Settings\ChangeAllowPublicationArticleController::class);
+        Route::group(['middleware' => ['auth:sanctum']], function () {
+            Route::post('allow-publication/update', \App\Modules\Article\Controllers\Settings\ChangeAllowPublicationArticleController::class);
+        });
     });
 });
 

@@ -16,23 +16,21 @@ use Illuminate\Support\Facades\Auth;
 class GetAllowPublicationArticleController extends Controller
 {
 
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     public function __invoke(Request $request)
     {
         try {
-            $user = Auth::user();
-            $access = GetGlobalOption::getOneValue(ArticleModel::getAllowPublicationArticleSettingName(), 1);
-            if ($request->admin && $user->hasRole('superAdmin')) {
-                return ['data' => $access];
+            if (Auth::check()) {
+                $user = Auth::user();
+                $access = GetGlobalOption::getOneValue(ArticleModel::getAllowPublicationArticleSettingName(), 1);
+                if ($request->admin && $user->hasRole('superAdmin')) {
+                    return ['status' => true, 'data' => $access];
+                }
+                (new AllowPublicationArticleAction($access))->run($user);
+                return ['status' => true, 'data' => $access];
             }
-            (new AllowPublicationArticleAction($access))->run($user);
-            return ['data' => $access];
+            return response(['status' => false, 'errors' => 'Необходима авторизация']);
         } catch (\Exception $e) {
-            return response(['errors' => $e->getMessage()], 403);
+            return response(['status' => false, 'errors' => $e->getMessage()]);
         }
         // 1 - отключенно
         // 2 - собственники

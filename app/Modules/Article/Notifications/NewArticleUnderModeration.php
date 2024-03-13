@@ -48,19 +48,22 @@ class NewArticleUnderModeration extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-        $text = '';
+        $author = '';
         $user = $this->article->user;
         if ($user) {
-            $text .= $this->article->user->last_name . ' ' . $this->article->user->name;
+            $author .= $this->article->user->last_name . ' ' . $this->article->user->name;
         }
-        $text .= $this->article->title . "\n";
+        $title = $this->article->title;
         $url = env('APP_URL') . '/admin/article/edit/' . $this->article->id;
+        $text = $this->article->text;
         return (new MailMessage)
             ->subject('Новая статья')
             ->greeting("Новая статья на модерацию")
             ->salutation('С Уважением, Администрация сайта')
             ->action('Смотреть', $url)
             ->line('На сайте добавлена новая статься и она ожидает модерации')
+            ->line($author)
+            ->line($title)
             ->line($text);
     }
 
