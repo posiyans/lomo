@@ -1,5 +1,10 @@
 <template>
-  <component :is="block">{{ before }}{{ showTime }}{{ after }}</component>
+  <component :is="block">
+    {{ before }}{{ showTime }}{{ after }}
+    <q-tooltip v-if="from" anchor="center left">
+      {{ stringTime }}
+    </q-tooltip>
+  </component>
 </template>
 
 <script>
@@ -55,18 +60,20 @@ export default defineComponent({
     })
     const showTime = computed(() => {
       if (props.from) {
-        return from()
+        return from.value
       } else {
-        if (dateUtc.value) {
-          const offset = dateUtc.value.getTimezoneOffset()
-          const newDate = date.subtractFromDate(dateUtc.value, { minutes: offset })
-          return date.formatDate(newDate, props.format)
-        }
-        return ''
+        return stringTime.value
       }
     })
-
-    const from = () => {
+    const stringTime = computed(() => {
+      if (dateUtc.value) {
+        const offset = dateUtc.value.getTimezoneOffset()
+        const newDate = date.subtractFromDate(dateUtc.value, { minutes: offset })
+        return date.formatDate(newDate, props.format)
+      }
+      return ''
+    })
+    const from = computed(() => {
       const dateNow = new Date()
       if (dateUtc.value) {
         // const date2 = new Date(dateUtc.value)
@@ -97,11 +104,12 @@ export default defineComponent({
       } else {
         return ''
       }
-    }
+    })
 
 
     return {
-      showTime
+      showTime,
+      stringTime
     }
   }
 })
