@@ -19,6 +19,7 @@ class ArticleResource extends JsonResource
             'title' => $this->title,
             'text' => (new GetResumeForArticleRepository($this->resource))->run(),
             'url' => '/article/show/' . $this->slug,
+            'date' => $this->updated_at,
         ];
         return $data;
     }

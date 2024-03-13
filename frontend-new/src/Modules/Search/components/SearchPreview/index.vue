@@ -4,6 +4,7 @@
       <q-card-section>
         <div class="relative-position">
           <div class="article-preview-title">{{ item.title }}</div>
+          <ShowTime :time="item.date" from class="text-small-85 o-60" />
         </div>
         <q-separator />
       </q-card-section>
