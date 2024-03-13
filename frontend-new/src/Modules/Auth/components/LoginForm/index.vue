@@ -18,14 +18,22 @@
 
       <q-input
         filled
-        type="password"
+        :type="showPassword ? 'text' : 'password'"
         v-model="form.password"
         label="Пароль"
         lazy-rules
         :rules="[
           required
         ]"
-      />
+      >
+        <template v-slot:append>
+          <q-icon
+            :name="showPassword ? 'visibility_off' : 'visibility'"
+            class="cursor-pointer"
+            @click="showPassword = !showPassword"
+          />
+        </template>
+      </q-input>
       <q-input
         ref="codeRef"
         v-show="showCodeForm"
@@ -70,6 +78,7 @@ export default defineComponent({
     const loginForm = ref(null)
     const codeRef = ref(null)
     const showCodeForm = ref(false)
+    const showPassword = ref(false)
     const siteMenuStore = useSiteMenuStore()
     const form = reactive({
       email: '',
@@ -121,6 +130,7 @@ export default defineComponent({
       authStore,
       loginForm,
       showCodeForm,
+      showPassword,
       isEmail,
       setCode,
       codeRef,
