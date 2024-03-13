@@ -4,6 +4,7 @@
       <q-card-section>
         <div class="relative-position">
           <div class="article-preview-title">{{ item.title }}</div>
+          <ShowTime :time="item.date" from class="text-small-85 o-60" />
         </div>
         <q-separator />
       </q-card-section>
@@ -29,7 +30,7 @@
 <script>
 /* eslint-disable */
 import { defineComponent, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import ShowTime from 'src/components/ShowTime/index.vue'
 import CountMessageBlock from 'src/Modules/Comments/components/CountMessageBlock/index.vue'
 import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
@@ -48,7 +49,6 @@ export default defineComponent({
   setup(props, { emit }) {
     const data = ref(null)
     const router = useRouter()
-    const route = useRoute()
     const authStore = useAuthStore()
     const showItem = () => {
       router.push(props.item.url)

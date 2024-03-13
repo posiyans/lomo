@@ -33,6 +33,7 @@
 /* eslint-disable */
 import { defineComponent, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useQuasar } from 'quasar'
 
 export default defineComponent({
   components: {},
@@ -42,8 +43,14 @@ export default defineComponent({
     const data = ref(false)
     const router = useRouter()
     const find = ref('')
+    const $q = useQuasar()
     const showInput = () => {
-      inputVisible.value = !inputVisible.value
+      if ($q.screen.width < 600) {
+        router.push('/search')
+      } else {
+        inputVisible.value = !inputVisible.value
+
+      }
     }
     const findAction = () => {
       router.push('/search?find=' + find.value)
