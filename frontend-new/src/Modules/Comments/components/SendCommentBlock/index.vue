@@ -54,10 +54,11 @@
             </AddFileBtn>
           </q-input>
         </div>
-        <div v-if="inputHint" class="">
+        <div v-if="inputHint" class="q-pt-xs">
           <FilesListShow
             v-model="message.newMessage.value.files"
             edit
+            class="row q-col-gutter-sm"
           />
         </div>
       </div>

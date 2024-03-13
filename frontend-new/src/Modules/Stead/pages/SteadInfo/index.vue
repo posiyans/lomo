@@ -8,12 +8,12 @@
           class="text-teal"
           :breakpoint="0"
         >
-          <q-tab name="steadinfo" label="Данные" />
+          <q-tab name="steadInfo" label="Данные" />
           <q-tab name="readings" label="Показания" />
           <q-tab v-if="bookkeeping" name="payment" label="Счета" />
         </q-tabs>
         <q-tab-panels v-model="tab" animated>
-          <q-tab-panel name="steadinfo" class="ba b--dark-green" style="min-height: 250px;">
+          <q-tab-panel name="steadInfo" class="ba b--dark-green" style="min-height: 250px;">
             <SteadTab :stead-id="steadId" />
           </q-tab-panel>
           <q-tab-panel name="readings" class="ba b--dark-green relative-position" style="min-height: 250px;">
@@ -51,7 +51,7 @@ export default defineComponent({
   props: {},
   setup(props, { emit }) {
     const route = useRoute()
-    const tab = ref(route.query.tab || 'steadinfo')
+    const tab = ref(route.query.tab || 'steadInfo')
     const keyReading = ref(1)
     const stead = ref({})
     const steadId = ref(route.params.id)

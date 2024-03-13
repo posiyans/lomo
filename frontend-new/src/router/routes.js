@@ -10,6 +10,7 @@ import adminRoutes from './adminRoutes.js'
 import { personalAreaRouter } from 'src/Modules/PersonalArea/router/personalAreaRouter'
 import { appeal } from 'src/Modules/Appeal/router/appealRouter'
 import search from 'src/Modules/Search/router/search.js'
+import { voting } from 'src/Modules/Voting/router/votingRouter'
 
 const routes = [
   {
@@ -42,7 +43,8 @@ const routes = [
       camera,
       weather,
       appeal,
-      search
+      search,
+      voting
     ]
   },
   {

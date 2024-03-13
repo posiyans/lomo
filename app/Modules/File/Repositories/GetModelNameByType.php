@@ -5,6 +5,7 @@ namespace App\Modules\File\Repositories;
 use App\Modules\Appeal\Models\AppealModel;
 use App\Modules\Article\Models\ArticleModel;
 use App\Modules\Comment\Models\CommentModel;
+use App\Modules\Stead\Models\SteadModel;
 
 /***
  *
@@ -15,7 +16,8 @@ class GetModelNameByType
     private $objectArray = [
         'article' => ArticleModel::class,
         'appeal' => AppealModel::class,
-        'comment' => CommentModel::class
+        'comment' => CommentModel::class,
+        'stead' => SteadModel::class
     ];
     private $type;
 

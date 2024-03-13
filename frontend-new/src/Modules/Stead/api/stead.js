@@ -72,3 +72,11 @@ export function getMySteads() {
     method: 'get'
   })
 }
+
+export function geFilesForStead(steadId, params) {
+  return request({
+    url: '/api/v2/stead/get-files/' + steadId,
+    method: 'get',
+    params
+  })
+}

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="files.length > 0" class="text-weight-bold">Файлы:</div>
-    <FilesListShow :modelValue="files" />
+    <FilesListShow :modelValue="files" class="row q-col-gutter-sm" />
   </div>
 </template>
 
@@ -19,16 +19,16 @@ export default {
       required: true
     }
   },
-  data () {
+  data() {
     return {
       files: []
     }
   },
-  mounted () {
+  mounted() {
     this.getData()
   },
   methods: {
-    getData () {
+    getData() {
       const data = {
         uid: this.articleUid
       }

@@ -1,29 +1,30 @@
 <template>
   <div>
-    <div class="row q-col-gutter-md">
-      <div v-for="(file) in filtersList" :key="file.uid">
-        <q-card>
-          <q-card-section class="row q-pa-xs" :class="{ 'items-center': !showPreview }">
-            <FilePreview v-if="!showPreview" :file="file" width="36px" class="overflow-hidden br-05" style="width: 36px; height: 36px;" />
-            <FileItem :file="file" :get-url="getUrl" :show-preview="showPreview" class="q-ml-xs" />
-            <div v-if="edit">
-              <div class="text-secondary row items-center">
-                <div
-                  class="text-red q-px-sm text-big-100"
-                  @click="deleteFile(file)">
-                  <DeleteIcon />
-                </div>
-              </div>
-              <div v-if="file.upload.error" class="text-red">
-                Ошибка {{ file.upload.errorsMessage }}
+    <div v-for="file in filtersList" :key="file.uid">
+      <q-card>
+        <q-card-section v-if="file.model?.description" class="q-py-none">
+          <div>{{ file.model?.description }}</div>
+        </q-card-section>
+        <q-card-section class="row q-pa-xs" :class="{ 'items-center': !showPreview }">
+          <FilePreview v-if="!showPreview" :file="file" width="36px" class="overflow-hidden br-05" style="width: 36px; height: 36px;" />
+          <FileItem :file="file" :get-url="getUrl" :show-preview="showPreview" class="q-ml-xs" />
+          <div v-if="edit">
+            <div class="text-secondary row items-center">
+              <div
+                class="text-red q-px-sm text-big-100"
+                @click="deleteFile(file)">
+                <DeleteIcon />
               </div>
             </div>
-          </q-card-section>
-          <div v-if="file.upload && !file.upload.success && file.upload.process > 0 && file.upload.process < 1" class="absolute-bottom full-width">
-            <q-linear-progress :value="file.upload.process" class="" track-color="grey" size="3px" />
+            <div v-if="file.upload?.error" class="text-red">
+              Ошибка {{ file.upload.errorsMessage }}
+            </div>
           </div>
-        </q-card>
-      </div>
+        </q-card-section>
+        <div v-if="file.upload && !file.upload.success && file.upload.process > 0 && file.upload.process < 1" class="absolute-bottom full-width">
+          <q-linear-progress :value="file.upload.process" class="" track-color="grey" size="3px" />
+        </div>
+      </q-card>
     </div>
   </div>
 </template>

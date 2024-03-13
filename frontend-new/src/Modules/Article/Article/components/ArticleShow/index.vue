@@ -27,7 +27,7 @@
       <div v-html="article.text" class="q-px-sm"></div>
       <div v-if="article.files?.length > 0" class="q-gutter-sm">
         <div class="text-weight-bold">Файлы:</div>
-        <FilesListShow :model-value="article.files" />
+        <FilesListShow :model-value="article.files" class="row q-col-gutter-sm" />
       </div>
       <ArticleChatBlock :article="article" />
     </q-card-section>

@@ -27,7 +27,7 @@
              class="q-py-sm"
              style="margin-left: 40px;"
              :class="messageTextClass" />
-        <FilesListShow v-if="!item.delete" :model-value="item.files" show-preview />
+        <FilesListShow v-if="!item.delete" :model-value="item.files" show-preview class="row q-col-gutter-sm" />
       </div>
     </div>
   </div>

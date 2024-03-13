@@ -3,6 +3,7 @@
 namespace App\Modules\Stead\Models;
 
 use App\Models\MyModel;
+use App\Modules\File\Models\FileModel;
 use App\Modules\MeteringDevice\Models\MeteringDeviceModel;
 use App\Modules\Owner\Models\OwnerUserModel;
 use App\Modules\Stead\Factories\SteadModelFactory;
@@ -92,6 +93,11 @@ class SteadModel extends MyModel
     public function metering_devices()
     {
         return $this->hasMany(MeteringDeviceModel::class, 'stead_id', 'id');
+    }
+
+    public function files()
+    {
+        return $this->morphMany(FileModel::class, 'commentable', null, 'commentable_uid', 'id');
     }
 
 

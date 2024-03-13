@@ -3,10 +3,10 @@
     <q-card v-if="voting">
       <q-card-section>
         <div class="row q-col-gutter-md q-pa-sm">
-          <ShowVotingType :type="voting.type" color/>
-          <ShowVotingStatus :status="voting.status" color class="text-weight-bold"/>
+          <ShowVotingType :type="voting.type" color />
+          <ShowVotingStatus :status="voting.status" color class="text-weight-bold" />
         </div>
-        <q-separator/>
+        <q-separator />
       </q-card-section>
       <q-card-section>
         <div>
@@ -28,7 +28,7 @@
         <div v-if="voting.files && voting.files.length > 0">
           <div class="file-list-header">Файлы:</div>
         </div>
-        <FilesListShow v-model="voting.files"/>
+        <FilesListShow v-model="voting.files" class="row q-col-gutter-sm" />
       </q-card-section>
       <q-card-section>
         <QuestionShow :voting="voting" @changeResult="fetchVoting" />
@@ -39,7 +39,7 @@
             <Back />
 
           </div>
-          <ShowTime :time="voting.date_publish" format="DD-MM-YYYY" class="text-grey-8"/>
+          <ShowTime :time="voting.date_publish" format="DD-MM-YYYY" class="text-grey-8" />
         </div>
       </q-card-actions>
     </q-card>
@@ -54,6 +54,7 @@ import ShowVotingStatus from 'src/Modules/Voting/components/ShowVotingStatus/ind
 import ShowTime from 'src/components/ShowTime/index.vue'
 import ShowVotingType from 'src/Modules/Voting/components/ShowVotingType'
 import FilesListShow from 'src/Modules/Files/components/FilesListShow'
+
 export default {
   components: {
     QuestionShow,
@@ -69,7 +70,7 @@ export default {
       default: 0
     }
   },
-  data () {
+  data() {
     return {
       loading: true,
       voting: false,
@@ -77,18 +78,18 @@ export default {
     }
   },
   computed: {
-    VotingTypeText () {
+    VotingTypeText() {
       if (this.voting.type === 'public') {
         return 'Открытое голосование'
       }
       return 'Голосование собственников'
     }
   },
-  mounted () {
+  mounted() {
     this.fetchVoting()
   },
   methods: {
-    fetchVoting () {
+    fetchVoting() {
       this.noFound = false
       fetchUserVoting(this.$route.params.id)
         .then(response => {

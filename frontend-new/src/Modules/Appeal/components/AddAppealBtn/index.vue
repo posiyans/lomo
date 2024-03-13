@@ -43,7 +43,7 @@
             </div>
             <div class="q-pa-md">
               <AddFileBtn @add-files="addFile" multiple parent-type="appeal" :parent-uid="data.uid" />
-              <FilesListShow v-model="data.files" edit />
+              <FilesListShow v-model="data.files" edit class="row q-col-gutter-sm" />
             </div>
           </div>
         </q-card-section>

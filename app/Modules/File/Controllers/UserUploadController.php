@@ -40,6 +40,7 @@ class UserUploadController extends Controller
                     ->file($file_path)
                     ->name($request->name)
                     ->size($request->size)
+                    ->description($request->description)
                     ->type($request->type)
                     ->uid($request->uid)
                     ->run();

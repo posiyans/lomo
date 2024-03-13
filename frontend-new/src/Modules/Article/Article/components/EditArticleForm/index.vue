@@ -94,7 +94,7 @@
     </div>
     <div class="q-pa-md">
       <AddFileBtn v-if="writeAccess" @add-files="addFile" multiple parent-type="article" :parent-uid="articleStore.article.uid" />
-      <FilesListShow v-model="articleStore.files" edit get-url />
+      <FilesListShow v-model="articleStore.files" edit get-url class="row q-col-gutter-sm" />
     </div>
   </div>
 </template>

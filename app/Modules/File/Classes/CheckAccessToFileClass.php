@@ -8,7 +8,9 @@ use App\Modules\Comment\Models\CommentModel;
 use App\Modules\File\AccessClass\AppealModelAccessClass;
 use App\Modules\File\AccessClass\ArticleModelAccessClass;
 use App\Modules\File\AccessClass\CommentModelAccessClass;
+use App\Modules\File\AccessClass\SteadModelAccessClass;
 use App\Modules\File\Models\FileModel;
+use App\Modules\Stead\Models\SteadModel;
 use Illuminate\Support\Facades\Auth;
 
 class CheckAccessToFileClass
@@ -19,6 +21,7 @@ class CheckAccessToFileClass
         ArticleModel::class => ArticleModelAccessClass::class,
         AppealModel::class => AppealModelAccessClass::class,
         CommentModel::class => CommentModelAccessClass::class,
+        SteadModel::class => SteadModelAccessClass::class,
     ];
 
 

@@ -16,7 +16,8 @@ export function useFile() {
       size: null,
       type: null,
       url: null,
-      blob: null
+      blob: null,
+      description: null
     }
   )
   const init = (val) => {
@@ -25,6 +26,7 @@ export function useFile() {
     model.size = val.size
     model.url = val.url
     model.type = val.type
+    model.description = val.description || ''
     upload.success = true
   }
   const addFile = (oldFile, parentType, parentUid) => {
@@ -101,6 +103,7 @@ export function useFile() {
           formData.append('name', model.name)
           formData.append('size', model.size)
           formData.append('type', model.type)
+          formData.append('description', model.description)
           formData.append('model', parent.type)
           formData.append('model_uid', parent.uid)
         } else {

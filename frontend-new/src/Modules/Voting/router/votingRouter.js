@@ -7,20 +7,21 @@ export const voting =
     children: [
       {
         path: 'index',
-        component: () => import('src/Modules/Voting/page/UserVotingList/index.vue'),
+        component: () => import('src/Modules/Voting/page/StupPage/index.vue'),
+        // component: () => import('src/Modules/Voting/page/UserVotingList/index.vue'),
         hidden: true,
         meta: {
           title: 'Голосования'
         }
-      },
-      {
-        path: 'show/:id',
-        component: () => import('src/Modules/Voting/page/UserVotingShow/index.vue'),
-        hidden: true,
-        meta: {
-          title: 'Голосование'
-        }
       }
+      // {
+      //   path: 'show/:id',
+      //   component: () => import('src/Modules/Voting/page/UserVotingShow/index.vue'),
+      //   hidden: true,
+      //   meta: {
+      //     title: 'Голосование'
+      //   }
+      // }
       // {
       //   path: 'send-file/:id',
       //   component: () => import('src/Modules/Voting/page/SendVoteFile/index.vue'),

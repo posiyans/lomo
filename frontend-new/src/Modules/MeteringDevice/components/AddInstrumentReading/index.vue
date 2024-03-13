@@ -11,7 +11,7 @@
     </div>
     <q-dialog
       v-model="dialogVisible"
-      :maximized="$q.screen.width < 500"
+      :maximized="dialogmaximized"
     >
       <q-card style="width: 450px;">
         <q-card-section class="row items-center q-pb-none">
@@ -183,7 +183,7 @@ export default defineComponent({
     }
 
     return {
-      $q,
+      dialogmaximized,
       currentDate,
       showDateInput,
       currentSteadId,
