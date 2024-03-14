@@ -1,6 +1,10 @@
 <template>
   <div>
-    <FilesListShow v-model="files" :edit="edit" class="q-gutter-sm" />
+    <FilesListShow v-model="files" :edit="edit" :key="key">
+      <template v-slot:before>
+        <AddDocumentToStead v-if="editAccess" :stead-id="steadId" @success="reload" />
+      </template>
+    </FilesListShow>
   </div>
 </template>
 
@@ -11,10 +15,12 @@ import { geFilesForStead } from 'src/Modules/Stead/api/stead'
 import FilesListShow from 'src/Modules/Files/components/FilesListShow/index.vue'
 import { useFile } from 'src/Modules/Files/hooks/useFile'
 import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
+import AddDocumentToStead from 'src/Modules/Stead/components/Documents/AddDocumentToStead/index.vue'
 
 export default defineComponent({
   components: {
-    FilesListShow
+    FilesListShow,
+    AddDocumentToStead
   },
   props: {
     steadId: {
@@ -23,11 +29,15 @@ export default defineComponent({
     }
   },
   setup(props, { emit }) {
+    const key = ref(1)
     const files = ref([])
     const listQuery = ref({})
-    const autnStore = useAuthStore()
+    const authStore = useAuthStore()
     const edit = computed(() => {
-      return autnStore.roles.includes('superAdmin')
+      return authStore.roles.includes('superAdmin')
+    })
+    const editAccess = computed(() => {
+      return authStore.checkPermission(['stead-edit', 'stead-show'])
     })
     const getData = () => {
       geFilesForStead(props.steadId, listQuery.value)
@@ -40,12 +50,18 @@ export default defineComponent({
           })
         })
     }
+    const reload = () => {
+      key.value++
+    }
     onMounted(() => {
       getData()
     })
     return {
       files,
-      edit
+      reload,
+      editAccess,
+      edit,
+      key
     }
   }
 })

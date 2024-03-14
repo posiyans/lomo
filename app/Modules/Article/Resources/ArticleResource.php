@@ -3,6 +3,7 @@
 namespace App\Modules\Article\Resources;
 
 use App\Modules\Article\Repositories\GetResumeForArticleRepository;
+use App\Modules\Comment\Repositories\GetCommentsForObject;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ArticleResource extends JsonResource
@@ -22,6 +23,7 @@ class ArticleResource extends JsonResource
             'resume' => (new GetResumeForArticleRepository($this->resource))->run(),
             'category_id' => $this->category_id,
             'allow_comments' => $this->allow_comments,
+            'count_comments' => (new GetCommentsForObject($this->resource))->run()->count(),
             'status' => $this->status,
             'updated_at' => $this->updated_at,
             'slug' => $this->slug,

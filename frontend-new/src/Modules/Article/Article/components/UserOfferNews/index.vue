@@ -27,7 +27,7 @@
                     :parent-uid="newArticleStore.article.uid" />
         <small> Максимум {{ maxFiles }} файлов, размером до {{ maxSize }} Мб</small>
       </div>
-      <FilesListShow v-model="newArticleStore.article.files" edit class="row q-col-gutter-sm" />
+      <FilesListShow v-model="newArticleStore.article.files" edit />
       <div class="q-pl-sm q-pt-lg">
         <q-btn label="Очистить" color="negative" :disable="newArticleStore.loading.upload" flat @click="newArticleStore.clear" />
         <q-btn color="primary" label="Сохранить" @click="showDialog" :loading="newArticleStore.loading.upload" />

@@ -93,8 +93,11 @@
         :height="300" />
     </div>
     <div class="q-pa-md">
-      <AddFileBtn v-if="writeAccess" @add-files="addFile" multiple parent-type="article" :parent-uid="articleStore.article.uid" />
-      <FilesListShow v-model="articleStore.files" edit get-url class="row q-col-gutter-sm" />
+      <FilesListShow v-model="articleStore.files" edit get-url>
+        <template v-slot:before>
+          <AddFileBtn v-if="writeAccess" @add-files="addFile" multiple parent-type="article" :parent-uid="articleStore.article.uid" />
+        </template>
+      </FilesListShow>
     </div>
   </div>
 </template>

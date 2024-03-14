@@ -28,7 +28,7 @@
               </div>
             </div>
             <div class="row items-center bg-grey-2 q-pa-none" style="border-radius: 16px;">
-              <div class="text-teal" :class="{'q-pa-sm' : !showAppealTypeSetting, 'q-pl-mh' : showAppealTypeSetting}">
+              <div class="text-teal" :class="{'q-py-sm' : !showAppealTypeSetting, 'q-px-md' : !showAppealTypeSetting, 'q-pl-md' : showAppealTypeSetting}">
                 {{ appeal.type.label }}
                 <q-tooltip>
                   {{ appeal.type.description }}
@@ -61,12 +61,18 @@
           </div>
         </div>
         <div v-if="appeal.files && appeal.files?.length > 0" class="q-pa-md">
-          <div v-if="appeal.files?.length > 0" class="text-weight-bold">Файлы:</div>
-          <FilesListShow :model-value="appeal.files" show-preview class="row q-col-gutter-sm" />
+          <FilesListShow :model-value="appeal.files" show-preview>
+            <template v-slot:before>
+              <div class="text-weight-bold">
+                Файлы:
+              </div>
+            </template>
+
+          </FilesListShow>
         </div>
       </q-card-section>
       <q-separator />
-      <q-card-section class="bg-grey-1 q-pa-none">
+      <q-card-section class="bg-grey-1 q-pa-xs">
         <ChatBlock :appeal="appeal" />
       </q-card-section>
     </q-card>

@@ -7,6 +7,10 @@ export function useMessageBlock(type, prentUid) {
   const objectType = type
   const objectUid = prentUid
   const $q = useQuasar()
+  const messageList = ref([])
+  const messageLoading = ref(false)
+  const showCount = ref(4)
+  const showAll = ref(false)
 
   const key = ref(1)
   const ban = ref({
@@ -31,10 +35,7 @@ export function useMessageBlock(type, prentUid) {
         ban.value.loading = false
       })
   }
-  const messageList = ref([])
-  const messageLoading = ref(false)
-  const showCount = ref(4)
-  const showAll = ref(false)
+
   const showMessage = computed(() => {
     // return messageList.value
     return messageList.value.slice(0, showCount.value)

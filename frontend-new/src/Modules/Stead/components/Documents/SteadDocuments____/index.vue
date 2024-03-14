@@ -1,7 +1,14 @@
 <template>
   <div>
     <AddDocumentToStead v-if="edit" :stead-id="steadId" class="q-pb-sm" @success="reload" />
-    <FilesForStead :stead-id="steadId" :key="key" />
+    <FilesForStead :stead-id="steadId" :key="key">
+      <template v-slot:#before>
+        <div>
+
+          xvxcvsdv
+        </div>
+      </template>
+    </FilesForStead>
   </div>
 </template>
 

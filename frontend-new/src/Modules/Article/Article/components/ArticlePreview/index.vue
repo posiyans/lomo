@@ -26,11 +26,17 @@
               color="primary"
               outline
               label="Подробнее"
-              @click="showArticle"
+              @click="showArticle('')"
             />
           </div>
-          <div v-if="article.allow_comments > 1 " @click="showArticle">
-            <CountMessageBlock type="article" :uid="article.uid" />
+          <div v-if="article.allow_comments > 1 || article.count_comments > 0" @click="showArticle('#comments')">
+            <q-btn
+              color="grey-2"
+              text-color="primary"
+              icon="message"
+              :label="article.count_comments || ''"
+              unelevated
+            />
           </div>
         </div>
       </q-card-actions>
@@ -41,15 +47,13 @@
 <script>
 /* eslint-disable */
 import { defineComponent, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import ShowTime from 'src/components/ShowTime/index.vue'
-import CountMessageBlock from 'src/Modules/Comments/components/CountMessageBlock/index.vue'
 import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
 
 export default defineComponent({
   components: {
-    ShowTime,
-    CountMessageBlock
+    ShowTime
   },
   props: {
     article: {
@@ -60,10 +64,9 @@ export default defineComponent({
   setup(props, { emit }) {
     const data = ref(null)
     const router = useRouter()
-    const route = useRoute()
     const authStore = useAuthStore()
-    const showArticle = () => {
-      router.push('/article/show/' + props.article.slug)
+    const showArticle = (val) => {
+      router.push({ path: '/article/show/' + props.article.slug, hash: val })
     }
     return {
       data,

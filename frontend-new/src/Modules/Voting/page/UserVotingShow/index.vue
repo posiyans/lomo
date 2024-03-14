@@ -28,7 +28,7 @@
         <div v-if="voting.files && voting.files.length > 0">
           <div class="file-list-header">Файлы:</div>
         </div>
-        <FilesListShow v-model="voting.files" class="row q-col-gutter-sm" />
+        <FilesListShow v-model="voting.files" />
       </q-card-section>
       <q-card-section>
         <QuestionShow :voting="voting" @changeResult="fetchVoting" />

@@ -23,11 +23,11 @@
           </div>
         </div>
         <slot></slot>
-        <div v-html="messageTextHtml"
+        <div v-if="messageTextHtml" v-html="messageTextHtml"
              class="q-py-sm"
              style="margin-left: 40px;"
              :class="messageTextClass" />
-        <FilesListShow v-if="!item.delete" :model-value="item.files" show-preview class="row q-col-gutter-sm" />
+        <FilesListShow v-if="!item.delete" :model-value="item.files" default-view="image" />
       </div>
     </div>
   </div>

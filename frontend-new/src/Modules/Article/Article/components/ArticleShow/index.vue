@@ -26,10 +26,13 @@
     <q-card-section v-if="showBody" class="q-px-xs-none q-pa-sm-sm">
       <div v-html="article.text" class="q-px-sm"></div>
       <div v-if="article.files?.length > 0" class="q-gutter-sm">
-        <div class="text-weight-bold">Файлы:</div>
-        <FilesListShow :model-value="article.files" class="row q-col-gutter-sm" />
+        <FilesListShow :model-value="article.files" default-view="small">
+          <template v-slot:before>
+            <div class="text-weight-bold">Файлы:</div>
+          </template>
+        </FilesListShow>
       </div>
-      <ArticleChatBlock :article="article" />
+      <ArticleChatBlock :article="article" :scroll="scrollToMessage" />
     </q-card-section>
     <q-card-section v-if="!showBody">
       <div v-html="article.resume" class="q-px-sm"></div>
@@ -38,13 +41,14 @@
 </template>
 
 <script>
-import { computed, defineComponent } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
 import ShowTime from 'components/ShowTime/index.vue'
 import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
 import FilesListShow from 'src/Modules/Files/components/FilesListShow/index.vue'
 import StatusShow from 'src/Modules/Article/Article/components/StatusShow/index.vue'
 import ArticleChatBlock from './components/ArticleChatBlock/index.vue'
 import { useQuasar } from 'quasar'
+import { useRoute } from 'vue-router'
 
 export default defineComponent({
   components: {
@@ -60,7 +64,9 @@ export default defineComponent({
     }
   },
   setup(props) {
+    const commentsRef = ref(null)
     const authStore = useAuthStore()
+    const route = useRoute()
     const $q = useQuasar()
     const showBody = computed(() => {
       if (authStore.permissions.includes('owner')) {
@@ -75,10 +81,15 @@ export default defineComponent({
       return $q.screen.width > 600 && authStore.checkPermission('article-edit')
     })
 
+    const scrollToMessage = computed(() => {
+      return route.hash === '#comments'
+    })
     return {
+      scrollToMessage,
       showBody,
       showEdit,
-      authStore
+      authStore,
+      commentsRef
     }
   }
 })

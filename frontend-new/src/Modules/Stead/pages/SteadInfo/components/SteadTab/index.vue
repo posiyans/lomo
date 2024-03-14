@@ -24,7 +24,7 @@
         <MeteringDeviceForStead :stead-id="steadId" :edit="editDevice" />
       </q-tab-panel>
       <q-tab-panel name="document">
-        <SteadDocuments :stead-id="steadId" :edit="editDevice" />
+        <FilesForStead :stead-id="steadId" />
       </q-tab-panel>
     </q-tab-panels>
 
@@ -38,14 +38,14 @@ import SteadInfoCard from 'src/Modules/Stead/components/SteadInfoCard/index.vue'
 import SteadOwnersCard from 'src/Modules/Stead/components/SteadOwnersCard/index.vue'
 import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
 import MeteringDeviceForStead from 'src/Modules/MeteringDevice/components/MeteringDeviceForStead/index.vue'
-import SteadDocuments from 'src/Modules/Stead/components/Documents/SteadDocuments/index.vue'
+import FilesForStead from 'src/Modules/Stead/components/Documents/FilesForStead/index.vue'
 
 export default defineComponent({
   components: {
     SteadInfoCard,
     SteadOwnersCard,
     MeteringDeviceForStead,
-    SteadDocuments
+    FilesForStead
   },
   props: {
     steadId: {

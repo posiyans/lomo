@@ -58,7 +58,7 @@
           <FilesListShow
             v-model="message.newMessage.value.files"
             edit
-            class="row q-col-gutter-sm"
+            default-view="small"
           />
         </div>
       </div>

@@ -1,43 +1,40 @@
 <template>
-  <div>
-    <div v-for="file in filtersList" :key="file.uid">
-      <q-card>
-        <q-card-section v-if="file.model?.description" class="q-py-none">
-          <div>{{ file.model?.description }}</div>
-        </q-card-section>
-        <q-card-section class="row q-pa-xs" :class="{ 'items-center': !showPreview }">
-          <FilePreview v-if="!showPreview" :file="file" width="36px" class="overflow-hidden br-05" style="width: 36px; height: 36px;" />
-          <FileItem :file="file" :get-url="getUrl" :show-preview="showPreview" class="q-ml-xs" />
-          <div v-if="edit">
-            <div class="text-secondary row items-center">
-              <div
-                class="text-red q-px-sm text-big-100"
-                @click="deleteFile(file)">
-                <DeleteIcon />
-              </div>
-            </div>
-            <div v-if="file.upload?.error" class="text-red">
-              Ошибка {{ file.upload.errorsMessage }}
-            </div>
-          </div>
-        </q-card-section>
-        <div v-if="file.upload && !file.upload.success && file.upload.process > 0 && file.upload.process < 1" class="absolute-bottom full-width">
-          <q-linear-progress :value="file.upload.process" class="" track-color="grey" size="3px" />
-        </div>
-      </q-card>
+  <div v-if="filtersList.length > 0">
+    <div class="row items-center">
+      <slot name="before"></slot>
+      <q-space />
+      <div>
+        <q-btn icon="list" dense flat :color="viewFormat === 'list' ? 'primary' : 'grey'" @click="changeFarmat('list')" />
+        <q-btn icon="apps" dense flat :color="viewFormat === 'small' ? 'primary' : 'grey'" @click="changeFarmat('small')" />
+        <q-btn icon="image" dense flat :color="viewFormat === 'image' ? 'primary' : 'grey'" @click="changeFarmat('image')" />
+      </div>
+    </div>
+    <q-separator />
+    <div>
+      <ListView v-if="viewFormat === 'list'" :files="filtersList" />
+      <SmallView v-if="viewFormat === 'small'" :files="filtersList" />
+      <ImageView v-if="viewFormat === 'image'" :files="filtersList" />
     </div>
   </div>
 </template>
 
 <script>
+/* eslint-disable */
+import { computed, defineComponent, ref } from 'vue'
 import DeleteIcon from 'src/Modules/Files/components/FilesListShow/DeleteIcon.vue'
-import { copyToClipboard } from 'quasar'
+import { copyToClipboard, useQuasar } from 'quasar'
 import { successMessage } from 'src/utils/message'
 import FileItem from './FileItem.vue'
 import FilePreview from 'src/Modules/Files/components/FilePreview/index.vue'
+import SmallView from './components/SmallView/index.vue'
+import ListView from './components/ListView/index.vue'
+import ImageView from './components/ImageView/index.vue'
 
-export default {
+export default defineComponent({
   components: {
+    SmallView,
+    ListView,
+    ImageView,
     FileItem,
     FilePreview,
     DeleteIcon
@@ -55,31 +52,28 @@ export default {
       type: Boolean,
       default: false
     },
-    showPreview: {
-      type: Boolean,
-      default: false
+    defaultView: {
+      type: String,
+      default: 'list'
     }
   },
-  data() {
-    return {}
-  },
-  computed: {
-    filtersList() {
-      return this.modelValue.filter(item => {
+  setup(props, { emit }) {
+    const viewFormat = ref(props.defaultView || 'list')
+    const filtersList = computed(() => {
+      return props.modelValue.filter(item => {
         return !item.delete
       })
-    }
-  },
-  methods: {
-    emitUrl(url) {
+    })
+    const emitUrl = (url) => {
       copyToClipboard(url)
         .then(() => {
           successMessage('Ссылка скопирована')
         })
-    },
-    deleteFile(file) {
-      if (this.edit) {
-        this.$q.dialog({
+    }
+    const $q = useQuasar()
+    const deleteFile = (file) => {
+      if (props.edit) {
+        $q.dialog({
           title: 'Внимание?',
           message: 'Удалить файл?',
           cancel: true,
@@ -87,16 +81,16 @@ export default {
         }).onOk(() => {
           file.deleteFile()
             .then(() => {
-              const data = this.modelValue.map(item => {
+              const data = props.modelValue.map(item => {
                 if (item === file) {
                   item.delete = true
                 }
                 return item
               })
-              this.$emit('update:modelValue', data)
+              emit('update:modelValue', data)
             })
             .catch(() => {
-              this.$q.notify(
+              $q.notify(
                 {
                   message: 'Ошибка удаления файла',
                   type: 'negative'
@@ -106,10 +100,19 @@ export default {
         })
       }
     }
+    const changeFarmat = (val) => {
+      viewFormat.value = val
+    }
+    return {
+      changeFarmat,
+      viewFormat,
+      filtersList,
+      deleteFile
+    }
   }
-}
+})
 </script>
 
-<style scoped>
+<style scoped lang='scss'>
 
 </style>

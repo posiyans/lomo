@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="files.length > 0" class="text-weight-bold">Файлы:</div>
-    <FilesListShow :modelValue="files" class="row q-col-gutter-sm" />
+    <FilesListShow :modelValue="files" />
   </div>
 </template>
 
