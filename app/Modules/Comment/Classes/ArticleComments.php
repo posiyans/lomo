@@ -54,7 +54,7 @@ class ArticleComments extends AbstractComments
     }
 
     /**
-     * возможность удалять комментариии обьекта пользователем
+     * возможность удалять комментарии обьекта пользователем
      *
      * @param $user UserModel
      * @return mixed

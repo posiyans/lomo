@@ -20,7 +20,7 @@
       </div>
     </div>
     <div v-else class="text-center q-pa-md text-weight-bold">
-      Чтоб оставлять комментариии необходимо войти на сайт
+      Чтоб оставлять комментарии необходимо войти на сайт
     </div>
   </div>
 </template>

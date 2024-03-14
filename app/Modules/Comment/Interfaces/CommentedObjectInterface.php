@@ -16,7 +16,7 @@ interface CommentedObjectInterface
     public function descriptionForComment(): array;
 
     /**
-     * возможность читать комментариии обьекта пользователем
+     * возможность читать комментарии обьекта пользователем
      *
      * @return boolean|\Exception
      */
@@ -28,14 +28,14 @@ interface CommentedObjectInterface
     public function commentRead($user);
 
     /**
-     * возможность оставлять комментариии для обьекта пользователем
+     * возможность оставлять комментарии для обьекта пользователем
      * @param $user UserModel
      * @return mixed
      */
     public function commentWrite(UserModel $user);
 
     /**
-     * возможность править(удалять) комментариии обьекта пользователем
+     * возможность править(удалять) комментарии обьекта пользователем
      * @param $user UserModel
      * @return mixed
      */
@@ -43,7 +43,7 @@ interface CommentedObjectInterface
 
 
     /**
-     * возможность удалять комментариии обьекта пользователем
+     * возможность удалять комментарии обьекта пользователем
      * @param $user UserModel
      * @return mixed
      */

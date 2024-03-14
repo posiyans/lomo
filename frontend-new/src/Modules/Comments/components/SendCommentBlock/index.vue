@@ -125,7 +125,7 @@ export default defineComponent({
       () => message.getStatusBan()
     )
     onMounted(() => {
-      if (!authStore.user.email_verified_at) {
+      if (!authStore.is_guest && !authStore.user.email_verified_at) {
         authStore.getMyInfo(true)
       }
     })

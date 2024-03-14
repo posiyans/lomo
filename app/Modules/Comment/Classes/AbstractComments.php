@@ -27,7 +27,7 @@ abstract class AbstractComments implements CommentedObjectInterface
     }
 
     /**
-     * возможность читать комментариии обьекта пользователем
+     * возможность читать комментарии обьекта пользователем
      *
      * @return boolean|\Exception
      */
@@ -42,7 +42,7 @@ abstract class AbstractComments implements CommentedObjectInterface
     }
 
     /**
-     * возможность оставлять комментариии для обьекта пользователем
+     * возможность оставлять комментарии для обьекта пользователем
      * @param $user UserModel
      * @return mixed
      */
@@ -52,7 +52,7 @@ abstract class AbstractComments implements CommentedObjectInterface
     }
 
     /**
-     * возможность править комментариии обьекта пользователем
+     * возможность править комментарии обьекта пользователем
      * @param $user UserModel
      * @return mixed
      */
@@ -62,7 +62,7 @@ abstract class AbstractComments implements CommentedObjectInterface
     }
 
     /**
-     * возможность удалять комментариии обьекта пользователем
+     * возможность удалять комментарии обьекта пользователем
      *
      * @param $user UserModel
      * @return mixed

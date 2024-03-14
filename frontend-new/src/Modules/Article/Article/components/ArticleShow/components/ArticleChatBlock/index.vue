@@ -51,7 +51,7 @@ export default defineComponent({
     const messageBlock = useMessageBlock('article', props.article.uid)
     const errorMessage = computed(() => {
       if (props.article.allow_comments === 1) {
-        return 'Комментариии отключены'
+        return 'Комментарии отключены'
       }
       if (props.article.allow_comments === 3 && !authStore.roles.includes('owner')) {
         return 'Комментировать могут только собственники'

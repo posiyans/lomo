@@ -2,6 +2,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { checkMyBan } from 'src/Modules/BanUsers/api/apiBanUser'
 import { getMessage, sendMessage } from 'src/Modules/Comments/api/commentApi'
 import { useQuasar } from 'quasar'
+import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
 
 export function useMessageBlock(type, prentUid) {
   const objectType = type
@@ -12,6 +13,7 @@ export function useMessageBlock(type, prentUid) {
   const showCount = ref(4)
   const showAll = ref(false)
 
+  const authStore = useAuthStore()
   const key = ref(1)
   const ban = ref({
     status: true,
@@ -23,17 +25,23 @@ export function useMessageBlock(type, prentUid) {
     getData()
   })
   const getStatusBan = () => {
-    ban.value.loading = true
-    const data = {
-      type: objectType,
-      uid: objectUid
+    if (authStore.is_guest) {
+      ban.value.status = true
+      ban.value.errorMessage = 'Чтоб оставлять комментарии необходимо войти на сайт'
+      ban.value.loading = false
+    } else {
+      ban.value.loading = true
+      const data = {
+        type: objectType,
+        uid: objectUid
+      }
+      checkMyBan(data)
+        .then(res => {
+          ban.value.status = res.data.ban
+          ban.value.errorMessage = res.data.errorMessage
+          ban.value.loading = false
+        })
     }
-    checkMyBan(data)
-      .then(res => {
-        ban.value.status = res.data.ban
-        ban.value.errorMessage = res.data.errorMessage
-        ban.value.loading = false
-      })
   }
 
   const showMessage = computed(() => {
