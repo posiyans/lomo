@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="min-width: 100px;">
     <q-table
       flat bordered
       :rows="rate"
@@ -10,13 +10,6 @@
       separator="cell"
       row-key="id"
     >
-      <template v-slot:body-cell-number="props">
-        <q-td :props="props" auto-width>
-          <div>
-            {{ props.row.id }}
-          </div>
-        </q-td>
-      </template>
       <template v-slot:header-cell-name="props">
         <q-th :props="props">
           <div class="row items-center">
@@ -31,7 +24,7 @@
       </template>
       <template v-slot:body-cell-name="props">
         <q-td :props="props">
-          <div>
+          <div style="max-width: calc(100vw - 220px)">
             <div>
               {{ props.row.name }}
             </div>
@@ -47,7 +40,7 @@
         </q-td>
       </template>
       <template v-slot:body-cell-rate="props">
-        <q-td :props="props">
+        <q-td :props="props" style="min-width: 150px;">
           <div>
             <div>
               {{ props.row.rate?.description }}
@@ -110,11 +103,6 @@ export default defineComponent({
       }
     })
     const columns = [
-      {
-        name: 'number',
-        align: 'center',
-        label: 'ID',
-      },
       {
         name: 'name',
         align: 'left',
