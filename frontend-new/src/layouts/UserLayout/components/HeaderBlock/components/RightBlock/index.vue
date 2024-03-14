@@ -7,7 +7,7 @@
       />
     </div>
     <div v-else>
-      <div v-if="authStore.is_guest" class="row items-center q-col-gutter-sm">
+      <div v-if="authStore.is_guest" class="row items-center q-col-gutter-sm no-wrap">
         <LoginBtn />
         <RegisterBtn />
       </div>

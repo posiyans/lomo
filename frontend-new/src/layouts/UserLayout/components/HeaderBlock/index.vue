@@ -11,7 +11,7 @@
       />
 
       <q-toolbar-title>
-        <div class="row items-center no-wrap">
+        <div class="row items-center no-wrap xs-hide">
           <SiteName class="cursor-pointer" @click="toHome" />
           <TemperWidget class="q-ml-sm" />
         </div>
