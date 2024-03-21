@@ -19,6 +19,8 @@ class GetCameraImageController extends Controller
     public function __invoke(int $id, Request $request)
     {
         try {
+            ignore_user_abort(true);
+            set_time_limit(500);
             $file = CameraRepository::getImagePath($id);
             $user = Auth::user() ?? false;
 
