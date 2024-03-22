@@ -18,7 +18,13 @@ class AddPaymentController extends Controller
     {
         try {
             $raw = $request->raw;
-            $payment = (new AddPaymentAction())->parseRawData($raw)->run();
+            $payment = (new AddPaymentAction())
+                ->parseRawData($raw)
+                ->stead($request->stead_id)
+                ->paymentDate($request->date)
+                ->price($request->price)
+                ->rateGroup($request->rate_group_id)
+                ->run();
             return new PaymentResource($payment);
         } catch (\Exception $e) {
             return response(['errors' => $e->getMessage()], 450);

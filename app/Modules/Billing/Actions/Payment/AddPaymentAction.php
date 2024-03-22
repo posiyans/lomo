@@ -23,6 +23,39 @@ class AddPaymentAction
         $this->payment = new BillingPaymentModel();
     }
 
+
+    public function stead($steadId)
+    {
+        if ($steadId) {
+            $this->payment->stead_id = $steadId;
+        }
+        return $this;
+    }
+
+    public function paymentDate($date)
+    {
+        if ($date) {
+            $this->payment->payment_date = $date;
+        }
+        return $this;
+    }
+
+    public function price($price)
+    {
+        if ($price) {
+            $this->payment->price = str_replace(',', '.', $price);;
+        }
+        return $this;
+    }
+
+    public function rateGroup($rate_group)
+    {
+        if ($rate_group) {
+            $this->payment->rate_group_id = $rate_group;
+        }
+        return $this;
+    }
+
     public function parseRawData(array $raw)
     {
         $payment_date = $raw[0];

@@ -43,7 +43,7 @@
       <tr>
         <td>id {{ payment.id }}</td>
         <td>
-          <ShowTime :time="payment.payment_date" before="от" format="DD-MM-YYYY HH:mm" />
+          <ShowTime :time="payment.payment_date" before="от " format="DD-MM-YYYY HH:mm" />
         </td>
       </tr>
       <tr :class="{'bg-red-1': steadError}">

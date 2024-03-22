@@ -19,7 +19,9 @@
         <AddInvoiceBtn :stead-id="steadId" @success="reload">
           <q-fab-action label-position="left" color="red" icon="add_shopping_cart" label="Добавить счет" />
         </AddInvoiceBtn>
-        <q-fab-action label-position="left" color="teal" icon="payment" label="Добавить платеж" />
+        <AddPaymentBtn :stead-id="steadId" @success="reload">
+          <q-fab-action label-position="left" color="teal" icon="payment" label="Добавить платеж" />
+        </AddPaymentBtn>
       </q-fab>
     </div>
     <ShowTable :list="list" @reload="reload" />
@@ -38,6 +40,7 @@ import { getFullBalanceForStead, getFullBalanceForSteadXlsx } from 'src/Modules/
 import BalanceForStead from 'src/Modules/Bookkeeping/components/Balance/BalanceForStead/index.vue'
 import DropDownBlock from 'components/DropDownBlock/index.vue'
 import AddInvoiceBtn from 'src/Modules/Bookkeeping/components/Invoice/AddInvoiceBtn/index.vue'
+import AddPaymentBtn from 'src/Modules/Bookkeeping/components/Payment/AddPaymentBtn/index.vue'
 
 export default defineComponent({
   components: {
@@ -47,7 +50,8 @@ export default defineComponent({
     BalanceForStead,
     LoadMore,
     DownloadXlsxBtn,
-    AddInvoiceBtn
+    AddInvoiceBtn,
+    AddPaymentBtn
   },
   props: {
     steadId: {
