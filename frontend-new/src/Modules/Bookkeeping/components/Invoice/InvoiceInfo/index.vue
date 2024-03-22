@@ -1,11 +1,11 @@
 <template>
   <div>
-    <table class="do-not-carry black">
+    <table class="do-not-carry black" style="width: 100%;">
       <tr class="bg-black-05" :class="{ 'bg-teal-1': invoice.is_paid, 'text-red': !invoice.is_paid }">
         <th>Поле</th>
         <th>
           <div class="row items-center">
-            <div class="col-grow">
+            <div class="col-grow" style="min-width: 250px;">
               <div>
                 Значение
               </div>

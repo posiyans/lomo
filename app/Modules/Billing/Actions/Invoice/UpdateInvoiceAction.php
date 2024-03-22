@@ -19,13 +19,18 @@ class UpdateInvoiceAction
         $this->invoice = $invoice;
     }
 
+    public function stead($stead_id)
+    {
+        $this->invoice->stead_id = $stead_id;
+        return $this;
+    }
 
     public function field($field, $value)
     {
         if (in_array($field, ['description', 'comment'])) {
-            $desc = $this->invoice->description;
-            $desc[$field] = $value;
-            $this->invoice->description = $desc;
+            $options = $this->invoice->options ?? [];
+            $options[$field] = $value;
+            $this->invoice->options = $options;
         } else {
             $this->invoice->$field = $value;
         }
@@ -35,7 +40,11 @@ class UpdateInvoiceAction
 
     public function run()
     {
-        if ($this->invoice->logAndSave('Изменение счета')) {
+        $description = 'Изменение счета';
+        if (!$this->invoice->id) {
+            $description = 'Создание счета';
+        }
+        if ($this->invoice->logAndSave($description)) {
             Cache::tags(['invoice'])->flush();
             return true;
         }

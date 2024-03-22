@@ -1,6 +1,8 @@
 <template>
-  <div>
-    <q-btn label="Скачать" color="primary" :loading="fileDownload" @click="downloadPayment" />
+  <div @click="downloadPayment">
+    <slot name="default" v-bind:loading="fileDownload">
+      <q-btn label="Скачать" color="primary" :loading="fileDownload" />
+    </slot>
   </div>
 </template>
 

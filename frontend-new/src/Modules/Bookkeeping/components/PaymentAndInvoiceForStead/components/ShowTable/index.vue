@@ -12,19 +12,36 @@
       row-key="id"
     >
       <template v-slot:body="props">
-        <q-tr :props="props" :class="{ 'bg-red-1': props.row.type.uid === 'invoice',  'bg-teal-1': props.row.type.uid === 'payment' }" :style="props.row.is_paid ?  'opacity: .5': ''">
-          <q-td auto-width>
+        <q-tr :props="props" :class="{ 'balance-red': props.row.type.uid === 'invoice',  'balance-green': props.row.type.uid === 'payment' }" :style="props.row.is_paid ?  'opacity: .5': ''">
+          <q-td v-if="dialogMaximized" style="padding: 0;">
+            <div class="row items-center q-col-gutter-xs justify-center">
+              <div class="text-center">
+                {{ props.row.type.label }}
+              </div>
+              <div class="text-center">
+                {{ props.row.id }}
+              </div>
+            </div>
+            <ShowTime :time="props.row.date" format="DD-MM-YYYY" class="text-center text-small-65" />
+            <div class="text-no-wrap">
+              <ShowPrice :price="props.row.price" class="text-center text-weight-bold" />
+              <div v-if="props.row.is_paid" class="text-teal text-small-85 text-center">
+                Оплачен
+              </div>
+            </div>
+          </q-td>
+          <q-td v-if="!dialogMaximized" auto-width>
             <div class="text-center">
               {{ props.row.id }}
             </div>
           </q-td>
-          <q-td auto-width>
+          <q-td v-if="!dialogMaximized" auto-width>
             <ShowTime :time="props.row.date" format="DD-MM-YYYY" class="text-center" />
             <div class="text-center">
               {{ props.row.type.label }}
             </div>
           </q-td>
-          <q-td auto-width>
+          <q-td v-if="!dialogMaximized" auto-width>
             <div class="text-no-wrap">
               <ShowPrice :price="props.row.price" class="text-center" />
               <div v-if="props.row.is_paid" class="text-teal text-small-85 text-center">
@@ -33,8 +50,11 @@
             </div>
           </q-td>
           <q-td>
+            <div v-if="dialogMaximized" class="text-weight-bold">
+              {{ props.row.rate?.name }}
+            </div>
             <div class="row items-center">
-              <div>
+              <div class="ellipsis-2-lines">
                 {{ props.row?.title }}
               </div>
               <q-space />
@@ -43,7 +63,7 @@
               </div>
             </div>
           </q-td>
-          <q-td>
+          <q-td v-if="!dialogMaximized">
             {{ props.row.rate?.name }}
           </q-td>
           <q-td>
@@ -69,6 +89,7 @@ import InvoiceInfo from 'src/Modules/Bookkeeping/components/Invoice/InvoiceInfo/
 import ShowReadingListInPayment from 'src/Modules/Bookkeeping/components/Payment/ShowReadingListInPayment/index.vue'
 import ReceiptForInvoiceBtn from 'src/Modules/Receipt/components/ReceiptForInvoiceBtn/index.vue'
 import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
+import { useQuasar } from 'quasar'
 
 export default defineComponent({
   components: {
@@ -93,45 +114,72 @@ export default defineComponent({
     const editPayment = computed(() => {
       return authStore.permissions.includes('payment-edit')
     })
-    const columns = [
-      {
-        name: 'id',
-        align: 'center',
-        label: '№'
-      },
-      {
-        name: 'date',
-        align: 'center',
-        label: 'Дата'
-      },
-      {
-        name: 'price',
-        align: 'center',
-        label: 'Сумма, руб'
-      },
+    const $q = useQuasar()
+    const dialogMaximized = computed(() => {
+      return $q.screen.width < 700
+    })
+    const columns = computed(() => {
+      if (dialogMaximized.value) {
+        return [
+          {
+            name: 'mobile_id',
+            align: 'center',
+            label: '№'
+          },
+          {
+            name: 'title',
+            align: 'left',
+            label: 'Назначение'
+          },
+          {
+            name: 'actions',
+            align: 'center',
+            label: ''
+          }
+        ]
+      } else {
+        return [
+          {
+            name: 'id',
+            align: 'center',
+            label: '№'
+          },
+          {
+            name: 'date',
+            align: 'center',
+            label: 'Дата'
+          },
+          {
+            name: 'price',
+            align: 'center',
+            label: 'Сумма, руб'
+          },
 
-      {
-        name: 'title',
-        align: 'left',
-        label: 'Назначение'
-      },
-      {
-        name: 'group',
-        align: 'center',
-        label: 'Группа'
-      },
-      {
-        name: 'actions',
-        align: 'center',
-        label: ''
+          {
+            name: 'title',
+            align: 'left',
+            label: 'Назначение'
+          },
+          {
+            name: 'group',
+            align: 'center',
+            label: 'Группа'
+          },
+          {
+            name: 'actions',
+            align: 'center',
+            label: ''
+          }
+        ]
       }
-    ]
+    })
     const reload = () => {
       emit('reload')
     }
     return {
       columns,
       reload,
+      dialogMaximized,
       editPayment,
       editInvoice
     }
@@ -140,5 +188,11 @@ export default defineComponent({
 </script>
 
 <style scoped lang='scss'>
+.balance-red {
+  background-color: #fff6f7;
+}
 
+.balance-green {
+  background-color: #f4fffc;
+}
 </style>

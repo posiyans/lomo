@@ -57,6 +57,26 @@ class CreateInvoiceAction
         return $this;
     }
 
+    public function description($description)
+    {
+        if ($description) {
+            $opt = $this->invoice->options;
+            $opt['description'] = $description;
+            $this->invoice->options = $opt;
+        }
+        return $this;
+    }
+
+    public function comment($comment)
+    {
+        if ($comment) {
+            $opt = $this->invoice->options;
+            $opt['comment'] = $comment;
+            $this->invoice->options = $opt;
+        }
+        return $this;
+    }
+
 
     public function invoiceGroup(BillingInvoiceGroupModel $invoice_group)
     {

@@ -7,7 +7,9 @@
     </div>
     <q-dialog
       v-model="dialogVisible"
+      :maximized="dialogMaximized"
       @hide="reload"
+
     >
       <q-card>
         <q-card-section class="row items-center q-pb-none">
@@ -34,10 +36,11 @@
 
 <script>
 /* eslint-disable */
-import { defineComponent, ref } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
 import PaymentInfoShowAndEdit from 'src/Modules/Bookkeeping/components/Payment/PaymentInfoShowAndEdit/index.vue'
 import ShowPrice from 'components/ShowPrice/index.vue'
 import ShowTime from 'components/ShowTime/index.vue'
+import { useQuasar } from 'quasar'
 
 export default defineComponent({
   components: {
@@ -60,6 +63,10 @@ export default defineComponent({
     const showDialog = () => {
       dialogVisible.value = true
     }
+    const $q = useQuasar()
+    const dialogMaximized = computed(() => {
+      return $q.screen.width < 600
+    })
     const reload = () => {
       emit('reload')
     }
@@ -71,6 +78,7 @@ export default defineComponent({
       reload,
       showDialog,
       deletePayment,
+      dialogMaximized,
       dialogVisible
     }
   }

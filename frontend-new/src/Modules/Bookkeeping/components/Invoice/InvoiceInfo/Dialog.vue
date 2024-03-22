@@ -7,6 +7,7 @@
     </div>
     <q-dialog
       v-model="dialogVisible"
+      :maximized="dialogMaximized"
       @hide="close"
     >
       <q-card>
@@ -32,9 +33,10 @@
 
 <script>
 /* eslint-disable */
-import { defineComponent, ref } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
 import InvoiceInfo from 'src/Modules/Bookkeeping/components/Invoice/InvoiceInfo/index.vue'
 import ShowTime from 'components/ShowTime/index.vue'
+import { useQuasar } from 'quasar'
 
 export default defineComponent({
   components: {
@@ -53,6 +55,10 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const dialogVisible = ref(false)
+    const $q = useQuasar()
+    const dialogMaximized = computed(() => {
+      return $q.screen.width < 600
+    })
     const showDialog = () => {
       dialogVisible.value = true
     }
@@ -63,6 +69,7 @@ export default defineComponent({
     return {
       dialogVisible,
       showDialog,
+      dialogMaximized,
       close
     }
   }

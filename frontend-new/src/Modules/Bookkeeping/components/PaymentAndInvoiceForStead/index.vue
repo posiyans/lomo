@@ -1,12 +1,26 @@
 <template>
   <div>
     <BalanceForStead :stead-id="steadId" class="q-pa-sm" />
-    <div class="row q-col-gutter-sm">
+    <div class="row q-col-gutter-sm q-pb-xs no-wrap">
       <DropDownBlock only-mobile>
         <FilterBlock v-model="listQuery" />
       </DropDownBlock>
       <q-space />
-      <DownloadXlsxBtn :func="funcXlsx" />
+      <q-fab
+        flat
+        text-color="black"
+        icon="more_vert"
+        vertical-actions-align="right"
+        direction="down"
+      >
+        <DownloadXlsxBtn :func="funcXlsx">
+          <q-fab-action label-position="left" color="primary" icon="download" label="Скачать" anchor="end" />
+        </DownloadXlsxBtn>
+        <AddInvoiceBtn :stead-id="steadId" @success="reload">
+          <q-fab-action label-position="left" color="red" icon="add_shopping_cart" label="Добавить счет" />
+        </AddInvoiceBtn>
+        <q-fab-action label-position="left" color="teal" icon="payment" label="Добавить платеж" />
+      </q-fab>
     </div>
     <ShowTable :list="list" @reload="reload" />
     <LoadMore :key="key" v-model:list-query="listQuery" :func="func" @setList="setList" />
@@ -23,6 +37,7 @@ import DownloadXlsxBtn from 'src/Modules/Files/components/DownloadXlsxFileBtn/in
 import { getFullBalanceForStead, getFullBalanceForSteadXlsx } from 'src/Modules/Bookkeeping/api/balaceApi.js'
 import BalanceForStead from 'src/Modules/Bookkeeping/components/Balance/BalanceForStead/index.vue'
 import DropDownBlock from 'components/DropDownBlock/index.vue'
+import AddInvoiceBtn from 'src/Modules/Bookkeeping/components/Invoice/AddInvoiceBtn/index.vue'
 
 export default defineComponent({
   components: {
@@ -31,7 +46,8 @@ export default defineComponent({
     FilterBlock,
     BalanceForStead,
     LoadMore,
-    DownloadXlsxBtn
+    DownloadXlsxBtn,
+    AddInvoiceBtn
   },
   props: {
     steadId: {

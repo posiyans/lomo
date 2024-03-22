@@ -11,7 +11,7 @@
       <tr class="bg-black-05">
         <th>Поле</th>
         <th>
-          <div class="row items-center">
+          <div class="row items-center" style="min-width: 250px;">
             <div class="col-grow">
               <div>
                 Значение

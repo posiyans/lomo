@@ -14,6 +14,7 @@ Route::group(['prefix' => 'v2/billing'], function () {
         Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::get('/get-list', \App\Modules\Billing\Controllers\Invoice\GetInvoiceListController::class);
             Route::put('/{invoice}', \App\Modules\Billing\Controllers\Invoice\UpdateInvoiceFieldController::class);
+            Route::post('/', \App\Modules\Billing\Controllers\Invoice\AddInvoiceController::class);
             Route::post('/add-payment/{invoice}', \App\Modules\Billing\Controllers\Invoice\AddPaymentToInvoiceController::class);
             Route::delete('/delete/{invoice}', \App\Modules\Billing\Controllers\Invoice\DeleteInvoiceController::class);
         });
