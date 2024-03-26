@@ -32,9 +32,9 @@ export default defineComponent({
     const data = ref(false)
     const formatedPrice = computed(() => {
       if (props.hideIcon) {
-        return new Intl.NumberFormat('ru-RU').format(props.price)
+        return new Intl.NumberFormat('ru-RU').format(+props.price)
       } else {
-        return new Intl.NumberFormat('ru-RU').format(props.price) + ' руб.'
+        return new Intl.NumberFormat('ru-RU').format(+props.price) + ' руб.'
       }
     })
     return {
