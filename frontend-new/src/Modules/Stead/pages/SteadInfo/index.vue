@@ -22,7 +22,7 @@
             <AddInstrumentReading :stead-id="steadId" @success="reloadReading" class="absolute-top-right" style="top: 15px; right: 18px;" />
             <InstrumentReadingList :key="keyReading" :edit="readingEdit" :stead-id="steadId" @success="reloadReading" />
           </q-tab-panel>
-          <q-tab-panel v-if="bookkeeping" name="payment" class="ba b--dark-green q-pa-none q-pa-sm-sm" style="min-height: 250px;">
+          <q-tab-panel v-if="bookkeeping" name="payment" class="ba b--dark-green q-pa-none q-pa-sm-sm" style="min-height: 50vh;">
             <PaymentAndInvoiceForStead :stead-id="steadId" />
           </q-tab-panel>
         </q-tab-panels>

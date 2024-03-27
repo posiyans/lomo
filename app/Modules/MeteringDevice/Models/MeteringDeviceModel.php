@@ -44,7 +44,7 @@ class MeteringDeviceModel extends MyModel
 {
 
     protected $casts = [
-//        'active' => 'boolean',
+        'id' => 'integer',
         'options' => 'array',
     ];
 

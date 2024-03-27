@@ -41,6 +41,7 @@ class AddInstrumentReadingController extends Controller
             foreach ($request->devices as $data) {
                 $device = (new MeteringDeviceRepository())->forStead($steads)->getById($data['device_id']);
                 $payment_id = '';
+                $reading = false;
                 if ($request->payment_id && $user_admin) {
                     $payment = (new PaymentRepository())->byId($request->payment_id);
                     if ($payment->stead_id != $device->stead_id) {
@@ -51,8 +52,6 @@ class AddInstrumentReadingController extends Controller
                     $reading = (new InstrumentReadingRepository())->for_device($device->id)->for_payment($payment_id)->first();
                     if ($reading) {
                         $reading = (new UpdateInstrumentReadingAction($reading))->value($data['value'])->run();
-                        $this->postSave($reading);
-                        return response(['status' => true, 'data' => new InstrumentReadingResource($reading)]);
                     }
                 } else {
                     $last_reading = $device->last_reading();
@@ -66,15 +65,17 @@ class AddInstrumentReadingController extends Controller
                         return response(['errors' => 'Значение показаний должны быть больше предыдущих (' . $data['value'] . ')'], 450);
                     }
                 }
-                $reading = (new AddInstrumentReadingAction($device))
-                    ->value($data['value'])
-                    ->date($request->date)
-                    ->payment($payment_id)
-                    ->run();
+                if (!$reading) {
+                    $reading = (new AddInstrumentReadingAction($device))
+                        ->value($data['value'])
+                        ->date($request->date)
+                        ->payment($payment_id)
+                        ->run();
+                }
                 $this->postSave($reading);
             }
             DB::commit();
-            return response(['status' => true]);
+            return response(['status' => true, ' data' => new InstrumentReadingResource($reading)]);
         } catch (\Exception $e) {
             DB::rollBack();
             return response(['errors' => $e->getMessage()], 450);
@@ -82,7 +83,8 @@ class AddInstrumentReadingController extends Controller
     }
 
     /**
-     * действия после сохранения показяний
+     * действия после сохранения показаний
+     *
      * @param $reading
      * @return void
      * @throws \Exception

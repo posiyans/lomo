@@ -54,6 +54,8 @@ class InstrumentReadingModel extends MyModel
 
 
     protected $casts = [
+        'id' => 'integer',
+        'metering_device_id' => 'integer',
         'value' => 'decimal:0',
         'options' => 'array'
     ];

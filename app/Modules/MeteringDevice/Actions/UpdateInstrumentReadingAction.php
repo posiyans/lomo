@@ -42,7 +42,7 @@ class UpdateInstrumentReadingAction
      */
     public function run()
     {
-        if ($this->reading->logAndSave('Изменние показаний прибора учета')) {
+        if ($this->reading->logAndSave('Изменение показаний прибора учета')) {
             return $this->reading;
         }
         throw new \Exception('Ошибка изменниея показаний пибора учета');

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div @click="onSubmit">
-      <slot>
+      <slot v-bind:loading="loading">
         <q-btn flat :loading="loading" icon="delete" color="negative" />
       </slot>
     </div>

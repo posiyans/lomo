@@ -69,6 +69,7 @@
                 outlined
                 label="Дата платежа"
                 :rules="[required]"
+                @update:model-value="setPaymentDate"
               />
             </div>
             <div>
@@ -219,9 +220,12 @@ export default defineComponent({
           date: payment.value.date
         }
         addPayment(data)
-          .then(res => {
+          .then(async res => {
             if (res.data.data.duplicate) {
               errorMessage('Данный платеж уже есть в системе')
+            } else if (rate.value.depends === 2) {
+              instrumentReading.paymentId.value = res.data.data.id
+              await instrumentReading.saveData()
             }
             emit('success')
             dialogVisible.value = false
@@ -231,8 +235,11 @@ export default defineComponent({
           })
       })
     }
-
+    const setPaymentDate = () => {
+      instrumentReading.currentDate.value = payment.value.date
+    }
     return {
+      setPaymentDate,
       onSubmit,
       changeRateGroup,
       stead,

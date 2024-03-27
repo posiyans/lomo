@@ -6,9 +6,11 @@
         <div v-if="editReading">
           <ReadingBlock
             v-for="item in devices"
-            :key="item.id" :device="item"
+            :key="item.id"
+            :device="item"
             :payment="payment"
             class="q-mb-xs"
+            @success="reloadData"
           />
         </div>
         <div v-else class="col-grow">
@@ -27,16 +29,11 @@
                   {{ item.delta }} *
                   {{ item.rate.description }}
                 </div>
-                <div>
-                  = {{ item.delta * item.rate.ratio_a }} руб
-                </div>
+                <ShowPrice :price="item.cost" before-text="= " />
               </div>
               <q-space />
-              <div class="text-weight-bold ">
+              <div class="text-weight-bold q-pr-sm">
                 {{ item.value }}
-              </div>
-              <div v-if="edit">
-                <DeleteInstrumentReading :reading-id="item.id" @success="reloadData" />
               </div>
             </div>
           </div>
@@ -61,13 +58,11 @@
 import { computed, defineComponent, ref } from 'vue'
 import { getMeteringDeviceForStead } from 'src/Modules/MeteringDevice/api/meteringDeviceApi'
 import ReadingBlock from './ReadingBlock.vue'
-import DeleteInstrumentReading from 'src/Modules/MeteringDevice/components/DeleteInstrumentReading/index.vue'
 import ShowPrice from 'components/ShowPrice/index.vue'
 
 export default defineComponent({
   components: {
     ReadingBlock,
-    DeleteInstrumentReading,
     ShowPrice
   },
   props: {
@@ -120,6 +115,7 @@ export default defineComponent({
       }, 500)
     }
     const reloadData = () => {
+      getData()
       emit('reloadData')
     }
     return {

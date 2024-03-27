@@ -29,7 +29,12 @@
         </q-input>
 
       </div>
-      <div style="min-width: 3em;">
+      <DeleteInstrumentReading v-if="readingId && status === 'old'" :key="key" :reading-id="readingId" @success="reloadData">
+        <template v-slot:default="{ loading }">
+          <q-btn flat :loading="loading" padding="sm" icon="delete" color="negative" />
+        </template>
+      </DeleteInstrumentReading>
+      <div v-else style="min-width: 3em;">
         <q-btn v-if="status === 'done'" flat padding="sm" icon="save" color="green" type="submit" />
         <q-spinner
           v-if="status === 'loading'"
@@ -48,9 +53,12 @@ import { defineComponent, onMounted, ref } from 'vue'
 import { useQuasar } from 'quasar'
 import { required } from 'src/utils/validators.js'
 import { addInstrumentReading } from 'src/Modules/MeteringDevice/api/instrumentReadingApi'
+import DeleteInstrumentReading from 'src/Modules/MeteringDevice/components/DeleteInstrumentReading/index.vue'
 
 export default defineComponent({
-  components: {},
+  components: {
+    DeleteInstrumentReading
+  },
   props: {
     device: {
       type: Object,
@@ -62,21 +70,25 @@ export default defineComponent({
     }
   },
   setup(props, { emit }) {
+    const key = ref(1)
     const status = ref('old')
+    const readingId = ref(null)
     const oldValue = ref('')
     const reading = ref({
-      value: '',
-      device_id: props.device.id,
-      payment_id: props.payment.id,
-      date: props.payment.payment_date.split(' ')[0]
+      value: ''
     })
-    onMounted(() => {
+    const init = () => {
       props.payment.readings.forEach(item => {
+        console.log(props.payment.readings)
         if (item.metering_device_id === props.device.id) {
+          readingId.value = item.id
           reading.value.value = item.value
         }
       })
       oldValue.value = reading.value.value
+    }
+    onMounted(() => {
+      init();
     })
     let timer = null
     const setValue = () => {
@@ -98,26 +110,20 @@ export default defineComponent({
     const $q = useQuasar()
     const onSubmit = () => {
       status.value = 'loading'
-      // $q.dialog({
-      //   title: 'Подтвердите',
-      //   message: 'Добавить показания?',
-      //   cancel: {
-      //     noCaps: true,
-      //     flat: true,
-      //     label: 'Отмена',
-      //     color: 'negative'
-      //   },
-      //   ok: {
-      //     noCaps: true,
-      //     outline: true,
-      //     label: 'Добавить',
-      //     color: 'primary'
-      //   },
-      //   persistent: true
-      // }).onOk(() => {
-      addInstrumentReading(reading.value)
+      const data = {
+        payment_id: props.payment.id,
+        devices: [
+          {
+            device_id: props.device.id,
+            value: reading.value.value,
+          }
+        ],
+        date: props.payment.payment_date.split(' ')[0]
+      }
+      addInstrumentReading(data)
         .then(res => {
           emit('success')
+          init()
         })
         .catch(er => {
           errorMessage(er.response.data.errors)
@@ -130,9 +136,18 @@ export default defineComponent({
         })
       // })
     }
+    const reloadData = () => {
+      status.value = 'old'
+      key.value++
+      emit('success')
+      init()
+    }
     return {
+      reloadData,
+      key,
       reading,
       status,
+      readingId,
       setValue,
       required,
       onSubmit

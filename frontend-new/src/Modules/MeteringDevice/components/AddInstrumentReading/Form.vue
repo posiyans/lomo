@@ -23,7 +23,7 @@
       />
     </div>
   </div>
-  <div v-if="showDateInput">
+  <div v-if="showDateInput" class="q-pt-sm">
     <InputDate
       v-model="currentDate"
       outlined
