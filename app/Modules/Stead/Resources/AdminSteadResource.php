@@ -31,6 +31,10 @@ class AdminSteadResource extends JsonResource
             'size' => $this->size,
             'owners' => $data,
         ];
-        return array_merge($rez, $this->options);
+        $rez['address'] = $this->options['address'] ?? null;
+        $rez['kadastr'] = $this->options['kadastr'] ?? null;
+        $rez['coordinates'] = $this->options['coordinates'] ?? null;
+
+        return $rez;
     }
 }

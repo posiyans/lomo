@@ -14,10 +14,11 @@
       </table>
     </div>
     <DropDownBlock
+      v-if="stead?.coordinates"
       show-label="Яндекс карты"
       hide-label="Яндекс карты"
     >
-      <div style="height: 500px;">
+      <div style="height: 600px;">
         <YandexMap :stead-id="steadId" />
       </div>
     </DropDownBlock>

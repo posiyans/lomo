@@ -23,11 +23,16 @@ class SteadMigrate
             $newItem->number = $item->number;
             $newItem->size = $item->size;
             $descriptions = json_decode($item->descriptions, true);
-            unset($descriptions['fio']); //todo 
-            $newItem->options = $descriptions;
+            $options = [
+                'address' => $descriptions['address'],
+                'kadastr' => $descriptions['kadastr'],
+                'coordinates' => $descriptions['geodata']['geometry']['coordinates'][0][0] ?? '',
+            ];
+            $newItem->options = $options;
             $newItem->created_at = $item->created_at;
             $newItem->save();
         }
     }
+
 
 }

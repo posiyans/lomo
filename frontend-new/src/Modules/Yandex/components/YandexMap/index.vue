@@ -1,5 +1,6 @@
 <template>
   <yandex-map
+    v-if="show"
     real-settings-location
     :settings="{
       behaviors: [],
@@ -56,57 +57,58 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const list = ref([])
-    const center = ref([30.473105, 59.110174])
+    const center = ref([30.313813, 59.935436])
     const zoom = ref(16)
     const show = ref(false)
     const figure = ref([])
     const getData = () => {
       getYandexMap()
         .then(response => {
-          list.value = response.data
+          list.value = response.data.data
+          center.value = response.data.center
           list.value.forEach(item => {
-            console.log(item)
             if (+props.steadId === +item.id) {
-              console.log(item.center)
-              const centerX = item.krd.reduce((summ, item) => {
+              const centerX = item.coordinates.reduce((summ, item) => {
                 return summ + item[0]
               }, 0)
-              const centerY = item.krd.reduce((summ, item) => {
+              const centerY = item.coordinates.reduce((summ, item) => {
                 return summ + item[1]
               }, 0)
-              center.value = [centerX / item.krd.length, centerY / item.krd.length]
+              center.value = [centerX / item.coordinates.length, centerY / item.coordinates.length]
               zoom.value = 17
             }
             const color = +props.steadId === +item.id ? 'rgba(255,0,0, 1)' : 'rgba(255,0,0,0.1)'
-            figure.value.push({
-              id: item.number,
-              draggable: false,
-              geometry: {
-                type: 'Polygon',
-                coordinates: [item.krd]
-              },
-              style: {
-                fillRule: 'nonzero',
-                fill: color,
-                fillOpacity: item.color.opacity,
-                stroke: [
-                  {
-                    color: item.color.color,
-                    width: 1
-                  },
-                ],
-              },
-              properties: {
-                hint: {
-                  title: 'Участок ' + item.number,
-                  body: item.size + ' кв.м'
+            if (item.coordinates) {
+              figure.value.push({
+                id: item.number,
+                draggable: false,
+                geometry: {
+                  type: 'Polygon',
+                  coordinates: [item.coordinates]
                 },
-              },
+                style: {
+                  fillRule: 'nonzero',
+                  fill: color,
+                  fillOpacity: item.color.opacity,
+                  stroke: [
+                    {
+                      color: item.color.color,
+                      width: 1
+                    },
+                  ],
+                },
+                properties: {
+                  hint: {
+                    title: 'Участок ' + item.number,
+                    body: item.size + ' кв.м'
+                  },
+                },
 
-              onDragEnd: (val) => {
-                console.log(val)
-              }
-            })
+                onDragEnd: (val) => {
+                  console.log(val)
+                }
+              })
+            }
           })
           show.value = true
         })

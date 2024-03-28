@@ -29,7 +29,7 @@ class GetSteadInfoController extends Controller
         $stead = (new GetSteadByIdRepository($id))->run();
         $user = \Auth::user();
         $access = false;
-        if ($user) {
+        if ($request->full && $user) {
             if ($user->ability('superAdmin', ['stead-show', 'stead-edit'])) {
                 $access = true;
             }
@@ -37,7 +37,7 @@ class GetSteadInfoController extends Controller
                 $access = true;
             }
         }
-        if ($request->full && $access) {
+        if ($access) {
             return new AdminSteadResource($stead);
         }
         return new SteadResource($stead);
