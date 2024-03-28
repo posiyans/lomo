@@ -16,10 +16,10 @@
         <DownloadXlsxBtn :func="funcXlsx">
           <q-fab-action label-position="left" color="primary" icon="download" label="Скачать" anchor="end" />
         </DownloadXlsxBtn>
-        <AddInvoiceBtn :stead-id="steadId" @success="reload">
+        <AddInvoiceBtn v-if="showInvoiceAddBtn" :stead-id="steadId" @success="reload">
           <q-fab-action label-position="left" color="red" icon="add_shopping_cart" label="Добавить счет" />
         </AddInvoiceBtn>
-        <AddPaymentBtn :stead-id="steadId" @success="reload">
+        <AddPaymentBtn v-if="showPaymentAddBtn" :stead-id="steadId" @success="reload">
           <q-fab-action label-position="left" color="teal" icon="payment" label="Добавить платеж" />
         </AddPaymentBtn>
       </q-fab>
@@ -41,6 +41,7 @@ import BalanceForStead from 'src/Modules/Bookkeeping/components/Balance/BalanceF
 import DropDownBlock from 'components/DropDownBlock/index.vue'
 import AddInvoiceBtn from 'src/Modules/Bookkeeping/components/Invoice/AddInvoiceBtn/index.vue'
 import AddPaymentBtn from 'src/Modules/Bookkeeping/components/Payment/AddPaymentBtn/index.vue'
+import { useAuthStore } from 'src/Modules/Auth/store/useAuthStore'
 
 export default defineComponent({
   components: {
@@ -80,6 +81,13 @@ export default defineComponent({
         return getFullBalanceForSteadXlsx(tmp)
       }
     })
+    const authStore = useAuthStore()
+    const showInvoiceAddBtn = computed(() => {
+      return authStore.checkPermission(['invoice-edit'])
+    })
+    const showPaymentAddBtn = computed(() => {
+      return authStore.checkPermission(['payment-edit'])
+    })
     const reload = () => {
       key.value++
     }
@@ -93,7 +101,9 @@ export default defineComponent({
       setList,
       func,
       funcXlsx,
-      list
+      list,
+      showInvoiceAddBtn,
+      showPaymentAddBtn
     }
   }
 })

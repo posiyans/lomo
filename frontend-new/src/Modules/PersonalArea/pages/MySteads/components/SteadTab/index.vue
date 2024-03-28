@@ -13,13 +13,13 @@
     </q-tabs>
     <q-separator color="teal" />
     <q-tab-panels v-model="tab" animated>
-      <q-tab-panel name="stead" class="q-pa-none">
+      <q-tab-panel name="stead">
         <SteadInfoCard :stead-id="steadId" :edit="editAccess" />
       </q-tab-panel>
       <q-tab-panel name="owner">
         <SteadOwnersCard :stead-id="steadId" :edit="editAccess" />
       </q-tab-panel>
-      <q-tab-panel name="metering_device" class="q-pa-none">
+      <q-tab-panel name="metering_device">
         <MeteringDeviceForStead :stead-id="steadId" :edit="editDevice" />
       </q-tab-panel>
     </q-tab-panels>

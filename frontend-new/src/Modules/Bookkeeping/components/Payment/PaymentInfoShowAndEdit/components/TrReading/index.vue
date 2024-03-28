@@ -1,21 +1,19 @@
 <template>
   <tr v-if="payment.rate.depends === 2">
     <td>Показания</td>
-    <td>
-      <div class="row items-center">
+    <td class="q-pt-sm">
+      <div class="q-pr-md">
         <div v-if="editReading">
           <ReadingBlock
             v-for="item in devices"
             :key="item.id"
             :device="item"
-            :payment="payment"
             class="q-mb-xs"
-            @success="reloadData"
           />
         </div>
-        <div v-else class="col-grow">
-          <div v-for="item in payment.readings" :key="item.id">
-            <div class="row items-center bg-blue-1 q-mb-xs">
+        <div v-else>
+          <div v-for="item in payment.readings" :key="item.id" class="q-mb-md">
+            <div class="row items-center bg-blue-1 q-col-gutter-sm">
               <div class="q-pl-sm">
                 <div>
                   {{ item.device.rate.name }}
@@ -31,7 +29,6 @@
                 </div>
                 <ShowPrice :price="item.cost" before-text="= " />
               </div>
-              <q-space />
               <div class="text-weight-bold q-pr-sm">
                 {{ item.value }}
               </div>
@@ -41,10 +38,9 @@
             Показания не найдены
           </div>
           <div v-else>
-            <ShowPrice before-text="Итого: " :price="sumReadings" />
+            <ShowPrice before-text="Итого: " :price="toValue(sumReadings)" />
           </div>
         </div>
-        <q-space />
         <div v-if="edit" class="absolute-top-right">
           <q-btn icon="edit" flat color="primary" dense size="sm" @click="editReadingShow" />
         </div>
@@ -55,10 +51,11 @@
 
 <script>
 /* eslint-disable */
-import { computed, defineComponent, ref } from 'vue'
+import { defineComponent, ref, toValue } from 'vue'
 import { getMeteringDeviceForStead } from 'src/Modules/MeteringDevice/api/meteringDeviceApi'
 import ReadingBlock from './ReadingBlock.vue'
 import ShowPrice from 'components/ShowPrice/index.vue'
+import { useCurrentPayment } from 'src/Modules/Bookkeeping/components/Payment/PaymentInfoShowAndEdit/use/currentPayment'
 
 export default defineComponent({
   components: {
@@ -66,10 +63,6 @@ export default defineComponent({
     ShowPrice
   },
   props: {
-    payment: {
-      type: Object,
-      required: true
-    },
     edit: {
       type: Boolean,
       default: false
@@ -77,54 +70,35 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const editReading = ref(false)
-    const sumReadings = computed(() => {
-      let sum = 0
-      props.payment.readings.forEach(item => {
-        sum += item.delta * item.rate.ratio_a
-      })
-      return sum
-    })
-    let timer = null
+    const { payment, getPaymentData, loading, updatePaymentData, sumReadings } = useCurrentPayment()
+
     const editReadingShow = () => {
       editReading.value = !editReading.value
       if (editReading.value) {
         getData()
-      } else {
-        emit('reloadData')
       }
     }
-    const data = ref(false)
+
     const devices = ref([])
     const getData = () => {
-      getMeteringDeviceForStead(props.payment.stead_id)
+      getMeteringDeviceForStead(payment.value.stead_id)
         .then(res => {
           devices.value = res.data.data
         })
-    }
-    const setValue = () => {
-      if (timer) clearTimeout(timer)
-      timer = setTimeout(() => {
-        if (reading.value.value) {
-          const tmp = reading.value.value
-          if (!isNaN(tmp)) {
-            reading.value.value = tmp
-          } else {
-            reading.value.value = ''
-          }
-        }
-      }, 500)
     }
     const reloadData = () => {
       getData()
       emit('reloadData')
     }
     return {
-      data,
       sumReadings,
       reloadData,
       editReading,
       editReadingShow,
-      devices
+      devices,
+      payment,
+      toValue
+
     }
   }
 })

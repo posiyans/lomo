@@ -133,7 +133,7 @@
                 </InvoiceInfo>
               </div>
               <div v-if="item.payment" class="cursor-pointer text-teal">
-                <PaymentInfoShowAndEdit :payment="item.payment">
+                <PaymentInfoShowAndEdit :payment-id="item.payment.id">
                   Платеж № {{ item.payment.id }}
                 </PaymentInfoShowAndEdit>
               </div>

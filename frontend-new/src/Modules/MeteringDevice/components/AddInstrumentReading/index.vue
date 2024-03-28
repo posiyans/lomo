@@ -4,7 +4,7 @@
       <slot>
         <q-btn icon="add" flat color="primary">
           <q-tooltip>
-            Добавить показяния приборов
+            Добавить показания приборов
           </q-tooltip>
         </q-btn>
       </slot>

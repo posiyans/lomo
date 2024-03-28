@@ -1,7 +1,6 @@
 <template>
   <yandex-map
     real-settings-location
-
     :settings="{
       behaviors: [],
       location: {
@@ -66,15 +65,16 @@ export default defineComponent({
         .then(response => {
           list.value = response.data
           list.value.forEach(item => {
+            console.log(item)
             if (+props.steadId === +item.id) {
               console.log(item.center)
-              const centerX = item.coordinates.reduce((summ, item) => {
+              const centerX = item.krd.reduce((summ, item) => {
                 return summ + item[0]
               }, 0)
-              const centerY = item.coordinates.reduce((summ, item) => {
+              const centerY = item.krd.reduce((summ, item) => {
                 return summ + item[1]
               }, 0)
-              center.value = [centerX / item.coordinates.length, centerY / item.coordinates.length]
+              center.value = [centerX / item.krd.length, centerY / item.krd.length]
               zoom.value = 17
             }
             const color = +props.steadId === +item.id ? 'rgba(255,0,0, 1)' : 'rgba(255,0,0,0.1)'
@@ -83,7 +83,7 @@ export default defineComponent({
               draggable: false,
               geometry: {
                 type: 'Polygon',
-                coordinates: [item.coordinates]
+                coordinates: [item.krd]
               },
               style: {
                 fillRule: 'nonzero',

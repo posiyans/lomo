@@ -97,6 +97,7 @@ export default defineComponent({
     const addValueAction = (val) => {
       const lastValue = +props.device.last_reading.value ?? 0
       reading.value.value = lastValue + +val
+      setValue()
     }
     return {
       addValueAction,

@@ -92,7 +92,7 @@
                 </td>
                 <td v-if="line.done && !line.uploadError && edit">
                   <div class="row items-center q-col-gutter-xs no-wrap">
-                    <PaymentInfoShowAndEdit :payment="line" @reload="reload(line.uid)">
+                    <PaymentInfoShowAndEdit :payment-id="line.id" @reload="reload(line.uid)">
                       <q-btn label="Подробнее" color="primary" outline />
                     </PaymentInfoShowAndEdit>
                     <div v-if="line.error" class="text-red">

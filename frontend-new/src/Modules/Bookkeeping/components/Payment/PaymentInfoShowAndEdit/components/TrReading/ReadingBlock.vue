@@ -2,7 +2,7 @@
   <q-form
     @submit="onSubmit"
   >
-    <div class="row items-center no-wrap justify-between">
+    <div class="row items-center no-wrap q-col-gutter-sm">
       <div>
         <div>
           {{ device.rate.name }}
@@ -13,12 +13,11 @@
       </div>
       <div>
         <q-input
-          v-model="reading.value"
+          v-model.number="reading"
           dense
           outlined
           :readonly="status === 'loading'"
           label="Показание"
-          lazy-rules
           @update:model-value="setValue"
         >
           <template v-slot:append>
@@ -29,12 +28,13 @@
         </q-input>
 
       </div>
-      <DeleteInstrumentReading v-if="readingId && status === 'old'" :key="key" :reading-id="readingId" @success="reloadData">
+      <DeleteInstrumentReading v-if="readingId && status === 'old'" :reading-id="readingId" @success="deleteReading">
         <template v-slot:default="{ loading }">
           <q-btn flat :loading="loading" padding="sm" icon="delete" color="negative" />
         </template>
       </DeleteInstrumentReading>
       <div v-else style="min-width: 3em;">
+        <q-btn v-if="status === 'done'" flat padding="sm" icon="restore_page" color="red" @click="cancelChange" />
         <q-btn v-if="status === 'done'" flat padding="sm" icon="save" color="green" type="submit" />
         <q-spinner
           v-if="status === 'loading'"
@@ -49,11 +49,10 @@
 
 <script>
 /* eslint-disable */
-import { defineComponent, onMounted, ref } from 'vue'
-import { useQuasar } from 'quasar'
-import { required } from 'src/utils/validators.js'
+import { computed, defineComponent, onMounted, ref } from 'vue'
 import { addInstrumentReading } from 'src/Modules/MeteringDevice/api/instrumentReadingApi'
 import DeleteInstrumentReading from 'src/Modules/MeteringDevice/components/DeleteInstrumentReading/index.vue'
+import { useCurrentPayment } from 'src/Modules/Bookkeeping/components/Payment/PaymentInfoShowAndEdit/use/currentPayment'
 
 export default defineComponent({
   components: {
@@ -63,29 +62,30 @@ export default defineComponent({
     device: {
       type: Object,
       required: true
-    },
-    payment: {
-      type: Object,
-      required: true
     }
   },
   setup(props, { emit }) {
-    const key = ref(1)
+    const { payment, getPaymentData, loading, updatePaymentData } = useCurrentPayment()
     const status = ref('old')
-    const readingId = ref(null)
     const oldValue = ref('')
-    const reading = ref({
-      value: ''
-    })
-    const init = () => {
-      props.payment.readings.forEach(item => {
-        console.log(props.payment.readings)
+    const reading = ref('')
+    const readingId = computed(() => {
+      let id = null
+      payment.value.readings.forEach(item => {
         if (item.metering_device_id === props.device.id) {
-          readingId.value = item.id
-          reading.value.value = item.value
+          id = item.id
         }
       })
-      oldValue.value = reading.value.value
+      return id
+    })
+    const init = () => {
+      payment.value.readings.forEach(item => {
+        if (item.metering_device_id === props.device.id) {
+          reading.value = item.value
+          status.value = 'old'
+        }
+      })
+      oldValue.value = reading.value
     }
     onMounted(() => {
       init();
@@ -94,62 +94,65 @@ export default defineComponent({
     const setValue = () => {
       if (timer) clearTimeout(timer)
       timer = setTimeout(() => {
-        if (reading.value.value) {
-          const tmp = reading.value.value
+        if (reading.value) {
+          const tmp = reading.value
           if (!isNaN(tmp)) {
-            reading.value.value = tmp
+            reading.value = tmp
           } else {
-            reading.value.value = ''
+            reading.value = ''
           }
-          if (oldValue.value !== reading.value.value) {
+          if (oldValue.value !== reading.value) {
             status.value = 'done'
           }
         }
       }, 500)
     }
-    const $q = useQuasar()
     const onSubmit = () => {
       status.value = 'loading'
+      loading.value = true
       const data = {
-        payment_id: props.payment.id,
+        payment_id: payment.value.id,
         devices: [
           {
             device_id: props.device.id,
-            value: reading.value.value,
+            value: reading.value,
           }
         ],
-        date: props.payment.payment_date.split(' ')[0]
+        date: payment.value.payment_date.split(' ')[0]
       }
       addInstrumentReading(data)
-        .then(res => {
-          emit('success')
-          init()
+        .then(async res => {
+          await getPaymentData()
+          status.value = 'ok'
+          setTimeout(() => {
+            init()
+          }, 3000)
         })
         .catch(er => {
           errorMessage(er.response.data.errors)
+          status.value = ''
         })
         .finally(() => {
-          status.value = 'ok'
-          setTimeout(() => {
-            status.value = ''
-          }, 3000)
+          loading.value = false
         })
-      // })
     }
-    const reloadData = () => {
-      status.value = 'old'
-      key.value++
-      emit('success')
+
+    const deleteReading = async () => {
+      reading.value = ''
+      await getPaymentData()
       init()
     }
+    const cancelChange = () => {
+      reading.value = oldValue.value
+      status.value = 'old'
+    }
     return {
-      reloadData,
-      key,
+      deleteReading,
+      cancelChange,
       reading,
       status,
       readingId,
       setValue,
-      required,
       onSubmit
     }
   }

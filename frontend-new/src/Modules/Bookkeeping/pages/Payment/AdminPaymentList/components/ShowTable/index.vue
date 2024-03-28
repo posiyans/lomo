@@ -63,7 +63,12 @@
       <template v-slot:body-cell-actions="props">
         <q-td :props="props">
           <div class="row justify-center">
-            <PaymentInfo :payment="props.row" :edit="edit" @reload="reload" @deletePayment="reload" />
+            <PaymentInfo
+              :payment-id="props.row.id"
+              :edit="edit"
+              @reload="reload"
+              @deletePayment="reload"
+            />
           </div>
         </q-td>
       </template>

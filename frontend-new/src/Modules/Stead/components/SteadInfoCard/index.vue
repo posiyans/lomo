@@ -1,5 +1,5 @@
 <template>
-  <div class="row items-center no-wrap" style="align-content: stretch;">
+  <div>
     <div style="max-width: 95vw;">
       <table v-if="stead">
         <TrTableBlock
@@ -13,9 +13,14 @@
         <RosreestrDataTr v-if="stead.kadastr" :kadastr="stead.kadastr" />
       </table>
     </div>
-    <div v-if="false" style="align-self: stretch; flex-grow: 1;">
-      <YandexMap :stead-id="steadId" class="q-pl-sm" />
-    </div>
+    <DropDownBlock
+      show-label="Яндекс карты"
+      hide-label="Яндекс карты"
+    >
+      <div style="height: 500px;">
+        <YandexMap :stead-id="steadId" />
+      </div>
+    </DropDownBlock>
   </div>
 </template>
 
@@ -26,12 +31,14 @@ import { getSteadInfo } from 'src/Modules/Stead/api/stead'
 import TrTableBlock from './components/TrTableBlock/index.vue'
 import YandexMap from 'src/Modules/Yandex/components/YandexMap/index.vue'
 import RosreestrDataTr from './components/RosreestrDataTr/index.vue'
+import DropDownBlock from 'components/DropDownBlock/index.vue'
 
 export default defineComponent({
   components: {
     TrTableBlock,
     YandexMap,
-    RosreestrDataTr
+    RosreestrDataTr,
+    DropDownBlock
   },
   props: {
     steadId: {

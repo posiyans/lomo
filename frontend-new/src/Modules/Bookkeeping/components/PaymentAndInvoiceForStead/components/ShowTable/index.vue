@@ -68,7 +68,13 @@
           </q-td>
           <q-td>
             <div class="row">
-              <PaymentInfo v-if="props.row.type.uid === 'payment'" :payment="props.row" :edit="editPayment" @reload="reload" @deletePayment="reload" />
+              <PaymentInfo
+                v-if="props.row.type.uid === 'payment'"
+                :payment-id="props.row.id"
+                :edit="editPayment"
+                @reload="reload"
+                @deletePayment="reload"
+              />
               <InvoiceInfo v-if="props.row.type.uid === 'invoice'" :invoice="props.row" :edit="editInvoice" @reload="reload" @deletePayment="reload" />
               <ReceiptForInvoiceBtn v-if="props.row.type.uid === 'invoice'" :invoice-id="props.row.id" />
             </div>

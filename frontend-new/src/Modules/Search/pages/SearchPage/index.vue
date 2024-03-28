@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div class="bg-white">
     <div class="page-title">
       Поиск по сайту
     </div>

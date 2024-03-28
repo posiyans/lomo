@@ -73,7 +73,7 @@
             </InvoiceInfo>
           </div>
           <div v-if="props.row.payment" class="cursor-pointer text-teal">
-            <PaymentInfoShowAndEdit :payment="props.row.payment" :edit="edit">
+            <PaymentInfoShowAndEdit :payment-id="props.row.payment.id" :edit="edit">
               Платеж № {{ props.row.payment.id }}
             </PaymentInfoShowAndEdit>
           </div>

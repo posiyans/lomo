@@ -19,7 +19,7 @@
               {{ owner.fullName }}
             </div>
             <div class="row justify-center">
-              <div v-for="item in owner.steads" :key="item.stead_id" @click="emitStead(item)">
+              <div v-for="item in owner.steads" :key="item.stead_id" class="cursor-pointer" @click="emitStead(item)">
                 <q-chip outline square color="primary" text-color="white">
                   {{ item.number }}
                 </q-chip>
@@ -76,6 +76,7 @@ export default defineComponent({
     )
     const emitStead = (val) => {
       emit('setStead', val)
+      listQuery.value.find = ''
     }
     onMounted(() => {
       listQuery.value.find = props.ownerName
